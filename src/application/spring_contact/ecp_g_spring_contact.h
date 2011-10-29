@@ -17,6 +17,18 @@ namespace ecp {
 namespace common {
 namespace generator {
 
+#define MINIMAL_FORCE 1.0
+#define FORCE_INCREMENT 2.0
+#define POSITION_INCREMENT 0.005
+#define HIGH_FORCE_INCREMENT 30.0
+#define HIGH_POSITION_INCREMENT 0.015
+#define ADAPTATION_FACTOR 800.0
+
+enum HAPTIC_STIFFNESS_STATES
+{
+	HS_LOW_FORCE = 0, HS_STIFNESS_ESTIMATION
+};
+
 /**
  * @brief degrees to radians factor constant
  */
@@ -41,6 +53,14 @@ protected:
 	 * @brief manipualtor tool frame
 	 */
 	lib::Homog_matrix tool_frame;
+
+	HAPTIC_STIFFNESS_STATES irp6p_state;
+	double total_irp6p_stiffness;
+	double last_irp6p_stiffness;
+	double initial_irp6p_force;
+	double initial_irp6p_position;
+	double intermediate_irp6p_force;
+	double intermediate_irp6p_position;
 
 public:
 

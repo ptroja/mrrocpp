@@ -80,15 +80,106 @@ bool spring_contact::first_step()
 // --------------------------------------------------------------------------
 bool spring_contact::next_step()
 {
+
+	double current_irp6p_force;
+	double current_irp6p_position;
+
 	// static int count;
 	// struct timespec start[9];
 	if (check_and_null_trigger()) {
 		return false;
 	}
 
-	std::cout << "spring_contact" << node_counter << std::endl;
-
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
+
+	// pobranie biezacej sily i polozenia w osi z narzedzia
+
+	current_irp6p_force = the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[2];
+
+	lib::Homog_matrix current_irp6p_frame(the_robot->reply_package.arm.pf_def.arm_frame);
+
+	current_irp6p_position = current_irp6p_frame(2, 3);
+
+	switch (irp6p_state)
+	{
+		case HS_LOW_FORCE:
+			//
+			//std::cout << "HS_LOW_FORCE" << std::endl;
+
+			if (current_irp6p_force > MINIMAL_FORCE) {
+				irp6p_state = HS_STIFNESS_ESTIMATION;
+				initial_irp6p_force = current_irp6p_force;
+				initial_irp6p_position = current_irp6p_position;
+
+				intermediate_irp6p_force = current_irp6p_force;
+				intermediate_irp6p_position = current_irp6p_position;
+
+				//	std::cout << "HS_STIFNESS_ESTIMATION" << std::endl;
+
+			}
+
+			break;
+		case HS_STIFNESS_ESTIMATION:
+			if (current_irp6p_force <= MINIMAL_FORCE) {
+				irp6p_state = HS_LOW_FORCE;
+				total_irp6p_stiffness = 0.0;
+				last_irp6p_stiffness = 0.0;
+
+			} else if ((fabs(current_irp6p_force - initial_irp6p_force) >= FORCE_INCREMENT)
+					|| (fabs(current_irp6p_position - initial_irp6p_position) >= POSITION_INCREMENT)) {
+				double computed_irp6p_stiffness = (current_irp6p_force - initial_irp6p_force)
+						/ -(current_irp6p_position - initial_irp6p_position);
+				//	std::cout << "STIFNESS_ESTIMATION" << std::endl;
+
+				if ((fabs(current_irp6p_force - initial_irp6p_force) >= HIGH_FORCE_INCREMENT)
+						|| (fabs(current_irp6p_position - initial_irp6p_position) >= HIGH_POSITION_INCREMENT)) {
+
+				}
+
+				if (computed_irp6p_stiffness > 0.0) {
+					total_irp6p_stiffness = computed_irp6p_stiffness;
+				}
+
+				if ((fabs(current_irp6p_force - intermediate_irp6p_force) >= FORCE_INCREMENT)
+						|| (fabs(current_irp6p_position - intermediate_irp6p_position) >= POSITION_INCREMENT)) {
+
+					double computed_intermiediate_irp6p_stiffness = (current_irp6p_force - intermediate_irp6p_force)
+							/ -(current_irp6p_position - intermediate_irp6p_position);
+
+					if (computed_intermiediate_irp6p_stiffness > 0.0) {
+						last_irp6p_stiffness = computed_intermiediate_irp6p_stiffness;
+					}
+
+					intermediate_irp6p_force = current_irp6p_force;
+					intermediate_irp6p_position = current_irp6p_position;
+
+				}
+
+			} else {
+
+			}
+			break;
+
+	}
+
+	// Korekta parametrów regulatora siłowego w robocie podrzednym na podstawie estymaty sztywnosci
+	double divisor;
+
+	if (total_irp6p_stiffness > ADAPTATION_FACTOR) {
+		divisor = total_irp6p_stiffness / ADAPTATION_FACTOR;
+	} else {
+		divisor = 1;
+	}
+
+	for (int i = 0; i < 3; i++) {
+		the_robot->ecp_command.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / divisor;
+		the_robot->ecp_command.arm.pf_def.inertia[i] = lib::FORCE_INERTIA / divisor;
+	}
+	// wypiski
+
+	//	if ((cycle_counter % 10) == 0) {
+	std::cout << "irp6p_f: " << current_irp6p_force << ", irp6p_p: " << current_irp6p_position << ", irp6p_ts: "
+			<< total_irp6p_stiffness << ", irp6p_ls: " << last_irp6p_stiffness << std::endl;
 
 	return true;
 
