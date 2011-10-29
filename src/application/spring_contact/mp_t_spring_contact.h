@@ -3,10 +3,10 @@
 
 /*!
  * @file
- * @brief File contains edge_follow_mr mp_task class declaration of unknown contour following application.
+ * @brief File contains mp_task class declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup edge_follow
+ * @ingroup spring_contact
  */
 
 namespace mrrocpp {
@@ -19,7 +19,7 @@ namespace task {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup edge_follow
  */
-class edge_follow_mr : public task
+class spring_contact : public task
 {
 protected:
 
@@ -29,7 +29,7 @@ public:
 	 * @brief Constructor
 	 * @param _config configurator object reference.
 	 */
-	edge_follow_mr(lib::configurator &_config);
+	spring_contact(lib::configurator &_config);
 
 	void create_robots(void);
 

@@ -1,9 +1,9 @@
 /*!
  * @file
- * @brief File contains edge_follow sub_task class definition of unknown contour following application.
+ * @brief File contains sub_task class definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup edge_follow
+ * @ingroup spring_contact
  */
 
 #include "ecp_g_spring_contact.h"
@@ -14,13 +14,13 @@ namespace ecp {
 namespace common {
 namespace sub_task {
 
-edge_follow::edge_follow(task::task &_ecp_t) :
+spring_contact::spring_contact(task::task &_ecp_t) :
 		sub_task(_ecp_t)
 {
 	scg = new generator::spring_contact(_ecp_t, 8);
 }
 
-void edge_follow::conditional_execution()
+void spring_contact::conditional_execution()
 {
 
 	scg->Move();

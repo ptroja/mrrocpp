@@ -27,7 +27,7 @@ namespace sub_task {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup subtasks edge_follow
  */
-class edge_follow : public sub_task
+class spring_contact : public sub_task
 {
 
 private:
@@ -43,7 +43,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_t ecp task object reference.
 	 */
-	edge_follow(task::task &_ecp_t);
+	spring_contact(task::task &_ecp_t);
 
 	void conditional_execution();
 };

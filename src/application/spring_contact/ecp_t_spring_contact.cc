@@ -45,7 +45,7 @@ spring_contact::spring_contact(lib::configurator &_config) :
 	// utworzenie podzadan
 	{
 		sub_task::sub_task* ecpst;
-		ecpst = new sub_task::edge_follow(*this);
+		ecpst = new sub_task::spring_contact(*this);
 		subtask_m[ecp_mp::sub_task::EDGE_FOLLOW] = ecpst;
 
 		ecpst = new sub_task::bias_edp_force(*this);
