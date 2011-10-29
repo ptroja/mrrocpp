@@ -10,7 +10,7 @@
  */
 
 #include "base/ecp/ecp_sub_task.h"
-#include "application/edge_follow/ecp_mp_st_edge_follow.h"
+#include "ecp_mp_st_spring_contact.h"
 
 namespace mrrocpp {
 namespace ecp {
