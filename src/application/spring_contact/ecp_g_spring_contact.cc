@@ -168,43 +168,43 @@ bool spring_contact::next_step()
 
 	}
 
+	double adaptation_factor = (HIGHEST_STIFFNESS - STIFFNESS_INSENSIVITY_LEVEL) / (MAX_DIVIDER - 1);
+
+	if (total_irp6p_stiffness > STIFFNESS_INSENSIVITY_LEVEL) {
+
+		if (total_irp6p_stiffness < HIGHEST_STIFFNESS) {
+
+			divisor = 1 + (total_irp6p_stiffness - STIFFNESS_INSENSIVITY_LEVEL) / adaptation_factor;
+
+		} else {
+			divisor = MAX_DIVIDER;
+		}
+	} else {
+		divisor = 1;
+	}
+
 	/*
-	 double adaptation_factor = (HIGHEST_STIFFNESS - STIFFNESS_INSENSIVITY_LEVEL) / (MAX_DIVIDER - 1);
+	 if (current_irp6p_force > 10.0) {
+	 start_changing_divisor = true;
 
-	 if (total_irp6p_stiffness > STIFFNESS_INSENSIVITY_LEVEL) {
-
-	 if (total_irp6p_stiffness < HIGHEST_STIFFNESS) {
-
-	 divisor = 1 + (total_irp6p_stiffness - STIFFNESS_INSENSIVITY_LEVEL) / adaptation_factor;
-
-	 } else {
-	 divisor = 1 + (HIGHEST_STIFFNESS - STIFFNESS_INSENSIVITY_LEVEL) / adaptation_factor;
 	 }
-	 } else {
-	 divisor = 1;
+
+	 if (start_changing_divisor) {
+
+	 if (node_counter % 1000 == 0) {
+
+	 divisor *= 2;
+
+	 std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	 ss << "divisor: " << divisor;
+
+	 sr_ecp_msg.message(ss.str().c_str());
+
+	 }
+
 	 }
 	 */
-	if (current_irp6p_force > 10.0) {
-		start_changing_divisor = true;
-
-	}
-
-	if (start_changing_divisor) {
-
-		if (node_counter % 1000 == 0) {
-
-			divisor *= 2;
-
-			std::stringstream ss(std::stringstream::in | std::stringstream::out);
-
-			ss << "divisor: " << divisor;
-
-			sr_ecp_msg.message(ss.str().c_str());
-
-		}
-
-	}
-
 	for (int i = 0; i < 3; i++) {
 		the_robot->ecp_command.arm.pf_def.reciprocal_damping[i] = 2 * lib::FORCE_RECIPROCAL_DAMPING / (divisor);
 		the_robot->ecp_command.arm.pf_def.inertia[i] = 2 * lib::FORCE_INERTIA / divisor;
