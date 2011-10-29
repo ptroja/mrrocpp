@@ -36,7 +36,7 @@ spring_contact::spring_contact(common::task::task& _ecp_task, int step) :
 bool spring_contact::first_step()
 {
 
-	std::cout << "spring_contact" << node_counter << std::endl;
+	std::cout << std::endl << "spring_contact" << node_counter << std::endl << std::endl;
 
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
@@ -67,8 +67,8 @@ bool spring_contact::first_step()
 		the_robot->ecp_command.arm.pf_def.behaviour[i] = lib::UNGUARDED_MOTION;
 	}
 
-	the_robot->ecp_command.arm.pf_def.inertia[2] = lib::FORCE_INERTIA / 10;
-	the_robot->ecp_command.arm.pf_def.reciprocal_damping[2] = lib::FORCE_RECIPROCAL_DAMPING / 10;
+	the_robot->ecp_command.arm.pf_def.inertia[2] = lib::FORCE_INERTIA;
+	the_robot->ecp_command.arm.pf_def.reciprocal_damping[2] = lib::FORCE_RECIPROCAL_DAMPING;
 	the_robot->ecp_command.arm.pf_def.behaviour[2] = lib::CONTACT;
 	// Sila dosciku do rawedzi
 	the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[2] = 10;
@@ -143,6 +143,8 @@ bool spring_contact::next_step()
 				if ((fabs(current_irp6p_force - intermediate_irp6p_force) >= FORCE_INCREMENT)
 						|| (fabs(current_irp6p_position - intermediate_irp6p_position) >= POSITION_INCREMENT)) {
 
+					//if (1) {
+
 					double computed_intermiediate_irp6p_stiffness = (current_irp6p_force - intermediate_irp6p_force)
 							/ -(current_irp6p_position - intermediate_irp6p_position);
 
@@ -165,11 +167,22 @@ bool spring_contact::next_step()
 	// Korekta parametrów regulatora siłowego w robocie podrzednym na podstawie estymaty sztywnosci
 	double divisor;
 
-	if (total_irp6p_stiffness > ADAPTATION_FACTOR) {
-		divisor = total_irp6p_stiffness / ADAPTATION_FACTOR;
+	double adaptation_factor = (HIGHEST_STIFFNESS - STIFFNESS_INSENSIVITY_LEVEL) / (MAX_DIVIDER - 1);
+
+	if (total_irp6p_stiffness > STIFFNESS_INSENSIVITY_LEVEL) {
+
+		if (total_irp6p_stiffness < HIGHEST_STIFFNESS) {
+
+			divisor = 1 + (total_irp6p_stiffness - STIFFNESS_INSENSIVITY_LEVEL) / adaptation_factor;
+
+		} else {
+			divisor = 1 + (HIGHEST_STIFFNESS - STIFFNESS_INSENSIVITY_LEVEL) / adaptation_factor;
+		}
 	} else {
 		divisor = 1;
 	}
+
+	divisor = 1 + (double) node_counter / 1000.0;
 
 	for (int i = 0; i < 3; i++) {
 		the_robot->ecp_command.arm.pf_def.reciprocal_damping[i] = lib::FORCE_RECIPROCAL_DAMPING / divisor;
@@ -179,7 +192,7 @@ bool spring_contact::next_step()
 
 	//	if ((cycle_counter % 10) == 0) {
 	std::cout << "irp6p_f: " << current_irp6p_force << ", irp6p_p: " << current_irp6p_position << ", irp6p_ts: "
-			<< total_irp6p_stiffness << ", irp6p_ls: " << last_irp6p_stiffness << std::endl;
+			<< total_irp6p_stiffness << ", irp6p_ls: " << last_irp6p_stiffness << ", divisor: " << divisor << std::endl;
 
 	return true;
 
