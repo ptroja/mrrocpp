@@ -16,7 +16,7 @@ namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace generator {
-class y_edge_follow_force;
+class spring_contact;
 }
 
 namespace sub_task {
@@ -35,7 +35,7 @@ private:
 	/*!
 	 * @brief y_edge_follow_force generator pointer
 	 */
-	generator::y_edge_follow_force* yefg;
+	generator::spring_contact* scg;
 
 public:
 
@@ -52,6 +52,5 @@ public:
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
-
 
 #endif

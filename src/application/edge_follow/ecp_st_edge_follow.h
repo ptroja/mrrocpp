@@ -53,5 +53,4 @@ public:
 } // namespace ecp
 } // namespace mrrocpp
 
-
 #endif

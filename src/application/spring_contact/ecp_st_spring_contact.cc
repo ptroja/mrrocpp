@@ -17,13 +17,13 @@ namespace sub_task {
 edge_follow::edge_follow(task::task &_ecp_t) :
 		sub_task(_ecp_t)
 {
-	yefg = new generator::y_edge_follow_force(_ecp_t, 8);
+	scg = new generator::spring_contact(_ecp_t, 8);
 }
 
 void edge_follow::conditional_execution()
 {
 
-	yefg->Move();
+	scg->Move();
 }
 
 } // namespace task

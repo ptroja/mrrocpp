@@ -28,7 +28,7 @@ const double DEGREES_TO_RADIANS = 57.295780;
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup edge_follow
  */
-class y_edge_follow_force : public common::generator::generator
+class spring_contact : public common::generator::generator
 {
 protected:
 
@@ -48,7 +48,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	y_edge_follow_force(common::task::task& _ecp_task, int step);
+	spring_contact(common::task::task& _ecp_task, int step);
 
 	bool first_step();
 	bool next_step();

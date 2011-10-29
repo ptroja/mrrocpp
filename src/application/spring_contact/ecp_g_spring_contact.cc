@@ -24,19 +24,19 @@ namespace generator {
 
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 //
-// 			y_edge_follow_force_generator
+// 			spring_contact_generator
 //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
-y_edge_follow_force::y_edge_follow_force(common::task::task& _ecp_task, int step) :
+spring_contact::spring_contact(common::task::task& _ecp_task, int step) :
 		common::generator::generator(_ecp_task), step_no(step), tool_frame(0.0, 0.0, 0.25)
 {
 }
 
-bool y_edge_follow_force::first_step()
+bool spring_contact::first_step()
 {
 
-	std::cout << "y_edge_follow_force" << node_counter << std::endl;
+	std::cout << "spring_contact" << node_counter << std::endl;
 
 	td.interpolation_node_no = 1;
 	td.internode_step_no = step_no;
@@ -79,7 +79,7 @@ bool y_edge_follow_force::first_step()
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
-bool y_edge_follow_force::next_step()
+bool spring_contact::next_step()
 {
 	// static int count;
 	// struct timespec start[9];
@@ -87,7 +87,7 @@ bool y_edge_follow_force::next_step()
 		return false;
 	}
 
-	std::cout << "y_edge_follow_force" << node_counter << std::endl;
+	std::cout << "spring_contact" << node_counter << std::endl;
 
 	// 	wstawienie nowego przyrostu pozyji do przyrostowej trajektorii ruchu do zapisu do pliku
 	lib::Homog_matrix tmp_matrix(the_robot->reply_package.arm.pf_def.arm_frame);
