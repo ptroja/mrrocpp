@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_edge_follow_MR_H)
-#define _ECP_T_edge_follow_MR_H
+#if !defined(_ECP_T_EDGE_FOLLOW_MR_H)
+#define _ECP_T_EDGE_FOLLOW_MR_H
 
 /*!
  * @file
