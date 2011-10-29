@@ -1,5 +1,5 @@
-#if !defined(_ECP_SUB_task_EDGE_FOLLOW_H)
-#define _ECP_SUB_task_EDGE_FOLLOW_H
+#if !defined(_ECP_SUB_TASK_SPRING_CONTACT_H)
+#define _ECP_SUB_TASK_SPRING_CONTACT_H
 
 /*!
  * @file

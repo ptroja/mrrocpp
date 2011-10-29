@@ -1,25 +1,29 @@
-#if !defined(__MP_T_edge_follow_MR_H)
-#define __MP_T_edge_follow_MR_H
+#if !defined(_ECP_T_SPRING_CONTACT_H)
+#define _ECP_T_SPRING_CONTACT_H
 
 /*!
  * @file
- * @brief File contains edge_follow_mr mp_task class declaration of unknown contour following application.
+ * @brief File contains edge_follow_mr ecp_task class declaration of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup edge_follow
  */
 
+#include "base/ecp/ecp_task.h"
+
 namespace mrrocpp {
-namespace mp {
+namespace ecp {
+namespace common {
 namespace task {
 
 /*!
- * @brief Task that executes motion of manipulator and its gripper to follow an unknown contour
+ * @brief task to execute edge_following.
+ * it executes two subtasks EDGE_FOLLOW and ECP_ST_BIAS_EDP_FORCE
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup edge_follow
  */
-class edge_follow_mr : public task
+class edge_follow_mr : public common::task::task
 {
 protected:
 
@@ -30,15 +34,11 @@ public:
 	 * @param _config configurator object reference.
 	 */
 	edge_follow_mr(lib::configurator &_config);
-
-	void create_robots(void);
-
-	void main_task_algorithm(void);
-
 };
 
-} // namespace task
-} // namespace mp
+}
+} // namespace common
+} // namespace ecp
 } // namespace mrrocpp
 
 #endif

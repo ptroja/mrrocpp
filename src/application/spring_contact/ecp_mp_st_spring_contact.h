@@ -2,8 +2,8 @@
 //                            ecp_st_go.h
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_MP_SUB_TASK_EDGE_FOLLOW_H)
-#define _ECP_MP_SUB_TASK_EDGE_FOLLOW_H
+#if !defined(_ECP_MP_SUB_TASK_SPRING_CONTACT_H)
+#define _ECP_MP_SUB_TASK_SPRING_CONTACT_H
 
 /*!
  * @file

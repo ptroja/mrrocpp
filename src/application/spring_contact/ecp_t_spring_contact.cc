@@ -16,9 +16,9 @@
 
 #include "robot/irp6p_m/const_irp6p_m.h"
 
-#include "ecp_t_edge_follow_mr.h"
+#include "ecp_t_spring_contact.h"
 
-#include "ecp_st_edge_follow.h"
+#include "ecp_st_spring_contact.h"
 #include "subtask/ecp_st_bias_edp_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"
 
