@@ -1,9 +1,9 @@
 /*!
  * @file
- * @brief File contains edge_follow_mr ecp_task class definition of unknown contour following application.
+ * @brief File contains ecp_task class definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup edge_follow
+ * @ingroup spring_contact
  */
 
 #include <cstdio>
@@ -30,14 +30,14 @@ namespace common {
 namespace task {
 
 // KONSTRUKTORY
-edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
-	common::task::task(_config)
+spring_contact::spring_contact(lib::configurator &_config) :
+		common::task::task(_config)
 {
 	// the robot is choose depending on the section of configuration file sent as argv[4]
 	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw
 	}
@@ -59,12 +59,12 @@ edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 		ecpst->nrg->configure_pulse_check(true);
 	}
 
-	sr_ecp_msg->message("ecp edge_follow_MR loaded");
+	sr_ecp_msg->message("ecp spring_contact loaded");
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)
 {
-	return new common::task::edge_follow_mr(_config);
+	return new common::task::spring_contact(_config);
 }
 
 }

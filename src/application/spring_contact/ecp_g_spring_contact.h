@@ -3,10 +3,10 @@
 
 /*!
  * @file
- * @brief File contains ecp_generator class declaration of unknown contour following application.
+ * @brief File contains ecp_generator class declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup edge_follow
+ * @ingroup spring_contact
  */
 
 #include "generator/ecp/ecp_g_teach_in.h"
@@ -23,10 +23,10 @@ namespace generator {
 const double DEGREES_TO_RADIANS = 57.295780;
 
 /*!
- * @brief Generator that follows unknown contour and memorizes trajectory
+ * @brief Generator that getting into contact with spring
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
- * @ingroup edge_follow
+ * @ingroup spring_contact
  */
 class spring_contact : public common::generator::generator
 {

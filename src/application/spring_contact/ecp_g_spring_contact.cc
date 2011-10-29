@@ -1,9 +1,9 @@
 /*!
  * @file
- * @brief File contains ecp_generator class definition of unknown contour following application.
+ * @brief File contains ecp_generator class definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup edge_follow
+ * @ingroup spring_contact
  */
 
 #include <cstdio>

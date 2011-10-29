@@ -116,7 +116,7 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
-	set_next_ecp_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", 0, manipulator_name);
+	set_next_ecp_state(ecp_mp::sub_task::SPRING_CONTACT, (int) 5, "", 0, manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
