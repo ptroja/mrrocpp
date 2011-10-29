@@ -207,9 +207,7 @@ bool spring_contact::next_step()
 
 	for (int i = 0; i < 3; i++) {
 		the_robot->ecp_command.arm.pf_def.reciprocal_damping[i] = 2 * lib::FORCE_RECIPROCAL_DAMPING / (divisor);
-		the_robot->ecp_command.arm.pf_def.inertia[i] = 2 * lib::FORCE_INERTIA
-		// / divisor
-				;
+		the_robot->ecp_command.arm.pf_def.inertia[i] = 2 * lib::FORCE_INERTIA / divisor;
 	}
 	// wypiski
 
