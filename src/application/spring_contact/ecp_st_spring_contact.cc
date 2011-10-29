@@ -17,7 +17,7 @@ namespace sub_task {
 spring_contact::spring_contact(task::task &_ecp_t) :
 		sub_task(_ecp_t)
 {
-	scg = new generator::spring_contact(_ecp_t, 4);
+	scg = new generator::spring_contact(_ecp_t, 5);
 }
 
 void spring_contact::conditional_execution()

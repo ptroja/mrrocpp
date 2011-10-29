@@ -191,12 +191,16 @@ bool spring_contact::next_step()
 
 	if (start_changing_divisor) {
 
-		if (node_counter % 2500 == 0) {
-			if (divisor < 1.05) {
-				divisor = 2;
-			} else {
-				divisor *= 2;
-			}
+		if (node_counter % 1000 == 0) {
+
+			divisor *= 2;
+
+			std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+			ss << "divisor: " << divisor;
+
+			sr_ecp_msg.message(ss.str().c_str());
+
 		}
 
 	}
