@@ -168,6 +168,9 @@ bool spring_contact::next_step()
 
 	}
 
+// #define ADAPTATION 1
+
+#ifdef ADAPTATION
 	double adaptation_factor = (HIGHEST_STIFFNESS - STIFFNESS_INSENSIVITY_LEVEL) / (MAX_DIVIDER - 1);
 
 	if (total_irp6p_stiffness > STIFFNESS_INSENSIVITY_LEVEL) {
@@ -183,31 +186,35 @@ bool spring_contact::next_step()
 		divisor = 1;
 	}
 
-	/*
-	 if (current_irp6p_force > 10.0) {
-	 start_changing_divisor = true;
+#else
 
-	 }
+	if (current_irp6p_force > 10.0) {
+		start_changing_divisor = true;
 
-	 if (start_changing_divisor) {
+	}
 
-	 if (node_counter % 1000 == 0) {
+	if (start_changing_divisor) {
 
-	 divisor *= 2;
+		if (node_counter % 1000 == 0) {
 
-	 std::stringstream ss(std::stringstream::in | std::stringstream::out);
+			divisor *= 2;
 
-	 ss << "divisor: " << divisor;
+			std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	 sr_ecp_msg.message(ss.str().c_str());
+			ss << "divisor: " << divisor;
 
-	 }
+			sr_ecp_msg.message(ss.str().c_str());
 
-	 }
-	 */
+		}
+
+	}
+
+#endif
 	for (int i = 0; i < 3; i++) {
 		the_robot->ecp_command.arm.pf_def.reciprocal_damping[i] = 2 * lib::FORCE_RECIPROCAL_DAMPING / (divisor);
+		//the_robot->ecp_command.arm.pf_def.reciprocal_damping[i] = 2 * lib::FORCE_RECIPROCAL_DAMPING;
 		the_robot->ecp_command.arm.pf_def.inertia[i] = 2 * lib::FORCE_INERTIA / divisor;
+		//the_robot->ecp_command.arm.pf_def.inertia[i] = 2 * lib::FORCE_INERTIA;
 	}
 	// wypiski
 
