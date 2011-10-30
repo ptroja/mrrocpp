@@ -30,7 +30,10 @@ enum FORCE_ORDER
 };
 
 }
+
 namespace sensor {
+
+#define BIAS_VECTOR_LENGTH 10
 
 const long COMMCYCLE_TIME_NS = 2000000;
 
@@ -109,7 +112,7 @@ public:
 	lib::condition_synchroniser thread_started;
 
 	//! komunikacja z SR
-	boost::shared_ptr<lib::sr_vsp> sr_msg;
+	boost::shared_ptr <lib::sr_vsp> sr_msg;
 
 	//! dostep do nowej wiadomosci dla vsp
 	lib::condition_synchroniser edp_vsp_synchroniser;
@@ -140,8 +143,8 @@ public:
 	virtual void wait_for_particular_event(void) = 0; // oczekiwanie na zdarzenie
 
 	void set_force_tool(void);
-}; // end: class edp_force_sensor
-
+};
+// end: class edp_force_sensor
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
 force* return_created_edp_force_sensor(common::manip_effector &_master);
