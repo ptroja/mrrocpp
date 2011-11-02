@@ -10,10 +10,17 @@
 
 //const int wgt_irp6_m_tool_angle_axis::angle_axis_number = 6;
 
-wgt_irp6_m_tool_angle_axis::wgt_irp6_m_tool_angle_axis(QString _widget_label, mrrocpp::ui::common::Interface& _interface,  mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+wgt_irp6_m_tool_angle_axis::wgt_irp6_m_tool_angle_axis(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
 		WgtToolBase(_widget_label, _interface, _robot, parent)
 {
-	robot = dynamic_cast<mrrocpp::ui::irp6_m::UiRobot *>(_robot);
+	robot = dynamic_cast <mrrocpp::ui::irp6_m::UiRobot *>(_robot);
+
+	ui.label_axis_1->setText("x");
+	ui.label_axis_2->setText("y");
+	ui.label_axis_3->setText("z");
+	ui.label_axis_4->setText("ax");
+	ui.label_axis_5->setText("ay");
+	ui.label_axis_6->setText("az");
 
 //	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 //	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);

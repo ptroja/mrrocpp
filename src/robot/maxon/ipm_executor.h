@@ -38,7 +38,7 @@ public:
 	typedef ipm_executor <NUM_OF_MOTION_SEGMENTS, NUM_OF_SERVOS> self_t;
 
 	//! Axes container
-	boost::array<epos *, NUM_OF_SERVOS> axes;
+        boost::array <epos *, NUM_OF_SERVOS> axes;
 
 	//! Check if there is a motion request for a given axis
 	Eigen::Matrix <bool, 1, NUM_OF_SERVOS> is_moving;
@@ -111,13 +111,13 @@ private:
 				// TODO: setup acceleration and velocity limit values
 				axes[i]->clearPvtBuffer();
 				for (int pnt = 0; pnt < 2; ++pnt) {
-					axes[i]->writeInterpolationDataRecord((int32_t) p(pnt, i), (int32_t) v(pnt, i), (uint8_t) t(pnt));
-					printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->readActualBufferSize());
+					axes[i]->setInterpolationDataRecord((int32_t) p(pnt, i), (int32_t) v(pnt, i), (uint8_t) t(pnt));
+					printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->getActualBufferSize());
 					fflush(stdout);
 				}
 				printf("\n");
 
-				const UNSIGNED16 status = axes[i]->readInterpolationBufferStatus();
+				const UNSIGNED16 status = axes[i]->getInterpolationBufferStatus();
 
 				if (axes[i]->checkInterpolationBufferWarning(status)) {
 					axes[i]->printInterpolationBufferStatus(status);
@@ -145,7 +145,7 @@ private:
 				/** Wait until there is free space in the EPOS data FIFO.
 				 *  Note: we check only the first axis.
 				 */
-				while (!epos::checkInterpolationBufferUnderflowWarning(axes[queryNodeId]->readInterpolationBufferStatus())) {
+				while (!epos::checkInterpolationBufferUnderflowWarning(axes[queryNodeId]->getInterpolationBufferStatus())) {
 					// do nothing
 				}
 
@@ -155,8 +155,8 @@ private:
 						continue;
 
 					// Send the data
-					axes[i]->writeInterpolationDataRecord((int32_t) p(pnt, i), (int32_t) v(pnt, i), (uint8_t) t(pnt));
-					printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->readActualBufferSize());
+					axes[i]->setInterpolationDataRecord((int32_t) p(pnt, i), (int32_t) v(pnt, i), (uint8_t) t(pnt));
+					printf("\rsend: %2d/%zu, free: %2d", pnt, i, axes[i]->getActualBufferSize());
 					fflush(stdout);
 				}
 			}

@@ -34,7 +34,7 @@ task* return_created_mp_task(lib::configurator &_config)
 }
 
 haptic::haptic(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
 
 }
@@ -69,7 +69,7 @@ void haptic::configure_edp_force_sensor(bool configure_track, bool configure_pos
 
 void haptic::main_task_algorithm(void)
 {
-	generator::haptic mp_h_gen(*this, 10);
+	generator::haptic mp_h_gen(*this, 2);
 	mp_h_gen.robot_m = robot_m;
 
 	sr_ecp_msg->message("New series");

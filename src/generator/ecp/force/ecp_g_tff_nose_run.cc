@@ -26,7 +26,7 @@ namespace common {
 namespace generator {
 
 tff_nose_run::tff_nose_run(common::task::task& _ecp_task, int step) :
-	common::generator::generator(_ecp_task), step_no(step)
+		common::generator::generator(_ecp_task), step_no(step)
 {
 	// domyslnie wszytkie osie podatne a pulse_check nieaktywne
 	configure_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT);
@@ -112,10 +112,6 @@ bool tff_nose_run::first_step()
 
 	//	std::cout << "tff_nose_run" << node_counter << std::endl;
 
-	td.interpolation_node_no = 1;
-	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 2;
-
 	lib::Homog_matrix tool_frame(0.0, 0.0, 0.25);
 	the_robot->ecp_command.robot_model.tool_frame_def.tool_frame = tool_frame;
 
@@ -129,16 +125,14 @@ bool tff_nose_run::first_step()
 	the_robot->ecp_command.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.motion_type = lib::RELATIVE;
 	the_robot->ecp_command.interpolation_type = lib::TCIM;
-	the_robot->ecp_command.motion_steps = td.internode_step_no;
-	the_robot->ecp_command.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.motion_steps = step_no;
+	the_robot->ecp_command.value_in_step_no = step_no - 2;
 
 	for (int i = 0; i < 6; i++) {
 		the_robot->ecp_command.arm.pf_def.behaviour[i] = generator_edp_data.next_behaviour[i];
 		the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = generator_edp_data.next_velocity[i];
-		the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[i]
-				= generator_edp_data.next_force_xyz_torque_xyz[i];
-		the_robot->ecp_command.arm.pf_def.reciprocal_damping[i]
-				= generator_edp_data.next_reciprocal_damping[i];
+		the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[i] = generator_edp_data.next_force_xyz_torque_xyz[i];
+		the_robot->ecp_command.arm.pf_def.reciprocal_damping[i] = generator_edp_data.next_reciprocal_damping[i];
 		the_robot->ecp_command.arm.pf_def.inertia[i] = generator_edp_data.next_inertia[i];
 	}
 
@@ -170,7 +164,6 @@ bool tff_nose_run::next_step()
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 
-
 	// wyrzucanie odczytu sil
 
 	if (force_meassure) {
@@ -186,7 +179,6 @@ bool tff_nose_run::next_step()
 }
 
 // metoda przeciazona bo nie chcemy rzucac wyjatku wyjscia poza zakres ruchu - UWAGA napisany szkielet skorygowac cialo funkcji
-
 
 void tff_nose_run::execute_motion(void)
 {

@@ -60,7 +60,7 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="label_5">
+    <widget class="QLabel" name="label_axis_1">
      <property name="text">
       <string>X</string>
      </property>
@@ -112,7 +112,7 @@
     </spacer>
    </item>
    <item row="2" column="0">
-    <widget class="QLabel" name="label_10">
+    <widget class="QLabel" name="label_axis_2">
      <property name="text">
       <string>Y</string>
      </property>
@@ -164,7 +164,7 @@
     </spacer>
    </item>
    <item row="3" column="0">
-    <widget class="QLabel" name="label_11">
+    <widget class="QLabel" name="label_axis_3">
      <property name="text">
       <string>Z</string>
      </property>
@@ -216,7 +216,7 @@
     </spacer>
    </item>
    <item row="4" column="0">
-    <widget class="QLabel" name="label_12">
+    <widget class="QLabel" name="label_axis_4">
      <property name="text">
       <string>alfa</string>
      </property>
@@ -268,7 +268,7 @@
     </spacer>
    </item>
    <item row="5" column="0">
-    <widget class="QLabel" name="label_13">
+    <widget class="QLabel" name="label_axis_5">
      <property name="text">
       <string>betta</string>
      </property>
@@ -320,7 +320,7 @@
     </spacer>
    </item>
    <item row="6" column="0">
-    <widget class="QLabel" name="label_14">
+    <widget class="QLabel" name="label_axis_6">
      <property name="text">
       <string>gamma</string>
      </property>

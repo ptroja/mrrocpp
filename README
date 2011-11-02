@@ -7,9 +7,12 @@ This software was developed at:
 Institute of Control and Computation Engineering,
 Warsaw University of Technology, Poland
 
-Main authors:
+Main authors of first version and general concept:
 	Cezary Zielinski
 	Wojciech Szynkiewicz
+	
+Main authors of current version:
+	
 	Tomasz Winiarski
 	Tomasz Kornuta
 	Piotr Trojanek
@@ -19,3 +22,5 @@ Main authors:
 To build follow the standard CMake build procedure
 mkdir build && cd build && cmake ../
 make && make install 
+
+

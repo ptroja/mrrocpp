@@ -35,6 +35,10 @@ enum EPOS_GEN_PROFILE
 	TRAPEZOIDAL_VELOCITY, CUBIC_POSITION, OPERATIONAL_SPACE, EPOS_GEN_PROFILE_NO_ACTION
 };
 
+/*!
+ * @brief SwarmItFix Epos motion variant
+ * @ingroup epos
+ */
 enum EPOS_MOTION_VARIANT
 {
 	NON_SYNC_TRAPEZOIDAL, SYNC_TRAPEZOIDAL, SYNC_POLYNOMIAL, OPERATIONAL
@@ -93,7 +97,7 @@ const std::string EPOS_CLEAR_FAULT_DATA_PORT = "EPOS_CLEAR_FAULT_DATA_PORT";
  * @brief SwarmItFix Epos status data request port
  * @ingroup epos
  */
-const std::string EPOS_REPLY_DATA_REQUEST_PORT = "EPOS_REPLY_DATA_REQUEST_PORT";
+const std::string EPOS_MOTOR_REPLY_DATA_REQUEST_PORT = "EPOS_MOTOR_REPLY_DATA_REQUEST_PORT";
 
 /*!
  * @brief SwarmItFix Epos status data request port

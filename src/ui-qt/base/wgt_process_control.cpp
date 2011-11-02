@@ -110,12 +110,12 @@ int wgt_process_control::init()
 	BOOST_FOREACH(const mrrocpp::ui::common::robot_pair_t & robot_node, interface.robot_m)
 			{
 
-				if (robot_node.second->state.edp.state <= 0) { // edp wylaczone
+				if (!(robot_node.second->is_edp_loaded())) { // edp wylaczone
 
-				} else if (robot_node.second->state.edp.state == 1) { // edp wlaczone reader czeka na start
+				} else if (robot_node.second->state.edp.state == mrrocpp::ui::common::UI_EDP_WAITING_TO_START_READER) { // edp wlaczone reader czeka na start
 					wlacz_PtButton_wnd_processes_control_all_reader_start = true;
 
-				} else if (robot_node.second->state.edp.state == 2) { // edp wlaczone reader czeka na stop
+				} else if (robot_node.second->state.edp.state == mrrocpp::ui::common::UI_EDP_WAITING_TO_STOP_READER) { // edp wlaczone reader czeka na stop
 					wlacz_PtButton_wnd_processes_control_all_reader_stop = true;
 					wlacz_PtButton_wnd_processes_control_all_reader_trigger = true;
 

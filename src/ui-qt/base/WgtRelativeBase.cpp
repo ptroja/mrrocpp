@@ -5,16 +5,14 @@
  *      Author: matt
  */
 
-
-
 #include "WgtRelativeBase.h"
 #include "ui_robot.h"
 #include "interface.h"
 
 const int WgtRelativeBase::angle_axis_number = 6;
 
-WgtRelativeBase::WgtRelativeBase(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent):
-	wgt_base(_widget_label, _interface, robo, parent)
+WgtRelativeBase::WgtRelativeBase(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent) :
+		wgt_base(_widget_label, _interface, robo, parent)
 {
 
 }
@@ -26,7 +24,7 @@ WgtRelativeBase::~WgtRelativeBase()
 
 void WgtRelativeBase::setup_ui(QGridLayout *layout)
 {
-	wgt_base::setup_ui(layout);
+	wgt_base::setup_ui(layout, 6);
 	wgt_base::create_buttons_and_spin_boxes(desired_pos_column, inc_move_column, angle_axis_number);
 
 	create_buttons();
@@ -43,8 +41,7 @@ void WgtRelativeBase::create_buttons()
 
 int WgtRelativeBase::synchro_depended_widgets_disable(bool set_disabled)
 {
-	for (int i = 0; i < angle_axis_number; i++)
-	{
+	for (int i = 0; i < angle_axis_number; i++) {
 		desired_pos_spin_boxes[i]->setDisabled(set_disabled);
 	}
 	return 1;

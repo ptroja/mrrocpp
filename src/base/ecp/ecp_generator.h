@@ -143,25 +143,20 @@ public:
 	 * @param _ecp_task ecp task object reference.
 	 */
 	_generator(common::task::_task <ECP_ROBOT_T> & _ecp_task) :
-		ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), ecp_t(_ecp_task)//, the_robot(ecp_t.ecp_m_robot)
+			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), ecp_t(_ecp_task) //, the_robot(ecp_t.ecp_m_robot)
 	{
 		if (ecp_t.ecp_m_robot.get()) {
-			the_robot = dynamic_cast <ECP_ROBOT_T *> (ecp_t.ecp_m_robot.get());
+			the_robot = dynamic_cast <ECP_ROBOT_T *>(ecp_t.ecp_m_robot.get());}
 		}
-	}
 
-	/**
-	 * @brief Desstructor
-	 */
-	virtual ~_generator()
-	{
-	}
+		/**
+		 * @brief Desstructor
+		 */
+		virtual ~_generator()
+		{
+		}
 
-	/**
-	 * @brief single trajectory node
-	 */
-	lib::trajectory_description td;
-};
+	};
 
 typedef _generator <robot::ecp_robot> generator;
 

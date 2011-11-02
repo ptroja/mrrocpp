@@ -39,7 +39,8 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @ingroup sarkofag
  */
 
-const std::string ports_strings[] = { "/dev/ttyMI0" };
+//const std::string ports_strings[] = { "/dev/ttyMI7" };
+const std::string ports_strings[] = { "/dev/ttyMI15" };
 
 /*!
  * @brief Sarkofag overcurrent threshold [mA]

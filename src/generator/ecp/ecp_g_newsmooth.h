@@ -23,7 +23,8 @@ namespace generator {
  * @brief Smooth trajectory generator which has an ability to calculate every trajectory (posiada moce super krowy).
  *
  * Usage:
- * Load one or more of trajectory poses using one of the load methods. Velocities and accelerations are set automatically. Call %calculate_interpolate() method.
+ * Load one or more of trajectory poses using one of the load methods. Velocities and accelerations are set automatically, however they can be
+ * also set by the appropriate load methods. Call %calculate_interpolate() method.
  * If it returns true generator is ready to communicate with the robot. Call the %Move() method. The generator resets itself automatically after
  * successful termination of the assumed trajectory, however it is safe to call the %reset() method before the next use of the generator.
  *
