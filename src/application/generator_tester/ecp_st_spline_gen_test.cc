@@ -213,7 +213,7 @@ void sub_task_spline_gen_test::conditional_execution()
         }
         // JOINT ABSOLUTE END
 
-        // JOINT RELATIVE
+        /*// JOINT RELATIVE
         sr_ecp_msg.message("Joint relative");
         cvgenjoint->reset();
         cvgenjoint->set_relative();
@@ -663,7 +663,7 @@ void sub_task_spline_gen_test::conditional_execution()
                 cvgenangle->Move();
         }
         // ANGLE AXIS RELATIVE END
-        sr_ecp_msg.message("Spline test END");
+        sr_ecp_msg.message("Spline test END");*/
 }
 
 sub_task_spline_gen_test::~sub_task_spline_gen_test()

@@ -177,7 +177,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
 
         if (track) {
                 coordinates2[0] = 0.0;
-                coordinates2[1] = -0.087;
+                coordinates2[1] = -0.137;
                 coordinates2[2] = -1.542;
                 coordinates2[3] = 0.024;
                 coordinates2[4] = 1.219;
@@ -212,7 +212,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
         // JOINT ABSOLUTE END
 
 
-        // JOINT RELATIVE
+       /* // JOINT RELATIVE
         sr_ecp_msg.message("Joint relative");
         cvgenjoint->reset();
         cvgenjoint->set_relative();
@@ -661,7 +661,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
         if (cvgenangle->calculate_interpolate()) {
                 cvgenangle->Move();
         }
-        // ANGLE AXIS RELATIVE END
+        // ANGLE AXIS RELATIVE END*/
 
 }
 
