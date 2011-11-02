@@ -26,20 +26,19 @@ visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator,
 	regulator(regulator), sensor(sensor), object_visible(false), max_steps_without_reading(5),
 			steps_without_reading(0)
 {
-	//log_dbg("visual_servo::visual_servo() begin\n");
+	log_dbg("visual_servo::visual_servo() begin\n");
 
-//	string log_enabled_name = "vs_log_enabled";
-//	string log_buffer_size_name = "vs_log_buffer_size";
-//
-//	if (configurator.exists(log_enabled_name, section_name)
-//			&& configurator.value <bool> (log_enabled_name, section_name)) {
-//		log_enabled = true;
-//		if (configurator.exists(log_buffer_size_name, section_name)) {
-//			log_buffer.set_capacity(configurator.value <unsigned int> (log_buffer_size_name, section_name));
-//		} else {
-//			log_buffer.set_capacity(log_buffer_default_capacity);
-//		}
-//	}
+	string log_enabled_name = "vs_log_enabled";
+	if (configurator.exists(log_enabled_name, section_name)
+			&& configurator.value <bool> (log_enabled_name, section_name)) {
+		unsigned int capacity = configurator.value <unsigned int> ("vs_log_capacity", section_name);
+		std::string server_addr = configurator.value <std::string> ("vs_log_server_addr", section_name);
+		int server_port = configurator.value <int> ("vs_log_server_port", section_name);
+
+		log_client = boost::shared_ptr<logger_client>(new logger_client(capacity, server_addr.c_str(), server_port));
+	}
+
+	log_dbg("visual_servo::visual_servo() end\n");
 }
 
 visual_servo::~visual_servo()
@@ -52,6 +51,16 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 
 	lib::Homog_matrix delta_position;
 
+	struct timespec sendTime, receiveTime, requestSentTime, processingStart, processingEnd;
+	sendTime.tv_sec = sendTime.tv_nsec = 0;
+	receiveTime.tv_sec = receiveTime.tv_nsec = 0;
+	requestSentTime.tv_sec = requestSentTime.tv_nsec = 0;
+	processingStart.tv_sec = processingStart.tv_nsec = 0;
+	processingEnd.tv_sec = processingEnd.tv_nsec = 0;
+
+	double mrroc_discode_time_offset = 0;
+	bool is_reading_repreated= false;
+
 	switch (sensor->get_state())
 	{
 		case discode_sensor::DSS_READING_RECEIVED: {
@@ -59,35 +68,30 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 			steps_without_reading = 0;
 
 			mrrocpp::ecp_mp::sensor::discode::reading_message_header rmh = sensor->get_rmh();
-//			sample.sendTimeNanoseconds = rmh.sendTimeNanoseconds;
-//			sample.sendTimeSeconds = rmh.sendTimeSeconds;
+			sendTime.tv_nsec = rmh.sendTimeNanoseconds;
+			sendTime.tv_sec = rmh.sendTimeSeconds;
 
-			struct timespec ts = sensor->get_reading_received_time();
-//			sample.receiveTimeNanoseconds = ts.tv_nsec;
-//			sample.receiveTimeSeconds = ts.tv_sec;
+			receiveTime = sensor->get_reading_received_time();
 
-			ts = sensor->get_request_sent_time();
-//			sample.requestSentTimeNanoseconds = ts.tv_nsec;
-//			sample.requestSentTimeSeconds = ts.tv_sec;
+			requestSentTime = sensor->get_request_sent_time();
 
-//			sample.mrroc_discode_time_offset = sensor->get_mrroc_discode_time_offset();
+			mrroc_discode_time_offset = sensor->get_mrroc_discode_time_offset();
 
 			retrieve_reading();
 			Types::Mrrocpp_Proxy::Reading* reading = get_reading();
 
-//			sample.processingStartSeconds = reading->processingStartSeconds;
-//			sample.processingStartNanoseconds = reading->processingStartNanoseconds;
+			processingStart.tv_sec = reading->processingStartSeconds;
+			processingStart.tv_nsec = reading->processingStartNanoseconds;
 
-//			sample.processingEndSeconds = reading->processingEndSeconds;
-//			sample.processingEndNanoseconds = reading->processingEndNanoseconds;
-
+			processingEnd.tv_sec = reading->processingEndSeconds;
+			processingEnd.tv_nsec = reading->processingEndNanoseconds;
 		}
 			break;
 		case discode_sensor::DSS_CONNECTED: // processing in DisCODe hasn't finished yet
 		case discode_sensor::DSS_REQUEST_SENT: // communication or synchronisation in DisCODe took too long
 			predict_reading();
 			steps_without_reading++;
-//			sample.is_reading_repreated = true;
+			is_reading_repreated = true;
 			break;
 		default: // error
 			log_dbg("visual_servo::get_position_change(): error\n");
@@ -101,8 +105,6 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		object_visible = is_object_visible_in_latest_reading();
 	}
 
-//	sample.is_object_visible = object_visible;
-
 	if (object_visible) {
 		//		log_dbg("visual_servo::get_position_change(): object_visible, calling compute_position_change\n");
 		delta_position = compute_position_change(current_position, dt);
@@ -110,16 +112,27 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		notify_object_considered_not_visible();
 	}
 
-//	if (log_enabled) {
-//		log_buffer.push_back(sample);
-//		//		if (log_buffer.size() % 100 == 0) {
-//		//			log_dbg("log_buffer.size(): %d\n", (int) log_buffer.size());
-//		//		}
-//		if (log_buffer.full()) {
-//			write_log();
-//		}
-//	}
+	// TODO: prepare log message
+	if(sendTime.tv_sec > 0){
+		sprintf(msg.text, "%d;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%.6lf",
+				(int)object_visible,
+				requestSentTime.tv_sec, requestSentTime.tv_nsec,
+				sendTime.tv_sec, sendTime.tv_nsec,
+				receiveTime.tv_sec, receiveTime.tv_nsec,
+				processingStart.tv_sec, processingStart.tv_nsec,
+				processingEnd.tv_sec, processingEnd.tv_nsec,
+				mrroc_discode_time_offset
+			);
+	} else {
+		sprintf(msg.text, "%d",
+				(int)object_visible
+			);
+	}
 
+	// write log message
+	if(log_client.get() != NULL){
+		log_client->log(msg);
+	}
 	//	log_dbg("visual_servo::get_position_change(): end\n");
 	return delta_position;
 } // get_position_change
