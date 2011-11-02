@@ -50,15 +50,6 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 {
 	//	log_dbg("visual_servo::get_position_change(): begin\n");
 
-//	visual_servo_log_sample sample;
-//	memset(&sample, 0, sizeof(visual_servo_log_sample));
-
-//	struct timespec ts;
-//	if (clock_gettime(CLOCK_REALTIME, &ts) == 0) {
-//		sample.sampleTimeNanoseconds = ts.tv_nsec;
-//		sample.sampleTimeSeconds = ts.tv_sec;
-//	}
-
 	lib::Homog_matrix delta_position;
 
 	switch (sensor->get_state())
