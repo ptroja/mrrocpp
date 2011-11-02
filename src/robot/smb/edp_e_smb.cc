@@ -8,12 +8,9 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-// Klasa edp_irp6ot_effector.
 #include "edp_e_smb.h"
 #include "festo_and_inputs.h"
-
 #include "base/edp/reader.h"
-// Kinematyki.
 #include "robot/smb/kinematic_model_smb.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
@@ -45,30 +42,35 @@ void effector::check_controller_state()
 
 	// Try to get state of each axis
 	unsigned int powerOn = 0;
-	unsigned int notInFaultState = 0;
+	unsigned int enabled = 0;
 	// Check axes.
 	for (size_t i = 0; i < axes.size(); ++i) {
 		try {
-			// Print state.
-			axes[i]->printState();
 			// Get current epos state.
 			maxon::epos::actual_state_t state = axes[i]->getState();
-			// Check if in the FAULT state
-			if (state == maxon::epos::FAULT) {
-				// Read number of errors
-				int errNum = axes[i]->getNumberOfErrors();
-				for (int j = 1; j <= errNum; ++j) {
-					// Get the detailed error
-					uint32_t errCode = axes[i]->getErrorHistory(j);
+			if (state != maxon::epos::OPERATION_ENABLE) {
+				cout << string("Axis ") << axesNames[i] << endl;
+				// Print state.
+				axes[i]->printState();
+				// Check if in the FAULT state
+				if (state == maxon::epos::FAULT) {
+					// Read number of errors
+					int errNum = axes[i]->getNumberOfErrors();
+					for (int j = 1; j <= errNum; ++j) {
+						// Get the detailed error
+						uint32_t errCode = axes[i]->getErrorHistory(j);
+						// Send message to SR.
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axesNames[i] + ": "
+								+ axes[i]->ErrorCodeMessage(errCode));
+					}
+				} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
 					// Send message to SR.
-					msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axesNames[i] + ": "
-							+ axes[i]->ErrorCodeMessage(errCode));
-				}
-			} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
-				// Send message to SR.
-				msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axesNames[i] + " is in the Disabled state");
+					msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axesNames[i]
+							+ " is in the Disabled state");
+				}//: if fault || disabled
 			} else {
-				notInFaultState++;
+				// EPOS in enabled state.
+				enabled++;
 			}
 			// In this loop step we are sure that axis is working, this powered.
 			powerOn++;
@@ -81,7 +83,7 @@ void effector::check_controller_state()
 	// Check whether robot is powered.
 	controller_state_edp_buf.is_power_on = (powerOn == axes.size());
 	// Check fault state.
-	controller_state_edp_buf.robot_in_fault_state = (notInFaultState != axes.size());
+	controller_state_edp_buf.robot_in_fault_state = (enabled != axes.size());
 }
 
 void effector::get_controller_state(lib::c_buffer &instruction)
@@ -114,7 +116,6 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 	}
 }
 
-// Konstruktor.
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	motor_driven_effector(_shell, l_robot_name)
 {
@@ -139,11 +140,11 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		gateway->open();
 
 		// Create epos objects according to CAN ID-mapping.
-		epos_di_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8);
+		legs_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8);
 		pkm_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 9);
 
 		// Collect axes into common array container.
-		axes[0] = &(*epos_di_node);
+		axes[0] = &(*legs_rotation_node);
 		axesNames[0] = "legs";
 		axes[1] = &(*pkm_rotation_node);
 		axesNames[1] = "pkm";
@@ -188,7 +189,8 @@ void effector::synchronise(void)
 		const double p3 = -507883.404901415;
 
 		// Compute desired position.
-		int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
+		// Instead moving with an offset 120000, we use 120500 - manipulator will stop on the left of synchro position.
+		int position = -(pot * pot * p1 + pot * p2 + p3) - 120500;
 		cout << "Retrieved potentiometer reading: " << pot << "\nComputed pose: " << position << endl;
 
 		// Move to the relative position.
@@ -203,23 +205,25 @@ void effector::synchronise(void)
 		// Compute joints positions in the home position
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
+		// Homing of the motor controlling the legs rotation - set current position as 0.
+		legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
+
 		// Check whether the synchronization was successful.
 		check_controller_state();
 
 		// Throw non-fatal error - if synchronization wasn't successful.
 		if (!controller_state_edp_buf.is_synchronised)
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_synchronization_unsuccessful());
-
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_synchronization_unsuccessful());
 
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
 		// Standard error handling.
-		HANDLE_MRROCPP_ERROR(e_)
+		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
 	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
 		// Standard error handling.
-		HANDLE_MRROCPP_ERROR(e_)
+		HANDLE_MRROCPP_FATAL_ERROR(e_)
 	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
 		// Standard error handling.
-		HANDLE_MRROCPP_ERROR(e_)
+		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
 	} catch (...) {
 		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
 	}
@@ -254,7 +258,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				break;
 			}
 			case lib::smb::QUICKSTOP: {
-				msg->message("QUICKSTOP");
 				if (!robot_test_mode) {
 					// Execute command
 					BOOST_FOREACH(maxon::epos * node, axes)
@@ -266,7 +269,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				break;
 			}
 			case lib::smb::CLEAR_FAULT: {
-				msg->message("CLEAR_FAULT");
+				//				msg->message("CLEAR_FAULT");
 				if (!robot_test_mode) {
 					BOOST_FOREACH(maxon::epos * node, axes)
 								{
@@ -298,6 +301,14 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (is_base_positioned_to_move_legs) {
 					fai->command();
 				}
+				// If all legs are currently down - reset legs rotation.
+/*				if (current_legs_state() == lib::smb::ALL_DOWN) {
+					msg->message("ALL DOWN!");
+					// Homing of the motor controlling the legs rotation - set current position as 0.
+					legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
+					legs_rotation_node->monitorHomingStatus();
+					msg->message("FINISHED!");
+				}*/
 				break;
 			}
 			default:
@@ -306,13 +317,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		}
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
 		// Standard error handling.
-		HANDLE_MRROCPP_ERROR(e_)
+		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
 	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
 		// Standard error handling.
-		HANDLE_MRROCPP_ERROR(e_)
+		HANDLE_MRROCPP_FATAL_ERROR(e_)
 	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
 		// Standard error handling.
-		HANDLE_MRROCPP_ERROR(e_)
+		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
 	} catch (...) {
 		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
 	}
@@ -396,8 +407,8 @@ void effector::parse_motor_command()
 	} //: switch (ecp_edp_cbuffer.set_pose_specification)
 }
 
-
-void effector::execute_motor_motion(){
+void effector::execute_motor_motion()
+{
 	// TODO: remove this line!
 	ecp_edp_cbuffer.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
@@ -536,25 +547,24 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
 		// Standard error handling.
-		HANDLE_MRROCPP_ERROR(e_)
+		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
 	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
 		// Standard error handling.
-		HANDLE_MRROCPP_ERROR(e_)
+		HANDLE_MRROCPP_FATAL_ERROR(e_)
 	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
 		// Standard error handling.
-		HANDLE_MRROCPP_ERROR(e_)
+		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
 	} catch (...) {
 		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
 	}
 }
 /*--------------------------------------------------------------------------*/
 
-// Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
 void effector::create_kinematic_models_for_given_robot(void)
 {
-	// Stworzenie wszystkich modeli kinematyki.
+	// Create basic kinematic mode.
 	add_kinematic_model(new kinematics::smb::model());
-	// Ustawienie aktywnego modelu.
+	// Set is as active.
 	set_kinematic_model(0);
 }
 

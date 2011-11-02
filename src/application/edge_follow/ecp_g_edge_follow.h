@@ -1,5 +1,5 @@
-#if !defined(_ECP_GEN_edge_follow_H)
-#define _ECP_GEN_edge_follow_H
+#if !defined(_ECP_GEN_EDGE_FOLLOW_H)
+#define _ECP_GEN_EDGE_FOLLOW_H
 
 /*!
  * @file

@@ -1199,7 +1199,7 @@ void epos::saveParameters()
 
 // by Martí Morta
 /* write home; 14.1.55 */
-INTEGER32 epos::setHomePosition()
+INTEGER32 epos::getHomePosition()
 {
 	return ReadObjectValue <INTEGER32>(0x2081, 0x00);
 }
@@ -1677,7 +1677,7 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	std::cout << "Speed for Zero Search: " << getSpeedForZeroSearch() << std::endl;
 	std::cout << "Homing Acceleration: " << getHomingAcceleration() << std::endl;
 	std::cout << "Current Threshold Homing Mode: " << getCurrentThresholdForHomingMode() << std::endl;
-	std::cout << "Home Position: " << setHomePosition() << std::endl;
+	std::cout << "Home Position: " << getHomePosition() << std::endl;
 
 	// set homing method
 	setHomingMethod(method);

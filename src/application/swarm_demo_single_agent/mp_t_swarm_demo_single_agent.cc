@@ -39,6 +39,63 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 }
 
+void swarmitfix::move_smb(int leg_number, double rotation)
+{
+	// spkm - przemieszczamy manipulator do pozycji podparcia dykty
+	sr_ecp_msg->message("2");
+
+	move_spkm_joints(0.28, 0.292, 0.28, 0, 0, 0);
+
+	// stoimy przez dwie sekundy symulujac podparcie dykty
+	sr_ecp_msg->message("3");
+
+	wait_ms(2000);
+
+	// spkm - przemieszczamy manipulator do pozycji marszowej (opuszczamy koncowke w dol)
+	sr_ecp_msg->message("4");
+
+	move_spkm_joints(0.242, 0.242, 0.242, 0, 0, 0);
+
+	// smb - unosimy dwie nogi
+	sr_ecp_msg->message("5");
+	sr_ecp_msg->message("PODNOSZEBIE NOG za 1s");
+
+	wait_ms(3000);
+
+	switch (leg_number)
+	{
+		case 1: {
+			move_smb_legs(lib::smb::DOWN, lib::smb::UP, lib::smb::UP);
+		}
+			break;
+		case 2: {
+			move_smb_legs(lib::smb::UP, lib::smb::DOWN, lib::smb::UP);
+
+		}
+			break;
+		case 3: {
+			move_smb_legs(lib::smb::UP, lib::smb::UP, lib::smb::DOWN);
+		}
+			break;
+		default:
+			break;
+	}
+
+	// smb - obracamy sie wokol opuszczonej nogi do pozycji bazy jezdnej B
+	sr_ecp_msg->message("6");
+
+	move_smb_external(rotation, 0);
+
+	// smb - opusczamy dwie nogi, ktore byly w gorze
+	sr_ecp_msg->message("7");
+
+	sr_ecp_msg->message("Opuszczanie DWOCH NOG za 1s");
+
+	wait_ms(3000);
+
+	move_smb_legs(lib::smb::DOWN, lib::smb::DOWN, lib::smb::DOWN);
+}
+
 void swarmitfix::main_task_algorithm(void)
 {
 
@@ -49,80 +106,12 @@ void swarmitfix::main_task_algorithm(void)
 	sr_ecp_msg->message("1");
 
 	move_smb_legs(lib::smb::DOWN, lib::smb::DOWN, lib::smb::DOWN);
-
-// spkm - przemieszczamy manipulator do pozycji podparcia dykty
-	sr_ecp_msg->message("2");
-
-	move_spkm_joints(0.28, 0.292, 0.28, 0, 0, 0);
-
-// stoimy przez dwie sekundy symulujac podparcie dykty
-	sr_ecp_msg->message("3");
-
-	wait_ms(2000);
-
-// spkm - przemieszczamy manipulator do pozycji marszowej (opuszczamy koncowke w dol)
-	sr_ecp_msg->message("4");
-
-	move_spkm_joints(0.242, 0.242, 0.242, 0, 0, 0);
-
-// smb - unosimy dwie nogi
-	sr_ecp_msg->message("5");
-	sr_ecp_msg->message("PODNOSZEBIE NOG za 1s");
-
-	wait_ms(1000);
-
-	move_smb_legs(lib::smb::UP, lib::smb::DOWN, lib::smb::UP);
-
-// smb - obracamy sie wokol opuszczonej nogi do pozycji bazy jezdnej B
-	sr_ecp_msg->message("6");
-
-	move_smb_external(1, 0);
-
-// smb - opusczamy dwie nogi, ktore byly w gorze
-	sr_ecp_msg->message("7");
-
-	sr_ecp_msg->message("Opuszczanie DWOCH NOG za 1s");
-
-	wait_ms(1000);
-
-	move_smb_legs(lib::smb::DOWN, lib::smb::DOWN, lib::smb::DOWN);
-
-// spkm - przemieszczamy manipulator do pozycji podparcia dykty
-	sr_ecp_msg->message("8");
-
-	move_spkm_joints(0.28, 0.292, 0.28, 0, 0, 0);
-
-// stoimy przez dwie sekundy symulujac podparcie dykty
-	sr_ecp_msg->message("9");
-	wait_ms(2000);
-
-// spkm - przemieszczamy manipulator do pozycji marszowej (opuszczamy koncowke w dol)
-	sr_ecp_msg->message("10");
-
-	move_spkm_joints(0.242, 0.242, 0.242, 0, 0, 0);
-
-// smb - unosimy dwie nogi
-	sr_ecp_msg->message("11");
-
-	sr_ecp_msg->message("PODNOSZEBIE DWOCH NOG za 1s");
-
-	wait_ms(1000);
-
-	move_smb_legs(lib::smb::UP, lib::smb::DOWN, lib::smb::UP);
-
-// smb - obracamy sie wokol opuszczonej nogi do pozycji bazy jezdnej A
-	sr_ecp_msg->message("12");
-
-	move_smb_external(0, 0);
-
-// smb - opusczamy dwie nogi, ktore byly w gorze
-	sr_ecp_msg->message("13");
-
-	sr_ecp_msg->message("Opuszczanie NOG za 1s");
-
-	wait_ms(1000);
-
-	move_smb_legs(lib::smb::DOWN, lib::smb::DOWN, lib::smb::DOWN);
+	move_smb(2, 1);
+	move_smb(3, 2);
+	move_smb(1, 3);
+	move_smb(2, 4);
+	move_smb(3, 5);
+	move_smb(1, 0);
 
 // smb - podnosimy wszystkie nogi
 	sr_ecp_msg->message("14");

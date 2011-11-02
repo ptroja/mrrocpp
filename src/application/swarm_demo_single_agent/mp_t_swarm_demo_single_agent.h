@@ -27,6 +27,8 @@ public:
 
 	void move_smb_legs(lib::smb::FESTO_LEG l1, lib::smb::FESTO_LEG l2, lib::smb::FESTO_LEG l3);
 
+	void move_smb(int leg_number, double rotation);
+
 	void move_smb_external(double x1, double x2);
 
 	void move_spkm_joints(double x1, double x2, double x3, double x4, double x5, double x6);
