@@ -1,5 +1,5 @@
-#if !defined(_ECP_SUB_TASK_EDGE_FOLLOW_H)
-#define _ECP_SUB_TASK_EDGE_FOLLOW_H
+#if !defined(_ECP_SUB_TASK_SPRING_CONTACT_H)
+#define _ECP_SUB_TASK_SPRING_CONTACT_H
 
 /*!
  * @file
@@ -10,13 +10,13 @@
  */
 
 #include "base/ecp/ecp_sub_task.h"
-#include "application/edge_follow/ecp_mp_st_edge_follow.h"
+#include "ecp_mp_st_spring_contact.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace generator {
-class y_edge_follow_force;
+class spring_contact;
 }
 
 namespace sub_task {
@@ -27,7 +27,7 @@ namespace sub_task {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup subtasks edge_follow
  */
-class edge_follow : public sub_task
+class spring_contact : public sub_task
 {
 
 private:
@@ -35,7 +35,7 @@ private:
 	/*!
 	 * @brief y_edge_follow_force generator pointer
 	 */
-	generator::y_edge_follow_force* yefg;
+	generator::spring_contact* scg;
 
 public:
 
@@ -43,7 +43,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_t ecp task object reference.
 	 */
-	edge_follow(task::task &_ecp_t);
+	spring_contact(task::task &_ecp_t);
 
 	void conditional_execution();
 };
