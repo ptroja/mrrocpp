@@ -163,12 +163,12 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates2[6] = -2.664;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates2);
 	} else if (postument) {
-		coordinates1[0] = -0.104;
-		coordinates1[1] = -1.342;
-		coordinates1[2] = 0.020;
-		coordinates1[3] = 1.034;
-		coordinates1[4] = 3.458;
-		coordinates1[5] = -2.738;
+                coordinates1[0] = -0.804;
+                coordinates1[1] = -1.342;
+                coordinates1[2] = 0.020;
+                coordinates1[3] = 1.034;
+                coordinates1[4] = 3.858;
+                coordinates1[5] = -2.738;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
 	}
 	else if (poly) {

@@ -24,7 +24,7 @@ spline::spline(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_s
     this->axes_num = axes_num;
     this->vpc = velocity_profile_calculator::spline_profile();
     this->inter = trajectory_interpolator::spline_interpolator();
-    this->type = cubic;
+    this->type = quintic;
 
     create_velocity_vectors(axes_num);
 }

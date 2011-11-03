@@ -156,11 +156,11 @@ void sub_task_spline_gen_test::conditional_execution()
                 coordinates2[6] = -2.664;
                 cvgenjoint->load_absolute_joint_trajectory_pose(coordinates2);
         } else if (postument) {
-                coordinates1[0] = -0.104;
+                coordinates1[0] = -0.804;
                 coordinates1[1] = -1.342;
                 coordinates1[2] = 0.020;
                 coordinates1[3] = 1.034;
-                coordinates1[4] = 3.458;
+                coordinates1[4] = 3.858;
                 coordinates1[5] = -2.738;
                 cvgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
         } else if (poly) {
@@ -212,8 +212,8 @@ void sub_task_spline_gen_test::conditional_execution()
                 cvgenjoint->Move();
         }
         // JOINT ABSOLUTE END
-
-        /*// JOINT RELATIVE
+/*
+        // JOINT RELATIVE
         sr_ecp_msg.message("Joint relative");
         cvgenjoint->reset();
         cvgenjoint->set_relative();
@@ -280,8 +280,8 @@ void sub_task_spline_gen_test::conditional_execution()
         }
         // JOINT RELATIVE END
 
-
-        // MOTOR ABSOLUTE
+*/
+        /*// MOTOR ABSOLUTE
         sr_ecp_msg.message("Motor absolute");
         cvgenmotor->reset();
         cvgenmotor->set_absolute();
