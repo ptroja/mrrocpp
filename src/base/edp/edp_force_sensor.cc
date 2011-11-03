@@ -239,12 +239,16 @@ void force::get_reading(void)
 
 				lib::Ft_vector output_in_base;
 
+				for (int j = 0; j < 6; j++) {
+					output_in_base[j] = 0.0;
+				}
+
 				// usredniamy za FORCE_BUFFER_LENGHT pomiarow
 
 				for (int i = 0; i < FORCE_BUFFER_LENGHT; i++) {
 
 					for (int j = 0; j < 6; j++) {
-						output_in_base[j] += (cb[i][j]) / FORCE_BUFFER_LENGHT;
+						output_in_base[j] += (cb[i][j]) / (double) FORCE_BUFFER_LENGHT;
 					}
 
 				}

@@ -107,7 +107,7 @@ protected:
 
 	struct timespec wake_time;
 
-	static const int FORCE_BUFFER_LENGHT = 4;
+	static const int FORCE_BUFFER_LENGHT = 2;
 
 	void clear_cb();
 
