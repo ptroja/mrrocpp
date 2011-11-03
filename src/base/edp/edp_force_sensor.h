@@ -11,6 +11,7 @@
 #include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/circular_buffer.hpp>
 #include <Eigen/Core>
 
 #include "base/lib/mrmath/ForceTrans.h"
@@ -106,6 +107,10 @@ protected:
 
 	struct timespec wake_time;
 
+	static const int FORCE_BUFFER_LENGHT = 2;
+
+	void clear_cb();
+
 public:
 	void operator()();
 	boost::mutex mtx;
@@ -135,6 +140,7 @@ public:
 
 	bool new_edp_command;
 
+	boost::circular_buffer <lib::Ft_vector> cb;
 	force(common::manip_effector &_master);
 
 	virtual ~force();
