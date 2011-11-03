@@ -58,17 +58,16 @@ void block_move::main_task_algorithm(void)
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
+	//Zerowanie czujników
+	sr_ecp_msg->message("Postument Bias");
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", 0, lib::irp6p_m::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
 	wait_ms(4000);
 
 	sr_ecp_msg->message("Final position for searching");
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/pos_search_area_final.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-
-	//Tutaj powinno być przekazanie parametru i dojście
-
-	//sr_ecp_msg->message("Rozwarcie szczek");
-	//set_next_ecp_state(ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, 0, NULL, 0, lib::irp6p_tfg::ROBOT_NAME);
-	//wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
 
 	wait_ms(4000);
 
@@ -76,9 +75,9 @@ void block_move::main_task_algorithm(void)
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/block_reaching.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-	//sr_ecp_msg->message("Zwarcie szczek");
-	//set_next_ecp_state();
-	//wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
+	sr_ecp_msg->message("Force approach");
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	wait_ms(4000);
 
@@ -92,9 +91,9 @@ void block_move::main_task_algorithm(void)
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-	//Tutaj powinno byc przekazanie parametru i dojscie - ruch sklada sie z dwoch czesci
-
-	wait_ms(4000);
+	sr_ecp_msg->message("Force approach");
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Put the block in its place");
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/build.trj", 0, lib::irp6p_m::ROBOT_NAME);
