@@ -232,9 +232,10 @@ void force::get_reading(void)
 
 				//sily przechowujemy w zerowej orientacji bazowej
 
-				lib::Ft_vector force_in_base_orientation(lib::Ft_tr(current_orientation) * base_force);
+				//		lib::Ft_vector force_in_base_orientation(lib::Ft_tr(current_orientation) * base_force);
 
-				cb.push_back(force_in_base_orientation);
+				//		cb.push_back(force_in_base_orientation);
+				cb.push_back(base_force);
 
 				lib::Ft_vector output_in_base;
 
@@ -243,14 +244,16 @@ void force::get_reading(void)
 				for (int i = 0; i < FORCE_BUFFER_LENGHT; i++) {
 
 					for (int j = 0; j < 6; j++) {
-						output_in_base[i] += (cb[i][j]) / FORCE_BUFFER_LENGHT;
+						output_in_base[j] += (cb[i][j]) / FORCE_BUFFER_LENGHT;
 					}
 
 				}
 
 				//sila zwracamy w biezacej oritntacji
 
-				lib::Ft_vector output(lib::Ft_tr(!current_orientation) * output_in_base);
+				//	lib::Ft_vector output(lib::Ft_tr(!current_orientation) * output_in_base);
+
+				lib::Ft_vector output = output_in_base;
 
 				master.force_msr_upload(output);
 			} else {
