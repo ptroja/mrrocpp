@@ -29,7 +29,7 @@ double time_diff(struct timespec t1, struct timespec t0)
 	return (t1.tv_sec - t0.tv_sec) + (t1.tv_nsec - t0.tv_nsec) * 1e-9;
 }
 
-logger_client::logger_client(int buffer_size, const char* server_addr, int server_port) :
+logger_client::logger_client(int buffer_size, const std::string& server_addr, int server_port) :
 		fd(-1), buffer(buffer_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false)
 {
 	thread = boost::thread(&logger_client::operator (), this);
@@ -114,9 +114,9 @@ void logger_client::connect()
 		throw runtime_error("setsockopt(): " + string(strerror(errno)));
 	}
 
-	hostent * server = gethostbyname(server_addr);
+	hostent * server = gethostbyname(server_addr.c_str());
 	if (server == NULL) {
-		throw runtime_error(string("gethostbyname(") + server_addr + "): " + string(hstrerror(h_errno)));
+		throw runtime_error("logger_client::connect(): gethostbyname(" + server_addr + "): " + string(hstrerror(h_errno)));
 	}
 
 	sockaddr_in serv_addr;

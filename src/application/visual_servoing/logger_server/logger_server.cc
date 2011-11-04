@@ -97,6 +97,7 @@ void logger_server::accept_connection(){
 
 void logger_server::main_loop()
 {
+	cout<<"logger_server::main_loop(): Starting...\n";
 	fd_set rfds;
 	struct timeval tv;
 
@@ -114,10 +115,11 @@ void logger_server::main_loop()
 		tv.tv_sec = 1;
 		tv.tv_usec = 0;
 		int ret = select(maxFd + 1, &rfds, NULL, NULL, &tv);
-		if(ret < 0){
+		if(ret < 0 && errno == EINTR){
+			terminate_now = true;
+		}else if(ret < 0){
 			throw runtime_error("select() error: " + string(strerror(errno)));
-		}
-		if(ret > 0){
+		}else if(ret > 0){
 			if(FD_ISSET(fd, &rfds)){ // accept new connection
 				cout<<"New connection\n";
 				accept_connection();

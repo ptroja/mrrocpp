@@ -23,8 +23,7 @@ using namespace std;
 
 visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <
 		mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator) :
-	regulator(regulator), sensor(sensor), object_visible(false), max_steps_without_reading(5),
-			steps_without_reading(0)
+	regulator(regulator), sensor(sensor), object_visible(false), max_steps_without_reading(5), steps_without_reading(0)
 {
 	log_dbg("visual_servo::visual_servo() begin\n");
 
@@ -35,7 +34,7 @@ visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator,
 		std::string server_addr = configurator.value <std::string> ("vs_log_server_addr", section_name);
 		int server_port = configurator.value <int> ("vs_log_server_port", section_name);
 
-		log_client = boost::shared_ptr<logger_client>(new logger_client(capacity, server_addr.c_str(), server_port));
+		log_client = boost::shared_ptr <logger_client>(new logger_client(capacity, server_addr, server_port));
 	}
 
 	log_dbg("visual_servo::visual_servo() end\n");
@@ -59,7 +58,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	processingEnd.tv_sec = processingEnd.tv_nsec = 0;
 
 	double mrroc_discode_time_offset = 0;
-	bool is_reading_repreated= false;
+	bool is_reading_repreated = false;
 
 	switch (sensor->get_state())
 	{
@@ -112,25 +111,22 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 		notify_object_considered_not_visible();
 	}
 
+	msg.time_elems = 5;
+	msg.time_buf[0] = requestSentTime;
+	msg.time_buf[1] = sendTime;
+	msg.time_buf[2] = receiveTime;
+	msg.time_buf[3] = processingStart;
+	msg.time_buf[4] = processingEnd;
+
 	// TODO: prepare log message
-	if(sendTime.tv_sec > 0){
-		sprintf(msg.text, "%d;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%.6lf",
-				(int)object_visible,
-				requestSentTime.tv_sec, requestSentTime.tv_nsec,
-				sendTime.tv_sec, sendTime.tv_nsec,
-				receiveTime.tv_sec, receiveTime.tv_nsec,
-				processingStart.tv_sec, processingStart.tv_nsec,
-				processingEnd.tv_sec, processingEnd.tv_nsec,
-				mrroc_discode_time_offset
-			);
+	if (sendTime.tv_sec > 0) {
+		sprintf(msg.text, "%d;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%.6lf", (int) object_visible, requestSentTime.tv_sec, requestSentTime.tv_nsec, sendTime.tv_sec, sendTime.tv_nsec, receiveTime.tv_sec, receiveTime.tv_nsec, processingStart.tv_sec, processingStart.tv_nsec, processingEnd.tv_sec, processingEnd.tv_nsec, mrroc_discode_time_offset);
 	} else {
-		sprintf(msg.text, "%d",
-				(int)object_visible
-			);
+		sprintf(msg.text, "%d", (int) object_visible);
 	}
 
 	// write log message
-	if(log_client.get() != NULL){
+	if (log_client.get() != NULL) {
 		log_client->log(msg);
 	}
 	//	log_dbg("visual_servo::get_position_change(): end\n");

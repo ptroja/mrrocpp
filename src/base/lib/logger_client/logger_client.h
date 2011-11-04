@@ -27,7 +27,7 @@ double time_diff(struct timespec t1, struct timespec t0);
 
 class logger_client {
 public:
-	logger_client(int buffer_size, const char* server_addr, int server_port);
+	logger_client(int buffer_size, const std::string& server_addr, int server_port);
 	~logger_client();
 
 	void log(log_message& msg);
@@ -45,7 +45,7 @@ private:
 	boost::thread thread;
 	boost::circular_buffer<log_message> buffer;
 
-	const char* server_addr;
+	std::string server_addr;
 	int server_port;
 
 	uint32_t current_message_number;

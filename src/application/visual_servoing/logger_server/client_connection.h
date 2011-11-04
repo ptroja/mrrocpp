@@ -9,6 +9,7 @@
 #define CLIENT_CONNECTION_H_
 
 #include <string>
+#include <fstream>
 
 #include "logger_server.h"
 
@@ -32,6 +33,8 @@ private:
 	int header_size;
 
 	int last_message_number;
+
+	std::ofstream outFile;
 };
 
 } /* namespace logger */
