@@ -118,12 +118,7 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	msg.time_buf[3] = processingStart;
 	msg.time_buf[4] = processingEnd;
 
-	// TODO: prepare log message
-	if (sendTime.tv_sec > 0) {
-		sprintf(msg.text, "%d;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%ld;%.6lf", (int) object_visible, requestSentTime.tv_sec, requestSentTime.tv_nsec, sendTime.tv_sec, sendTime.tv_nsec, receiveTime.tv_sec, receiveTime.tv_nsec, processingStart.tv_sec, processingStart.tv_nsec, processingEnd.tv_sec, processingEnd.tv_nsec, mrroc_discode_time_offset);
-	} else {
-		sprintf(msg.text, "%d", (int) object_visible);
-	}
+	sprintf(msg.text, "%d", (int) object_visible);
 
 	// write log message
 	if (log_client.get() != NULL) {

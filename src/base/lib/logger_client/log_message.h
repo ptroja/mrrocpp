@@ -28,7 +28,7 @@ struct log_message_header
 };
 
 #define log_message_text_buf_size 256
-#define log_message_timespec_buf_size 10
+#define log_message_time_buf_size 10
 
 struct log_message
 {
@@ -40,42 +40,26 @@ struct log_message
 
 	char text[log_message_text_buf_size];
 	uint32_t time_elems;
-	struct timespec time_buf[log_message_timespec_buf_size];
+	struct timespec time_buf[log_message_time_buf_size];
 
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		//		ar & number;
-		//		ar & seconds;
-		//		ar & nanoseconds;
-		//		ar & text;
-
 		ar & number;
 		ar & seconds;
 		ar & nanoseconds;
 		ar & text;
 		ar & time_elems;
+
+		if(time_elems > log_message_time_buf_size){
+			throw std::runtime_error("log_message::serialize(): time_elems > log_message_time_buf_size");
+		}
+
 		for (int i = 0; i < time_elems; ++i) {
 			ar & time_buf[i].tv_nsec;
 			ar & time_buf[i].tv_sec;
 		}
 	}
-
-	//	template <class Archive>
-	//	void save(Archive & ar, const unsigned int version) const
-	//	{
-	//
-	//	}
-	//	template <class Archive>
-	//	void load(Archive & ar, const unsigned int version)
-	//	{
-	//		ar & number;
-	//		ar & seconds;
-	//		ar & nanoseconds;
-	//		ar & text;
-	//	}
-
-	//	BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 	virtual void prepare_text();
 };
