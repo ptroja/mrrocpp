@@ -75,15 +75,21 @@ int main(int argc, char *argv[])
 		}
 
 		// Change to the operational mode.
-		node.reset();
-
-		// Get current potentiometer readings.
-		int pot = node.getAnalogInput1();
+		// node.reset();
 
 		// Set coefficients.
 		const double p1 = -0.0078258336;
 		const double p2 = 174.7796278191;
 		const double p3 = -507883.404901415;
+
+		// Get current potentiometer readings.
+		int pot;
+		do {
+			pot = node.getAnalogInput1();
+			int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
+			//std::cout << pot << std::endl;
+			std::cout << position << std::endl;
+		} while (true);
 
 		// Compute desired position.
 		int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
