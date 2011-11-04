@@ -29,7 +29,7 @@ struct log_message_header
 	}
 };
 
-#define log_message_text_buf_size 256
+#define log_message_text_buf_size 1024
 #define log_message_time_buf_size 10
 
 struct log_message
@@ -52,6 +52,10 @@ struct log_message
 		ar & nanoseconds;
 		ar & text;
 		ar & time_elems;
+
+		if(strlen(text) >= log_message_text_buf_size){
+			throw std::runtime_error("log_message::serialize(): strlen(text) > log_message_text_buf_size");
+		}
 
 		if(time_elems > log_message_time_buf_size){
 			throw std::runtime_error("log_message::serialize(): time_elems > log_message_time_buf_size");

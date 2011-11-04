@@ -26,7 +26,9 @@ void log_message::prepare_text(){
 
 void log_message::append_Homog_matrix(const mrrocpp::lib::Homog_matrix& hm)
 {
-	char hm_text[300] = {0};
+	char hm_text[300];
+	strcpy(hm_text, "");
+
 	for(int i=0; i<3; ++i){
 		for(int j=0; j<4; ++j){
 			char v[16];
