@@ -1,12 +1,12 @@
-#if !defined(_ECP_T_EDGE_FOLLOW_MR_H)
-#define _ECP_T_EDGE_FOLLOW_MR_H
+#if !defined(_ECP_T_SPRING_CONTACT_H)
+#define _ECP_T_SPRING_CONTACT_H
 
 /*!
  * @file
- * @brief File contains edge_follow_mr ecp_task class declaration of unknown contour following application.
+ * @brief File containsecp_task class declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup edge_follow
+ * @ingroup spring_contact
  */
 
 #include "base/ecp/ecp_task.h"
@@ -23,7 +23,7 @@ namespace task {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup edge_follow
  */
-class edge_follow_mr : public common::task::task
+class spring_contact : public common::task::task
 {
 protected:
 
@@ -33,7 +33,7 @@ public:
 	 * @brief Constructor
 	 * @param _config configurator object reference.
 	 */
-	edge_follow_mr(lib::configurator &_config);
+	spring_contact(lib::configurator &_config);
 };
 
 }

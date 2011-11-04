@@ -183,7 +183,7 @@ void effector::synchronise(void)
 		// Get current potentiometer readings.
 		int pot = pkm_rotation_node->getAnalogInput1();
 
-		// Set coefficients.
+		// Set voltage-to-position interpolation coefficients.
 		const double p1 = -0.0078258336;
 		const double p2 = 174.7796278191;
 		const double p3 = -507883.404901415;

@@ -11,6 +11,7 @@
 #include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/circular_buffer.hpp>
 #include <Eigen/Core>
 
 #include "base/lib/mrmath/ForceTrans.h"
@@ -30,7 +31,10 @@ enum FORCE_ORDER
 };
 
 }
+
 namespace sensor {
+
+#define BIAS_VECTOR_LENGTH 10
 
 const long COMMCYCLE_TIME_NS = 2000000;
 
@@ -103,13 +107,17 @@ protected:
 
 	struct timespec wake_time;
 
+	static const int FORCE_BUFFER_LENGHT = 2;
+
+	void clear_cb();
+
 public:
 	void operator()();
 	boost::mutex mtx;
 	lib::condition_synchroniser thread_started;
 
 	//! komunikacja z SR
-	boost::shared_ptr<lib::sr_vsp> sr_msg;
+	boost::shared_ptr <lib::sr_vsp> sr_msg;
 
 	//! dostep do nowej wiadomosci dla vsp
 	lib::condition_synchroniser edp_vsp_synchroniser;
@@ -132,6 +140,7 @@ public:
 
 	bool new_edp_command;
 
+	boost::circular_buffer <lib::Ft_vector> cb;
 	force(common::manip_effector &_master);
 
 	virtual ~force();
@@ -140,8 +149,8 @@ public:
 	virtual void wait_for_particular_event(void) = 0; // oczekiwanie na zdarzenie
 
 	void set_force_tool(void);
-}; // end: class edp_force_sensor
-
+};
+// end: class edp_force_sensor
 
 // Zwrocenie stworzonego obiektu - czujnika. Funkcja implementowana w plikach klas dziedziczacych.
 force* return_created_edp_force_sensor(common::manip_effector &_master);

@@ -50,7 +50,7 @@ const int MAX_CURRENT_0 = 200;
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
  * @ingroup irp6p_tfg
  */
-const double MAX_INCREMENT[] = { 100 };
+const double MAX_INCREMENT[] = { 1000 };
 
 }
 } // namespace lib

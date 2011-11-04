@@ -32,7 +32,7 @@ namespace sensor {
 
 // Rejstracja procesu VSP
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
-	force(_master), dev_name("/dev/comedi1")
+		force(_master), dev_name("/dev/comedi1")
 {
 	printf("FT6284KB created !!! \n");
 
@@ -79,12 +79,21 @@ void ATI6284_force::disconnect_from_hardware(void)
 /**************************** inicjacja czujnika ****************************/
 void ATI6284_force::configure_particular_sensor(void)
 {
+	// by Y
+	// synchronize gravity transformation with average based filtration
 
-	// synchronize gravity transformation
+	for (int l = 0; l < 6; l++) {
+		bias_data[l] = 0.0;
+	}
 
-	wait_for_particular_event();
+	for (int i = 0; i < BIAS_VECTOR_LENGTH; i++) {
+		wait_for_particular_event();
 
-	bias_data = datav;
+		for (int l = 0; l < 6; l++) {
+			bias_data[l] += datav[l] / ((double) BIAS_VECTOR_LENGTH);
+		}
+
+	}
 
 }
 
@@ -119,7 +128,7 @@ void ATI6284_force::get_particular_reading(void)
 force* return_created_edp_force_sensor(common::manip_effector &_master)
 {
 	return new ATI6284_force(_master);
-}// : return_created_sensor
+} // : return_created_sensor
 
 /***************************** konwersja danych z danych binarnych na sile *****************************/
 /* convert data with bias from hex data to force */
