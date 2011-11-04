@@ -234,9 +234,9 @@ const lib::Homog_matrix& visual_servo_manager::get_current_position() const
 
 void visual_servo_manager::configure(const std::string & sensor_prefix)
 {
-	//	log_dbg("void visual_servo_manager::configure() 1\n");
+//	log_dbg("void visual_servo_manager::configure() 1\n");
 	configure_all_servos();
-	//	log_dbg("void visual_servo_manager::configure() 2\n");
+//	log_dbg("void visual_servo_manager::configure() 2\n");
 	int i = 0;
 	for (std::vector <boost::shared_ptr <visual_servo> >::iterator it = servos.begin(); it != servos.end(); ++it, ++i) {
 		(*it)->get_sensor()->configure_sensor();
@@ -245,7 +245,7 @@ void visual_servo_manager::configure(const std::string & sensor_prefix)
 		lib::sensor::SENSOR_t sensor_id = sensor_prefix + sensor_suffix;
 		sensor_m[sensor_id] = (*it)->get_sensor().get();
 	}
-	//	log_dbg("void visual_servo_manager::configure() 3\n");
+//	log_dbg("void visual_servo_manager::configure() 3\n");
 }
 
 void visual_servo_manager::add_position_constraint(boost::shared_ptr <position_constraint> new_constraint)
