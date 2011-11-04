@@ -1,6 +1,10 @@
 #include <cstdio>
 #include <iostream>
 #include <bitset>
+//#include <boost/range/algorithm.hpp>
+#include <algorithm>
+#include <boost/thread/thread.hpp>
+#include <boost/thread/thread_time.hpp>
 #include <boost/foreach.hpp>
 
 #include "base/lib/typedefs.h"
@@ -65,8 +69,8 @@ void effector::check_controller_state()
 					}
 				} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
 					// Send message to SR.
-					msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling axis ") + axesNames[i]
-							+ " is in the Disabled state");
+					msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axesNames[i]
+							+ " rotation is in the Disabled state");
 				}//: if fault || disabled
 			} else {
 				// EPOS in enabled state.
@@ -169,6 +173,42 @@ void effector::reset_variables()
 	desired_joints = current_joints;
 }
 
+int effector::relativeSynchroPosition(maxon::epos & node)
+{
+	// Wakeup time.
+	boost::system_time wakeup;
+
+	// Setup the wakeup time.
+	wakeup = boost::get_system_time();
+
+	// Set voltage-to-position interpolation coefficients.
+	const double p1 = -0.0078258336;
+	const double p2 = 174.7796278191;
+	const double p3 = -507883.404901415;
+
+	// Number of readings.
+	const unsigned int filter = 7;
+	std::vector <int> potTable(filter);
+
+	// Get current potentiometer readings.
+	for (int i = 0; i < filter; ++i) {
+		potTable[i] = node.getAnalogInput1();
+		// Increment the wakeup time
+		wakeup += boost::posix_time::milliseconds(5);
+		// Wait for device state to change
+		boost::thread::sleep(wakeup);
+	}
+	// Sort readings table.
+	std::sort(potTable.begin(), potTable.end());
+	// Compute mean value.
+	double pot = (potTable[2] + potTable[3] + potTable[4]) / 3.0;
+
+	// Compute desired position.
+	int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
+	// Return computed position
+	return position;
+}
+
 void effector::synchronise(void)
 {
 	if (robot_test_mode) {
@@ -180,23 +220,32 @@ void effector::synchronise(void)
 		controller_state_edp_buf.is_synchronised = false;
 		// Two-step synchronization of the motor rotating the whole PKM.
 		// Step1: Potentiometer.
-		// Get current potentiometer readings.
-		int pot = pkm_rotation_node->getAnalogInput1();
-
-		// Set voltage-to-position interpolation coefficients.
-		const double p1 = -0.0078258336;
-		const double p2 = 174.7796278191;
-		const double p3 = -507883.404901415;
-
+		int position;
 		// Compute desired position.
-		// Instead moving with an offset 120000, we use 120500 - manipulator will stop on the left of synchro position.
-		int position = -(pot * pot * p1 + pot * p2 + p3) - 120500;
-		cout << "Retrieved potentiometer reading: " << pot << "\nComputed pose: " << position << endl;
+		position = relativeSynchroPosition(*pkm_rotation_node);
+		cout << "Computed pose: " << position << endl;
 
-		// Move to the relative position.
-		pkm_rotation_node->moveRelative(position);
-		while (!pkm_rotation_node->isTargetReached())
-			usleep(200000);
+		do {
+			// Move to the relative position.
+			pkm_rotation_node->moveRelative(position);
+
+			// Wakeup time.
+			boost::system_time wakeup;
+
+			// Setup the wakeup time.
+			wakeup = boost::get_system_time();
+
+			// Wait until end of the motion.
+			while (!pkm_rotation_node->isTargetReached()) {
+				// Sleep for a constant period of time
+				wakeup += boost::posix_time::milliseconds(5);
+
+				boost::thread::sleep(wakeup);
+			}
+
+			// Get current position.
+			position = relativeSynchroPosition(*pkm_rotation_node);
+		} while (abs(position) > 100);
 
 		// Step2: Homing.
 		// Activate homing mode.
@@ -302,13 +351,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					fai->command();
 				}
 				// If all legs are currently down - reset legs rotation.
-/*				if (current_legs_state() == lib::smb::ALL_DOWN) {
-					msg->message("ALL DOWN!");
-					// Homing of the motor controlling the legs rotation - set current position as 0.
-					legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
-					legs_rotation_node->monitorHomingStatus();
-					msg->message("FINISHED!");
-				}*/
+				/*				if (current_legs_state() == lib::smb::ALL_DOWN) {
+				 msg->message("ALL DOWN!");
+				 // Homing of the motor controlling the legs rotation - set current position as 0.
+				 legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
+				 legs_rotation_node->monitorHomingStatus();
+				 msg->message("FINISHED!");
+				 }*/
 				break;
 			}
 			default:

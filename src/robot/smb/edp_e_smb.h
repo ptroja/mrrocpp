@@ -162,6 +162,12 @@ public:
 	 */
 	void synchronise();
 
+
+	/*!
+	 * @brief Method responsible for computation of relative PKM axis position on the base of potentiometer reading.
+	 */
+	int relativeSynchroPosition(maxon::epos & node);
+
 	/*!
 	 * \brief method to choose master_order variant
 	 *
