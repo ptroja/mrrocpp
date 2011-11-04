@@ -15,6 +15,8 @@
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 
+#include "base/lib/mrmath/mrmath.h"
+
 namespace logger {
 
 struct log_message_header
@@ -62,6 +64,8 @@ struct log_message
 	}
 
 	virtual void prepare_text();
+
+	void append_Homog_matrix(const mrrocpp::lib::Homog_matrix& hm);
 };
 
 } /* namespace logger */

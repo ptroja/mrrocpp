@@ -6,6 +6,7 @@
  */
 
 #include <cstring>
+#include <cstdio>
 
 #include "log_message.h"
 
@@ -23,4 +24,17 @@ void log_message::prepare_text(){
 	// does nothing
 }
 
+void log_message::append_Homog_matrix(const mrrocpp::lib::Homog_matrix& hm)
+{
+	char hm_text[300] = {0};
+	for(int i=0; i<3; ++i){
+		for(int j=0; j<4; ++j){
+			char v[16];
+			sprintf(v, "%0.6lf;", hm(i, j));
+			strcat(hm_text, v);
+		}
+	}
+	strcat(text, hm_text);
 }
+
+} // namespace logger

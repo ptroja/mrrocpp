@@ -118,7 +118,12 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	msg.time_buf[3] = processingStart;
 	msg.time_buf[4] = processingEnd;
 
-	sprintf(msg.text, "%d", (int) object_visible);
+
+	lib::Homog_matrix new_position = current_position * delta_position;
+
+	sprintf(msg.text, "%d;%s;", (int) object_visible);
+
+	msg.append_Homog_matrix(new_position);
 
 	// write log message
 	if (log_client.get() != NULL) {
