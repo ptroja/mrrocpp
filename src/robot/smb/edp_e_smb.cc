@@ -65,7 +65,7 @@ void effector::check_controller_state()
 					}
 				} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
 					// Send message to SR.
-					msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axesNames[i]
+					msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling axis ") + axesNames[i]
 							+ " is in the Disabled state");
 				}//: if fault || disabled
 			} else {
