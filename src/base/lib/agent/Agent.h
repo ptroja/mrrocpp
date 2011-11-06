@@ -17,7 +17,7 @@
 #include "DataBuffer.h"
 
 /**
- * Agent base class
+ * Base class for every agent
  */
 class Agent : public AgentBase
 {
