@@ -8,7 +8,11 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include <boost/exception/get_error_info.hpp>
+#include <algorithm>
+#include <boost/thread/thread.hpp>
+#include <boost/thread/thread_time.hpp>
 #include <boost/array.hpp>
 #include <boost/foreach.hpp>
 #include <sys/time.h>
@@ -19,6 +23,50 @@
 using namespace mrrocpp::edp::canopen;
 using namespace mrrocpp::edp::maxon;
 using namespace std;
+
+int relativeSynchroPosition(epos & node)
+{
+	// Wakeup time
+	boost::system_time wakeup;
+
+	// Setup the wakeup time
+	wakeup = boost::get_system_time();
+
+	// Set coefficients.
+	const double p1 = -0.0078258336;
+	const double p2 = 174.7796278191;
+	const double p3 = -507883.404901415;
+
+	const unsigned int filter = 7;
+
+	std::vector<int> potTable(filter);
+
+	// Get current potentiometer readings.
+	for (int i = 0; i < filter; ++i) {
+			potTable[i] = node.getAnalogInput1();
+//					std::cout << potTable[i] << std::endl;
+
+			// Increment the wakeup time
+			wakeup += boost::posix_time::milliseconds(5);
+
+			// Wait for device state to change
+			boost::thread::sleep(wakeup);
+	}
+
+	std::sort(potTable.begin(), potTable.end());
+
+//	std::cout << "sorted" << std::endl;
+	for (int i = 0; i < filter; ++i) {
+//					std::cout << potTable[i] << std::endl;
+	}
+
+	double pot = (potTable[2]+potTable[3]+potTable[4])/3.0;
+
+	// Compute desired position.
+	int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
+
+	return position;
+}
 
 int main(int argc, char *argv[])
 {
@@ -32,13 +80,14 @@ int main(int argc, char *argv[])
 		// Try to convert mode.
 		istringstream iss(argv[1]);
 		iss >> mode;
-		if ((mode <0)||(mode>2))
+		if ((mode <0)||(mode>3))
 			throw;
 	} catch (...) {
 		cout << "Usage: smb_synchro_test X - test synchronization."
-				<< "\n\t X=0 - only prints potentiometer readings."
-				<< "\n\t X=1 - only first step - movement based on the potentiometer readings."
-				<< "\n\t X=2 - full synchronization." << endl;
+				<< "\n\t X=0 - prints potentiometer readings in a loop."
+				<< "\n\t X=1 - prints potentiometer readings only once."
+				<< "\n\t X=2 - only first step - movement based on the potentiometer readings."
+				<< "\n\t X=3 - full synchronization." << endl;
 		exit(-1);
 	}
 
@@ -77,31 +126,31 @@ int main(int argc, char *argv[])
 		// Change to the operational mode.
 		node.reset();
 
-		// Get current potentiometer readings.
-		int pot = node.getAnalogInput1();
+		int position;
+		do {
+			position = relativeSynchroPosition(node);
 
-		// Set coefficients.
-		const double p1 = -0.0078258336;
-		const double p2 = 174.7796278191;
-		const double p3 = -507883.404901415;
-
-		// Compute desired position.
-		int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
-		cout << "Retrieved potentiometer reading: " << pot << "\nComputed pose: " << position << endl;
+			cout << "Computed pose: " << position << endl;
+		} while (mode == 0);
 
 		// Move to the relative position.
-		if(mode>0) {
-			node.moveRelative(position);
-			while (!node.isTargetReached())
-				usleep(200000);
-				cout<< "~2.5V Position reached!\n";
+		if (mode > 1) {
+			do {
+				node.moveRelative(position);
+
+				while (!node.isTargetReached())
+					usleep(200000);
+
+				cout << "~2.5V Position reached!\n";
+
+				position = relativeSynchroPosition(node);
+			} while (abs(position) > 100);
 		}
+
 		usleep(2000000);
 
-
-
 		// Activate homing mode.
-		if(mode>1)
+		if(mode>2)
 			node.doHoming(epos::HM_INDEX_NEGATIVE_SPEED, 0);
 
 		// Close gateway.

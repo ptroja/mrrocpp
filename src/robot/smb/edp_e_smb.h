@@ -48,7 +48,7 @@ private:
 	boost::array <maxon::epos *, mrrocpp::lib::smb::NUM_OF_SERVOS> axes;
 
 	//! Digitial_input axis
-	boost::shared_ptr <maxon::epos> epos_di_node;
+	boost::shared_ptr <maxon::epos> legs_rotation_node;
 
 	//! Axis responsible for rotation of the PKM (upper SMB joint).
 	boost::shared_ptr <maxon::epos> pkm_rotation_node;
@@ -161,6 +161,12 @@ public:
 	 * This method synchronizes motors of the robots.
 	 */
 	void synchronise();
+
+
+	/*!
+	 * @brief Method responsible for computation of relative PKM axis position on the base of potentiometer reading.
+	 */
+	int relativeSynchroPosition(maxon::epos & node);
 
 	/*!
 	 * \brief method to choose master_order variant

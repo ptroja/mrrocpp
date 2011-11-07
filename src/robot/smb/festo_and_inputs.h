@@ -9,11 +9,10 @@
 #ifndef __FESTO_AND_INPUTS_H
 #define __FESTO_AND_INPUTS_H
 
-#include "base/edp/edp_e_motor_driven.h"
 #include <bitset>
 
 #include "const_smb.h"
-
+#include "base/edp/edp_e_motor_driven.h"
 #include "../canopen/gateway_epos_usb.h"
 #include "../canopen/gateway_socketcan.h"
 #include "../festo/cpv.h"

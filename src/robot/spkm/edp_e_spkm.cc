@@ -190,6 +190,7 @@ void effector::synchronise(void)
 {
 	if (robot_test_mode) {
 		controller_state_edp_buf.is_synchronised = true;
+		reply.reply_type = lib::SYNCHRO_OK;
 		return;
 	}
 
@@ -240,7 +241,6 @@ void effector::synchronise(void)
 	//	axisA->writeMinimalPositionLimit(-100000);
 	//	axisB->writeMinimalPositionLimit(-100000);
 	//	axisC->writeMinimalPositionLimit(-100000);
-
 	// Reset internal state of the motor positions
 	for (int i = 0; i < number_of_servos; ++i) {
 		current_motor_pos[i] = desired_motor_pos_old[i] = 0;
@@ -251,6 +251,7 @@ void effector::synchronise(void)
 
 	// Now the robot is synchronised
 	controller_state_edp_buf.is_synchronised = true;
+	reply.reply_type = lib::SYNCHRO_OK;
 }
 
 void effector::move_arm(const lib::c_buffer &instruction)
@@ -400,7 +401,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 
 						// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
-						double t = ppm <6> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
+						double t = ppm <6>(Delta, Vmax, Amax, Vnew, Anew, Dnew);
 
 						cerr << "Delta:\n" << Delta << endl << "Vmax:\n" << Vmax << endl << "Amax:\n" << Amax << endl
 								<< endl;
@@ -474,8 +475,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 						// Interpolate motor poses - equal to number of segments +1 (the start pose).
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> motor_interpolations;
-						linear_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS>(motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
-						//linear_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_deltas, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
+						cubic_polynomial_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1,
+								lib::spkm::NUM_OF_SERVOS>(motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
 
 						// Compute motor_deltas for segments.
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_deltas_for_segments;
@@ -620,8 +621,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 										<< "Axis "
 										<< i
 										<< ": "
-										<< ((p(0, i) != p(lib::spkm::NUM_OF_MOTION_SEGMENTS, i)) ? "moving" : "not moving")<< endl;
-									}
+										<< ((p(0, i) != p(lib::spkm::NUM_OF_MOTION_SEGMENTS, i)) ? "moving" : "not moving")
+										<< endl;
+							}
 
 							descfile.close();
 							cout << "Motion description was written to file: " << filename << endl;
@@ -655,8 +657,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
 									axis_pvt << (int) p(pnt, i) << ";" << (int) v(pnt, i) << ";" << (int) t(pnt)
 											<< ";\r\n";
-								}//: for points
-								// Close file for given axis.
+								} //: for points
+								  // Close file for given axis.
 								axis_pvt.close();
 								cout << "PVT for axis " << i << " were written to file: " << filename << endl;
 
@@ -669,20 +671,21 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								axis_m0123 << "m0w;m1w;m2w;m3w;\r\n";
 								// Write parameters.
 								for (int sgt = 0; sgt < lib::spkm::NUM_OF_MOTION_SEGMENTS; ++sgt) {
-									axis_m0123 << motor_0w(sgt, i) << ";" << motor_1w(sgt, i) << ";"
-											<< motor_2w(sgt, i) << ";" << motor_3w(sgt, i) << ";\r\n";
-								}//: for segments
-								// Close file for given axis.
+									axis_m0123 << motor_0w(sgt, i) << ";" << motor_1w(sgt, i) << ";" << motor_2w(sgt, i)
+											<< ";" << motor_3w(sgt, i) << ";\r\n";
+								} //: for segments
+								  // Close file for given axis.
 								axis_m0123.close();
-								cout << "Trajectory parameters for axis " << i << " were written to file: " << filename << endl;
+								cout << "Trajectory parameters for axis " << i << " were written to file: " << filename
+										<< endl;
 
 								// Write
-							}//: for axes
-						}//: else
+							} //: for axes
+						} //: else
 #endif
 						// Check which motor moves.
 						Eigen::Matrix <bool, 1, lib::spkm::NUM_OF_SERVOS> change;
-						check_pvt_translocation <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> (p, change);
+						check_pvt_translocation <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS>(p, change);
 
 						// Execute motion
 						if (!robot_test_mode) {
@@ -769,28 +772,28 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				return;
 			case lib::spkm::CLEAR_FAULT:
 				BOOST_FOREACH(maxon::epos * node, axes)
-							{
-								node->printState();
+						{
+							node->printState();
 
-								// Check if in a FAULT state
-								if (node->getState() == 11) {
-									maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
-									cerr << "readNumberOfErrors() = " << (int) errNum << endl;
-									for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
+							// Check if in a FAULT state
+							if (node->getState() == 11) {
+								maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
+								cerr << "readNumberOfErrors() = " << (int) errNum << endl;
+								for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-										maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
+									maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
 
-										cerr << node->ErrorCodeMessage(errCode) << endl;
-									}
-									if (errNum > 0) {
-										node->clearNumberOfErrors();
-									}
-									node->setState(maxon::epos::FAULT_RESET);
+									cerr << node->ErrorCodeMessage(errCode) << endl;
 								}
-
-								// Reset node.
-								node->reset();
+								if (errNum > 0) {
+									node->clearNumberOfErrors();
+								}
+								node->setState(maxon::epos::FAULT_RESET);
 							}
+
+							// Reset node.
+							node->reset();
+						}
 				// Internal position counters need not be updated
 				return;
 			default:
@@ -817,7 +820,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
 		// TODO - be sure that this (forget about the cartesian pose in case of error) won't be necessary.
 		// is_previous_cartesian_pose_known = false;
-		HANDLE_MRROCPP_ERROR(e_)
+		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
 	}
 }
 

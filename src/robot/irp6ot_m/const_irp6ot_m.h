@@ -59,7 +59,7 @@ const int MAX_CURRENT_6 = 10000;
  * @brief IRp6 on track max encoder increment
  * @ingroup irp6ot_m
  */
-const double MAX_INCREMENT[] = { 150, 150, 200, 150, 150, 150, 200 };
+const double MAX_INCREMENT[] = { 1000, 1000, 1000, 1000, 1000, 1000, 1000 };
 
 } // namespace irp6ot_m
 } // namespace lib

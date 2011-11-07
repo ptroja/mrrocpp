@@ -1,15 +1,15 @@
 #ifndef _DATABUFFER_H
 #define _DATABUFFER_H
 
-#include <vector>
-#include <ostream>
-
 #include <boost/thread/thread_time.hpp>
 
 #include "base/lib/xdr/xdr_iarchive.hpp"
 
 #include "Agent.h"
 
+/**
+ * Input data buffer
+ */
 template <class T>
 class InputBuffer : public DataBufferBase {
 	//! Agent needs an access to Store/Update methods
@@ -22,7 +22,7 @@ private:
 	//! flag indicating that the new data has not been getted yet
 	bool fresh;
 
-	//! Timestamp of the last message received
+	//! Timestamp of the last received message
 	boost::system_time timestamp;
 
 	/**
@@ -78,7 +78,7 @@ public:
 	/**
 	 * Get the timestamp of the last message
 	 */
-	boost::system_time getTimestamp()
+	boost::system_time getTimestamp() const
 	{
 		return timestamp;
 	}

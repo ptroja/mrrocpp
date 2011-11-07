@@ -443,7 +443,7 @@ public:
 	void saveParameters();
 
 	//! \brief read home position
-	INTEGER32 setHomePosition();
+	INTEGER32 getHomePosition();
 
 	//! \brief write home position
 	void setHomePosition(INTEGER32 val);

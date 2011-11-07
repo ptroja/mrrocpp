@@ -1199,7 +1199,7 @@ void epos::saveParameters()
 
 // by Martí Morta
 /* write home; 14.1.55 */
-INTEGER32 epos::setHomePosition()
+INTEGER32 epos::getHomePosition()
 {
 	return ReadObjectValue <INTEGER32>(0x2081, 0x00);
 }
@@ -1305,7 +1305,7 @@ std::string epos::getDeviceName()
 
 	char name[16];
 
-	for (int i = 0; i < 8; ++i) {
+	for (int i = 0; i < 4; ++i) {
 		name[i * 2] = (answer[3 + i] & 0xFF);
 		name[i * 2 + 1] = ((answer[3 + i] >> 8) & 0xFF);
 	}
@@ -1677,7 +1677,7 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	std::cout << "Speed for Zero Search: " << getSpeedForZeroSearch() << std::endl;
 	std::cout << "Homing Acceleration: " << getHomingAcceleration() << std::endl;
 	std::cout << "Current Threshold Homing Mode: " << getCurrentThresholdForHomingMode() << std::endl;
-	std::cout << "Home Position: " << setHomePosition() << std::endl;
+	std::cout << "Home Position: " << getHomePosition() << std::endl;
 
 	// set homing method
 	setHomingMethod(method);
@@ -1703,6 +1703,10 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	}
 
 	if ((w & E_BIT12) == E_BIT12) {
+		// Just to be sure (this should be OK according to specification)
+		if ((w & E_BIT15) != E_BIT15) {
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Not referenced after homing(!?)") << canId(nodeId));
+		}
 		printf("homing finished!\n");
 		return (0);
 	} else {

@@ -100,10 +100,8 @@ canid_t gateway_socketcan::readFromWire(struct can_frame & frame)
 		throw se_canopen_error() << reason("CAN interface not ready to read");
 	}
 
-	ssize_t nbytes;
-
     /* read frame */
-    if ((nbytes = ::read(sock, &frame, sizeof(frame))) != sizeof(frame)) {
+    if (::read(sock, &frame, sizeof(frame)) != sizeof(frame)) {
         perror("read()");
         BOOST_THROW_EXCEPTION(se_canopen_error() << reason("read from CAN socket failed"));
     }
@@ -137,10 +135,9 @@ void gateway_socketcan::writeToWire(const struct can_frame & frame)
 	if (!FD_ISSET(sock, &wfds)) {
 		throw se_canopen_error() << reason("CAN interface not ready to write");
 	}
-	ssize_t nbytes;
 
     /* send frame */
-    if ((nbytes = ::write(sock, &frame, sizeof(frame))) != sizeof(frame)) {
+    if (::write(sock, &frame, sizeof(frame)) != sizeof(frame)) {
         perror("write()");
         BOOST_THROW_EXCEPTION(se_canopen_error() << reason("write to CAN socket failed"));
     }

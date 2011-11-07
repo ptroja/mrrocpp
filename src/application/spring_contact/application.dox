@@ -1,0 +1,7 @@
+/** 
+
+   @defgroup spring_contact Spring Contact
+   @ingroup applications
+   Application of IRp6 manipulator getting into the contact with spring
+  
+*/
