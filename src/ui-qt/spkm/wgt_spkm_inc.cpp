@@ -7,12 +7,11 @@
 #include "../base/mainwindow.h"
 #include "../base/ui_robot.h"
 
-
 wgt_spkm_inc::wgt_spkm_inc(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
-	wgt_base(_widget_label, _interface, parent)
+		wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
-	robot = dynamic_cast<mrrocpp::ui::spkm::UiRobot *>(_robot);
+	robot = dynamic_cast <mrrocpp::ui::spkm::UiRobot *>(_robot);
 
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p0);
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p1);
@@ -126,9 +125,9 @@ int wgt_spkm_inc::init()
 			{
 				synchro_depended_widgets_disable(false);
 
-				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.set_request();
+				robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.set_request();
 				robot->ui_ecp_robot->execute_motion();
-				robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.get();
+				robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.get();
 
 				for (int i = 0; i < robot->number_of_servos; i++) {
 					set_single_axis(i, doubleSpinBox_mcur_Vector[i], doubleSpinBox_cur_Vector[i], radioButton_mip_Vector[i]);
@@ -150,7 +149,7 @@ int wgt_spkm_inc::init()
 int wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip)
 {
 
-	lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_reply_data_request_port.data;
+	lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
 	qdsb_mcur->setValue(er.epos_controller[axis].current);
 	qdsb_cur_p->setValue(er.epos_controller[axis].position);
 
@@ -371,5 +370,12 @@ int wgt_spkm_inc::move_it()
 	CATCH_SECTION_UI_PTR
 
 	return 1;
+}
+
+void wgt_spkm_inc::showEvent(QShowEvent * event)
+{
+//	emit gotFocus();
+
+	init();
 }
 

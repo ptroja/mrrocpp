@@ -1,5 +1,5 @@
-#if !defined(_ECP_SUB_task_EDGE_FOLLOW_H)
-#define _ECP_SUB_task_EDGE_FOLLOW_H
+#if !defined(_ECP_SUB_TASK_EDGE_FOLLOW_H)
+#define _ECP_SUB_TASK_EDGE_FOLLOW_H
 
 /*!
  * @file
@@ -52,6 +52,5 @@ public:
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
-
 
 #endif

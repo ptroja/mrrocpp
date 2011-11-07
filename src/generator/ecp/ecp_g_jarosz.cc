@@ -1205,7 +1205,7 @@ bool quintic::next_step()
 // ####################################################################################################
 
 
-spline::spline(common::task::task& _ecp_task) :
+splineJarosz::splineJarosz(common::task::task& _ecp_task) :
 	teach_in(_ecp_task)
 {
 }
@@ -1221,7 +1221,7 @@ spline::spline(common::task::task& _ecp_task) :
 // ----------------------------------------------------------------------------------------------
 
 parabolic_teach_in::parabolic_teach_in(common::task::task& _ecp_task, double interval = 0.02) :
-	spline(_ecp_task)
+        splineJarosz(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i;
@@ -1541,7 +1541,7 @@ bool parabolic_teach_in::next_step()
 // ----------------------------------------------------------------------------------------------
 
 calibration::calibration(common::task::task& _ecp_task, double interval) :
-	spline(_ecp_task)
+        splineJarosz(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i; // Licznik
@@ -1957,7 +1957,7 @@ bool calibration::next_step()
 
 
 cubic_spline::cubic_spline(common::task::task& _ecp_task, double interval = 0.02) :
-	spline(_ecp_task)
+        splineJarosz(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	int i;
@@ -2275,7 +2275,7 @@ bool cubic_spline::next_step()
 // ----------------------------------------------------------------------------------------------
 
 smooth_cubic_spline::smooth_cubic_spline(common::task::task& _ecp_task, double *vp, double *vk, double interval = 0.02) :
-	spline(_ecp_task)
+        splineJarosz(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 	build_coeff = true;
@@ -2773,7 +2773,7 @@ bool smooth_cubic_spline::next_step()
 // ----------------------------------------------------------------------------------------------
 
 quintic_spline::quintic_spline(common::task::task& _ecp_task, double interval = 0.02) :
-	spline(_ecp_task)
+        splineJarosz(_ecp_task)
 {
 	INTERVAL = interval; // Dlugosc okresu interpolacji w [sek]
 

@@ -32,6 +32,9 @@ typedef boost::error_info <struct motor_number_, int> motor_number;
 //! Number of joint that caused the exception.
 typedef boost::error_info <struct joint_number_, int> joint_number;
 
+//! Desired value that caused the exception.
+typedef boost::error_info <struct desired_value_, double> desired_value;
+
 /*!
  * \brief Exception thrown in case of motor limits violation.
  * \author tkornuta
@@ -49,6 +52,12 @@ REGISTER_NON_FATAL_ERROR(nfe_joint_limit, "Joint limit exceeded")
  * \author tkornuta
  */
 REGISTER_NON_FATAL_ERROR(nfe_robot_unsynchronized, "Robot unsynchronized")
+
+/*!
+ * \brief Exception thrown when in an synchronization finished unsuccessfully.
+ * \author tkornuta
+ */
+REGISTER_FATAL_ERROR(fe_synchronization_unsuccessful, "Robot synchronization failed")
 
 /*!
  * \brief Exception thrown in case of invalid pose specification.

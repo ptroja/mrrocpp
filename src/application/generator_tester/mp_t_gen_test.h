@@ -21,7 +21,6 @@ public:
 	 * Constructor.
 	 */
 	gen_test(lib::configurator &_config);
-	/// utworzenie robotow
 	void create_robots(void);
 	void main_task_algorithm(void);
 

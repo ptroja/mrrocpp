@@ -9,29 +9,23 @@
  * @ingroup smb
  */
 
-#include "robot/epos/dp_epos.h"
+#include "robot/maxon/dp_epos.h"
 
 namespace mrrocpp {
 namespace lib {
 namespace smb {
 
 /*!
- * @brief SwarmItFix Mobile Base multi pin insertion command data port
+ * @brief SwarmItFix Mobile Base fest command data port
  * @ingroup smb
  */
-const std::string MULTI_PIN_INSERTION_DATA_PORT = "SMB_MULTI_PIN_INSERTION_DATA_PORT";
-
-/*!
- * @brief SwarmItFix Mobile Base mulri pin locking command data port
- * @ingroup smb
- */
-const std::string MULTI_PIN_LOCKING_DATA_PORT = "SMB_MULTI_PIN_LOCKING_DATA_PORT";
+const std::string FESTO_COMMAND_DATA_PORT = "FESTO_COMMAND_DATA_PORT";
 
 /*!
  * @brief SwarmItFix Mobile Base status data request port
  * @ingroup smb
  */
-const std::string MULTI_LEG_REPLY_DATA_REQUEST_PORT = "SMB_MULTI_LEG_REPLY_DATA_REQUEST_PORT";
+const std::string MULTI_LEG_REPLY_DATA_REQUEST_PORT = "MULTI_LEG_REPLY_DATA_REQUEST_PORT";
 
 /*!
  * @brief SwarmItFix Mobile Base total number of servos
@@ -62,46 +56,56 @@ struct mp_to_ecp_parameters
  */
 struct leg_reply
 {
-	bool is_inserted;
-	bool is_locked;
-	bool insertion_in_progress;
-	bool locking_in_progress;
+	bool is_up;
+	bool is_down;
+	bool is_attached;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & is_up;
+		ar & is_down;
+		ar & is_attached;
+	}
+
 }__attribute__((__packed__));
 
 /*!
- * @brief SwarmItFix Mobile Base pin insertion command
+ * @brief SwarmItFix Mobile Base single leg festo command
  * @ingroup smb
  */
-enum PIN_INSERTION
+enum FESTO_LEG
 {
-	INSERT, WITHDRAWN, PIN_INSERTION_NO_ACTION
-}; // namespace mrrocpp
+	UP, DOWN
+};
+// namespace mrrocpp
 
-/*!
- * @brief SwarmItFix Mobile Base pin locking command
- * @ingroup smb
- */
-enum PIN_LOCKING
-{
-	CLAMB, UNCLAMB, SMB_PIN_LOCKING_NO_ACTION
-}; // namespace mrrocpp
+// namespace mrrocpp
 
 /*!
  * @brief SwarmItFix Mobile Base multi pin insertion command
  * @ingroup smb
  */
-struct multi_pin_insertion_td
+struct festo_command_td
 {
-	PIN_INSERTION leg[LEG_CLAMP_NUMBER];
-}__attribute__((__packed__));
+	FESTO_LEG leg[LEG_CLAMP_NUMBER];
+	bool undetachable[LEG_CLAMP_NUMBER];
 
-/*!
- * @brief SwarmItFix Mobile Base multi pin locking command
- * @ingroup smb
- */
-struct multi_pin_locking_td
-{
-	PIN_LOCKING leg[LEG_CLAMP_NUMBER];
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & leg;
+		ar & undetachable;
+	}
+
 }__attribute__((__packed__));
 
 /*!
@@ -111,6 +115,17 @@ struct multi_pin_locking_td
 struct multi_leg_reply_td
 {
 	leg_reply leg[LEG_CLAMP_NUMBER];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & leg;
+	}
+
 }__attribute__((__packed__));
 
 } // namespace smb

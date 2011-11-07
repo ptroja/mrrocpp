@@ -184,7 +184,7 @@ public:
 // ################################     KLASA BAZOWA dla SPLAJNOW     #################################
 // ####################################################################################################
 
-class spline : public teach_in
+class splineJarosz : public teach_in
 {
 protected:
   ecp_taught_in_pose tip;			// Kolejna pozycja.
@@ -209,7 +209,7 @@ protected:
   virtual bool next_step ()=0;
 
   public:
-   spline (common::task::task& _ecp_task);
+   splineJarosz (common::task::task& _ecp_task);
 
 }; // end : irp6p_spline_generator
 
@@ -218,7 +218,7 @@ protected:
 // z dokladna zadana pozycja koncowa
 // ####################################################################################################
 
-class parabolic_teach_in : public spline
+class parabolic_teach_in : public splineJarosz
 {
 protected:
 
@@ -237,7 +237,7 @@ public:
 // Generator odtwarzajacy liste nauczonych pozycji, wykorzystywany do kalibracji
 // ####################################################################################################
 
-class calibration : public spline
+class calibration : public splineJarosz
 {
 protected:
 
@@ -259,7 +259,7 @@ public:
 // z rozpedzaniem i hamowaniem miedzy pozycjami
 // ####################################################################################################
 
-class cubic_spline : public spline
+class cubic_spline : public splineJarosz
 {
 protected:
 
@@ -283,7 +283,7 @@ public:
 // Generator interpolujacy sklejanymi wielomianami 3 stopnia
 // ####################################################################################################
 
-class smooth_cubic_spline : public spline
+class smooth_cubic_spline : public splineJarosz
 {
 protected:
 
@@ -309,7 +309,7 @@ public:
 // z rozpedzaniem i hamowaniem miedzy pozycjami
 // ####################################################################################################
 
-class quintic_spline : public spline
+class quintic_spline : public splineJarosz
 {
 protected:
 

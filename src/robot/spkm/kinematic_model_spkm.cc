@@ -2,7 +2,7 @@
  * @file
  * @brief File containing definition of kinematic_model_spkm class methods.
  *
- * @author tkornuta
+ * @author Tomasz Kornuta
  * @date Jan 05, 2010
  *
  * @ingroup KINEMATICS SIF_KINEMATICS spkm
@@ -31,9 +31,9 @@ void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_po
 	// Check upper limit for every motor.
 	for (int i = 0; i < 6; ++i) {
 		if (motor_position[i] > params.upper_motor_pos_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(UPPER_LIMIT));
+			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(UPPER_LIMIT) << desired_value(motor_position[i]));
 		else if (motor_position[i] < params.lower_motor_pos_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(LOWER_LIMIT));
+			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(LOWER_LIMIT) << desired_value(motor_position[i]));
 	}
 }
 

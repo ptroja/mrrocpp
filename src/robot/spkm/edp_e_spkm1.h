@@ -2,7 +2,7 @@
  * @file edp_e_spkm1.h
  * @brief File containing the declaration of edp::spkm::effector class.
  *
- * @author yoyek
+ * @author Tomasz Winiarski
  * @date 2009
  *
  */

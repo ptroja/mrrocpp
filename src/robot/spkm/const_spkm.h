@@ -30,7 +30,7 @@ const int NUM_OF_SERVOS = 6;
  * @brief Number of segments making up the whole PKM motion.
  *
  *
- * @author tkornuta
+ * @author Tomasz Kornuta
  * @ingroup spkm
  */
 const unsigned int NUM_OF_MOTION_SEGMENTS = 5;
@@ -63,7 +63,10 @@ struct cbuffer
 	CBUFFER_VARIANT variant;
 
 	//! Pose specification type
-	POSE_SPECIFICATION pose_specification;
+	POSE_SPECIFICATION set_pose_specification;
+
+	//! Pose specification type
+	POSE_SPECIFICATION get_pose_specification;
 
 	//! Motion interpolation variant
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
@@ -97,11 +100,13 @@ struct cbuffer
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & variant;
+
+		ar & get_pose_specification;
 		switch (variant)
 		{
 			case POSE:
-				ar & pose_specification;
-				switch (pose_specification)
+				ar & set_pose_specification;
+				switch (set_pose_specification)
 				{
 					case FRAME:
 						ar & goal_pos;

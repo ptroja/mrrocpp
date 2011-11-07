@@ -5,6 +5,8 @@
 #include "ui_r_smb2.h"
 #include "ui_ecp_r_smb2.h"
 
+
+
 namespace mrrocpp {
 namespace ui {
 namespace smb2 {
@@ -12,7 +14,7 @@ namespace smb2 {
 UiRobot::UiRobot(common::Interface& _interface) :
 	smb::UiRobot(_interface, lib::smb2::ROBOT_NAME)
 {
-
+	add_wgt <wgt_smb_command>(smb::WGT_SMB_COMMAND, "Smb2 command");
 }
 
 void UiRobot::create_ui_ecp_robot()

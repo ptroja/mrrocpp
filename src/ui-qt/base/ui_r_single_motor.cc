@@ -75,53 +75,40 @@ void UiRobot::setup_menubar()
 
 int UiRobot::manage_interface()
 {
-	MainWindow *mw = interface.get_main_window();
-//	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 
 	common::UiRobot::manage_interface();
 
 	switch (state.edp.state)
 	{
-		case -1:
-			//	mw->enable_menu_item(false, 1, robot_menu);
-			break;
-		case 0:
-			mw->enable_menu_item(false, 1, menu_Preset_Positions);
-			mw->enable_menu_item(false, 1, action_Synchronisation);
-			//	mw->enable_menu_item(true, 1, robot_menu);
-			//	mw->enable_menu_item(true, 1, EDP_Load);
+		case common::UI_EDP_INACTIVE:
 
 			break;
-		case 1:
-		case 2:
-			//	mw->enable_menu_item(true, 1, robot_menu);
-			//	mw->enable_menu_item(true, 1, menuBar->actionall_EDP_Unload);
+		case common::UI_EDP_OFF:
+			menu_Preset_Positions->setEnabled(false);
+			action_Synchronisation->setEnabled(false);
+			break;
+		case common::UI_EDP_WAITING_TO_START_READER:
+		case common::UI_EDP_WAITING_TO_STOP_READER:
+
+
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->enable_menu_item(false, 1, action_Synchronisation);
+				action_Synchronisation->setEnabled(false);
 				//	mw->enable_menu_item(true, 1, menuBar->menuall_Preset_Positions);
 
 				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-						mw->enable_menu_item(true, 1, menu_Preset_Positions);
-						//	mw->enable_menu_item(true, 1, EDP_Unload);
-						//	mw->enable_menu_item(false, 1, EDP_Load);
-						//	block_ecp_trigger();
-						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-						mw->enable_menu_item(true, 1, menu_Preset_Positions);
-						//mw->enable_menu_item(false, 2, EDP_Load, EDP_Unload);
-						//block_ecp_trigger();
+						menu_Preset_Positions->setEnabled(true);
 						break;
 					case common::UI_MP_TASK_RUNNING:
-						//unblock_ecp_trigger();
+
 						break;
 					case common::UI_MP_TASK_PAUSED:
-						mw->enable_menu_item(false, 1, menu_Preset_Positions);
-						//block_ecp_trigger();
+						menu_Preset_Positions->setEnabled(false);
 						break;
 					default:
 						break;
@@ -129,8 +116,7 @@ int UiRobot::manage_interface()
 
 			} else // jesli robot jest niezsynchronizowany
 			{
-				mw->enable_menu_item(true, 1, action_Synchronisation);
-				// mw->enable_menu_item(false, 1, EDP_Load);
+				action_Synchronisation->setEnabled(true);
 			}
 			break;
 		default:

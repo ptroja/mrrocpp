@@ -18,7 +18,6 @@ namespace shead1 {
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
 
-
 /*!
  * \brief class of EDP SwarmItFix head effector
  *
@@ -42,6 +41,5 @@ public:
 } // namespace smb
 } // namespace edp
 } // namespace mrrocpp
-
 
 #endif

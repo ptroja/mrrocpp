@@ -1,10 +1,3 @@
-//#include "generator/ecp/ecp_g_smooth.h"
-//#include "generator/ecp/ecp_g_sleep.h"
-
-//#include "subtask/ecp_st_bias_edp_force.h"
-//#include "subtask/ecp_st_tff_nose_run.h"
-//
-
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_ecp.h"
 
@@ -18,7 +11,6 @@ namespace ecp {
 namespace common {
 namespace task {
 
-// KONSTRUKTORY
 gen_test::gen_test(lib::configurator &_config) :
 	common::task::task(_config)
 {
@@ -35,15 +27,15 @@ gen_test::gen_test(lib::configurator &_config) :
 		// TODO: throw
 	}
 
-	// utworzenie podzadan
-	{
-		sub_task::sub_task* ecpst;
-		ecpst = new sub_task::sub_task_const_vel_gen_test(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST] = ecpst;
+        sub_task::sub_task* ecpst;
+        ecpst = new sub_task::sub_task_const_vel_gen_test(*this);
+        subtask_m[ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST] = ecpst;
 
-		ecpst = new sub_task::sub_task_smooth_gen_test(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST] = ecpst;
-	}
+        ecpst = new sub_task::sub_task_smooth_gen_test(*this);
+        subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST] = ecpst;
+
+        ecpst = new sub_task::sub_task_spline_gen_test(*this);
+        subtask_m[ecp_mp::sub_task::ECP_ST_SPLINE_GEN_TEST] = ecpst;
 
 	sr_ecp_msg->message("ecp GEN_TEST loaded");
 }

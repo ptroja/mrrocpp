@@ -113,9 +113,8 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 
 void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
-	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
-	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
-
+// Wypenienie struktury danych transformera na podstawie parametrow polecenia
+// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 	switch (instruction.set_arm_type)
 	{
@@ -135,8 +134,8 @@ void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruct
 
 void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
-	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
-	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
+// Wypenienie struktury danych transformera na podstawie parametrow polecenia
+// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 	switch (instruction.set_arm_type)
 	{
@@ -191,16 +190,11 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 }
 
 motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name) :
-	effector(_shell, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR),
-			servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR),
-			current_joints(lib::MAX_SERVOS_NR), desired_motor_pos_old(lib::MAX_SERVOS_NR),
-			desired_motor_pos_new(lib::MAX_SERVOS_NR), current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0),
-			number_of_servos(-1)
+		effector(_shell, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR), servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR), current_joints(lib::MAX_SERVOS_NR), desired_motor_pos_old(lib::MAX_SERVOS_NR), desired_motor_pos_new(lib::MAX_SERVOS_NR), current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0), number_of_servos(-1)
 {
 	controller_state_edp_buf.is_synchronised = false;
 	controller_state_edp_buf.is_power_on = true;
-	controller_state_edp_buf.is_wardrobe_on = true;
-	controller_state_edp_buf.is_robot_blocked = false;
+	controller_state_edp_buf.robot_in_fault_state = false;
 
 	real_reply_type = lib::ACKNOWLEDGE;
 
@@ -213,7 +207,7 @@ motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_
 	float _velocity_limit_global_factor;
 
 	if (config.exists("velocity_limit_global_factor")) {
-		_velocity_limit_global_factor = config.value <float> ("velocity_limit_global_factor");
+		_velocity_limit_global_factor = config.value <float>("velocity_limit_global_factor");
 		if ((_velocity_limit_global_factor > 0) && (_velocity_limit_global_factor <= 1)) {
 			velocity_limit_global_factor = _velocity_limit_global_factor;
 		} else {
@@ -293,12 +287,12 @@ bool motor_driven_effector::compute_servo_joints_and_frame(void)
 			}
 		}
 		catch_nr = 0;
-	}//: try
+	} //: try
 	catch (...) {
 		if ((++catch_nr) == 1)
 			printf("servo thread compute_servo_joints_and_frame throw catch exception\n");
 		ret_val = false;
-	}//: catch
+	} //: catch
 
 	{
 		boost::mutex::scoped_lock lock(effector_mutex);
@@ -307,7 +301,7 @@ bool motor_driven_effector::compute_servo_joints_and_frame(void)
 		for (int i = 0; i < number_of_servos; i++) {
 			servo_current_motor_pos[i];
 			servo_current_joints[i];
-		}//: for
+		} //: for
 
 	}
 
@@ -515,6 +509,7 @@ void motor_driven_effector::synchronise()
 		servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
 		desired_joints[i] = current_joints[i];
 	}
+	reply.reply_type = lib::SYNCHRO_OK;
 }
 
 void motor_driven_effector::set_outputs(const lib::c_buffer &instruction)
@@ -594,7 +589,6 @@ void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 
 	lib::MotorArray desired_motor_pos_new_tmp(number_of_servos);
 	lib::JointArray desired_joints_tmp(number_of_servos); // Wspolrzedne wewnetrzne -
-
 
 	// obliczenia dla ruchu ramienia (silnikami)
 	/* Wypenienie struktury danych transformera na podstawie parametrow polecenia otrzymanego z ECP */
@@ -939,6 +933,9 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 							reply.reply_type = lib::ACKNOWLEDGE;
 							reply_to_instruction(reply);
 							/* Zlecenie wykonania synchronizacji */
+							//zakladamy ze instrukcja jest blednie wykonana, ejsli nie dobiegnie konca.
+							// Na koncu metod synchronise poszczegolnych robotow nalezy ustawiac reply.reply_type = lib::SYNCHRO_OK;
+							reply.reply_type = lib::ERROR;
 							master_order(MT_SYNCHRONISE, 0); // by Y przejscie przez watek transfor w celu ujednolicenia
 							// synchronise();
 							// Jezeli synchronizacja okae sie niemoliwa, to zostanie zgloszony wyjatek:
@@ -976,10 +973,16 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 					/* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
 					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
 						// Budowa adekwatnej odpowiedzi
-						reply.reply_type = lib::SYNCHRO_OK;
-						reply_to_instruction(reply);
-						next_state = GET_INSTRUCTION;
-						msg->message("Robot is synchronised");
+						if (reply.reply_type == lib::ERROR) {
+							msg->message(lib::NON_FATAL_ERROR, "Synchronization unsuccessful");
+							reply_to_instruction(reply);
+							next_state = GET_SYNCHRO;
+						} else if (reply.reply_type == lib::SYNCHRO_OK) {
+							msg->message("Robot is synchronized");
+							reply_to_instruction(reply);
+							next_state = GET_INSTRUCTION;
+						}
+
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						throw NonFatal_error_4(QUERY_EXPECTED);
 					}
@@ -1232,7 +1235,6 @@ void motor_driven_effector::onReaderStopped()
 }
 //#endif
 
-
-} // namespace common
+}// namespace common
 } // namespace edp
 } // namespace mrrocpp

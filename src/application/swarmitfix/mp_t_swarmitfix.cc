@@ -12,7 +12,7 @@
 #include "mp_t_swarmitfix.h"
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "robot/epos/dp_epos.h"
+#include "robot/maxon/dp_epos.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_spkm.h"
 
@@ -38,14 +38,15 @@ void swarmitfix::create_robots()
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
 	ACTIVATE_MP_ROBOT(smb1);
-	ACTIVATE_MP_ROBOT(smb2)
+	ACTIVATE_MP_ROBOT(smb2);
 	ACTIVATE_MP_ROBOT(shead1);
 	ACTIVATE_MP_ROBOT(shead2);
 }
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
+
 }
 
 void swarmitfix::main_task_algorithm(void)
@@ -54,8 +55,8 @@ void swarmitfix::main_task_algorithm(void)
 
 	// wlaczenie generatora transparentnego w obu robotach
 	set_next_ecp_state(ecp_mp::spkm::generator::ECP_GEN_POSE_LIST, 0, "", 0, lib::spkm1::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::smb::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::shead::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::smb1::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::shead1::ROBOT_NAME);
 
 	double a = 2.88;
 
@@ -70,7 +71,7 @@ void swarmitfix::main_task_algorithm(void)
 	lib::single_thread_port <int> int_port("int_port_label", port_manager);
 	lib::single_thread_port <int>* int_port_from_manager;
 
-	int_port_from_manager = port_manager.get_port <int> ("int_port_label");
+	int_port_from_manager = port_manager.get_port <int>("int_port_label");
 
 	int_port_from_manager->data = 16;
 
@@ -105,7 +106,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	sr_ecp_msg->message("END");
 
-	send_end_motion_to_ecps(2, lib::smb::ROBOT_NAME.c_str(), lib::shead::ROBOT_NAME.c_str());
+	send_end_motion_to_ecps(2, lib::smb1::ROBOT_NAME.c_str(), lib::shead1::ROBOT_NAME.c_str());
 }
 
 } // namespace task
