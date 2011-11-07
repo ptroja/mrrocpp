@@ -14,17 +14,19 @@
 // TODO: rewrite with messip dataport wrapper
 #include "../messip/messip_dataport.h"
 
+/**
+ * Remote agent proxy
+ */
 class RemoteAgent : public AgentBase {
 private:
 	//! remote server channel id
 	messip_channel_t * channel;
 
-public:
 	/**
 	 * Set the data of given buffer
 	 * @param name buffer name
 	 * @param the data
-	 * @todo this should not be public method but friending with template RemoteBuffer is tricky
+	 * @todo this should not be public method but friending with template OutputBuffer is tricky
 	 */
 	void Send(const xdr_oarchive<> & oa) {
 		// do a non-blocking send
@@ -37,6 +39,10 @@ public:
 		}
 	};
 
+	template <class T> friend class OutputBuffer;
+
+public:
+	//! Connect to remote agent
 	RemoteAgent(const std::string & _name) :
 		AgentBase(_name)
 	{
@@ -54,15 +60,18 @@ public:
 		}
 	}
 
+	//! Disconnect from remote agent
 	virtual ~RemoteAgent()
 	{
 		if(messip::port_disconnect(channel, MESSIP_NOTIMEOUT) != 0) {
 			// TODO: check for results
-			throw std::logic_error("Disconnect from remote agent failed");
 		}
 	}
 };
 
+/**
+ * Remote data buffer proxy
+ */
 template <class T>
 class OutputBuffer {
 private:
@@ -79,7 +88,7 @@ public:
 	{
 	}
 
-	//! Set the contents of the remove buffer
+	//! Set the contents of the remote buffer
 	void Send(const T & data) {
 		xdr_oarchive<> oa;
 		oa << name;

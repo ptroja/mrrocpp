@@ -1305,7 +1305,7 @@ std::string epos::getDeviceName()
 
 	char name[16];
 
-	for (int i = 0; i < 8; ++i) {
+	for (int i = 0; i < 4; ++i) {
 		name[i * 2] = (answer[3 + i] & 0xFF);
 		name[i * 2 + 1] = ((answer[3 + i] >> 8) & 0xFF);
 	}
@@ -1703,6 +1703,10 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	}
 
 	if ((w & E_BIT12) == E_BIT12) {
+		// Just to be sure (this should be OK according to specification)
+		if ((w & E_BIT15) != E_BIT15) {
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Not referenced after homing(!?)") << canId(nodeId));
+		}
 		printf("homing finished!\n");
 		return (0);
 	} else {

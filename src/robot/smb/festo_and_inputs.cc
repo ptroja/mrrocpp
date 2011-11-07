@@ -599,7 +599,7 @@ void festo_and_inputs::command_two_up_one_down()
 					for (int iteration = 0; number_of_legs_up < number_of_legs_moved + 1; iteration++) {
 						delay(FAI_SINGLE_DELAY);
 
-						// if it take too long to wait break
+						// if it takes too long to wait then break.
 						if (iteration > FAI_DELAY_MAX_ITERATION) {
 							master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
 

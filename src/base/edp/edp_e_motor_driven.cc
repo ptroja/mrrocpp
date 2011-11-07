@@ -509,6 +509,7 @@ void motor_driven_effector::synchronise()
 		servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
 		desired_joints[i] = current_joints[i];
 	}
+	reply.reply_type = lib::SYNCHRO_OK;
 }
 
 void motor_driven_effector::set_outputs(const lib::c_buffer &instruction)
@@ -932,6 +933,9 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 							reply.reply_type = lib::ACKNOWLEDGE;
 							reply_to_instruction(reply);
 							/* Zlecenie wykonania synchronizacji */
+							//zakladamy ze instrukcja jest blednie wykonana, ejsli nie dobiegnie konca.
+							// Na koncu metod synchronise poszczegolnych robotow nalezy ustawiac reply.reply_type = lib::SYNCHRO_OK;
+							reply.reply_type = lib::ERROR;
 							master_order(MT_SYNCHRONISE, 0); // by Y przejscie przez watek transfor w celu ujednolicenia
 							// synchronise();
 							// Jezeli synchronizacja okae sie niemoliwa, to zostanie zgloszony wyjatek:
@@ -969,10 +973,16 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 					/* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
 					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
 						// Budowa adekwatnej odpowiedzi
-						reply.reply_type = lib::SYNCHRO_OK;
-						reply_to_instruction(reply);
-						next_state = GET_INSTRUCTION;
-						msg->message("Robot is synchronised");
+						if (reply.reply_type == lib::ERROR) {
+							msg->message(lib::NON_FATAL_ERROR, "Synchronization unsuccessful");
+							reply_to_instruction(reply);
+							next_state = GET_SYNCHRO;
+						} else if (reply.reply_type == lib::SYNCHRO_OK) {
+							msg->message("Robot is synchronized");
+							reply_to_instruction(reply);
+							next_state = GET_INSTRUCTION;
+						}
+
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						throw NonFatal_error_4(QUERY_EXPECTED);
 					}

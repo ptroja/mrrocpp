@@ -41,10 +41,10 @@ int main(int argc, char *argv[])
 		cout << "ROTATION:" << position << endl;
 	} catch (...) {
 		cout << "Usage: smb_move_test MOTOR ROTATION - rotates the given motor to given relative position."
-				<< "\n\t MOTOR - number of EPOS controlling the motor, currently only 8 and 9 are allowed."
+				<< "\n\t MOTOR - number of EPOS controlling the motor, currently only 8 (LEGS) and 9 (PKM) are allowed."
 				<< "\n\t ROTATION - number of motor increments." << endl;
+		return 1;
 	}
-	return -1;
 
 	// Create gateway.
 	gateway_epos_usb gateway;
