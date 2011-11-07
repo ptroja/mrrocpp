@@ -103,6 +103,17 @@ void HI_moxa::init()
 			tcflush(fd[i], TCIFLUSH);
 			tcsetattr(fd[i], TCSANOW, &newtio);
 
+			servo_data[i].drive_status.sw1=0;
+			servo_data[i].drive_status.sw2=0;
+			servo_data[i].drive_status.swSynchr=0;
+			servo_data[i].drive_status.synchroZero=0;
+			servo_data[i].drive_status.powerStageFault=0;
+			servo_data[i].drive_status.overcurrent=0;
+			servo_data[i].drive_status.error=0;
+			servo_data[i].drive_status.isSynchronized=0;
+			servo_data[i].drive_status.current=0;
+			servo_data[i].drive_status.position=0;
+
 			// start driver in MANUAL mode
 			set_parameter(i, hi_moxa::PARAM_DRIVER_MODE, hi_moxa::PARAM_DRIVER_MODE_MANUAL);
 			set_parameter(i, hi_moxa::PARAM_DRIVER_MODE, hi_moxa::PARAM_DRIVER_MODE_MANUAL);
