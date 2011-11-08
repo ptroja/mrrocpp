@@ -46,8 +46,7 @@
 
 struct dinfo_s {
 	procfs_debuginfo info;
-	char pathbuffer[PATH_MAX]; /* 1st byte is
-	 info.path[0] */
+	char pathbuffer[PATH_MAX]; /* 1st byte is info.path[0] */
 };
 #endif /* __QNXNTO__ */
 
@@ -168,7 +167,7 @@ get_taskname(pid_t pid, char *pname)
 		return pname;
 	}
 
-	nitems = fscanf(fp, "%u (%s)", &rpid, rname);
+	nitems = fscanf(fp, "%10u (%80s)", &rpid, rname);
 	if (nitems != 2) {
 		sprintf(pname, "?%d?", pid);
 		fclose(fp);

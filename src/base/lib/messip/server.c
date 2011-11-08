@@ -62,7 +62,7 @@ int message_handler(messip_channel_t * ch, void * handle)
 
 int main(int argc, char *argv[])
 {
-	messip_channel_t *ch1, *ch2;
+	messip_channel_t *ch1; //, *ch2;
 	//messip_dispatch_t *dpp;
 
 #if 0

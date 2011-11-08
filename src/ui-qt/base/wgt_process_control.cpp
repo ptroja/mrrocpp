@@ -48,6 +48,7 @@ void wgt_process_control::my_open(bool set_on_top)
 void wgt_process_control::on_mp_start_pushButton_clicked()
 {
 	interface.mp->pulse_start_mp();
+
 }
 
 void wgt_process_control::on_mp_stop_pushButton_clicked()
