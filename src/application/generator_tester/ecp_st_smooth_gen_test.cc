@@ -163,12 +163,12 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates2[6] = -2.664;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates2);
 	} else if (postument) {
-		coordinates1[0] = -0.104;
-		coordinates1[1] = -1.342;
-		coordinates1[2] = 0.020;
-		coordinates1[3] = 1.034;
-		coordinates1[4] = 3.458;
-		coordinates1[5] = -2.738;
+                coordinates1[0] = -0.804;
+                coordinates1[1] = -1.342;
+                coordinates1[2] = 0.020;
+                coordinates1[3] = 1.034;
+                coordinates1[4] = 3.858;
+                coordinates1[5] = -2.738;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
 	}
 	else if (poly) {
@@ -185,7 +185,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 
 	if (track) {
 		coordinates2[0] = 0.0;
-		coordinates2[1] = -0.087;
+                coordinates2[1] = -0.137;
 		coordinates2[2] = -1.542;
 		coordinates2[3] = 0.024;
 		coordinates2[4] = 1.219;
@@ -218,7 +218,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	// JOINT ABSOLUTE END
 
 
-	// JOINT RELATIVE
+        /*// JOINT RELATIVE
 	sr_ecp_msg.message("Joint relative");
 	sgenjoint->reset();
 	sgenjoint->set_relative();
@@ -668,7 +668,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	if (sgenangle->calculate_interpolate() && sgenangle->detect_jerks(2) == 0) {
 		sgenangle->Move();
 	}
-        // ANGLE AXIS RELATIVE END
+        // ANGLE AXIS RELATIVE END*/
 }
 
 sub_task_smooth_gen_test::~sub_task_smooth_gen_test()
