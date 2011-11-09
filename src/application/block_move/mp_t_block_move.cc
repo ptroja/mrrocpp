@@ -28,6 +28,9 @@
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 //#include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
 
+#include "../visual_servoing/visual_servoing.h"
+#include "../visual_servoing_demo/ecp_mp_g_visual_servo_tester.h"
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -55,7 +58,7 @@ void block_move::main_task_algorithm(void)
 	sr_ecp_msg->message("Block Move MP Start");
 
 	sr_ecp_msg->message("Start position for searching");
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	//Zerowanie czujników
@@ -65,14 +68,18 @@ void block_move::main_task_algorithm(void)
 
 	wait_ms(4000);
 
-	sr_ecp_msg->message("Final position for searching");
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/pos_search_area_final.trj", 0, lib::irp6p_m::ROBOT_NAME);
+/*	sr_ecp_msg->message("Final position for searching");
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_final.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	wait_ms(4000);
 
 	sr_ecp_msg->message("Reach the block");
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/block_reaching.trj", 0, lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/block_reaching.trj", 0, lib::irp6p_m::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+*/
+	sr_ecp_msg->message("Servovision");
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Force approach");
@@ -82,13 +89,13 @@ void block_move::main_task_algorithm(void)
 	wait_ms(4000);
 
 	sr_ecp_msg->message("Get the block");
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/up_to_p0.trj", 0, lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_to_p0.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	wait_ms(4000);
 
 	sr_ecp_msg->message("Start position for building");
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Force approach");
@@ -96,7 +103,7 @@ void block_move::main_task_algorithm(void)
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Put the block in its place");
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/build.trj", 0, lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/build.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	//sr_ecp_msg->message("Rozwarcie szczek");
@@ -106,7 +113,7 @@ void block_move::main_task_algorithm(void)
 	//wait_ms(4000);
 
 	//sr_ecp_msg->message("Final position for building");
-	//set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/pos_build_final.trj", 0, lib::irp6p_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_final.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	//wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	//sr_ecp_msg->message("Zwarcie szczek");

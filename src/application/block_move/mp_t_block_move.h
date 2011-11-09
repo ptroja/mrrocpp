@@ -15,7 +15,12 @@ public:
 
 	void create_robots(void);
 	void main_task_algorithm(void);
+/*
+private:
 
+	const std::string config_section_name;
+	int vs_settle_time;
+*/
 };
 
 } // namespace task
