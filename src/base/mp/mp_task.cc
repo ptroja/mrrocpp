@@ -316,7 +316,7 @@ void task::initialize_communication()
 	const std::string mp_pulse_attach_point = config.get_mp_pulse_attach_point();
 
 	// Rejestracja kanalu dla pulsow z procesu UI
-	registerBuffer(ui_pulse);
+	Agent::registerBuffer(ui_pulse);
 }
 
 void task::wait_for_start()
