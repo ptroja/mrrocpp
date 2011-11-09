@@ -44,7 +44,7 @@
                     <xs:element ref="gamma"/>
                     <xs:element ref="line"/>
                     <xs:element ref="lineseg"/>
-                    <xs:element ref="actions"/>
+                    <xs:element name="actions" type="xs:string"/>
                     <xs:element ref="numActions"/>
                     <xs:element ref="k1"/>
                     <xs:element ref="k2"/>
@@ -81,7 +81,15 @@
                     <xs:element ref="cy"/>
                     <xs:element ref="theta"/>
                     <xs:element ref="pkmTheta"/>
-                    <xs:element name="actions"/>
+                    <xs:element name="actions">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element ref="pin"/>
+                          <xs:element ref="dTheta"/>
+                          <xs:element ref="dPkmTheta"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
                     <xs:element ref="numActions"/>
                     <xs:element ref="agent"/>
                     <xs:element ref="TBeg"/>
@@ -105,7 +113,7 @@
                     <xs:element ref="l2"/>
                     <xs:element ref="l3"/>
                     <xs:element ref="psi1"/>
-                    <xs:element name="psi2"/>
+                    <xs:element ref="psi2"/>
                     <xs:element ref="psi3"/>
                     <xs:element ref="beta7"/>
                     <xs:element ref="pkmbaseToFixedPkm"/>
@@ -276,15 +284,6 @@
   <xs:element name="ABeg" type="xs:decimal"/>
   <xs:element name="AHoldMax" type="xs:decimal"/>
   <xs:element name="AHoldMin" type="xs:decimal"/>
-  <xs:element name="actions">
-    <xs:complexType mixed="true">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element ref="dPkmTheta"/>
-        <xs:element ref="dTheta"/>
-        <xs:element ref="pin"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="dPkmTheta" type="xs:decimal"/>
   <xs:element name="dTheta" type="xs:decimal"/>
   <xs:element name="pin" type="xs:integer"/>
