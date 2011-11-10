@@ -415,7 +415,11 @@ void effector::parse_motor_command()
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
 		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT) && (current_joints[0]
-				!= ecp_edp_cbuffer.motor_pos[0]))
+				!= ecp_edp_cbuffer.joint_pos[0]))
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
+		// Check externals.
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::FRAME) && (current_joints[0]
+				!= ecp_edp_cbuffer.goal_pos[0] * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
