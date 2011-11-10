@@ -331,7 +331,11 @@
   <xs:element name="pkmbaseToFixedPkm" type="xs:decimal"/>
   <xs:element name="hlowered" type="xs:decimal"/>
   <xs:element name="Dz" type="xs:integer"/>
-  <xs:element name="maxPkmNeutralDist" type="xs:integer"/>
+  <xs:element name="maxPkmNeutralDist" type="xs:integer">
+    <xs:annotation>
+      <xs:documentation>in neutral position the head is within this radius over the base center</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="PX" type="xs:decimal"/>
   <xs:element name="PZ" type="xs:decimal"/>
   <xs:element name="COSGA" type="xs:decimal"/>

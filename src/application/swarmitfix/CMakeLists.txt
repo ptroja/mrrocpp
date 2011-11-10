@@ -1,3 +1,15 @@
+include(FindXSD)
+include(FindXerces)
+
+if(XSD_FOUND AND XERCES_FOUND)
+add_executable(plantest
+	plan/plan.cxx
+	plan/ParsePlan.cc
+)
+
+target_link_libraries(plantest ${XERCESC_LIBRARIES})
+endif(XSD_FOUND AND XERCES_FOUND)
+
 add_executable(mp_swarmitfix
 	mp_t_swarmitfix.cc
 )
