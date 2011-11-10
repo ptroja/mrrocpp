@@ -63,7 +63,7 @@ private:
 	 * \brief Variable storing the relative zero position of the motor rotating legs.
 	 * Set when all legs are down.
 	 */
-	uint32_t legs_relative_zero_position;
+	int32_t legs_relative_zero_position;
 
 	//! Default axis velocity [rpm]
 	static const uint32_t Vdefault[mrrocpp::lib::smb::NUM_OF_SERVOS];
