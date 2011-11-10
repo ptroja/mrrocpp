@@ -27,12 +27,13 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-/*
- TODO: Set propper values of A and V.
- const uint32_t effector::Vdefault[lib::smb::NUM_OF_SERVOS] = { 100UL, 100UL };
- const uint32_t effector::Adefault[lib::smb::NUM_OF_SERVOS] = { 1000UL, 1000UL };
- const uint32_t effector::Ddefault[lib::smb::NUM_OF_SERVOS] = { 1000UL, 1000UL };
- */
+
+// Maximal velocity: legs (verified for 2000 rpm), pkm (verified for 2000 rpm).
+const uint32_t effector::Vdefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
+// Maximal acceleration: legs (verified for 4000 rpm), pkm (verified for 4000 rpm).
+const uint32_t effector::Adefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
+// Maximal deceleration: legs (verified for 4000 rpm), pkm (verified for 4000 rpm).
+const uint32_t effector::Ddefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
@@ -229,6 +230,12 @@ void effector::synchronise(void)
 		position = relativeSynchroPosition(*pkm_rotation_node);
 		cout << "Computed pose: " << position << endl;
 
+		// Set "safe" velocity and acceleration values.
+		pkm_rotation_node->setProfileVelocity(500);
+		pkm_rotation_node->setProfileAcceleration(100);
+		pkm_rotation_node->setProfileDeceleration(100);
+
+		// Loop.
 		do {
 			// Move to the relative position.
 			pkm_rotation_node->moveRelative(position);
@@ -488,9 +495,10 @@ void effector::execute_motor_motion()
 				if (is_synchronised()) {
 					cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
 					if (!robot_test_mode) {
-						/*						axes[i]->writeProfileVelocity(Vdefault[i]);
-						 axes[i]->writeProfileAcceleration(Adefault[i]);
-						 axes[i]->writeProfileDeceleration(Ddefault[i]);*/
+						// Set velocity and acceleration values.
+						axes[i]->setProfileVelocity(Vdefault[i]);
+						axes[i]->setProfileAcceleration(Adefault[i]);
+						axes[i]->setProfileDeceleration(Ddefault[i]);
 						// In case of legs rotation node...
 						if (i == 0)
 							// ... perform the relative move.
@@ -504,9 +512,10 @@ void effector::execute_motor_motion()
 				} else {
 					cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
 					if (!robot_test_mode) {
-						/*						axes[i]->writeProfileVelocity(Vdefault[i]);
-						 axes[i]->writeProfileAcceleration(Adefault[i]);
-						 axes[i]->writeProfileDeceleration(Ddefault[i]);*/
+						// Set velocity and acceleration values.
+						axes[i]->setProfileVelocity(Vdefault[i]);
+						axes[i]->setProfileAcceleration(Adefault[i]);
+						axes[i]->setProfileDeceleration(Ddefault[i]);
 						axes[i]->moveRelative(desired_motor_pos_new[i]);
 					} else {
 						// Virtually "move" to desired relative position.
