@@ -1305,7 +1305,7 @@ std::string epos::getDeviceName()
 
 	char name[16];
 
-	for (int i = 0; i < 8; ++i) {
+	for (int i = 0; i < 4; ++i) {
 		name[i * 2] = (answer[3 + i] & 0xFF);
 		name[i * 2 + 1] = ((answer[3 + i] >> 8) & 0xFF);
 	}

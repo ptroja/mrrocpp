@@ -287,6 +287,16 @@ protected:
 		flushall();
 	}
 
+        double getCurrentModule(int i)
+        {
+            return the_robot->reply_package.arm.measured_current.average_module[i];
+        }
+
+        double getCurrentCubic(int i)
+        {
+            return the_robot->reply_package.arm.measured_current.average_cubic[i];
+        }
+
 public:
 	/**
 	 * Constructor.
