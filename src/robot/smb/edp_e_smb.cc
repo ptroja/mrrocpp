@@ -27,12 +27,11 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-
-// Maximal velocity: legs (verified for 2000 rpm), pkm (verified for 2000 rpm).
+// Maximum velocity: legs (verified for 2000 rpm), pkm (verified for 2000 rpm).
 const uint32_t effector::Vdefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
-// Maximal acceleration: legs (verified for 4000 rpm), pkm (verified for 4000 rpm).
+// Maximum acceleration: legs (verified for 4000 rpm/s), pkm (verified for 4000 rpm/s).
 const uint32_t effector::Adefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
-// Maximal deceleration: legs (verified for 4000 rpm), pkm (verified for 4000 rpm).
+// Maximum deceleration: legs (verified for 4000 rpm/s), pkm (verified for 4000 rpm/s).
 const uint32_t effector::Ddefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
@@ -71,7 +70,7 @@ void effector::check_controller_state()
 				} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
 					// Send message to SR.
 					msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axesNames[i]
-							+ " rotation is in the Disabled state");
+							+ " rotation is disabled");
 				} //: if fault || disabled
 			} else {
 				// EPOS in enabled state.
@@ -83,7 +82,7 @@ void effector::check_controller_state()
 			// Probably the axis is not powered on, do nothing.
 		}
 	}
-	// Robot is synchronised if only one axis - the one controlling the PKM rotation - is referenced.
+	// Robot is synchronized if only one axis - the one controlling the PKM rotation - is referenced.
 	controller_state_edp_buf.is_synchronised = axes[1]->isReferenced();
 	// Check whether robot is powered.
 	controller_state_edp_buf.is_power_on = (powerOn == axes.size());
@@ -93,31 +92,44 @@ void effector::check_controller_state()
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
-	// False is the initial value
-	controller_state_edp_buf.is_synchronised = false;
-	controller_state_edp_buf.is_power_on = false;
-	controller_state_edp_buf.robot_in_fault_state = false;
+	try {
+		// False is the initial value
+		controller_state_edp_buf.is_synchronised = false;
+		controller_state_edp_buf.is_power_on = false;
+		controller_state_edp_buf.robot_in_fault_state = false;
 
-	// Check controller state.
-	check_controller_state();
+		// Check controller state.
+		check_controller_state();
 
-	// Copy data to reply buffer
-	reply.controller_state = controller_state_edp_buf;
+		// Copy data to reply buffer
+		reply.controller_state = controller_state_edp_buf;
 
-	// Check if it is safe to calculate joint positions
-	if (is_synchronised()) {
-		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-	}
-
-	// Lock data structure during update
-	{
-		boost::mutex::scoped_lock lock(effector_mutex);
-
-		// Initialize internal data
-		for (int i = 0; i < number_of_servos; i++) {
-			servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
-			desired_joints[i] = current_joints[i];
+		// Check if it is safe to calculate joint positions
+		if (is_synchronised()) {
+			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 		}
+
+		// Lock data structure during update
+		{
+			boost::mutex::scoped_lock lock(effector_mutex);
+
+			// Initialize internal data
+			for (int i = 0; i < number_of_servos; i++) {
+				servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
+				desired_joints[i] = current_joints[i];
+			}
+		}
+	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_FATAL_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
+	} catch (...) {
+		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
 	}
 }
 
@@ -292,7 +304,6 @@ void effector::synchronise(void)
 	} catch (...) {
 		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
 	}
-
 }
 
 lib::smb::ALL_LEGS_VARIANT effector::current_legs_state(void)
