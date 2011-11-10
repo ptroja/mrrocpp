@@ -22,7 +22,8 @@ namespace edp {
 namespace smb {
 
 festo_and_inputs::festo_and_inputs(effector &_master) :
-		master(_master), epos_di_node(master.legs_rotation_node), cpv10(master.cpv10), robot_test_mode(master.robot_test_mode)
+	master(_master), epos_di_node(master.legs_rotation_node), cpv10(master.cpv10),
+			robot_test_mode(master.robot_test_mode)
 {
 	if (!(robot_test_mode)) {
 		// prepares hardware
@@ -43,7 +44,6 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 
 		master.gateway->SendNMTService(10, canopen::gateway::Start_Remote_Node);
 
-		read_state();
 		determine_legs_state();
 		desired_output[1] = current_output[1];
 		desired_output[2] = current_output[2];
@@ -213,7 +213,7 @@ void festo_and_inputs::set_clean(int leg_number, bool value)
 void festo_and_inputs::determine_legs_state()
 {
 	if (!(robot_test_mode)) {
-
+		read_state();
 		int number_of_legs_up = 0;
 
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -262,7 +262,6 @@ void festo_and_inputs::command()
 		master.msg->message(ss.str().c_str());
 
 	} else {
-		read_state();
 		determine_legs_state();
 	}
 
@@ -498,7 +497,6 @@ void festo_and_inputs::command_two_up_one_down()
 				}
 				execute_command();
 
-
 				//waits a while for lockers to move
 				delay(500);
 
@@ -608,8 +606,8 @@ void festo_and_inputs::command_two_up_one_down()
 
 						read_state();
 						for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-							if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))
-									&& (festo_command.leg[i] == lib::smb::UP)) {
+							if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1)) && (festo_command.leg[i]
+									== lib::smb::UP)) {
 								set_checked(i + 1);
 								number_of_legs_up++;
 								set_detach(i + 1, false);
