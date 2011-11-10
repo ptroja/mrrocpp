@@ -153,6 +153,9 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		axes[1] = &(*pkm_rotation_node);
 		axesNames[1] = "pkm";
 
+		// Reset zero position.
+		legs_relative_zero_position = legs_rotation_node->getActualPosition();
+
 		// Create festo node.
 		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, 10);
 	}
@@ -171,9 +174,6 @@ void effector::reset_variables()
 	// Compute current motor positions on the base of zeroed motors.
 	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 	desired_joints = current_joints;
-
-	// Reset zero position.
-	legs_relative_zero_position = 0;
 }
 
 int effector::relativeSynchroPosition(maxon::epos & node)
