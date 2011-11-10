@@ -2,12 +2,17 @@ include(FindXSD)
 include(FindXerces)
 
 if(XSD_FOUND AND XERCES_FOUND)
+
+XSD_SCHEMA( PLAN_SRCS plan/plan.xsd --type-naming ucc --root-element plan )
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 add_executable(plantest
-	plan/plan.cxx
+	${PLAN_SRCS}
 	plan/ParsePlan.cc
 )
 
-target_link_libraries(plantest ${XERCESC_LIBRARIES})
+target_link_libraries(plantest ${XERCES_LIBRARIES})
 endif(XSD_FOUND AND XERCES_FOUND)
 
 add_executable(mp_swarmitfix

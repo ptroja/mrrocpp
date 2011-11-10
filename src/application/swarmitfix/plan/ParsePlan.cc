@@ -15,10 +15,10 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 	try {
-		const Plan_t p = *plan("PlanXML.xml", xml_schema::flags::dont_validate);
+		const Plan p = *plan("PlanXML.xml", xml_schema::Flags::dont_validate);
 
 		cerr << p.hNum() << endl;
-	} catch (const xml_schema::exception& e) {
+	} catch (const xml_schema::Exception& e) {
 		cerr << e << endl;
 		return 1;
 	}
