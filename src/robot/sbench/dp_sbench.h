@@ -37,7 +37,7 @@ const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
  * @brief SwarmItFix bench pins state typedef
  * @ingroup sbench
  */
-typedef bool pins_state_td[64];
+typedef bool pins_state_td[NUM_OF_PINS];
 
 } // namespace sbench
 }
