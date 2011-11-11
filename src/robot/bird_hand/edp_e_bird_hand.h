@@ -11,7 +11,7 @@
  */
 
 #include "base/edp/edp_e_manip.h"
-#include "robot/bird_hand/const_bird_hand.h"
+#include "dp_bird_hand.h"
 
 #include "hi_bird_hand.h"
 
@@ -125,6 +125,5 @@ private:
 } // namespace bird_hand
 } // namespace edp
 } // namespace mrrocpp
-
 
 #endif

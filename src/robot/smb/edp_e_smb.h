@@ -59,6 +59,12 @@ private:
 	// state of the legs rotation
 	bool is_base_positioned_to_move_legs;
 
+	/*
+	 * \brief Variable storing the relative zero position of the motor rotating legs.
+	 * Set when all legs are down.
+	 */
+	int32_t legs_relative_zero_position;
+
 	//! Default axis velocity [rpm]
 	static const uint32_t Vdefault[mrrocpp::lib::smb::NUM_OF_SERVOS];
 
@@ -94,8 +100,6 @@ protected:
 	lib::smb::cbuffer ecp_edp_cbuffer;
 	lib::smb::rbuffer edp_ecp_rbuffer;
 
-	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
-
 	/*!
 	 * \brief method,  creates a list of available kinematic models for smb effector.
 	 *
@@ -130,7 +134,7 @@ public:
 	 *
 	 * it chooses the single thread variant from the motor_driven_effector
 	 */
-	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
+	void move_arm(const lib::c_buffer &instruction);
 
 	/*!
 	 * \brief returns current legs state from festo_and_inputs class
@@ -149,7 +153,7 @@ public:
 	 *
 	 * Here it calls common::motor_driven_effector::get_arm_position_get_arm_type_switch
 	 */
-	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction);
 
 
 
