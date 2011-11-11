@@ -15,23 +15,29 @@ namespace mrrocpp {
 namespace lib {
 namespace sbench {
 
-/*!
- * @brief SwarmItFix Head head soldification command data port
- * @ingroup sbench
- */
-const std::string HEAD_SOLIDIFICATION_DATA_PORT = "SBENCH_HEAD_SOLIDIFICATION_DATA_PORT";
 
 /*!
- * @brief SwarmItFix Head head vacuum activation command data port
+ * @brief SwarmItFix Head total number of pins
  * @ingroup sbench
  */
-const std::string VACUUM_ACTIVATION_DATA_PORT = "SBENCH_VACUUM_ACTIVATION_DATA_PORT";
+const int NUM_OF_PINS = 64;
 
 /*!
- * @brief SwarmItFix Head status data request port
+ * @brief SwarmItFix bench pins activation command data port
+ * @ingroup sbench
+ */
+const std::string PINS_ACTIVATION_DATA_PORT = "SBENCH_PINS_ACTIVATION_DATA_PORT";
+
+
+/*!
+ * @brief SwarmItFix sbench status data request port
  * @ingroup sbench
  */
 const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
+
+
+typedef bool pins_state[64];
+
 
 /*!
  * @brief SwarmItFix Head EDP state of the head soldification enum

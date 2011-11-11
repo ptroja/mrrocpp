@@ -59,7 +59,9 @@ struct rbuffer
  * @brief SwarmItFix Head total number of servos
  * @ingroup sbench
  */
-const int NUM_OF_SERVOS = 1;
+const int NUM_OF_SERVOS = 0;
+
+
 
 } // namespace sbench
 } // namespace lib

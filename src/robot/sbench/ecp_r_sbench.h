@@ -33,11 +33,6 @@ protected:
 	lib::single_thread_port <lib::sbench::HEAD_SOLIDIFICATION> sbench_head_soldification_data_port;
 
 	/**
-	 * @brief vacuum activation command data port
-	 */
-	lib::single_thread_port <lib::sbench::VACUUM_ACTIVATION> sbench_vacuum_activation_data_port;
-
-	/**
 	 * @brief Head state reply data request port
 	 */
 	lib::single_thread_request_port <lib::sbench::reply> sbench_reply_data_request_port;
