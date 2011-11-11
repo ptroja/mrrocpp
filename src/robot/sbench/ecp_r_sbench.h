@@ -10,7 +10,7 @@
  */
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/sbench/const_sbench.h"
+#include "dp_sbench.h"
 #include "base/kinematics/kinematics_manager.h"
 
 namespace mrrocpp {
@@ -30,17 +30,12 @@ protected:
 	/**
 	 * @brief head soldification command data port
 	 */
-	lib::single_thread_port <lib::sbench::HEAD_SOLIDIFICATION> sbench_head_soldification_data_port;
-
-	/**
-	 * @brief vacuum activation command data port
-	 */
-	lib::single_thread_port <lib::sbench::VACUUM_ACTIVATION> sbench_vacuum_activation_data_port;
+	lib::single_thread_port <lib::sbench::pins_state_td> sbench_command_data_port;
 
 	/**
 	 * @brief Head state reply data request port
 	 */
-	lib::single_thread_request_port <lib::sbench::reply> sbench_reply_data_request_port;
+	lib::single_thread_request_port <lib::sbench::pins_state_td> sbench_reply_data_request_port;
 
 	/**
 	 * @brief EDP command buffer

@@ -9,13 +9,24 @@
  * @ingroup smb
  */
 
-#include "dp_smb.h"
-
 #include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
 namespace smb {
+
+/*!
+ * @brief SwarmItFix Mobile Base total number of servos
+ * @ingroup smb
+ */
+const int NUM_OF_SERVOS = 2;
+
+/*!
+ * @brief SwarmItFix Mobile Base total number of legs
+ * @ingroup smb
+ */
+const int LEG_CLAMP_NUMBER = 3;
+
 
 /*!
  * @brief SwarmItFix Mobile Base leg position variants from all legs point of view
@@ -44,103 +55,6 @@ typedef enum _POSE_SPECIFICATION
 	FRAME, JOINT, MOTOR
 } POSE_SPECIFICATION;
 
-/*!
- * @brief SwarmItFix Mobile Base EDP command buffer
- * @ingroup smb
- */
-struct cbuffer
-{
-	//! Variant of the command
-	CBUFFER_VARIANT variant;
-
-	festo_command_td festo_command;
-
-	//! Pose specification type
-	POSE_SPECIFICATION set_pose_specification;
-
-	//! Pose specification type
-	POSE_SPECIFICATION get_pose_specification;
-
-	//! Motion interpolation variant
-	lib::epos::EPOS_MOTION_VARIANT motion_variant;
-
-	//! Motion time - used in the Interpolated Position Mode.
-	double estimated_time;
-
-	int32_t motor_pos[NUM_OF_SERVOS];
-
-	double joint_pos[NUM_OF_SERVOS];
-
-	double goal_pos[6];
-
-	//! Allowed time for the motion in seconds.
-	//! If 0, then the motion time will be limited by the motor parameters.
-	//! If > 0 and greater than a limit imposed by the motors, then the motion will be slowed down.
-	//! In another case, the NACK will be replied.
-	double duration;
-
-	//! True if the contact is expected during the motion.
-	//! The NACK will be replied if:
-	//! - the contact was expected and did not happened
-	//! - OR the contact was NOT expected and did happened.
-	bool guarded_motion;
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & variant;
-		ar & festo_command;
-		ar & get_pose_specification;
-		switch (variant)
-		{
-			case POSE:
-				ar & set_pose_specification;
-				switch (set_pose_specification)
-				{
-					case FRAME:
-						ar & goal_pos;
-						break;
-					case JOINT:
-						ar & joint_pos;
-						break;
-					case MOTOR:
-						ar & motor_pos;
-						break;
-				}
-				ar & motion_variant;
-				ar & estimated_time;
-				break;
-			default:
-				break;
-		};
-	}
-
-}__attribute__((__packed__));
-
-/*!
- * @brief SwarmItFix Mobile Base EDP reply buffer
- * @ingroup smb
- */
-struct rbuffer
-{
-	multi_leg_reply_td multi_leg_reply;
-	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & epos_controller;
-	}
-
-};
 
 } // namespace smb
 } // namespace lib
