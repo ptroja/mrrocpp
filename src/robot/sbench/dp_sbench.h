@@ -10,16 +10,11 @@
  */
 
 #include <string>
+#include "const_sbench.h"
 
 namespace mrrocpp {
 namespace lib {
 namespace sbench {
-
-/*!
- * @brief SwarmItFix Head total number of pins
- * @ingroup sbench
- */
-const int NUM_OF_PINS = 64;
 
 /*!
  * @brief SwarmItFix bench pins activation command data port
@@ -38,6 +33,24 @@ const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
  * @ingroup sbench
  */
 typedef bool pins_state_td[NUM_OF_PINS];
+
+/*!
+ * @brief SwarmItFix Head EDP command buffer
+ * @ingroup sbench
+ */
+struct cbuffer
+{
+	pins_state_td pins_state;
+}__attribute__((__packed__));
+
+/*!
+ * @brief SwarmItFix Head EDP reply buffer
+ * @ingroup sbench
+ */
+struct rbuffer
+{
+	pins_state_td pins_state;
+}__attribute__((__packed__));
 
 } // namespace sbench
 }

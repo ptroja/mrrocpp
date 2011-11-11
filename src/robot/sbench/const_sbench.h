@@ -9,7 +9,7 @@
  * @ingroup sbench
  */
 
-#include "dp_sbench.h"
+
 
 #include "base/lib/impconst.h"
 
@@ -24,22 +24,10 @@ namespace sbench {
 const robot_name_t ROBOT_NAME = "sbench";
 
 /*!
- * @brief SwarmItFix Head EDP command buffer
+ * @brief SwarmItFix Head total number of pins
  * @ingroup sbench
  */
-struct cbuffer
-{
-	pins_state_td pins_state;
-}__attribute__((__packed__));
-
-/*!
- * @brief SwarmItFix Head EDP reply buffer
- * @ingroup sbench
- */
-struct rbuffer
-{
-	pins_state_td pins_state;
-}__attribute__((__packed__));
+const int NUM_OF_PINS = 64;
 
 /*!
  * @brief SwarmItFix Head total number of servos
