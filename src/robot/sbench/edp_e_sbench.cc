@@ -27,7 +27,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
-	motor_driven_effector(_shell, lib::sbench::ROBOT_NAME)
+		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME)
 {
 
 	number_of_servos = lib::sbench::NUM_OF_SERVOS;
@@ -77,32 +77,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	switch (ecp_edp_cbuffer.variant)
-	{
-		case lib::sbench::CBUFFER_HEAD_SOLIDIFICATION: {
-			lib::sbench::HEAD_SOLIDIFICATION head_solidification;
+	lib::sbench::pins_state_td pins_state;
 
-			memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification), sizeof(head_solidification));
-
-			msg->message(ss.str().c_str());
-
-			// previously computed parameters send to epos2 controllers
-
-
-			// start the trajectory execution
-
-		}
-			break;
-		case lib::sbench::CBUFFER_VACUUM_ACTIVATION: {
-			lib::sbench::VACUUM_ACTIVATION vacuum_activation;
-
-			memcpy(&vacuum_activation, &(ecp_edp_cbuffer.vacuum_activation), sizeof(vacuum_activation));
-		}
-			break;
-		default:
-			break;
-
-	}
+	memcpy(&pins_state, &(ecp_edp_cbuffer.pins_state), sizeof(pins_state));
 
 }
 /*--------------------------------------------------------------------------*/
@@ -119,7 +96,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	ss << "get_arm_position: " << licznikaaa;
 	msg->message(ss.str().c_str());
 	//	printf("%s\n", ss.str().c_str());
-
 
 	reply.servo_step = step_counter;
 }
@@ -152,7 +128,7 @@ void effector::reply_serialization(void)
 	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
 }
 
-}// namespace smb
+} // namespace smb
 
 namespace common {
 
