@@ -24,7 +24,7 @@ class Interface;
 namespace sbench {
 
 // ---------------------------------------------------------------
-class EcpRobot : public common::EcpRobotDataPort
+class EcpRobot : public common::_EcpRobotDataPort <ecp::sbench::robot>
 {
 
 public:
