@@ -14,7 +14,7 @@
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_task.h"
 
-#include "base/lib/agent/DataBuffer.h"
+#include "base/lib/agent/InputBuffer.h"
 #include "base/lib/agent/RemoteAgent.h"
 
 #include "base/kinematics/kinematics_manager.h"

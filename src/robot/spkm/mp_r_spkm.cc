@@ -11,7 +11,7 @@
 #include "base/lib/swarmtypes.h"
 #include "mp_r_spkm.h"
 
-#include "base/lib/agent/DataBuffer.h"
+#include "base/lib/agent/InputBuffer.h"
 
 namespace mrrocpp {
 namespace mp {

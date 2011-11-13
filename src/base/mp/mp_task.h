@@ -12,7 +12,7 @@
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
-#include "base/lib/agent/DataBuffer.h"
+#include "base/lib/agent/InputBuffer.h"
 #include "base/lib/messip/messip.h"
 
 namespace mrrocpp {

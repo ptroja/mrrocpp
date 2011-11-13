@@ -8,7 +8,7 @@
 #include "base/lib/messip/messip.h"
 #include "base/lib/xdr/xdr_iarchive.hpp"
 
-#include "DataBuffer.h"
+#include "InputBuffer.h"
 
 void Agent::registerBuffer(DataBufferBase & buf)
 {

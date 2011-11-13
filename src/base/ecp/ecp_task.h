@@ -14,8 +14,9 @@
 #include "base/lib/agent/Agent.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 #include "base/ecp/ecp_robot.h"
-#include "base/lib/agent/DataBuffer.h"
 #include "base/lib/agent/RemoteAgent.h"
+#include "base/lib/agent/InputBuffer.h"
+#include "base/lib/agent/OutputBuffer.h"
 
 namespace mrrocpp {
 namespace ecp {

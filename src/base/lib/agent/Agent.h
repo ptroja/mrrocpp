@@ -14,7 +14,7 @@
 #include "AgentBase.h"
 
 #include "DataBufferBase.h"
-#include "DataBuffer.h"
+#include "InputBuffer.h"
 
 /**
  * Base class for every agent

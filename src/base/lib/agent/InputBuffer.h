@@ -1,5 +1,5 @@
-#ifndef _DATABUFFER_H
-#define _DATABUFFER_H
+#ifndef _INPUTBUFFER_H
+#define _INPUTBUFFER_H
 
 #include <boost/thread/thread_time.hpp>
 
@@ -89,4 +89,4 @@ public:
 	const T & access;
 };
 
-#endif /* _DATABUFFER_H */
+#endif /* _INPUTBUFFER_H */
