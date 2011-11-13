@@ -9,6 +9,9 @@
 namespace mrrocpp {
 namespace lib {
 
+// Forward declaration
+class Homog_matrix;
+
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Ft_v_vector : public Eigen::Matrix<double, 6, 1>
 {

@@ -48,6 +48,6 @@ add_executable(pvat_test
 
 target_link_libraries (mrrocpp sr)
 
-target_link_libraries(mrrocpp ${Boost_SERIALIZATION_LIBRARY})
+target_link_libraries(mrrocpp ${Boost_SERIALIZATION_LIBRARY} ${Boost_THREAD_LIBRARY})
 
 install(TARGETS mrrocpp DESTINATION lib)

@@ -10,9 +10,10 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_executable(plantest
 	${PLAN_SRCS}
 	plan/ParsePlan.cc
+	plan_utils.cc
 )
 
-target_link_libraries(plantest ${XERCES_LIBRARIES})
+target_link_libraries(plantest ${XERCES_LIBRARIES} mrrocpp)
 endif(XSD_FOUND AND XERCES_FOUND)
 
 add_executable(mp_swarmitfix

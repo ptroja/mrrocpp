@@ -87,8 +87,6 @@ MACRO( XSD_SCHEMA NAME FILE )
   					  COMMAND ${XSD_EXECUTABLE}
 					  ARGS "cxx-tree" ${ARGN} ${CMAKE_CURRENT_SOURCE_DIR}/${xs_SRC}
 					  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${xs_SRC})
-					  
-  message(STATUS "dependency: ${CMAKE_CURRENT_SOURCE_DIR}/${xs_SRC}")   
 
   #
   # Don't fail if a generated file does not exist.
