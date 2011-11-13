@@ -1,14 +1,10 @@
-// -------------------------------------------------------------------------
-//                            edp_s.cc 		dla QNX6.3.0
-//
-//            Virtual Sensor Process (lib::VSP) - methods for Schunk force/torgue sensor
-// Metody klasy VSP
-//
-// Ostatnia modyfikacja: styczen 2010
-// Autor: labi (Kamil Tarkowski)
-// Autor: Yoyek (Tomek Winiarski)
-// na podstawie szablonu vsp Tomka Kornuty i programu obslugi czujnika Artura Zarzyckiego
-// -------------------------------------------------------------------------
+/*!
+ * @file
+ * @brief File containing methods of the ATI3084 Froce/Torque sensor class.
+ *
+ * @author Konrad Banachowicz
+ *
+ */
 
 #include <cstdio>
 #include <exception>
@@ -30,7 +26,6 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-// Rejstracja procesu VSP
 ATI6284_force::ATI6284_force(common::manip_effector &_master) :
 		force(_master), dev_name("/dev/comedi1")
 {
@@ -76,7 +71,6 @@ void ATI6284_force::disconnect_from_hardware(void)
 		comedi_close(device);
 }
 
-/**************************** inicjacja czujnika ****************************/
 void ATI6284_force::configure_particular_sensor(void)
 {
 	// by Y
@@ -117,24 +111,18 @@ void ATI6284_force::wait_for_particular_event()
 
 }
 
-/***************************** odczyt z czujnika *****************************/
 void ATI6284_force::get_particular_reading(void)
 {
 
 	convert_data(datav, bias_data, ft_table);
 
 }
-/*******************************************************************/
+
 force* return_created_edp_force_sensor(common::manip_effector &_master)
 {
 	return new ATI6284_force(_master);
-} // : return_created_sensor
+}
 
-/***************************** konwersja danych z danych binarnych na sile *****************************/
-/* convert data with bias from hex data to force */
-// int16_t result_raw[6] - voltage [V]
-// int16_t bias_raw[6] - bias data [V]
-// double force[6] - output data in N, N*m
 void ATI6284_force::convert_data(const Vector6d &result_raw, const Vector6d &bias_raw, lib::Ft_vector &force) const
 {
 	Matrix <double, 6, 1> result_voltage;
@@ -150,3 +138,4 @@ void ATI6284_force::convert_data(const Vector6d &result_raw, const Vector6d &bia
 } // namespace sensor
 } // namespace edp
 } // namespace mrrocpp
+

@@ -28,16 +28,6 @@ class robot : public common::robot::ecp_robot, public kinematics::common::kinema
 protected:
 
 	/**
-	 * @brief head soldification command data port
-	 */
-	lib::single_thread_port <lib::sbench::pins_state_td> sbench_command_data_port;
-
-	/**
-	 * @brief Head state reply data request port
-	 */
-	lib::single_thread_request_port <lib::sbench::pins_state_td> sbench_reply_data_request_port;
-
-	/**
 	 * @brief EDP command buffer
 	 */
 	lib::sbench::cbuffer ecp_edp_cbuffer;
@@ -50,6 +40,17 @@ protected:
 	void create_kinematic_models_for_given_robot(void);
 
 public:
+
+	/**
+	 * @brief head soldification command data port
+	 */
+	lib::single_thread_port <lib::sbench::pins_state_td> sbench_command_data_port;
+
+	/**
+	 * @brief Head state reply data request port
+	 */
+	lib::single_thread_request_port <lib::sbench::pins_state_td> sbench_reply_data_request_port;
+
 	/**
 	 * @brief constructor called from UI
 	 * @param _config configuration object reference
