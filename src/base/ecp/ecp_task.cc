@@ -32,7 +32,8 @@ namespace common {
 namespace task {
 
 task_base::task_base(lib::configurator &_config) :
-		ecp_mp::task::task(_config), MP(lib::MP_SECTION), reply(MP, _config.section_name), command("command"), mp_command(command.access), continuous_coordination(false)
+	ecp_mp::task::task(_config), MP(lib::MP_SECTION), reply(MP, _config.section_name), command("command"), mp_command(command.access), continuous_coordination(false),
+	mp_2_ecp_next_state_string(mp_command.ecp_next_state.next_state)
 {
 	initialize_communication();
 }
@@ -240,9 +241,6 @@ void task_base::get_next_state(void)
 				break;
 		}
 	}
-
-	// Extract the next command to the local variable
-	mp_2_ecp_next_state_string = mp_command.ecp_next_state.next_state;
 }
 
 // Receive a message from MP

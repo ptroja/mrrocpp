@@ -1052,7 +1052,8 @@ public:
  */
 struct ecp_next_state_t
 {
-	char next_state[MP_2_ECP_NEXT_STATE_STRING_SIZE];
+	std::string next_state;
+
 	int variant;
 	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 

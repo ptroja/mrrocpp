@@ -21,16 +21,10 @@ namespace mrrocpp {
 namespace lib {
 
 // Rozmiary buforow
-const int MP_2_ECP_NEXT_STATE_STRING_SIZE = 100;
 const int MP_2_ECP_STRING_SIZE = 300;
 const int ECP_2_MP_STRING_SIZE = 300;
-const int MAX_TEXT = 100; // MAC7
-const int MAX_PROSODY = 20; // MAC7
-
 
 // Stale do komunikacji
-
-
 const unsigned int CONNECT_RETRY = 200;
 const unsigned int CONNECT_DELAY = 10000;
 

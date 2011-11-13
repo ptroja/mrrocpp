@@ -114,7 +114,7 @@ public:
 	/**
 	 * @brief buffered next state label sent by MP
 	 */
-	std::string mp_2_ecp_next_state_string;
+	const std::string & mp_2_ecp_next_state_string;
 
 	/**
 	 * @brief ECP subtasks container
