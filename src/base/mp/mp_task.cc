@@ -158,7 +158,7 @@ void task::wait_for_task_termination(bool activate_trigger, int number_of_robots
 	wtf_gen.Move();
 }
 
-void task::wait_for_task_termination(bool activate_trigger, int number_of_robots, const std::vector <lib::robot_name_t> & robotSet)
+void task::wait_for_task_termination(bool activate_trigger, const std::vector <lib::robot_name_t> & robotSet)
 {
 	generator::wait_for_task_termination wtf_gen(*this);
 
@@ -191,8 +191,8 @@ void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *prop
 //
 // intended use:
 //
-// when the_generator.wait_for_ECP_pulse is set
-//     1) block for ECP pulse and react to UI pulses
+// when the_generator.wait_for_ECP_message is set
+//     1) block for ECP message and react to UI pulses
 // otherwise
 //     2) peak for UI pulse and eventually react for in in pause/resume/stop/trigger cycle
 void task::receive_ui_or_ecp_message(generator::generator & the_generator)
@@ -214,7 +214,7 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 	} mp_state = MP_RUNNING;
 
 	bool ui_exit_from_while = false;
-	bool ecp_exit_from_while = (the_generator.wait_for_ECP_pulse) ? false : true;
+	bool ecp_exit_from_while = (the_generator.wait_for_ECP_message) ? false : true;
 
 	// 0 0 -> enter
 	// 0 1 -> enter
@@ -263,7 +263,7 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 				} else {
 					if (ui_pulse.Get() == MP_TRIGGER) { // odebrano trigger
 						ui_exit_from_while = true;
-						the_generator.trigger = true;
+						the_generator.set_trigger();
 						// 2 ponizsze linie po dodaniu prawdziwej sporadycznej synchrnozniacji
 						ui_exit_from_while = true;
 						ecp_exit_from_while = true;
@@ -276,14 +276,14 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 				}
 			}
 
-			if (the_generator.wait_for_ECP_pulse) {
-				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse the_generator.wait_for_ECP_pulse");
+			if (the_generator.wait_for_ECP_message) {
+				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse the_generator.wait_for_ECP_message");
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 							{
 								if (robot_node.second->reply.isFresh()) {
 									//					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse received");
 
-									//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
+									//	 if (debug_tmp)	printf("wait_for_ECP_message r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
 									ecp_exit_from_while = true;
 
 									robot_node.second->ecp_errors_handler();

@@ -142,7 +142,7 @@ public:
 	 */
 	void wait_for_task_termination(bool activate_trigger, int number_of_robots, ...);
 
-	void wait_for_task_termination(bool activate_trigger, int number_of_robots, const std::vector<lib::robot_name_t> & robotSet);
+	void wait_for_task_termination(bool activate_trigger, const std::vector<lib::robot_name_t> & robotSet);
 
 	/**
 	 * @brief sends end motion command to ECP's - mkisiel xml task version
