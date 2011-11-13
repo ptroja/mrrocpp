@@ -121,9 +121,9 @@ public:
 	/**
 	 * @brief the communication with EDP flag
 	 *
-	 * if the flag is set (default) the MP communicates with ECP in Move method of generator\n
-	 * Sometimes it is needed to disable communication e.g. when there is a need to communicate only With MP or VSP\n
-	 * in the following iterations of Move
+	 * if the flag is set (default) the MP communicates with ECP in Move method of generator.
+	 * Sometimes it is needed to disable communication, e.g. when there is a need to communicate only with MP or VSP.
+	 * in the following iterations of Move.
 	 */
 	bool communicate_with_ecp;
 

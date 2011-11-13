@@ -1061,10 +1061,13 @@ struct ecp_next_state_t
 
 	const char * get_mp_2_ecp_next_state_string() const;
 
-	typedef std::vector <spkm::segment_t> spkm_segment_sequence_t;
+	//! Type for sequence of motions of SPKM robot
+	typedef std::vector<spkm::segment_t> spkm_segment_sequence_t;
 
+	//! Sequence of motion segments for SPKM robot
 	spkm_segment_sequence_t spkm_segment_sequence;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -1089,6 +1092,7 @@ struct _MP_COMMAND_PACKAGE
 	NEXT_STATE_T ecp_next_state;
 	c_buffer instruction;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
