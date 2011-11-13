@@ -405,4 +405,11 @@
   <xs:element name="index">
     <xs:complexType/>
   </xs:element>
+  <xs:complexType name="State">
+    <xs:sequence>
+      <xs:element ref="agent"/>
+      <xs:element ref="TBeg"/>
+      <xs:element ref="TEnd"/>
+    </xs:sequence>
+  </xs:complexType>  
 </xs:schema>
