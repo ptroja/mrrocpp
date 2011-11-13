@@ -108,8 +108,6 @@ void UiRobot::setup_menubar()
 	common::UiRobot::setup_menubar();
 	//	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
 
-	robot_menu->setTitle(QApplication::translate("MainWindow", "S&head", 0, QApplication::UnicodeUTF8));
-
 	robot_menu->setTitle(QApplication::translate("MainWindow", "S&bench", 0, QApplication::UnicodeUTF8));
 
 }

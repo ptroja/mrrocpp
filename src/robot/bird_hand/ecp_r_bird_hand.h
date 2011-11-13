@@ -29,6 +29,20 @@ class robot : public common::robot::ecp_robot, public kinematics::common::kinema
 protected:
 
 	/**
+	 * @brief EDP command buffer
+	 */
+	lib::bird_hand::cbuffer ecp_edp_cbuffer;
+
+	/**
+	 * @brief EDP reply buffer
+	 */
+	lib::bird_hand::rbuffer edp_ecp_rbuffer;
+
+	void create_kinematic_models_for_given_robot(void);
+
+public:
+
+	/**
 	 * @brief motion command data port
 	 */
 	lib::single_thread_port <lib::bird_hand::command> bird_hand_command_data_port;
@@ -48,19 +62,6 @@ protected:
 	 */
 	lib::single_thread_request_port <lib::bird_hand::configuration> bird_hand_configuration_reply_data_request_port;
 
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::bird_hand::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::bird_hand::rbuffer edp_ecp_rbuffer;
-
-	void create_kinematic_models_for_given_robot(void);
-
-public:
 	/**
 	 * @brief constructor called from UI
 	 * @param _config configuration object reference
