@@ -36,8 +36,6 @@
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/lib/mrmath/ft_v_vector.h"
 
-#include "robot/spkm/dp_spkm.h"
-
 #include "base/lib/messip/messip.h"
 
 namespace mrrocpp {
