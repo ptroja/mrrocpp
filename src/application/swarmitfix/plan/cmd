@@ -3,3 +3,6 @@
 	--type-regex '/ (.+)/\u$1_t/' \
 	--root-element plan \
 	plan.xsd
+
+xsltproc reverse.xsl PlanXML.xml >PlanReverted.xml
+xmllint --format PlanReverted.xml >foo
