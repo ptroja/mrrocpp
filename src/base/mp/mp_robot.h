@@ -95,7 +95,7 @@ private:
 	void resume_ecp(void);
 
 	/**
-	 * @brief ecp_errorrs_handler and detector
+	 * @brief ECP errors handler
 	 */
 	void ecp_errors_handler();
 

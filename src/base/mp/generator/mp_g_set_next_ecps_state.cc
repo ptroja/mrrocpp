@@ -25,7 +25,7 @@ namespace generator {
 set_next_ecps_state::set_next_ecps_state(task::task& _mp_task) :
 		generator(_mp_task)
 {
-	wait_for_ECP_pulse = true;
+	wait_for_ECP_message = true;
 }
 
 void set_next_ecps_state::configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string, int str_len)

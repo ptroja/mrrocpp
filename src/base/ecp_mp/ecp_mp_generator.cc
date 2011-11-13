@@ -13,7 +13,7 @@ namespace ecp_mp {
 namespace generator {
 
 generator::generator(lib::sr_ecp& _sr_ecp_msg) :
-	sr_ecp_msg(_sr_ecp_msg), trigger(false), node_counter(0)
+	trigger(false), sr_ecp_msg(_sr_ecp_msg), node_counter(0)
 {
 }
 
@@ -26,6 +26,11 @@ bool generator::check_and_null_trigger()
 	}
 
 	return returned_value;
+}
+
+void generator::set_trigger()
+{
+	trigger = true;
 }
 
 generator::~generator()

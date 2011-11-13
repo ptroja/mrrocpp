@@ -39,7 +39,7 @@ robot::robot(const lib::robot_name_t & l_robot_name, task::task &mp_object_l, in
 	ecp_reply_package(reply.access),
 	communicate_with_ecp(true)
 {
-	mp_object_l.registerBuffer(reply);
+	mp_object_l.Agent::registerBuffer(reply);
 }
 
 robot::~robot()
