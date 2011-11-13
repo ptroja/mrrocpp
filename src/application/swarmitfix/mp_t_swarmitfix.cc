@@ -73,6 +73,8 @@ void swarmitfix::main_task_algorithm(void)
 
 				if(robot_m[lib::spkm1::ROBOT_NAME]->reply.isFresh()) {
 					robot_m[lib::spkm1::ROBOT_NAME]->reply.markAsUsed();
+
+					current_workers_status[lib::spkm1::ROBOT_NAME] = IDLE;
 				}
 
 			} while (true);

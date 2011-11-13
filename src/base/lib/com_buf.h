@@ -1062,12 +1062,6 @@ struct ecp_next_state_t
 
 	const char * get_mp_2_ecp_next_state_string() const;
 
-	//! Type for sequence of motions of SPKM robot
-	typedef std::vector<spkm::segment_t> spkm_segment_sequence_t;
-
-	//! Sequence of motion segments for SPKM robot
-	spkm_segment_sequence_t spkm_segment_sequence;
-
 private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -1079,7 +1073,6 @@ private:
 		ar & next_state;
 		ar & variant;
 		ar & data;
-		ar & spkm_segment_sequence;
 		// ar & playerpos_goal; // this is not used at this moment
 	}
 };

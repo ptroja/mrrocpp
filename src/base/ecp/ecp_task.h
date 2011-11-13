@@ -163,7 +163,7 @@ public:
 	virtual void ecp_stop_accepted_handler(void);
 
 	/**
-	 * @brief sends the message to MP after task execution is finished
+	 * @brief sends the message to MP after task execution is completed
 	 */
 	void termination_notice(void);
 

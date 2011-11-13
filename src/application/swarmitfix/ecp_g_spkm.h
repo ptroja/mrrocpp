@@ -21,7 +21,7 @@ class spkm_pose : public common::generator::_generator<ecp::spkm::robot>
 {
 private:
 	//! Motion segment iterator
-	lib::ecp_next_state_t::spkm_segment_sequence_t::const_iterator segment_iterator;
+	lib::spkm::next_state_t::spkm_segment_sequence_t::const_iterator segment_iterator;
 
 	//! Request execution of a single motion segment
 	void request_segment_execution(robot_t & robot, const lib::spkm::segment_t & segment);

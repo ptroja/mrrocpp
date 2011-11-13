@@ -40,6 +40,10 @@ class robot : public ecp_mp::robot
 	friend class mrrocpp::mp::generator::generator;
 	friend class mrrocpp::mp::task::task;
 
+protected:
+	//! Remote agent proxy
+	RemoteAgent ecp;
+
 private:
 	/**
 	 * @brief nummber of servos (joints)
@@ -50,9 +54,6 @@ private:
 	 * @brief pid of spawned ECP process
 	 */
 	lib::child ECP_pid;
-
-	//! Pointer to the remote agent proxy
-	RemoteAgent ecp;
 
 	//! Remote agent's data buffer
 	OutputBuffer <lib::MP_COMMAND_PACKAGE> command;
