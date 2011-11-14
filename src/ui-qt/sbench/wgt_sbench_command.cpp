@@ -74,6 +74,21 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.set_request();
 	robot->ui_ecp_robot->execute_motion();
 	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.get();
+
+	QFont font;
+
+	for (int i = 0; i < SBENCH_MAX_EL; i++) {
+		if (robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data[i]) {
+
+			font.setBold(true);
+		} else {
+
+			font.setBold(false);
+		}
+
+		checkBox_Vector[i]->setFont(font);
+	}
+
 }
 
 void wgt_sbench_command::on_pushButton_clear_clicked()

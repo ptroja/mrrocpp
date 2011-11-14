@@ -35,13 +35,22 @@ effector::effector(common::shell &_shell) :
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
+
+	if (!robot_test_mode) {
+
+		// initiate hardware
+	}
+
 }
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
 
-	if (robot_test_mode)
+	if (robot_test_mode) {
 		controller_state_edp_buf.is_synchronised = true;
+	} else {
+		controller_state_edp_buf.is_synchronised = true;
+	}
 
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
@@ -88,9 +97,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			} else {
 				ss << "0";
 			}
+			current_pins_state[i] = pins_state[i];
 		}
 		ss << std::endl;
 		msg->message(ss.str());
+	} else {
+
+		// send command to hardware
 	}
 
 }
@@ -111,6 +124,16 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	ss << "get_arm_position: " << licznikaaa;
 	msg->message(ss.str().c_str());
 	//	printf("%s\n", ss.str().c_str());
+
+	if (!robot_test_mode) {
+
+		// read pin_state from hardware
+	}
+
+	for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+
+		edp_ecp_rbuffer.pins_state[i] = current_pins_state[i];
+	}
 
 	reply.servo_step = step_counter;
 }
