@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include "const_shead.h"
+
 namespace mrrocpp {
 namespace lib {
 namespace shead {
@@ -58,7 +60,8 @@ enum STATE_OF_THE_VACUUM
 enum HEAD_SOLIDIFICATION
 {
 	SOLIDIFY, DESOLIDIFY, HEAD_SOLIDIFICATION_NO_ACTION
-}; // namespace mrrocpp
+};
+// namespace mrrocpp
 
 /*!
  * @brief SwarmItFix Head EDP vacuum activation command enum
@@ -67,7 +70,8 @@ enum HEAD_SOLIDIFICATION
 enum VACUUM_ACTIVATION
 {
 	VACUUM_ON, VACUUM_OFF, VACUUM_ACTIVATION_NO_ACTION
-}; // namespace mrrocpp
+};
+// namespace mrrocpp
 
 /*!
  * @brief SwarmItFix Head reply buffer
@@ -77,6 +81,38 @@ struct reply
 {
 	STATE_OF_THE_HEAD head_state;
 	STATE_OF_THE_VACUUM vacuum_state;
+}__attribute__((__packed__));
+
+/*!
+ * @brief SwarmItFix Head EDP command buffer variant enum
+ * @ingroup shead
+ */
+enum CBUFFER_VARIANT
+{
+	CBUFFER_HEAD_SOLIDIFICATION, CBUFFER_VACUUM_ACTIVATION
+};
+
+/*!
+ * @brief SwarmItFix Head EDP command buffer
+ * @ingroup shead
+ */
+struct cbuffer
+{
+	CBUFFER_VARIANT variant;
+	union
+	{
+		lib::shead::HEAD_SOLIDIFICATION head_solidification;
+		lib::shead::VACUUM_ACTIVATION vacuum_activation;
+	};
+}__attribute__((__packed__));
+
+/*!
+ * @brief SwarmItFix Head EDP reply buffer
+ * @ingroup shead
+ */
+struct rbuffer
+{
+	reply shead_reply;
 }__attribute__((__packed__));
 
 } // namespace shead

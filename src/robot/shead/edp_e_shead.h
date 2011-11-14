@@ -11,14 +11,13 @@
 #define __EDP_E_SHEAD_H
 
 #include "base/edp/edp_e_motor_driven.h"
-#include "robot/shead/const_shead.h"
+#include "dp_shead.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace shead {
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
-
 
 /*!
  * \brief class of EDP SwarmItFix head effector
@@ -65,7 +64,6 @@ public:
 	 */
 	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
 
-
 	/*!
 	 * \brief method to get position of the motors or joints
 	 *
@@ -73,7 +71,6 @@ public:
 	 */
 
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
-
 
 	/*!
 	 * \brief method to choose master_order variant
@@ -101,6 +98,5 @@ public:
 } // namespace smb
 } // namespace edp
 } // namespace mrrocpp
-
 
 #endif

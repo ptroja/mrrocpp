@@ -1,13 +1,10 @@
-// -------------------------------------------------------------------------
-//
-//
-// Definicje klasy edp_ATI6284_force_sensor
-//
-// Ostatnia modyfikacja: styczen 2010
-// Autor: labi (Kamil Tarkowski)
-// Autor: Yoyek (Tomek Winiarski)
-// -------------------------------------------------------------------------
-
+/*!
+ * @file
+ * @brief File containing the declaration of the ATI6284 Froce/Torque sensor class.
+ *
+ * @author Konrad Banachowicz
+ *
+ */
 
 #if !defined(_EDP_S_ATI6284_KB_H)
 #define _EDP_S_ATI6284_KB_H
@@ -27,7 +24,14 @@ namespace sensor {
 typedef Matrix <double, 6, 6> Matrix6d;
 typedef Matrix <double, 6, 1> Vector6d;
 
-/********** klasa czujnikow po stronie VSP **************/
+/*!
+ * @file
+ * @brief File containing the declaration of the ATI3084 Froce/Torque sensor class.
+ *
+ * @author Konrad Banachowicz
+ *
+ */
+
 class ATI6284_force : public force
 {
 public:
@@ -37,13 +41,13 @@ public:
 	ATI6284_force(common::manip_effector &_master);
 	virtual ~ATI6284_force();
 	void disconnect_from_hardware(void);
-	void configure_particular_sensor(void); // konfiguracja czujnika
-	void wait_for_particular_event(void); // oczekiwanie na zdarzenie
-	void get_particular_reading(void); // odebranie odczytu od VSP		// zwraca blad
+	void configure_particular_sensor(void);
+	void wait_for_particular_event(void);
+	void get_particular_reading(void);
 
 private:
 	const std::string dev_name;
-	comedi_t *device; // device dyscryptor
+	comedi_t *device; // device descriptor
 	lsampl_t adc_data[6]; // raw ADC data
 	Vector6d datav; // mensured voltage
 	Vector6d bias_data; // sensor bias voltage
@@ -62,3 +66,4 @@ private:
 
 
 #endif //_EDP_S_ATI6284_KB_H
+

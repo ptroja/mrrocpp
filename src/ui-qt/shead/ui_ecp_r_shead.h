@@ -24,7 +24,7 @@ class Interface;
 namespace shead {
 
 // ---------------------------------------------------------------
-class EcpRobot : public common::EcpRobotDataPort
+class EcpRobot : public common::_EcpRobotDataPort <ecp::shead::robot>
 {
 
 public:
