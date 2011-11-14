@@ -56,12 +56,18 @@ wgt_sbench_command::~wgt_sbench_command()
 
 void wgt_sbench_command::on_pushButton_execute_clicked()
 {
+	robot->ui_ecp_robot->the_robot->sbench_command_data_port.set();
 
+	robot->ui_ecp_robot->execute_motion();
+
+	on_pushButton_read_clicked();
 }
 
 void wgt_sbench_command::on_pushButton_read_clicked()
 {
-
+	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.set_request();
+	robot->ui_ecp_robot->execute_motion();
+	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.get();
 }
 
 void wgt_sbench_command::on_pushButton_clear_clicked()
