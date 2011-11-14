@@ -61,7 +61,7 @@ typedef struct _segment
 /**
  * ECP command variant
  */
-typedef enum _command_variant { POSELIST, STOP } command_variant;
+typedef enum _command_variant { POSE_LIST, STOP } command_variant;
 
 /*!
  *  Command for ECP agent
@@ -86,7 +86,7 @@ private:
 	{
 		ar & command;
 		switch (command) {
-			case POSELIST:
+			case POSE_LIST:
 				ar & spkm_segment_sequence;
 				break;
 			default:
