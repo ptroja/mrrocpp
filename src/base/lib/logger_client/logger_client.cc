@@ -73,31 +73,35 @@ void logger_client::log(log_message& msg)
 
 void logger_client::operator()()
 {
-	queue_mutex.lock();
-	boost::circular_buffer<log_message> temp_buffer(buffer.capacity());
-	queue_mutex.unlock();
+	try{
+		queue_mutex.lock();
+		boost::circular_buffer<log_message> temp_buffer(buffer.capacity());
+		queue_mutex.unlock();
 
-	connect();
-	do {
-		{
-			boost::mutex::scoped_lock lock(queue_mutex);
-			if(!buffer.empty() && !terminate){
-				cond.wait(lock);
+		connect();
+		do {
+			{
+				boost::mutex::scoped_lock lock(queue_mutex);
+				if(!buffer.empty() && !terminate){
+					cond.wait(lock);
+				}
+				// move data from queue to temp buffer
+				while(!buffer.empty()){
+					temp_buffer.push_back(buffer.front());
+					buffer.pop_front();
+				}
 			}
-			// move data from queue to temp buffer
-			while(!buffer.empty()){
-				temp_buffer.push_back(buffer.front());
-				buffer.pop_front();
-			}
-		}
 
-		// send data to the server
-		while (!temp_buffer.empty()) {
-			send_message(temp_buffer.front());
-			temp_buffer.pop_front();
-		}
-	} while(!terminate);
-	disconnect();
+			// send data to the server
+			while (!temp_buffer.empty()) {
+				send_message(temp_buffer.front());
+				temp_buffer.pop_front();
+			}
+		} while(!terminate);
+		disconnect();
+	}catch(std::exception& ex){
+		cout<<"logger_client::operator()(): exception caught: "<< ex.what() <<"\n";
+	}
 	cout<<"logger_client::operator()(): exiting...\n";
 }
 
@@ -126,7 +130,7 @@ void logger_client::connect()
 	serv_addr.sin_port = htons(server_port);
 
 	if (::connect(fd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
-		throw runtime_error("connect(): " + string(strerror(errno)));
+		throw runtime_error("logger_client::connect(): " + string(strerror(errno)));
 	}
 }
 
