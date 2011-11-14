@@ -76,17 +76,25 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.get();
 
 	QFont font;
+	QPalette pal;
 
 	for (int i = 0; i < SBENCH_MAX_EL; i++) {
 		if (robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data[i]) {
 
-			font.setBold(true);
+			font.setUnderline(true);
+
+			pal.setColor(QPalette::WindowText, Qt::blue);
+			pal.setColor(QPalette::Background, Qt::blue);
 		} else {
 
-			font.setBold(false);
+			font.setUnderline(false);
+
+			pal.setColor(QPalette::WindowText, Qt::black);
+			pal.setColor(QPalette::Background, Qt::black);
 		}
 
 		checkBox_Vector[i]->setFont(font);
+		checkBox_Vector[i]->setPalette(pal);
 	}
 
 }
