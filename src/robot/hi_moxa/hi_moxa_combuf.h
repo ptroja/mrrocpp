@@ -50,6 +50,7 @@ const uint64_t LOWER_LIMIT_SWITCH = 0x0000000000000004ULL;
 const uint64_t UPPER_LIMIT_SWITCH = 0x0000000000000008ULL;
 const uint64_t OVER_CURRENT = 0x0000000000000010ULL;
 
+/// motor driver status buffer structure
 struct status_St {
 	uint8_t startByte;
 	uint8_t sw1 :1;
@@ -64,10 +65,12 @@ struct status_St {
 	int32_t position;
 }__attribute__((__packed__));
 
+/// pwm data structure
 struct pwm_St {
 	int16_t pwm;
 }__attribute__((__packed__));
 
+/// parameter data union
 union param_Un {
 	int8_t synchronized;
 	int8_t driver_mode;
@@ -76,6 +79,7 @@ union param_Un {
 	int16_t largest;
 };
 
+/// data buffer structure
 struct servo_St{
 	char buf[SERVO_ST_BUF_LEN];
 	uint8_t command_params;
