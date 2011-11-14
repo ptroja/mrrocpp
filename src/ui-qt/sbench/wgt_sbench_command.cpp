@@ -1,6 +1,6 @@
-#include "../smb/ui_ecp_r_smb.h"
-#include "../smb/ui_r_smb.h"
-#include "robot/smb/const_smb.h"
+#include "../sbench/ui_ecp_r_sbench.h"
+#include "../sbench/ui_r_sbench.h"
+#include "robot/sbench/const_sbench.h"
 
 #include "wgt_sbench_command.h"
 #include "../base/interface.h"
@@ -11,7 +11,7 @@ wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::commo
 		wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
-	robot = dynamic_cast <mrrocpp::ui::smb::UiRobot *>(_robot);
+	robot = dynamic_cast <mrrocpp::ui::sbench::UiRobot *>(_robot);
 
 	// utworzenie list widgetow
 

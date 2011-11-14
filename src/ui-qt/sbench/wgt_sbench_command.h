@@ -14,7 +14,7 @@ namespace common {
 class Interface;
 class UiRobot;
 }
-namespace smb {
+namespace sbench {
 class UiRobot;
 const std::string WGT_SBENCH_COMMAND = "WGT_SBENCH_COMMAND";
 }
@@ -32,7 +32,7 @@ public:
 
 private:
 	Ui::wgt_sbench_commandClass ui;
-	mrrocpp::ui::smb::UiRobot* robot;
+	mrrocpp::ui::sbench::UiRobot* robot;
 
 };
 
