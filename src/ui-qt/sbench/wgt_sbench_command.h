@@ -7,6 +7,7 @@
 #include "ui_wgt_sbench_command.h"
 #include "../base/wgt_base.h"
 #include <QTimer>
+#include <QCheckBox>
 
 namespace mrrocpp {
 namespace ui {
@@ -34,6 +35,13 @@ private:
 	Ui::wgt_sbench_commandClass ui;
 	mrrocpp::ui::sbench::UiRobot* robot;
 
+	QVector <QCheckBox*> checkBox_Vector;
+
+private slots:
+
+	void on_pushButton_execute_clicked();
+	void on_pushButton_read_clicked();
+	void on_pushButton_clear_clicked();
 
 };
 

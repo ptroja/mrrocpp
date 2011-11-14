@@ -7,11 +7,11 @@
 #include "../base/mainwindow.h"
 #include "../base/ui_robot.h"
 
-#include <QCheckBox>
 #include <QFont>
 
 #define SBENCH_MAX_ROW 8
 #define SBENCH_MAX_COL 8
+#define SBENCH_MAX_EL 64
 
 wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
 		wgt_base(_widget_label, _interface, parent)
@@ -43,6 +43,7 @@ wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::commo
 			 */
 			int k = i % 2;
 			ui.gridLayout->addWidget(tmp_checkbox, i, (2 * j) + k);
+			checkBox_Vector.append(tmp_checkbox);
 		}
 	}
 
@@ -51,5 +52,22 @@ wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::commo
 wgt_sbench_command::~wgt_sbench_command()
 {
 
+}
+
+void wgt_sbench_command::on_pushButton_execute_clicked()
+{
+
+}
+
+void wgt_sbench_command::on_pushButton_read_clicked()
+{
+
+}
+
+void wgt_sbench_command::on_pushButton_clear_clicked()
+{
+	for (int i; i < SBENCH_MAX_EL; i++) {
+		checkBox_Vector[i]->setChecked(false);
+	}
 }
 
