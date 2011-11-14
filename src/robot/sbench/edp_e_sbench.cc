@@ -81,7 +81,20 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	memcpy(&pins_state, &(ecp_edp_cbuffer.pins_state), sizeof(pins_state));
 
+	if (robot_test_mode) {
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+		ss << std::endl;
+		msg->message(ss.str());
+	}
+
 }
+
 /*--------------------------------------------------------------------------*/
 
 /*--------------------------------------------------------------------------*/

@@ -51,9 +51,9 @@ void robot::create_command()
 
 	if (sbench_command_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
-
 		// generator command interpretation
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; ++i) {
+
 			ecp_edp_cbuffer.pins_state[i] = sbench_command_data_port.data[i];
 		}
 
