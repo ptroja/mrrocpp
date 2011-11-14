@@ -1057,11 +1057,11 @@ struct ecp_next_state_t
 	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
 	/*! Target position for the mobile robot. */
-playerpos_goal_t	playerpos_goal;
+	playerpos_goal_t playerpos_goal;
 
 	const char * get_mp_2_ecp_next_state_string() const;
 
-	typedef std::vector<spkm::segment_t> spkm_segment_sequence_t;
+	typedef std::vector <spkm::segment_t> spkm_segment_sequence_t;
 
 	spkm_segment_sequence_t spkm_segment_sequence;
 
@@ -1160,9 +1160,7 @@ typedef struct _empty
  */
 enum splineType
 {
-    linear = 1,
-    cubic = 2,
-    quintic = 3
+	linear = 1, cubic = 2, quintic = 3
 };
 
 #endif

@@ -9,8 +9,6 @@
  * @ingroup bird_hand
  */
 
-#include "dp_bird_hand.h"
-
 #include "base/lib/impconst.h"
 
 namespace mrrocpp {
@@ -24,50 +22,25 @@ namespace bird_hand {
 const robot_name_t ROBOT_NAME = "bird_hand";
 
 /*!
- * @brief Bird Hand EDP command buffer
+ * @brief Bird Hand total number of servos
  * @ingroup bird_hand
  */
-struct cbuffer
-{
-	/*!
-	 * @brief Motion command
-	 */
-	struct
-	{
-		/*!
-		 * @brief Motion duration in EDP steps
-		 */
-		int motion_steps;
-		/*!
-		 * @brief EDP query step number
-		 */
-		int ecp_query_step;
-		single_joint_command finger[NUM_OF_SERVOS];
-	} command_structure;
-	/*!
-	 * @brief Configuration command
-	 */
-	struct
-	{
-		single_joint_configuration finger[NUM_OF_SERVOS];
-	} configuration_command_structure;
-}__attribute__((__packed__));
-
+const int NUM_OF_SERVOS = 8;
 /*!
- * @brief Bird Hand EDP reply buffer
+ * @brief Bird Hand thumb finger number of servos
  * @ingroup bird_hand
  */
-struct rbuffer
-{
-	struct
-	{
-		single_joint_status finger[NUM_OF_SERVOS];
-	} status_reply_structure;
-	struct
-	{
-		single_joint_configuration finger[NUM_OF_SERVOS];
-	} configuration_reply_structure;
-}__attribute__((__packed__));
+const int THUMB_F_NUM_OF_SERVOS = 2;
+/*!
+ * @brief Bird Hand index finger number of servos
+ * @ingroup bird_hand
+ */
+const int INDEX_F_NUM_OF_SERVOS = 3;
+/*!
+ * @brief Bird Hand ring finger number of servos
+ * @ingroup bird_hand
+ */
+const int RING_F_NUM_OF_SERVOS = 3;
 
 } // namespace bird_hand
 } // namespace lib
