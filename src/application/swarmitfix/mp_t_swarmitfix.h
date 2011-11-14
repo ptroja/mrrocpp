@@ -2,6 +2,10 @@
 #define __MP_T_SWARMITFIX_H
 
 #include <boost/unordered_map.hpp>
+#include <boost/ptr_container/ptr_unordered_map.hpp>
+
+#include "base/lib/impconst.h"
+#include "base/lib/agent/DataBufferBase.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -27,6 +31,9 @@ private:
 
 	//! Current workers status
 	boost::unordered_map<lib::robot_name_t, WORKER_STATUS> current_workers_status;
+
+	//! Input and output buffer container
+	boost::ptr_unordered_map<std::string, DataBufferBase> IOBuffers;
 
 public:
 	swarmitfix(lib::configurator &_config);

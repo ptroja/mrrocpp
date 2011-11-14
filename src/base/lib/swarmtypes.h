@@ -17,7 +17,7 @@ namespace lib {
 typedef enum _notification { ACK, NACK } notification_t;
 
 const std::string notifyBufferId = "_NOTIFICATION";
-const std::string nextstateBufferId = "_NOTIFICATION";
+const std::string commandBufferId = "_COMMAND";
 
 }
 }

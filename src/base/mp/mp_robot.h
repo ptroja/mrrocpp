@@ -41,10 +41,6 @@ class robot : public ecp_mp::robot
 	friend class mrrocpp::mp::generator::generator;
 	friend class mrrocpp::mp::task::task;
 
-protected:
-	//! Remote agent proxy
-	RemoteAgent ecp;
-
 private:
 	/**
 	 * @brief nummber of servos (joints)
@@ -100,6 +96,10 @@ private:
 	 * @brief ECP errors handler
 	 */
 	void ecp_errors_handler();
+
+protected:
+	//! Remote agent proxy
+	RemoteAgent ecp;
 
 public:
 	/**
