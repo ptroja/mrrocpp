@@ -10,21 +10,22 @@
             <xs:sequence>
               <xs:element maxOccurs="unbounded" name="item">
                 <xs:complexType>
-                  <xs:sequence>
-                    <xs:element ref="sHind"/>
-                    <xs:element ref="eHind"/>
-                    <xs:element ref="numH"/>
-                    <xs:element ref="sBind"/>
-                    <xs:element ref="eBind"/>
-                    <xs:element ref="numB"/>
-                    <xs:element ref="sPind"/>
-                    <xs:element ref="ePind"/>
-                    <xs:element ref="numP"/>
-                    <xs:element ref="segInd"/>
-                    <xs:element ref="agent"/>
-                    <xs:element ref="TBeg"/>
-                    <xs:element ref="TEnd"/>
-                  </xs:sequence>
+                  <xs:complexContent>
+                    <xs:extension base="State">
+                      <xs:sequence>
+                        <xs:element ref="sHind"/>
+                        <xs:element ref="eHind"/>
+                        <xs:element ref="numH"/>
+                        <xs:element ref="sBind"/>
+                        <xs:element ref="eBind"/>
+                        <xs:element ref="numB"/>
+                        <xs:element ref="sPind"/>
+                        <xs:element ref="ePind"/>
+                        <xs:element ref="numP"/>
+                        <xs:element ref="segInd"/>
+                      </xs:sequence>                      
+                    </xs:extension>
+                  </xs:complexContent>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -36,35 +37,36 @@
             <xs:sequence>
               <xs:element maxOccurs="unbounded" name="item">
                 <xs:complexType>
-                  <xs:sequence>
-                    <xs:element ref="ind"/>
-                    <xs:element ref="cx"/>
-                    <xs:element ref="cy"/>
-                    <xs:element ref="cz"/>
-                    <xs:element ref="alfa"/>
-                    <xs:element ref="beta"/>
-                    <xs:element ref="gamma"/>
-                    <xs:element ref="line"/>
-                    <xs:element ref="lineseg"/>
-                    <xs:element name="actions" type="xs:string"/>
-                    <xs:element ref="numActions"/>
-                    <xs:element ref="k1"/>
-                    <xs:element ref="k2"/>
-                    <xs:element ref="ABeg"/>
-                    <xs:element ref="AHoldMin"/>
-                    <xs:element ref="AHoldMax"/>
-                    <xs:element ref="b"/>
-                    <xs:element ref="bcx"/>
-                    <xs:element ref="bcy"/>
-                    <xs:element ref="dmin"/>
-                    <xs:element ref="dmax"/>
-                    <xs:element ref="dcen"/>
-                    <xs:element ref="dh"/>
-                    <xs:element ref="eps"/>
-                    <xs:element ref="agent"/>
-                    <xs:element ref="TBeg"/>
-                    <xs:element ref="TEnd"/>
-                  </xs:sequence>
+                  <xs:complexContent>
+                    <xs:extension base="State">
+                      <xs:sequence>
+                        <xs:element ref="ind"/>
+                        <xs:element ref="cx"/>
+                        <xs:element ref="cy"/>
+                        <xs:element ref="cz"/>
+                        <xs:element ref="alfa"/>
+                        <xs:element ref="beta"/>
+                        <xs:element ref="gamma"/>
+                        <xs:element ref="line"/>
+                        <xs:element ref="lineseg"/>
+                        <xs:element name="actions" type="xs:string"/>
+                        <xs:element ref="numActions"/>
+                        <xs:element ref="k1"/>
+                        <xs:element ref="k2"/>
+                        <xs:element ref="ABeg"/>
+                        <xs:element ref="AHoldMin"/>
+                        <xs:element ref="AHoldMax"/>
+                        <xs:element ref="b"/>
+                        <xs:element ref="bcx"/>
+                        <xs:element ref="bcy"/>
+                        <xs:element ref="dmin"/>
+                        <xs:element ref="dmax"/>
+                        <xs:element ref="dcen"/>
+                        <xs:element ref="dh"/>
+                        <xs:element ref="eps"/>
+                      </xs:sequence>
+                    </xs:extension>
+                  </xs:complexContent>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -76,27 +78,28 @@
             <xs:sequence>
               <xs:element maxOccurs="unbounded" name="item">
                 <xs:complexType>
-                  <xs:sequence>
-                    <xs:element ref="ind"/>
-                    <xs:element ref="bCind"/>
-                    <xs:element ref="cx"/>
-                    <xs:element ref="cy"/>
-                    <xs:element ref="theta"/>
-                    <xs:element ref="pkmTheta"/>
-                    <xs:element name="actions">
-                      <xs:complexType>
-                        <xs:sequence>
-                          <xs:element ref="pin"/>
-                          <xs:element ref="dTheta"/>
-                          <xs:element ref="dPkmTheta"/>
-                        </xs:sequence>
-                      </xs:complexType>
-                    </xs:element>
-                    <xs:element ref="numActions"/>
-                    <xs:element ref="agent"/>
-                    <xs:element ref="TBeg"/>
-                    <xs:element ref="TEnd"/>
-                  </xs:sequence>
+                  <xs:complexContent>
+                    <xs:extension base="State">
+                      <xs:sequence>
+                        <xs:element ref="ind"/>
+                        <xs:element ref="bCind"/>
+                        <xs:element ref="cx"/>
+                        <xs:element ref="cy"/>
+                        <xs:element ref="theta"/>
+                        <xs:element ref="pkmTheta"/>
+                        <xs:element name="actions">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element ref="pin"/>
+                              <xs:element ref="dTheta"/>
+                              <xs:element ref="dPkmTheta"/>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element ref="numActions"/>
+                      </xs:sequence>
+                    </xs:extension>
+                  </xs:complexContent>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -108,28 +111,29 @@
             <xs:sequence>
               <xs:element maxOccurs="unbounded" name="item">
                 <xs:complexType>
-                  <xs:sequence>
-                    <xs:element ref="ind"/>
-                    <xs:element ref="alpha0"/>
-                    <xs:element ref="l1"/>
-                    <xs:element ref="l2"/>
-                    <xs:element ref="l3"/>
-                    <xs:element ref="psi1"/>
-                    <xs:element ref="psi2"/>
-                    <xs:element ref="psi3"/>
-                    <xs:element ref="beta7"/>
-                    <xs:element ref="pkmbaseToFixedPkm"/>
-                    <xs:element ref="hlowered"/>
-                    <xs:element ref="Dz"/>
-                    <xs:element ref="maxPkmNeutralDist"/>
-                    <xs:element ref="PX"/>
-                    <xs:element ref="PZ"/>
-                    <xs:element ref="COSGA"/>
-                    <xs:element ref="SINGA"/>
-                    <xs:element ref="agent"/>
-                    <xs:element ref="TBeg"/>
-                    <xs:element ref="TEnd"/>
-                  </xs:sequence>
+                  <xs:complexContent>
+                    <xs:extension base="State">                      
+                      <xs:sequence>
+                        <xs:element ref="ind"/>
+                        <xs:element ref="alpha0"/>
+                        <xs:element ref="l1"/>
+                        <xs:element ref="l2"/>
+                        <xs:element ref="l3"/>
+                        <xs:element ref="psi1"/>
+                        <xs:element ref="psi2"/>
+                        <xs:element ref="psi3"/>
+                        <xs:element ref="beta7"/>
+                        <xs:element ref="pkmbaseToFixedPkm"/>
+                        <xs:element ref="hlowered"/>
+                        <xs:element ref="Dz"/>
+                        <xs:element ref="maxPkmNeutralDist"/>
+                        <xs:element ref="PX"/>
+                        <xs:element ref="PZ"/>
+                        <xs:element ref="COSGA"/>
+                        <xs:element ref="SINGA"/>
+                      </xs:sequence>
+                    </xs:extension>
+                  </xs:complexContent>
                 </xs:complexType>
               </xs:element>              
             </xs:sequence>
