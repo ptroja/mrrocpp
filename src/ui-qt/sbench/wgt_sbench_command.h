@@ -34,6 +34,7 @@ private:
 	Ui::wgt_sbench_commandClass ui;
 	mrrocpp::ui::sbench::UiRobot* robot;
 
+
 };
 
 #endif // WGT_SBENCH_COMMAND_H
