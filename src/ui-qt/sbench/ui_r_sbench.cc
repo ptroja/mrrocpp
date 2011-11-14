@@ -48,7 +48,7 @@ int UiRobot::synchronise()
 UiRobot::UiRobot(common::Interface& _interface) :
 		common::UiRobot(_interface, lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
-
+//	add_wgt <wgt_sbench_command>(sbench::WGT_SBENCH_COMMAND, "Sbench command");
 }
 
 int UiRobot::manage_interface()
@@ -66,7 +66,6 @@ int UiRobot::manage_interface()
 			break;
 		case common::UI_EDP_WAITING_TO_START_READER:
 		case common::UI_EDP_WAITING_TO_STOP_READER:
-
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
@@ -100,8 +99,6 @@ int UiRobot::manage_interface()
 
 	return 1;
 }
-
-
 
 void UiRobot::setup_menubar()
 {

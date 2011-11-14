@@ -13,6 +13,8 @@
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
 
+#include "wgt_sbench_command.h"
+
 namespace Ui {
 class MenuBar;
 class MenuBarAction;
@@ -33,7 +35,6 @@ class EcpRobot;
 //
 //
 
-
 class UiRobot : public common::UiRobot
 {
 Q_OBJECT
@@ -51,7 +52,6 @@ public:
 
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
-
 
 	void setup_menubar();
 };
