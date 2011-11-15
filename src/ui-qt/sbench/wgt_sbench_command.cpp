@@ -54,21 +54,6 @@ wgt_sbench_command::~wgt_sbench_command()
 
 }
 
-void wgt_sbench_command::on_pushButton_execute_clicked()
-{
-
-	for (int i = 0; i < SBENCH_MAX_EL; i++) {
-
-		robot->ui_ecp_robot->the_robot->sbench_command_data_port.data[i] = checkBox_Vector[i]->isChecked();
-	}
-
-	robot->ui_ecp_robot->the_robot->sbench_command_data_port.set();
-
-	robot->ui_ecp_robot->execute_motion();
-
-	on_pushButton_read_clicked();
-}
-
 void wgt_sbench_command::on_pushButton_read_clicked()
 {
 	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.set_request();
@@ -99,10 +84,35 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 
 }
 
+void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
+{
+	on_pushButton_read_clicked();
+
+	for (int i; i < SBENCH_MAX_EL; i++) {
+		checkBox_Vector[i]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data[i]);
+	}
+
+}
+
 void wgt_sbench_command::on_pushButton_clear_clicked()
 {
 	for (int i; i < SBENCH_MAX_EL; i++) {
 		checkBox_Vector[i]->setChecked(false);
 	}
+}
+
+void wgt_sbench_command::on_pushButton_execute_clicked()
+{
+
+	for (int i = 0; i < SBENCH_MAX_EL; i++) {
+
+		robot->ui_ecp_robot->the_robot->sbench_command_data_port.data[i] = checkBox_Vector[i]->isChecked();
+	}
+
+	robot->ui_ecp_robot->the_robot->sbench_command_data_port.set();
+
+	robot->ui_ecp_robot->execute_motion();
+
+	on_pushButton_read_clicked();
 }
 

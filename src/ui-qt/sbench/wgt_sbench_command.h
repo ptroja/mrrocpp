@@ -39,9 +39,10 @@ private:
 
 private slots:
 
-	void on_pushButton_execute_clicked();
 	void on_pushButton_read_clicked();
+	void on_pushButton_read_and_copy_clicked();
 	void on_pushButton_clear_clicked();
+	void on_pushButton_execute_clicked();
 
 };
 

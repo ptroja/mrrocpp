@@ -67,6 +67,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="pushButton_read_and_copy">
+        <property name="text">
+         <string>Read and Copy</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pushButton_clear">
         <property name="text">
          <string>Clear</string>
