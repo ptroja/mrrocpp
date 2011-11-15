@@ -26,6 +26,9 @@
 #include "base/lib/swarmtypes.h"
 #include "robot/spkm/dp_spkm.h"
 
+#include "base/lib/agent/InputBuffer.h"
+#include "base/lib/agent/OutputBuffer.h"
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -54,8 +57,8 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void swarmitfix::create_robots()
 {
-	//IOBuffers[lib::spkm1::ROBOT_NAME] = ;
-	//new InputBuffer(lib::spkm1::ROBOT_NAME+lib::notifyBufferId);
+	IOBuffers.insert(lib::spkm1::ROBOT_NAME, new InputBuffer<lib::notification_t>(lib::spkm1::ROBOT_NAME+lib::notifyBufferId));
+	//IOBuffersv.push_back(new InputBuffer<lib::notification_t>(lib::spkm1::ROBOT_NAME+lib::notifyBufferId));
 
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);

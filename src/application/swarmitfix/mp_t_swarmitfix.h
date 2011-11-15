@@ -3,9 +3,10 @@
 
 #include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_unordered_map.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include "base/lib/impconst.h"
-#include "base/lib/agent/DataBufferBase.h"
+#include "base/lib/agent/InputBufferBase.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -33,7 +34,8 @@ private:
 	boost::unordered_map<lib::robot_name_t, WORKER_STATUS> current_workers_status;
 
 	//! Input and output buffer container
-	boost::ptr_unordered_map<std::string, DataBufferBase> IOBuffers;
+	boost::ptr_unordered_map<const lib::robot_name_t, InputBufferBase> IOBuffers;
+	boost::ptr_vector<InputBufferBase> IOBuffersv;
 
 public:
 	swarmitfix(lib::configurator &_config);
