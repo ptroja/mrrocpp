@@ -39,7 +39,7 @@ typedef std::map <lib::sensor::SENSOR_t, ecp_mp::sensor::sensor_interface *> sen
  */
 typedef sensors_t::value_type sensor_item_t;
 
-typedef std::map <lib::TRANSMITTER_t, transmitter::transmitter_base*> transmitters_t;
+typedef std::map <const lib::TRANSMITTER_t, transmitter::transmitter_base*> transmitters_t;
 typedef transmitters_t::value_type transmitter_item_t;
 
 } // namespace mp
