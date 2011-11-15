@@ -11,7 +11,7 @@
  * Input data buffer
  */
 template <class T>
-class InputBuffer : public DataBufferBase {
+class InputBuffer : public InputBufferBase {
 	//! Agent needs an access to Store/Update methods
 	friend class Agent;
 
@@ -44,7 +44,7 @@ private:
 public:
 	//! Constructor
 	InputBuffer(const std::string & _name, const T & _default_value = T())
-		: DataBufferBase(_name), data(_default_value),
+		: InputBufferBase(_name), data(_default_value),
 		fresh(false), access(data)
 	{
 	}

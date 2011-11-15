@@ -10,7 +10,7 @@
 
 #include "InputBuffer.h"
 
-void Agent::registerBuffer(DataBufferBase & buf)
+void Agent::registerBuffer(InputBufferBase & buf)
 {
 	std::pair <buffers_t::iterator, bool> result = buffers.insert(buffer_item_t(buf.getName(), &buf));
 
