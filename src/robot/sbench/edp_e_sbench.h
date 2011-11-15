@@ -12,6 +12,7 @@
 
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_sbench.h"
+#include <comedilib.h>
 
 namespace mrrocpp {
 namespace edp {
@@ -99,6 +100,10 @@ public:
 	 * Currently simple memcpy implementation
 	 */
 	void reply_serialization();
+
+private:
+	const std::string dev_name;
+	comedi_t *device; // device descriptor
 
 };
 
