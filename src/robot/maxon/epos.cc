@@ -916,7 +916,7 @@ void epos::startRelativeMotion()
 void epos::setOperationMode(operational_mode_t m)
 {
 	if (OpMode != m) {
-		WriteObjectValue(0x6060, 0x00, (int8_t) m);
+		WriteObjectValue<INTEGER8>(0x6060, 0x00, (int8_t) m);
 
 		OpMode = m;
 	}
