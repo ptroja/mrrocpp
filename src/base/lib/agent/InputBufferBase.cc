@@ -8,13 +8,8 @@
 #include "InputBufferBase.h"
 
 InputBufferBase::InputBufferBase(const std::string & _name)
-	: name(_name)
+	: BufferBase(_name)
 {
-}
-
-const std::string & InputBufferBase::getName() const
-{
-	return name;
 }
 
 InputBufferBase::~InputBufferBase()
