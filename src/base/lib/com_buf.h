@@ -36,8 +36,6 @@
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/lib/mrmath/ft_v_vector.h"
 
-#include "robot/spkm/dp_spkm.h"
-
 #include "base/lib/messip/messip.h"
 
 namespace mrrocpp {
@@ -1052,7 +1050,8 @@ public:
  */
 struct ecp_next_state_t
 {
-	char next_state[MP_2_ECP_NEXT_STATE_STRING_SIZE];
+	std::string next_state;
+
 	int variant;
 	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
@@ -1061,10 +1060,7 @@ struct ecp_next_state_t
 
 	const char * get_mp_2_ecp_next_state_string() const;
 
-	typedef std::vector <spkm::segment_t> spkm_segment_sequence_t;
-
-	spkm_segment_sequence_t spkm_segment_sequence;
-
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -1075,7 +1071,6 @@ struct ecp_next_state_t
 		ar & next_state;
 		ar & variant;
 		ar & data;
-		ar & spkm_segment_sequence;
 		// ar & playerpos_goal; // this is not used at this moment
 	}
 };
@@ -1089,6 +1084,7 @@ struct _MP_COMMAND_PACKAGE
 	NEXT_STATE_T ecp_next_state;
 	c_buffer instruction;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 

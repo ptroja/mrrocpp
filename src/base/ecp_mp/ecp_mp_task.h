@@ -85,6 +85,11 @@ public:
 	transmitters_t transmitter_m;
 
 	/**
+	 * @brief allow to register robot-specific buffers
+	 */
+	using Agent::registerBuffer;
+
+	/**
 	 * @brief pointer to the SR communication object
 	 */
 	static boost::shared_ptr<lib::sr_ecp> sr_ecp_msg; // TODO: rename from _ecp_ (?!)

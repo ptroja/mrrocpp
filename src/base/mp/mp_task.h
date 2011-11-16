@@ -12,7 +12,7 @@
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
-#include "base/lib/agent/DataBuffer.h"
+#include "base/lib/agent/InputBuffer.h"
 #include "base/lib/messip/messip.h"
 
 namespace mrrocpp {
@@ -25,23 +25,28 @@ class generator;
 
 namespace task {
 
-/*
- * Two usefull mp robot addition macros
- * this is necessary to first create robot and then assign it to robot_m
- * the robot constructor can not be directly called with them associated robot_m field creation\n
+/**
+ * Two useful MP robot addition macros.
+ * @note this is necessary to first create robot and then assign it to robot_m
+ * the robot constructor can not be directly called with them associated robot_m field creation
  * because it uses robot_m
+ * @note if the robot has been already added, then do nothing
  */
 
 #define ACTIVATE_MP_ROBOT(__robot_name) \
 		if (config.exists_and_true ("is_active", "[edp_" #__robot_name "]")) {\
-			robot::robot* created_robot = new robot::__robot_name(*this);\
-			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
+			if(robot_m.find(lib::__robot_name::ROBOT_NAME) == robot_m.end()) {\
+				robot::robot* created_robot = new robot::__robot_name(*this);\
+				robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
+			}\
 		}
 
 #define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
 		if (config.exists_and_true ("is_active", "[edp_" #__robot_name "]")) {\
-			robot::robot* created_robot = new robot::robot(lib::__robot_name::ROBOT_NAME, *this, 0);\
-			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
+			if(robot_m.find(lib::__robot_name::ROBOT_NAME) == robot_m.end()) {\
+				robot::robot* created_robot = new robot::robot(lib::__robot_name::ROBOT_NAME, *this, 0);\
+				robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
+			}\
 		}
 
 /*!
@@ -137,7 +142,7 @@ public:
 	 */
 	void wait_for_task_termination(bool activate_trigger, int number_of_robots, ...);
 
-	void wait_for_task_termination(bool activate_trigger, int number_of_robots, const std::vector<lib::robot_name_t> & robotSet);
+	void wait_for_task_termination(bool activate_trigger, const std::vector<lib::robot_name_t> & robotSet);
 
 	/**
 	 * @brief sends end motion command to ECP's - mkisiel xml task version

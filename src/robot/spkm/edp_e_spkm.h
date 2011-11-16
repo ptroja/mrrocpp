@@ -15,6 +15,7 @@
 
 #include "base/edp/edp_e_manip.h"
 #include "const_spkm.h"
+#include "dp_spkm.h"
 
 #include "robot/canopen/gateway.h"
 #include "robot/maxon/epos.h"

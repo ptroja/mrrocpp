@@ -46,11 +46,11 @@ bool spkm_pose::first_step()
 	sr_ecp_msg.message("spkm_pose: first_step");
 
 	// skip the empty command sequence
-	if (ecp_t.mp_command.ecp_next_state.spkm_segment_sequence.empty())
+	if(the_robot->nextstateBuffer->Get().spkm_segment_sequence.empty())
 		return false;
 
 	// set iterator to the first command
-	segment_iterator = ecp_t.mp_command.ecp_next_state.spkm_segment_sequence.begin();
+	segment_iterator = the_robot->nextstateBuffer->Get().spkm_segment_sequence.begin();
 
 	// Prepare command for execution of the first motion segment
 	request_segment_execution(*the_robot, *segment_iterator);
@@ -92,7 +92,7 @@ bool spkm_pose::next_step()
 	++segment_iterator;
 
 	// Check if the motion sequence is completed
-	if (segment_iterator == ecp_t.mp_command.ecp_next_state.spkm_segment_sequence.end())
+	if (segment_iterator == the_robot->nextstateBuffer->Get().spkm_segment_sequence.end())
 		return false;
 
 	// Prepare command for execution of a next motion segment

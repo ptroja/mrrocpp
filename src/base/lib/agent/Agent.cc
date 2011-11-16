@@ -8,9 +8,9 @@
 #include "base/lib/messip/messip.h"
 #include "base/lib/xdr/xdr_iarchive.hpp"
 
-#include "DataBuffer.h"
+#include "InputBuffer.h"
 
-void Agent::registerBuffer(DataBufferBase & buf)
+void Agent::registerBuffer(InputBufferBase & buf)
 {
 	std::pair <buffers_t::iterator, bool> result = buffers.insert(buffer_item_t(buf.getName(), &buf));
 

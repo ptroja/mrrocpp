@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "Agent.h"
-#include "DataBuffer.h"
+#include "InputBuffer.h"
 
 class Reader : public Agent {
 public:

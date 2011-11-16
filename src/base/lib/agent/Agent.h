@@ -13,8 +13,7 @@
 #include "base/lib/xdr/xdr_iarchive.hpp"
 #include "AgentBase.h"
 
-#include "DataBufferBase.h"
-#include "DataBuffer.h"
+#include "InputBufferBase.h"
 
 /**
  * Base class for every agent
@@ -51,7 +50,7 @@ private:
 
 protected:
 	//! Datatype of buffers container
-	typedef boost::unordered_map <std::string, DataBufferBase *> buffers_t;
+	typedef boost::unordered_map <std::string, InputBufferBase *> buffers_t;
 
 	//! Datatype of buffers container value
 	typedef buffers_t::value_type buffer_item_t;
@@ -60,7 +59,7 @@ protected:
 	buffers_t buffers;
 
 	//! Add a buffer to the agent
-	void registerBuffer(DataBufferBase & buf);
+	void registerBuffer(InputBufferBase & buf);
 
 	//! List buffers of the agent
 	void listBuffers() const;

@@ -96,7 +96,7 @@ public:
 
 			node_counter++;
 			if (ecp_t.pulse_check()) {
-				trigger = true;
+				set_trigger();
 			}
 
 		} while (next_step());
