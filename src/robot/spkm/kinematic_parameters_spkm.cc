@@ -57,22 +57,22 @@ const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::
 const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.242, 0.242, 0.242, -2.2777, -0.5498, -2.4347 };
 
 //! Lower platform: Initialize the jb coordinate of P1A in O(ib,jb,kb).
-const double kinematic_parameters_spkm::dA = -0.05;
+const double kinematic_parameters_spkm::lA = -0.05;
 
 //! Lower platform: Initialize the ib coordinate of P1B in O(ib,jb,kb).
-const double kinematic_parameters_spkm::dB = 0.18;
+const double kinematic_parameters_spkm::lB = 0.18;
 
 //! Lower platform: Initialize the jb coordinate of P1C in O(ib,jb,kb).
-const double kinematic_parameters_spkm::dC = 0.05;
+const double kinematic_parameters_spkm::lC = 0.05;
 
 //! Upper platform: Initialize the j coordinate of P4A in P(ijk).
-const double kinematic_parameters_spkm::pA = -0.05;
+const double kinematic_parameters_spkm::uA = -0.05;
 
 //! Upper platform: Initialize the i coordinate of P5B in P(ijk).
-const double kinematic_parameters_spkm::pB = 0.086;
+const double kinematic_parameters_spkm::uB = 0.086;
 
 //! Upper platform: Initialize the j coordinate of P4C in P(ijk).
-const double kinematic_parameters_spkm::pC = 0.05;
+const double kinematic_parameters_spkm::uC = 0.05;
 
 //! Initialization of vector representing a translation from P (middle of upper P platform) and S (middle of the spherical wrist).
 const Vector3d kinematic_parameters_spkm::P_S_P(0, 0, 0.0905);

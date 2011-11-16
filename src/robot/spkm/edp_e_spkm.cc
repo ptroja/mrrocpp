@@ -366,8 +366,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
 
 								// Postcondition I - check desired Cartesian position, basing on the upper platform pose.
-								// TODO get_current_kinematic_model()->check_cartesian_pose(desired_end_effector_frame);
-								get_current_kinematic_model()->check_joints(desired_joints);
+								get_current_kinematic_model()->check_cartesian_pose(desired_end_effector_frame);
+								//get_current_kinematic_model()->check_joints(desired_joints);
 
 								// Transform joints to motors.
 								get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);

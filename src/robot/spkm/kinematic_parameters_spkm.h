@@ -44,22 +44,22 @@ public:
 //	kinematic_parameters_spkm();
 
 	//! Lower platform: jb coordinate of P1A in O(ib,jb,kb).
-	static const double dA;
+	static const double lA;
 
 	//! Lower platform: ib coordinate of P1B in O(ib,jb,kb).
-	static const double dB;
+	static const double lB;
 
 	//! Lower platform: jb coordinate of P1C in O(ib,jb,kb).
-	static const double dC;
+	static const double lC;
 
 	//! Upper platform: j coordinate of P4A in P(ijk).
-	static const double pA;
+	static const double uA;
 
 	//! Upper platform: i coordinate of P5B in P(ijk).
-	static const double pB;
+	static const double uB;
 
 	//! Upper platform: j coordinate of P4C in P(ijk).
-	static const double pC;
+	static const double uC;
 
     //! Vector representing a translation from P (middle of upper P platform) and S (middle of the spherical wrist). An equivalent of <Hx,0,Hz>.
 	static const Vector3d P_S_P;
