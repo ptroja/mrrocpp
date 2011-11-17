@@ -15,6 +15,7 @@
 #include "kinematic_model_spkm.h"
 
 using namespace mrrocpp::edp::exception;
+using namespace mrrocpp::edp::spkm;
 using namespace std;
 
 namespace mrrocpp {
@@ -65,57 +66,41 @@ void kinematic_model_spkm::check_cartesian_pose(const lib::Homog_matrix& H_) con
 	Homog4d O_uB_T = O_P_T * uB;
 	Homog4d O_uC_T = O_P_T * uC;
 
-	/*cout << " O_uA_T:\n"<< O_uA_T << endl;
-	cout << " O_uB_T:\n"<< O_uB_T << endl;
-	cout << " O_uC_T:\n"<< O_uC_T << endl;*/
-
 	// Compute angles related to the inner and outer gimbals.
 	Homog4d uA_lA_T = O_uA_T - O_lA_T;
 	Homog4d uB_lB_T = O_uB_T - O_lB_T;
 	Homog4d uC_lC_T = O_uC_T - O_lC_T;
 
-	/*cout << " uA_lA_T:\n"<< uA_lA_T << endl;
-	cout << " uB_lB_T:\n"<< uB_lB_T << endl;
-	cout << " uC_lC_T:\n"<< uC_lC_T << endl;*/
-
-	/*cout << " uA_lA_T(0,3)x:\t"<< uA_lA_T(0,3) << "\t uA_lA_T(1,3)y:\t"<< uA_lA_T(1,3) << "\t uA_lA_T(2,3)z:\t"<< uA_lA_T(2,3) << endl;
-	cout << " uB_lB_T(0,3)x:\t"<< uB_lB_T(0,3) << "\t uB_lB_T(1,3)y:\t"<< uB_lB_T(1,3) << "\t uB_lB_T(2,3)z:\t"<< uB_lB_T(2,3) << endl;
-	cout << " uC_lC_T(0,3)x:\t"<< uC_lC_T(0,3) << "\t uC_lC_T(1,3)y:\t"<< uC_lC_T(1,3) << "\t uC_lC_T(2,3)z:\t"<< uC_lC_T(2,3) << endl;*/
-
-
-	// THYK_ALPHA_LIMIT_PLUS
-	// Upper limit for monitoring the outer cardan angle at the base (0,1,2)
-	// Thyk alpha = rotation around the x axes of legs A, B, and C of the upper platform: alpha = arc tan (|y|/|z|)
+	// Thyk alpha = rotation around the x axes of legs A, B, and C of the upper platform: alpha = arc tan (|y|/|z|).
 	double thyk_alpha[3];
 	thyk_alpha[0] = atan2 (uA_lA_T(1,3), uA_lA_T(2,3)) * 180.0 / M_PI;
 	thyk_alpha[1] = atan2 (uB_lB_T(1,3), uB_lB_T(2,3)) * 180.0 / M_PI;
 	thyk_alpha[2] = atan2 (uC_lC_T(1,3), uC_lC_T(2,3)) * 180.0 / M_PI;
 	cout << "alpha: A=" << thyk_alpha[0] << " B=" << thyk_alpha[1] << " C=" << thyk_alpha[2] <<endl;
 
-	// Thyk beta = rotation around the y axes of legs A, B, and C of the upper platform: alpha = arc tan (|x|/|z|)
+	// Check thyk alpha angle.
+	for (int i = 0; i < 3; ++i) {
+		if (thyk_alpha[i] > params.upper_alpha_thyk_angle_limit[i])
+			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_alpha[i]));
+		else if (thyk_alpha[i] < params.lower_alpha_thyk_angle_limit[i])
+			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_alpha[i]));
+	}
+
+	// Thyk beta = rotation around the y axes of legs A, B, and C of the upper platform: alpha = arc tan (|x|/|z|).
 	double thyk_beta[3];
 	thyk_beta[0] = atan2 (uA_lA_T(0,3), uA_lA_T(2,3)) * 180.0 / M_PI;
 	thyk_beta[1] = atan2 (uB_lB_T(0,3), uB_lB_T(2,3)) * 180.0 / M_PI;
 	thyk_beta[2] = atan2 (uC_lC_T(0,3), uC_lC_T(2,3)) * 180.0 / M_PI;
 	cout << "beta: A=" << thyk_beta[0] << " B=" << thyk_beta[1] << " C=" << thyk_beta[2] <<endl;
 
-	// Check limits.
+	// Check thyk beta angle.
+	for (int i = 0; i < 3; ++i) {
+		if (thyk_beta[i] > params.upper_beta_thyk_angle_limit[i])
+			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_beta[i]));
+		else if (thyk_beta[i] < params.lower_beta_thyk_angle_limit[i])
+			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_beta[i]));
+	}
 
-	// THYK_ALPHA_LIMIT_MINUS
-	// Lower limit for monitoring the outer cardan angle at the base (0,1,2)
-
-	// THYK_BETA_LIMIT_PLUS
-	// Upper limit for monitoring the inner cardan angle at the base (0,1,2)
-	//double thyk_beta[3];
-
-	// THYK_BETA_LIMIT_MINUS
-	// Lower limit for monitoring the inner cardan angle at the base (0,1,2)
-
-
-
-
-	// Throw exception in case of error.
-	//BOOST_THROW_EXCEPTION(nfe_joint_limit() << joint_number(i) << limit_type(LOWER_LIMIT));
 }
 
 

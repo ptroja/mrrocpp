@@ -56,6 +56,18 @@ const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::
 //! The lower values are related to positions of synchronization sensors.
 const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.242, 0.242, 0.242, -2.2777, -0.5498, -2.4347 };
 
+//! Initialization of upper thyk alpha angle limit.
+const double kinematic_parameters_spkm::upper_alpha_thyk_angle_limit[3] = { 30.0, 50.0, 30.0 };
+
+//! Initialization of lower thyk alpha angle limit.
+const double kinematic_parameters_spkm::lower_alpha_thyk_angle_limit[3] = { -30.0, -50.0, -30.0 };
+
+//! Initialization of upper thyk beta angle limit.
+const double kinematic_parameters_spkm::upper_beta_thyk_angle_limit[3] = { 30.0, 50.0, 30.0 };
+
+//! Initialization of lower thyk beta angle limit.
+const double kinematic_parameters_spkm::lower_beta_thyk_angle_limit[3] = { -30.0, -50.0, -30.0 };
+
 //! Lower platform: Initialize the jb coordinate of P1A in O(ib,jb,kb).
 const double kinematic_parameters_spkm::lA = -0.05;
 

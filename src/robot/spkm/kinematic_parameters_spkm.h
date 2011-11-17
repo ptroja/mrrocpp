@@ -91,6 +91,19 @@ public:
 	//! Smallest values that joints can reach.
 	static const double lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
+	//! Largest values of upper thyk alpha angle.
+	static const double upper_alpha_thyk_angle_limit[3];
+
+	//! Smallest values of lower thyk alpha angle.
+	static const double lower_alpha_thyk_angle_limit[3];
+
+	//! Largest values of upper thyk beta angle.
+	static const double upper_beta_thyk_angle_limit[3];
+
+	//! Smallest values of lower thyk beta angle.
+	static const double lower_beta_thyk_angle_limit[3];
+
+
 	// You must overload "operator new" so that it generates 16-bytes-aligned pointers.
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
