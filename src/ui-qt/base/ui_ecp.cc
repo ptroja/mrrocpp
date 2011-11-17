@@ -45,7 +45,7 @@ namespace ui {
 namespace common {
 
 ecp_buffer::ecp_buffer(Interface& _interface) :
-	interface(_interface), communication_state(UI_ECP_AFTER_REPLY)
+		interface(_interface), communication_state(UI_ECP_AFTER_REPLY)
 {
 	thread_id = boost::thread(boost::bind(&ecp_buffer::operator(), this));
 }
@@ -58,6 +58,16 @@ ecp_buffer::~ecp_buffer()
 
 void ecp_buffer::operator()()
 {
+
+	static sigset_t signal_mask; /* signals to block         */
+	sigemptyset(&signal_mask);
+	sigaddset(&signal_mask, SIGINT);
+	sigaddset(&signal_mask, SIGTERM);
+	sigaddset(&signal_mask, SIGCHLD);
+	int rc = pthread_sigmask(SIG_BLOCK, &signal_mask, NULL);
+	if (rc != 0) {
+		/* handle error */
+	}
 
 	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 5);
 

@@ -61,7 +61,7 @@ namespace ui {
 namespace common {
 
 Interface::Interface() :
-		is_mp_and_ecps_active(false), position_refresh_interval(200), mrrocpp_bin_to_root_path("../../")
+		is_mp_and_ecps_active(false), position_refresh_interval(200), sigchld_handling(1), mrrocpp_bin_to_root_path("../../")
 {
 
 	mw = (boost::shared_ptr <MainWindow>) new MainWindow(*this);
@@ -198,8 +198,8 @@ void Interface::timer_slot()
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
-			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
+			char process_name_buffer[NAME_LENGTH + 1];snprintf
+			(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -641,11 +641,15 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 	return 1;
 }
 
-int Interface::wait_for_child_termiantion(pid_t pid)
+int Interface::wait_for_child_termiantion(pid_t pid, bool hang)
 {
 	int status;
 	pid_t child_pid;
-	child_pid = waitpid(pid, &status, 0);
+	if (hang) {
+		child_pid = waitpid(pid, &status, 0);
+	} else {
+		child_pid = waitpid(pid, &status, WNOHANG);
+	}
 
 	if (child_pid == -1) {
 		//	int e = errno;
@@ -704,6 +708,18 @@ void Interface::create_robots()
 	setRobotsMenu();
 }
 
+void Interface::block_sigchld()
+{
+	//signal(SIGCHLD, SIG_IGN);
+	sigchld_handling--;
+}
+
+void Interface::unblock_sigchld()
+{
+	//signal(SIGCHLD, &catch_signal);
+	sigchld_handling++;
+}
+
 void Interface::init()
 {
 
@@ -737,7 +753,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-	if (uname(&sysinfo) == -1) {
+if(	uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -781,7 +797,7 @@ void Interface::init()
 	signal(SIGALRM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
 
-	// signal(SIGCHLD, &catch_signal);
+	signal(SIGCHLD, &catch_signal);
 	/* TR
 	 lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 	 */
@@ -1047,11 +1063,14 @@ void Interface::abort_threads()
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
 {
+
 	bool r_val;
 
 	{
 		boost::unique_lock <boost::mutex> lock(process_creation_mtx);
+		block_sigchld();
 		r_val = lib::ping(_node);
+		unblock_sigchld();
 	}
 
 	std::cout << "ping returned " << r_val << std::endl;
@@ -1228,7 +1247,8 @@ int Interface::initiate_configuration()
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL)
+				if (direntp == NULL
+				)
 					break;
 
 				// printf( "%s\n", direntp->d_name );
@@ -1317,7 +1337,8 @@ void Interface::fill_node_list()
 	if (dirp != NULL) {
 		for (;;) {
 			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL)
+			if (direntp == NULL
+			)
 				break;
 			all_node_list.push_back(std::string(direntp->d_name));
 		}

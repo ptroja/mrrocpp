@@ -14,6 +14,8 @@ void catch_signal(int sig)
 	// print a message
 	fprintf(stderr, "UI: %s\n", strsignal(sig));
 
+	std::cout << std::endl << std::endl << "catch_signal: " << interface->sigchld_handling << std::endl << std::endl;
+
 	switch (sig)
 	{
 		case SIGINT:
@@ -27,11 +29,16 @@ void catch_signal(int sig)
 			signal(SIGSEGV, SIG_DFL);
 			break;
 		case SIGCHLD:
-			/*
-			 if (interface) {
-			 interface->wait_for_child_termiantion(-1);
-			 }
-			 */
+
+			if (interface) {
+				if ((interface->sigchld_handling) > 0) {
+					interface->wait_for_child_termiantion(-1, false);
+				} else {
+					//	interface->unblock_sigchld();
+				}
+
+			}
+
 			break;
 		default:
 			fprintf(stderr, "UI: unknown signal (%d)\n", sig);
