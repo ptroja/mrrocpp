@@ -45,7 +45,7 @@ namespace ui {
 namespace common {
 
 ecp_buffer::ecp_buffer(Interface& _interface) :
-	interface(_interface), communication_state(UI_ECP_AFTER_REPLY)
+		interface(_interface), communication_state(UI_ECP_AFTER_REPLY)
 {
 	thread_id = boost::thread(boost::bind(&ecp_buffer::operator(), this));
 }
@@ -58,6 +58,8 @@ ecp_buffer::~ecp_buffer()
 
 void ecp_buffer::operator()()
 {
+
+	interface.mask_signals_for_thread();
 
 	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 5);
 

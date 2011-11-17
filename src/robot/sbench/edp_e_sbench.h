@@ -12,6 +12,7 @@
 
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_sbench.h"
+#include <comedilib.h>
 
 namespace mrrocpp {
 namespace edp {
@@ -38,6 +39,13 @@ protected:
 	 * It will be used if any motor will be commanded to move. Then motor to joint transform will be implemented in kinematics.
 	 */
 	virtual void create_kinematic_models_for_given_robot(void);
+
+	/*!
+	 * \brief current pins state
+	 *
+	 * it is cipied from desired in test_mode or read in hardware_mode
+	 */
+	lib::sbench::pins_state_td current_pins_state;
 
 public:
 
@@ -92,6 +100,10 @@ public:
 	 * Currently simple memcpy implementation
 	 */
 	void reply_serialization();
+
+private:
+	const std::string dev_name;
+	comedi_t *device; // device descriptor
 
 };
 

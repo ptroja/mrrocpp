@@ -1,3 +1,10 @@
+/*
+ * hi_moxa.cc
+ *
+ *  Created on: Nov 14, 2011
+ *      Author: mwalecki
+ */
+
 #include <exception>
 #include <stdexcept>
 #include <cstring>

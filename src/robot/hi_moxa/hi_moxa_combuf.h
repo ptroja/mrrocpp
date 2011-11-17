@@ -1,3 +1,10 @@
+/*
+ * hi_moxa_combuf.h
+ *
+ *  Created on: Nov 14, 2011
+ *      Author: mwalecki
+ */
+
 #ifndef __HI_MOXA_COMBUF_H
 #define __HI_MOXA_COMBUF_H
 
@@ -10,16 +17,16 @@ namespace hi_moxa {
 #define SERVO_ST_BUF_LEN 30
 const char START_BYTE = '#';
 
-// commands
+/// commands
 const int COMMAND_MODE_PWM = 0x00;
 const int COMMAND_MODE_CURRENT = 0x01;
 const int COMMAND_MODE_POSITION = 0x02;
 const int COMMAND_SET_PARAM = 0x0f;
 
-// command parameters
+/// command parameters
 const int COMMAND_PARAM_SYNCHRO = 0x10;
 
-// SET_PARAM command parameters
+/// SET_PARAM command parameters
 const int PARAM_SYNCHRONIZED = 0x10;
 const int PARAM_MAXCURRENT = 0x20;
 const int PARAM_PID_POS_P = 0x30;
@@ -30,12 +37,12 @@ const int PARAM_PID_CURR_I = 0x70;
 const int PARAM_PID_CURR_D = 0x80;
 const int PARAM_DRIVER_MODE = 0x90;
 
-// DRIVER_MODE values
+/// DRIVER_MODE values
 const int PARAM_DRIVER_MODE_MANUAL = 0x00;
 const int PARAM_DRIVER_MODE_PWM = 0x03;
 const int PARAM_DRIVER_MODE_ERROR = 0x04;
 
-// error flags returned by hi::read_write_hardware (defined in servo_gr.h)
+/// error flags returned by hi::read_write_hardware (defined in servo_gr.h)
 const uint64_t ALL_RIGHT = 0x0000000000000000ULL;
 const uint64_t SYNCHRO_ZERO = 0x0000000000000001ULL;
 const uint64_t SYNCHRO_SWITCH_ON = 0x0000000000000002ULL;
@@ -43,6 +50,7 @@ const uint64_t LOWER_LIMIT_SWITCH = 0x0000000000000004ULL;
 const uint64_t UPPER_LIMIT_SWITCH = 0x0000000000000008ULL;
 const uint64_t OVER_CURRENT = 0x0000000000000010ULL;
 
+/// motor driver status buffer structure
 struct status_St {
 	uint8_t startByte;
 	uint8_t sw1 :1;
@@ -57,10 +65,12 @@ struct status_St {
 	int32_t position;
 }__attribute__((__packed__));
 
+/// pwm data structure
 struct pwm_St {
 	int16_t pwm;
 }__attribute__((__packed__));
 
+/// parameter data union
 union param_Un {
 	int8_t synchronized;
 	int8_t driver_mode;
@@ -69,11 +79,11 @@ union param_Un {
 	int16_t largest;
 };
 
+/// data buffer structure
 struct servo_St{
 	char buf[SERVO_ST_BUF_LEN];
 	uint8_t command_params;
 	struct status_St drive_status;
-//	int32_t position_offset;
 	int32_t current_absolute_position;
 	int32_t previous_absolute_position;
 	double current_position_inc;

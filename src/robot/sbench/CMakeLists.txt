@@ -4,7 +4,7 @@ add_executable(edp_sbench
 )
 
 target_link_libraries(edp_sbench kinematicssbench edp
-	${COMMON_LIBRARIES})
+	${COMMON_LIBRARIES} ${COMEDI_LIBRARY})
 
 		
 add_library(kinematicssbench

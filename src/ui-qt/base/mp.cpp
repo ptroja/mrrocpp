@@ -23,6 +23,7 @@ Mp::Mp(Interface *iface) :
 int Mp::MPup()
 
 {
+
 	//eb.command(boost::bind(&ui::spkm::UiRobot::execute_motor_motion, &(*this)));
 	interface->main_eb->command(boost::bind(&ui::common::Mp::MPup_int, &(*this)));
 
@@ -107,6 +108,7 @@ int Mp::MPslay()
 
 		//	SignalKill(mp.node_nr, mp.pid, 0, SIGTERM, 0, 0);
 
+		interface->block_sigchld();
 		if (kill(mp_state.pid, SIGTERM) == -1) {
 			perror("kill()");
 		} else {
@@ -114,9 +116,9 @@ int Mp::MPslay()
 			//    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
 			//    			perror("waitpid()");
 			//    		}
-			interface->wait_for_child_termiantion(mp_state.pid);
+			interface->wait_for_child_termination(mp_state.pid, true);
 		}
-
+		interface->unblock_sigchld();
 		mp_state.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
 
 	}

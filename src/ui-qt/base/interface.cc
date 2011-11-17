@@ -61,7 +61,7 @@ namespace ui {
 namespace common {
 
 Interface::Interface() :
-		is_mp_and_ecps_active(false), position_refresh_interval(200), mrrocpp_bin_to_root_path("../../")
+		is_mp_and_ecps_active(false), position_refresh_interval(200), sigchld_handling(1), mrrocpp_bin_to_root_path("../../")
 {
 
 	mw = (boost::shared_ptr <MainWindow>) new MainWindow(*this);
@@ -641,11 +641,15 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 	return 1;
 }
 
-int Interface::wait_for_child_termiantion(pid_t pid)
+int Interface::wait_for_child_termination(pid_t pid, bool hang)
 {
 	int status;
 	pid_t child_pid;
-	child_pid = waitpid(pid, &status, 0);
+	if (hang) {
+		child_pid = waitpid(pid, &status, 0);
+	} else {
+		child_pid = waitpid(pid, &status, WNOHANG);
+	}
 
 	if (child_pid == -1) {
 		//	int e = errno;
@@ -702,6 +706,40 @@ void Interface::create_robots()
 	ADD_UI_ROBOT(irp6ot_tfg);
 
 	setRobotsMenu();
+}
+
+bool Interface::check_sigchld_handling()
+{
+	if (sigchld_handling > 0) {
+		return true;
+	}
+	return false;
+}
+
+void Interface::block_sigchld()
+{
+	//signal(SIGCHLD, SIG_IGN);
+	sigchld_handling--;
+}
+
+void Interface::unblock_sigchld()
+{
+	//signal(SIGCHLD, &catch_signal);
+	sigchld_handling++;
+}
+
+void Interface::mask_signals_for_thread()
+{
+	static sigset_t signal_mask; /* signals to block         */
+
+	sigemptyset(&signal_mask);
+	//sigaddset(&signal_mask, SIGINT);
+	//sigaddset(&signal_mask, SIGTERM);
+	sigaddset(&signal_mask, SIGCHLD);
+	int rc = pthread_sigmask(SIG_BLOCK, &signal_mask, NULL);
+	if (rc != 0) {
+
+	}
 }
 
 void Interface::init()
@@ -781,7 +819,7 @@ void Interface::init()
 	signal(SIGALRM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
 
-	// signal(SIGCHLD, &catch_signal);
+	signal(SIGCHLD, &catch_signal);
 	/* TR
 	 lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 	 */
@@ -1047,11 +1085,14 @@ void Interface::abort_threads()
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
 {
+
 	bool r_val;
 
 	{
 		boost::unique_lock <boost::mutex> lock(process_creation_mtx);
+		block_sigchld();
 		r_val = lib::ping(_node);
+		unblock_sigchld();
 	}
 
 	std::cout << "ping returned " << r_val << std::endl;

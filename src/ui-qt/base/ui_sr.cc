@@ -49,6 +49,8 @@ namespace common {
 
 void sr_buffer::operator()()
 {
+
+	interface.mask_signals_for_thread();
 	lib::set_thread_name("sr");
 
 	lib::fd_server_t ch;
@@ -71,7 +73,7 @@ void sr_buffer::operator()()
 		}
 
 		if (strlen(sr_msg.process_name) > 1) // by Y jesli ten string jest pusty to znaczy ze przyszedl smiec
-		{
+				{
 			//	flushall();
 
 			put_one_msg(sr_msg);
@@ -82,7 +84,7 @@ void sr_buffer::operator()()
 }
 
 sr_buffer::sr_buffer(Interface& _interface) :
-	interface(_interface), cb(UI_SR_BUFFER_LENGHT), thread_started()
+		interface(_interface), cb(UI_SR_BUFFER_LENGHT), thread_started()
 {
 	thread_id = boost::thread(boost::bind(&sr_buffer::operator(), this));
 }
