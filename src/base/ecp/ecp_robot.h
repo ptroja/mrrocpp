@@ -50,7 +50,6 @@ namespace robot {
 class ECP_error
 {
 public:
-
 	/**
 	 * @brief error class (type)
 	 */
@@ -85,7 +84,6 @@ public:
 class ECP_main_error
 {
 public:
-
 	/**
 	 * @brief error class (type)
 	 */
@@ -127,7 +125,7 @@ class ecp_robot_base : public ecp_mp::robot
 	/**
 	 * @brief pid of EDP process
 	 */
-	pid_t EDP_MASTER_Pid; // Identyfikator procesu driver'a edp_m
+	pid_t EDP_MASTER_Pid;
 
 	/**
 	 * @brief  the EDP spawn and kill flag
@@ -169,14 +167,14 @@ public:
 	virtual void query() = 0;
 
 	/**
-	 * @brief reference to sr_ecp object for sending messages to UI_SR console
+	 * @brief reference to object for sending messages to UI/SR console
 	 */
-	lib::sr_ecp & sr_ecp_msg; // obiekt do komunikacji z SR
+	lib::sr_ecp & sr_ecp_msg;
 
 	/**
 	 * @brief flag if the robot is synchronised or not
 	 */
-	bool synchronised; // Flaga synchronizacji robota (true - zsynchronizowany, false - nie)
+	bool synchronised;
 
 	/**
 	 * @brief nummber of servos (joints)
@@ -191,7 +189,7 @@ public:
 	/**
 	 * @brief file descriptor of EDP communication channel
 	 */
-	lib::fd_client_t EDP_fd; // by Y&W
+	lib::fd_client_t EDP_fd;
 
 	/**
 	 * @brief executed the communication sequence with EDP: set and query with error handling
