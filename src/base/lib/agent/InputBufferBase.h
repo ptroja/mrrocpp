@@ -12,26 +12,22 @@
 
 #include "base/lib/xdr/xdr_iarchive.hpp"
 
+#include "BufferBase.h"
+
 /**
  * Base class for input data buffer and its proxy
  */
-class InputBufferBase {
+class InputBufferBase : public BufferBase {
 	//! Agent needs an access to Store/Update methods
 	friend class Agent;
 
 protected:
-	//! name of the data buffer
-	const std::string name;
-
 	//! store new data
 	virtual void Store(xdr_iarchive<> & ia) = 0;
 
 public:
 	//! Constructor
 	InputBufferBase(const std::string & _name);
-
-	//! get name of the buffer
-	const std::string & getName() const;
 
 	//! This is required to make a class polimorphic
 	virtual ~InputBufferBase();
