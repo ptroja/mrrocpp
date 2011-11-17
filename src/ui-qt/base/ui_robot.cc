@@ -416,7 +416,7 @@ void UiRobot::EDP_slay_int()
 
 		close_edp_connections();
 
-		interface.wait_for_child_termiantion((pid_t) state.edp.pid, true);
+		interface.wait_for_child_termination((pid_t) state.edp.pid, true);
 		interface.unblock_sigchld();
 		abort_thread();
 	}

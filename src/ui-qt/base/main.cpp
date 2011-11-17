@@ -30,15 +30,9 @@ void catch_signal(int sig)
 			break;
 		case SIGCHLD:
 
-			if (interface) {
-				if ((interface->sigchld_handling) > 0) {
-					interface->wait_for_child_termiantion(-1, false);
-				} else {
-					//	interface->unblock_sigchld();
-				}
-
+			if ((interface) && (interface->check_sigchld_handling())) {
+				interface->wait_for_child_termination(-1, false);
 			}
-
 			break;
 		default:
 			fprintf(stderr, "UI: unknown signal (%d)\n", sig);
@@ -55,7 +49,7 @@ int main(int argc, char *argv[])
 //	std::cerr << "main: delete interface" << std::endl;
 	delete interface;
 
-	// interface->UI_close();
+// interface->UI_close();
 
 	return r;
 }

@@ -116,7 +116,7 @@ int Mp::MPslay()
 			//    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
 			//    			perror("waitpid()");
 			//    		}
-			interface->wait_for_child_termiantion(mp_state.pid, true);
+			interface->wait_for_child_termination(mp_state.pid, true);
 		}
 		interface->unblock_sigchld();
 		mp_state.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone

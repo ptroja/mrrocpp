@@ -59,15 +59,7 @@ ecp_buffer::~ecp_buffer()
 void ecp_buffer::operator()()
 {
 
-	static sigset_t signal_mask; /* signals to block         */
-	sigemptyset(&signal_mask);
-	sigaddset(&signal_mask, SIGINT);
-	sigaddset(&signal_mask, SIGTERM);
-	sigaddset(&signal_mask, SIGCHLD);
-	int rc = pthread_sigmask(SIG_BLOCK, &signal_mask, NULL);
-	if (rc != 0) {
-		/* handle error */
-	}
+	interface.mask_signals_for_thread();
 
 	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 5);
 

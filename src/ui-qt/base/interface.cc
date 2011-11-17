@@ -198,8 +198,8 @@ void Interface::timer_slot()
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
-			char process_name_buffer[NAME_LENGTH + 1];snprintf
-			(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
+			char process_name_buffer[NAME_LENGTH + 1];
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -641,7 +641,7 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 	return 1;
 }
 
-int Interface::wait_for_child_termiantion(pid_t pid, bool hang)
+int Interface::wait_for_child_termination(pid_t pid, bool hang)
 {
 	int status;
 	pid_t child_pid;
@@ -708,6 +708,14 @@ void Interface::create_robots()
 	setRobotsMenu();
 }
 
+bool Interface::check_sigchld_handling()
+{
+	if (sigchld_handling > 0) {
+		return true;
+	}
+	return false;
+}
+
 void Interface::block_sigchld()
 {
 	//signal(SIGCHLD, SIG_IGN);
@@ -718,6 +726,20 @@ void Interface::unblock_sigchld()
 {
 	//signal(SIGCHLD, &catch_signal);
 	sigchld_handling++;
+}
+
+void Interface::mask_signals_for_thread()
+{
+	static sigset_t signal_mask; /* signals to block         */
+
+	sigemptyset(&signal_mask);
+	//sigaddset(&signal_mask, SIGINT);
+	//sigaddset(&signal_mask, SIGTERM);
+	sigaddset(&signal_mask, SIGCHLD);
+	int rc = pthread_sigmask(SIG_BLOCK, &signal_mask, NULL);
+	if (rc != 0) {
+
+	}
 }
 
 void Interface::init()
@@ -753,7 +775,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-if(	uname(&sysinfo) == -1) {
+	if (uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -1247,8 +1269,7 @@ int Interface::initiate_configuration()
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL
-				)
+				if (direntp == NULL)
 					break;
 
 				// printf( "%s\n", direntp->d_name );
@@ -1337,8 +1358,7 @@ void Interface::fill_node_list()
 	if (dirp != NULL) {
 		for (;;) {
 			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL
-			)
+			if (direntp == NULL)
 				break;
 			all_node_list.push_back(std::string(direntp->d_name));
 		}

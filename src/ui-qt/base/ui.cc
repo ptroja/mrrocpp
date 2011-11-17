@@ -90,16 +90,7 @@ int function_execution_buffer::wait_and_execute()
 void feb_thread::operator()()
 {
 
-	static sigset_t signal_mask; /* signals to block         */
-
-	sigemptyset(&signal_mask);
-	//sigaddset(&signal_mask, SIGINT);
-	//sigaddset(&signal_mask, SIGTERM);
-	sigaddset(&signal_mask, SIGCHLD);
-	int rc = pthread_sigmask(SIG_BLOCK, &signal_mask, NULL);
-	if (rc != 0) {
-
-	}
+	feb.interface.mask_signals_for_thread();
 
 	while (true) {
 		feb.wait_and_execute();
