@@ -13,9 +13,9 @@
 #define __TRANSFORMER_ERROR_H
 
 #include <stdint.h>
-#include <sys/time.h>
 #include <boost/exception/all.hpp>
 #include <boost/exception/diagnostic_information.hpp>
+#include <boost/thread/thread_time.hpp>
 
 namespace mrrocpp {
 namespace lib {
@@ -40,7 +40,7 @@ namespace exception {
 typedef boost::error_info <struct mrrocpp_error_description_, char const *> mrrocpp_error_description;
 
 //! Moment in which error was detected.
-typedef boost::error_info <struct time_, struct timeval> mrrocpp_error_time;
+typedef boost::error_info <struct timestamp, boost::system_time> mrrocpp_error_time;
 
 /*!
  * \brief Base class for all system exceptions/errors.
@@ -62,13 +62,8 @@ public:
 	mrrocpp_error() :
 		error_class(ercl)
 	{
-		// Get current time.
-		struct timeval tv;
-		if(gettimeofday(&tv, NULL) == -1) {
-			perror("gettimeofday()");
-		}
 		// Add it to diagnostic information.
-		*this << mrrocpp_error_time(tv);
+		*this << mrrocpp_error_time(boost::get_system_time());
 	}
 
 	/*!
