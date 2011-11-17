@@ -52,7 +52,7 @@ private:
 	 */
 	lib::child ECP_pid;
 
-protected:
+public:
 	//! Remote agent proxy
 	RemoteAgent ecp;
 

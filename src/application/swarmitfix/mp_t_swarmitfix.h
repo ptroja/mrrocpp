@@ -1,11 +1,12 @@
 #if !defined(__MP_T_SWARMITFIX_H)
 #define __MP_T_SWARMITFIX_H
 
+#include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_unordered_map.hpp>
 
 #include "base/lib/impconst.h"
-#include "base/lib/agent/InputBufferBase.h"
+#include "base/lib/swarmtypes.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -13,9 +14,58 @@ namespace task {
 
 /** @defgroup swarmitfix swarmitfix
  *  @ingroup application
- *  A swarmitfix QNX test application
  *  @{
  */
+
+typedef struct _IO {
+	typedef struct _transmitters {
+		typedef struct _spkm1 {
+			typedef InputPtr<lib::notification_t> notificationBuffer_t;
+
+			notificationBuffer_t notification;
+
+			typedef OutputPtr<lib::notification_t> command_t;
+
+			command_t command;
+		} spkm1_t;
+		spkm1_t spkm1;
+
+		typedef struct _spkm2 {
+			typedef InputPtr<lib::notification_t> notificationBuffer_t;
+
+			notificationBuffer_t notification;
+
+			typedef OutputPtr<lib::notification_t> command_t;
+
+			command_t command;
+		} spkm2_t;
+		spkm1_t spkm2;
+
+		typedef struct _smb1 {
+			typedef InputPtr<lib::notification_t> notificationBuffer_t;
+
+			notificationBuffer_t notification;
+
+			typedef OutputPtr<lib::notification_t> command_t;
+
+			command_t command;
+		} smb1_t;
+		smb1_t smb1;
+
+		typedef struct _smb2 {
+			typedef InputPtr<lib::notification_t> notificationBuffer_t;
+
+			notificationBuffer_t notification;
+
+			typedef OutputPtr<lib::notification_t> command_t;
+
+			command_t command;
+		} smb2_t;
+		smb2_t smb2;
+
+	} transmitters_t;
+	transmitters_t transmitters;
+} IO_t;
 
 class swarmitfix : public task
 {
@@ -32,8 +82,8 @@ private:
 	//! Current workers status
 	boost::unordered_map<const lib::robot_name_t, WORKER_STATUS> current_workers_status;
 
-	//! Input and output buffer container
-	boost::ptr_unordered_map<const lib::robot_name_t, InputBufferBase> IBuffers;
+	//! Input/Output subsystems
+	IO_t IO;
 
 public:
 	swarmitfix(lib::configurator &_config);
