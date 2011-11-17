@@ -24,12 +24,6 @@ public:
 	//! Destructor
 	virtual ~Agent();
 
-	//! Add a buffer to the agent
-	void registerBuffer(InputBufferBase & buf);
-
-	//! Remove buffer
-	void unregisterBuffer(InputBufferBase & buf);
-
 	//! Receive single message
 	//! @param block true for blocking mode
 	//! @return true if a message has been received
@@ -76,6 +70,14 @@ private:
 	//! Receive single message
 	int ReceiveMessage(void * msg, std::size_t msglen, bool block);
 
+	//! Give access to buffer registration
+	friend class InputBufferBase;
+
+	//! Add a buffer to the agent
+	void registerBuffer(InputBufferBase & buf);
+
+	//! Remove buffer
+	void unregisterBuffer(InputBufferBase & buf);
 };
 
 #endif /* __AGENT_H */

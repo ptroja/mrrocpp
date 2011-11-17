@@ -3,9 +3,8 @@
 
 #include <boost/thread/thread_time.hpp>
 
+#include "InputBufferBase.h"
 #include "base/lib/xdr/xdr_iarchive.hpp"
-
-#include "Agent.h"
 
 /**
  * Input data buffer
@@ -14,9 +13,6 @@ template <class T>
 class InputBuffer : public InputBufferBase {
 	//! Agent needs an access to Store/Update methods
 	friend class Agent;
-
-	//! Owner of the buffer
-	Agent & owner;
 
 private:
 	//! current data
@@ -47,16 +43,9 @@ private:
 public:
 	//! Constructor
 	InputBuffer(Agent & _owner, const std::string & _name, const T & _default_value = T())
-		: InputBufferBase(_name), owner(_owner), data(_default_value),
+		: InputBufferBase(_owner, _name), data(_default_value),
 		fresh(false), access(data)
 	{
-		owner.registerBuffer(*this);
-	}
-
-	//! Destructor
-	~InputBuffer()
-	{
-		owner.unregisterBuffer(*this);
 	}
 
 	/**

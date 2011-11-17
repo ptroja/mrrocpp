@@ -48,7 +48,7 @@ namespace task {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp_mp
  */
-class task : protected Agent
+class task : public Agent
 {
 public:
 	/**
@@ -83,11 +83,6 @@ public:
 	 * @brief the map of transmitters
 	 */
 	transmitters_t transmitter_m;
-
-	/**
-	 * @brief allow to register robot-specific buffers
-	 */
-	using Agent::registerBuffer;
 
 	/**
 	 * @brief pointer to the SR communication object

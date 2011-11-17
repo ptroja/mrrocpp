@@ -6,12 +6,15 @@
  */
 
 #include "InputBufferBase.h"
+#include "Agent.h"
 
-InputBufferBase::InputBufferBase(const std::string & _name)
-	: BufferBase(_name)
+InputBufferBase::InputBufferBase(Agent & _owner, const std::string & _name)
+	: BufferBase(_name), owner(_owner)
 {
+	owner.registerBuffer(*this);
 }
 
 InputBufferBase::~InputBufferBase()
 {
+	owner.unregisterBuffer(*this);
 }

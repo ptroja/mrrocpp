@@ -7,6 +7,7 @@
 #include "base/lib/messip/messip.h"
 #include "base/lib/xdr/xdr_iarchive.hpp"
 
+#include "Agent.h"
 #include "InputBuffer.h"
 
 Agent::Agent(const std::string & _name) :

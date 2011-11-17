@@ -110,8 +110,6 @@ void task_base::initialize_communication()
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed  Failed to name attach (trigger pulse)");
 		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
 	}
-
-	registerBuffer(command);
 }
 // -------------------------------------------------------------------
 
