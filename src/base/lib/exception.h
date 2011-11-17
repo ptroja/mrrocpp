@@ -16,6 +16,7 @@
 #include <boost/exception/all.hpp>
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/thread/thread_time.hpp>
+#include <boost/date_time/posix_time/time_formatters.hpp>
 
 namespace mrrocpp {
 namespace lib {
@@ -39,8 +40,14 @@ namespace exception {
 //! A single line description of error.
 typedef boost::error_info <struct mrrocpp_error_description_, char const *> mrrocpp_error_description;
 
-//! Moment in which error was detected.
+//! Time when error was detected.
 typedef boost::error_info <struct timestamp, boost::system_time> mrrocpp_error_time;
+
+//! Convert exception's timestamp to human-readable string
+inline std::string to_string(mrrocpp_error_time const & e)
+{
+	return boost::posix_time::to_simple_string(e.value());
+}
 
 /*!
  * \brief Base class for all system exceptions/errors.
@@ -80,9 +87,6 @@ public:
 	{
 		return diagnostic_information_what(*this);
 	}
-
-	// TODO: timestampe based on boost::posix_time
-
 };
 
 /*!
