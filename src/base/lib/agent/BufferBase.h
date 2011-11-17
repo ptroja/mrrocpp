@@ -1,5 +1,5 @@
 /*
- * Buffer.h
+ * BaseBuffer.h
  *
  *  Created on: Nov 15, 2011
  *      Author: ptroja
