@@ -12,7 +12,6 @@ namespace ecp {
 namespace spkm {
 namespace task {
 
-// KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
 	task_t(_config)
 {
