@@ -35,11 +35,10 @@ robot::robot(const lib::robot_name_t & l_robot_name, task::task &mp_object_l, in
 	ecp(mp_object_l.config.get_ecp_section(robot_name)),
 	command(ecp, "command"),
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
-	reply(mp_object_l.config.get_ecp_section(robot_name)),
+	reply(mp_object_l, mp_object_l.config.get_ecp_section(robot_name)),
 	ecp_reply_package(reply.access),
 	communicate_with_ecp(true)
 {
-	mp_object_l.Agent::registerBuffer(reply);
 }
 
 robot::~robot()

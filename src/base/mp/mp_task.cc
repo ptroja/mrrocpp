@@ -54,7 +54,7 @@ static void va_to_robot_map(int num, va_list arguments, const common::robots_t &
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config), ui_pulse("MP_PULSE")
+	ecp_mp::task::task(_config), ui_pulse(*this, "MP_PULSE")
 {
 	// initialize communication with other processes
 	initialize_communication();
@@ -314,9 +314,6 @@ void task::initialize_communication()
 	sr_ecp_msg = (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::MP, "mp", sr_net_attach_point); // Obiekt do komuniacji z SR
 
 	const std::string mp_pulse_attach_point = config.get_mp_pulse_attach_point();
-
-	// Rejestracja kanalu dla pulsow z procesu UI
-	Agent::registerBuffer(ui_pulse);
 }
 
 void task::wait_for_start()

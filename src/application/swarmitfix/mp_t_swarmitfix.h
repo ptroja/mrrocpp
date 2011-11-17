@@ -3,7 +3,6 @@
 
 #include <boost/unordered_map.hpp>
 #include <boost/ptr_container/ptr_unordered_map.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 #include "base/lib/impconst.h"
 #include "base/lib/agent/InputBufferBase.h"
@@ -31,11 +30,10 @@ private:
 	PLAN_STATUS current_plan_status;
 
 	//! Current workers status
-	boost::unordered_map<lib::robot_name_t, WORKER_STATUS> current_workers_status;
+	boost::unordered_map<const lib::robot_name_t, WORKER_STATUS> current_workers_status;
 
 	//! Input and output buffer container
-	boost::ptr_unordered_map<const lib::robot_name_t, InputBufferBase> IOBuffers;
-	boost::ptr_vector<InputBufferBase> IOBuffersv;
+	boost::ptr_unordered_map<const lib::robot_name_t, InputBufferBase> IBuffers;
 
 public:
 	swarmitfix(lib::configurator &_config);

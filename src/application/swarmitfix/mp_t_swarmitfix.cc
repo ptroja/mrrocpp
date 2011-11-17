@@ -57,8 +57,12 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void swarmitfix::create_robots()
 {
-	IOBuffers.insert(lib::spkm1::ROBOT_NAME, new InputBuffer<lib::notification_t>(lib::spkm1::ROBOT_NAME+lib::notifyBufferId));
-	//IOBuffersv.push_back(new InputBuffer<lib::notification_t>(lib::spkm1::ROBOT_NAME+lib::notifyBufferId));
+	IBuffers.insert(lib::spkm1::ROBOT_NAME, new InputBuffer<lib::notification_t>(*this, lib::spkm1::ROBOT_NAME+lib::notifyBufferId));
+//	IBuffers.insert(lib::spkm2::ROBOT_NAME, new InputBuffer<lib::notification_t>(lib::spkm2::ROBOT_NAME+lib::notifyBufferId));
+//	IBuffers.insert(lib::smb1::ROBOT_NAME, new InputBuffer<lib::notification_t>(lib::smb1::ROBOT_NAME+lib::notifyBufferId));
+//	IBuffers.insert(lib::smb2::ROBOT_NAME, new InputBuffer<lib::notification_t>(lib::smb2::ROBOT_NAME+lib::notifyBufferId));
+//	IBuffers.insert(lib::shead1::ROBOT_NAME, new InputBuffer<lib::notification_t>(lib::shead1::ROBOT_NAME+lib::notifyBufferId));
+//	IBuffers.insert(lib::shead2::ROBOT_NAME, new InputBuffer<lib::notification_t>(lib::shead2::ROBOT_NAME+lib::notifyBufferId));
 
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);

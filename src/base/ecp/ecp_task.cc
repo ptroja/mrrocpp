@@ -32,7 +32,11 @@ namespace common {
 namespace task {
 
 task_base::task_base(lib::configurator &_config) :
-	ecp_mp::task::task(_config), MP(lib::MP_SECTION), reply(MP, _config.section_name), command("command"), mp_command(command.access),
+	ecp_mp::task::task(_config),
+	MP(lib::MP_SECTION),
+	reply(MP, _config.section_name),
+	command(*this, "command"),
+	mp_command(command.access),
 	mp_2_ecp_next_state_string(mp_command.ecp_next_state.next_state),
 	continuous_coordination(false)
 {

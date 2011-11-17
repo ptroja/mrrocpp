@@ -15,6 +15,9 @@ class InputBuffer : public InputBufferBase {
 	//! Agent needs an access to Store/Update methods
 	friend class Agent;
 
+	//! Owner of the buffer
+	Agent & owner;
+
 private:
 	//! current data
 	T data;
@@ -43,10 +46,17 @@ private:
 
 public:
 	//! Constructor
-	InputBuffer(const std::string & _name, const T & _default_value = T())
-		: InputBufferBase(_name), data(_default_value),
+	InputBuffer(Agent & _owner, const std::string & _name, const T & _default_value = T())
+		: InputBufferBase(_name), owner(_owner), data(_default_value),
 		fresh(false), access(data)
 	{
+		owner.registerBuffer(*this);
+	}
+
+	//! Destructor
+	~InputBuffer()
+	{
+		owner.unregisterBuffer(*this);
 	}
 
 	/**

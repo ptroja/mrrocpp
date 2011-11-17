@@ -52,13 +52,18 @@ private:
 	 */
 	lib::child ECP_pid;
 
+protected:
+	//! Remote agent proxy
+	RemoteAgent ecp;
+
+private:
 	//! Remote agent's data buffer
 	OutputBuffer <lib::MP_COMMAND_PACKAGE> command;
 
 	/**
 	 * @brief reference to sr_ecp object for sending messages to UI_SR console
 	 */
-	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
+	lib::sr_ecp & sr_ecp_msg; // obiekt do komunikacji z SR
 
 	/**
 	 * @brief send a single command to the ECP
@@ -96,10 +101,6 @@ private:
 	 * @brief ECP errors handler
 	 */
 	void ecp_errors_handler();
-
-protected:
-	//! Remote agent proxy
-	RemoteAgent ecp;
 
 public:
 	/**
