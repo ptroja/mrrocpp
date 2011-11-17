@@ -71,21 +71,25 @@ class swarmitfix : public task
 {
 private:
 	//! Type for plan realization status
-	typedef enum _PLAN_STATUS { ONGOING, FAILURE } PLAN_STATUS;
+	typedef enum _PLAN_STATUS { ONGOING, FAILURE } PlanStatus;
 
 	//! Type for worker (ECP) agent status
-	typedef enum _WORKER_STATUS { IDLE, BUSY } WORKER_STATUS;
+	typedef enum _WORKER_STATUS { IDLE, BUSY } WorkerStatus;
+
+	//! Associative container type for worker status
+	typedef boost::unordered_map<const lib::robot_name_t, WorkerStatus> WorkersStatus;
 
 	//! Current plan status
-	PLAN_STATUS current_plan_status;
+	PlanStatus current_plan_status;
 
 	//! Current workers status
-	boost::unordered_map<const lib::robot_name_t, WORKER_STATUS> current_workers_status;
+	WorkersStatus current_workers_status;
 
 	//! Input/Output subsystems
 	IO_t IO;
 
 public:
+	//! Constructor
 	swarmitfix(lib::configurator &_config);
 
 	/// utworzenie robotow
