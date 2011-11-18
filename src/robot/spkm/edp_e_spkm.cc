@@ -402,7 +402,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					// TODO add other context informations that are available.
 					e_ << mrrocpp::edp::spkm::pose_specification(ecp_edp_cbuffer.set_pose_specification);
 					// Throw the catched exception.
-					throw;
+					boost::rethrow_exception(e_);
 				}
 
 				// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
