@@ -32,13 +32,14 @@ void manip_trans_t::operator()()
 	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY);
 
 	while (1) {
+
+		// oczekiwanie na zezwolenie ruchu od edp_master
+		master_to_trans_synchroniser.wait();
+
 		//domyslnie brak bledu boost
 		error = boost::exception_ptr();
 
 		exception_error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
-
-		// oczekiwanie na zezwolenie ruchu od edp_master
-		master_to_trans_synchroniser.wait();
 
 		// przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
 
