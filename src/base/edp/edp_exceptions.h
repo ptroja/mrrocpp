@@ -77,11 +77,97 @@ REGISTER_NON_FATAL_ERROR(nfe_invalid_motion_type, "Invalid motion type")
  */
 REGISTER_NON_FATAL_ERROR(nfe_1, "NonFatal_error_1")
 
+/********************************** OLD MRROC++ ERRORS **********************************/
+
 /**
  * System error (inter-process communication, filesystem, etc.)
  */
 class System_error
 {
+};
+
+/**
+ * Fatal exception in framework or application
+ */
+class Fatal_error
+{
+public:
+	//! Servo error number (1)
+	const uint64_t error0;
+
+	//! Servo error number (2)
+	const uint64_t error1;
+
+	/**
+	 * Constructor
+	 * @param err_no_0 servo error number (1)
+	 * @param err_no_1 servo error number (2)
+	 * @return
+	 */
+	Fatal_error(uint64_t err_no_0, uint64_t err_no_1) :
+			error0(err_no_0), error1(err_no_1)
+	{
+	}
+};
+
+/**
+ * Non-fatal errors (type 2)
+ * @author Tomasz Winiarski <tomrobotics@gmail.com>
+ */
+class NonFatal_error_2
+{
+public:
+	//! Error in coordinate calculations
+	const uint64_t error;
+
+	/**
+	 * Constructor
+	 * @param err_no error value
+	 */
+	NonFatal_error_2(uint64_t err_no) :
+			error(err_no)
+	{
+	}
+};
+
+/**
+ * Non-fatal errors (type 3)
+ * @author Tomasz Winiarski <tomrobotics@gmail.com>
+ */
+class NonFatal_error_3
+{
+public:
+	//! Error in coordinate calculations
+	const uint64_t error;
+
+	/**
+	 * Constructor
+	 * @param err_no error value
+	 */
+	NonFatal_error_3(uint64_t err_no) :
+			error(err_no)
+	{
+	}
+};
+
+/**
+ * Non-fatal errors (type 4)
+ * @author Tomasz Winiarski <tomrobotics@gmail.com>
+ */
+class NonFatal_error_4
+{
+public:
+	//! Error in coordinate calculations
+	const uint64_t error;
+
+	/**
+	 * Constructor
+	 * @param err_no error value
+	 */
+	NonFatal_error_4(uint64_t err_no) :
+			error(err_no)
+	{
+	}
 };
 
 } // namespace exception

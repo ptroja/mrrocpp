@@ -21,7 +21,7 @@
 
 #include "base/lib/condition_synchroniser.h"
 
-using namespace mrrocpp::lib::exception;
+using namespace mrrocpp::edp::exception;
 
 namespace mrrocpp {
 namespace edp {
@@ -90,7 +90,7 @@ public:
 				throw *(Fatal_error*) (error_pointer);
 				break;
 			case System_erroR:
-				throw *(exception::System_error*) (error_pointer);
+				throw *(System_error*) (error_pointer);
 				break;
 			default:
 				break;

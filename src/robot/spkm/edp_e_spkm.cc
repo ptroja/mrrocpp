@@ -674,9 +674,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 										<< "Axis "
 										<< i
 										<< ": "
-										<< ((p(0, i) != p(lib::spkm::NUM_OF_MOTION_SEGMENTS, i)) ? "moving" : "not moving")
-										<< endl;
-							}
+										<< ((p(0, i) != p(lib::spkm::NUM_OF_MOTION_SEGMENTS, i)) ? "moving" : "not moving")<< endl;
+									}
 
 							descfile.close();
 							cout << "Motion description was written to file: " << filename << endl;
