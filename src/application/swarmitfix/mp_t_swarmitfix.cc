@@ -10,10 +10,6 @@
 #include "base/mp/mp_task.h"
 #include "base/mp/MP_main_error.h"
 #include "mp_t_swarmitfix.h"
-#include "base/lib/single_thread_port.h"
-#include "base/lib/mrmath/mrmath.h"
-#include "robot/maxon/dp_epos.h"
-#include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_spkm.h"
 
 #include "robot/shead/mp_r_shead1.h"
@@ -25,9 +21,6 @@
 
 #include "base/lib/swarmtypes.h"
 #include "robot/spkm/dp_spkm.h"
-
-#include "base/lib/agent/InputBuffer.h"
-#include "base/lib/agent/OutputBuffer.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -57,20 +50,18 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void swarmitfix::create_robots()
 {
-	/*
 	if(IS_MP_ROBOT_ACTIVE(spkm1)) IO.transmitters.spkm1.notification.Create(*this, lib::spkm1::ROBOT_NAME+lib::notifyBufferId);
 	if(IS_MP_ROBOT_ACTIVE(spkm2)) IO.transmitters.spkm2.notification.Create(*this, lib::spkm2::ROBOT_NAME+lib::notifyBufferId);
 	if(IS_MP_ROBOT_ACTIVE(smb1)) IO.transmitters.smb1.notification.Create(*this, lib::smb1::ROBOT_NAME+lib::notifyBufferId);
 	if(IS_MP_ROBOT_ACTIVE(smb2)) IO.transmitters.smb2.notification.Create(*this, lib::smb2::ROBOT_NAME+lib::notifyBufferId);
-	*/
 
-//	ACTIVATE_MP_ROBOT(spkm1);
+	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
-//	ACTIVATE_MP_ROBOT(smb1);
-//	ACTIVATE_MP_ROBOT(smb2);
+	ACTIVATE_MP_ROBOT(smb1);
+	ACTIVATE_MP_ROBOT(smb2);
 //	ACTIVATE_MP_ROBOT(shead1);
 //	ACTIVATE_MP_ROBOT(shead2);
-/*
+
 	if(is_robot_activated(lib::spkm1::ROBOT_NAME)) {
 		IO.transmitters.spkm1.command.Create(robot_m[lib::spkm1::ROBOT_NAME]->ecp, lib::commandBufferId);
 	}
@@ -83,7 +74,6 @@ void swarmitfix::create_robots()
 	if(is_robot_activated(lib::smb2::ROBOT_NAME)) {
 		IO.transmitters.spkm1.command.Create(robot_m[lib::smb2::ROBOT_NAME]->ecp, lib::commandBufferId);
 	}
-*/
 }
 
 void swarmitfix::main_task_algorithm(void)
