@@ -42,6 +42,12 @@ typedef boost::error_info <struct mrrocpp_error_description_, char const *> mrro
 //! Moment in which error was detected.
 typedef boost::error_info <struct time_, struct timeval> mrrocpp_error_time;
 
+//! error0 for old mrroc++ exceptions
+typedef boost::error_info <struct error0_, uint64_t> mrrocpp_error0;
+
+//! error1 for old mrroc++ exceptions
+typedef boost::error_info <struct error1_, uint64_t> mrrocpp_error1;
+
 /*!
  * \brief Base class for all system exceptions/errors.
  * \author tkornuta
@@ -60,11 +66,11 @@ public:
 	 * Constructor.
 	 */
 	mrrocpp_error() :
-		error_class(ercl)
+			error_class(ercl)
 	{
 		// Get current time.
 		struct timeval tv;
-		if(gettimeofday(&tv, NULL) == -1) {
+		if (gettimeofday(&tv, NULL) == -1) {
 			perror("gettimeofday()");
 		}
 		// Add it to diagnostic information.
@@ -196,7 +202,6 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error \
 #define HANDLE_MRROCPP_NON_FATAL_ERROR(ERROR) \
 	std::cout<< ERROR.what() << std::endl; \
 	msg->message(ERROR);
-
 
 /********************************** OLD MRROC++ ERRORS **********************************/
 
