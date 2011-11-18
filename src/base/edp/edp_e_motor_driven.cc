@@ -1019,7 +1019,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 						next_state = GET_INSTRUCTION;
 
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
-						throw NonFatal_error_4(QUERY_EXPECTED);
+						BOOST_THROW_EXCEPTION(nfe_4() << mrrocpp_error0(QUERY_EXPECTED));
 					}
 					break;
 				case WAIT_Q:
@@ -1103,15 +1103,22 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			next_state = GET_SYNCHRO;
 		} // end: catch(transformer::NonFatal_error nfe3)
 
-		catch (NonFatal_error_4 nfe4) {
+		catch (exception::nfe_4 & error) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// zapamietanie poprzedniej odpowiedzi
+
+			uint64_t error0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
 			lib::REPLY_TYPE rep_type = reply.reply_type;
-			establish_error(reply, nfe4.error, OK);
+			establish_error(reply, error0, OK);
 			reply_to_instruction(reply);
-			msg->message(lib::NON_FATAL_ERROR, nfe4.error);
+			msg->message(lib::NON_FATAL_ERROR, error0);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
 			// powrot do stanu: SYNCHRO_TERMINATED

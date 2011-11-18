@@ -128,26 +128,6 @@ public:
 	}
 };
 
-/**
- * Non-fatal errors (type 4)
- * @author Tomasz Winiarski <tomrobotics@gmail.com>
- */
-class NonFatal_error_4
-{
-public:
-	//! Error in coordinate calculations
-	const uint64_t error;
-
-	/**
-	 * Constructor
-	 * @param err_no error value
-	 */
-	NonFatal_error_4(uint64_t err_no) :
-			error(err_no)
-	{
-	}
-};
-
 } // namespace exception
 } // namespace edp
 } // namespace mrrocpp
