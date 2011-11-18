@@ -14,6 +14,7 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 //#include "robot/irp6p_tfg/const_irp6p_tfg.h"
+#include "../visual_servoing/visual_servoing.h"
 
 using namespace mrrocpp::ecp_mp::sensor::discode;
 using namespace mrrocpp::ecp::common::generator;

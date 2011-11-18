@@ -79,7 +79,7 @@ void block_move::main_task_algorithm(void)
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 */
 	sr_ecp_msg->message("Servovision");
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, 5, "", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Force approach");
