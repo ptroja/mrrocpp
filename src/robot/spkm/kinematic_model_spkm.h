@@ -34,7 +34,7 @@ protected:
 	//! Kinematic parameters of both: parallel kinematics machine (PM) and spherical wrist (SW) attached to it.
 	kinematic_parameters_spkm params;
 
-	//! Upper platform pose - computed during the IK and used for Cartesian limits verification.
+	//! Upper platform pose - computed by the IK and used later for Cartesian limits verification.
 	Homog4d O_P_T;
 
 	//! Sets parameters used by given kinematics model - empty.
