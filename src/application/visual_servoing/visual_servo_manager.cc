@@ -171,6 +171,23 @@ bool visual_servo_manager::next_step()
 
 	dt = motion_steps * step_time;
 
+	sprintf(msg.text, "%d;%d;%d;%d;%d;%d;",
+			motion_steps,
+			(int)is_linear_speed_constrained, (int)is_linear_accel_constrained,
+			(int)is_angular_speed_constrained, (int)is_angular_accel_constrained,
+			(int)is_position_constrained
+	);
+	msg.append_Homog_matrix(the_robot->reply_package.arm.pf_def.arm_frame);
+	msg.append_Homog_matrix(next_position);
+	msg.append_matrix(velocity);
+	msg.append_matrix(acceleration);
+	msg.append_matrix(angular_velocity);
+	msg.append_matrix(angular_acceleration);
+
+	if (log_client.get() != NULL) {
+		log_client->log(msg);
+	}
+
 	return !any_condition_met;
 } // next_step()
 

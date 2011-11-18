@@ -182,10 +182,10 @@ private:
 	bool is_linear_speed_constrained;
 
 	/** Set to true, if speed/accel was constrained by constrain_speed_accel() */
-	bool is_angular_speed_constrained;
+	bool is_linear_accel_constrained;
 
 	/** Set to true, if speed/accel was constrained by constrain_speed_accel() */
-	bool is_linear_accel_constrained;
+	bool is_angular_speed_constrained;
 
 	/** Set to true, if speed/accel was constrained by constrain_speed_accel() */
 	bool is_angular_accel_constrained;

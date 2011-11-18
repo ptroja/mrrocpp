@@ -14,6 +14,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
+#include <Eigen/Dense>
 
 #include "base/lib/mrmath/mrmath.h"
 
@@ -70,7 +71,26 @@ struct log_message
 	virtual void prepare_text();
 
 	void append_Homog_matrix(const mrrocpp::lib::Homog_matrix& hm);
+
+	template<int rows, int cols>
+	void append_matrix(const Eigen::Matrix <double, rows, cols>& mat);
 };
+
+template<int rows, int cols>
+void log_message::append_matrix(const Eigen::Matrix <double, rows, cols>& mat)
+{
+	char hm_text[300];
+	strcpy(hm_text, "");
+
+	for(int i=0; i<rows; ++i){
+		for(int j=0; j<cols; ++j){
+			char v[16];
+			sprintf(v, "%0.6lf;", mat(i, j));
+			strcat(hm_text, v);
+		}
+	}
+	strcat(text, hm_text);
+}
 
 } /* namespace logger */
 #endif /* LOG_MESSAGE_H_ */

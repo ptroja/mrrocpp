@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <stdexcept>
+#include <sstream>
 #include <limits>
 #include <cmath>
 #include <cstring>
@@ -91,8 +92,10 @@ void logger_server::accept_connection(){
 	int client_port = ntohs(m_addr.sin_port);
 	cout<<"client_address = "<<client_address<<":"<<client_port<<endl;
 
+	stringstream ss;
+	ss<<client_address<<"_"<<client_port;
 
-	connections.push_back(boost::shared_ptr<client_connection>(new client_connection(acceptedFd, client_address)));
+	connections.push_back(boost::shared_ptr<client_connection>(new client_connection(acceptedFd, ss.str())));
 }
 
 void logger_server::main_loop()
@@ -133,6 +136,10 @@ void logger_server::main_loop()
 				}catch(exception& ex){
 					it = connections.erase(it);
 				}
+			}
+			if(connections.size() == 0){
+				first_message_received = false;
+				cout<<"logger_server::main_loop(): Resetting t0...\n";
 			}
 		}
 	}
