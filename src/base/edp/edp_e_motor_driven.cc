@@ -844,7 +844,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 						// zle jej wykonanie, czyli wyslij odpowiedz
 						reply_to_instruction(reply);
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
-						throw NonFatal_error_3(QUERY_EXPECTED);
+						BOOST_THROW_EXCEPTION(nfe_3() << mrrocpp_error0(QUERY_EXPECTED));
 					}
 
 					/*
@@ -910,25 +910,32 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			next_state = WAIT;
 		} // end: catch(transformer::NonFatal_error_2 nfe)
 
-		catch (NonFatal_error_3 nfe) {
+		catch (exception::nfe_3 & error) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesowa
 			// zapamietanie poprzedniej odpowiedzi
 			// Oczekiwano na QUERY a otrzymano co innego, wiec sygnalizacja bledu i
 			// dalsze oczekiwanie na QUERY
+
+			uint64_t error0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
 			lib::REPLY_TYPE rep_type = reply.reply_type;
 			uint64_t err_no_0 = reply.error_no.error0;
 			uint64_t err_no_1 = reply.error_no.error1;
 
-			establish_error(reply, nfe.error, OK);
+			establish_error(reply, error0, OK);
 			// informacja dla ECP o bledzie
 			reply_to_instruction(reply);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
 			establish_error(reply, err_no_0, err_no_1);
 			//     printf("ERROR w EDP 3\n");
-			msg->message(lib::NON_FATAL_ERROR, nfe.error);
+			msg->message(lib::NON_FATAL_ERROR, error0);
 			// msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_STATE;
@@ -1022,7 +1029,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 						reply_to_instruction(reply);
 						next_state = GET_SYNCHRO;
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
-						throw NonFatal_error_3(QUERY_EXPECTED);
+						BOOST_THROW_EXCEPTION(nfe_3() << mrrocpp_error0(QUERY_EXPECTED));
 					}
 					break;
 				default:
@@ -1071,17 +1078,23 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			next_state = WAIT_Q;
 		} // end: catch(transformer::NonFatal_error nfe2)
 
-		catch (NonFatal_error_3 nfe3) {
+		catch (exception::nfe_3 & error) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// zapamietanie poprzedniej odpowiedzi
+			uint64_t error0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
 			lib::REPLY_TYPE rep_type = reply.reply_type;
 			uint64_t err_no_0 = reply.error_no.error0;
 			uint64_t err_no_1 = reply.error_no.error1;
-			establish_error(reply, nfe3.error, OK);
+			establish_error(reply, error0, OK);
 			reply_to_instruction(reply);
-			msg->message(lib::NON_FATAL_ERROR, nfe3.error);
+			msg->message(lib::NON_FATAL_ERROR, error0);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
 			establish_error(reply, err_no_0, err_no_1);
@@ -1174,7 +1187,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 						// zlec jej wykonanie, czyli wyslij odpowiedz
 						reply_to_instruction(reply);
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
-						throw NonFatal_error_3(QUERY_EXPECTED);
+						BOOST_THROW_EXCEPTION(nfe_3() << mrrocpp_error0(QUERY_EXPECTED));
 					}
 					next_state = GET_INSTRUCTION;
 					break;
@@ -1221,25 +1234,32 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			next_state = WAIT;
 		} // end: catch(transformer::NonFatal_error_2 nfe)
 
-		catch (NonFatal_error_3 & nfe) {
+		catch (exception::nfe_3 & error) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesowa
 			// zapamietanie poprzedniej odpowiedzi
 			// Oczekiwano na QUERY a otrzymano co innego, wiec sygnalizacja bledu i
 			// dalsze oczekiwanie na QUERY
+
+			uint64_t error0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
 			lib::REPLY_TYPE rep_type = reply.reply_type;
 			uint64_t err_no_0 = reply.error_no.error0;
 			uint64_t err_no_1 = reply.error_no.error1;
 
-			establish_error(reply, nfe.error, OK);
+			establish_error(reply, error0, OK);
 			// informacja dla ECP o bledzie
 			reply_to_instruction(reply);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
 			establish_error(reply, err_no_0, err_no_1);
 			// printf("ERROR w EDP 3\n");
-			msg->message(lib::NON_FATAL_ERROR, nfe.error);
+			msg->message(lib::NON_FATAL_ERROR, error0);
 			// msg->message(lib::NON_FATAL_ERROR, err_no_0, err_no_1); // by Y - oryginalnie
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_INSTRUCTION;
