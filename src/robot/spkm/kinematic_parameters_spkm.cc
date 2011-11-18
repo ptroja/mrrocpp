@@ -40,12 +40,10 @@ const uint32_t kinematic_parameters_spkm::encoder_resolution[mrrocpp::lib::spkm:
 };
 
 //! Initialization of upper motors limits vector.
-//! Those values were computed on the base of "safe" joint limits.
 const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 8000, 8000, 8000, 330000, 90000, 340000 };
 
 //! Initialization of lower motors limits vector.
-//! The "unsafe" (in terms that robot can hit its "shell" from inside) are { -194000, -281000, -173000 }
-//! Those values were computed on the base of "safe" joint limits.
+//! Those are the "unsafe" (in terms that robot can hit its "shell" from inside) values.
 const int32_t kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -280000, -280000, -280000, -320000, -200000, -280000 };
 
 //! Initialization of upper joints vector.
@@ -57,15 +55,19 @@ const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::
 const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.242, 0.242, 0.242, -2.2777, -0.5498, -2.4347 };
 
 //! Initialization of upper thyk alpha angle limit.
+//! Those values were determined experimentally.
 const double kinematic_parameters_spkm::upper_alpha_thyk_angle_limit[3] = { 30.0, 50.0, 30.0 };
 
 //! Initialization of lower thyk alpha angle limit.
+//! Those values were determined experimentally.
 const double kinematic_parameters_spkm::lower_alpha_thyk_angle_limit[3] = { -30.0, -50.0, -30.0 };
 
 //! Initialization of upper thyk beta angle limit.
+//! Those values were determined experimentally.
 const double kinematic_parameters_spkm::upper_beta_thyk_angle_limit[3] = { 30.0, 50.0, 30.0 };
 
 //! Initialization of lower thyk beta angle limit.
+//! Those values were determined experimentally.
 const double kinematic_parameters_spkm::lower_beta_thyk_angle_limit[3] = { -30.0, -50.0, -30.0 };
 
 //! Lower platform: Initialize the jb coordinate of P1A in O(ib,jb,kb).
