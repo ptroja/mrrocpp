@@ -124,6 +124,25 @@ public:
 	 */
 	void move_arm(const lib::c_buffer &instruction);
 
+	/*!
+	 * \brief Method responsible for parsing of the command for motors controlling the legs and SPKM rotation.
+	 * \author tkornuta
+	 */
+	void parse_motor_command();
+
+	/*!
+	 * \brief Method responsible for motion of motors controlling the legs and SPKM rotation.
+	 * \author tkornuta
+	 */
+	void execute_motor_motion();
+
+	/*!
+	 * \brief Method responsible for interpolated motion in the operational space.
+	 * \author tkornuta
+	 */
+	void interpolated_motion_in_operational_space();
+
+
 	void get_controller_state(lib::c_buffer &instruction);
 
 	/*!

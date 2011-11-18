@@ -293,15 +293,15 @@ void effector::synchronise(void)
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
-		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+		throw Fatal_error(UNKNOWN_SYNCHRO_ERROR, SYNCHRO_ERROR);
 	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_MRROCPP_FATAL_ERROR(e_)
-		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+		throw Fatal_error(UNKNOWN_SYNCHRO_ERROR, SYNCHRO_ERROR);
 	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
 		// Standard error handling.
 		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
-		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+		throw Fatal_error(UNKNOWN_SYNCHRO_ERROR, SYNCHRO_ERROR);
 	} catch (...) {
 		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
 	}
@@ -674,9 +674,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 										<< "Axis "
 										<< i
 										<< ": "
-										<< ((p(0, i) != p(lib::spkm::NUM_OF_MOTION_SEGMENTS, i)) ? "moving" : "not moving")
-										<< endl;
-							}
+										<< ((p(0, i) != p(lib::spkm::NUM_OF_MOTION_SEGMENTS, i)) ? "moving" : "not moving")<< endl;
+									}
 
 							descfile.close();
 							cout << "Motion description was written to file: " << filename << endl;
