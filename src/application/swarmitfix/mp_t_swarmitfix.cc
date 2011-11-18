@@ -34,46 +34,48 @@ task* return_created_mp_task(lib::configurator &_config)
 swarmitfix::swarmitfix(lib::configurator &_config) :
 		task(_config)
 {
-	// Initialize internal memory variables
-	current_plan_status = ONGOING;
+	// Create optional Input buffers
+	if(IS_MP_ROBOT_ACTIVE(spkm1)) IO.transmitters.spkm1.notification.Create(*this, lib::spkm1::ROBOT_NAME+lib::notifyBufferId);
+	if(IS_MP_ROBOT_ACTIVE(spkm2)) IO.transmitters.spkm2.notification.Create(*this, lib::spkm2::ROBOT_NAME+lib::notifyBufferId);
+	if(IS_MP_ROBOT_ACTIVE(smb1)) IO.transmitters.smb1.notification.Create(*this, lib::smb1::ROBOT_NAME+lib::notifyBufferId);
+	if(IS_MP_ROBOT_ACTIVE(smb2)) IO.transmitters.smb2.notification.Create(*this, lib::smb2::ROBOT_NAME+lib::notifyBufferId);
 
 	// Call the robot activation so we can support only the active ones
 	create_robots();
+
+	// Create optional Output buffers
+	if(is_robot_activated(lib::spkm1::ROBOT_NAME)) {
+		IO.transmitters.spkm1.command.Create(robot_m[lib::spkm1::ROBOT_NAME]->ecp, lib::commandBufferId);
+	}
+	if(is_robot_activated(lib::spkm2::ROBOT_NAME)) {
+		IO.transmitters.spkm1.command.Create(robot_m[lib::spkm2::ROBOT_NAME]->ecp, lib::commandBufferId);
+	}
+	if(is_robot_activated(lib::smb1::ROBOT_NAME)) {
+		IO.transmitters.spkm1.command.Create(robot_m[lib::smb1::ROBOT_NAME]->ecp, lib::commandBufferId);
+	}
+	if(is_robot_activated(lib::smb2::ROBOT_NAME)) {
+		IO.transmitters.spkm1.command.Create(robot_m[lib::smb2::ROBOT_NAME]->ecp, lib::commandBufferId);
+	}
 
 	// Initialize status of the active robots
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 	{
 		current_workers_status[robot_node.second->robot_name] = IDLE;
 	}
+
+	// Initialize internal memory variables
+	current_plan_status = ONGOING;
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void swarmitfix::create_robots()
 {
-	if(IS_MP_ROBOT_ACTIVE(spkm1) && !is_robot_activated(lib::spkm1::ROBOT_NAME)) IO.transmitters.spkm1.notification.Create(*this, lib::spkm1::ROBOT_NAME+lib::notifyBufferId);
-	if(IS_MP_ROBOT_ACTIVE(spkm2) && !is_robot_activated(lib::spkm2::ROBOT_NAME)) IO.transmitters.spkm2.notification.Create(*this, lib::spkm2::ROBOT_NAME+lib::notifyBufferId);
-	if(IS_MP_ROBOT_ACTIVE(smb1) && !is_robot_activated(lib::smb1::ROBOT_NAME)) IO.transmitters.smb1.notification.Create(*this, lib::smb1::ROBOT_NAME+lib::notifyBufferId);
-	if(IS_MP_ROBOT_ACTIVE(smb2) && !is_robot_activated(lib::smb2::ROBOT_NAME)) IO.transmitters.smb2.notification.Create(*this, lib::smb2::ROBOT_NAME+lib::notifyBufferId);
-
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
 	ACTIVATE_MP_ROBOT(smb1);
 	ACTIVATE_MP_ROBOT(smb2);
 //	ACTIVATE_MP_ROBOT(shead1);
 //	ACTIVATE_MP_ROBOT(shead2);
-
-	if(is_robot_activated(lib::spkm1::ROBOT_NAME) && !is_robot_activated(lib::spkm1::ROBOT_NAME)) {
-		IO.transmitters.spkm1.command.Create(robot_m[lib::spkm1::ROBOT_NAME]->ecp, lib::commandBufferId);
-	}
-	if(is_robot_activated(lib::spkm2::ROBOT_NAME) && !is_robot_activated(lib::spkm2::ROBOT_NAME)) {
-		IO.transmitters.spkm1.command.Create(robot_m[lib::spkm2::ROBOT_NAME]->ecp, lib::commandBufferId);
-	}
-	if(is_robot_activated(lib::smb1::ROBOT_NAME) && !is_robot_activated(lib::smb1::ROBOT_NAME)) {
-		IO.transmitters.spkm1.command.Create(robot_m[lib::smb1::ROBOT_NAME]->ecp, lib::commandBufferId);
-	}
-	if(is_robot_activated(lib::smb2::ROBOT_NAME) && !is_robot_activated(lib::smb2::ROBOT_NAME)) {
-		IO.transmitters.spkm1.command.Create(robot_m[lib::smb2::ROBOT_NAME]->ecp, lib::commandBufferId);
-	}
 }
 
 void swarmitfix::main_task_algorithm(void)
