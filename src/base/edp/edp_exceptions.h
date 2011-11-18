@@ -77,6 +77,24 @@ REGISTER_NON_FATAL_ERROR(nfe_invalid_motion_type, "Invalid motion type")
  */
 REGISTER_NON_FATAL_ERROR(nfe_1, "NonFatal_error_1")
 
+/*!
+ * \brief old mrroc++ non fatal error 2
+ * \author yoyek
+ */
+REGISTER_NON_FATAL_ERROR(nfe_2, "NonFatal_error_2")
+
+/*!
+ * \brief old mrroc++ non fatal error 3
+ * \author yoyek
+ */
+REGISTER_NON_FATAL_ERROR(nfe_3, "NonFatal_error_3")
+
+/*!
+ * \brief old mrroc++ non fatal error 4
+ * \author yoyek
+ */
+REGISTER_NON_FATAL_ERROR(nfe_4, "NonFatal_error_4")
+
 /********************************** OLD MRROC++ ERRORS **********************************/
 
 /**
@@ -106,26 +124,6 @@ public:
 	 */
 	Fatal_error(uint64_t err_no_0, uint64_t err_no_1) :
 			error0(err_no_0), error1(err_no_1)
-	{
-	}
-};
-
-/**
- * Non-fatal errors (type 2)
- * @author Tomasz Winiarski <tomrobotics@gmail.com>
- */
-class NonFatal_error_2
-{
-public:
-	//! Error in coordinate calculations
-	const uint64_t error;
-
-	/**
-	 * Constructor
-	 * @param err_no error value
-	 */
-	NonFatal_error_2(uint64_t err_no) :
-			error(err_no)
 	{
 	}
 };

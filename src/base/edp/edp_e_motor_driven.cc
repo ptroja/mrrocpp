@@ -107,7 +107,7 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 			break;
 		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
 			printf("EFF_TYPE: %d\n", instruction.get_arm_type);
-			throw NonFatal_error_2(INVALID_GET_END_EFFECTOR_TYPE);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_GET_END_EFFECTOR_TYPE));
 	}
 
 }
@@ -128,7 +128,8 @@ void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruct
 			move_servos();
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
-			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_SET_END_EFFECTOR_TYPE));
+
 	}
 
 }
@@ -151,7 +152,8 @@ void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instructi
 			mt_tt_obj->trans_t_to_master_synchroniser.command();
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
-			throw NonFatal_error_2(INVALID_SET_END_EFFECTOR_TYPE);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_SET_END_EFFECTOR_TYPE));
+
 	}
 
 }
@@ -413,7 +415,8 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 					break;
 				default: // blad
 					// ustawi numer bledu
-					throw NonFatal_error_2(INVALID_REPLY_TYPE);
+					BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_REPLY_TYPE));
+
 			}
 			break;
 		case lib::SET_GET:
@@ -471,12 +474,14 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 					break;
 				default: // blad
 					// ustawi numer bledu
-					throw NonFatal_error_2(INVALID_REPLY_TYPE);
+					BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_REPLY_TYPE));
+
 			}
 			break;
 		default: // blad
 			// ustawi numer bledu
-			throw NonFatal_error_2(INVALID_INSTRUCTION_TYPE);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_INSTRUCTION_TYPE));
+
 	}
 
 	// printf("interpret instruction koniec\n");
@@ -600,8 +605,10 @@ void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 	motion_steps = instruction.motion_steps;
 	value_in_step_no = instruction.value_in_step_no;
 	p = &instruction.arm.pf_def.arm_coordinates[0];
-	if ((motion_steps <= 0) /* || (value_in_step_no < 0) */)
-		throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+	if ((motion_steps <= 0) /* || (value_in_step_no < 0) */) {
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
+
+	}
 	switch (motion_type)
 	{
 		case lib::ABSOLUTE: // ruch bezwzgledny
@@ -627,8 +634,10 @@ void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 				get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
 			}
 			break;
-		default:
-			throw NonFatal_error_2(INVALID_MOTION_TYPE);
+		default: {
+
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_TYPE));
+		}
 	}
 
 	// kinematyka nie stwierdzila bledow, przepisanie wartosci
@@ -654,7 +663,8 @@ void motor_driven_effector::set_robot_model(const lib::c_buffer &instruction)
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
 			// ustawia numer bledu
-			throw NonFatal_error_2(INVALID_SET_ROBOT_MODEL_TYPE);
+
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_SET_ROBOT_MODEL_TYPE));
 	}
 }
 
@@ -675,7 +685,8 @@ void motor_driven_effector::get_robot_model(lib::c_buffer &instruction)
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
 			// ustawie numer bledu
-			throw NonFatal_error_2(INVALID_GET_ROBOT_MODEL_TYPE);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_GET_ROBOT_MODEL_TYPE));
+
 	}
 }
 
@@ -693,8 +704,10 @@ void motor_driven_effector::compute_joints(const lib::c_buffer &instruction)
 	motion_steps = instruction.motion_steps;
 	value_in_step_no = instruction.value_in_step_no;
 	p = &instruction.arm.pf_def.arm_coordinates[0];
-	if ((value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no > motion_steps + 1))
-		throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+	if ((value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no > motion_steps + 1)) {
+
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
+	}
 	switch (motion_type)
 	{
 		case lib::ABSOLUTE: // ruch bezwzgledny
@@ -706,7 +719,8 @@ void motor_driven_effector::compute_joints(const lib::c_buffer &instruction)
 				desired_joints_tmp[i] = desired_joints[i] + p[i];
 			break;
 		default:
-			throw NonFatal_error_2(INVALID_MOTION_TYPE);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_TYPE));
+
 	}
 	// check_joints(desired_joints);
 	get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
@@ -878,13 +892,20 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			next_state = GET_STATE;
 		} // end: catch(transformer::NonFatal_error_1 nfe)
 
-		catch (NonFatal_error_2 nfe) {
+		catch (exception::nfe_2 & error) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			//  printf ("catch master thread NonFatal_error_2\n");
-			establish_error(reply, nfe.error, OK);
-			msg->message(lib::NON_FATAL_ERROR, nfe.error);
+
+			uint64_t error0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			establish_error(reply, error0, OK);
+			msg->message(lib::NON_FATAL_ERROR, error0);
 			// powrot do stanu: WAIT
 			next_state = WAIT;
 		} // end: catch(transformer::NonFatal_error_2 nfe)
@@ -1029,15 +1050,22 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			next_state = GET_SYNCHRO;
 		} // end: catch(transformer::NonFatal_error_1 nfe)
 
-		catch (NonFatal_error_2 nfe2) {
+		catch (exception::nfe_2 & error) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// zapamietanie poprzedniej odpowiedzi
+
+			uint64_t error0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
 			lib::REPLY_TYPE rep_type = reply.reply_type;
-			establish_error(reply, nfe2.error, OK);
+			establish_error(reply, error0, OK);
 			reply_to_instruction(reply);
-			msg->message(lib::NON_FATAL_ERROR, nfe2.error);
+			msg->message(lib::NON_FATAL_ERROR, error0);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type; // powrot do stanu: WAIT_Q
 			next_state = WAIT_Q;
@@ -1175,13 +1203,20 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			next_state = GET_INSTRUCTION;
 		} // end: catch(transformer::NonFatal_error_1 nfe)
 
-		catch (NonFatal_error_2 & nfe) {
+		catch (exception::nfe_2 & error) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// printf ("catch master thread NonFatal_error_2\n");
-			establish_error(reply, nfe.error, OK);
-			msg->message(lib::NON_FATAL_ERROR, nfe.error);
+
+			uint64_t error0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			establish_error(reply, error0, OK);
+			msg->message(lib::NON_FATAL_ERROR, error0);
 			// powrot do stanu: WAIT
 			next_state = WAIT;
 		} // end: catch(transformer::NonFatal_error_2 nfe)

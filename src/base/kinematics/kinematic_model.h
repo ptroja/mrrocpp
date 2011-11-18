@@ -18,6 +18,7 @@
 #include "base/edp/edp_exceptions.h"
 
 using namespace mrrocpp::edp::exception;
+using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
 namespace kinematics {

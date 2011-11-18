@@ -565,7 +565,7 @@ void manip_effector::set_robot_model(const lib::c_buffer &instruction)
 			const lib::Homog_matrix & hm = instruction.robot_model.tool_frame_def.tool_frame;
 
 			if (!(hm.is_valid())) {
-				throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
+				BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_HOMOGENEOUS_MATRIX));
 			}
 			// Ustawienie macierzy reprezentujacej narzedzie.
 			// TODO: dynamic_cast<>
@@ -635,7 +635,8 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 	lib::Homog_matrix p_m(instruction.arm.pf_def.arm_frame);
 
 	if ((value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no > motion_steps + 1)) {
-		throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
+
 	}
 	switch (motion_type)
 	{
@@ -647,8 +648,10 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 			//      fprintf(stderr, "debug@%s:%d\n", __FILE__, __LINE__);
 			desired_end_effector_frame = current_end_effector_frame * p_m;
 			break;
-		default:
-			throw NonFatal_error_2(INVALID_MOTION_TYPE);
+		default: {
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_TYPE));
+
+		}
 	}
 	// Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
 	get_current_kinematic_model()->e2i_transform(desired_joints_tmp, desired_joints, desired_end_effector_frame);
