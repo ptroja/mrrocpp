@@ -107,8 +107,8 @@ void manip_trans_t::operator()()
 			trans_t_to_master_synchroniser.command();
 		}
 
-		catch (System_error fe) {
-			error_pointer = new System_error(fe);
+		catch (exception::System_error fe) {
+			error_pointer = new exception::System_error(fe);
 			exception_error = System_erroR;
 			trans_t_to_master_synchroniser.command();
 		}

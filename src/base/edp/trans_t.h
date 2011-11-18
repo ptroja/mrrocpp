@@ -17,7 +17,7 @@
 
 #include "base/edp/edp_typedefs.h"
 
-#include "base/lib/exception.h"
+#include "edp_exceptions.h"
 
 #include "base/lib/condition_synchroniser.h"
 
@@ -90,7 +90,7 @@ public:
 				throw *(Fatal_error*) (error_pointer);
 				break;
 			case System_erroR:
-				throw *(System_error*) (error_pointer);
+				throw *(exception::System_error*) (error_pointer);
 				break;
 			default:
 				break;

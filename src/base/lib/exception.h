@@ -205,12 +205,7 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error \
 
 /********************************** OLD MRROC++ ERRORS **********************************/
 
-/**
- * System error (inter-process communication, filesystem, etc.)
- */
-class System_error
-{
-};
+
 
 /**
  * Fatal exception in framework or application

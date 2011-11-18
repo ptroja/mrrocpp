@@ -77,6 +77,13 @@ REGISTER_NON_FATAL_ERROR(nfe_invalid_motion_type, "Invalid motion type")
  */
 REGISTER_NON_FATAL_ERROR(nfe_1, "NonFatal_error_1")
 
+/**
+ * System error (inter-process communication, filesystem, etc.)
+ */
+class System_error
+{
+};
+
 } // namespace exception
 } // namespace edp
 } // namespace mrrocpp
