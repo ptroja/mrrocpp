@@ -26,44 +26,6 @@ namespace servovision {
 using logger::logger_client;
 using logger::log_message;
 
-struct visual_servo_log_sample : public log_message
-{
-	/**
-	 * Timestamp when processing in Discode starts (taken just after camera source).
-	 */
-	uint32_t processingStartSeconds;
-	uint32_t processingStartNanoseconds;
-
-	/**
-	 * Timestamp when processing in Discode ends (taken just before sending to mrroc proxy).
-	 */
-	uint32_t processingEndSeconds;
-	uint32_t processingEndNanoseconds;
-
-	/** Time, when request for reading was sent from mrrocpp to discode. */
-	uint32_t requestSentTimeSeconds;
-	uint32_t requestSentTimeNanoseconds;
-
-	/** Time, when reading was sent to mrrocpp. */
-	uint32_t sendTimeSeconds;
-	uint32_t sendTimeNanoseconds;
-
-	/** Time, when reading was received in mrrocpp. */
-	uint32_t receiveTimeSeconds;
-	uint32_t receiveTimeNanoseconds;
-
-	/** Time, when sample was taken. */
-	uint32_t sampleTimeSeconds;
-	uint32_t sampleTimeNanoseconds;
-
-	double mrroc_discode_time_offset;
-
-	/** Is object visible in latest reading. */
-	bool is_object_visible;
-
-	bool is_reading_repreated;
-};
-
 /** @addtogroup servovision
  *  @{
  */
