@@ -22,7 +22,7 @@ namespace edp {
 namespace common {
 
 manip_trans_t::manip_trans_t(motor_driven_effector& _master) :
-	master(_master)
+		master(_master)
 {
 	thread_id = boost::thread(boost::bind(&manip_trans_t::operator(), this));
 }
@@ -32,16 +32,18 @@ void manip_trans_t::operator()()
 	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY);
 
 	while (1) {
+		//domyslnie brak bledu boost
+		error = boost::exception_ptr();
+
+		exception_error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
+
 		// oczekiwanie na zezwolenie ruchu od edp_master
 		master_to_trans_synchroniser.wait();
 
 		// przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
 
-
 		current_cmd = tmp_cmd;
 		//        master.current_instruction = master.instruction;
-
-		exception_error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
 
 		try {
 			// TODO: this thread is for handling special case of move_arm instruction;
@@ -75,8 +77,6 @@ void manip_trans_t::operator()()
 				default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
 					break;
 			}
-
-
 
 		}
 
@@ -119,12 +119,14 @@ void manip_trans_t::operator()()
 		}
 
 		catch (...) {
+			error = boost::current_exception();
 			printf("transformation thread unidentified_error\n");
 
 			trans_t_to_master_synchroniser.command();
 			// Wylapywanie niezdefiniowanych bledow
 			// printf("zlapane cos");// by Y&W
 		}
+
 	}
 }
 

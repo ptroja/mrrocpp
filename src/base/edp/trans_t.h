@@ -54,6 +54,9 @@ public:
 	// wskaznik na bledy (rzutowany na odpowiedni blad)
 	void* error_pointer;
 
+	//wskaznik na nowe bledy boost
+	boost::exception_ptr error;
+
 	virtual ~trans_t()
 	{
 	}
@@ -94,6 +97,10 @@ public:
 				break;
 			default:
 				break;
+		}
+
+		if (error) {
+			boost::rethrow_exception(error);
 		}
 	}
 };
