@@ -14,6 +14,7 @@
 #include "visual_servo.h"
 #include "position_constraint.h"
 #include "termination_condition.h"
+#include "base/lib/logger_client/logger_client.h"
 
 #include <csignal>
 #include <ctime>
@@ -176,6 +177,26 @@ private:
 	Eigen::Matrix <double, 3, 1> acceleration;
 	/** End effector acceleration */
 	Eigen::Matrix <double, 3, 1> angular_acceleration;
+
+	/** Set to true, if speed/accel was constrained by constrain_speed_accel() */
+	bool is_linear_speed_constrained;
+
+	/** Set to true, if speed/accel was constrained by constrain_speed_accel() */
+	bool is_angular_speed_constrained;
+
+	/** Set to true, if speed/accel was constrained by constrain_speed_accel() */
+	bool is_linear_accel_constrained;
+
+	/** Set to true, if speed/accel was constrained by constrain_speed_accel() */
+	bool is_angular_accel_constrained;
+
+	bool speed_constrained, accel_constrained;
+
+	/** Set to true, if position was constrained by constrain_position() */
+	bool is_position_constrained;
+
+	boost::shared_ptr<logger::logger_client> log_client;
+	logger::log_message msg;
 
 	void constrain_position(lib::Homog_matrix & new_position);
 

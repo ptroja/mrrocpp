@@ -152,7 +152,7 @@ protected:
 	Eigen::Matrix <double, 6, 1> error;
 private:
 	boost::shared_ptr<logger_client> log_client;
-	visual_servo_log_sample msg;
+	log_message msg;
 
 	bool object_visible;
 
