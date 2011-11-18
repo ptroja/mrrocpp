@@ -84,7 +84,7 @@ public:
 	void Create(RemoteAgent & owner, const std::string & name)
 	{
 		if(ptrType::get()) {
-			throw std::runtime_error("optional Input buffer already created");
+			throw std::runtime_error("optional Output buffer already created");
 		}
 		ptrType::operator=((ptrType) new OutputBuffer<T>(owner, name));
 	}
