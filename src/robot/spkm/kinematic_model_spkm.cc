@@ -117,7 +117,7 @@ void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_
 
 	// Compute desired motor positions for rotary axes.
 	for (int i = 3; i < 6; ++i) {
-		local_desired_motor_pos_new[i] = local_desired_joints[i] * 4 * 2000 * 100 / (2 * M_PI);
+		local_desired_motor_pos_new[i] = local_desired_joints[i] / params.mp2i_ratios[i];
 	}
 
 	// Postcondition
@@ -137,7 +137,7 @@ void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_
 
 	// Rotary axes
 	for (int i = 3; i < 6; ++i) {
-		local_current_joints[i] = ((local_current_motor_pos[i] / (4 * 2000)) / 100) * 2 * M_PI;
+		local_current_joints[i] = local_current_motor_pos[i] * params.mp2i_ratios[i];
 	}
 
 	// Postcondition
