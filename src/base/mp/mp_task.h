@@ -51,7 +51,7 @@ namespace task {
 
 //! Macro for checking if robot is marked as activate in the config file
 #define IS_MP_ROBOT_ACTIVE(__robot_name) \
-		(config.exists_and_true ("is_active", "[edp_" #__robot_name "]"))
+	(config.exists_and_true ("is_active", "[edp_" #__robot_name "]"))
 
 //! Type for optionally active input data buffer
 template <class T>
@@ -63,6 +63,9 @@ public:
 	//! Create input buffer and register within an agent
 	void Create(Agent & owner, const std::string & name, const T & default_value = T())
 	{
+		if(ptrType::get()) {
+			throw std::runtime_error("optional Input buffer already created");
+		}
 		ptrType::operator=((ptrType) new InputBuffer<T>(owner, name, default_value));
 	}
 
@@ -80,6 +83,9 @@ public:
 	//! Create input buffer and register within an agent
 	void Create(RemoteAgent & owner, const std::string & name)
 	{
+		if(ptrType::get()) {
+			throw std::runtime_error("optional Input buffer already created");
+		}
 		ptrType::operator=((ptrType) new OutputBuffer<T>(owner, name));
 	}
 
