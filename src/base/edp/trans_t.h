@@ -77,9 +77,7 @@ public:
 
 		switch (exception_error)
 		{
-			case Fatal_erroR:
-				throw *(Fatal_error*) (error_pointer);
-				break;
+
 			case System_erroR:
 				throw *(System_error*) (error_pointer);
 				break;

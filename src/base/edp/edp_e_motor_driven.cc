@@ -877,7 +877,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 
-			uint64_t error0;
+			uint64_t error0 = 0;
 
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
@@ -898,7 +898,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			//  printf ("catch master thread NonFatal_error_2\n");
 
-			uint64_t error0;
+			uint64_t error0 = 0;
 
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
@@ -918,7 +918,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			// Oczekiwano na QUERY a otrzymano co innego, wiec sygnalizacja bledu i
 			// dalsze oczekiwanie na QUERY
 
-			uint64_t error0;
+			uint64_t error0 = 0;
 
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
@@ -941,13 +941,24 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			next_state = GET_STATE;
 		} // end: catch(transformer::NonFatal_error_3 nfe)
 
-		catch (Fatal_error fe) {
-			//     printf("ERROR w EDP transformer fe\n");
+		catch (exception::fe & error) {
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
 			// Sa to bledy dotyczace sprzetu oraz QNXa (komunikacji)
-			establish_error(reply, fe.error0, fe.error1);
-			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
+
+			uint64_t error0 = 0;
+			uint64_t error1 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error1>(error)) {
+				error1 = *tmp;
+			}
+
+			establish_error(reply, error0, error1);
+			msg->message(lib::FATAL_ERROR, error0, error1);
 			// Powrot do stanu: WAIT
 			next_state = WAIT;
 		} // end: catch(transformer::Fatal_error fe)
@@ -1044,7 +1055,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 
-			uint64_t error0;
+			uint64_t error0 = 0;
 
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
@@ -1063,7 +1074,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// zapamietanie poprzedniej odpowiedzi
 
-			uint64_t error0;
+			uint64_t error0 = 0;
 
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
@@ -1083,7 +1094,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// zapamietanie poprzedniej odpowiedzi
-			uint64_t error0;
+			uint64_t error0 = 0;
 
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
@@ -1109,7 +1120,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// zapamietanie poprzedniej odpowiedzi
 
-			uint64_t error0;
+			uint64_t error0 = 0;
 
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
@@ -1125,10 +1136,22 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			next_state = SYNCHRO_TERMINATED;
 		} // end: catch(transformer::NonFatal_error nfe4)
 
-		catch (Fatal_error fe) {
+		catch (exception::fe & error) {
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skadowych error0 lub error1 obiektu fe
 			// Sa to bledy dotyczace sprzetu oraz QNXa (komunikacji)
+
+			uint64_t error0 = 0;
+			uint64_t error1 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error1>(error)) {
+				error1 = *tmp;
+			}
+
 			if (receive_instruction(instruction) != lib::QUERY) {
 				// blad: powinna byla nadejsc instrukcja QUERY
 				establish_error(reply, QUERY_EXPECTED, OK);
@@ -1137,12 +1160,13 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 				receive_instruction(instruction);
 			}
 			reply.reply_type = lib::ERROR;
-			establish_error(reply, fe.error0, fe.error1);
+			establish_error(reply, error0, error1);
 			reply_to_instruction(reply);
-			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
+			msg->message(lib::FATAL_ERROR, error0, error1);
 			// powrot do stanu: GET_SYNCHRO
 			next_state = GET_SYNCHRO;
 		} // catch(transformer::Fatal_error fe)
+
 	}
 }
 
@@ -1208,7 +1232,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 
-			uint64_t error0;
+			uint64_t error0 = 0;
 
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
@@ -1229,7 +1253,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
 			// printf ("catch master thread NonFatal_error_2\n");
 
-			uint64_t error0;
+			uint64_t error0 = 0;
 
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
@@ -1249,7 +1273,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			// Oczekiwano na QUERY a otrzymano co innego, wiec sygnalizacja bledu i
 			// dalsze oczekiwanie na QUERY
 
-			uint64_t error0;
+			uint64_t error0 = 0;
 
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
@@ -1272,12 +1296,24 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			next_state = GET_INSTRUCTION;
 		} // end: catch(transformer::NonFatal_error_3 nfe)
 
-		catch (Fatal_error & fe) {
+		catch (exception::fe & error) {
 			// Obsluga bledow fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu fe
 			// Sa to bledy dotyczace sprzetu oraz QNXa (komunikacji)
-			establish_error(reply, fe.error0, fe.error1);
-			msg->message(lib::FATAL_ERROR, fe.error0, fe.error1);
+
+			uint64_t error0 = 0;
+			uint64_t error1 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error1>(error)) {
+				error1 = *tmp;
+			}
+
+			establish_error(reply, error0, error1);
+			msg->message(lib::FATAL_ERROR, error0, error1);
 			// Powrot do stanu: WAIT
 			next_state = WAIT;
 		} // end: catch(transformer::Fatal_error fe)

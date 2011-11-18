@@ -83,12 +83,6 @@ void manip_trans_t::operator()()
 
 		// sekcja przechwytujaca bledy i przygotowujaca do ich rzucania w watku master
 
-		catch (Fatal_error fe) {
-			error_pointer = new Fatal_error(fe);
-			exception_error = Fatal_erroR;
-			trans_t_to_master_synchroniser.command();
-		}
-
 		catch (exception::System_error fe) {
 			error_pointer = new exception::System_error(fe);
 			exception_error = System_erroR;

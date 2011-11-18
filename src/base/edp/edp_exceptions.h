@@ -95,6 +95,12 @@ REGISTER_NON_FATAL_ERROR(nfe_3, "NonFatal_error_3")
  */
 REGISTER_NON_FATAL_ERROR(nfe_4, "NonFatal_error_4")
 
+/*!
+ * \brief old mrroc++ non fatal error
+ * \author yoyek
+ */
+REGISTER_NON_FATAL_ERROR(fe, "Fatal_error")
+
 /********************************** OLD MRROC++ ERRORS **********************************/
 
 /**
@@ -102,30 +108,6 @@ REGISTER_NON_FATAL_ERROR(nfe_4, "NonFatal_error_4")
  */
 class System_error
 {
-};
-
-/**
- * Fatal exception in framework or application
- */
-class Fatal_error
-{
-public:
-	//! Servo error number (1)
-	const uint64_t error0;
-
-	//! Servo error number (2)
-	const uint64_t error1;
-
-	/**
-	 * Constructor
-	 * @param err_no_0 servo error number (1)
-	 * @param err_no_1 servo error number (2)
-	 * @return
-	 */
-	Fatal_error(uint64_t err_no_0, uint64_t err_no_1) :
-			error0(err_no_0), error1(err_no_1)
-	{
-	}
 };
 
 } // namespace exception
