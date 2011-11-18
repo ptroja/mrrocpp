@@ -234,23 +234,6 @@ public:
 };
 
 /**
- * Non-fatal errors (type 1)
- * @author Tomasz Winiarski <tomrobotics@gmail.com>
- */
-class NonFatal_error_1
-{
-public:
-	//! Error in coordinate calculations
-	const uint64_t error;
-
-	/**
-	 * Constructor
-	 * @param err_no error value
-	 */
-	NonFatal_error_1(uint64_t err_no);
-};
-
-/**
  * Non-fatal errors (type 2)
  * @author Tomasz Winiarski <tomrobotics@gmail.com>
  */

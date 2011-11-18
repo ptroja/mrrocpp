@@ -77,9 +77,6 @@ public:
 
 		switch (exception_error)
 		{
-			case NonFatal_erroR_1:
-				throw *(NonFatal_error_1*) (error_pointer);
-				break;
 			case NonFatal_erroR_2:
 				throw *(NonFatal_error_2*) (error_pointer);
 				break;

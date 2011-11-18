@@ -26,16 +26,17 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/edp/servo_gr.h"
-#include "base/edp/reader.h"
-#include "base/edp/edp_e_motor_driven.h"
-#include "base/edp/manip_trans_t.h"
-#include "base/edp/vis_server.h"
+#include "servo_gr.h"
+#include "reader.h"
+#include "edp_e_motor_driven.h"
+#include "manip_trans_t.h"
+#include "vis_server.h"
+#include "edp_exceptions.h"
 
 #include "base/lib/mrmath/mrmath.h"
 
 //#include "base/kinematics/kinematic_model.h"
-#include "base/edp/in_out.h"
+#include "in_out.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -807,16 +808,20 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 								// master_order(MT_GET_CONTROLLER_STATE, 0);
 								interpret_instruction(instruction);
 							} else {
-								throw NonFatal_error_1(INVALID_INSTRUCTION_TYPE);
+								BOOST_THROW_EXCEPTION(exception::nfe_1() << mrrocpp_error0(INVALID_INSTRUCTION_TYPE));
+
+								//	throw NonFatal_error_1(INVALID_INSTRUCTION_TYPE);
 							}
 
 							break;
 						case lib::QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
 							// okreslenie numeru bledu
-							throw NonFatal_error_1(QUERY_NOT_EXPECTED);
+							BOOST_THROW_EXCEPTION(exception::nfe_1() << mrrocpp_error0(QUERY_NOT_EXPECTED));
+
 						default: // blad: nieznana instrukcja
 							// okreslenie numeru bledu
-							throw NonFatal_error_1(INVALID_INSTRUCTION_TYPE);
+							BOOST_THROW_EXCEPTION(exception::nfe_1() << mrrocpp_error0(INVALID_INSTRUCTION_TYPE));
+
 					}
 					next_state = WAIT;
 					break;
@@ -853,15 +858,22 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			}
 		}
 
-		catch (NonFatal_error_1 nfe) {
+		catch (exception::nfe_1 & error) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
-			establish_error(reply, nfe.error, OK);
+
+			uint64_t error0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			establish_error(reply, error0, OK);
 			//  printf("catch NonFatal_error_1\n");
 			// informacja dla ECP o bledzie
 			reply_to_instruction(reply);
-			msg->message(lib::NON_FATAL_ERROR, nfe.error);
+			msg->message(lib::NON_FATAL_ERROR, error0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_STATE;
 		} // end: catch(transformer::NonFatal_error_1 nfe)
@@ -958,13 +970,15 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 								// synchronizacji lub ruchow presynchronizacyjnych
 								// Bez synchronizacji adna inna instrukcja nie moze by wykonana przez EDP
 								/* Informacja o bedzie polegajcym na braku polecenia synchronizacji */
-								throw NonFatal_error_1(NOT_YET_SYNCHRONISED);
+								BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(NOT_YET_SYNCHRONISED));
+
 							break;
 						default: // blad: jedyna instrukcja w tym stanie moze by polecenie
 							// synchronizacji lub ruchow presynchronizacyjnych
 							// Bez synchronizacji adna inna instrukcja nie moze by wykonana przez EDP
 							/* Informacja o bedzie polegajcym na braku polecenia synchronizacji */
-							throw NonFatal_error_1(INVALID_INSTRUCTION_TYPE);
+							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(INVALID_INSTRUCTION_TYPE));
+
 					}
 					break;
 				case SYNCHRO_TERMINATED:
@@ -997,16 +1011,23 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 
 		// printf("debug edp po while\n");		// by Y&W
 
-		catch (NonFatal_error_1 nfe1) {
+		catch (exception::nfe_1 & error) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
-			establish_error(reply, nfe1.error, OK);
+
+			uint64_t error0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			establish_error(reply, error0, OK);
 			reply_to_instruction(reply);
-			msg->message(lib::NON_FATAL_ERROR, nfe1.error);
+			msg->message(lib::NON_FATAL_ERROR, error0);
 			// powrot do stanu: GET_SYNCHRO
 			next_state = GET_SYNCHRO;
-		} // end: catch(transformer::NonFatal_error_1 nfe1)
+		} // end: catch(transformer::NonFatal_error_1 nfe)
 
 		catch (NonFatal_error_2 nfe2) {
 			// Obsluga bledow nie fatalnych
@@ -1099,13 +1120,19 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 							break;
 						case lib::SYNCHRO: // blad: robot jest juz zsynchronizowany
 							// okreslenie numeru bledu
-							throw NonFatal_error_1(ALREADY_SYNCHRONISED);
+
+							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(ALREADY_SYNCHRONISED));
+
 						case lib::QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
 							// okreslenie numeru bledu
-							throw NonFatal_error_1(QUERY_NOT_EXPECTED);
+
+							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(QUERY_NOT_EXPECTED));
+
 						default: // blad: nieznana instrukcja
 							// okreslenie numeru bledu
-							throw NonFatal_error_1(UNKNOWN_INSTRUCTION);
+
+							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(UNKNOWN_INSTRUCTION));
+
 					}
 					next_state = EXECUTE_INSTRUCTION;
 					break;
@@ -1128,15 +1155,22 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			}
 		}
 
-		catch (NonFatal_error_1 & nfe) {
+		catch (exception::nfe_1 & error) {
 			// Obsluga bledow nie fatalnych
 			// Konkretny numer bledu znajduje sie w skladowej error obiektu nfe
 			// Sa to bledy nie zwiazane ze sprzetem i komunikacja miedzyprocesow
-			establish_error(reply, nfe.error, OK);
+
+			uint64_t error0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			establish_error(reply, error0, OK);
 			// printf("catch NonFatal_error_1\n");
 			// informacja dla ECP o bledzie
 			reply_to_instruction(reply);
-			msg->message(lib::NON_FATAL_ERROR, nfe.error);
+			msg->message(lib::NON_FATAL_ERROR, error0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_INSTRUCTION;
 		} // end: catch(transformer::NonFatal_error_1 nfe)
