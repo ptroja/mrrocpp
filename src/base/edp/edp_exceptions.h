@@ -71,6 +71,12 @@ REGISTER_NON_FATAL_ERROR(nfe_invalid_pose_specification, "Invalid pose specifica
  */
 REGISTER_NON_FATAL_ERROR(nfe_invalid_motion_type, "Invalid motion type")
 
+/*!
+ * \brief old mrroc++ non fatal error 1
+ * \author yoyek
+ */
+REGISTER_NON_FATAL_ERROR(nfe_1, "NonFatal_error_1")
+
 } // namespace exception
 } // namespace edp
 } // namespace mrrocpp
