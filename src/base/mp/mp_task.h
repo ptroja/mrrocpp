@@ -9,6 +9,8 @@
 #ifndef MP_TASK_H_
 #define MP_TASK_H_
 
+#include <ostream>
+
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
@@ -64,7 +66,9 @@ public:
 	void Create(Agent & owner, const std::string & name, const T & default_value = T())
 	{
 		if(ptrType::get()) {
-			throw std::runtime_error("optional Input buffer already created");
+	        std::ostringstream tmp;
+	        tmp << "optional Input buffer \"" << name << "\"already created";
+			throw std::runtime_error(tmp.str());
 		}
 		ptrType::operator=((ptrType) new InputBuffer<T>(owner, name, default_value));
 	}
@@ -84,7 +88,9 @@ public:
 	void Create(RemoteAgent & owner, const std::string & name)
 	{
 		if(ptrType::get()) {
-			throw std::runtime_error("optional Output buffer already created");
+	        std::ostringstream tmp;
+	        tmp << "optional Output buffer \"" << name << "\"already created";
+			throw std::runtime_error(tmp.str());
 		}
 		ptrType::operator=((ptrType) new OutputBuffer<T>(owner, name));
 	}
