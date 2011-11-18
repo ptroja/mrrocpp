@@ -41,7 +41,7 @@ void manip_trans_t::operator()()
 		current_cmd = tmp_cmd;
 		//        master.current_instruction = master.instruction;
 
-		error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
+		exception_error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
 
 		try {
 			// TODO: this thread is for handling special case of move_arm instruction;
@@ -75,43 +75,46 @@ void manip_trans_t::operator()()
 				default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
 					break;
 			}
+
+
+
 		}
 
 		// sekcja przechwytujaca bledy i przygotowujaca do ich rzucania w watku master
 
 		catch (NonFatal_error_1 nfe) {
 			error_pointer = new NonFatal_error_1(nfe);
-			error = NonFatal_erroR_1;
+			exception_error = NonFatal_erroR_1;
 			trans_t_to_master_synchroniser.command();
 		}
 
 		catch (NonFatal_error_2 nfe) {
 			error_pointer = new NonFatal_error_2(nfe);
-			error = NonFatal_erroR_2;
+			exception_error = NonFatal_erroR_2;
 			trans_t_to_master_synchroniser.command();
 		}
 
 		catch (NonFatal_error_3 nfe) {
 			error_pointer = new NonFatal_error_3(nfe);
-			error = NonFatal_erroR_3;
+			exception_error = NonFatal_erroR_3;
 			trans_t_to_master_synchroniser.command();
 		}
 
 		catch (NonFatal_error_4 nfe) {
 			error_pointer = new NonFatal_error_4(nfe);
-			error = NonFatal_erroR_4;
+			exception_error = NonFatal_erroR_4;
 			trans_t_to_master_synchroniser.command();
 		}
 
 		catch (Fatal_error fe) {
 			error_pointer = new Fatal_error(fe);
-			error = Fatal_erroR;
+			exception_error = Fatal_erroR;
 			trans_t_to_master_synchroniser.command();
 		}
 
 		catch (System_error fe) {
 			error_pointer = new System_error(fe);
-			error = System_erroR;
+			exception_error = System_erroR;
 			trans_t_to_master_synchroniser.command();
 		}
 

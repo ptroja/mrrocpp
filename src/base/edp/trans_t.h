@@ -49,7 +49,7 @@ public:
 	lib::condition_synchroniser master_to_trans_synchroniser;
 	lib::condition_synchroniser trans_t_to_master_synchroniser;
 
-	ERROR_TYPE error;
+	ERROR_TYPE exception_error;
 
 	// wskaznik na bledy (rzutowany na odpowiedni blad)
 	void* error_pointer;
@@ -72,7 +72,7 @@ public:
 
 		// sekcja sprawdzajaca czy byl blad w watku transforamation i ew. rzucajaca go w watku master
 
-		switch (error)
+		switch (exception_error)
 		{
 			case NonFatal_erroR_1:
 				throw *(NonFatal_error_1*) (error_pointer);
