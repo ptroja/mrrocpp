@@ -296,7 +296,7 @@ void manip_effector::compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray &
 			base_pos_xyz_rot_xyz_vector = lib::Xyz_Angle_Axis_vector(instruction.arm.pf_def.arm_coordinates);
 			break;
 		default:
-			throw exception::System_error();
+			throw exception::se();
 	}
 }
 

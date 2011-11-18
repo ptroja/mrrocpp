@@ -49,8 +49,6 @@ public:
 	lib::condition_synchroniser master_to_trans_synchroniser;
 	lib::condition_synchroniser trans_t_to_master_synchroniser;
 
-	ERROR_TYPE exception_error;
-
 	// wskaznik na bledy (rzutowany na odpowiedni blad)
 	void* error_pointer;
 
@@ -74,16 +72,6 @@ public:
 		trans_t_to_master_synchroniser.wait();
 
 		// sekcja sprawdzajaca czy byl blad w watku transforamation i ew. rzucajaca go w watku master
-
-		switch (exception_error)
-		{
-
-			case System_erroR:
-				throw *(System_error*) (error_pointer);
-				break;
-			default:
-				break;
-		}
 
 		if (error) {
 			boost::rethrow_exception(error);

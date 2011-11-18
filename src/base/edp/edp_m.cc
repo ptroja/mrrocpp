@@ -136,10 +136,6 @@ int main(int argc, char *argv[])
 		std::cerr << diagnostic_information(e);
 	}
 
-	catch (edp::exception::System_error & fe) {
-		std::cerr << "EDP: System_error" << std::endl;
-	}
-
 	catch (std::exception & e) {
 		std::cerr << "EDP: " << e.what() << std::endl;
 	}

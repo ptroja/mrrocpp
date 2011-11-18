@@ -96,19 +96,16 @@ REGISTER_NON_FATAL_ERROR(nfe_3, "NonFatal_error_3")
 REGISTER_NON_FATAL_ERROR(nfe_4, "NonFatal_error_4")
 
 /*!
- * \brief old mrroc++ non fatal error
+ * \brief old mrroc++ fatal error
  * \author yoyek
  */
 REGISTER_NON_FATAL_ERROR(fe, "Fatal_error")
 
-/********************************** OLD MRROC++ ERRORS **********************************/
-
-/**
- * System error (inter-process communication, filesystem, etc.)
+/*!
+ * \brief old mrroc++  System error
+ * \author yoyek
  */
-class System_error
-{
-};
+REGISTER_NON_FATAL_ERROR(se, "System_error")
 
 } // namespace exception
 } // namespace edp

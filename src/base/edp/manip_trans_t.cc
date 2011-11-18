@@ -39,8 +39,6 @@ void manip_trans_t::operator()()
 		//domyslnie brak bledu boost
 		error = boost::exception_ptr();
 
-		exception_error = NO_ERROR; // wyjsciowo brak bledu (dla rzutowania)
-
 		// przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
 
 		current_cmd = tmp_cmd;
@@ -82,12 +80,6 @@ void manip_trans_t::operator()()
 		}
 
 		// sekcja przechwytujaca bledy i przygotowujaca do ich rzucania w watku master
-
-		catch (exception::System_error fe) {
-			error_pointer = new exception::System_error(fe);
-			exception_error = System_erroR;
-			trans_t_to_master_synchroniser.command();
-		}
 
 		catch (...) {
 			error = boost::current_exception();
