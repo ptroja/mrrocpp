@@ -153,10 +153,33 @@ int main(int argc, char *argv[], char **arge)
 			exit(EXIT_FAILURE);
 		}
 
-		catch (lib::sensor::sensor_error & e) {
+		catch (lib::exception::se_sensor & error) {
+
+			uint64_t error0 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
 			/* Wyswietlenie komunikatu. */
 			if (mp::common::mp_t) {
-				mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+				mp::common::mp_t->sr_ecp_msg->message(lib::SYSTEM_ERROR, error0);
+			}
+			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			exit(EXIT_FAILURE);
+		}
+
+		catch (lib::exception::fe_sensor & error) {
+
+			uint64_t error0 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			/* Wyswietlenie komunikatu. */
+			if (mp::common::mp_t) {
+				mp::common::mp_t->sr_ecp_msg->message(lib::FATAL_ERROR, error0);
 			}
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 			exit(EXIT_FAILURE);
@@ -293,11 +316,35 @@ int main(int argc, char *argv[], char **arge)
 
 			} /*end: catch*/
 
-			catch (lib::sensor::sensor_error & e) {
+			catch (lib::exception::se_sensor & error) {
+
+				uint64_t error0 = 0;
+
+				if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+					error0 = *tmp;
+				}
+
 				/* Wyswietlenie komunikatu. */
-				mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
-				printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
-			} /* end: catch sensor_error  */
+				if (mp::common::mp_t) {
+					mp::common::mp_t->sr_ecp_msg->message(lib::SYSTEM_ERROR, error0);
+				}
+				printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			}
+
+			catch (lib::exception::fe_sensor & error) {
+
+				uint64_t error0 = 0;
+
+				if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+					error0 = *tmp;
+				}
+
+				/* Wyswietlenie komunikatu. */
+				if (mp::common::mp_t) {
+					mp::common::mp_t->sr_ecp_msg->message(lib::FATAL_ERROR, error0);
+				}
+				printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			}
 
 			catch (ecp_mp::exception::se_tr & error) {
 				/* Wyswietlenie komunikatu. */
