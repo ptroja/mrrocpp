@@ -16,9 +16,12 @@
 //#include "robot/irp6p_tfg/const_irp6p_tfg.h"
 #include "../visual_servoing/visual_servoing.h"
 
+#include "BReading.h"
+
 using namespace mrrocpp::ecp_mp::sensor::discode;
 using namespace mrrocpp::ecp::common::generator;
 using namespace logger;
+using namespace std;
 
 namespace mrrocpp {
 namespace ecp {
@@ -54,7 +57,7 @@ block_move::block_move(lib::configurator &_config) :
 	ds = shared_ptr <discode_sensor> (new discode_sensor(config, vs_config_section_name));
 	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, ds, vs_config_section_name, config));
 	object_reached_term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(config, vs_config_section_name));
-	//timeout_term_cond = shared_ptr <termination_condition> (new timeout_termination_condition(5));
+	timeout_term_cond = shared_ptr <termination_condition> (new timeout_termination_condition(5));
 
 	//utworzenie generatora ruchu
 	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, vs_config_section_name.c_str(), vs));
@@ -72,6 +75,13 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 	}
 	else if(mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST) {
 		sr_ecp_msg->message("configurate servovision...");
+
+		Types::Mrrocpp_Proxy::BReading br;
+		ds->configure_sensor();
+		uint32_t param = 1;
+		br = ds->call_remote_procedure<Types::Mrrocpp_Proxy::BReading>(param);
+		//cout << rc_str << endl;
+
 		sm->configure();
 		sm->Move();
 	}
@@ -85,13 +95,13 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 	}
 
 	//obsługa warunku zakończenia pracy - timeout
-/*	if(timeout_term_cond->is_condition_met()) {
+	if(timeout_term_cond->is_condition_met()) {
 		sr_ecp_msg->message("timeout_term_cond is met");
 	}
 	else {
 		sr_ecp_msg->message("timeout_term_cond IS NOT MET");
 	}
-*/
+
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)

@@ -2,6 +2,8 @@
 #define _ECP_T_BLOCK_MOVE_H
 
 #include <cstdio>
+#include <string>
+
 #include <boost/shared_ptr.hpp>
 
 #include "base/lib/logger.h"
@@ -55,7 +57,7 @@ protected:
 	shared_ptr<discode_sensor> ds;
 
 	shared_ptr<termination_condition> object_reached_term_cond;
-	//shared_ptr<termination_condition> timeout_term_cond;
+	shared_ptr<termination_condition> timeout_term_cond;
 
 	std::string vs_config_section_name;
 
