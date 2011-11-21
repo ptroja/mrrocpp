@@ -24,7 +24,7 @@ namespace kinematics {
 namespace irp6ot {
 
 model_with_wrist::model_with_wrist(int _number_of_servos) :
-	number_of_servos(_number_of_servos)
+		number_of_servos(_number_of_servos)
 {
 	// Ustawienie etykiety modelu kinematycznego.
 	set_kinematic_model_label("Switching to  kinematic model with active wrist");
@@ -261,126 +261,123 @@ void model_with_wrist::set_kinematic_parameters(void)
 	upper_limit_joint[6] = 2.93;
 	upper_limit_joint[7] = 0.091;
 
-}// end: set_kinematic_parameters
-
+} // end: set_kinematic_parameters
 
 void model_with_wrist::check_motor_position(const lib::MotorArray & motor_position) const
 {
 	if (motor_position[0] < lower_limit_axis[0]) // Kat f1 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_0);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_LIMIT_AXIS_0));
 	else if (motor_position[0] > upper_limit_axis[0]) // Kat f1 wiekszy od maksymalnego
-		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_0);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_LIMIT_AXIS_0));
 
 	if (motor_position[1] < lower_limit_axis[1]) // Kat f2 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_1);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_LIMIT_AXIS_1));
 	else if (motor_position[1] > upper_limit_axis[1]) // Kat f2 wiekszy od maksymalnego
-		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_1);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_LIMIT_AXIS_1));
 
 	if (motor_position[2] < lower_limit_axis[2]) // Kat f3 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_2);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_LIMIT_AXIS_2));
 	else if (motor_position[2] > upper_limit_axis[2]) // Kat f3 wiekszy od maksymalnego
-		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_2);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_LIMIT_AXIS_2));
 
 	if (motor_position[3] < lower_limit_axis[3]) // Kat f4 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_3);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_LIMIT_AXIS_3));
 	else if (motor_position[3] > upper_limit_axis[3]) // Kat f4 wiekszy od maksymalnego
-		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_3);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_LIMIT_AXIS_3));
 
 	if (motor_position[4] < lower_limit_axis[4]) // Kat f5 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_4);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_LIMIT_AXIS_4));
 	else if (motor_position[4] > upper_limit_axis[4]) // Kat f5 wiekszy od maksymalnego
-		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_4);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_LIMIT_AXIS_4));
 
 	if (motor_position[5] < lower_limit_axis[5]) // Kat f6 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_5);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_LIMIT_AXIS_5));
 	else if (motor_position[5] > upper_limit_axis[5]) // Kat f6 wiekszy od maksymalnego
-		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_5);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_LIMIT_AXIS_5));
 
 	if (motor_position[6] < lower_limit_axis[6]) // Kat f7 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_6);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_LIMIT_AXIS_6));
 	else if (motor_position[6] > upper_limit_axis[6]) // Kat f7 wiekszy od maksymalnego
-		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_6);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_LIMIT_AXIS_6));
 
 	if (number_of_servos > 7) {
 		if (motor_position[7] < lower_limit_axis[7]) // Kat f8 mniejszy od minimalnego
-			throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_7);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_LIMIT_AXIS_7));
 		else if (motor_position[7] > upper_limit_axis[7]) // Kat f8 wiekszy od maksymalnego
-			throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_7);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_LIMIT_AXIS_7));
 	}
 
-}//: check_motor_position
-
+} //: check_motor_position
 
 void model_with_wrist::check_joints(const lib::JointArray & q) const
 {
 	if (isnan(q[0]))
-		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_D0);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(NOT_A_NUMBER_JOINT_VALUE_D0));
 
 	if (q[0] < lower_limit_joint[0]) // kat q1 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_D0_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_D0_LIMIT));
 	else if (q[0] > upper_limit_joint[0]) // kat q1 wiekszy od maksymalnego
-		throw NonFatal_error_2(BEYOND_UPPER_D0_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_D0_LIMIT));
 
 	if (isnan(q[1]))
-		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA1);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(NOT_A_NUMBER_JOINT_VALUE_THETA1));
 	if (q[1] < lower_limit_joint[1]) // dlugosc silownika mniejsza od minimalnej
-		throw NonFatal_error_2(BEYOND_LOWER_THETA1_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_THETA1_LIMIT));
 
 	if (q[1] > upper_limit_joint[1]) // dlugosc silownika wieksza od maksymalnej
-		throw NonFatal_error_2(BEYOND_UPPER_THETA1_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_THETA1_LIMIT));
 
 	if (isnan(q[2]))
-		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA2);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(NOT_A_NUMBER_JOINT_VALUE_THETA2));
 	if (q[2] < lower_limit_joint[2]) // dlugosc silownika mniejsza od minimalnej
-		throw NonFatal_error_2(BEYOND_LOWER_THETA2_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_THETA2_LIMIT));
 
 	if (q[2] > upper_limit_joint[2]) // dlugosc silownika wieksza od maksymalnej
-		throw NonFatal_error_2(BEYOND_UPPER_THETA2_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_THETA2_LIMIT));
 
 	if (isnan(q[3]))
-		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA3);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(NOT_A_NUMBER_JOINT_VALUE_THETA3));
 	if (q[3] < lower_limit_joint[3]) // kat q3 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_THETA3_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_THETA3_LIMIT));
 
 	if (q[3] > upper_limit_joint[3])
-		throw NonFatal_error_2(BEYOND_UPPER_THETA3_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_THETA3_LIMIT));
 
 	if (isnan(q[4]))
-		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA4);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(NOT_A_NUMBER_JOINT_VALUE_THETA4));
 	if (q[4] < lower_limit_joint[4]) // kat q4 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_THETA4_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_THETA4_LIMIT));
 
 	if (q[4] > upper_limit_joint[4]) // kat q4 wiekszy od maksymalnego
-		throw NonFatal_error_2(BEYOND_UPPER_THETA4_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_THETA4_LIMIT));
 
 	if (isnan(q[5]))
-		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA5);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(NOT_A_NUMBER_JOINT_VALUE_THETA5));
 	if (q[5] < lower_limit_joint[5]) // kat q5 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_THETA5_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_THETA5_LIMIT));
 
 	if (q[5] > upper_limit_joint[5]) // kat q5 wiekszy od maksymalnego
-		throw NonFatal_error_2(BEYOND_UPPER_THETA5_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_THETA5_LIMIT));
 
 	if (isnan(q[6]))
-		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA6);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(NOT_A_NUMBER_JOINT_VALUE_THETA6));
 	if (q[6] < lower_limit_joint[6]) // 6 st. swobody
-		throw NonFatal_error_2(BEYOND_LOWER_THETA6_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_THETA6_LIMIT));
 
 	if (q[6] > upper_limit_joint[6]) // 6 st. swobody
-		throw NonFatal_error_2(BEYOND_UPPER_THETA6_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_THETA6_LIMIT));
 
 	//***szczeki chwytaka***
 	if (number_of_servos > 7) {
 		if (isnan(q[7]))
-			throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA7);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(NOT_A_NUMBER_JOINT_VALUE_THETA7));
 		if (q[7] < lower_limit_joint[7]) // 7 st. swobody
-			throw NonFatal_error_2(BEYOND_LOWER_THETA7_LIMIT);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_THETA7_LIMIT));
 
 		if (q[7] > upper_limit_joint[7]) // 7 st. swobody
-			throw NonFatal_error_2(BEYOND_UPPER_THETA7_LIMIT);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_THETA7_LIMIT));
 	}
-}//: check_joints
-
+} //: check_joints
 
 void model_with_wrist::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib::JointArray & local_current_joints)
 {
@@ -427,8 +424,8 @@ void model_with_wrist::mp2i_transform(const lib::MotorArray & local_current_moto
 
 	// Przelicznik polozenia walu silnika napedowego obrotu kisci V w radianach
 	// na kat obrotu kisci (wspolrzedna wewnetrzna) w radianach
-	local_current_joints[5] = (local_current_motor_pos[5] - synchro_motor_position[5] - (local_current_motor_pos[4]
-			- synchro_motor_position[4])) / gear[5] + theta[5];
+	local_current_joints[5] = (local_current_motor_pos[5] - synchro_motor_position[5]
+			- (local_current_motor_pos[4] - synchro_motor_position[4])) / gear[5] + theta[5];
 
 	// Przelicznik polozenia walu silnika napedowego obrotu kisci N w radianach
 	// na kat obrotu kisci (wspolrzedna wewnetrzna) w radianach
@@ -441,8 +438,7 @@ void model_with_wrist::mp2i_transform(const lib::MotorArray & local_current_moto
 	// Sprawdzenie obliczonych wartosci wspolrzednych wewnetrznych.
 	check_joints(local_current_joints);
 
-}//: mp2i_transform
-
+} //: mp2i_transform
 
 void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
@@ -468,12 +464,14 @@ void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_
 	local_desired_motor_pos_new[1] = gear[1] * local_desired_joints_tmp[1] + synchro_joint_position[1];
 
 	// Obliczanie kata obrotu walu silnika napedowego ramienia dolnego
-	local_desired_motor_pos_new[2] = gear[2] * sqrt(sl123 + mi2 * cos(local_desired_joints_tmp[2]) + ni2
-			* sin(-local_desired_joints_tmp[2])) + synchro_joint_position[2];
+	local_desired_motor_pos_new[2] = gear[2]
+			* sqrt(sl123 + mi2 * cos(local_desired_joints_tmp[2]) + ni2 * sin(-local_desired_joints_tmp[2]))
+			+ synchro_joint_position[2];
 
 	// Obliczanie kata obrotu walu silnika napedowego ramienia gornego
-	local_desired_motor_pos_new[3] = gear[3] * sqrt(sl123 + mi3 * cos(local_desired_joints_tmp[3]) + ni3
-			* sin(-local_desired_joints_tmp[3])) + synchro_joint_position[3];
+	local_desired_motor_pos_new[3] = gear[3]
+			* sqrt(sl123 + mi3 * cos(local_desired_joints_tmp[3]) + ni3 * sin(-local_desired_joints_tmp[3]))
+			+ synchro_joint_position[3];
 
 	// Obliczanie kata obrotu walu silnika napedowego obotu kisci T
 	// jesli jest mniejsze od -pi/2
@@ -503,8 +501,7 @@ void model_with_wrist::i2mp_transform(lib::MotorArray & local_desired_motor_pos_
 	// Sprawdzenie obliczonych wartosci.
 	check_motor_position(local_desired_motor_pos_new);
 
-}//: i2mp_transform
-
+} //: i2mp_transform
 
 void model_with_wrist::direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame)
 {
@@ -548,8 +545,7 @@ void model_with_wrist::direct_kinematics_transform(const lib::JointArray & local
 	local_current_end_effector_frame(2, 2) = c4 * s5; //AZ
 	local_current_end_effector_frame(2, 3) = -a2 * s2 - a3 * s3 - d5 * s4; //PZ
 
-}//:: direct_kinematics_transform()
-
+} //:: direct_kinematics_transform()
 
 void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
 {
@@ -631,35 +627,35 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
 
 		// Sprawdzenie warunkow.
 		t_ok = t6 + local_desired_joints[4];
-		if (fabs(t_ok - local_current_joints_tmp[6]) > fabs(t6 - M_PI + local_desired_joints[4]
-				- (local_current_joints_tmp[6])))
+		if (fabs(t_ok - local_current_joints_tmp[6])
+				> fabs(t6 - M_PI + local_desired_joints[4] - (local_current_joints_tmp[6])))
 			t_ok = t6 - M_PI + local_desired_joints[4];
-		if (fabs(t_ok - local_current_joints_tmp[6]) > fabs(t6 + M_PI + local_desired_joints[4]
-				- (local_current_joints_tmp[6])))
+		if (fabs(t_ok - local_current_joints_tmp[6])
+				> fabs(t6 + M_PI + local_desired_joints[4] - (local_current_joints_tmp[6])))
 			t_ok = t6 + M_PI + local_desired_joints[4];
 
-		if (fabs(t_ok - local_current_joints_tmp[6]) > fabs(t6 - 2 * M_PI + local_desired_joints[4]
-				- (local_current_joints_tmp[6])))
+		if (fabs(t_ok - local_current_joints_tmp[6])
+				> fabs(t6 - 2 * M_PI + local_desired_joints[4] - (local_current_joints_tmp[6])))
 			t_ok = t6 - 2 * M_PI + local_desired_joints[4];
-		if (fabs(t_ok - local_current_joints_tmp[6]) > fabs(t6 + 2 * M_PI + local_desired_joints[4]
-				- (local_current_joints_tmp[6])))
+		if (fabs(t_ok - local_current_joints_tmp[6])
+				> fabs(t6 + 2 * M_PI + local_desired_joints[4] - (local_current_joints_tmp[6])))
 			t_ok = t6 + 2 * M_PI + local_desired_joints[4];
 
-		if (fabs(t_ok - local_current_joints_tmp[6]) > fabs(t6 - local_desired_joints[4]
-				- (local_current_joints_tmp[6])))
+		if (fabs(t_ok - local_current_joints_tmp[6])
+				> fabs(t6 - local_desired_joints[4] - (local_current_joints_tmp[6])))
 			t_ok = t6 - local_desired_joints[4];
-		if (fabs(t_ok - local_current_joints_tmp[6]) > fabs(t6 - M_PI - local_desired_joints[4]
-				- (local_current_joints_tmp[6])))
+		if (fabs(t_ok - local_current_joints_tmp[6])
+				> fabs(t6 - M_PI - local_desired_joints[4] - (local_current_joints_tmp[6])))
 			t_ok = t6 - M_PI - local_desired_joints[4];
-		if (fabs(t_ok - local_current_joints_tmp[6]) > fabs(t6 + M_PI - local_desired_joints[4]
-				- (local_current_joints_tmp[6])))
+		if (fabs(t_ok - local_current_joints_tmp[6])
+				> fabs(t6 + M_PI - local_desired_joints[4] - (local_current_joints_tmp[6])))
 			t_ok = t6 + M_PI - local_desired_joints[4];
 
-		if (fabs(t_ok - local_current_joints_tmp[6]) > fabs(t6 - 2 * M_PI - local_desired_joints[4]
-				- (local_current_joints_tmp[6])))
+		if (fabs(t_ok - local_current_joints_tmp[6])
+				> fabs(t6 - 2 * M_PI - local_desired_joints[4] - (local_current_joints_tmp[6])))
 			t_ok = t6 - 2 * M_PI - local_desired_joints[4];
-		if (fabs(t_ok - local_current_joints_tmp[6]) > fabs(t6 + 2 * M_PI - local_desired_joints[4]
-				- (local_current_joints_tmp[6])))
+		if (fabs(t_ok - local_current_joints_tmp[6])
+				> fabs(t6 + 2 * M_PI - local_desired_joints[4] - (local_current_joints_tmp[6])))
 			t_ok = t6 + 2 * M_PI - local_desired_joints[4];
 
 		local_desired_joints[6] = t_ok;
@@ -681,7 +677,7 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
 		if (fabs(t_ok - local_current_joints_tmp[4]) > fabs(t_ok + M_PI - (local_current_joints_tmp[4])))
 			t_ok = t_ok + M_PI;
 		local_desired_joints[4] = t_ok;
-	}//: else
+	} //: else
 
 	// Wyliczenie Theta2.
 	c4 = cos(local_desired_joints[4]);
@@ -711,8 +707,8 @@ void model_with_wrist::inverse_kinematics_transform(lib::JointArray & local_desi
 	// Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
 	check_joints(local_desired_joints);
 
-}//: inverse_kinematics_transform()
+} //: inverse_kinematics_transform()
 
-}// namespace irp6ot
-}// namespace kinematic
-}// namespace mrrocpp
+} // namespace irp6ot
+} // namespace kinematic
+} // namespace mrrocpp

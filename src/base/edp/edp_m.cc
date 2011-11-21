@@ -42,7 +42,6 @@ effector* master = NULL; // Bufor polecen i odpowiedzi EDP_MASTER
 
 shell* edp_shell = NULL; // obiekt glownie do wykrywania obecnosci drugiego edp jeszcze przed powolaniem klasy efectora
 
-
 /* Przechwycenie sygnalu */
 void catch_signal(int sig)
 {
@@ -135,10 +134,6 @@ int main(int argc, char *argv[])
 
 	catch (boost::exception & e) {
 		std::cerr << diagnostic_information(e);
-	}
-
-	catch (System_error & fe) {
-		std::cerr << "EDP: System_error" << std::endl;
 	}
 
 	catch (std::exception & e) {

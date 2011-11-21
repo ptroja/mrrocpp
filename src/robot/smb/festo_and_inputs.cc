@@ -22,8 +22,7 @@ namespace edp {
 namespace smb {
 
 festo_and_inputs::festo_and_inputs(effector &_master) :
-	master(_master), epos_di_node(master.legs_rotation_node), cpv10(master.cpv10),
-			robot_test_mode(master.robot_test_mode)
+		master(_master), epos_di_node(master.legs_rotation_node), cpv10(master.cpv10), robot_test_mode(master.robot_test_mode)
 {
 	if (!(robot_test_mode)) {
 		// prepares hardware
@@ -127,7 +126,7 @@ void festo_and_inputs::set_detach(int leg_number, bool value)
 			break;
 
 		default:
-			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
 	}
 }
@@ -153,7 +152,7 @@ void festo_and_inputs::set_move_up(int leg_number, bool value)
 			break;
 
 		default:
-			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
 
 	}
@@ -180,7 +179,7 @@ void festo_and_inputs::set_move_down(int leg_number, bool value)
 			break;
 
 		default:
-			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
 
 	}
@@ -204,7 +203,7 @@ void festo_and_inputs::set_clean(int leg_number, bool value)
 			break;
 
 		default:
-			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
 
 	}
@@ -606,8 +605,8 @@ void festo_and_inputs::command_two_up_one_down()
 
 						read_state();
 						for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-							if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1)) && (festo_command.leg[i]
-									== lib::smb::UP)) {
+							if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))
+									&& (festo_command.leg[i] == lib::smb::UP)) {
 								set_checked(i + 1);
 								number_of_legs_up++;
 								set_detach(i + 1, false);

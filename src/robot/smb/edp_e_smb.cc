@@ -291,18 +291,18 @@ void effector::synchronise(void)
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
-		throw Fatal_error(UNKNOWN_SYNCHRO_ERROR, SYNCHRO_ERROR);
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
 	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_MRROCPP_FATAL_ERROR(e_)
-		throw Fatal_error(UNKNOWN_SYNCHRO_ERROR, SYNCHRO_ERROR);
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
 	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
 		// Standard error handling.
 		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
-		throw Fatal_error(UNKNOWN_SYNCHRO_ERROR, SYNCHRO_ERROR);
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
 	} catch (...) {
 		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
-		throw Fatal_error(UNKNOWN_SYNCHRO_ERROR, SYNCHRO_ERROR);
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
 	}
 }
 

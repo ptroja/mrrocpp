@@ -29,7 +29,6 @@ add_library(mrrocpp
 	c_buffer.cc r_buffer.cc
 	mis_fun.cc
 	timer.cc
-	exception.cc
 	playerpos_goal.cc
 	datastr.cc
 	condition_synchroniser.cc

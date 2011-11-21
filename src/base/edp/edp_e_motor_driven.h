@@ -25,7 +25,6 @@
 #include <boost/function.hpp>
 //#endif
 
-
 static const float VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT = 0.2;
 
 namespace mrrocpp {
@@ -82,7 +81,6 @@ protected:
 	boost::function <void()> stoppedCallback_;
 	bool stoppedCallbackRegistered_;
 	//#endif
-
 
 	/*!
 	 * \brief friend class of servo thread to handle the motion controllers
