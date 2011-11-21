@@ -100,6 +100,8 @@ public:
 	 * @return
 	 */
 	const std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> >& get_servos() const;
+
+	const lib::Homog_matrix& get_current_position() const;
 protected:
 	visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name);
 	/**
@@ -112,7 +114,6 @@ protected:
 	 */
 	virtual void configure_all_servos() = 0;
 	std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> > servos;
-	const lib::Homog_matrix& get_current_position() const;
 
 	/** Time for single step () */
 	static const double step_time;
