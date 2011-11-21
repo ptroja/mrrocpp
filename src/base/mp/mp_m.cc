@@ -14,6 +14,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "base/ecp_mp/ecp_mp_exceptions.h"
 #include "base/ecp_mp/transmitter.h"
 
 #include "base/lib/mis_fun.h"
@@ -113,10 +114,10 @@ int main(int argc, char *argv[], char **arge)
 			// ignore Ctrl-C signal, which comes from UI console
 			signal(SIGINT, SIG_IGN);
 
-		} catch (ecp_mp::task::ECP_MP_main_error & e) {
-			/* Obsluga bledow ECP_MP_main_error */
-			if (e.error_class == lib::SYSTEM_ERROR)
-				exit(EXIT_FAILURE);
+		}
+
+		catch (ecp_mp::exception::se & error) {
+			exit(EXIT_FAILURE);
 		}
 
 		catch (mp::exception::se & error) {
@@ -209,11 +210,9 @@ int main(int argc, char *argv[], char **arge)
 				mp::common::mp_t->terminate_all();
 			} // end: try
 
-			catch (ecp_mp::task::ECP_MP_main_error & e) {
-				/* Obsluga bledow ECP_MP_main_error */
-				if (e.error_class == lib::SYSTEM_ERROR)
-					exit(EXIT_FAILURE);
-			} /*end: catch */
+			catch (ecp_mp::exception::se & error) {
+				exit(EXIT_FAILURE);
+			}
 
 			catch (mp::exception::se & error) {
 				exit(EXIT_FAILURE);
