@@ -21,6 +21,12 @@ namespace exception {
  */
 REGISTER_SYSTEM_ERROR(se, "ECP_MP system_error")
 
+/*!
+ * \brief ECP_MP System error
+ * \author yoyek
+ */
+REGISTER_SYSTEM_ERROR(se_tr, "ECP_MP transmiter system_error")
+
 } // namespace exception
 } // namespace ecp_mp
 } // namespace mrrocpp

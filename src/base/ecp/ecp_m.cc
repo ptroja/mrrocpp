@@ -112,10 +112,10 @@ int main(int argc, char *argv[])
 		}
 		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		exit(EXIT_FAILURE);
-	} catch (ecp_mp::transmitter::transmitter_error & e) {
-		if (ecp::common::ecp_t) {
-			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
-		}
+	}
+
+	catch (ecp_mp::exception::se_tr & error) {
+		/* Wyswietlenie komunikatu. */
 		printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		exit(EXIT_FAILURE);
 	}
@@ -224,10 +224,10 @@ int main(int argc, char *argv[])
 			printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
 		}
 
-		catch (ecp_mp::transmitter::transmitter_error & e) {
-			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
-			printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
-		}
+		catch (ecp_mp::exception::se_tr & error) {
+			/* Wyswietlenie komunikatu. */
+			printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			}
 
 		catch (const std::exception & e) {
 			std::string tmp_string(" The following error has been detected: ");
