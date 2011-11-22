@@ -17,11 +17,11 @@
 
 #include "base/lib/configurator.h"
 #include "base/lib/mis_fun.h"
-#include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_robot.h"
-#include "base/ecp/ECP_main_error.h"
-#include "base/ecp/ECP_error.h"
-#include "base/ecp/ecp_generator.h"
+#include "ecp_task.h"
+#include "ecp_robot.h"
+#include "ecp_exceptions.h"
+#include "ECP_error.h"
+#include "ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -182,9 +182,9 @@ int main(int argc, char *argv[])
 			exit(EXIT_FAILURE);
 		}
 
-		catch (ecp::common::ECP_main_error & e) {
-			if (e.error_class == lib::SYSTEM_ERROR)
-				exit(EXIT_FAILURE);
+		catch (ecp::exception::se & error) {
+			exit(EXIT_FAILURE);
+
 		}
 
 		catch (ecp::common::robot::ECP_error & er) {
