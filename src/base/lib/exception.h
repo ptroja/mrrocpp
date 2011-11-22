@@ -49,6 +49,12 @@ inline std::string to_string(mrrocpp_error_time const & e)
 	return boost::posix_time::to_simple_string(e.value());
 }
 
+//! error0 for old mrroc++ exceptions
+typedef boost::error_info <struct error0_, uint64_t> mrrocpp_error0;
+
+//! error1 for old mrroc++ exceptions
+typedef boost::error_info <struct error1_, uint64_t> mrrocpp_error1;
+
 /*!
  * \brief Base class for all system exceptions/errors.
  * \author tkornuta
@@ -67,7 +73,7 @@ public:
 	 * Constructor.
 	 */
 	mrrocpp_error() :
-		error_class(ercl)
+			error_class(ercl)
 	{
 		// Add it to diagnostic information.
 		*this << mrrocpp_error_time(boost::get_system_time());
@@ -196,104 +202,6 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error \
 	std::cout<< ERROR.what() << std::endl; \
 	msg->message(ERROR);
 
-
-/********************************** OLD MRROC++ ERRORS **********************************/
-
-/**
- * System error (inter-process communication, filesystem, etc.)
- */
-class System_error
-{
-};
-
-/**
- * Fatal exception in framework or application
- */
-class Fatal_error
-{
-public:
-	//! Servo error number (1)
-	const uint64_t error0;
-
-	//! Servo error number (2)
-	const uint64_t error1;
-
-	/**
-	 * Constructor
-	 * @param err_no_0 servo error number (1)
-	 * @param err_no_1 servo error number (2)
-	 * @return
-	 */
-	Fatal_error(uint64_t err_no_0, uint64_t err_no_1);
-};
-
-/**
- * Non-fatal errors (type 1)
- * @author Tomasz Winiarski <tomrobotics@gmail.com>
- */
-class NonFatal_error_1
-{
-public:
-	//! Error in coordinate calculations
-	const uint64_t error;
-
-	/**
-	 * Constructor
-	 * @param err_no error value
-	 */
-	NonFatal_error_1(uint64_t err_no);
-};
-
-/**
- * Non-fatal errors (type 2)
- * @author Tomasz Winiarski <tomrobotics@gmail.com>
- */
-class NonFatal_error_2
-{
-public:
-	//! Error in coordinate calculations
-	const uint64_t error;
-
-	/**
-	 * Constructor
-	 * @param err_no error value
-	 */
-	NonFatal_error_2(uint64_t err_no);
-};
-
-/**
- * Non-fatal errors (type 3)
- * @author Tomasz Winiarski <tomrobotics@gmail.com>
- */
-class NonFatal_error_3
-{
-public:
-	//! Error in coordinate calculations
-	const uint64_t error;
-
-	/**
-	 * Constructor
-	 * @param err_no error value
-	 */
-	NonFatal_error_3(uint64_t err_no);
-};
-
-/**
- * Non-fatal errors (type 4)
- * @author Tomasz Winiarski <tomrobotics@gmail.com>
- */
-class NonFatal_error_4
-{
-public:
-	//! Error in coordinate calculations
-	const uint64_t error;
-
-	/**
-	 * Constructor
-	 * @param err_no error value
-	 */
-	NonFatal_error_4(uint64_t err_no);
-};
 
 } // namespace exception
 } // namespace common

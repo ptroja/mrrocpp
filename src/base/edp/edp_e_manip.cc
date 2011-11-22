@@ -58,7 +58,7 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 		//obliczanie zadanej pozycji koncowki wedlug aktualnego rozkazu przetwarzanego w servo
 
 		// @bug race condition (issue #69)
-		while(!sb) {
+		while (!sb) {
 			std::cerr << "Race condition detected! (" << __FILE__ << ":" << __LINE__ << ")" << std::endl;
 			usleep(1000);
 		}
@@ -86,30 +86,30 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 		((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->i2e_wo_tool_transform(servo_current_joints, servo_current_frame_wo_tool);
 
 		if (vs != NULL) {
-				boost::mutex::scoped_lock lock(vs->mtx);
-				if ((is_synchronised()) && (!(force_sensor_post_synchro_configuration))) {
-					force_sensor_post_synchro_configuration = true;
-					vs->new_edp_command = true;
-					vs->command = FORCE_CONFIGURE;
-				}
+			boost::mutex::scoped_lock lock(vs->mtx);
+			if ((is_synchronised()) && (!(force_sensor_post_synchro_configuration))) {
+				force_sensor_post_synchro_configuration = true;
+				vs->new_edp_command = true;
+				vs->command = FORCE_CONFIGURE;
+			}
 		}
 
 		catch_nr = 0;
 
-	}//: try
+	} //: try
 	catch (...) {
 		if ((++catch_nr) == 1) {
 			std::cout << "servo thread compute_servo_joints_and_frame throw catch exception" << std::endl;
 		}
 		return false;
-	}//: catch
+	} //: catch
 
 	return true;
 }
 
 /*--------------------------------------------------------------------------*/
 manip_effector::manip_effector(shell &_shell, lib::robot_name_t l_robot_name) :
-	motor_driven_effector(_shell, l_robot_name)
+		motor_driven_effector(_shell, l_robot_name)
 {
 }
 
@@ -176,8 +176,7 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib:
 	lib::Homog_matrix current_frame_wo_offset = return_current_frame(WITHOUT_TRANSLATION);
 	lib::Ft_tr ft_tr_inv_current_frame_matrix(!current_frame_wo_offset);
 
-	lib::Homog_matrix
-			current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool);
+	lib::Homog_matrix current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool);
 	lib::Ft_tr ft_tr_inv_tool_matrix(!current_tool);
 
 	lib::Ft_vector current_force;
@@ -289,15 +288,15 @@ void manip_effector::compute_base_pos_xyz_rot_xyz_vector(const lib::JointArray &
 			goal_frame_increment_in_end_effector = ((!begining_end_effector_frame) * goal_frame);
 			goal_frame_increment_in_end_effector.get_xyz_angle_axis(goal_xyz_angle_axis_increment_in_end_effector);
 			for (int i = 0; i < 6; i++) {
-				base_pos_xyz_rot_xyz_vector[i] = goal_xyz_angle_axis_increment_in_end_effector[i] * (double) (1
-						/ (((double) lib::EDP_STEP) * ((double) ECP_motion_steps)));
+				base_pos_xyz_rot_xyz_vector[i] = goal_xyz_angle_axis_increment_in_end_effector[i]
+						* (double) (1 / (((double) lib::EDP_STEP) * ((double) ECP_motion_steps)));
 			}
 			break;
 		case lib::PF_VELOCITY:
 			base_pos_xyz_rot_xyz_vector = lib::Xyz_Angle_Axis_vector(instruction.arm.pf_def.arm_coordinates);
 			break;
 		default:
-			throw System_error();
+			throw exception::se();
 	}
 }
 
@@ -363,11 +362,9 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 	lib::Xyz_Angle_Axis_vector pos_xyz_rot_xyz_vector;
 	static lib::Xyz_Angle_Axis_vector previous_move_rot_vector;
 
-	lib::Homog_matrix
-			current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool);
+	lib::Homog_matrix current_tool(((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool);
 
 	//	std::cout << current_tool << std::endl;
-
 
 	lib::Ft_tr ft_tr_inv_tool_matrix = !(lib::Ft_tr(current_tool));
 	lib::V_tr v_tr_tool_matrix(current_tool);
@@ -385,14 +382,12 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 		// sprowadzenie sil z ukladu bazowego do ukladu kisci
 		// modyfikacja pobranych sil w ukladzie czujnika - do ukladu wyznaczonego przez force_tool_frame i reference_frame
 
-
 		lib::Homog_matrix begining_end_effector_frame_with_current_translation = begining_end_effector_frame;
 		begining_end_effector_frame_with_current_translation.set_translation_vector(desired_end_effector_frame);
 
 		lib::Ft_v_vector current_force_torque(ft_tr_inv_tool_matrix * !(lib::Ft_tr(current_frame_wo_offset))
 				* current_force);
 		//		lib::Ft_v_vector tmp_force_torque (lib::Ft_v_tr((!current_tool) * (!current_frame_wo_offset), lib::Ft_v_tr::FT) * lib::Ft_v_vector (current_force));
-
 
 		//wyzerowanie historii dla dlugiej przerwy w sterowaniu silowym
 
@@ -435,8 +430,9 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 
 			// PRAWO STEROWANIA
 			move_rot_vector[i] = ((reciprocal_damping[i] * (force_xyz_torque_xyz[i] - current_force_torque[i])
-					+ pos_xyz_rot_xyz_vector[i]) * lib::EDP_STEP * lib::EDP_STEP + reciprocal_damping[i] * inertia[i]
-					* previous_move_rot_vector[i]) / (lib::EDP_STEP + reciprocal_damping[i] * inertia[i]);
+					+ pos_xyz_rot_xyz_vector[i]) * lib::EDP_STEP * lib::EDP_STEP
+					+ reciprocal_damping[i] * inertia[i] * previous_move_rot_vector[i])
+					/ (lib::EDP_STEP + reciprocal_damping[i] * inertia[i]);
 		}
 
 		previous_move_rot_vector = v_tr_current_frame_matrix * v_tr_tool_matrix * move_rot_vector;
@@ -562,7 +558,6 @@ void manip_effector::set_robot_model(const lib::c_buffer &instruction)
 			// Sprawdzenie czy przepisana macierz jest jednorodna
 			// Jezeli nie, to wyzwalany jest wyjatek.
 
-
 			// Przyslano dane dotyczace narzedzia i koncowki.
 			// Sprawdzenie poprawnosci macierzy
 			//	set_tool_frame_in_kinematic_model(lib::Homog_matrix(instruction.robot_model.tool_frame_def.tool_frame));
@@ -570,7 +565,7 @@ void manip_effector::set_robot_model(const lib::c_buffer &instruction)
 			const lib::Homog_matrix & hm = instruction.robot_model.tool_frame_def.tool_frame;
 
 			if (!(hm.is_valid())) {
-				throw NonFatal_error_2(INVALID_HOMOGENEOUS_MATRIX);
+				BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_HOMOGENEOUS_MATRIX));
 			}
 			// Ustawienie macierzy reprezentujacej narzedzie.
 			// TODO: dynamic_cast<>
@@ -615,8 +610,8 @@ void manip_effector::get_robot_model(lib::c_buffer &instruction)
 
 			reply.robot_model.type = lib::TOOL_FRAME;
 
-			reply.robot_model.tool_frame_def.tool_frame
-					= ((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool;
+			reply.robot_model.tool_frame_def.tool_frame =
+					((mrrocpp::kinematics::common::kinematic_model_with_tool*) get_current_kinematic_model())->tool;
 
 			break;
 		default: // blad: nie istniejaca specyfikacja modelu robota
@@ -640,7 +635,8 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 	lib::Homog_matrix p_m(instruction.arm.pf_def.arm_frame);
 
 	if ((value_in_step_no <= 0) || (motion_steps <= 0) || (value_in_step_no > motion_steps + 1)) {
-		throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
+
 	}
 	switch (motion_type)
 	{
@@ -652,8 +648,10 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 			//      fprintf(stderr, "debug@%s:%d\n", __FILE__, __LINE__);
 			desired_end_effector_frame = current_end_effector_frame * p_m;
 			break;
-		default:
-			throw NonFatal_error_2(INVALID_MOTION_TYPE);
+		default: {
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_TYPE));
+
+		}
 	}
 	// Przeliczenie wspolrzednych zewnetrznych na wspolrzedne wewnetrzne
 	get_current_kinematic_model()->e2i_transform(desired_joints_tmp, desired_joints, desired_end_effector_frame);
@@ -671,7 +669,7 @@ void manip_effector::compute_frame(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 
 lib::Homog_matrix manip_effector::return_current_frame(TRANSLATION_ENUM translation_mode)
-{// by Y
+{ // by Y
 	boost::mutex::scoped_lock lock(effector_mutex);
 	// przepisanie danych na zestaw lokalny dla edp_force
 	// lib::copy_frame(force_current_end_effector_frame, global_current_end_effector_frame);
@@ -683,7 +681,7 @@ lib::Homog_matrix manip_effector::return_current_frame(TRANSLATION_ENUM translat
 }
 
 void manip_effector::force_msr_upload(const lib::Ft_vector & l_vector)
-{// by Y wgranie globalnego zestawu danych
+{ // by Y wgranie globalnego zestawu danych
 	boost::mutex::scoped_lock lock(force_mutex);
 	global_force_msr = l_vector;
 }
@@ -716,9 +714,8 @@ void manip_effector::get_controller_state(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void manip_effector::single_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
-	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
-	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
-
+// Wypenienie struktury danych transformera na podstawie parametrow polecenia
+// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 	switch (instruction.set_arm_type)
 	{
@@ -736,9 +733,8 @@ void manip_effector::single_thread_move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void manip_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
-	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
-	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
-
+// Wypenienie struktury danych transformera na podstawie parametrow polecenia
+// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 	switch (instruction.interpolation_type)
 	{

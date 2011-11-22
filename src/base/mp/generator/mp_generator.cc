@@ -50,27 +50,22 @@ void generator::Move()
 
 	// kasujemy znacznik swiezosci buforow
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m)
-	{
-		if (robot_node.second->reply.isFresh()) {
-			robot_node.second->reply.markAsUsed();
-		}
-	}
+			{
+				if (robot_node.second->reply.isFresh()) {
+					robot_node.second->reply.markAsUsed();
+				}
+			}
 }
 // ------------------------------------------------------------------------
 
 void generator::execute_all()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		if (robot_node.second->communicate_with_ecp) {
-			robot_node.second->execute_motion();
-		}
-	}
-}
-
-MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
-	error_class(err0), error_no(err1)
-{
+			{
+				if (robot_node.second->communicate_with_ecp) {
+					robot_node.second->execute_motion();
+				}
+			}
 }
 
 } // namespace generator

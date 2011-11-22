@@ -10,42 +10,26 @@
 #ifndef SENSOR_ERROR_H_
 #define SENSOR_ERROR_H_
 
-#include "base/lib/exception.h"
+#include "exception.h"
 
 namespace mrrocpp {
 namespace lib {
-namespace sensor {
+namespace exception {
 
 /*!
- *
- * @brief Class representing the exceptions thrown by and handled by MRROC++ sensors.
- * @author tkornuta
-  *
- * @ingroup SENSORS
+ * \brief Sensor System error
+ * \author yoyek
  */
-class sensor_error : public std::exception
-{
-public:
-	/** Error class. */
-	const lib::error_class_t error_class;
+REGISTER_SYSTEM_ERROR(se_sensor, "Sensor System_error")
 
-	/** Error number. */
-	const uint64_t error_no;
-
-	/*!
-	 * Constructor.
-	 * @param err_cl Error class.
-	 * @param err_no Error number.
-	 */
-	sensor_error(lib::error_class_t err_cl, uint64_t err_no) :
-		std::exception(), error_class(err_cl), error_no(err_no)
-	{
-	}
-};
+/*!
+ * \brief Sensor System error
+ * \author yoyek
+ */
+REGISTER_FATAL_ERROR(fe_sensor, "Sensor Fatal_error")
 
 } // namespace sensor
 } // namespace lib
 } // namespace mrrocpp
-
 
 #endif /* SENSOR_ERROR_H_ */

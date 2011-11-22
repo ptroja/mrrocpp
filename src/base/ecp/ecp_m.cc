@@ -12,6 +12,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "base/ecp_mp/ecp_mp_exceptions.h"
 #include "base/ecp_mp/transmitter.h"
 
 #include "base/lib/configurator.h"
@@ -68,8 +69,8 @@ int main(int argc, char *argv[])
 		// configuration read
 		lib::configurator * _config = new lib::configurator(argv[1], argv[2], argv[3]);
 
-		ecp::common::ecp_t
-				= (boost::shared_ptr <ecp::common::task::task_base>) ecp::common::task::return_created_ecp_task(*_config);
+		ecp::common::ecp_t =
+				(boost::shared_ptr <ecp::common::task::task_base>) ecp::common::task::return_created_ecp_task(*_config);
 
 		lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 3);
 
@@ -79,10 +80,13 @@ int main(int argc, char *argv[])
 		signal(SIGTERM, &(ecp::common::catch_signal_in_ecp));
 		signal(SIGSEGV, &(ecp::common::catch_signal_in_ecp));
 
-	} catch (ecp_mp::task::ECP_MP_main_error & e) {
-		if (e.error_class == lib::SYSTEM_ERROR)
-			exit(EXIT_FAILURE);
-	} catch (ecp::common::robot::ECP_main_error & e) {
+	}
+
+	catch (ecp_mp::exception::se & error) {
+		exit(EXIT_FAILURE);
+	}
+
+	catch (ecp::common::robot::ECP_main_error & e) {
 		switch (e.error_class)
 		{
 			case lib::SYSTEM_ERROR:
@@ -102,16 +106,42 @@ int main(int argc, char *argv[])
 		}
 		printf("Mam blad generatora section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		exit(EXIT_FAILURE);
-	} catch (lib::sensor::sensor_error & e) {
+	}
+
+	catch (lib::exception::se_sensor & error) {
+
+		uint64_t error0 = 0;
+
+		if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+			error0 = *tmp;
+		}
+
+		/* Wyswietlenie komunikatu. */
 		if (ecp::common::ecp_t) {
-			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+			ecp::common::ecp_t->sr_ecp_msg->message(lib::SYSTEM_ERROR, error0);
 		}
 		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		exit(EXIT_FAILURE);
-	} catch (ecp_mp::transmitter::transmitter_error & e) {
-		if (ecp::common::ecp_t) {
-			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
+	}
+
+	catch (lib::exception::fe_sensor & error) {
+
+		uint64_t error0 = 0;
+
+		if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+			error0 = *tmp;
 		}
+
+		/* Wyswietlenie komunikatu. */
+		if (ecp::common::ecp_t) {
+			ecp::common::ecp_t->sr_ecp_msg->message(lib::FATAL_ERROR, error0);
+		}
+		printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
+		exit(EXIT_FAILURE);
+	}
+
+	catch (ecp_mp::exception::se_tr & error) {
+		/* Wyswietlenie komunikatu. */
 		printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		exit(EXIT_FAILURE);
 	}
@@ -148,9 +178,8 @@ int main(int argc, char *argv[])
 
 		}
 
-		catch (ecp_mp::task::ECP_MP_main_error & e) {
-			if (e.error_class == lib::SYSTEM_ERROR)
-				exit(EXIT_FAILURE);
+		catch (ecp_mp::exception::se & error) {
+			exit(EXIT_FAILURE);
 		}
 
 		catch (ecp::common::ECP_main_error & e) {
@@ -206,7 +235,7 @@ int main(int argc, char *argv[])
 					ecp::common::ecp_t->reply.Send(ecp::common::ecp_t->ecp_reply);
 					break;
 				case ECP_STOP_ACCEPTED:
-                                        //ecp::common::ecp_t->sr_ecp_msg->message("pierwszy catch stop");
+					//ecp::common::ecp_t->sr_ecp_msg->message("pierwszy catch stop");
 					ecp::common::ecp_t->ecp_stop_accepted_handler();
 					break;
 				default:
@@ -216,14 +245,41 @@ int main(int argc, char *argv[])
 			} /* end: switch*/
 		} /*end: catch */
 
-		catch (lib::sensor::sensor_error & e) {
-			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
-			printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
+		catch (lib::exception::se_sensor & error) {
+
+			uint64_t error0 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			/* Wyswietlenie komunikatu. */
+			if (ecp::common::ecp_t) {
+				ecp::common::ecp_t->sr_ecp_msg->message(lib::SYSTEM_ERROR, error0);
+			}
+			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
+
 		}
 
-		catch (ecp_mp::transmitter::transmitter_error & e) {
-			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, 0);
-			printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
+		catch (lib::exception::fe_sensor & error) {
+
+			uint64_t error0 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			/* Wyswietlenie komunikatu. */
+			if (ecp::common::ecp_t) {
+				ecp::common::ecp_t->sr_ecp_msg->message(lib::FATAL_ERROR, error0);
+			}
+			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
+
+		}
+
+		catch (ecp_mp::exception::se_tr & error) {
+			/* Wyswietlenie komunikatu. */
+			printf("ecp_m.cc: Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		}
 
 		catch (const std::exception & e) {

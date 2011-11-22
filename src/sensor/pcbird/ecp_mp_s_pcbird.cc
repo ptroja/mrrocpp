@@ -9,8 +9,6 @@
  * @ingroup SENSORS PCBIRD_SENSOR
  */
 
-
-
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <strings.h>
@@ -25,24 +23,23 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sensor {
 
-
 pcbird::pcbird(const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config) :
-	sr_ecp_msg(_sr_ecp_msg), sensor_name(SENSOR_PCBIRD)
+		sr_ecp_msg(_sr_ecp_msg), sensor_name(SENSOR_PCBIRD)
 {
 	// Set period variables.
 	base_period = current_period = 1;
 
 	// Retrieve pcbird node name and port from configuration file.
-	int pcbird_port = config.value <int> ("pcbird_port", _section_name);
-	std::string pcbird_node_name = config.value <std::string> ("pcbird_node_name", _section_name);
+	int pcbird_port = config.value <int>("pcbird_port", _section_name);
+	std::string pcbird_node_name = config.value <std::string>("pcbird_node_name", _section_name);
 
 	// Try to connect to pcbird.
-	if ((sockfd = pcbird_connect(pcbird_node_name.c_str(), pcbird_port)) == -1)
-		throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+	if ((sockfd = pcbird_connect(pcbird_node_name.c_str(), pcbird_port)) == -1) {
+		BOOST_THROW_EXCEPTION(lib::exception::se_sensor() << lib::exception::mrrocpp_error0(CANNOT_LOCATE_DEVICE));
+	}
 
 	sr_ecp_msg.message("Connected to pcbird");
 }
-
 
 void pcbird::configure_sensor()
 {
@@ -53,11 +50,9 @@ void pcbird::configure_sensor()
 
 }
 
-
 void pcbird::initiate_reading()
 {
 }
-
 
 void pcbird::get_reading()
 {
@@ -78,7 +73,6 @@ void pcbird::get_reading()
 	 sr_ecp_msg.message(measures);
 	 */
 }
-
 
 pcbird::~pcbird()
 {

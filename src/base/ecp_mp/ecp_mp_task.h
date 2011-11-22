@@ -56,7 +56,8 @@ public:
 	 */
 	typedef std::map <const char *, ecp_mp::common::Trajectory> trajectories_t;
 
-	typedef std::map <std::string, std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> > bang_trajectories_map;
+	typedef std::map <std::string,
+			std::pair <std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> > bang_trajectories_map;
 
 	/**
 	 * @brief Constructor
@@ -87,7 +88,7 @@ public:
 	/**
 	 * @brief pointer to the SR communication object
 	 */
-	static boost::shared_ptr<lib::sr_ecp> sr_ecp_msg; // TODO: rename from _ecp_ (?!)
+	static boost::shared_ptr <lib::sr_ecp> sr_ecp_msg; // TODO: rename from _ecp_ (?!)
 
 	/**
 	 * @brief configurator object reference
@@ -161,7 +162,7 @@ public:
 	 * @param stateID task state id
 	 * @return Trajectory pointer
 	 */
-	std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num);
+	std::pair <std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num);
 
 	/**
 	 * @brief loads trajectory
@@ -170,40 +171,6 @@ public:
 	 * @return trajectories_t pointer
 	 */
 	bang_trajectories_map * loadTrajectories(const char * fileName, lib::robot_name_t propRobot, int axes_num);
-};
-
-/*!
- * @brief ECP_MP main task error handling class
- *
- * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
- * @ingroup ecp_mp
- */
-class ECP_MP_main_error
-{
-public:
-	/**
-	 * @brief error number
-	 */
-	const lib::error_class_t error_class;
-
-	/**
-	 * @brief error number
-	 */
-	const uint64_t mp_error;
-
-	/**
-	 * @brief constructor
-	 * @param err0 error class
-	 * @param err1 error number
-	 * @param file file_name
-	 * @param line line number
-	 */
-	ECP_MP_main_error(lib::error_class_t err0, uint64_t err1, const char *file, int line) :
-		error_class(err0), mp_error(err1)
-	{
-		fprintf(stderr, "ecp_MP_main_error @ %s:%d\n", file, line);
-	}
-#define ECP_MP_main_error(e0,e1)	ECP_MP_main_error((e0),(e1), __FILE__, __LINE__)
 };
 
 } // namespace task

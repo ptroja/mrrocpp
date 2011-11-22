@@ -10,7 +10,6 @@
 
 #include <boost/foreach.hpp>
 
-#include "base/mp/MP_main_error.h"
 #include "base/mp/mp_robot.h"
 
 #include "robot/player/ecp_mp_t_player.h"
@@ -42,18 +41,18 @@ void wait_for_task_termination::configure(bool l_activate_trigger)
 bool wait_for_task_termination::first_step()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->communicate_with_ecp = false;
-				}
+			{
+				robot_node.second->communicate_with_ecp = false;
+			}
 
 	if (check_task_termination_in_first_step) {
 		// usuwamy te roboty, ktore juz odpoweidzialy
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-					{
-						if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-							robot_m.erase(robot_node.first);
-						}
+				{
+					if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
+						robot_m.erase(robot_node.first);
 					}
+				}
 
 		if (robot_m.empty()) {
 			return false;
@@ -78,11 +77,11 @@ bool wait_for_task_termination::next_step()
 
 	// usuwamy te roboty, ktore juz odpoweidzialy
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
-						robot_m.erase(robot_node.first);
-					}
+			{
+				if (robot_node.second->ecp_reply_package.reply == lib::TASK_TERMINATED) {
+					robot_m.erase(robot_node.first);
 				}
+			}
 
 	if (robot_m.empty()) {
 
