@@ -16,25 +16,22 @@ namespace ecp {
 namespace exception {
 
 /*!
- * \brief MP non fatal error
+ * \brief ECP generator non fatal error
  * \author yoyek
  */
-// REGISTER_NON_FATAL_ERROR(nfe, "MP non_fatal_error")
-/*!
- * \brief MP generator non fatal error
- * \author yoyek
- */
-// REGISTER_NON_FATAL_ERROR(nfe_g, "MP generator non_fatal_error")
-/*!
- * \brief MP robot non fatal error
- * \author yoyek
- */
-// REGISTER_NON_FATAL_ERROR(nfe_r, "MP generator non_fatal_error")
+REGISTER_NON_FATAL_ERROR(nfe_g, "ECP generator non_fatal_error")
+
 /*!
  * \brief ECP System error
  * \author yoyek
  */
 REGISTER_SYSTEM_ERROR(se, "ECP system_error")
+
+/*!
+ * \brief ECP generator System error
+ * \author yoyek
+ */
+REGISTER_SYSTEM_ERROR(se_g, "ECP generator system_error")
 
 } // namespace exception
 } // namespace ecp

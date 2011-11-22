@@ -5,6 +5,7 @@
  * @ingroup generators
  */
 
+#include "base/ecp/ecp_exceptions.h"
 #include "ecp_g_constant_velocity.h"
 
 namespace mrrocpp {
@@ -103,7 +104,7 @@ bool constant_velocity::calculate() {
 			}
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
-			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(ECP_ERRORS));//TODO change the second argument
 		}
 
 		if(!vpc.calculate_time_pose(pose_vector_iterator) ||//calculate times for each of the axes
@@ -204,7 +205,7 @@ bool constant_velocity::load_absolute_pose(ecp_mp::common::trajectory_pose::cons
 	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_EULER_ZYZ) {
 		load_trajectory_pose(trajectory_pose.coordinates, lib::ABSOLUTE, trajectory_pose.arm_type, trajectory_pose.v, euler_zyz_max_velocity);
 	} else {
-		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 	}
 	return true;
 }
@@ -219,7 +220,7 @@ bool constant_velocity::load_relative_pose(ecp_mp::common::trajectory_pose::cons
 	} else if (trajectory_pose.arm_type == lib::ECP_XYZ_EULER_ZYZ) {
 		load_trajectory_pose(trajectory_pose.coordinates, lib::RELATIVE, trajectory_pose.arm_type, trajectory_pose.v, euler_zyz_max_velocity);
 	} else {
-		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 	}
 	return true;
 }

@@ -100,12 +100,21 @@ int main(int argc, char *argv[])
 				break;
 		}
 		exit(EXIT_FAILURE);
-	} catch (ecp::common::generator::ECP_error & e) {
+	}
+
+	catch (ecp::exception::nfe_g & error) {
+		uint64_t error0 = 0;
+
+		if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+			error0 = *tmp;
+		}
+
 		if (ecp::common::ecp_t) {
-			ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+			ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, error0);
 		}
 		printf("Mam blad generatora section 1 (@%s:%d)\n", __FILE__, __LINE__);
 		exit(EXIT_FAILURE);
+
 	}
 
 	catch (lib::exception::se_sensor & error) {
@@ -212,13 +221,14 @@ int main(int argc, char *argv[])
 			} /* end: switch */
 		} /*end: catch*/
 
-		catch (ecp::common::generator::ECP_error & er) {
-			/* Wylapywanie bledow generowanych przez generatory*/
-			if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunukat do SR */
-				perror("ecp aborted due to lib::SYSTEM_ERROR");
-				exit(EXIT_FAILURE);
+		catch (ecp::exception::nfe_g & error) {
+			uint64_t error0 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+				error0 = *tmp;
 			}
-			switch (er.error_no)
+
+			switch (error0)
 			{
 				case INVALID_POSE_SPECIFICATION:
 				case INVALID_MP_COMMAND:
@@ -230,7 +240,7 @@ int main(int argc, char *argv[])
 				case MAX_ACCELERATION_EXCEEDED:
 				case MAX_VELOCITY_EXCEEDED:
 					/*Komunikat o bledzie wysylamy do SR */
-					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, er.error_no);
+					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, error0);
 					ecp::common::ecp_t->set_ecp_reply(lib::ERROR_IN_ECP);
 					ecp::common::ecp_t->reply.Send(ecp::common::ecp_t->ecp_reply);
 					break;
@@ -243,6 +253,14 @@ int main(int argc, char *argv[])
 					perror("Unidentified exception");
 					exit(EXIT_FAILURE);
 			} /* end: switch*/
+
+		}
+
+		catch (ecp::exception::se_g & error) {
+
+			perror("ecp aborted due to lib::SYSTEM_ERROR");
+			exit(EXIT_FAILURE);
+
 		} /*end: catch */
 
 		catch (lib::exception::se_sensor & error) {
@@ -300,5 +318,6 @@ int main(int argc, char *argv[])
 
 	} // end: for (;;) zewnetrznej
 
-} // koniec: main()
+}
+// koniec: main()
 // ------------------------------------------------------------------------
