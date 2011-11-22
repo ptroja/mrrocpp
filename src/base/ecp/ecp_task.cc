@@ -21,7 +21,6 @@
 #include "ecp_sub_task.h"
 #include "ecp_robot.h"
 #include "ecp_exceptions.h"
-#include "ECP_error.h"
 #include "ecp_generator.h"
 
 #include "base/lib/messip/messip_dataport.h"

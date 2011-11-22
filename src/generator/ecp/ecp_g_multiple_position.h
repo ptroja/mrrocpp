@@ -14,7 +14,7 @@
 #include "base/ecp/ecp_exceptions.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
-#include "base/ecp/ECP_error.h"
+
 #include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "generator/ecp/ecp_g_get_position.h"
 #include "base/ecp/ecp_generator.h"

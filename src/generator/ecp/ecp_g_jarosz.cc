@@ -26,7 +26,7 @@
 #include "base/ecp/ecp_exceptions.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
-#include "base/ecp/ECP_error.h"
+
 #include "generator/ecp/ecp_g_jarosz.h"
 
 namespace mrrocpp {

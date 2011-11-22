@@ -20,7 +20,6 @@
 #include "ecp_task.h"
 #include "ecp_robot.h"
 #include "ecp_exceptions.h"
-#include "ECP_error.h"
 #include "ecp_generator.h"
 
 namespace mrrocpp {

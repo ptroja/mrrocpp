@@ -7,7 +7,7 @@
 
 #include "base/ecp/ecp_exceptions.h"
 #include "base/ecp/ecp_robot.h"
-#include "base/ecp/ECP_error.h"
+
 #include "ecp_g_get_position.h"
 
 namespace mrrocpp {
