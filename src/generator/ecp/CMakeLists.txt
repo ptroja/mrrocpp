@@ -20,6 +20,6 @@ add_library(ecp_generators
         trajectory_interpolator/spline_interpolator.cc
 )
 
-target_link_libraries(ecp_generators ecp_generators_force mrrocpp ecp)
+target_link_libraries(ecp_generators ecp_generators_force)
 
 install(TARGETS ecp_generators DESTINATION lib)
