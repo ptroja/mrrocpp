@@ -155,10 +155,12 @@ int UiRobot::edp_create_int()
 						create_ui_ecp_robot();
 					}
 
-					catch (ecp::common::robot::ECP_main_error & e) {
+					catch (ecp::exception::se_r & error) {
 						/* Obsluga bledow ECP */
+
 						null_ui_ecp_robot();
-						throw ecp::common::robot::ECP_main_error(e.error_class, e.error_no);
+
+						throw error;
 
 					} /*end: catch */
 				}
@@ -186,11 +188,10 @@ int UiRobot::edp_create_int()
 					}
 				}
 
-				catch (ecp::common::robot::ECP_main_error & e) {
+				catch (ecp::exception::se_r & error) {
 					/* Obsluga bledow ECP */
 					close_edp_connections();
 					null_ui_ecp_robot();
-
 				} /*end: catch */
 
 			}
@@ -198,9 +199,9 @@ int UiRobot::edp_create_int()
 
 	} // end try
 
-	catch (ecp::common::robot::ECP_main_error & e) {
+	catch (ecp::exception::fe_r & error) {
 		/* Obsluga bledow ECP */
-
+		catch_ecp_robot_fe(error);
 	} /*end: catch */
 
 	catch (ecp::exception::se_r & error) {
@@ -637,17 +638,23 @@ int UiRobot::reload_configuration()
 	return 1;
 }
 
-void UiRobot::catch_ecp_main_error(ecp::common::robot::ECP_main_error & e)
+void UiRobot::catch_ecp_robot_fe(ecp::exception::fe_r & error)
 
 {
-	if (e.error_class == lib::SYSTEM_ERROR)
-		printf("ecp lib::SYSTEM_ERROR error in UI\n");
+	uint64_t error0 = 0;
+
+	if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+		error0 = *tmp;
+	}
+
+	msg->message(lib::FATAL_ERROR, error0);
 	interface.ui_state = 2;
 }
 
 void UiRobot::catch_ecp_robot_se(ecp::exception::se_r & error)
 {
 	perror("ecp lib::SYSTEM_ERROR in UI");
+	interface.ui_state = 2;
 }
 
 void UiRobot::catch_ecp_robot_nfe(ecp::exception::nfe_r & error)

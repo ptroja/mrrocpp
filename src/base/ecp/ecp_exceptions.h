@@ -22,6 +22,12 @@ namespace exception {
 REGISTER_NON_FATAL_ERROR(nfe_r, "ECP robot non_fatal_error")
 
 /*!
+ * \brief ECP robot fatal error
+ * \author yoyek
+ */
+REGISTER_FATAL_ERROR(fe_r, "ECP robot fatal_error")
+
+/*!
  * \brief ECP robot System error
  * \author yoyek
  */

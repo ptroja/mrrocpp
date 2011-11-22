@@ -81,23 +81,24 @@ int main(int argc, char *argv[])
 
 	}
 
-	catch (ecp_mp::exception::se & error) {
+	catch (ecp::exception::fe_r & error) {
+		uint64_t error0 = 0;
+
+		if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+			error0 = *tmp;
+		}
 		exit(EXIT_FAILURE);
+
 	}
 
-	catch (ecp::common::robot::ECP_main_error & e) {
-		switch (e.error_class)
-		{
-			case lib::SYSTEM_ERROR:
-			case lib::FATAL_ERROR:
-				if (ecp::common::ecp_t) {
-					ecp::common::ecp_t->sr_ecp_msg->message(e.error_class, e.error_no);
-				}
+	catch (ecp::exception::se_r & error) {
 
-				break;
-			default:
-				break;
-		}
+		perror("ecp aborted due to lib::SYSTEM_ERROR");
+		exit(EXIT_FAILURE);
+
+	} /*end: catch */
+
+	catch (ecp_mp::exception::se & error) {
 		exit(EXIT_FAILURE);
 	}
 

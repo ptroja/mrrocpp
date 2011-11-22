@@ -29,12 +29,7 @@ namespace common {
 
 const std::string WGT_ROBOT_PC = "WGT_ROBOT_PC";
 
-#define CATCH_SECTION_IN_ROBOT catch (ecp::common::robot::ECP_main_error & e) { \
-	/* Obsluga bledow ECP */ \
-		catch_ecp_main_error(e); \
-  } /*end: catch */ \
-\
-catch (ecp::exception::se_r & error) { \
+#define CATCH_SECTION_IN_ROBOT catch (ecp::exception::se_r & error) { \
 	/* Obsluga bledow ECP */ \
 		catch_ecp_robot_se(error); \
   } /*end: catch */ \
@@ -42,6 +37,11 @@ catch (ecp::exception::se_r & error) { \
 catch (ecp::exception::nfe_r & error) { \
 	/* Obsluga bledow ECP */ \
 		catch_ecp_robot_nfe(error); \
+ } /*end: catch */ \
+\
+catch (ecp::exception::fe_r & error) { \
+	/* Obsluga bledow ECP */ \
+		catch_ecp_robot_fe(error); \
  } /*end: catch */ \
 \
 catch(const std::exception & e){\
@@ -54,35 +54,15 @@ catch (...) {  /* Dla zewnetrznej petli try*/ \
 } /*end: catch */\
 
 
-#define CATCH_SECTION_UI catch (ecp::common::robot::ECP_main_error & e) { \
-	/* Obsluga bledow ECP */ \
-		robot.catch_ecp_main_error(e); \
-  } /*end: catch */ \
-\
-catch (ecp::common::robot::ECP_error & er) { \
-	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
-		robot.catch_ecp_error(er); \
-} /* end: catch */ \
-\
-catch(const std::exception & e){\
-	robot.catch_std_exception(e); \
-}\
-\
-catch (...) {  /* Dla zewnetrznej petli try*/ \
-	/* Wylapywanie niezdefiniowanych bledow*/ \
-		robot.catch_tridot(); \
-} /*end: catch */\
-
-
-#define CATCH_SECTION_UI_PTR catch (ecp::common::robot::ECP_main_error & e) { \
-	/* Obsluga bledow ECP */ \
-		robot->catch_ecp_main_error(e); \
-  } /*end: catch */ \
-\
-catch (ecp::exception::se_r & error) { \
+#define CATCH_SECTION_UI_PTR catch (ecp::exception::se_r & error) { \
 	/* Obsluga bledow ECP */ \
 		robot->catch_ecp_robot_se(error); \
   } /*end: catch */ \
+\
+catch (ecp::exception::fe_r & error) { \
+	/* Obsluga bledow ECP */ \
+		robot->catch_ecp_robot_fe(error); \
+ } /*end: catch */ \
 \
 catch (ecp::exception::nfe_r & error) { \
 	/* Obsluga bledow ECP */ \
@@ -200,7 +180,7 @@ public:
 	virtual int move_to_preset_position(int variant);
 
 	// default try catch handlers
-	void catch_ecp_main_error(ecp::common::robot::ECP_main_error & e);
+	void catch_ecp_robot_fe(ecp::exception::fe_r & error);
 	void catch_ecp_robot_se(ecp::exception::se_r & error);
 	void catch_ecp_robot_nfe(ecp::exception::nfe_r & error);
 	void catch_std_exception(const std::exception & e);
