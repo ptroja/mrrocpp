@@ -654,7 +654,7 @@ void UiRobot::catch_ecp_robot_fe(ecp::exception::fe_r & error)
 void UiRobot::catch_ecp_robot_se(ecp::exception::se_r & error)
 {
 	perror("ecp lib::SYSTEM_ERROR in UI");
-	interface.ui_state = 2;
+	//interface.ui_state = 2;
 }
 
 void UiRobot::catch_ecp_robot_nfe(ecp::exception::nfe_r & error)

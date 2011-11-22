@@ -14,7 +14,7 @@ void catch_signal(int sig)
 	// print a message
 	fprintf(stderr, "UI: %s\n", strsignal(sig));
 
-	std::cout << std::endl << std::endl << "catch_signal: " << interface->sigchld_handling << std::endl << std::endl;
+//	std::cout << std::endl << std::endl << "catch_signal: " << interface->sigchld_handling << std::endl << std::endl;
 
 	switch (sig)
 	{
