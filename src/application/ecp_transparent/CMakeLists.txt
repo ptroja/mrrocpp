@@ -3,6 +3,6 @@ add_executable(ecp_tran
 )
 
 # this are dependency libraries
-target_link_libraries(ecp_tran ecp ecp_robot)
+target_link_libraries(ecp_tran ecp_generators ecp_subtasks ecp_r_irp6ot_m)
 
 install(TARGETS ecp_tran DESTINATION bin)

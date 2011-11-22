@@ -195,21 +195,20 @@ int main(int argc, char *argv[])
 
 		}
 
-		catch (ecp::common::robot::ECP_error & er) {
-			/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP*/
-			if (er.error_class == lib::SYSTEM_ERROR) { /*blad systemowy juz wyslano komunukat do SR*/
-				perror("ecp aborted due to lib::SYSTEM_ERRORn");
-				exit(EXIT_FAILURE);
-			}
+		catch (ecp::exception::nfe_r & error) {
+			uint64_t error0 = 0;
 
-			switch (er.error_no)
+			if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+			switch (error0)
 			{
 				case INVALID_POSE_SPECIFICATION:
 				case INVALID_COMMAND_TO_EDP:
 				case EDP_ERROR:
 				case INVALID_ROBOT_MODEL_TYPE:
 					/*Komunikat o bledzie wysylamy do SR */
-					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, er.error_no);
+					ecp::common::ecp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, error0);
 					ecp::common::ecp_t->set_ecp_reply(lib::ERROR_IN_ECP);
 					ecp::common::ecp_t->reply.Send(ecp::common::ecp_t->ecp_reply);
 					break;
@@ -218,7 +217,15 @@ int main(int argc, char *argv[])
 					perror("Unidentified exception");
 					exit(EXIT_FAILURE);
 			} /* end: switch */
-		} /*end: catch*/
+
+		}
+
+		catch (ecp::exception::se_r & error) {
+
+			perror("ecp aborted due to lib::SYSTEM_ERROR");
+			exit(EXIT_FAILURE);
+
+		} /*end: catch */
 
 		catch (ecp::exception::nfe_g & error) {
 			uint64_t error0 = 0;
