@@ -43,7 +43,6 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 
 		master.gateway->SendNMTService(10, canopen::gateway::Start_Remote_Node);
 
-		read_state();
 		determine_legs_state();
 		desired_output[1] = current_output[1];
 		desired_output[2] = current_output[2];
@@ -127,7 +126,7 @@ void festo_and_inputs::set_detach(int leg_number, bool value)
 			break;
 
 		default:
-			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
 	}
 }
@@ -153,7 +152,7 @@ void festo_and_inputs::set_move_up(int leg_number, bool value)
 			break;
 
 		default:
-			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
 
 	}
@@ -180,7 +179,7 @@ void festo_and_inputs::set_move_down(int leg_number, bool value)
 			break;
 
 		default:
-			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
 
 	}
@@ -204,7 +203,7 @@ void festo_and_inputs::set_clean(int leg_number, bool value)
 			break;
 
 		default:
-			throw NonFatal_error_2(INVALID_MOTION_PARAMETERS);
+			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
 
 	}
@@ -213,7 +212,7 @@ void festo_and_inputs::set_clean(int leg_number, bool value)
 void festo_and_inputs::determine_legs_state()
 {
 	if (!(robot_test_mode)) {
-
+		read_state();
 		int number_of_legs_up = 0;
 
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -262,7 +261,6 @@ void festo_and_inputs::command()
 		master.msg->message(ss.str().c_str());
 
 	} else {
-		read_state();
 		determine_legs_state();
 	}
 
@@ -497,7 +495,6 @@ void festo_and_inputs::command_two_up_one_down()
 					}
 				}
 				execute_command();
-
 
 				//waits a while for lockers to move
 				delay(500);

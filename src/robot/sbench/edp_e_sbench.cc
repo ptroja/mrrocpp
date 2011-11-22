@@ -6,7 +6,7 @@
 #include "base/lib/mrmath/mrmath.h"
 
 // Klasa edp_irp6ot_effector.
-#include "robot/sbench/edp_e_sbench.h"
+#include "edp_e_sbench.h"
 #include "base/edp/reader.h"
 // Kinematyki.
 #include "robot/sbench/kinematic_model_sbench.h"
@@ -27,7 +27,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
-	motor_driven_effector(_shell, lib::sbench::ROBOT_NAME)
+		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME), dev_name("/dev/comedi0")
 {
 
 	number_of_servos = lib::sbench::NUM_OF_SERVOS;
@@ -35,13 +35,34 @@ effector::effector(common::shell &_shell) :
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
+
+	if (!robot_test_mode) {
+
+		// initiate hardware
+		device = comedi_open(dev_name.c_str());
+
+		if (!device) {
+
+			throw std::runtime_error("Could not open device");
+		}
+
+	} else {
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+
+			current_pins_state[i] = 0;
+		}
+	}
+
 }
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
 
-	if (robot_test_mode)
+	if (robot_test_mode) {
 		controller_state_edp_buf.is_synchronised = true;
+	} else {
+		controller_state_edp_buf.is_synchronised = true;
+	}
 
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
@@ -77,39 +98,38 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	switch (ecp_edp_cbuffer.variant)
-	{
-		case lib::sbench::CBUFFER_HEAD_SOLIDIFICATION: {
-			lib::sbench::HEAD_SOLIDIFICATION head_solidification;
+	lib::sbench::pins_state_td pins_state;
 
-			memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification), sizeof(head_solidification));
+	memcpy(&pins_state, &(ecp_edp_cbuffer.pins_state), sizeof(pins_state));
 
-			msg->message(ss.str().c_str());
-
-			// previously computed parameters send to epos2 controllers
-
-
-			// start the trajectory execution
-
+	if (robot_test_mode) {
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+			current_pins_state[i] = pins_state[i];
 		}
-			break;
-		case lib::sbench::CBUFFER_VACUUM_ACTIVATION: {
-			lib::sbench::VACUUM_ACTIVATION vacuum_activation;
+		ss << std::endl;
+		msg->message(ss.str());
+	} else {
 
-			memcpy(&vacuum_activation, &(ecp_edp_cbuffer.vacuum_activation), sizeof(vacuum_activation));
-		}
-			break;
-		default:
-			break;
-
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			comedi_dio_write(device, (int) (i / 32), (i%32), pins_state[i]);
+		//	current_pins_state[i] = pins_state[i];
+		} // send command to hardware
 	}
 
 }
-/*--------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------*/
+			/*--------------------------------------------------------------------------*/
+
+			/*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
+	msg->message("get_arm");
+
 	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
 	//	printf(" GET ARM\n");
 	//	flushall();
@@ -120,6 +140,22 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	msg->message(ss.str().c_str());
 	//	printf("%s\n", ss.str().c_str());
 
+	if (!robot_test_mode) {
+
+		// read pin_state from hardware
+
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			unsigned int current_read;
+			comedi_dio_read(device, (int) (i / 32), (i%32), &current_read);
+			current_pins_state[i] = current_read;
+		} // send command to hardware
+
+	}
+
+	for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+
+		edp_ecp_rbuffer.pins_state[i] = current_pins_state[i];
+	}
 
 	reply.servo_step = step_counter;
 }
@@ -152,7 +188,7 @@ void effector::reply_serialization(void)
 	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
 }
 
-}// namespace smb
+} // namespace smb
 
 namespace common {
 

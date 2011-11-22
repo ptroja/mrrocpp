@@ -76,6 +76,7 @@ SET(GUI_CXX_SRCS
     irp6_m/wgt_irp6_m_relative_angle_axis.cpp
     irp6_m/wgt_irp6_m_tool_angle_axis.cpp
     irp6_m/wgt_irp6_m_tool_euler.cpp
+   	sbench/wgt_sbench_command.cpp
 )
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
@@ -130,6 +131,7 @@ SET(GUI_MOC_SRCS
 	sarkofag/ui_r_sarkofag.h
 	conveyor/ui_r_conveyor.h
 	base/ui_robot.h
+	sbench/wgt_sbench_command.h
 )
 
 # Generate MOC files
@@ -161,6 +163,7 @@ SET(GUI_UI
     irp6_m/wgt_irp6_m_relative_angle_axis.ui
     irp6_m/wgt_irp6_m_tool_angle_axis.ui
     irp6_m/wgt_irp6_m_tool_euler.ui
+    sbench/wgt_sbench_command.ui
 )
 
 # Generate UI include files

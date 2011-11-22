@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "../base/wgt_base.h"
-#include "robot/bird_hand/const_bird_hand.h"
+#include "robot/bird_hand/dp_bird_hand.h"
 #include "../base/ui_robot.h"
 #include "ui_wgt_bird_hand_command.h"
 #include <QVector>

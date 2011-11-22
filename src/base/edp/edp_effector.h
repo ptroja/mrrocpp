@@ -127,7 +127,7 @@ protected:
 			uint64_t e = errno;
 			perror("Reply() to ECP failed");
 			msg->message(lib::SYSTEM_ERROR, e, "Reply() to ECP failed");
-			throw System_error();
+			throw exception::se();
 		}
 		real_reply_type = lib::ACKNOWLEDGE;
 	}

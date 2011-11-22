@@ -37,8 +37,10 @@ kinematics_manager::~kinematics_manager(void)
 
 void kinematics_manager::set_kinematic_model(unsigned int _desired_kinematic_model_nr)
 {
-	if (_desired_kinematic_model_nr >= kinematic_models_list.size())
-		throw NonFatal_error_2(INVALID_KINEMATIC_MODEL_NO);
+	if (_desired_kinematic_model_nr >= kinematic_models_list.size()){
+
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_KINEMATIC_MODEL_NO));
+	}
 
 	current_kinematic_model_no = _desired_kinematic_model_nr;
 }

@@ -10,7 +10,7 @@
  */
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/shead/const_shead.h"
+#include "dp_shead.h"
 #include "base/kinematics/kinematics_manager.h"
 
 namespace mrrocpp {
@@ -28,6 +28,20 @@ class robot : public common::robot::ecp_robot, public kinematics::common::kinema
 protected:
 
 	/**
+	 * @brief EDP command buffer
+	 */
+	lib::shead::cbuffer ecp_edp_cbuffer;
+
+	/**
+	 * @brief EDP reply buffer
+	 */
+	lib::shead::rbuffer edp_ecp_rbuffer;
+
+	void create_kinematic_models_for_given_robot(void);
+
+public:
+
+	/**
 	 * @brief head soldification command data port
 	 */
 	lib::single_thread_port <lib::shead::HEAD_SOLIDIFICATION> shead_head_soldification_data_port;
@@ -42,19 +56,6 @@ protected:
 	 */
 	lib::single_thread_request_port <lib::shead::reply> shead_reply_data_request_port;
 
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::shead::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::shead::rbuffer edp_ecp_rbuffer;
-
-	void create_kinematic_models_for_given_robot(void);
-
-public:
 	/**
 	 * @brief constructor called from UI
 	 * @param _config configuration object reference

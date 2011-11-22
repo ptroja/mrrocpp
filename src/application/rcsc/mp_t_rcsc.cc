@@ -11,7 +11,7 @@
 #include "base/lib/sr/srlib.h"
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
-#include "base/mp/MP_main_error.h"
+
 #include "base/mp/mp_task.h"
 #include "base/mp/generator/mp_g_wait_for_task_termination.h"
 #include "mp_t_rcsc.h"

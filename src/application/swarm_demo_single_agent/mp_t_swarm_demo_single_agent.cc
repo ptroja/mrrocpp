@@ -8,7 +8,7 @@
 #include "base/lib/sr/srlib.h"
 
 #include "base/mp/mp_task.h"
-#include "base/mp/MP_main_error.h"
+
 #include "mp_t_swarm_demo_single_agent.h"
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mrmath/mrmath.h"
@@ -107,11 +107,11 @@ void swarmitfix::main_task_algorithm(void)
 
 	move_smb_legs(lib::smb::DOWN, lib::smb::DOWN, lib::smb::DOWN);
 	move_smb(2, 1);
-	move_smb(3, 2);
-	move_smb(1, 3);
-	move_smb(2, 4);
-	move_smb(3, 5);
-	move_smb(1, 0);
+	move_smb(3, 1);
+	move_smb(1, 1);
+	move_smb(2, 1);
+	move_smb(3, 1);
+	move_smb(1, -5);
 
 // smb - podnosimy wszystkie nogi
 	sr_ecp_msg->message("14");
