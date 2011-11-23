@@ -80,7 +80,7 @@ ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configura
 		sm->add_termination_condition(timeout_term_cond);
 		log_dbg("ecp_t_objectfollower_pb: configuring visual_servo_manager\n");
 		sm->configure();
-	}catch(exception& ex){
+	}catch(std::exception& ex){
 		sr_ecp_msg->message(lib::FATAL_ERROR, string("ERROR in ecp_t_objectfollower_pb_eih: ") + ex.what());
 		throw ex;
 	}
