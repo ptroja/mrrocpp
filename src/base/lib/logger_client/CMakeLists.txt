@@ -3,6 +3,6 @@ add_library(logger_client
 	log_message.cc
 )
 
-target_link_libraries(logger_client ${Boost_SERIALIZATION_LIBRARY})
+target_link_libraries(logger_client ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} mrrocpp)
 
 install(TARGETS logger_client DESTINATION lib)

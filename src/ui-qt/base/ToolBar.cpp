@@ -16,7 +16,6 @@ ToolBar::ToolBar(MenuBar *menuBar, QWidget *parent)
 
 	addAction(menuBar->actionall_EDP_Load);
 	addAction(menuBar->actionall_EDP_Unload);
-	addAction(menuBar->actionall_Synchro_Position);
 	addAction(menuBar->actionReload_Configuration);
 	addAction(menuBar->actionMP_Load);
 	addAction(menuBar->actionMP_Unload);
