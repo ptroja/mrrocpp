@@ -4,7 +4,7 @@ add_executable(ecp_spring_contact
 	ecp_st_spring_contact.cc
 )
 
-target_link_libraries(ecp_spring_contact ecp_generators ecp_subtasks ecp_r_irp6ot_m ecp_r_irp6p_m)
+target_link_libraries(ecp_spring_contact ecp_robot)
 
 add_executable(mp_spring_contact
 	mp_t_spring_contact.cc

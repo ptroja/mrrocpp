@@ -174,7 +174,7 @@ public:
 	 *
 	 * Closes communication channels and optionally kills EDP process
 	 */
-	virtual ~ecp_robot_base(void);
+	virtual ~ecp_robot_base();
 
 	/**
 	 * @brief send the synchronise command to EDP

@@ -14,7 +14,7 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
-#include <Eigen/Dense>
+#include <Eigen/Core>
 
 #include "base/lib/mrmath/mrmath.h"
 
@@ -54,11 +54,11 @@ struct log_message
 		ar & text;
 		ar & time_elems;
 
-		if(strlen(text) >= log_message_text_buf_size){
+		if (strlen(text) >= log_message_text_buf_size) {
 			throw std::runtime_error("log_message::serialize(): strlen(text) > log_message_text_buf_size");
 		}
 
-		if(time_elems > log_message_time_buf_size){
+		if (time_elems > log_message_time_buf_size) {
 			throw std::runtime_error("log_message::serialize(): time_elems > log_message_time_buf_size");
 		}
 
@@ -72,18 +72,18 @@ struct log_message
 
 	void append_Homog_matrix(const mrrocpp::lib::Homog_matrix& hm);
 
-	template<int rows, int cols>
+	template <int rows, int cols>
 	void append_matrix(const Eigen::Matrix <double, rows, cols>& mat);
 };
 
-template<int rows, int cols>
+template <int rows, int cols>
 void log_message::append_matrix(const Eigen::Matrix <double, rows, cols>& mat)
 {
 	char hm_text[300];
 	strcpy(hm_text, "");
 
-	for(int i=0; i<rows; ++i){
-		for(int j=0; j<cols; ++j){
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < cols; ++j) {
 			char v[16];
 			sprintf(v, "%0.6lf;", mat(i, j));
 			strcat(hm_text, v);

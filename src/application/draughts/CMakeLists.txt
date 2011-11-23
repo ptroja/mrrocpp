@@ -7,8 +7,7 @@ add_executable(ecp_draughts
 )
 
 target_link_libraries(ecp_draughts
-	ecp_r_irp6ot_m
-	ecp_generators ecp_subtasks
+	ecp
 )
 
 install(TARGETS ecp_draughts DESTINATION bin)

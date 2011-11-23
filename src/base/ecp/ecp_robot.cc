@@ -51,7 +51,7 @@ ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _numbe
 }
 
 // -------------------------------------------------------------------
-ecp_robot_base::~ecp_robot_base(void)
+ecp_robot_base::~ecp_robot_base()
 {
 	// Close and invalidate the connection with EDP
 	if (EDP_fd != lib::invalid_fd) {

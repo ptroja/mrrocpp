@@ -12,10 +12,9 @@ add_library(ecp
 	ecp_m.cc
 	ecp_task.cc
 	ecp_sub_task.cc
-	ecp_taught_in_pose.cc
-	ecp_g_transparent.cc
+	ecp_robot.cc
 )
 
-target_link_libraries(ecp ecp_robot ecp_mp)
+target_link_libraries(ecp ecp_subtasks ecp_mp)
 	
 install(TARGETS ecp DESTINATION lib)
