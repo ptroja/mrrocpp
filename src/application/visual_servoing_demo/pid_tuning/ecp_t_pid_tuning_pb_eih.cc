@@ -137,17 +137,22 @@ void ecp_t_pid_tuning_pb_eih::main_task_algorithm(void)
 				// ustaw wzmocnienie k_p
 
 				// uruchom VS z timeout_termination_condition i object_reached_termination_condition
+				sr_ecp_msg->message("Staring visual servo.");
 				sm->Move();
+				sr_ecp_msg->message("Visual servo finished.");
 
 				if(timeout_term_cond->is_condition_met()){
 					// jesli warunek timeout_termination_condition zostal spelniony
 					// zakoncz
+					sr_ecp_msg->message("Visual servo timeout - terminating.");
 					break;
 				} else if (obj_reached_term_cond->is_condition_met()){
 					// jesli warunek object_reached_termination_condition zostal spelniony
 					// przesun KR do object_reached_position
+					sr_ecp_msg->message("Visual servo - object reached.");
 				} else {
 					// cos nie tak
+					sr_ecp_msg->message("???????????");
 				}
 			}
 			sr_ecp_msg->message("Finished");
