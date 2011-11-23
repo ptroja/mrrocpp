@@ -56,6 +56,7 @@ public:
 	QAction *actionMP_Unload;
 	QAction *actionProcess_Control;
 	QAction *actionOpen_Configuration;
+	QAction *actionReload_Configuration;
 //
 //    QAction *actionspeaker_EDP_Load;
 //    QAction *actionspeaker_EDP_Unload;
@@ -102,6 +103,7 @@ public slots:
 	void on_actionMP_Unload_triggered();
 	void on_actionProcess_Control_triggered();
 	void on_actionOpen_Configuration_triggered();
+	void on_actionReload_Configuration_triggered();
 
 	// special menu
 	void on_actionClear_Console_triggered();

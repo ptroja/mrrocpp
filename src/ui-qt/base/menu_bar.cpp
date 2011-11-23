@@ -57,6 +57,9 @@ void MenuBar::setupMenuBar(QMainWindow *mainWindow)
 	actionOpen_Configuration = new QAction(mainWindow);
 	actionOpen_Configuration->setObjectName(QString::fromUtf8("actionOpen_Configuration"));
 
+	actionReload_Configuration = new QAction(mainWindow);
+	actionReload_Configuration->setObjectName(QString::fromUtf8("actionReload_Configuration"));
+
 //    actionspeaker_EDP_Load = new QAction(mainWindow);
 //    actionspeaker_EDP_Load->setObjectName(QString::fromUtf8("actionspeaker_EDP_Load"));
 //    actionspeaker_EDP_Unload = new QAction(mainWindow);
@@ -152,6 +155,7 @@ void MenuBar::setupMenuBar(QMainWindow *mainWindow)
 	menuTask->addSeparator();
 	menuTask->addAction(actionProcess_Control);
 	menuTask->addAction(actionOpen_Configuration);
+	menuTask->addAction(actionReload_Configuration);
 	menuHelp->addAction(actionAbout);
 	retranslateMenuBar();
 
@@ -176,28 +180,8 @@ void MenuBar::retranslateMenuBar()
 	actionMP_Load->setText(QApplication::translate("MainWindow", "MP &Load", 0, QApplication::UnicodeUTF8));
 	actionMP_Unload->setText(QApplication::translate("MainWindow", "MP &Unload", 0, QApplication::UnicodeUTF8));
 	actionProcess_Control->setText(QApplication::translate("MainWindow", "&Process Control", 0, QApplication::UnicodeUTF8));
-	actionOpen_Configuration->setText(QApplication::translate("MainWindow", "Open &Configuration", 0, QApplication::UnicodeUTF8));
-
-//    actionspeaker_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
-//    actionspeaker_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
-//    actionspeaker_Play->setText(QApplication::translate("MainWindow", "&Play", 0, QApplication::UnicodeUTF8));
-//    actionspeaker_Sound_0->setText(QApplication::translate("MainWindow", "Sound &0", 0, QApplication::UnicodeUTF8));
-//    actionspeaker_Sound_1->setText(QApplication::translate("MainWindow", "Sound &1", 0, QApplication::UnicodeUTF8));
-//    actionspeaker_Sound_2->setText(QApplication::translate("MainWindow", "Sound &2", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_EDP_Load->setText(QApplication::translate("MainWindow", "EDP &Load", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_EDP_Unload->setText(QApplication::translate("MainWindow", "EDP &Unload", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Synchronization->setText(QApplication::translate("MainWindow", "&Synchronization", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Pre_Synchro_Moves_Motors->setText(QApplication::translate("MainWindow", "&Motors", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Absolute_Moves_Motors->setText(QApplication::translate("MainWindow", "&Motors", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Joints->setText(QApplication::translate("MainWindow", "&Joints", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Xyz_Euler_Zyz->setText(QApplication::translate("MainWindow", "Xyz &Euler Zyz", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Xyz_Angle_Axis->setText(QApplication::translate("MainWindow", "Xyz &Angle Axis", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Synchro_Position->setText(QApplication::translate("MainWindow", "&Synchro Position", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Position_0->setText(QApplication::translate("MainWindow", "Position &0", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Position_1->setText(QApplication::translate("MainWindow", "Position &1", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Position_2->setText(QApplication::translate("MainWindow", "Position &2", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Tool_Xyz_Euler_Zyz->setText(QApplication::translate("MainWindow", "Xyz &Euler Zyz", 0, QApplication::UnicodeUTF8));
-//    actionirp6_Mechatronika_Tool_Xyz_Angle_Axis->setText(QApplication::translate("MainWindow", "Xyz &Angle Axis", 0, QApplication::UnicodeUTF8));
+	actionOpen_Configuration->setText(QApplication::translate("MainWindow", "&Open Configuration", 0, QApplication::UnicodeUTF8));
+	actionReload_Configuration->setText(QApplication::translate("MainWindow", "&Reload &Configuration", 0, QApplication::UnicodeUTF8));
 
 	menuRobot->setTitle(QApplication::translate("MainWindow", "&Robot", 0, QApplication::UnicodeUTF8));
 	menuFile->setTitle(QApplication::translate("MainWindow", "&File", 0, QApplication::UnicodeUTF8));
@@ -225,6 +209,7 @@ void MenuBar::makeConnections()
 	connect(actionMP_Unload, SIGNAL(triggered()), this, SLOT(on_actionMP_Unload_triggered()), Qt::QueuedConnection);
 	connect(actionProcess_Control, SIGNAL(triggered()), this, SLOT(on_actionProcess_Control_triggered()), Qt::QueuedConnection);
 	connect(actionOpen_Configuration, SIGNAL(triggered()), this, SLOT(on_actionOpen_Configuration_triggered()), Qt::QueuedConnection);
+	connect(actionReload_Configuration, SIGNAL(triggered()), this, SLOT(on_actionReload_Configuration_triggered()), Qt::QueuedConnection);
 	connect(actionClear_Console, SIGNAL(triggered()), this, SLOT(on_actionClear_Console_triggered()), Qt::QueuedConnection);
 	connect(actionUnload_All, SIGNAL(triggered()), this, SLOT(on_actionUnload_All_triggered()), Qt::QueuedConnection);
 	connect(actionSlay_All, SIGNAL(triggered()), this, SLOT(on_actionSlay_All_triggered()), Qt::QueuedConnection);
@@ -313,6 +298,21 @@ void MenuBar::on_actionOpen_Configuration_triggered()
 			interface->reload_whole_configuration();
 			interface->set_default_configuration_file_name();
 		}
+	}
+
+	catch (...) {
+
+	}
+
+}
+
+void MenuBar::on_actionReload_Configuration_triggered()
+{
+
+	try {
+
+		interface->reload_whole_configuration();
+
 	}
 
 	catch (...) {

@@ -69,10 +69,10 @@ void AllRobots::manage_interface()
 				|| (all_edps == UI_ALL_EDPS_NONE_LOADED)) {
 
 			mw->getMenuBar()->actionOpen_Configuration->setEnabled(true);
-
+			mw->getMenuBar()->actionReload_Configuration->setEnabled(true);
 		} else {
 			mw->getMenuBar()->actionOpen_Configuration->setEnabled(false);
-
+			mw->getMenuBar()->actionReload_Configuration->setEnabled(false);
 		}
 
 		switch (all_edps)
