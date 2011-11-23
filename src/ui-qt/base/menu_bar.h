@@ -7,7 +7,7 @@
 #include <QMenuBar>
 #include <QMainWindow>
 #include <QSignalMapper>
-#include "mainwindow.h"
+//#include "mainwindow.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -21,7 +21,7 @@ class Mp;
 }
 
 namespace Ui {
-class MainWindow;
+//class MainWindow;
 class MenuBarAction;
 }
 

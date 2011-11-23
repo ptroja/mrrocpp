@@ -34,6 +34,9 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 
 	menuBar = new Ui::MenuBar(&interface, this);
 	menuBar->setupMenuBar(this);
+	toolBar = new Ui::ToolBar(menuBar, this);
+	addToolBar(Qt::TopToolBarArea, toolBar);
+
 
 	signalDispatcher = new Ui::SignalDispatcher(interface);
 	//signalDispatcher = new mrrocpp::ui::common::SignalDispatcher();
@@ -48,10 +51,10 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 
 }
 
-void MainWindow::setMenu()
-{
-	menuBar->setupMenuBar(this);
-}
+//void MainWindow::setMenu()
+//{
+//	menuBar->setupMenuBar(this);
+//}
 
 Ui::SignalDispatcher* MainWindow::getSignalDispatcher()
 {
