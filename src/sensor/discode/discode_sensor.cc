@@ -19,7 +19,6 @@
 #include <unistd.h>
 
 #include "discode_sensor.h"
-#include "base/lib/logger.h"
 #include "base/lib/configurator.h"
 #include "headers.h"
 
@@ -111,7 +110,7 @@ void discode_sensor::configure_sensor()
 	hostent * server = gethostbyname(discode_node_name.c_str());
 	if (server == NULL) {
 		state = DSS_ERROR;
-		throw ds_connection_exception("gethostbyname(" + discode_node_name + "): " + string(
+		throw ds_connection_exception("discode_sensor::configure_sensor(): gethostbyname(" + discode_node_name + "): " + string(
 				hstrerror(h_errno)));
 	}
 
