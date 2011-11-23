@@ -28,7 +28,7 @@ const robot_name_t ROBOT_NAME = "irp6p_tfg";
 const int NUM_OF_SERVOS = 1;
 
 /*!
- * @brief Sarkofag last Moxa port number [0..7]
+ * @brief IRp6 postument two finger gripper last Moxa port number [0..7]
  * @ingroup sarkofag
  */
 const int LAST_MOXA_PORT_NUM = 0;

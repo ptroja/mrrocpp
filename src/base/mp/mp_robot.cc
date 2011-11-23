@@ -16,9 +16,9 @@
 
 #include "base/lib/datastr.h"
 
-#include "base/mp/MP_main_error.h"
-#include "base/mp/mp_task.h"
-#include "base/mp/mp_robot.h"
+#include "mp_exceptions.h"
+#include "mp_task.h"
+#include "mp_robot.h"
 #include "base/lib/mis_fun.h"
 
 #include "base/lib/agent/RemoteAgent.h"
@@ -29,15 +29,7 @@ namespace mp {
 namespace robot {
 
 robot::robot(const lib::robot_name_t & l_robot_name, task::task &mp_object_l, int _number_of_servos) :
-	ecp_mp::robot(l_robot_name),
-	number_of_servos(_number_of_servos),
-	ECP_pid(mp_object_l.config, mp_object_l.config.get_ecp_section(robot_name)),
-	ecp(mp_object_l.config.get_ecp_section(robot_name)),
-	command(ecp, "command"),
-	sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
-	reply(mp_object_l.config.get_ecp_section(robot_name)),
-	ecp_reply_package(reply.access),
-	communicate_with_ecp(true)
+		ecp_mp::robot(l_robot_name), number_of_servos(_number_of_servos), ECP_pid(mp_object_l.config, mp_object_l.config.get_ecp_section(robot_name)), ecp(mp_object_l.config.get_ecp_section(robot_name)), command(ecp, "command"), sr_ecp_msg(*(mp_object_l.sr_ecp_msg)), reply(mp_object_l.config.get_ecp_section(robot_name)), ecp_reply_package(reply.access), communicate_with_ecp(true)
 {
 	mp_object_l.registerBuffer(reply);
 }
@@ -86,13 +78,8 @@ void robot::ecp_errors_handler()
 {
 	if (reply.Get().reply == lib::ERROR_IN_ECP) {
 		// Odebrano od ECP informacje o bledzie
-		throw MP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);
+		BOOST_THROW_EXCEPTION(exception::nfe() << lib::exception::mrrocpp_error0(ECP_ERRORS));
 	}
-}
-
-MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
-	error_class(err0), error_no(err1)
-{
 }
 
 } // namespace robot

@@ -14,7 +14,7 @@
 
 #include <fcntl.h>
 
-#include "base/ecp_mp/ecp_mp_sensor_interface.h"
+#include "ecp_mp_sensor_interface.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/configurator.h"
 
@@ -120,7 +120,7 @@ public:
 	 * @param _sr_ecp_msg communication object.
 	 * @param config Configuration object.
 	 */
-			sensor(lib::sensor::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config);
+	sensor(lib::sensor::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config);
 
 	/** @brief Virtual destructor. Sends TERMINATE command to VSP. */
 	virtual ~sensor();
@@ -144,22 +144,19 @@ public:
 
 template <typename SENSOR_IMAGE, typename CONFIGURE_DATA>
 sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name, const std::string & _section_name, lib::sr_ecp & _sr_ecp_msg, lib::configurator & config) :
-	sr_ecp_msg(_sr_ecp_msg), sensor_name(_sensor_name)
+		sr_ecp_msg(_sr_ecp_msg), sensor_name(_sensor_name)
 {
 	// Ustawienie domyslnego okresu pracy czujnika.
 	base_period = current_period = 1;
 
-	node_name = config.value <std::string> ("node_name", _section_name);
-
-
+	node_name = config.value <std::string>("node_name", _section_name);
 
 	VSP_NAME = config.return_attach_point_name("resourceman_attach_point", _section_name);
 
 	// cout<<"vsp_NAME = "<<VSP_NAME<<endl;
 
 	// Sprawdzeie czy nie jest juz zarejestrowany zarzadca zasobow o tej nazwie.
-	if( (sd = messip::port_connect(VSP_NAME)))
-	{
+	if ((sd = messip::port_connect(VSP_NAME))) {
 		// by Y - usuniete bo mozna podlaczyc sie do istniejacego czujnika
 		// throw sensor_error(lib::SYSTEM_ERROR, DEVICE_ALREADY_EXISTS);
 		pid = 0; // tymczasowo
@@ -167,21 +164,21 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 	}
 
 	// Stworzenie nowego procesu.
-	if ((pid = config.process_spawn(_section_name)) == -1)
-	throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_SPAWN_VSP);
+	if ((pid = config.process_spawn(_section_name)) == -1) {
+		BOOST_THROW_EXCEPTION(lib::exception::se_sensor() << lib::exception::mrrocpp_error0(CANNOT_SPAWN_VSP));
+	}
 
 	short tmp = 0;
 	// Kilka sekund  (~2) na otworzenie urzadzenia.
-	while( (sd = messip::port_connect(VSP_NAME)) == NULL)
-	{
+	while ((sd = messip::port_connect(VSP_NAME)) == NULL) {
 		// 		cout<<tmp<<endl;
-		if((tmp++)<lib::CONNECT_RETRY)
-		usleep(lib::CONNECT_DELAY);
+		if ((tmp++) < lib::CONNECT_RETRY)
+			usleep(lib::CONNECT_DELAY);
 		else {
 			std::cerr << "ecp_mp_sensor: messip::port_connect(" << VSP_NAME << ") failed" << std::endl;
-			throw lib::sensor::sensor_error(lib::SYSTEM_ERROR, CANNOT_LOCATE_DEVICE);
+			BOOST_THROW_EXCEPTION(lib::exception::se_sensor() << lib::exception::mrrocpp_error0(CANNOT_LOCATE_DEVICE));
 		}
-	}// end: while
+	} // end: while
 
 }
 
@@ -190,11 +187,10 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::~sensor()
 {
 	to_vsp.i_code = lib::sensor::VSP_TERMINATE;
 
-
-	if(messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
-	sr_ecp_msg.message (lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
+	if (messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
+		sr_ecp_msg.message(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 	else
-	messip::port_disconnect(sd);
+		messip::port_disconnect(sd);
 
 	kill(pid, SIGTERM);
 
@@ -205,7 +201,7 @@ void sensor <SENSOR_IMAGE, CONFIGURE_DATA>::configure_sensor(void)
 {
 	to_vsp.i_code = lib::sensor::VSP_CONFIGURE_SENSOR;
 
-		if(messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
+	if (messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
 
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 }
@@ -215,7 +211,7 @@ void sensor <SENSOR_IMAGE, CONFIGURE_DATA>::initiate_reading(void)
 {
 	to_vsp.i_code = lib::sensor::VSP_INITIATE_READING;
 
-		if(messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
+	if (messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
 
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, CANNOT_WRITE_TO_DEVICE, VSP_NAME);
 }
@@ -223,7 +219,7 @@ void sensor <SENSOR_IMAGE, CONFIGURE_DATA>::initiate_reading(void)
 template <typename SENSOR_IMAGE, typename CONFIGURE_DATA>
 void sensor <SENSOR_IMAGE, CONFIGURE_DATA>::get_reading(void)
 {
-	get_reading( image);
+	get_reading(image);
 }
 
 template <typename SENSOR_IMAGE, typename CONFIGURE_DATA>
@@ -232,7 +228,7 @@ void sensor <SENSOR_IMAGE, CONFIGURE_DATA>::get_reading(SENSOR_IMAGE & sensor_im
 	// Sprawdzenie, czy uzyc domyslnego obrazu.
 	to_vsp.i_code = lib::sensor::VSP_GET_READING;
 
-		if(messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
+	if (messip::port_send(sd, 0, 0, to_vsp, from_vsp) < 0)
 
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, CANNOT_READ_FROM_DEVICE, VSP_NAME);
 
@@ -245,7 +241,6 @@ void sensor <SENSOR_IMAGE, CONFIGURE_DATA>::get_reading(SENSOR_IMAGE & sensor_im
 }
 
 } // namespace sensor
-
 
 } // namespace ecp_mp
 } // namespace mrrocpp

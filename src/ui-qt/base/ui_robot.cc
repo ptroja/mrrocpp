@@ -155,10 +155,12 @@ int UiRobot::edp_create_int()
 						create_ui_ecp_robot();
 					}
 
-					catch (ecp::common::robot::ECP_main_error & e) {
+					catch (ecp::exception::se_r & error) {
 						/* Obsluga bledow ECP */
+
 						null_ui_ecp_robot();
-						throw ecp::common::robot::ECP_main_error(e.error_class, e.error_no);
+
+						throw error;
 
 					} /*end: catch */
 				}
@@ -186,11 +188,10 @@ int UiRobot::edp_create_int()
 					}
 				}
 
-				catch (ecp::common::robot::ECP_main_error & e) {
+				catch (ecp::exception::se_r & error) {
 					/* Obsluga bledow ECP */
 					close_edp_connections();
 					null_ui_ecp_robot();
-
 				} /*end: catch */
 
 			}
@@ -198,15 +199,20 @@ int UiRobot::edp_create_int()
 
 	} // end try
 
-	catch (ecp::common::robot::ECP_main_error & e) {
+	catch (ecp::exception::fe_r & error) {
 		/* Obsluga bledow ECP */
-
+		catch_ecp_robot_fe(error);
 	} /*end: catch */
 
-	catch (ecp::common::robot::ECP_error & er) {
-		/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */
-		catch_ecp_error(er);
-	} /* end: catch */
+	catch (ecp::exception::se_r & error) {
+		/* Obsluga bledow ECP */
+		catch_ecp_robot_se(error);
+	} /*end: catch */
+
+	catch (ecp::exception::nfe_r & error) {
+		/* Obsluga bledow ECP */
+		catch_ecp_robot_nfe(error);
+	} /*end: catch */
 
 	catch (const std::exception & e) {
 		catch_std_exception(e);
@@ -632,36 +638,48 @@ int UiRobot::reload_configuration()
 	return 1;
 }
 
-void UiRobot::catch_ecp_main_error(ecp::common::robot::ECP_main_error & e)
+void UiRobot::catch_ecp_robot_fe(ecp::exception::fe_r & error)
 
 {
-	if (e.error_class == lib::SYSTEM_ERROR)
-		printf("ecp lib::SYSTEM_ERROR error in UI\n");
+	uint64_t error0 = 0;
+
+	if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+		error0 = *tmp;
+	}
+
+	msg->message(lib::FATAL_ERROR, error0);
 	interface.ui_state = 2;
 }
 
-void UiRobot::catch_ecp_error(ecp::common::robot::ECP_error & er)
-
+void UiRobot::catch_ecp_robot_se(ecp::exception::se_r & error)
 {
-	if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */
-		perror("ecp lib::SYSTEM_ERROR in UI");
-		/* PtExit( EXIT_SUCCESS ); */
-	} else {
-		switch (er.error_no)
-		{
-			case INVALID_POSE_SPECIFICATION:
-			case INVALID_COMMAND_TO_EDP:
-			case EDP_ERROR:
-			case INVALID_ROBOT_MODEL_TYPE:
-				/* Komunikat o bledzie wysylamy do SR */
-				msg->message(lib::NON_FATAL_ERROR, er.error_no);
-				break;
-			default:
-				msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
-				perror("Unidentified exception");
-				break;
-		} /* end: switch */
+	perror("ecp lib::SYSTEM_ERROR in UI");
+	//interface.ui_state = 2;
+}
+
+void UiRobot::catch_ecp_robot_nfe(ecp::exception::nfe_r & error)
+{
+
+	uint64_t error0 = 0;
+
+	if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+		error0 = *tmp;
 	}
+	switch (error0)
+	{
+		case INVALID_POSE_SPECIFICATION:
+		case INVALID_COMMAND_TO_EDP:
+		case EDP_ERROR:
+		case INVALID_ROBOT_MODEL_TYPE:
+			/* Komunikat o bledzie wysylamy do SR */
+			msg->message(lib::NON_FATAL_ERROR, error0);
+			break;
+		default:
+			msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
+			perror("Unidentified exception");
+			break;
+	} /* end: switch */
+
 }
 
 void UiRobot::catch_std_exception(const std::exception & e)

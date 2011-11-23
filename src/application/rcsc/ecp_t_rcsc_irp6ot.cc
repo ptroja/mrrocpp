@@ -35,7 +35,7 @@ namespace irp6ot_m {
 namespace task {
 
 rcsc::rcsc(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);

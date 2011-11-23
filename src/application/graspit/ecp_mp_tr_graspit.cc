@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 
 #include "ecp_mp_tr_graspit.h"
+#include "../../base/ecp_mp/ecp_mp_exceptions.h"
 
 using namespace std;
 
@@ -15,8 +16,7 @@ namespace ecp_mp {
 namespace transmitter {
 
 TRGraspit::TRGraspit(lib::TRANSMITTER_t _transmitter_name, const char* _section_name, task::task& _ecp_mp_object) :
-	GraspitTransmitter_t(_transmitter_name, _section_name, _ecp_mp_object),
-	socketDescriptor(-1)
+		GraspitTransmitter_t(_transmitter_name, _section_name, _ecp_mp_object), socketDescriptor(-1)
 {
 }
 
@@ -29,7 +29,7 @@ void TRGraspit::TRconnect(const char *host, unsigned short int serverPort)
 	struct hostent * hostInfo = gethostbyname(host);
 	if (hostInfo == NULL) {
 		cerr << "problem interpreting host: " << host << "\n";
-		throw ecp_mp::transmitter::transmitter_error(lib::SYSTEM_ERROR);
+		BOOST_THROW_EXCEPTION(exception::se_tr());
 	}
 
 	cout << "host ok\n";
@@ -37,7 +37,7 @@ void TRGraspit::TRconnect(const char *host, unsigned short int serverPort)
 	int socketDesc = socket(AF_INET, SOCK_STREAM, 0);
 	if (socketDesc == -1) {
 		cerr << "cannot create socket\n";
-		throw ecp_mp::transmitter::transmitter_error(lib::SYSTEM_ERROR);
+		BOOST_THROW_EXCEPTION(exception::se_tr());
 	}
 
 	cout << "socket ok\n";
@@ -49,7 +49,7 @@ void TRGraspit::TRconnect(const char *host, unsigned short int serverPort)
 
 	if (connect(socketDesc, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) {
 		cerr << "cannot connect\n";
-		throw ecp_mp::transmitter::transmitter_error(lib::SYSTEM_ERROR);
+		BOOST_THROW_EXCEPTION(exception::se_tr());
 	}
 
 	cout << "connect ok\n";
@@ -69,7 +69,7 @@ bool TRGraspit::t_read()
 	if (recv(socketDescriptor, &from_va, sizeof(from_va), 0) < 0) {
 		cerr << "didn't get response from server?";
 		close(socketDescriptor);
-		throw ecp_mp::transmitter::transmitter_error(lib::SYSTEM_ERROR);
+		BOOST_THROW_EXCEPTION(exception::se_tr());
 	}
 
 	cout << "read ok\n";

@@ -14,7 +14,7 @@
 #include "base/mp/mp_task.h"
 #include "base/mp/generator/mp_generator.h"
 #include "base/mp/mp_robot.h"
-#include "base/mp/MP_main_error.h"
+
 #include "mp_t_multiplayer.h"
 #include "robot/festival/ecp_mp_t_festival.h"
 #include "robot/player/ecp_mp_t_player.h"

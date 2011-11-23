@@ -33,7 +33,7 @@ namespace task {
 
 // KONSTRUKTORY
 tran::tran(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	if (config.robot_name == lib::irp6ot_tfg::ROBOT_NAME) {

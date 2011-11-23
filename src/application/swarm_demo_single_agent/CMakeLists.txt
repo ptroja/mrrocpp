@@ -9,7 +9,7 @@ add_executable(ecp_spkm_swarm_demo_single_agent
 	ecp_t_spkm.cc
 )
 
-target_link_libraries(ecp_spkm_swarm_demo_single_agent ecp_r_spkm ecp 
+target_link_libraries(ecp_spkm_swarm_demo_single_agent ecp_generators ecp_subtasks ecp_r_spkm 
 )
 
 add_executable(ecp_smb_swarm_demo_single_agent
@@ -18,7 +18,7 @@ add_executable(ecp_smb_swarm_demo_single_agent
 )
 
 target_link_libraries(ecp_smb_swarm_demo_single_agent
-	ecp_generators
+	ecp_generators ecp_r_smb
 )
 
 

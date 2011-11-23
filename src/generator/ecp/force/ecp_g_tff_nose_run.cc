@@ -189,7 +189,7 @@ void tff_nose_run::execute_motion(void)
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
 		the_robot->query();
-		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+		BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(EDP_ERROR));
 
 	}
 	the_robot->query();
@@ -215,7 +215,7 @@ void tff_nose_run::execute_motion(void)
 			case BEYOND_LOWER_THETA7_LIMIT:
 				break;
 			default:
-				throw common::robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+				BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(EDP_ERROR));
 				break;
 
 		} /* end: switch */

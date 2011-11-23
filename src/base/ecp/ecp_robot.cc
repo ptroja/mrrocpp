@@ -93,7 +93,7 @@ void ecp_robot_base::connect_to_edp(lib::configurator &config)
 			int e = errno; // kod bledu systemowego
 			fprintf(stderr, "Unable to locate EDP_MASTER process at channel \"%s\": %s\n", edp_net_attach_point.c_str(), strerror(errno));
 			sr_ecp_msg.message(lib::SYSTEM_ERROR, e, ": Unable to locate EDP_MASTER process");
-			throw ECP_main_error(lib::SYSTEM_ERROR, 0);
+			BOOST_THROW_EXCEPTION(exception::se_r());
 		}
 	}
 	printf(".done\n");
@@ -113,33 +113,10 @@ bool ecp_robot_base::is_synchronised(void) const
 void ecp_robot_base::check_then_set_command_flag(bool& flag)
 {
 	if (flag) {
-		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+		BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
 	} else {
 		flag = true;
 	}
-}
-
-ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0, uint64_t err1) :
-		error_class(err_cl), error_no(err_no)
-{
-	error.error0 = err0;
-	error.error1 = err1;
-#ifdef __gnu_linux__
-	void * array[25];
-	int nSize = backtrace(array, 25);
-	char ** symbols = backtrace_symbols(array, nSize);
-
-	for (int i = 0; i < nSize; i++) {
-		std::cerr << symbols[i] << std::endl;
-	}
-
-	free(symbols);
-#endif /* __gnu_linux__ */
-}
-
-ECP_main_error::ECP_main_error(lib::error_class_t err_cl, uint64_t err_no) :
-		error_class(err_cl), error_no(err_no)
-{
 }
 
 }

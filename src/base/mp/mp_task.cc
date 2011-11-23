@@ -21,13 +21,13 @@
 
 #include "base/lib/datastr.h"
 
-#include "base/mp/MP_main_error.h"
-#include "base/mp/mp_task.h"
-#include "base/mp/generator/mp_g_wait_for_task_termination.h"
-#include "base/mp/generator/mp_g_delay_ms_condition.h"
-#include "base/mp/generator/mp_g_set_next_ecps_state.h"
-#include "base/mp/generator/mp_g_send_end_motion_to_ecps.h"
-#include "base/mp/mp_robot.h"
+#include "mp_exceptions.h"
+#include "mp_task.h"
+#include "generator/mp_g_wait_for_task_termination.h"
+#include "generator/mp_g_delay_ms_condition.h"
+#include "generator/mp_g_set_next_ecps_state.h"
+#include "generator/mp_g_send_end_motion_to_ecps.h"
+#include "mp_robot.h"
 
 #include "base/lib/messip/messip_dataport.h"
 
@@ -41,7 +41,7 @@ lib::fd_server_t task::mp_pulse_attach = lib::invalid_fd;
 static void va_to_robot_map(int num, va_list arguments, const common::robots_t & from, common::robots_t & to)
 {
 	for (int i = 0; i < num; ++i) // Loop until all numbers are added
-	{
+			{
 		lib::robot_name_t robot_l = (lib::robot_name_t) (va_arg ( arguments, const char* )); // Adds the next value in argument list to sum.
 		if (from.count(robot_l) == 0) {
 			std::cerr << "usunieto nadmiarowe roboty" << std::endl;
@@ -54,7 +54,7 @@ static void va_to_robot_map(int num, va_list arguments, const common::robots_t &
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config), ui_pulse("MP_PULSE")
+		ecp_mp::task::task(_config), ui_pulse("MP_PULSE")
 {
 	// initialize communication with other processes
 	initialize_communication();
@@ -64,9 +64,9 @@ task::~task()
 {
 	// Remove (kill) all ECP from the container
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					delete robot_node.second;
-				}
+			{
+				delete robot_node.second;
+			}
 
 	// TODO: check for error
 	if (mp_pulse_attach != lib::invalid_fd) {
@@ -82,7 +82,7 @@ void task::stop_and_terminate()
 	sr_ecp_msg->message("To terminate MP click STOP icon");
 	try {
 		wait_for_stop();
-	} catch (common::MP_main_error & e) {
+	} catch (exception::nfe & e) {
 		exit(EXIT_FAILURE);
 	}
 	terminate_all();
@@ -129,12 +129,14 @@ void task::send_end_motion_to_ecps(int number_of_robots, ...)
 
 	va_list arguments; // A place to store the list of arguments
 
-	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
+	va_start(arguments, number_of_robots);
+	// Initializing arguments to store all values after num
 
 	// Copy given robots to the map container
 	va_to_robot_map(number_of_robots, arguments, robot_m, mp_semte_gen.robot_m);
 
-	va_end(arguments); // Cleans up the list
+	va_end(arguments);
+	// Cleans up the list
 
 	mp_semte_gen.Move();
 }
@@ -146,12 +148,14 @@ void task::wait_for_task_termination(bool activate_trigger, int number_of_robots
 
 	va_list arguments; // A place to store the list of arguments
 
-	va_start(arguments, number_of_robots); // Initializing arguments to store all values after num
+	va_start(arguments, number_of_robots);
+	// Initializing arguments to store all values after num
 
 	// Copy given robots to the map container
 	va_to_robot_map(number_of_robots, arguments, robot_m, wtf_gen.robot_m);
 
-	va_end(arguments); // Cleans up the list
+	va_end(arguments);
+	// Cleans up the list
 
 	wtf_gen.configure(activate_trigger);
 
@@ -163,9 +167,9 @@ void task::wait_for_task_termination(bool activate_trigger, int number_of_robots
 	generator::wait_for_task_termination wtf_gen(*this);
 
 	BOOST_FOREACH(lib::robot_name_t robotName, robotSet)
-				{
-					wtf_gen.robot_m[robotName] = robot_m[robotName];
-				}
+			{
+				wtf_gen.robot_m[robotName] = robot_m[robotName];
+			}
 
 	wtf_gen.configure(activate_trigger);
 
@@ -178,7 +182,7 @@ void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *prop
 	generator::send_end_motion_to_ecps mp_semte_gen(*this);
 
 	for (int x = 0; x < number_of_robots; x++) // Loop until all numbers are added
-	{
+			{
 		lib::robot_name_t robot_l = properRobotsSet[x]; // Adds the next value in argument list to sum.
 		mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
 	}
@@ -200,13 +204,13 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 
 	// najpierw kasujemy znacznik swiezosci buforow
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					if (robot_node.second->reply.isFresh()) {
+			{
+				if (robot_node.second->reply.isFresh()) {
 
-						robot_node.second->reply.markAsUsed();
+					robot_node.second->reply.markAsUsed();
 
-					}
 				}
+			}
 
 	enum MP_STATE_ENUM
 	{
@@ -243,7 +247,7 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 				{
 					case MP_STOP:
 						terminate_all();
-						throw common::MP_main_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+						BOOST_THROW_EXCEPTION(exception::nfe() << lib::exception::mrrocpp_error0(ECP_STOP_ACCEPTED));
 					case MP_PAUSE:
 
 						mp_state = MP_PAUSED;
@@ -254,7 +258,7 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 						break;
 				}
 
-				if (mp_state == MP_PAUSED) {// oczekujemy na resume
+				if (mp_state == MP_PAUSED) { // oczekujemy na resume
 					if (ui_pulse.Get() == MP_RESUME) { // odebrano resume
 						mp_state = MP_RUNNING;
 						resume_all();
@@ -279,17 +283,17 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 			if (the_generator.wait_for_ECP_pulse) {
 				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse the_generator.wait_for_ECP_pulse");
 				BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-							{
-								if (robot_node.second->reply.isFresh()) {
-									//					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse received");
+						{
+							if (robot_node.second->reply.isFresh()) {
+								//					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse received");
 
-									//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
-									ecp_exit_from_while = true;
+								//	 if (debug_tmp)	printf("wait_for_ECP_pulse r: %d, pc: %d\n", robot_node.first, robot_node.second->ui_pulse_code);
+								ecp_exit_from_while = true;
 
-									robot_node.second->ecp_errors_handler();
+								robot_node.second->ecp_errors_handler();
 
-								}
 							}
+						}
 			} else {
 				ecp_exit_from_while = true;
 			}
@@ -367,14 +371,14 @@ void task::wait_for_all_robots_acknowledge()
 		ReceiveSingleMessage(true);
 		//		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_all_robots_acknowledge za receive");
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, not_confirmed)
-					{
-						if (robot_node.second->reply.isFresh() && robot_node.second->reply.Get().reply
-								== lib::ECP_ACKNOWLEDGE) {
-							robot_node.second->reply.markAsUsed();
-							not_confirmed.erase(robot_node.first);
+				{
+					if (robot_node.second->reply.isFresh()
+							&& robot_node.second->reply.Get().reply == lib::ECP_ACKNOWLEDGE) {
+						robot_node.second->reply.markAsUsed();
+						not_confirmed.erase(robot_node.first);
 
-						}
 					}
+				}
 	}
 }
 
@@ -382,10 +386,10 @@ void task::start_all()
 {
 	// Wystartowanie wszystkich ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->start_ecp();
+			{
+				robot_node.second->start_ecp();
 
-				}
+			}
 
 	wait_for_all_robots_acknowledge();
 }
@@ -394,9 +398,9 @@ void task::pause_all()
 {
 	// Wystartowanie wszystkich ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->pause_ecp();
-				}
+			{
+				robot_node.second->pause_ecp();
+			}
 
 }
 
@@ -404,9 +408,9 @@ void task::resume_all()
 {
 	// Wystartowanie wszystkich ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->resume_ecp();
-				}
+			{
+				robot_node.second->resume_ecp();
+			}
 
 }
 
@@ -415,10 +419,10 @@ void task::terminate_all()
 	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "terminate_all poczatek");
 	// Zatrzymanie wszystkich ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					//if(robot_node.second->reply.Get().reply != lib::TASK_TERMINATED)
-					robot_node.second->terminate_ecp();
-				}
+			{
+				//if(robot_node.second->reply.Get().reply != lib::TASK_TERMINATED)
+				robot_node.second->terminate_ecp();
+			}
 
 	wait_for_all_robots_acknowledge();
 }
