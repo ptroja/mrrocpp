@@ -1,5 +1,5 @@
 /*
- * ecp_t_objectfollower_pb_eih.cc
+ * ecp_t_pid_tuning_pb_eih.cc
  *
  *  Created on: Apr 21, 2010
  *      Author: mboryn
@@ -9,15 +9,8 @@
 
 #include "ecp_t_pid_tuning_pb_eih.h"
 
-#include "../defines.h"
-
-#ifdef ROBOT_P
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#endif
-
-#ifdef ROBOT_OT
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
-#endif
 
 #include "../ecp_mp_g_visual_servo_tester.h"
 
@@ -34,16 +27,18 @@ namespace common {
 
 namespace task {
 
-ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configurator& config) :
+ecp_t_pid_tuning_pb_eih::ecp_t_pid_tuning_pb_eih(mrrocpp::lib::configurator& config) :
 	common::task::task(config)
 {
 	try{
-#ifdef ROBOT_P
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
-#endif
-#ifdef ROBOT_OT
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6ot_m::robot(*this);
-#endif
+		std::string robot_name = config.value<std::string>("robot_name", "[visualservo_tester]");
+		if(robot_name == lib::irp6p_m::ROBOT_NAME){
+			ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
+		} else if(robot_name == lib::irp6ot_m::ROBOT_NAME){
+			ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6ot_m::robot(*this);
+		} else {
+			throw std::runtime_error("ecp_t_pid_tuning_pb_eih option robot_name in config file has unknown value: " + robot_name);
+		}
 
 		newsmooth_gen = boost::shared_ptr<generator::newsmooth>(new generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6));
 
@@ -71,23 +66,23 @@ ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configura
 		obj_reached_term_cond = shared_ptr <object_reached_termination_condition> (new object_reached_termination_condition(config, config_section_name));
 		timeout_term_cond = shared_ptr <timeout_termination_condition> (new timeout_termination_condition(config.value<double>("vs_timeout", config_section_name)));
 
-		log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 3\n");
+		log_dbg("ecp_t_pid_tuning_pb_eih::ecp_t_pid_tuning_pb_eih(): 3\n");
 		sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
-		log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 4\n");
+		log_dbg("ecp_t_pid_tuning_pb_eih::ecp_t_pid_tuning_pb_eih(): 4\n");
 		sm->add_position_constraint(cube);
 
 		sm->add_termination_condition(obj_reached_term_cond);
 		sm->add_termination_condition(timeout_term_cond);
-		log_dbg("ecp_t_objectfollower_pb: configuring visual_servo_manager\n");
+		log_dbg("ecp_t_pid_tuning_pb_eih: configuring visual_servo_manager\n");
 		sm->configure();
 	}catch(std::exception& ex){
-		sr_ecp_msg->message(lib::FATAL_ERROR, string("ERROR in ecp_t_objectfollower_pb_eih: ") + ex.what());
+		sr_ecp_msg->message(lib::FATAL_ERROR, string("ERROR in ecp_t_pid_tuning_pb_eih: ") + ex.what());
 		throw ex;
 	}
-	log_dbg("ecp_t_objectfollower_pb: initialization completed.\n");
+	log_dbg("ecp_t_pid_tuning_pb_eih: initialization completed.\n");
 }
 
-void ecp_t_objectfollower_pb_eih::main_task_algorithm(void)
+void ecp_t_pid_tuning_pb_eih::main_task_algorithm(void)
 {
 //	newsmooth_gen->set_debug(true);
 	while (1) {
@@ -157,7 +152,7 @@ void ecp_t_objectfollower_pb_eih::main_task_algorithm(void)
 			}
 			sr_ecp_msg->message("Finished");
 		} else {
-			log("ecp_t_objectfollower_pb::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());
+			log("ecp_t_pid_tuning_pb_eih::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());
 		}
 	}
 
@@ -166,7 +161,7 @@ void ecp_t_objectfollower_pb_eih::main_task_algorithm(void)
 
 task_base* return_created_ecp_task(lib::configurator &config)
 {
-	return new ecp_t_objectfollower_pb_eih(config);
+	return new ecp_t_pid_tuning_pb_eih(config);
 }
 
 } // namespace task

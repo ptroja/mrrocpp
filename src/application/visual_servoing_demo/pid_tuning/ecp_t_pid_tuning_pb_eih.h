@@ -1,5 +1,5 @@
 /*
- * ecp_t_objectfollower_pb_eih.h
+ * ecp_t_pid_tuning_pb_eih.h
  *
  *  Created on: Apr 21, 2010
  *      Author: mboryn
@@ -31,10 +31,10 @@ namespace task {
  *  @{
  */
 
-class ecp_t_objectfollower_pb_eih : public mrrocpp::ecp::common::task::task
+class ecp_t_pid_tuning_pb_eih : public mrrocpp::ecp::common::task::task
 {
 public:
-	ecp_t_objectfollower_pb_eih(mrrocpp::lib::configurator& config);
+	ecp_t_pid_tuning_pb_eih(mrrocpp::lib::configurator& config);
 
 	void main_task_algorithm(void);
 
