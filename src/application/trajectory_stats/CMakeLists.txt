@@ -4,7 +4,7 @@ add_executable(ecp_stats
 )
 
 target_link_libraries(ecp_stats
-	ecp
+	ecp_robot
 )
 
 add_executable(mp_stats

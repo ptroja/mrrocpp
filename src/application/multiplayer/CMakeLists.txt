@@ -9,7 +9,7 @@ add_executable(ecp_irp6ot_multiplayer
 )
 
 target_link_libraries(ecp_irp6ot_multiplayer
-	ecp
+	ecp_robot
 )
 
 install(TARGETS mp_multiplayer ecp_irp6ot_multiplayer DESTINATION bin)

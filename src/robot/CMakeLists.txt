@@ -60,5 +60,7 @@ target_link_library_if(ROBOT_SMB ecp_robot ecp_r_smb)
 target_link_library_if(ROBOT_SPKM ecp_robot ecp_r_spkm)
 target_link_library_if(ROBOT_SBENCH ecp_robot ecp_r_sbench)
 
+target_link_libraries(ecp_robot ecp)
+
 install(TARGETS mp_robots ecp_robot DESTINATION lib)
 

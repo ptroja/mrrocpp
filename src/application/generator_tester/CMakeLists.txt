@@ -6,7 +6,7 @@ add_executable(ecp_gen_test
 )
 
 target_link_libraries(ecp_gen_test
-	ecp
+	ecp_robot
 )
 
 add_executable(mp_gen_test

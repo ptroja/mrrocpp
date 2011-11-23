@@ -5,6 +5,6 @@ add_library(ecp_subtasks
 	ecp_st_go.cc
 )
 
-target_link_libraries(ecp_subtasks)
+target_link_libraries(ecp_subtasks ecp_generators)
 
 install(TARGETS ecp_subtasks DESTINATION lib)
