@@ -29,27 +29,21 @@ double time_diff(struct timespec t1, struct timespec t0)
 	return (t1.tv_sec - t0.tv_sec) + (t1.tv_nsec - t0.tv_nsec) * 1e-9;
 }
 
-logger_client::logger_client(int buffer_size, const std::string& server_addr, int server_port) :
-		fd(-1), buffer(buffer_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false)
+logger_client::logger_client(int buffer_size, const std::string& server_addr, int server_port, const std::string& header_text) :
+		fd(-1), buffer(buffer_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false), header_text(header_text)
 {
 	thread = boost::thread(&logger_client::operator (), this);
 }
 
 logger_client::~logger_client()
 {
-//	cout<<"logger_client::~logger_client(): 1\n";
 	terminate = true;
 	{
 		boost::mutex::scoped_lock lock(queue_mutex);
-//		cout<<"logger_client::~logger_client(): 2\n";
 		cond.notify_one();
-//		cout<<"logger_client::~logger_client(): 3\n";
 	}
-//	cout<<"logger_client::~logger_client(): 4\n";
 	thread.join();
-//	cout<<"logger_client::~logger_client(): 5\n";
 	disconnect();
-//	cout<<"logger_client::~logger_client(): 6\n";
 }
 
 void logger_client::log(log_message& msg)
@@ -79,6 +73,11 @@ void logger_client::operator()()
 		queue_mutex.unlock();
 
 		connect();
+
+		log_message lm;
+		strcpy(lm.text, header_text.c_str());
+		send_message(lm);
+
 		do {
 			{
 				boost::mutex::scoped_lock lock(queue_mutex);

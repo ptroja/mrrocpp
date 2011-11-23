@@ -27,7 +27,7 @@ double time_diff(struct timespec t1, struct timespec t0);
 
 class logger_client {
 public:
-	logger_client(int buffer_size, const std::string& server_addr, int server_port);
+	logger_client(int buffer_size, const std::string& server_addr, int server_port, const std::string& header_text);
 	~logger_client();
 
 	void log(log_message& msg);
@@ -55,6 +55,8 @@ private:
 
 	xdr_oarchive<> oa_header;
 	xdr_oarchive<> oa_data;
+
+	const std::string header_text;
 };
 
 } // namespace logger

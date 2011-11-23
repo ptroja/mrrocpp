@@ -95,7 +95,7 @@ void logger_server::accept_connection(){
 	stringstream ss;
 	ss<<client_address<<"_"<<client_port;
 
-	connections.push_back(boost::shared_ptr<client_connection>(new client_connection(acceptedFd, ss.str())));
+	connections.push_back(boost::shared_ptr<client_connection>(new client_connection(this, acceptedFd, ss.str())));
 }
 
 void logger_server::main_loop()
@@ -130,7 +130,7 @@ void logger_server::main_loop()
 			for(it = connections.begin(); it != connections.end();){
 				try{
 					if(FD_ISSET((*it)->connection_fd, &rfds)){
-						(*it)->service(this);
+						(*it)->service();
 					}
 					++it;
 				}catch(exception& ex){

@@ -13,6 +13,8 @@
 
 #include "logger_server.h"
 
+#include "base/lib/logger_client/log_message.h"
+
 namespace logger {
 
 class logger_server;
@@ -22,14 +24,20 @@ class client_connection
 public:
 	friend class logger_server;
 
-	client_connection(int connection_fd, const std::string& remote_address);
+	client_connection(logger_server* server, int connection_fd, const std::string& remote_address);
 	virtual ~client_connection();
 
-	void service(logger_server* server);
+	void service();
 private:
 	client_connection(const client_connection&);
+
+	log_message receive_message();
+	void save_message(log_message& lm);
+
+	logger_server* server;
 	int connection_fd;
 	const std::string& remote_address;
+
 	int header_size;
 
 	int last_message_number;
