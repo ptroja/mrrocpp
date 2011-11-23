@@ -17,7 +17,7 @@ target_link_libraries(plantest ${XERCES_LIBRARIES} mrrocpp)
 endif(XSD_FOUND AND XERCES_FOUND)
 
 add_executable(mp_swarmitfix
-	mp_t_swarmitfix.cc
+	mp_t_swarmitfix.cc mp_t_swarmitfix_logic.cc planner.cc
 )
 
 target_link_libraries(mp_swarmitfix mp)
