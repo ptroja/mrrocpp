@@ -20,6 +20,9 @@
 #include "subtask/ecp_mp_st_smooth_file_from_mp.h"
 #include "subtask/ecp_st_go.h"
 
+#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/ecp_mp_g_newsmooth.h"
+
 #include "../visual_servoing/visual_servo.h"
 #include "../visual_servoing/single_visual_servo_manager.h"
 #include "../visual_servoing/ib_eih_visual_servo.h"
@@ -49,6 +52,8 @@ class block_move : public common::task::task
 protected:
 
 	common::generator::tff_gripper_approach* gtga;
+	common::generator::newsmooth* sg;
+
 	//common::sub_task::gripper_opening* stgo;
 
 	shared_ptr<single_visual_servo_manager> sm;
