@@ -16,12 +16,12 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "base/edp/edp_typedefs.h"
+#include "edp_typedefs.h"
 
 #include "base/lib/sr/sr_edp.h"
 #include "base/lib/configurator.h"
 
-#include "base/lib/exception.h"
+#include "edp_exceptions.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -48,6 +48,7 @@ SET(GUI_CXX_SRCS
     base/main.cpp
     base/mainwindow.cpp
     base/menu_bar.cpp
+    base/ToolBar.cpp
     base/allrobots.cpp
     base/mp.cpp
     base/wgt_base.cpp
@@ -76,6 +77,7 @@ SET(GUI_CXX_SRCS
     irp6_m/wgt_irp6_m_relative_angle_axis.cpp
     irp6_m/wgt_irp6_m_tool_angle_axis.cpp
     irp6_m/wgt_irp6_m_tool_euler.cpp
+   	sbench/wgt_sbench_command.cpp
 )
 
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
@@ -115,6 +117,7 @@ SET(GUI_MOC_SRCS
 	polycrank/ui_r_polycrank.h
 	base/signal_dispatcher.h
 	base/menu_bar.h
+	base/ToolBar.h
 	base/menu_bar_action.h
 	bird_hand/ui_r_bird_hand.h
 	spkm/ui_r_spkm.h
@@ -130,6 +133,7 @@ SET(GUI_MOC_SRCS
 	sarkofag/ui_r_sarkofag.h
 	conveyor/ui_r_conveyor.h
 	base/ui_robot.h
+	sbench/wgt_sbench_command.h
 )
 
 # Generate MOC files
@@ -161,6 +165,7 @@ SET(GUI_UI
     irp6_m/wgt_irp6_m_relative_angle_axis.ui
     irp6_m/wgt_irp6_m_tool_angle_axis.ui
     irp6_m/wgt_irp6_m_tool_euler.ui
+    sbench/wgt_sbench_command.ui
 )
 
 # Generate UI include files
@@ -171,6 +176,7 @@ ADD_EXECUTABLE(
 	ui-qt
 	${GUI_CXX_SRCS}
 	base/menu_bar.cpp
+#	base/ToolBar.cpp
 	base/allrobots.cpp
 	base/mp.cpp
 	base/menu_bar_action.cpp

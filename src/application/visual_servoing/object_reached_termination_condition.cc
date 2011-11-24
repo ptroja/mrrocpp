@@ -68,10 +68,16 @@ void object_reached_termination_condition::update(const mrrocpp::ecp::common::ge
 		steps_delay++;
 		if (steps_delay >= min_steps) {
 			condition_met = true;
+			position = vsm->get_current_position();
 		}
 	} else {
 		steps_delay = 0;
 	}
+}
+
+lib::Homog_matrix object_reached_termination_condition::get_position() const
+{
+	return position;
 }
 
 }//namespace generator

@@ -28,7 +28,7 @@ const robot_name_t ROBOT_NAME = "irp6p_tfg";
 const int NUM_OF_SERVOS = 1;
 
 /*!
- * @brief Sarkofag last Moxa port number [0..7]
+ * @brief IRp6 postument two finger gripper last Moxa port number [0..7]
  * @ingroup sarkofag
  */
 const int LAST_MOXA_PORT_NUM = 0;
@@ -50,7 +50,7 @@ const int MAX_CURRENT_0 = 200;
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
  * @ingroup irp6p_tfg
  */
-const double MAX_INCREMENT[] = { 100 };
+const double MAX_INCREMENT[] = { 1000 };
 
 }
 } // namespace lib

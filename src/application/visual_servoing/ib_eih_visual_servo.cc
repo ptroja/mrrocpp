@@ -41,7 +41,7 @@ ib_eih_visual_servo::~ib_eih_visual_servo()
 
 lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_matrix& current_position, double dt)
 {
-//	log_dbg("ib_eih_visual_servo::compute_position_change() begin\n");
+	log_dbg("ib_eih_visual_servo::compute_position_change() begin\n");
 
 	lib::K_vector u_translation(0, 0, 0);
 	lib::Homog_matrix u_rotation;
@@ -53,14 +53,14 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 	Eigen::Matrix <double, Types::ImagePosition::elementsSize, 1> imagePosition(reading.imagePosition.elements);
 	e.block(0, 0, 4, 1) = imagePosition - desired_position;
 
-//	log_dbg("reading.imagePosition.elements = [%g; %g; %g; %g]\n", reading.imagePosition.elements[0], reading.imagePosition.elements[1], reading.imagePosition.elements[2], reading.imagePosition.elements[3]);
+	log_dbg("reading.imagePosition.elements = [%g; %g; %g; %g]\n", reading.imagePosition.elements[0], reading.imagePosition.elements[1], reading.imagePosition.elements[2], reading.imagePosition.elements[3]);
 
 	error = e;
 
 	Eigen::Matrix <double, 6, 1> control;
 
 	control = regulator->compute_control(e, dt);
-//	log_dbg("ib_eih_visual_servo::get_position_change() control: [%+07.3lg; %+07.3lg; %+07.3lg; %+07.3lg]\n", control(0, 0), control(1, 0), control(2, 0), control(3, 0));
+	log_dbg("ib_eih_visual_servo::get_position_change() control: [%+07.3lg; %+07.3lg; %+07.3lg; %+07.3lg]\n", control(0, 0), control(1, 0), control(2, 0), control(3, 0));
 
 	Eigen::Matrix <double, 3, 1> camera_to_object_translation;
 	camera_to_object_translation(0, 0) = control(0, 0);
@@ -69,7 +69,7 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 
 	u_translation = e_T_c_position * camera_to_object_translation;
 
-//	log_dbg("ib_eih_visual_servo::get_position_change() u_translation: %+07.3lg, %+07.3lg, %+07.3lg\n", u_translation(0, 0), u_translation(1, 0), u_translation(2, 0));
+	log_dbg("ib_eih_visual_servo::get_position_change() u_translation: %+07.3lg, %+07.3lg, %+07.3lg\n", u_translation(0, 0), u_translation(1, 0), u_translation(2, 0));
 
 	u_rotation.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(0, 0, 0, 0, 0, control(3, 0)));
 
@@ -77,7 +77,7 @@ lib::Homog_matrix ib_eih_visual_servo::compute_position_change(const lib::Homog_
 	delta_position.set_rotation_matrix(u_rotation);
 	delta_position.set_translation_vector(u_translation);
 
-//	log_dbg("ib_eih_visual_servo::compute_position_change() end\n");
+	log_dbg("ib_eih_visual_servo::compute_position_change() end\n");
 	return delta_position;
 }
 

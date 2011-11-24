@@ -33,15 +33,11 @@ target_link_libraries(mp_rcsc mp)
 target_link_libraries(mp_fsautomat mp)
 
 target_link_libraries(ecp_irp6ot_rcsc
-    ecp_r_irp6ot_m
-	ecp_generators 
-	ecp_subtasks
+    ecp_robot
 	visual_servoing
 	)
-target_link_libraries(ecp_irp6p_rcsc ecp_r_irp6p_m
-	ecp_generators ecp_subtasks)
-target_link_libraries(ecp_fsautomat ecp_r_irp6p_m ecp_r_irp6ot_m
-	ecp_generators ecp_subtasks)
+target_link_libraries(ecp_irp6p_rcsc ecp_robot)
+target_link_libraries(ecp_fsautomat ecp_robot)
 
 install(TARGETS
 	mp_fsautomat ecp_fsautomat

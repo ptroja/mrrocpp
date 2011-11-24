@@ -120,137 +120,191 @@ void effector::reset_variables()
 	is_previous_cartesian_pose_known = false;
 }
 
-void effector::get_controller_state(lib::c_buffer &instruction)
+void effector::check_controller_state()
 {
-	// False is the initial value
-	controller_state_edp_buf.is_synchronised = false;
-	controller_state_edp_buf.is_power_on = false;
-	controller_state_edp_buf.robot_in_fault_state = false;
+	if (robot_test_mode)
+		return;
 
-	if (!robot_test_mode) {
-		// Try to get state of each axis
-		unsigned int referenced = 0;
-		unsigned int powerOn = 0;
-		unsigned int notInFaultState = 0;
-		for (size_t i = 0; i < axes.size(); ++i) {
-			try {
+	// Try to get state of each axis
+	unsigned int referenced = 0;
+	unsigned int powerOn = 0;
+	unsigned int enabled = 0;
+	// Check axes.
+	for (size_t i = 0; i < axes.size(); ++i) {
+		try {
+			// Get current epos state.
+			maxon::epos::actual_state_t state = axes[i]->getState();
+			if (state != maxon::epos::OPERATION_ENABLE) {
+				cout << string("Axis ") << axesNames[i] << endl;
+				// Print state.
+				axes[i]->printState();
 				// Check if in the FAULT state
-				if (axes[i]->getState() == 11) {
+				if (state == maxon::epos::FAULT) {
 					// Read number of errors
 					int errNum = axes[i]->getNumberOfErrors();
 					for (int j = 1; j <= errNum; ++j) {
 						// Get the detailed error
 						uint32_t errCode = axes[i]->getErrorHistory(j);
-
-						msg->message(mrrocpp::lib::FATAL_ERROR, string("axis ") + axesNames[i] + ": "
+						// Send message to SR.
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axesNames[i] + ": "
 								+ axes[i]->ErrorCodeMessage(errCode));
 					}
-				} else {
-					// Axis not in fault state.
-					notInFaultState++;
-					// Activate it.
+				} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
+					// Send message to SR.
+					msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axesNames[i]
+							+ " rotation is disabled");
+				} //: if fault || disabled
+			} else {
+				// EPOS in enabled state.
+				enabled++;
+			}
+			if (axes[i]->isReferenced()) {
+				// Do not break from this loop so this is a also a preliminary axis error check
+				referenced++;
+			}
+			powerOn++;
+		} catch (...) {
+			// Probably the axis is not powered on, do nothing.
+		}
+	}
+	// Robot is synchronized if all axes are referenced
+	controller_state_edp_buf.is_synchronised = (referenced == axes.size());
+	// Check whether all axes are powered.
+	controller_state_edp_buf.is_power_on = (powerOn == axes.size());
+	// Check fault state.
+	controller_state_edp_buf.robot_in_fault_state = (enabled != axes.size());
+}
 
-				}
-				if (axes[i]->isReferenced()) {
-					// Do not break from this loop so this is a also a preliminary axis error check
-					referenced++;
-				}
-				powerOn++;
-			} catch (...) {
-				// Probably the axis is not powered on, do nothing.
+void effector::get_controller_state(lib::c_buffer &instruction)
+{
+	try {
+		// False is the initial value
+		controller_state_edp_buf.is_synchronised = false;
+		controller_state_edp_buf.is_power_on = false;
+		controller_state_edp_buf.robot_in_fault_state = false;
+
+		// Check controller state.
+		check_controller_state();
+
+		// Copy data to reply buffer
+		reply.controller_state = controller_state_edp_buf;
+
+		// Check if it is safe to calculate joint positions
+		if (is_synchronised()) {
+			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+		}
+
+		// Lock data structure during update
+		{
+			boost::mutex::scoped_lock lock(effector_mutex);
+
+			// Initialize internal data
+			for (int i = 0; i < number_of_servos; i++) {
+				servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
+				desired_joints[i] = current_joints[i];
 			}
 		}
-		// Robot is synchronised if all axes are referenced
-		controller_state_edp_buf.is_synchronised = (referenced == axes.size());
-		controller_state_edp_buf.is_power_on = (powerOn == axes.size());
-		controller_state_edp_buf.robot_in_fault_state = (notInFaultState != axes.size());
-	}
 
-	// Copy data to reply buffer
-	reply.controller_state = controller_state_edp_buf;
-
-	// Check if it is safe to calculate joint positions
-	if (is_synchronised()) {
-		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-	}
-
-	// Lock data structure during update
-	{
-		boost::mutex::scoped_lock lock(effector_mutex);
-
-		// Initialize internal data
-		for (int i = 0; i < number_of_servos; i++) {
-			servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
-			desired_joints[i] = current_joints[i];
-		}
+	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_FATAL_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
+	} catch (...) {
+		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
 	}
 }
 
 void effector::synchronise(void)
 {
-	if (robot_test_mode) {
-		controller_state_edp_buf.is_synchronised = true;
-		return;
-	}
 
-	// switch to homing mode
-	BOOST_FOREACH(maxon::epos * node, axes)
-			{
-				node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-			}
+	try {
 
-	// reset controller
-	BOOST_FOREACH(maxon::epos * node, axes)
-			{
-				node->reset();
-			}
+		if (robot_test_mode) {
+			controller_state_edp_buf.is_synchronised = true;
 
-	// Do homing with preconfigured parameters
-	BOOST_FOREACH(maxon::epos * node, axes)
-			{
-				node->startHoming();
-			}
+			return;
+		}
 
-	// Loop until homing is finished
-	bool finished;
-	do {
-		finished = true;
+		// switch to homing mode
 		BOOST_FOREACH(maxon::epos * node, axes)
 				{
-					if (!node->isHomingFinished()) {
-						finished = false;
-					}
+					node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
 				}
-	} while (!finished);
 
-	// Hardcoded safety values.
-	// TODO: move to configuration file?
-	for (size_t i = 0; i < axes.size(); ++i) {
-		axes[i]->setMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i] - 100);
-		axes[i]->setMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i] + 100);
+		// reset controller
+		BOOST_FOREACH(maxon::epos * node, axes)
+				{
+					node->reset();
+				}
+
+		// Do homing with preconfigured parameters
+		BOOST_FOREACH(maxon::epos * node, axes)
+				{
+					node->startHoming();
+				}
+
+		// Loop until homing is finished
+		bool finished;
+		do {
+			finished = true;
+			BOOST_FOREACH(maxon::epos * node, axes)
+					{
+						if (!node->isHomingFinished()) {
+							finished = false;
+						}
+					}
+		} while (!finished);
+
+		// Hardcoded safety values.
+		// TODO: move to configuration file?
+		for (size_t i = 0; i < axes.size(); ++i) {
+			axes[i]->setMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i]
+					- 100);
+			axes[i]->setMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i]
+					+ 100);
+		}
+
+		// Move the longest linear axis to the 'zero' position with a fast motion command
+		/*	axisB->writeProfileVelocity(5000UL);
+		 axisB->writeProfileAcceleration(1000UL);
+		 axisB->writeProfileDeceleration(1000UL);
+		 axisB->moveAbsolute(-57500);*/
+
+		// Just for testing if limits actually work
+		//	axisA->writeMinimalPositionLimit(-100000);
+		//	axisB->writeMinimalPositionLimit(-100000);
+		//	axisC->writeMinimalPositionLimit(-100000);
+		// Reset internal state of the motor positions
+		for (int i = 0; i < number_of_servos; ++i) {
+			current_motor_pos[i] = desired_motor_pos_old[i] = 0;
+		}
+
+		// Compute joints positions in the home position
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+
+		// Now the robot is synchronised
+		controller_state_edp_buf.is_synchronised = true;
+
+	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_FATAL_ERROR(e_)
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+	} catch (...) {
+		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
 	}
-
-	// Move the longest linear axis to the 'zero' position with a fast motion command
-	/*	axisB->writeProfileVelocity(5000UL);
-	 axisB->writeProfileAcceleration(1000UL);
-	 axisB->writeProfileDeceleration(1000UL);
-	 axisB->moveAbsolute(-57500);*/
-
-	// Just for testing if limits actually work
-	//	axisA->writeMinimalPositionLimit(-100000);
-	//	axisB->writeMinimalPositionLimit(-100000);
-	//	axisC->writeMinimalPositionLimit(-100000);
-
-	// Reset internal state of the motor positions
-	for (int i = 0; i < number_of_servos; ++i) {
-		current_motor_pos[i] = desired_motor_pos_old[i] = 0;
-	}
-
-	// Compute joints positions in the home position
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
-	// Now the robot is synchronised
-	controller_state_edp_buf.is_synchronised = true;
 }
 
 void effector::move_arm(const lib::c_buffer &instruction)
@@ -314,8 +368,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
 
 								// Postcondition I - check desired Cartesian position, basing on the upper platform pose.
-								// TODO get_current_kinematic_model()->check_cartesian_pose(desired_end_effector_frame);
-								get_current_kinematic_model()->check_joints(desired_joints);
+								get_current_kinematic_model()->check_cartesian_pose(desired_end_effector_frame);
+								//get_current_kinematic_model()->check_joints(desired_joints);
 
 								// Transform joints to motors.
 								get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
@@ -400,7 +454,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 
 						// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
-						double t = ppm <6> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
+						double t = ppm <6>(Delta, Vmax, Amax, Vnew, Anew, Dnew);
 
 						cerr << "Delta:\n" << Delta << endl << "Vmax:\n" << Vmax << endl << "Amax:\n" << Amax << endl
 								<< endl;
@@ -474,8 +528,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 						// Interpolate motor poses - equal to number of segments +1 (the start pose).
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> motor_interpolations;
-						linear_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS>(motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
-						//linear_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS+1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_deltas, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
+						cubic_polynomial_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1,
+								lib::spkm::NUM_OF_SERVOS>(motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
 
 						// Compute motor_deltas for segments.
 						Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_deltas_for_segments;
@@ -620,8 +674,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 										<< "Axis "
 										<< i
 										<< ": "
-										<< ((p(0, i) != p(lib::spkm::NUM_OF_MOTION_SEGMENTS, i)) ? "moving" : "not moving")<< endl;
-									}
+										<< ((p(0, i) != p(lib::spkm::NUM_OF_MOTION_SEGMENTS, i)) ? "moving" : "not moving")
+										<< endl;
+							}
 
 							descfile.close();
 							cout << "Motion description was written to file: " << filename << endl;
@@ -655,8 +710,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
 									axis_pvt << (int) p(pnt, i) << ";" << (int) v(pnt, i) << ";" << (int) t(pnt)
 											<< ";\r\n";
-								}//: for points
-								// Close file for given axis.
+								} //: for points
+								  // Close file for given axis.
 								axis_pvt.close();
 								cout << "PVT for axis " << i << " were written to file: " << filename << endl;
 
@@ -669,20 +724,21 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								axis_m0123 << "m0w;m1w;m2w;m3w;\r\n";
 								// Write parameters.
 								for (int sgt = 0; sgt < lib::spkm::NUM_OF_MOTION_SEGMENTS; ++sgt) {
-									axis_m0123 << motor_0w(sgt, i) << ";" << motor_1w(sgt, i) << ";"
-											<< motor_2w(sgt, i) << ";" << motor_3w(sgt, i) << ";\r\n";
-								}//: for segments
-								// Close file for given axis.
+									axis_m0123 << motor_0w(sgt, i) << ";" << motor_1w(sgt, i) << ";" << motor_2w(sgt, i)
+											<< ";" << motor_3w(sgt, i) << ";\r\n";
+								} //: for segments
+								  // Close file for given axis.
 								axis_m0123.close();
-								cout << "Trajectory parameters for axis " << i << " were written to file: " << filename << endl;
+								cout << "Trajectory parameters for axis " << i << " were written to file: " << filename
+										<< endl;
 
 								// Write
-							}//: for axes
-						}//: else
+							} //: for axes
+						} //: else
 #endif
 						// Check which motor moves.
 						Eigen::Matrix <bool, 1, lib::spkm::NUM_OF_SERVOS> change;
-						check_pvt_translocation <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> (p, change);
+						check_pvt_translocation <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS>(p, change);
 
 						// Execute motion
 						if (!robot_test_mode) {
@@ -769,28 +825,28 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				return;
 			case lib::spkm::CLEAR_FAULT:
 				BOOST_FOREACH(maxon::epos * node, axes)
-							{
-								node->printState();
+						{
+							node->printState();
 
-								// Check if in a FAULT state
-								if (node->getState() == 11) {
-									maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
-									cerr << "readNumberOfErrors() = " << (int) errNum << endl;
-									for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
+							// Check if in a FAULT state
+							if (node->getState() == 11) {
+								maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
+								cerr << "readNumberOfErrors() = " << (int) errNum << endl;
+								for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
 
-										maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
+									maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
 
-										cerr << node->ErrorCodeMessage(errCode) << endl;
-									}
-									if (errNum > 0) {
-										node->clearNumberOfErrors();
-									}
-									node->setState(maxon::epos::FAULT_RESET);
+									cerr << node->ErrorCodeMessage(errCode) << endl;
 								}
-
-								// Reset node.
-								node->reset();
+								if (errNum > 0) {
+									node->clearNumberOfErrors();
+								}
+								node->setState(maxon::epos::FAULT_RESET);
 							}
+
+							// Reset node.
+							node->reset();
+						}
 				// Internal position counters need not be updated
 				return;
 			default:
@@ -815,64 +871,87 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		 else
 		 is_previous_cartesian_pose_known = false;*/
 	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
-		// TODO - be sure that this (forget about the cartesian pose in case of error) won't be necessary.
-		// is_previous_cartesian_pose_known = false;
-		HANDLE_MRROCPP_ERROR(e_)
+		// Standard error handling.
+		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_FATAL_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
+	} catch (...) {
+		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
 	}
 }
 
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	// we do not check the arm position when only lib::SET is set
-	if (instruction.instruction_type != lib::SET) {
-		switch (ecp_edp_cbuffer.get_pose_specification)
-		{
-			case lib::spkm::MOTOR:
-				msg->message("EDP get_arm_position MOTOR");
-				for (size_t i = 0; i < axes.size(); ++i) {
-					if (robot_test_mode) {
-						edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
-						edp_ecp_rbuffer.epos_controller[i].current = 0;
-						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
-					} else {
-						current_motor_pos[i] = axes[i]->getActualPosition();
-						edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
-						edp_ecp_rbuffer.epos_controller[i].current = axes[i]->getActualCurrent();
-						edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
-					}
-				}
-				break;
-			case lib::spkm::JOINT:
-				msg->message("EDP get_arm_position JOINT");
+	try {
+		// Check controller state.
+		check_controller_state();
 
-				// Read actual values from hardware
-				if (!robot_test_mode) {
+		// we do not check the arm position when only lib::SET is set
+		if (instruction.instruction_type != lib::SET) {
+			switch (ecp_edp_cbuffer.get_pose_specification)
+			{
+				case lib::spkm::MOTOR:
+					msg->message("EDP get_arm_position MOTOR");
 					for (size_t i = 0; i < axes.size(); ++i) {
-						current_motor_pos[i] = axes[i]->getActualPosition();
+						if (robot_test_mode) {
+							edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
+							edp_ecp_rbuffer.epos_controller[i].current = 0;
+							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+						} else {
+							current_motor_pos[i] = axes[i]->getActualPosition();
+							edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
+							edp_ecp_rbuffer.epos_controller[i].current = axes[i]->getActualCurrent();
+							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
+						}
 					}
+					break;
+				case lib::spkm::JOINT:
+					msg->message("EDP get_arm_position JOINT");
+
+					// Read actual values from hardware
+					if (!robot_test_mode) {
+						for (size_t i = 0; i < axes.size(); ++i) {
+							current_motor_pos[i] = axes[i]->getActualPosition();
+						}
+					}
+
+					// Do the calculation
+					get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+
+					// Fill the values into a buffer
+					for (int i = 0; i < number_of_servos; ++i) {
+						edp_ecp_rbuffer.epos_controller[i].position = current_joints[i];
+					}
+					break;
+				case lib::spkm::FRAME: {
+					msg->message("EDP get_arm_position FRAME");
+
+					edp_ecp_rbuffer.current_pose = lib::Homog_matrix();
 				}
+					break;
+				default:
+					break;
 
-				// Do the calculation
-				get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
-				// Fill the values into a buffer
-				for (int i = 0; i < number_of_servos; ++i) {
-					edp_ecp_rbuffer.epos_controller[i].position = current_joints[i];
-				}
-				break;
-			case lib::spkm::FRAME: {
-				msg->message("EDP get_arm_position FRAME");
-
-				edp_ecp_rbuffer.current_pose = lib::Homog_matrix();
 			}
-				break;
-			default:
-				break;
-
 		}
-	}
 
-	reply.servo_step = step_counter;
+		reply.servo_step = step_counter;
+	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_FATAL_ERROR(e_)
+	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
+	} catch (...) {
+		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
+	}
 }
 
 void effector::create_kinematic_models_for_given_robot(void)

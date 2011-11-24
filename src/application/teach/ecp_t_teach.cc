@@ -27,7 +27,7 @@ namespace task {
 
 // KONSTRUKTORY
 teach::teach(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::task(_config)
 {
 	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
@@ -35,7 +35,7 @@ teach::teach(lib::configurator &_config) :
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else {
 		fprintf(stderr, "unknown robot \"%s\" in teach task\n", config.section_name.c_str());
-		throw(robot::ECP_main_error(lib::FATAL_ERROR, 0));
+		BOOST_THROW_EXCEPTION(exception::fe_r());
 	}
 
 	tig = new generator::teach_in(*this);

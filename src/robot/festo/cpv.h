@@ -137,7 +137,8 @@ private:
 	const uint8_t nodeId;
 
 	//! remote operation enable bit
-	bool remote;
+	//! @todo requires setup of PDO mapping
+	// bool remote;
 
 public:
 	/*! \brief create new controller object

@@ -1,7 +1,7 @@
 #if !defined(__MP_T_BIRDHAND_GRASPIT_H)
 #define __MP_T_BIRDHAND_GRASPIT_H
 
-#include "base/mp/MP_main_error.h"
+
 #include "ecp_mp_tr_graspit.h"
 
 namespace mrrocpp {

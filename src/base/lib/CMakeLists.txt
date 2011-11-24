@@ -9,6 +9,7 @@ install(TARGETS configsrv DESTINATION bin)
 
 add_subdirectory (agent)
 add_subdirectory (sr)
+add_subdirectory (logger_client)
 
 # Create a library called "mrrocpp" which includes the following source files.
 # The extension is already found. Any number of sources could be listed here. 
@@ -23,16 +24,15 @@ add_library(mrrocpp
 	mrmath/Xyz_Angle_Axis_Gamma_vector.cc
 	mrmath/jacobian_matrix.cc
 	configurator.cc
+	logger.cc
 	child.cc
 	c_buffer.cc r_buffer.cc
 	mis_fun.cc
 	timer.cc
-	exception.cc
 	playerpos_goal.cc
 	datastr.cc
 	condition_synchroniser.cc
 	single_thread_port.cc
-	logger.cc
 	trajectory_pose/bang_bang_trajectory_pose.cc
 	trajectory_pose/trajectory_pose.cc
 	trajectory_pose/constant_velocity_trajectory_pose.cc

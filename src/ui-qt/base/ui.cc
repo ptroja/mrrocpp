@@ -14,7 +14,7 @@ namespace ui {
 namespace common {
 
 busy_flagger::busy_flagger(busy_flag & _flag) :
-	flag(_flag)
+		flag(_flag)
 {
 	flag.increment();
 }
@@ -25,7 +25,7 @@ busy_flagger::~busy_flagger()
 }
 
 busy_flag::busy_flag() :
-	counter(0)
+		counter(0)
 {
 }
 
@@ -48,7 +48,7 @@ bool busy_flag::is_busy() const
 }
 
 function_execution_buffer::function_execution_buffer(Interface& _interface) :
-	interface(_interface), has_command(false)
+		interface(_interface), has_command(false)
 {
 }
 
@@ -90,13 +90,15 @@ int function_execution_buffer::wait_and_execute()
 void feb_thread::operator()()
 {
 
+	feb.interface.mask_signals_for_thread();
+
 	while (true) {
 		feb.wait_and_execute();
 	}
 }
 
 feb_thread::feb_thread(function_execution_buffer & _feb) :
-	feb(_feb)
+		feb(_feb)
 {
 	thread_id = boost::thread(boost::bind(&feb_thread::operator(), this));
 }

@@ -8,7 +8,7 @@
 #ifndef MP_T_VISUALSERVO_TESTER_H_
 #define MP_T_VISUALSERVO_TESTER_H_
 
-#include "base/mp/MP_main_error.h"
+
 
 #include <string>
 
@@ -39,6 +39,7 @@ private:
 	bool run_vs;
 	bool run_conveyor;
 	int vs_settle_time;
+	std::string robot_name;
 };
 
 /** @} */

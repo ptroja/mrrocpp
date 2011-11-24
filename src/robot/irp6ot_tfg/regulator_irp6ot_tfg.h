@@ -24,12 +24,12 @@ const double AXIS_7_SYNCHRO_STEP_FINE = -0.2;
 const int GRIPPER_BLOCKED_TIME_PERIOD = 200;
 const int MAX_GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS = 1000;
 
-const int GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS = 10;
-const int GRIPPER_SUM_OF_CURRENTS_MAX_VALUE = 100;
+const int GRIPPER_SUM_OF_CURRENTS_NR_OF_ELEMENTS = 100;
+const int GRIPPER_SUM_OF_CURRENTS_MAX_VALUE = 1000;
 // const int  GRIPPER_SUM_PWM_MIN 80
 
 
-const double POSTUMENT_TO_TRACK_VOLTAGE_RATIO = 0.75;
+const double POSTUMENT_TO_TRACK_VOLTAGE_RATIO = 1;
 
 /*-----------------------------------------------------------------------*/
 class NL_regulator_8_irp6ot : public common::NL_regulator

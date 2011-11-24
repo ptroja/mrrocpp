@@ -11,14 +11,14 @@
 #define __EDP_E_SBENCH_H
 
 #include "base/edp/edp_e_motor_driven.h"
-#include "robot/sbench/const_sbench.h"
+#include "dp_sbench.h"
+#include <comedilib.h>
 
 namespace mrrocpp {
 namespace edp {
 namespace sbench {
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
-
 
 /*!
  * \brief class of EDP SwarmItFix head effector
@@ -39,6 +39,13 @@ protected:
 	 * It will be used if any motor will be commanded to move. Then motor to joint transform will be implemented in kinematics.
 	 */
 	virtual void create_kinematic_models_for_given_robot(void);
+
+	/*!
+	 * \brief current pins state
+	 *
+	 * it is cipied from desired in test_mode or read in hardware_mode
+	 */
+	lib::sbench::pins_state_td current_pins_state;
 
 public:
 
@@ -65,7 +72,6 @@ public:
 	 */
 	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
 
-
 	/*!
 	 * \brief method to get position of the motors or joints
 	 *
@@ -73,7 +79,6 @@ public:
 	 */
 
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
-
 
 	/*!
 	 * \brief method to choose master_order variant
@@ -96,11 +101,14 @@ public:
 	 */
 	void reply_serialization();
 
+private:
+	const std::string dev_name;
+	comedi_t *device; // device descriptor
+
 };
 
 } // namespace smb
 } // namespace edp
 } // namespace mrrocpp
-
 
 #endif

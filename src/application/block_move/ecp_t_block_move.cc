@@ -11,6 +11,8 @@
 
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 
+#include "sensor/discode/discode_sensor.h"
+
 #include "robot/irp6p_m/const_irp6p_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 //#include "robot/irp6p_tfg/const_irp6p_tfg.h"
@@ -49,6 +51,11 @@ block_move::block_move(lib::configurator &_config) :
 	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
 	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
 
+	//sensor rpc
+	sr_ecp_msg->message("Creating discode sensor...");
+	ds_config_section_name = "[discode_sensor]";
+	ds_rpc = shared_ptr <discode_sensor> (new discode_sensor(config, ds_config_section_name));
+
 	//serwowizja
 	sr_ecp_msg->message("Creating visual servo...");
 	vs_config_section_name = "[object_follower_ib]";
@@ -69,21 +76,33 @@ block_move::block_move(lib::configurator &_config) :
 void block_move::mp_2_ecp_next_state_string_handler(void)
 {
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
+
 		sr_ecp_msg->message("configurate tff_gripper_approach...");
-		gtga->configure(0.02, 300, 3);
+
+		gtga->configure(0.05, 350, 4);
 		gtga->Move();
+
+		sr_ecp_msg->message("tff_gripper_approach end");
 	}
 	else if(mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST) {
-		sr_ecp_msg->message("configurate servovision...");
+
+		sr_ecp_msg->message("configurate sensor...");
+
+		ds_rpc->configure_sensor();
+		uint32_t param = (int) mp_command.ecp_next_state.variant;
 
 		Types::Mrrocpp_Proxy::BReading br;
-		ds->configure_sensor();
-		uint32_t param = 1;
-		br = ds->call_remote_procedure<Types::Mrrocpp_Proxy::BReading>(param);
-		//cout << rc_str << endl;
+		br = ds_rpc->call_remote_procedure<Types::Mrrocpp_Proxy::BReading>((int) param);
 
+		sr_ecp_msg->message("configurate servovision...");
+
+		sm->add_termination_condition(object_reached_term_cond);
+		sm->add_termination_condition(timeout_term_cond);
 		sm->configure();
+
 		sm->Move();
+
+		sr_ecp_msg->message("tff_gripper_approach end");
 	}
 
 	//obsługa warunku zakończenia pracy - warunek stopu

@@ -45,7 +45,6 @@ add_library(ecp_robot
 	../base/ecp/ecp_robot.cc
 )
 
-target_link_libraries(ecp_robot ecp_mp)
 
 # enable conditional inclusion to ecp_robot
 target_link_library_if(ROBOT_IRP6_ON_TRACK ecp_robot ecp_r_irp6ot_m)
@@ -61,5 +60,7 @@ target_link_library_if(ROBOT_SMB ecp_robot ecp_r_smb)
 target_link_library_if(ROBOT_SPKM ecp_robot ecp_r_spkm)
 target_link_library_if(ROBOT_SBENCH ecp_robot ecp_r_sbench)
 
-install(TARGETS mp_robots ecp_robot  DESTINATION lib)
+target_link_libraries(ecp_robot ecp)
+
+install(TARGETS mp_robots ecp_robot DESTINATION lib)
 

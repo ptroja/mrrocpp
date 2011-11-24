@@ -24,7 +24,6 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm {
 
-// Klasa reprezentujaca robota IRp-6 na postumencie.
 /*!
  * @brief class of EDP SwarmItFix parallel kinematic manipulator
  *
@@ -74,6 +73,9 @@ private:
 	//! Handler for the asynchronous execution of the interpolated profile motion
 	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
+	//! Method checks the state of EPOS controllers.
+	void check_controller_state();
+
 protected:
 	lib::spkm::cbuffer ecp_edp_cbuffer;
 	lib::spkm::rbuffer edp_ecp_rbuffer;
@@ -121,6 +123,25 @@ public:
 	 * it chooses the single thread variant from the manip_effector
 	 */
 	void move_arm(const lib::c_buffer &instruction);
+
+	/*!
+	 * \brief Method responsible for parsing of the command for motors controlling the legs and SPKM rotation.
+	 * \author tkornuta
+	 */
+	void parse_motor_command();
+
+	/*!
+	 * \brief Method responsible for motion of motors controlling the legs and SPKM rotation.
+	 * \author tkornuta
+	 */
+	void execute_motor_motion();
+
+	/*!
+	 * \brief Method responsible for interpolated motion in the operational space.
+	 * \author tkornuta
+	 */
+	void interpolated_motion_in_operational_space();
+
 
 	void get_controller_state(lib::c_buffer &instruction);
 

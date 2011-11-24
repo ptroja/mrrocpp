@@ -12,6 +12,9 @@
 
 #include "base/lib/xdr/xdr_iarchive.hpp"
 
+/**
+ * Base class for input data buffer and its proxy
+ */
 class DataBufferBase {
 	//! Agent needs an access to Store/Update methods
 	friend class Agent;

@@ -15,8 +15,6 @@
 
 #include <unistd.h>
 
-#include "../defines.h"
-
 #include "robot/conveyor/mp_r_conveyor.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
@@ -52,6 +50,7 @@ visualservo_tester::visualservo_tester(lib::configurator &config) :
 	run_vs = config.value <bool> ("run_vs", config_section_name);
 	run_conveyor = config.value <bool> ("run_conveyor", config_section_name);
 	vs_settle_time = config.value <int> ("vs_settle_time", config_section_name);
+	robot_name = config.value <std::string> ("robot_name", config_section_name);
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
@@ -70,7 +69,7 @@ void visualservo_tester::main_task_algorithm(void)
 {
 	if (run_vs) {
 		sr_ecp_msg->message("Starting visual servo");
-		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", 0, ROBOT_NAME_MB);
+		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", 0, robot_name);
 		sr_ecp_msg->message("Visual servo started.");
 
 		char txt[128];
@@ -91,7 +90,7 @@ void visualservo_tester::main_task_algorithm(void)
 		sr_ecp_msg->message("Conveyor started.");
 	}
 
-	wait_for_task_termination(false, 2, ROBOT_NAME_MB.c_str(), lib::conveyor::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, 2, robot_name.c_str(), lib::conveyor::ROBOT_NAME.c_str());
 
 	log("visualservo_tester::main_task_algorithm() 4\n");
 }

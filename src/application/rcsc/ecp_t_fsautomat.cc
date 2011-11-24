@@ -13,6 +13,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+#include "base/ecp/ecp_exceptions.h"
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_ecp.h"
 
@@ -64,14 +65,14 @@ void ecp_gripper_opening (task& _ecp_task, double gripper_increment, int motion_
 	tdes.internode_step_no = motion_time;
 	tdes.value_in_step_no = tdes.internode_step_no - 2;
 	// Wspolrzedne kartezjanskie XYZ i katy Eulera ZYZ
-	tdes.coordinate_delta[0] = 0.0; // przyrost wspolrzednej X
+	tdes.coordinate_delta[0] = 0.0;// przyrost wspolrzednej X
 	tdes.coordinate_delta[1] = 0.0;// przyrost wspolrzednej Y
-	tdes.coordinate_delta[2] = 0.0; // przyrost wspolrzednej Z
-	tdes.coordinate_delta[3] = 0.0; // przyrost wspolrzednej FI
-	tdes.coordinate_delta[4] = 0.0; // przyrost wspolrzednej TETA
-	tdes.coordinate_delta[5] = 0.0; // przyrost wspolrzednej PSI
+	tdes.coordinate_delta[2] = 0.0;// przyrost wspolrzednej Z
+	tdes.coordinate_delta[3] = 0.0;// przyrost wspolrzednej FI
+	tdes.coordinate_delta[4] = 0.0;// przyrost wspolrzednej TETA
+	tdes.coordinate_delta[5] = 0.0;// przyrost wspolrzednej PSI
 	//	tdes.coordinate_delta[6] = 0.0;   // przyrost wspolrzednej PSI
-	tdes.coordinate_delta[6] = gripper_increment; // przyrost wspolrzednej PSI
+	tdes.coordinate_delta[6] = gripper_increment;// przyrost wspolrzednej PSI
 
 	// Generator trajektorii prostoliniowej
 	ecp::common::generator::linear lg(_ecp_task, tdes, 1);
@@ -81,23 +82,21 @@ void ecp_gripper_opening (task& _ecp_task, double gripper_increment, int motion_
 #endif
 // KONSTRUKTORY
 fsautomat::fsautomat(lib::configurator &_config) :
-	common::task::task(_config),
-	gt(NULL), nrg(NULL), rgg(NULL), gag(NULL), rfrg(NULL),
-	tig(NULL), befg(NULL), wmg(NULL), go_st(NULL)
+		common::task::task(_config), gt(NULL), nrg(NULL), rgg(NULL), gag(NULL), rfrg(NULL), tig(NULL), befg(NULL), wmg(NULL), go_st(NULL)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw, robot unsupported
 		return;
 	}
-std::cout<<"INICJACJA ECP"<<std::endl;
+	std::cout << "INICJACJA ECP" << std::endl;
 	const std::string whichECP = lib::toString(ecp_m_robot->robot_name);
 	std::string filePath(mrrocpp_network_path);
-	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
+	std::string fileName = config.value <std::string>("xml_file", "[xml_settings]");
 	filePath += fileName;
 
 	// open xml document
@@ -124,10 +123,9 @@ std::cout<<"INICJACJA ECP"<<std::endl;
 				while (xmlStrcmp(cur_node->children->name, (const xmlChar *) "taskInit"))
 					cur_node->children = cur_node->children->next;
 				// For each child of state: i.e. Robot
-				for (xmlNode *child_node = cur_node->children->children; child_node != NULL; child_node
-						= child_node->next) {
-					if (child_node->type == XML_ELEMENT_NODE
-							&& !xmlStrcmp(child_node->name, (const xmlChar *) "ecp")) {
+				for (xmlNode *child_node = cur_node->children->children; child_node != NULL;
+						child_node = child_node->next) {
+					if (child_node->type == XML_ELEMENT_NODE && !xmlStrcmp(child_node->name, (const xmlChar *) "ecp")) {
 						xmlChar * robot = xmlGetProp(child_node, (const xmlChar *) "name");
 						if (robot && !xmlStrcmp(robot, (const xmlChar *) whichECP.c_str())) {
 							for (; child_node->children; child_node->children = child_node->children->next) {
@@ -135,7 +133,7 @@ std::cout<<"INICJACJA ECP"<<std::endl;
 									if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_gen_t")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-										gt = new common::generator::transparent(*this);
+											gt = new common::generator::transparent(*this);
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_nose_run_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
@@ -158,14 +156,14 @@ std::cout<<"INICJACJA ECP"<<std::endl;
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_gripper_approach_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											gag
-													= new common::generator::tff_gripper_approach(*this, atoi((char *) argument));
+											gag =
+													new common::generator::tff_gripper_approach(*this, atoi((char *) argument));
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_rubik_face_rotate_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											rfrg
-													= new common::generator::tff_rubik_face_rotate(*this, atoi((char *) argument));
+											rfrg =
+													new common::generator::tff_rubik_face_rotate(*this, atoi((char *) argument));
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_teach_in_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
@@ -193,13 +191,12 @@ std::cout<<"INICJACJA ECP"<<std::endl;
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_smooth_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-										{
-												axes_num=atoi((char *)argument);
-												std::cout<<"UWAGA!!!! liczba przegubow: !!!! "<<axes_num<<std::endl;
-												sg = new common::generator::newsmooth(*this,lib::ECP_JOINT, axes_num);//changed askubis
+										if (argument && xmlStrcmp(argument, (const xmlChar *) "")) {
+											axes_num = atoi((char *) argument);
+											std::cout << "UWAGA!!!! liczba przegubow: !!!! " << axes_num << std::endl;
+											sg = new common::generator::newsmooth(*this, lib::ECP_JOINT, axes_num); //changed askubis
 										}
-											xmlFree(argument);
+										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "weight_measure_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
@@ -228,31 +225,30 @@ std::cout<<"INICJACJA ECP"<<std::endl;
 //TODO: askubis dodac do XML definicje absolute/relative
 void fsautomat::main_task_algorithm(void)
 {
-	std::cout<<"MAIN_TASK ECP"<<std::endl;
-	std::string fileName = config.value <std::string> ("xml_file", "[xml_settings]");
-	int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
-	int ecpLevel = config.value <int> ("trajectory_on_ecp_level", "[xml_settings]");
+	std::cout << "MAIN_TASK ECP" << std::endl;
+	std::string fileName = config.value <std::string>("xml_file", "[xml_settings]");
+	int trjConf = config.value <int>("trajectory_from_xml", "[xml_settings]");
+	int ecpLevel = config.value <int>("trajectory_on_ecp_level", "[xml_settings]");
 	if (trjConf && ecpLevel) {
-		std::cout<< "!!!"<<std::endl;
-		std::cout<< "trajectorymap"<<std::endl;
-		std::cout<< "!!!"<<std::endl;
+		std::cout << "!!!" << std::endl;
+		std::cout << "trajectorymap" << std::endl;
+		std::cout << "!!!" << std::endl;
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
 		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
 	}
-		for (;;) {
+	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
 
-
-std::cout<<"przed_next_state"<<std::endl;
+		std::cout << "przed_next_state" << std::endl;
 		get_next_state();
-std::cout<<"po_next_state"<<std::endl;
+		std::cout << "po_next_state" << std::endl;
 		sr_ecp_msg->message("Order received");
 
 		subtasks_conditional_execution();
-std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::endl;
+		std::cout << "NEXT STATE STRING OGOLNY        " << mp_2_ecp_next_state_string << std::endl;
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);
-			path += (char*)mp_command.ecp_next_state.data;
+			path += (char*) mp_command.ecp_next_state.data;
 			tig->flush_pose_list();
 			//tig->load_file_with_path (path.c_str());
 			//tig->initiate_pose_list();
@@ -260,38 +256,34 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 			if (operator_reaction("Save?"))
 				tig->save_file(lib::ECP_MOTOR);
 			//tig->Move();
-		}
-		 else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
+		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 			if (trjConf) {
 				if (ecpLevel) {
-					std::cout<<"armtype in fsautomat: "<< (char*)mp_command.ecp_next_state.data<<std::endl;
-					std::cout<<"NAZWASTANUUUUUUUUUUUU: "<<(char*)mp_command.ecp_next_state.data<<std::endl;
-					load_trajectory_from_xml((*trjMap)[(std::string)(char*)mp_command.ecp_next_state.data]);
+					std::cout << "armtype in fsautomat: " << (char*) mp_command.ecp_next_state.data << std::endl;
+					std::cout << "NAZWASTANUUUUUUUUUUUU: " << (char*) mp_command.ecp_next_state.data << std::endl;
+					load_trajectory_from_xml((*trjMap)[(std::string) (char*) mp_command.ecp_next_state.data]);
 				} else {
 					std::string path(mrrocpp_network_path);
 					path += fileName;
 					load_trajectory_from_xml(path.c_str(), (char*) mp_command.ecp_next_state.data);
 				}
-			}//if
-		else //moj przypadekl -> z pliku
+			} //if
+			else //moj przypadekl -> z pliku
 			{
 				std::string path(mrrocpp_network_path);
-				if(((char*)mp_command.ecp_next_state.data)[0]=='/')
-				{
-					path = (char*)mp_command.ecp_next_state.data;
-				}
-				else
-				{
-					path += (char*)mp_command.ecp_next_state.data;
+				if (((char*) mp_command.ecp_next_state.data)[0] == '/') {
+					path = (char*) mp_command.ecp_next_state.data;
+				} else {
+					path += (char*) mp_command.ecp_next_state.data;
 				}
 				//std::cout<<"WCZYTYWANIE Z PLIKU, SCIEZKA:   "<<path<< " VARIANT "<<mp_command.ecp_next_state.mp_2_ecp_next_state_variant<<std::endl;
 				//std::cout<<"STATE:  "<<mp_command.ecp_next_state.mp_2_ecp_next_state<<" STRING:  "<<(char*)mp_command.ecp_next_state.mp_2_ecp_next_state_string<<std::endl;
 				sg->load_trajectory_from_file(path.c_str());
-			}//else
-			//std::cout<<"interpolating"<<std::endl;
+			} //else
+			  //std::cout<<"interpolating"<<std::endl;
 			sg->calculate_interpolate();
 			//std::cout<<"interpolated, moving"<<std::endl;
-			sg->Move();//changed askubis
+			sg->Move(); //changed askubis
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
 			wmg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
@@ -302,7 +294,7 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 			befg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
 			double gen_args[4];
-			int size = lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.data);
+			int size = lib::setValuesInArray(gen_args, (char*) mp_command.ecp_next_state.data);
 			if (size > 3)
 				rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2], (bool) gen_args[3]);
 			else
@@ -310,7 +302,7 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 			rgg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
 			double gen_args[1];
-			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.data);
+			lib::setValuesInArray(gen_args, (char*) mp_command.ecp_next_state.data);
 			rfrg->configure(gen_args[0]);
 			rfrg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
@@ -327,15 +319,13 @@ std::cout<<"NEXT STATE STRING OGOLNY        "<<mp_2_ecp_next_state_string<<std::
 			//lib::STOP czyli 2 powinien byc a jest 4...
 		} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
 			double gen_args[2];
-			lib::setValuesInArray(gen_args, (char*)mp_command.ecp_next_state.data);
+			lib::setValuesInArray(gen_args, (char*) mp_command.ecp_next_state.data);
 			go_st->configure(gen_args[0], (int) gen_args[1]);
 			go_st->execute();
 		}
 
 		termination_notice();
 	} //end for
-
-
 
 }
 
@@ -344,171 +334,150 @@ task_base* return_created_ecp_task(lib::configurator &_config)
 	return new fsautomat(_config);
 }
 
-
-
-void fsautomat::load_trajectory_from_xml(std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> pair_trj_motion) {
-std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect = pair_trj_motion.first;
-if(pair_trj_motion.second==lib::ABSOLUTE)
-	for (int i=0;i<trj_vect.size();i++)
-	{
-		std::cout<<"WEKTOR ZAWIERA "<<trj_vect.size()<<" ELEMENTOW"<<std::endl;
-		ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose trj = (*trj_vect[i]);
-		sg->load_absolute_pose(trj);
-	}
-else if (pair_trj_motion.second==lib::RELATIVE)
-	for (int i=0;i<trj_vect.size();i++)
-	{
-		std::cout<<"WEKTOR ZAWIERA "<<trj_vect.size()<<" ELEMENTOW"<<std::endl;
-		ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose trj = (*trj_vect[i]);
-		sg->load_relative_pose(trj);
+void fsautomat::load_trajectory_from_xml(std::pair <
+		std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> pair_trj_motion)
+{
+	std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *> trj_vect = pair_trj_motion.first;
+	if (pair_trj_motion.second == lib::ABSOLUTE)
+		for (int i = 0; i < trj_vect.size(); i++) {
+			std::cout << "WEKTOR ZAWIERA " << trj_vect.size() << " ELEMENTOW" << std::endl;
+			ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose trj = (*trj_vect[i]);
+			sg->load_absolute_pose(trj);
+		}
+	else if (pair_trj_motion.second == lib::RELATIVE)
+		for (int i = 0; i < trj_vect.size(); i++) {
+			std::cout << "WEKTOR ZAWIERA " << trj_vect.size() << " ELEMENTOW" << std::endl;
+			ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose trj = (*trj_vect[i]);
+			sg->load_relative_pose(trj);
 		}
 }
 
-void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeName) {
-    // Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
+void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeName)
+{
+	// Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
-	 bool first_time = true; // Znacznik
+	bool first_time = true; // Znacznik
 
-	 xmlDocPtr doc = xmlParseFile(fileName);
-	 xmlXIncludeProcess(doc);
-	 if(doc == NULL)
-	 {
-        throw generator::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
-	 }
+	xmlDocPtr doc = xmlParseFile(fileName);
+	xmlXIncludeProcess(doc);
+	if (doc == NULL)
+	{
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
+	}
 
-	 xmlNodePtr root = xmlDocGetRootElement(doc);
-	 if(!root || !root->name)
-	 {
-		 xmlFreeDoc(doc);
-		 throw generator::ECP_error (lib::NON_FATAL_ERROR, READ_FILE_ERROR);
-	 }
+	xmlNodePtr root = xmlDocGetRootElement(doc);
+	if (!root || !root->name) {
+		xmlFreeDoc(doc);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
+	}
 
 	//sg->reset(); // Usuniecie listy pozycji, o ile istnieje
 
-   for(xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next)
-   {
-      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask" ) )
-      {
-   		for(xmlNodePtr subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next)
-			{
-      		if ( subTaskNode->type == XML_ELEMENT_NODE  && !xmlStrcmp(subTaskNode->name, (const xmlChar *) "State" ) )
-				{
+	for (xmlNodePtr cur_node = root->children; cur_node != NULL; cur_node = cur_node->next) {
+		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "SubTask")) {
+			for (xmlNodePtr subTaskNode = cur_node->children; subTaskNode != NULL; subTaskNode = subTaskNode->next) {
+				if (subTaskNode->type == XML_ELEMENT_NODE && !xmlStrcmp(subTaskNode->name, (const xmlChar *) "State")) {
 					xmlChar * stateID = xmlGetProp(subTaskNode, (const xmlChar *) "id");
-					if(stateID && !strcmp((const char *)stateID, nodeName)  )
-					{
-						for(xmlNodePtr child_node = subTaskNode->children; child_node != NULL; child_node = child_node->next)
-						{
-							if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
-							{
+					if (stateID && !strcmp((const char *) stateID, nodeName)) {
+						for (xmlNodePtr child_node = subTaskNode->children; child_node != NULL;
+								child_node = child_node->next) {
+							if (child_node->type == XML_ELEMENT_NODE
+									&& !xmlStrcmp(child_node->name, (const xmlChar *) "Trajectory")) {
 								set_pose_from_xml(child_node, first_time);
 							}
 						}
 					}
-         		xmlFree(stateID);
+					xmlFree(stateID);
 				}
 			}
 		}
-      if ( cur_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cur_node->name, (const xmlChar *) "State" ) )
-      {
-         xmlChar * stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
-         if(stateID && !strcmp((const char *)stateID, nodeName))
-			{
-	         for(xmlNodePtr child_node = cur_node->children; child_node != NULL; child_node = child_node->next)
-	         {
-	            if ( child_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(child_node->name, (const xmlChar *)"Trajectory") )
-	            {
+		if (cur_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cur_node->name, (const xmlChar *) "State")) {
+			xmlChar * stateID = xmlGetProp(cur_node, (const xmlChar *) "id");
+			if (stateID && !strcmp((const char *) stateID, nodeName)) {
+				for (xmlNodePtr child_node = cur_node->children; child_node != NULL; child_node = child_node->next) {
+					if (child_node->type == XML_ELEMENT_NODE
+							&& !xmlStrcmp(child_node->name, (const xmlChar *) "Trajectory")) {
 						set_pose_from_xml(child_node, first_time);
-	            }
-	         }
+					}
+				}
 			}
-         xmlFree(stateID);
+			xmlFree(stateID);
 		}
 	}
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
 }
 
-
-
-void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time) {
-	lib::ECP_POSE_SPECIFICATION ps;     // Rodzaj wspolrzednych
-
+void fsautomat::set_pose_from_xml(xmlNode *stateNode, bool &first_time)
+{
+	lib::ECP_POSE_SPECIFICATION ps; // Rodzaj wspolrzednych
 
 	xmlNode *cchild_node, *ccchild_node;
 	xmlChar *coordinateType, *m_type;
 	xmlChar *xmlDataLine;
 
-	int num=0;
+	int num = 0;
 
-
-	coordinateType = xmlGetProp(stateNode, (const xmlChar *)"coordinateType");
-	ps = lib::returnProperPS((char *)coordinateType);
-	m_type = xmlGetProp(stateNode, (const xmlChar *)"motionType");
-	char * motionType = ((char *)m_type);
-
+	coordinateType = xmlGetProp(stateNode, (const xmlChar *) "coordinateType");
+	ps = lib::returnProperPS((char *) coordinateType);
+	m_type = xmlGetProp(stateNode, (const xmlChar *) "motionType");
+	char * motionType = ((char *) m_type);
 
 	double tmp[10];
 
-
-	for(cchild_node = stateNode->children; cchild_node!=NULL; cchild_node = cchild_node->next)
-	{
-		if ( cchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(cchild_node->name, (const xmlChar *)"Pose") )	{
+	for (cchild_node = stateNode->children; cchild_node != NULL; cchild_node = cchild_node->next) {
+		if (cchild_node->type == XML_ELEMENT_NODE && !xmlStrcmp(cchild_node->name, (const xmlChar *) "Pose")) {
 			ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose * actTrajectory =
-				new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
-			actTrajectory->arm_type =ps;
-			for(ccchild_node = cchild_node->children; ccchild_node!=NULL; ccchild_node = ccchild_node->next)
-			{
-				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Velocity") )
-				{
+					new ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose();
+			actTrajectory->arm_type = ps;
+			for (ccchild_node = cchild_node->children; ccchild_node != NULL; ccchild_node = ccchild_node->next) {
+				if (ccchild_node->type == XML_ELEMENT_NODE
+						&& !xmlStrcmp(ccchild_node->name, (const xmlChar *) "Velocity")) {
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					num =lib::setValuesInArray(tmp,(char *) xmlDataLine);
-					for (int i=0; i<num;i++){
+					num = lib::setValuesInArray(tmp, (char *) xmlDataLine);
+					for (int i = 0; i < num; i++) {
 						actTrajectory->v.push_back(tmp[i]);
 					}
 					xmlFree(xmlDataLine);
 				}
-				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Accelerations") )
-				{
+				if (ccchild_node->type == XML_ELEMENT_NODE
+						&& !xmlStrcmp(ccchild_node->name, (const xmlChar *) "Accelerations")) {
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					num=lib::setValuesInArray(tmp,(char *) xmlDataLine);
-					for (int i=0; i<num;i++){
+					num = lib::setValuesInArray(tmp, (char *) xmlDataLine);
+					for (int i = 0; i < num; i++) {
 						actTrajectory->a.push_back(tmp[i]);
 					}
 					xmlFree(xmlDataLine);
 				}
-				if ( ccchild_node->type == XML_ELEMENT_NODE  && !xmlStrcmp(ccchild_node->name, (const xmlChar *)"Coordinates") )
-				{
+				if (ccchild_node->type == XML_ELEMENT_NODE
+						&& !xmlStrcmp(ccchild_node->name, (const xmlChar *) "Coordinates")) {
 					xmlDataLine = xmlNodeGetContent(ccchild_node);
-					num = lib::setValuesInArray(tmp,(char *) xmlDataLine);
-					for (int i=0; i<num;i++){
+					num = lib::setValuesInArray(tmp, (char *) xmlDataLine);
+					for (int i = 0; i < num; i++) {
 						actTrajectory->coordinates.push_back(tmp[i]);
 					}
 					xmlFree(xmlDataLine);
 				}
 				/*for (int i = 0; i<actTrajectory->coordinates.size(); i++)
-				{
-							std::cout<<"COORDS: "<<actTrajectory->coordinates[i]<<std::endl;
-							std::cout<<"SPEED:  "<<actTrajectory->v[i]<<std::endl;
-							std::cout<<"ACCEL:  "<<actTrajectory->a[i]<<std::endl;
-				}*/
+				 {
+				 std::cout<<"COORDS: "<<actTrajectory->coordinates[i]<<std::endl;
+				 std::cout<<"SPEED:  "<<actTrajectory->v[i]<<std::endl;
+				 std::cout<<"ACCEL:  "<<actTrajectory->a[i]<<std::endl;
+				 }*/
 			}
-			if(!strcmp(motionType,"Absolute"))
-			sg->load_absolute_pose((*actTrajectory));
-			else if(!strcmp(motionType,"Realative"))
-			sg->load_relative_pose((*actTrajectory));
-			else
-			{
+			if (!strcmp(motionType, "Absolute"))
+				sg->load_absolute_pose((*actTrajectory));
+			else if (!strcmp(motionType, "Realative"))
+				sg->load_relative_pose((*actTrajectory));
+			else {
 				//some error
 			}
-
-
 
 		}
 	}
 	xmlFree(coordinateType);
 	xmlFree(m_type);
 }
-
 
 } // namespace task
 } // namespace common

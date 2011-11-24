@@ -9,6 +9,8 @@
  * @ingroup bird_hand
  */
 
+#include "const_bird_hand.h"
+
 namespace mrrocpp {
 namespace lib {
 namespace bird_hand {
@@ -35,26 +37,6 @@ const std::string CONFIGURATION_DATA_PORT = "bird_hand_configuration_data_port";
  */
 const std::string CONFIGURATION_DATA_REQUEST_PORT = "bird_hand_configuration_data_request_port";
 
-/*!
- * @brief Bird Hand total number of servos
- * @ingroup bird_hand
- */
-const int NUM_OF_SERVOS = 8;
-/*!
- * @brief Bird Hand thumb finger number of servos
- * @ingroup bird_hand
- */
-const int THUMB_F_NUM_OF_SERVOS = 2;
-/*!
- * @brief Bird Hand index finger number of servos
- * @ingroup bird_hand
- */
-const int INDEX_F_NUM_OF_SERVOS = 3;
-/*!
- * @brief Bird Hand ring finger number of servos
- * @ingroup bird_hand
- */
-const int RING_F_NUM_OF_SERVOS = 3;
 
 /*!
  * @brief Bird Hand three commanded motion variants enumeration
@@ -147,6 +129,52 @@ struct configuration
 	single_joint_configuration thumb_f[THUMB_F_NUM_OF_SERVOS];
 	single_joint_configuration index_f[INDEX_F_NUM_OF_SERVOS];
 	single_joint_configuration ring_f[RING_F_NUM_OF_SERVOS];
+}__attribute__((__packed__));
+
+/*!
+ * @brief Bird Hand EDP command buffer
+ * @ingroup bird_hand
+ */
+struct cbuffer
+{
+	/*!
+	 * @brief Motion command
+	 */
+	struct
+	{
+		/*!
+		 * @brief Motion duration in EDP steps
+		 */
+		int motion_steps;
+		/*!
+		 * @brief EDP query step number
+		 */
+		int ecp_query_step;
+		single_joint_command finger[NUM_OF_SERVOS];
+	} command_structure;
+	/*!
+	 * @brief Configuration command
+	 */
+	struct
+	{
+		single_joint_configuration finger[NUM_OF_SERVOS];
+	} configuration_command_structure;
+}__attribute__((__packed__));
+
+/*!
+ * @brief Bird Hand EDP reply buffer
+ * @ingroup bird_hand
+ */
+struct rbuffer
+{
+	struct
+	{
+		single_joint_status finger[NUM_OF_SERVOS];
+	} status_reply_structure;
+	struct
+	{
+		single_joint_configuration finger[NUM_OF_SERVOS];
+	} configuration_reply_structure;
 }__attribute__((__packed__));
 
 } // namespace bird_hand

@@ -1,4 +1,3 @@
-#include "base/mp/MP_main_error.h"
 #include "robot/polycrank/mp_r_polycrank.h"
 
 namespace mrrocpp {

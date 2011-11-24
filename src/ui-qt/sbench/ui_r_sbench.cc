@@ -48,7 +48,7 @@ int UiRobot::synchronise()
 UiRobot::UiRobot(common::Interface& _interface) :
 		common::UiRobot(_interface, lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
-
+	add_wgt <wgt_sbench_command>(sbench::WGT_SBENCH_COMMAND, "Sbench command");
 }
 
 int UiRobot::manage_interface()
@@ -62,12 +62,11 @@ int UiRobot::manage_interface()
 
 			break;
 		case common::UI_EDP_OFF:
-
+			action_command->setEnabled(false);
 			break;
 		case common::UI_EDP_WAITING_TO_START_READER:
 		case common::UI_EDP_WAITING_TO_STOP_READER:
-
-
+			action_command->setEnabled(true);
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 
@@ -75,16 +74,12 @@ int UiRobot::manage_interface()
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-
-						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-
+						action_command->setEnabled(true);
 						break;
 					case common::UI_MP_TASK_RUNNING:
-
-						break;
 					case common::UI_MP_TASK_PAUSED:
-
+						action_command->setEnabled(false);
 						break;
 					default:
 						break;
@@ -101,16 +96,17 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-
-
 void UiRobot::setup_menubar()
 {
 	common::UiRobot::setup_menubar();
-	//	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
-
-	robot_menu->setTitle(QApplication::translate("MainWindow", "S&head", 0, QApplication::UnicodeUTF8));
+	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "S&bench", 0, QApplication::UnicodeUTF8));
+
+	action_command = new Ui::MenuBarAction(QString("&Command"), wgts[WGT_SBENCH_COMMAND], signalDispatcher, menuBar);
+
+	robot_menu->addAction(action_command);
 
 }
 

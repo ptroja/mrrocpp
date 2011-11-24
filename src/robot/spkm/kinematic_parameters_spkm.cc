@@ -40,13 +40,11 @@ const uint32_t kinematic_parameters_spkm::encoder_resolution[mrrocpp::lib::spkm:
 };
 
 //! Initialization of upper motors limits vector.
-//! Those values were computed on the base of "safe" joint limits.
-const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 8000, 8000, 8000, 330000, 60000, 340000 };
+const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 8000, 8000, 8000, 330000, 90000, 340000 };
 
 //! Initialization of lower motors limits vector.
-//! The "unsafe" (in terms that robot can hit its "shell" from inside) are { -194000, -281000, -173000 }
-//! Those values were computed on the base of "safe" joint limits.
-const int32_t kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -240000, -248000, -240000, -320000, -80000, -280000 };
+//! Those are the "unsafe" (in terms that robot can hit its "shell" from inside) values.
+const int32_t kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -280000, -280000, -280000, -320000, -200000, -280000 };
 
 //! Initialization of upper joints vector.
 //! Those are the "safe" limits, not related to synchronization sensors positions.
@@ -56,23 +54,39 @@ const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::
 //! The lower values are related to positions of synchronization sensors.
 const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.242, 0.242, 0.242, -2.2777, -0.5498, -2.4347 };
 
+//! Initialization of upper thyk alpha angle limit.
+//! Those values were determined experimentally.
+const double kinematic_parameters_spkm::upper_alpha_thyk_angle_limit[3] = { 30.0, 50.0, 30.0 };
+
+//! Initialization of lower thyk alpha angle limit.
+//! Those values were determined experimentally.
+const double kinematic_parameters_spkm::lower_alpha_thyk_angle_limit[3] = { -30.0, -50.0, -30.0 };
+
+//! Initialization of upper thyk beta angle limit.
+//! Those values were determined experimentally.
+const double kinematic_parameters_spkm::upper_beta_thyk_angle_limit[3] = { 30.0, 50.0, 30.0 };
+
+//! Initialization of lower thyk beta angle limit.
+//! Those values were determined experimentally.
+const double kinematic_parameters_spkm::lower_beta_thyk_angle_limit[3] = { -30.0, -50.0, -30.0 };
+
 //! Lower platform: Initialize the jb coordinate of P1A in O(ib,jb,kb).
-const double kinematic_parameters_spkm::dA = -0.05;
+const double kinematic_parameters_spkm::lA = -0.05;
 
 //! Lower platform: Initialize the ib coordinate of P1B in O(ib,jb,kb).
-const double kinematic_parameters_spkm::dB = 0.18;
+const double kinematic_parameters_spkm::lB = 0.18;
 
 //! Lower platform: Initialize the jb coordinate of P1C in O(ib,jb,kb).
-const double kinematic_parameters_spkm::dC = 0.05;
+const double kinematic_parameters_spkm::lC = 0.05;
 
 //! Upper platform: Initialize the j coordinate of P4A in P(ijk).
-const double kinematic_parameters_spkm::pA = -0.05;
+const double kinematic_parameters_spkm::uA = -0.05;
 
 //! Upper platform: Initialize the i coordinate of P5B in P(ijk).
-const double kinematic_parameters_spkm::pB = 0.086;
+const double kinematic_parameters_spkm::uB = 0.086;
 
 //! Upper platform: Initialize the j coordinate of P4C in P(ijk).
-const double kinematic_parameters_spkm::pC = 0.05;
+const double kinematic_parameters_spkm::uC = 0.05;
 
 //! Initialization of vector representing a translation from P (middle of upper P platform) and S (middle of the spherical wrist).
 const Vector3d kinematic_parameters_spkm::P_S_P(0, 0, 0.0905);

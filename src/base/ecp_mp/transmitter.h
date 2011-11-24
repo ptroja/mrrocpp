@@ -66,27 +66,6 @@ public:
 
 };
 
-/*!
- * @brief ECP_MP transmitter_error error handling class
- *
- * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
- * @ingroup ecp_mp
- */
-class transmitter_error
-{
-public:
-	/**
-	 * @brief error number
-	 */
-	const lib::error_class_t error_class;
-
-	/**
-	 * @brief constructor
-	 * @param err_cl error class
-	 */
-	transmitter_error(lib::error_class_t err_cl);
-
-};
 
 /*!
  * @brief Template ecp_mp transmitter class

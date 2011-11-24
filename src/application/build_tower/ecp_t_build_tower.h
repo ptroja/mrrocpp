@@ -17,6 +17,9 @@
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 
+#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/ecp_mp_g_newsmooth.h"
+
 #include "base/ecp/ecp_task.h"
 #include "subtask/ecp_mp_st_smooth_file_from_mp.h"
 #include "subtask/ecp_st_go.h"
@@ -33,6 +36,7 @@ class build_tower : public common::task::task
 protected:
 
 	common::generator::tff_gripper_approach* gtga;
+	common::generator::newsmooth* sg;
 
 public:
 

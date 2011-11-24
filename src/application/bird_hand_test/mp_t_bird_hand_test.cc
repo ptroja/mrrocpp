@@ -12,7 +12,7 @@
 #include "base/lib/sr/srlib.h"
 
 #include "base/mp/mp_task.h"
-#include "base/mp/MP_main_error.h"
+
 #include "ecp_mp_t_bird_hand_test.h"
 #include "mp_t_bird_hand_test.h"
 #include "base/lib/single_thread_port.h"

@@ -57,7 +57,7 @@ REGISTER_NON_FATAL_ERROR(nfe_robot_unsynchronized, "Robot unsynchronized")
  * \brief Exception thrown when in an synchronization finished unsuccessfully.
  * \author tkornuta
  */
-REGISTER_NON_FATAL_ERROR(nfe_synchronization_unsuccessful, "Robot synchronization unsuccessfull")
+REGISTER_FATAL_ERROR(fe_synchronization_unsuccessful, "Robot synchronization failed")
 
 /*!
  * \brief Exception thrown in case of invalid pose specification.
@@ -70,6 +70,42 @@ REGISTER_NON_FATAL_ERROR(nfe_invalid_pose_specification, "Invalid pose specifica
  * \author tkornuta
  */
 REGISTER_NON_FATAL_ERROR(nfe_invalid_motion_type, "Invalid motion type")
+
+/*!
+ * \brief old mrroc++ non fatal error 1
+ * \author yoyek
+ */
+REGISTER_NON_FATAL_ERROR(nfe_1, "NonFatal_error_1")
+
+/*!
+ * \brief old mrroc++ non fatal error 2
+ * \author yoyek
+ */
+REGISTER_NON_FATAL_ERROR(nfe_2, "NonFatal_error_2")
+
+/*!
+ * \brief old mrroc++ non fatal error 3
+ * \author yoyek
+ */
+REGISTER_NON_FATAL_ERROR(nfe_3, "NonFatal_error_3")
+
+/*!
+ * \brief old mrroc++ non fatal error 4
+ * \author yoyek
+ */
+REGISTER_NON_FATAL_ERROR(nfe_4, "NonFatal_error_4")
+
+/*!
+ * \brief old mrroc++ fatal error
+ * \author yoyek
+ */
+REGISTER_FATAL_ERROR(fe, "Fatal_error")
+
+/*!
+ * \brief old mrroc++  System error
+ * \author yoyek
+ */
+REGISTER_SYSTEM_ERROR(se, "System_error")
 
 } // namespace exception
 } // namespace edp

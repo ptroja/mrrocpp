@@ -92,11 +92,11 @@ double spline_interpolator::calculate_velocity(vector<ecp_mp::common::trajectory
   double velocity;
   generatePowers(4, time, t);
 
-  velocity = t[0]*it->coeffs[i][0] +
-             2.0*t[1]*it->coeffs[i][1] +
-             3.0*t[2]*it->coeffs[i][2] +
-             4.0*t[3]*it->coeffs[i][3] +
-             5.0*t[4]*it->coeffs[i][4];
+  velocity = t[0]*it->coeffs[i][1] +
+             2.0*t[1]*it->coeffs[i][2] +
+             3.0*t[2]*it->coeffs[i][3] +
+             4.0*t[3]*it->coeffs[i][4] +
+             5.0*t[4]*it->coeffs[i][5];
   return velocity;
 }
 
@@ -106,10 +106,10 @@ double spline_interpolator::calculate_acceleration(vector<ecp_mp::common::trajec
   double acceleration;
   generatePowers(3, time, t);
 
-  acceleration = 2.0*t[0]*it->coeffs[i][0] +
-                 6.0*t[1]*it->coeffs[i][1] +
-                 12.0*t[2]*it->coeffs[i][2] +
-                 20.0*t[3]*it->coeffs[i][3];
+  acceleration = 2.0*t[0]*it->coeffs[i][2] +
+                 6.0*t[1]*it->coeffs[i][3] +
+                 12.0*t[2]*it->coeffs[i][4] +
+                 20.0*t[3]*it->coeffs[i][5];
   return acceleration;
 }
 

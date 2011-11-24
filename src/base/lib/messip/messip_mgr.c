@@ -246,6 +246,7 @@ static int do_writev(int sockfd, const struct iovec *iov, int iovcnt)
 
 	int sz = 0;
 	int n;
+
 	for (n = 0; n < iovcnt; n++)
 		sz += iov[n].iov_len;
 
@@ -257,10 +258,15 @@ static int do_writev(int sockfd, const struct iovec *iov, int iovcnt)
 			return dcount;
 		if ((dcount == -1) && (errno == EINTR))
 			continue;
+		if (dcount > 0)
+			sz -= dcount;
 		break;
 	} // for (;;)
 	if (cnt)
 		logg(LOG_MESSIP_NON_FATAL_ERROR, "%s %d: %d\n", __FILE__, __LINE__, cnt);
+
+	if(sz != 0)
+		logg(LOG_MESSIP_FATAL_ERROR, "%s %d: %d\n", __FILE__, __LINE__, cnt);
 
 	return dcount;
 
@@ -684,12 +690,18 @@ static int http_send_status(int sockfd, int version, int subversion, int key)
 	iovec[0].iov_base = msg1;
 	iovec[0].iov_len = strlen(msg1);
 	dcount = do_writev(sockfd, iovec, 1);
+	if(dcount != iovec[0].iov_len) {
+		/* TODO: handle error */
+	}
 	free(msg1);
 
 	/*--- Send now the page ---*/
 	iovec[0].iov_base = msg2;
 	iovec[0].iov_len = strlen(msg2);
 	dcount = do_writev(sockfd, iovec, 1);
+	if(dcount != iovec[0].iov_len) {
+		/* TODO: handle error */
+	}
 	free(msg2);
 
 	/*--- Ok ---*/
@@ -1318,6 +1330,9 @@ thread_client_send_buffered_msg(void *arg)
 			FD_ZERO( &ready );
 			FD_SET( sockfd, &ready );
 			status = select(FD_SETSIZE, NULL, &ready, NULL, NULL);
+			if(status < 0) {
+				perror("select()");
+			}
 
 			LOCK;
 			if (ch->nb_msg_buffered == 0) {
@@ -1408,7 +1423,9 @@ static int client_death_notify(int sockfd, struct sockaddr_in *client_addr)
 	struct iovec iovec[1];
 	messip_send_death_notify_t msgsend;
 	messip_reply_death_notify_t msgreply;
+	/*
 	connexion_t *cnx;
+	*/
 
 	/*--- Read additional data specific to this message ---*/
 	iovec[0].iov_base = &msgsend;
@@ -1433,7 +1450,9 @@ static int client_death_notify(int sockfd, struct sockaddr_in *client_addr)
 	ch = search_ch_by_sockfd(sockfd);
 	assert( ch != NULL );
 	ch->f_notify_deaths = msgsend.status;
+	/*
 	cnx = ch->cnx;
+	*/
 	UNLOCK;
 
 	/*--- Reply to the client ---*/
@@ -1483,6 +1502,7 @@ static int client_buffered_send(int sockfd, struct sockaddr_in *client_addr)
 		data = malloc(msg.datalen);
 		dcount = read(sockfd, data, msg.datalen);
 		if (dcount != msg.datalen) {
+			free(data);
 			fprintf(stderr, "Should have read %d bytes - only %zd have been read\n", msg.datalen, dcount);
 			return -1;
 		}
@@ -1499,6 +1519,7 @@ static int client_buffered_send(int sockfd, struct sockaddr_in *client_addr)
 	if (ch == NULL) {
 		UNLOCK;
 		fprintf(stderr, "%s: socket %d not found\n", __FUNCTION__, msg.mgr_sockfd);
+		if(data) free(data);
 		return -1;
 	}
 	cnx = ch->cnx;
@@ -1513,6 +1534,7 @@ static int client_buffered_send(int sockfd, struct sockaddr_in *client_addr)
 		if (ch->bufferedsend_sockfd < 0) {
 			UNLOCK;
 			fprintf(stderr, "%s %d\n\tUnable to open a socket!\n", __FILE__, __LINE__);
+			if(data) free(data);
 			return -1;
 		}
 
@@ -1526,6 +1548,7 @@ static int client_buffered_send(int sockfd, struct sockaddr_in *client_addr)
 			fprintf(stderr, "%s %d\n\tUnable to connect to host %s, port %d: %s\n", __FILE__, __LINE__, inet_ntoa(sockaddr.sin_addr), sockaddr.sin_port, strerror(errno));
 			if (close(ch->bufferedsend_sockfd) == -1)
 				fprintf(stderr, "Error while closing socket %d: %s\n", ch->bufferedsend_sockfd, strerror(errno));
+			if(data) free(data);
 			return -1;
 		}
 
@@ -1724,6 +1747,7 @@ static int client_proxy_attach(int sockfd, struct sockaddr_in *client_addr)
 		data = malloc(msgsent.nbytes);
 		dcount = read(sockfd, data, msgsent.nbytes);
 		if (dcount != msgsent.nbytes) {
+			free(data);
 			fprintf(stderr, "%s %d\n\tShould have read %d bytes - only %zd have been read\n", __FILE__, __LINE__, msgsent.nbytes, dcount);
 			return -1;
 		}
@@ -1746,6 +1770,7 @@ static int client_proxy_attach(int sockfd, struct sockaddr_in *client_addr)
 		iovec[0].iov_len = sizeof(msgreply);
 		dcount = do_writev(sockfd, iovec, 1);
 		assert( dcount == sizeof( msgreply ) );
+		if(data) free(data);
 		return 0;
 	}
 	cnx = ch->cnx;
@@ -2188,6 +2213,9 @@ static int notify_server_death_client(channel_t * ch, pid_t pid, pthread_t tid, 
 	FD_ZERO( &ready );
 	FD_SET( sockfd, &ready );
 	status = select(FD_SETSIZE, NULL, &ready, NULL, NULL);
+	if(status < 0) {
+		perror("select()");
+	}
 
 	/*--- Send a fake message ---*/
 	memset(&datasend, 0, sizeof(messip_datasend_t));
