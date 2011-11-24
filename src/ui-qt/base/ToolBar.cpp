@@ -19,6 +19,8 @@ ToolBar::ToolBar(MenuBar *menuBar, QWidget *parent) :
 	addAction(menuBar->actionMP_Load);
 	addAction(menuBar->actionMP_Unload);
 	addSeparator();
+	addAction(menuBar->actionall_Synchro_Position);
+	addSeparator();
 	addAction(menuBar->actionReload_Configuration);
 	addAction(menuBar->actionClear_Console);
 }
