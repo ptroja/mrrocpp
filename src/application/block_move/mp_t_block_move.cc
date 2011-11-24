@@ -57,6 +57,8 @@ void block_move::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("Block Move MP Start");
 
+	//TODO: connect block_move application with build_tower application
+
 	sr_ecp_msg->message("Start position for searching");
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
@@ -79,7 +81,7 @@ void block_move::main_task_algorithm(void)
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 */
 
-	int color = 3;
+	int color = 2;
 
 	sr_ecp_msg->message("Servovision");
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, color, "", 0, lib::irp6p_m::ROBOT_NAME);

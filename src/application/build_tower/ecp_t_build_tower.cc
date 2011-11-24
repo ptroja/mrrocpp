@@ -95,14 +95,13 @@ void build_tower::mp_2_ecp_next_state_string_handler(void)
 			sr_ecp_msg->message("error in loading trajectory from file");
 		}
 
-		//sg->print_pose_vector();
-
 		sr_ecp_msg->message("after loading trajectory from file");
 
 		double base_pos[6];
 
 		for (int i = 0; i < 6; i++) {
-			base_pos[i] = sg->pose_vector_iterator->coordinates[i];
+			//TODO: odczytanie konfiguracji z pliku
+			//base_pos[i] = sg->pose_vector_iterator->coordinates[i];
 		}
 
 		sr_ecp_msg->message("after load coordinates");

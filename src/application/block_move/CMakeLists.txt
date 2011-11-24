@@ -12,11 +12,9 @@ add_executable(ecp_block_move
     ../../sensor/discode/discode_sensor.cc
 )
 
-<<<<<<< HEAD
 target_link_libraries(ecp_block_move ecp_r_irp6p_m ecp_generators ecp_subtasks visual_servoing ecp)
-=======
+
 target_link_libraries(ecp_block_move ecp_robot)
->>>>>>> 23f31b728c58b0a0a3ba06ac85d751d1c14cefea
 
 add_executable(mp_block_move
 	mp_t_block_move.cc

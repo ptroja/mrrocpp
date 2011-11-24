@@ -79,7 +79,7 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 		sr_ecp_msg->message("configurate tff_gripper_approach...");
 
-		gtga->configure(0.05, 350, 4);
+		gtga->configure(0.03, 300, 3);
 		gtga->Move();
 
 		sr_ecp_msg->message("tff_gripper_approach end");
@@ -93,6 +93,8 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 		Types::Mrrocpp_Proxy::BReading br;
 		br = ds_rpc->call_remote_procedure<Types::Mrrocpp_Proxy::BReading>((int) param);
+
+		ds_rpc->terminate();
 
 		sr_ecp_msg->message("configurate servovision...");
 
