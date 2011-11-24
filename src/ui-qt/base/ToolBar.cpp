@@ -9,16 +9,17 @@
 
 namespace Ui {
 
-ToolBar::ToolBar(MenuBar *menuBar, QWidget *parent)
-	: QToolBar(parent)
+ToolBar::ToolBar(MenuBar *menuBar, QWidget *parent) :
+		QToolBar(parent)
 {
 	setFloatable(false);
 
 	addAction(menuBar->actionall_EDP_Load);
 	addAction(menuBar->actionall_EDP_Unload);
-	addAction(menuBar->actionReload_Configuration);
 	addAction(menuBar->actionMP_Load);
 	addAction(menuBar->actionMP_Unload);
+	addSeparator();
+	addAction(menuBar->actionReload_Configuration);
 	addAction(menuBar->actionClear_Console);
 }
 ToolBar::~ToolBar()
