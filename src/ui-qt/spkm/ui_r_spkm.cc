@@ -119,7 +119,7 @@ int UiRobot::manage_interface()
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				menuspkm_Pre_synchro_moves->setEnabled(false);
-				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+				mw->menuall_Preset_Positions_setEnabled(true);
 
 				switch (interface.mp->mp_state.state)
 				{
@@ -145,7 +145,7 @@ int UiRobot::manage_interface()
 			{
 				menuspkm_Pre_synchro_moves->setEnabled(true);
 				menuspkm_Post_synchro_moves->setEnabled(false);
-				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+				mw->menuall_Preset_Positions_setEnabled(false);
 
 			}
 			break;

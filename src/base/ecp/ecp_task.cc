@@ -17,12 +17,11 @@
 
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_ecp.h"
-#include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_sub_task.h"
-#include "base/ecp/ecp_robot.h"
-#include "base/ecp/ECP_main_error.h"
-#include "base/ecp/ECP_error.h"
-#include "base/ecp/ecp_generator.h"
+#include "ecp_task.h"
+#include "ecp_sub_task.h"
+#include "ecp_robot.h"
+#include "ecp_exceptions.h"
+#include "ecp_generator.h"
 
 #include "base/lib/messip/messip_dataport.h"
 
@@ -37,7 +36,6 @@ task_base::task_base(lib::configurator &_config) :
 	reply(MP, _config.section_name),
 	command(*this, "command"),
 	mp_command(command.access),
-	mp_2_ecp_next_state_string(mp_command.ecp_next_state.next_state),
 	continuous_coordination(false)
 {
 	initialize_communication();
@@ -108,7 +106,7 @@ void task_base::initialize_communication()
 		int e = errno; // kod bledu systemowego
 		perror("Failed to attach TRIGGER pulse chanel for ecp");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed  Failed to name attach (trigger pulse)");
-		throw ECP_main_error(lib::SYSTEM_ERROR, 0);
+		BOOST_THROW_EXCEPTION(exception::se());
 	}
 }
 // -------------------------------------------------------------------
@@ -189,13 +187,13 @@ void task_base::wait_for_start(void)
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 				// Reply with ACK
 				reply.Send(ecp_reply);
-				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(ECP_STOP_ACCEPTED));
 				break;
 			default:
 				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
 				// Reply with NACK
 				reply.Send(ecp_reply);
-				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_MP_COMMAND));
 				break;
 		}
 	}
@@ -210,14 +208,30 @@ void task_base::get_next_state(void)
 
 	while (!next_state_received) {
 		while (!command.isFresh()) {
+<<<<<<< HEAD
 			ReceiveSingleMessage(true);
 		}
+=======
+			//		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 1");
+
+			ReceiveSingleMessage(true);
+			//		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 2");
+
+		}
+		//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 3");
+>>>>>>> wut-rcprg/master
 
 		command.markAsUsed();
 
 		switch (mp_command.command)
 		{
 			case lib::NEXT_STATE:
+<<<<<<< HEAD
+=======
+				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::NEXT_STATE");
+
+>>>>>>> wut-rcprg/master
 				// Reply with ACK
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 				reply.Send(ecp_reply);
@@ -225,21 +239,48 @@ void task_base::get_next_state(void)
 				next_state_received = true;
 				break;
 			case lib::PAUSE_TASK:
+<<<<<<< HEAD
 				wait_for_resume();
 				break;
 			case lib::STOP:
+=======
+				//	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::PAUSE_TASK");
+
+				// Reply with ACK
+				//	reply.Send(ecp_reply);
+				wait_for_resume();
+				break;
+			case lib::STOP:
+				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::STOP");
+
+>>>>>>> wut-rcprg/master
 				// Reply with ACK
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 				reply.Send(ecp_reply);
+<<<<<<< HEAD
 
 				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
 				break;
 			default:
+=======
+				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(ECP_STOP_ACCEPTED));
+				break;
+			default:
+				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
+				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::INCORRECT_MP_COMMAND");
+
+>>>>>>> wut-rcprg/master
 				// Reply with NACK
 				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
 				reply.Send(ecp_reply);
+<<<<<<< HEAD
 
 				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+=======
+				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_MP_COMMAND));
+>>>>>>> wut-rcprg/master
 				break;
 		}
 	}
@@ -280,7 +321,7 @@ bool task_base::peek_mp_message()
 					command.markAsUsed();
 					// Reply with ACK
 					reply.Send(ecp_reply);
-					throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(ECP_STOP_ACCEPTED));
 					break;
 				case lib::PAUSE_TASK:
 					//	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
@@ -296,7 +337,7 @@ bool task_base::peek_mp_message()
 					command.markAsUsed();
 					// Reply with NACK
 					reply.Send(ecp_reply);
-					throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_MP_COMMAND));
 					break;
 			}
 		}
@@ -330,7 +371,7 @@ void task_base::wait_for_resume()
 
 				// Reply with ACK
 				reply.Send(ecp_reply);
-				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, ECP_STOP_ACCEPTED);
+				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(ECP_STOP_ACCEPTED));
 				break;
 			case lib::RESUME_TASK:
 				//	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
@@ -348,7 +389,7 @@ void task_base::wait_for_resume()
 
 				// Reply with NACK
 				reply.Send(ecp_reply);
-				throw common::generator::ECP_error(lib::NON_FATAL_ERROR, INVALID_MP_COMMAND);
+				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_MP_COMMAND));
 				break;
 		}
 	}

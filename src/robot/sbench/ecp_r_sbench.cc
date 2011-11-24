@@ -58,7 +58,7 @@ void robot::create_command()
 		}
 
 		if (is_new_data) {
-			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
 		} else {
 			is_new_data = true;
 		}

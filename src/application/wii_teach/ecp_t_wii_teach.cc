@@ -16,9 +16,7 @@
 #include "base/lib/mrmath/mrmath.h"
 #include "ecp_t_wii_teach.h"
 
-
 #include "base/lib/messip/messip_dataport.h"
-
 
 namespace mrrocpp {
 namespace ecp {
@@ -26,99 +24,86 @@ namespace irp6ot_m {
 namespace task {
 
 wii_teach::wii_teach(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::task(_config)
 {
-	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
+	ecp_m_robot = (boost::shared_ptr <robot_t>) new robot(*this);
 	trajectory.count = trajectory.position = 0;
 	trajectory.head = trajectory.tail = trajectory.current = NULL;
 
 	//create Wii-mote virtual sensor object
-	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]
-			= new ecp_mp::sensor::wiimote(ecp_mp::sensor::SENSOR_WIIMOTE, "[vsp_wiimote]", *this->sr_ecp_msg, this->config);
-	
+	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE] =
+			new ecp_mp::sensor::wiimote(ecp_mp::sensor::SENSOR_WIIMOTE, "[vsp_wiimote]", *this->sr_ecp_msg, this->config);
+
 	//configure the sensor
 	sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]->configure_sensor();
 }
 
 int wii_teach::load_trajectory()
 {
-	if (chdir(path) != 0) 
-	{
+	if (chdir(path) != 0) {
 		perror(path);
-		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(NON_EXISTENT_DIRECTORY));
 	}
 
 	std::ifstream from_file(filename); // otworz plik do zapisu
 
-	if (!from_file) 
-	{
+	if (!from_file) {
 		perror(filename);
-		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
 	}
-	
+
 	node* current = NULL;
 	trajectory.position = 0;
 	trajectory.count = 0;
 	int count = 0;
-	
+
 	struct stat filestatus;
 	stat(filename, &filestatus);
-	
-	if(filestatus.st_size)
-	{
+
+	if (filestatus.st_size) {
 		from_file >> type;
 		from_file >> count;
 		from_file >> mode;
-		
-		if(!strcmp(type.c_str(),"JOINT"))
-		{
+
+		if (!strcmp(type.c_str(), "JOINT")) {
 			pose_spec = lib::ECP_JOINT;
 			axis_num = 7;
-		}
-		else
-		{
+		} else {
 			pose_spec = lib::ECP_XYZ_ANGLE_AXIS;
 			axis_num = 6;
 		}
-		
-		coordinates = std::vector<double>(axis_num);
-		
-		do
-		{
+
+		coordinates = std::vector <double>(axis_num);
+
+		do {
 			getline(from_file, velocity);
 		} while (!velocity.length() || from_file.eof());
-		
-		do
-		{
+
+		do {
 			getline(from_file, acceleration);
 		} while (!acceleration.length() || from_file.eof());
-		
-		
-		while (trajectory.count < count && !from_file.eof()) 
-		{
+
+		while (trajectory.count < count && !from_file.eof()) {
 			++trajectory.count;
-			if (current) 
-			{
+			if (current) {
 				current->next = new node();
 				current->next->prev = current;
 				current = current->next;
-			} 
-			else 
-			{
+			} else {
 				current = new node();
 				trajectory.head = current;
 			}
-			
-			current->position = std::vector<double>(axis_num);
+
+			current->position = std::vector <double>(axis_num);
 			current->id = trajectory.count;
 
 			trajectory.tail = current;
-			for(int i = 0; i < axis_num; ++i)
-			{
+			for (int i = 0; i < axis_num; ++i) {
 				from_file >> current->position[i];
 			}
-			
-			sprintf(buffer, "Loaded %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), trajectory.count, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], axis_num > 6 ? current->position[6] : 0);
+
+			sprintf(buffer, "Loaded %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), trajectory.count, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5],
+					axis_num > 6 ? current->position[6] : 0);
 			sr_ecp_msg->message(buffer);
 		}
 
@@ -137,20 +122,20 @@ bool wii_teach::get_filenames(void)
 
 	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
 	strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
-	
+
 	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 
-	if(messip::port_send(this->UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) // by Y&W
+	if (messip::port_send(this->UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) // by Y&W
 
-	{
+			{
 		e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-		throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
+		BOOST_THROW_EXCEPTION(exception::se_r());
 	}
 
 	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
-	{ 
+			{
 		return false;
 	}
 
@@ -162,36 +147,32 @@ bool wii_teach::get_filenames(void)
 
 void wii_teach::save_trajectory(void)
 {
-	if (chdir(path) != 0) 
-	{
+	if (chdir(path) != 0) {
 		perror(path);
-		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(NON_EXISTENT_DIRECTORY));
 	}
 
 	std::ofstream to_file(filename); // otworz plik do zapisu
-	if (!to_file) 
-	{
+	if (!to_file) {
 		perror(filename);
-		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
 	}
 
 	node* current = trajectory.head;
-	
+
 	to_file << type << '\n';
-	
+
 	to_file << trajectory.count << '\n';
-	
+
 	to_file << "ABSOLUTE" << '\n' << '\n';
-	
+
 	to_file << velocity << '\n' << acceleration << '\n';
 
-	while (current) 
-	{
-		for(int i = 0; i < axis_num; ++i)
-		{
+	while (current) {
+		for (int i = 0; i < axis_num; ++i) {
 			to_file << current->position[i] << ' ';
 		}
-		
+
 		to_file << '\n';
 
 		current = current->next;
@@ -203,7 +184,7 @@ void wii_teach::save_trajectory(void)
 
 void wii_teach::updateButtonsPressed(void)
 {
-	ecp_mp::sensor::wiimote * wii = dynamic_cast <ecp_mp::sensor::wiimote *> (sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
+	ecp_mp::sensor::wiimote * wii = dynamic_cast <ecp_mp::sensor::wiimote *>(sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
 
 	buttonsPressed.left = !lastButtons.left && wii->image.left;
 	buttonsPressed.right = !lastButtons.right && wii->image.right;
@@ -223,33 +204,31 @@ void wii_teach::print_trajectory(void)
 	node* current = trajectory.head;
 
 	sr_ecp_msg->message("=== Trajektoria ===");
-	
-	while (current) 
-	{
-		sprintf(buffer, "Pozycja %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], axis_num > 6 ? current->position[6] : 0);
+
+	while (current) {
+		sprintf(buffer, "Pozycja %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5],
+				axis_num > 6 ? current->position[6] : 0);
 		sr_ecp_msg->message(buffer);
 		current = current->next;
 	}
-	
+
 	sr_ecp_msg->message("=== Trajektoria - koniec ===");
 }
 
 void wii_teach::move_to_next(void)
 {
 	buttonsPressed.left = 0;
-	if (trajectory.position < trajectory.count) 
-	{
+	if (trajectory.position < trajectory.count) {
 		++trajectory.position;
 		trajectory.current = trajectory.current->next;
 		move_to_current();
-	}	
+	}
 }
 
 void wii_teach::move_to_prev(void)
 {
 	buttonsPressed.right = 0;
-	if (trajectory.position > 1) 
-	{
+	if (trajectory.position > 1) {
 		--trajectory.position;
 		trajectory.current = trajectory.current->prev;
 		move_to_current();
@@ -259,34 +238,30 @@ void wii_teach::move_to_prev(void)
 void wii_teach::handleHome(void)
 {
 	buttonsPressed.buttonHome = 0;
-	if (trajectory.count && trajectory.position > 0) 
-	{
+	if (trajectory.count && trajectory.position > 0) {
 		trajectory.current->position = gg->get_position_vector();
 
-		sprintf(buffer, "Changed %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], axis_num > 6 ? trajectory.current->position[6] : 0);
+		sprintf(buffer, "Changed %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5],
+				axis_num > 6 ? trajectory.current->position[6] : 0);
 		sr_ecp_msg->message(buffer);
 	}
 
 	print_trajectory();
-}				
+}
 
 void wii_teach::handle12(void)
 {
-	if (buttonsPressed.button1) 
-	{
+	if (buttonsPressed.button1) {
 		buttonsPressed.button1 = 0;
 		gen = ++gen % 3;
-	} 
-	else if (buttonsPressed.button2) 
-	{
+	} else if (buttonsPressed.button2) {
 		buttonsPressed.button2 = 0;
 		gen = --gen % 3;
-		if (gen < 0)
-		{
+		if (gen < 0) {
 			gen = 2;
 		}
 	}
-			
+
 	message.led_change = true;
 	message.rumble = false;
 	switch (gen)
@@ -305,40 +280,32 @@ void wii_teach::handle12(void)
 			break;
 	}
 	((ecp_mp::sensor::wiimote*) sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE])->send_reading(message);
-}			
+}
 
 void wii_teach::handleMinus(void)
 {
 	buttonsPressed.buttonMinus = 0;
-	if (trajectory.position > 0) 
-	{
+	if (trajectory.position > 0) {
 		node* tmp = trajectory.current;
-		if (trajectory.current == trajectory.head) 
-		{
+		if (trajectory.current == trajectory.head) {
 			trajectory.head = trajectory.current->next;
 		}
-					
-		if (trajectory.current == trajectory.tail) 
-		{
+
+		if (trajectory.current == trajectory.tail) {
 			trajectory.tail = trajectory.current->prev;
 		}
-					
-		if (trajectory.current->prev) 
-		{
+
+		if (trajectory.current->prev) {
 			trajectory.current->prev->next = trajectory.current->next;
 		}
-					
-		if (trajectory.current->next) 
-		{
+
+		if (trajectory.current->next) {
 			trajectory.current->next->prev = trajectory.current->prev;
 		}
-					
-		if(trajectory.current->prev)
-		{
+
+		if (trajectory.current->prev) {
 			trajectory.current = trajectory.current->prev;
-		}
-		else
-		{
+		} else {
 			trajectory.current = trajectory.current->next;
 		}
 
@@ -348,27 +315,24 @@ void wii_teach::handleMinus(void)
 
 		--trajectory.count;
 		--trajectory.position;
-					
-		if (!trajectory.position && trajectory.count)
-		{
+
+		if (!trajectory.position && trajectory.count) {
 			trajectory.position = 1;
 		}
-					
+
 		print_trajectory();
 
-		if (trajectory.current)
-		{
+		if (trajectory.current) {
 			move_to_current();
 		}
 	}
-}				
+}
 
 void wii_teach::handleB(void)
 {
 	buttonsPressed.buttonB = 0;
-				
-	if (has_filenames) 
-	{
+
+	if (has_filenames) {
 		save_trajectory();
 	}
 }
@@ -396,7 +360,7 @@ void wii_teach::handleA(void)
 	((ecp_mp::sensor::wiimote*) sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE])->send_reading(message);
 
 	g->Move();
-	
+
 	gg->Move();
 
 	message.led_change = true;
@@ -408,35 +372,33 @@ void wii_teach::handleA(void)
 void wii_teach::handlePlus(void)
 {
 	buttonsPressed.buttonPlus = 0;
-	
+
 	node* current = new node;
 	current->id = ++cnt;
 
 	current->position = gg->get_position_vector();
-	
-	if(!current->position.size()) return;
 
-	if (trajectory.current) 
-	{
+	if (!current->position.size())
+		return;
+
+	if (trajectory.current) {
 		current->next = trajectory.current->next;
 		current->prev = trajectory.current;
 		trajectory.current->next = current;
-	
-		if (trajectory.tail == trajectory.current)
-		{
+
+		if (trajectory.tail == trajectory.current) {
 			trajectory.tail = current;
 		}
 		trajectory.current = current;
-	} 
-	else 
-	{
+	} else {
 		trajectory.current = trajectory.head = trajectory.tail = current;
 	}
 
 	++trajectory.position;
 	++trajectory.count;
 
-	sprintf(buffer, "Added %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5], axis_num > 6 ? current->position[6] : 0);
+	sprintf(buffer, "Added %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), current->id, current->position[0], current->position[1], current->position[2], current->position[3], current->position[4], current->position[5],
+			axis_num > 6 ? current->position[6] : 0);
 	sr_ecp_msg->message(buffer);
 
 	print_trajectory();
@@ -445,12 +407,9 @@ void wii_teach::handlePlus(void)
 void wii_teach::move_to_first(void)
 {
 	buttonsPressed.down = 0;
-	if (trajectory.count > 0) 
-	{
-		do
-		{
-			if(trajectory.current->prev) 
-			{
+	if (trajectory.count > 0) {
+		do {
+			if (trajectory.current->prev) {
 				trajectory.current = trajectory.current->prev;
 				trajectory.position -= 1;
 			}
@@ -463,11 +422,9 @@ void wii_teach::move_to_first(void)
 			coordinates[5] = trajectory.current->position[5];
 
 			sg->load_absolute_angle_axis_trajectory_pose(coordinates);
-		}					
-		while(trajectory.current->prev);
+		} while (trajectory.current->prev);
 
-		if(sg->calculate_interpolate())
-		{
+		if (sg->calculate_interpolate()) {
 			sg->Move();
 		}
 	}
@@ -476,14 +433,11 @@ void wii_teach::move_to_first(void)
 void wii_teach::move_to_last(void)
 {
 	buttonsPressed.up = 0;
-	if (trajectory.count > 0)
-	{
+	if (trajectory.count > 0) {
 		sg->reset();
 		sg->set_absolute();
-		do
-		{
-			if(trajectory.current->next) 
-			{
+		do {
+			if (trajectory.current->next) {
 				trajectory.current = trajectory.current->next;
 				trajectory.position += 1;
 			}
@@ -494,49 +448,41 @@ void wii_teach::move_to_last(void)
 			coordinates[3] = trajectory.current->position[3];
 			coordinates[4] = trajectory.current->position[4];
 			coordinates[5] = trajectory.current->position[5];
-			
-			sg->load_absolute_angle_axis_trajectory_pose(coordinates);
-		}					
-		while(trajectory.current->next);
 
-		if(sg->calculate_interpolate())
-		{
+			sg->load_absolute_angle_axis_trajectory_pose(coordinates);
+		} while (trajectory.current->next);
+
+		if (sg->calculate_interpolate()) {
 			sg->Move();
 		}
-	}	
+	}
 }
 
 void wii_teach::move_to_current(void)
 {
-	if (trajectory.current) 
-	{
-		sprintf(buffer, "Move to %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5], axis_num > 6 ? trajectory.current->position[6] : 0);
+	if (trajectory.current) {
+		sprintf(buffer, "Move to %s %d: %.4f %.4f %.4f %.4f %.4f %.4f %.4f", type.c_str(), trajectory.current->id, trajectory.current->position[0], trajectory.current->position[1], trajectory.current->position[2], trajectory.current->position[3], trajectory.current->position[4], trajectory.current->position[5],
+				axis_num > 6 ? trajectory.current->position[6] : 0);
 		sr_ecp_msg->message(buffer);
 		sg->reset();
-		
-		
-		for(int i = 0; i < axis_num; ++i)
-		{
+
+		for (int i = 0; i < axis_num; ++i) {
 			coordinates[i] = trajectory.current->position[i];
 		}
-		
+
 		sg->set_absolute();
-		
-		if(pose_spec == lib::ECP_JOINT)
-		{
+
+		if (pose_spec == lib::ECP_JOINT) {
 			sg->load_absolute_joint_trajectory_pose(coordinates);
-		}
-		else
-		{
+		} else {
 			sg->load_absolute_angle_axis_trajectory_pose(coordinates);
 		}
-	
-		if(sg->calculate_interpolate())
-		{
+
+		if (sg->calculate_interpolate()) {
 			sg->Move();
 		}
 	}
-	
+
 	gg->Move();
 }
 
@@ -550,7 +496,7 @@ void wii_teach::main_task_algorithm(void)
 	type = "XYZ_ANGLE_AXIS";
 	pose_spec = lib::ECP_XYZ_ANGLE_AXIS;
 
-	ecp_mp::sensor::wiimote * wii = dynamic_cast <ecp_mp::sensor::wiimote *> (sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
+	ecp_mp::sensor::wiimote * wii = dynamic_cast <ecp_mp::sensor::wiimote *>(sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]);
 
 	sg = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	sg->set_debug(true);
@@ -559,26 +505,23 @@ void wii_teach::main_task_algorithm(void)
 	jg = new irp6ot_m::generator::wii_joint(*this, wii);
 
 	has_filenames = get_filenames();
-	
-	if (has_filenames) 
-	{
+
+	if (has_filenames) {
 		load_trajectory();
 		gg = new common::generator::get_position(*this, pose_spec, axis_num);
 		print_trajectory();
 
-		if(trajectory.count)
-		{
+		if (trajectory.count) {
 			move_to_current();
 		}
 	}
-	
+
 	uint8_t response = 0;
-	if(!trajectory.count)
-	{
+	if (!trajectory.count) {
 		response = choose_option("Pose specification: [1] Angle Axis, [2] Joint", 2);
 	}
 
-	switch(response)
+	switch (response)
 	{
 		case lib::OPTION_TWO:
 			pose_spec = lib::ECP_JOINT;
@@ -590,14 +533,13 @@ void wii_teach::main_task_algorithm(void)
 			axis_num = 6;
 			break;
 	}
-	
-	if(!gg)
-	{
+
+	if (!gg) {
 		gg = new common::generator::get_position(*this, pose_spec, axis_num);
 	}
-	
-	coordinates = std::vector<double>(axis_num);
-	
+
+	coordinates = std::vector <double>(axis_num);
+
 	g = ag;
 
 	message.led_change = true;
@@ -614,57 +556,36 @@ void wii_teach::main_task_algorithm(void)
 			message.led_status = 0x4;
 			break;
 	}
-	
+
 	wii->send_reading(message);
 
-	while (1) 
-	{
+	while (1) {
 		sensor_m[ecp_mp::sensor::SENSOR_WIIMOTE]->get_reading();
 		updateButtonsPressed();
 		lastButtons = wii->image;
 
-		if (buttonsPressed.button1 || buttonsPressed.button2) 
-		{
+		if (buttonsPressed.button1 || buttonsPressed.button2) {
 			handle12();
-		} 
-		else if (buttonsPressed.buttonA) 
-		{
+		} else if (buttonsPressed.buttonA) {
 			handleA();
-		} 
-		else if (buttonsPressed.left) 
-		{
+		} else if (buttonsPressed.left) {
 			move_to_prev();
-		} 
-		else if (buttonsPressed.right) 
-		{
+		} else if (buttonsPressed.right) {
 			move_to_next();
-		}
-		else if (buttonsPressed.up) 
-		{
+		} else if (buttonsPressed.up) {
 			move_to_last();
-		} 
-		else if (buttonsPressed.down) 
-		{
+		} else if (buttonsPressed.down) {
 			move_to_first();
-		} 
-		else if (buttonsPressed.buttonPlus) 
-		{
+		} else if (buttonsPressed.buttonPlus) {
 			handlePlus();
-		} 
-		else if (buttonsPressed.buttonMinus) 
-		{
+		} else if (buttonsPressed.buttonMinus) {
 			handleMinus();
-		} 
-		else if (buttonsPressed.buttonHome) 
-		{
+		} else if (buttonsPressed.buttonHome) {
 			handleHome();
-		} 
-		else if (buttonsPressed.buttonB) 
-		{
+		} else if (buttonsPressed.buttonB) {
 			handleB();
 		}
 	}
-
 
 	termination_notice();
 }
@@ -684,5 +605,4 @@ task_base* return_created_ecp_task(lib::configurator &_config)
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
-
 
