@@ -88,12 +88,43 @@ void festo_and_inputs::set_all_legs_unchecked()
 
 bool festo_and_inputs::is_upper_halotron_active(int leg_number)
 {
-	return epos_inputs[2 * leg_number + 9];
+
+	switch (leg_number)
+	{
+		case 1:
+			return epos_inputs[EPOS_L1_HAL_UP];
+			break;
+		case 2:
+			return epos_inputs[EPOS_L2_HAL_UP];
+			break;
+		case 3:
+			return epos_inputs[EPOS_L3_HAL_UP];
+			break;
+		default:
+			break;
+	}
+//	return epos_inputs[2 * leg_number + 9];
+	return false;
 }
 
 bool festo_and_inputs::is_lower_halotron_active(int leg_number)
 {
-	return epos_inputs[2 * leg_number + 8];
+	switch (leg_number)
+	{
+		case 1:
+			return epos_inputs[EPOS_L1_HAL_DOWN];
+			break;
+		case 2:
+			return epos_inputs[EPOS_L2_HAL_DOWN];
+			break;
+		case 3:
+			return epos_inputs[EPOS_L3_HAL_DOWN];
+			break;
+		default:
+			break;
+	}
+	//return epos_inputs[2 * leg_number + 8];
+	return false;
 }
 
 bool festo_and_inputs::is_attached(int leg_number)
