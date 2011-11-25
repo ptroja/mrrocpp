@@ -40,7 +40,7 @@ const uint32_t kinematic_parameters_spkm::encoder_resolution[mrrocpp::lib::spkm:
 };
 
 //! Initialization of upper motors limits vector.
-const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 8000, 8000, 8000, 330000, 90000, 340000 };
+const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 8000, 8000, 8000, 320000, 90000, 340000 };
 
 //! Initialization of lower motors limits vector.
 //! Those are the "unsafe" (in terms that robot can hit its "shell" from inside) values.
@@ -92,7 +92,7 @@ const double kinematic_parameters_spkm::uC = 0.05;
 const Vector3d kinematic_parameters_spkm::P_S_P(0, 0, 0.0905);
 
 //! Initialization of transformation from P (middle of upper P platform) and S (middle of the spherical wrist).
-const double tmp_pst[16] = {0, -1.0, 0, 0, 1.0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1};
+const double tmp_pst[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1};
 const Homog4d kinematic_parameters_spkm::P_S_T(tmp_pst);
 
 //! Initialization of transformation from W (SW end-effector) to S (middle of the spherical wrist).
