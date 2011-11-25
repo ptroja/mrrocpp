@@ -5,13 +5,14 @@
 
 #include <cstdio>
 #include <cstdlib>
+
 #include <unistd.h>
 
 // Klasa edp_irp6ot_effector.
 #include "robot/irp6ot_tfg/edp_irp6ot_tfg_effector.h"
 #include "base/edp/reader.h"
 // Klasa hardware_interface.
-#include "robot/irp6ot_tfg/hi_irp6ot_tfg.h"
+#include "robot/hi_moxa/hi_moxa.h"
 // Klasa servo_buffer.
 #include "robot/irp6ot_tfg/sg_irp6ot_tfg.h"
 #include "robot/irp6ot_tfg/regulator_irp6ot_tfg.h"
@@ -35,12 +36,19 @@ servo_buffer::servo_buffer(effector &_master) :
 
 void servo_buffer::load_hardware_interface(void)
 {
-	// tablica pradow maksymalnych d;a poszczegolnych osi
-	int max_current[lib::irp6ot_tfg::NUM_OF_SERVOS] = { AXIS_8_MAX_CURRENT };
+	// tablica pradow maksymalnych dla poszczegolnych osi
+		//int max_current[lib::irp6p_tfg::NUM_OF_SERVOS] = { AXIS_7_MAX_CURRENT };
 
-	hi
-			= new hardware_interface(master, IRQ_REAL, INT_FREC_DIVIDER, HI_RYDZ_INTR_TIMEOUT_HIGH, FIRST_SERVO_PTR, INTERRUPT_GENERATOR_SERVO_PTR, ISA_CARD_OFFSET, max_current);
-	hi->init();
+		const std::vector <std::string>
+				ports_vector(mrrocpp::lib::irp6ot_tfg::ports_strings, mrrocpp::lib::irp6ot_tfg::ports_strings
+						+ mrrocpp::lib::irp6ot_tfg::LAST_MOXA_PORT_NUM + 1);
+		hi
+				= new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6ot_tfg::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::irp6ot_tfg::MAX_INCREMENT);
+		hi->init();
+
+		//Ustawienie zwlocznego ograniczenia pradowego - dlugotrwale przekroczenie ustawionej wartosci
+		//spowoduje wlaczenie stopu awaryjnego przez sterownik
+		hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_tfg::MAX_CURRENT_0);
 
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1

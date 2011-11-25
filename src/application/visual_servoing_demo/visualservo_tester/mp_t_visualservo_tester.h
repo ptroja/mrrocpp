@@ -39,6 +39,7 @@ private:
 	bool run_vs;
 	bool run_conveyor;
 	int vs_settle_time;
+	std::string robot_name;
 };
 
 /** @} */
