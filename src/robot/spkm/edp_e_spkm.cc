@@ -406,13 +406,16 @@ void effector::parse_motor_command()
 				// Copy data directly from buffer
 				for (int i = 0; i < number_of_servos; ++i) {
 					desired_motor_pos_new[i] = ecp_edp_cbuffer.motor_pos[i];
-					cout << "MOTOR[ " << i << "]: " << desired_motor_pos_new[i] << endl;
+					cout << "MOTOR1[ " << i << "]: " << desired_motor_pos_new[i] << endl;
 				}
 
 				if (is_synchronised()) {
+					cout << "Synchronised" << endl;
 					// Check the desired motor (only motors!) values if they are absolute.
 					get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
-				}
+				} else
+					cout << "Not synchronised" << endl;
+
 				break;
 			case lib::spkm::JOINT:
 				// Copy data directly from buffer
