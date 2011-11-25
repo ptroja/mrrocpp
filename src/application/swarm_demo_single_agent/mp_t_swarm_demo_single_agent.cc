@@ -107,11 +107,11 @@ void swarmitfix::main_task_algorithm(void)
 
 	move_smb_legs(lib::smb::DOWN, lib::smb::DOWN, lib::smb::DOWN);
 	move_smb(2, -1);
-	move_smb(3, -1);
 	move_smb(1, -1);
-	move_smb(2, -1);
 	move_smb(3, -1);
-	move_smb(1, 5);
+	move_smb(2, -1);
+	move_smb(1, -1);
+	move_smb(3, 5);
 
 // smb - podnosimy wszystkie nogi
 	sr_ecp_msg->message("14");
