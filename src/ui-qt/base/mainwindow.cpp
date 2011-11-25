@@ -37,7 +37,6 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	toolBar = new Ui::ToolBar(menuBar, this);
 	addToolBar(Qt::TopToolBarArea, toolBar);
 
-
 	signalDispatcher = new Ui::SignalDispatcher(interface);
 	//signalDispatcher = new mrrocpp::ui::common::SignalDispatcher();
 
@@ -87,6 +86,17 @@ MainWindow::~MainWindow()
 Ui::MenuBar* MainWindow::getMenuBar()
 {
 	return menuBar;
+}
+
+void MainWindow::menuall_Preset_Positions_setEnabled(bool value)
+{
+	getMenuBar()->menuall_Preset_Positions->setEnabled(value);
+	getMenuBar()->actionall_Synchro_Position->setEnabled(value);
+	getMenuBar()->actionall_Front_Position->setEnabled(value);
+	getMenuBar()->actionall_Position_0->setEnabled(value);
+	getMenuBar()->actionall_Position_1->setEnabled(value);
+	getMenuBar()->actionall_Position_2->setEnabled(value);
+
 }
 
 Ui::MainWindow * MainWindow::get_ui()

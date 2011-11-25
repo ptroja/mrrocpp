@@ -484,7 +484,7 @@ int UiRobot::manage_interface()
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+				mw->menuall_Preset_Positions_setEnabled(true);
 
 				switch (interface.mp->mp_state.state)
 				{
