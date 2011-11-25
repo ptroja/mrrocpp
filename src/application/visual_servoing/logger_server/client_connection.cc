@@ -8,9 +8,6 @@
 #include <stdexcept>
 #include <iostream>
 
-#include "base/lib/xdr/xdr_iarchive.hpp"
-#include "base/lib/xdr/xdr_oarchive.hpp"
-
 #include "client_connection.h"
 
 using namespace std;
@@ -24,13 +21,16 @@ client_connection::client_connection(logger_server* server, int connection_fd, c
 	oa << log_message_header();
 	header_size = oa.getArchiveSize();
 
+	config_message cm = receive_message<config_message>();
+
 	time_t timep = time(NULL);
 	struct tm* time_split = localtime(&timep);
 	char time_log_filename[128];
-	sprintf(time_log_filename, "../../msr/%04d-%02d-%02d_%02d-%02d-%02d_%s.csv", time_split->tm_year + 1900, time_split->tm_mon
+	sprintf(time_log_filename, "../../msr/%s_%04d-%02d-%02d_%02d-%02d-%02d_%s.csv", cm.filename_prefix, time_split->tm_year + 1900, time_split->tm_mon
 			+ 1, time_split->tm_mday, time_split->tm_hour, time_split->tm_min, time_split->tm_sec, remote_address.c_str());
 
 	outFile.open(time_log_filename, ofstream::out | ofstream::trunc);
+	outFile << "message_number;message_time_s;"<<cm.header<<"\n";
 }
 
 client_connection::~client_connection()
@@ -43,7 +43,7 @@ client_connection::~client_connection()
 void client_connection::service()
 {
 	//	cout << "client_connection::service(" << connection_fd << "):\n";
-	log_message lm = receive_message();
+	log_message lm = receive_message<log_message>();
 
 	if (last_message_number + 1 != lm.number) {
 		cerr << "!!!!!!!!!!!!!!!!!!!logger_client buffer overflow detected!!!!!!!!!!!!!!!!!!!!!!\n";
@@ -54,26 +54,7 @@ void client_connection::service()
 	last_message_number = lm.number;
 }
 
-log_message client_connection::receive_message()
-{
-	xdr_iarchive <> ia;
-	if (read(connection_fd, ia.get_buffer(), header_size) != header_size) {
-		throw runtime_error("read() != header_size");
-	}
-	log_message_header lmh;
-	ia >> lmh;
 
-	//	cout << "    lmh.message_size = " << lmh.message_size << endl;
-
-	ia.clear_buffer();
-	if (read(connection_fd, ia.get_buffer(), lmh.message_size) != lmh.message_size) {
-		throw runtime_error("read() != lmh.message_size");
-	}
-
-	log_message lm;
-	ia >> lm;
-	return lm;
-}
 
 void client_connection::save_message(log_message& lm)
 {

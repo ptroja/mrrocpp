@@ -15,6 +15,10 @@
 
 #include "base/lib/logger_client/log_message.h"
 
+#include "base/lib/xdr/xdr_iarchive.hpp"
+#include "base/lib/xdr/xdr_oarchive.hpp"
+
+
 namespace logger {
 
 class logger_server;
@@ -31,7 +35,8 @@ public:
 private:
 	client_connection(const client_connection&);
 
-	log_message receive_message();
+	template<typename T>
+	T receive_message();
 	void save_message(log_message& lm);
 
 	logger_server* server;
@@ -44,6 +49,28 @@ private:
 
 	std::ofstream outFile;
 };
+
+template<typename T>
+T client_connection::receive_message()
+{
+	xdr_iarchive <> ia;
+	if (read(connection_fd, ia.get_buffer(), header_size) != header_size) {
+		throw std::runtime_error("read() != header_size");
+	}
+	log_message_header lmh;
+	ia >> lmh;
+
+	//	cout << "    lmh.message_size = " << lmh.message_size << endl;
+
+	ia.clear_buffer();
+	if (read(connection_fd, ia.get_buffer(), lmh.message_size) != lmh.message_size) {
+		throw std::runtime_error("read() != lmh.message_size");
+	}
+
+	T lm;
+	ia >> lm;
+	return lm;
+}
 
 } /* namespace logger */
 #endif /* CLIENT_CONNECTION_H_ */

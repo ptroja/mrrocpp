@@ -29,8 +29,8 @@ double time_diff(struct timespec t1, struct timespec t0)
 	return (t1.tv_sec - t0.tv_sec) + (t1.tv_nsec - t0.tv_nsec) * 1e-9;
 }
 
-logger_client::logger_client(int buffer_size, const std::string& server_addr, int server_port, const std::string& header_text) :
-		fd(-1), buffer(buffer_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false), header_text(header_text)
+logger_client::logger_client(int buffer_size, const std::string& server_addr, int server_port, const std::string& header_text, const std::string& filename_prefix) :
+		fd(-1), buffer(buffer_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false), reconnect_now(false), connected(false), header_text(header_text), filename_prefix(filename_prefix)
 {
 	thread = boost::thread(&logger_client::operator (), this);
 }
@@ -48,6 +48,9 @@ logger_client::~logger_client()
 
 void logger_client::log(log_message& msg)
 {
+	if(!connected){
+		return;
+	}
 	msg.number = current_message_number;
 	struct timespec tp;
 	if (clock_gettime(CLOCK_REALTIME, &tp) != 0) {
@@ -74,14 +77,10 @@ void logger_client::operator()()
 
 		connect();
 
-		log_message lm;
-		strcpy(lm.text, header_text.c_str());
-		send_message(lm);
-
 		do {
 			{
 				boost::mutex::scoped_lock lock(queue_mutex);
-				if(!buffer.empty() && !terminate){
+				if(!buffer.empty() && !terminate && !reconnect_now){
 					cond.wait(lock);
 				}
 				// move data from queue to temp buffer
@@ -95,6 +94,13 @@ void logger_client::operator()()
 			while (!temp_buffer.empty()) {
 				send_message(temp_buffer.front());
 				temp_buffer.pop_front();
+			}
+
+			if(reconnect_now){
+				reconnect_now = false;
+				disconnect();
+				sleep(1);
+				connect();
 			}
 		} while(!terminate);
 		disconnect();
@@ -131,34 +137,13 @@ void logger_client::connect()
 	if (::connect(fd, (const struct sockaddr *) &serv_addr, sizeof(serv_addr)) == -1) {
 		throw runtime_error("logger_client::connect(): " + string(strerror(errno)));
 	}
-}
+	current_message_number = 0;
 
-void logger_client::send_message(const log_message& msg)
-{
-	oa_data.clear_buffer();
-	oa_header.clear_buffer();
-
-	oa_data << msg;
-
-	log_message_header header;
-	header.message_size = oa_data.getArchiveSize();
-	oa_header << header;
-
-	struct iovec iov[2];
-	ssize_t nwritten;
-
-	iov[0].iov_base = (void*) oa_header.get_buffer();
-	iov[0].iov_len = oa_header.getArchiveSize();
-	iov[1].iov_base = (void*) oa_data.get_buffer();
-	iov[1].iov_len = oa_data.getArchiveSize();
-
-	nwritten = writev(fd, iov, 2);
-	if (nwritten == -1) {
-		throw runtime_error("Socket::writev2() nwritten == -1");
-	}
-	if ((size_t) nwritten != iov[0].iov_len + iov[1].iov_len) {
-		throw runtime_error("Socket::writev2() nwritten != buf1Size + buf2Size");
-	}
+	config_message cm;
+	strcpy(cm.header, header_text.c_str());
+	strcpy(cm.filename_prefix, filename_prefix.c_str());
+	send_message(cm);
+	connected = true;
 }
 
 void logger_client::disconnect()
@@ -166,6 +151,21 @@ void logger_client::disconnect()
 	if (fd >= 0) {
 		close(fd);
 		fd = -1;
+	}
+	connected = false;
+}
+
+void logger_client::set_filename_prefix(const std::string& filename_prefix)
+{
+	this->filename_prefix = filename_prefix;
+}
+
+void logger_client::reconnect()
+{
+	reconnect_now = true;
+	{
+		boost::mutex::scoped_lock lock(queue_mutex);
+		cond.notify_one();
 	}
 }
 

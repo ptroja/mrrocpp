@@ -6,6 +6,7 @@
  */
 
 #include <stdexcept>
+#include <sstream>
 
 #include "ecp_t_pid_tuning_pb_eih.h"
 
@@ -121,6 +122,16 @@ void ecp_t_pid_tuning_pb_eih::main_task_algorithm(void)
 				log("running with k_p = %g", k_p);
 
 				reg->Kp(regulator_axis, regulator_axis) = k_p;
+
+				std::stringstream ss;
+				ss << "PID_Tuning_k_p_" << k_p;
+
+				std::string log_filename_prefix = ss.str();
+
+				sm->log_client->set_filename_prefix(log_filename_prefix);
+				vs->log_client->set_filename_prefix(log_filename_prefix);
+				sm->log_client->reconnect();
+				vs->log_client->reconnect();
 
 				// przesun KR do object_reached_position
 				newsmooth_gen->reset();
