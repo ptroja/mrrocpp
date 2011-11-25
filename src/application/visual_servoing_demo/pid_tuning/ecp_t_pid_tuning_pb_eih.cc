@@ -119,7 +119,7 @@ void ecp_t_pid_tuning_pb_eih::main_task_algorithm(void)
 
 			// dla wzmocnienia k_p_min ... k_p_max co krok k_p_step dla osi current_axis
 			for(double k_p = k_p_min; k_p <= k_p_max; k_p += k_p_step){
-				log("running with k_p = %g", k_p);
+				log("running with k_p = %g\n", k_p);
 
 				reg->Kp(regulator_axis, regulator_axis) = k_p;
 
@@ -130,8 +130,6 @@ void ecp_t_pid_tuning_pb_eih::main_task_algorithm(void)
 
 				sm->log_client->set_filename_prefix(log_filename_prefix);
 				vs->log_client->set_filename_prefix(log_filename_prefix);
-				sm->log_client->reconnect();
-				vs->log_client->reconnect();
 
 				// przesun KR do object_reached_position
 				newsmooth_gen->reset();
@@ -148,9 +146,21 @@ void ecp_t_pid_tuning_pb_eih::main_task_algorithm(void)
 				// ustaw wzmocnienie k_p
 
 				// uruchom VS z timeout_termination_condition i object_reached_termination_condition
+				sr_ecp_msg->message("Staring logger.");
+
+				sm->log_client->set_connect();
+				vs->log_client->set_connect();
+
 				sr_ecp_msg->message("Staring visual servo.");
+
 				sm->Move();
+
 				sr_ecp_msg->message("Visual servo finished.");
+
+				sm->log_client->set_disconnect();
+				vs->log_client->set_disconnect();
+
+				sr_ecp_msg->message("Logger stopped.");
 
 				if(timeout_term_cond->is_condition_met()){
 					// jesli warunek timeout_termination_condition zostal spelniony

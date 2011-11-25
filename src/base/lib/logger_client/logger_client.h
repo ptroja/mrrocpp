@@ -35,7 +35,8 @@ public:
 	void operator()();
 
 	void set_filename_prefix(const std::string& filename_prefix);
-	void reconnect();
+	void set_connect();
+	void set_disconnect();
 protected:
 
 private:
@@ -56,8 +57,12 @@ private:
 	boost::condition_variable cond;
 	boost::mutex queue_mutex;
 	bool terminate;
-	bool reconnect_now;
+	bool connect_now;
+	bool disconnect_now;
 	bool connected;
+
+	boost::mutex connect_mutex;
+	boost::condition_variable connect_cond;
 
 	xdr_oarchive<> oa_header;
 	xdr_oarchive<> oa_data;
@@ -69,6 +74,9 @@ private:
 template<typename T>
 void logger_client::send_message(const T& msg)
 {
+	if(fd < 0){
+		return;
+	}
 	oa_data.clear_buffer();
 	oa_header.clear_buffer();
 

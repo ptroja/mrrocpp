@@ -30,7 +30,7 @@ double time_diff(struct timespec t1, struct timespec t0)
 }
 
 logger_client::logger_client(int buffer_size, const std::string& server_addr, int server_port, const std::string& header_text, const std::string& filename_prefix) :
-		fd(-1), buffer(buffer_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false), reconnect_now(false), connected(false), header_text(header_text), filename_prefix(filename_prefix)
+		fd(-1), buffer(buffer_size), server_addr(server_addr), server_port(server_port), current_message_number(0), terminate(false), connect_now(false), disconnect_now(false), connected(false), header_text(header_text), filename_prefix(filename_prefix)
 {
 	thread = boost::thread(&logger_client::operator (), this);
 }
@@ -75,18 +75,33 @@ void logger_client::operator()()
 		boost::circular_buffer<log_message> temp_buffer(buffer.capacity());
 		queue_mutex.unlock();
 
-		connect();
+//		connect();
 
 		do {
 			{
 				boost::mutex::scoped_lock lock(queue_mutex);
-				if(!buffer.empty() && !terminate && !reconnect_now){
+				if(!buffer.empty() && !terminate && !connect_now && !disconnect_now){
 					cond.wait(lock);
 				}
-				// move data from queue to temp buffer
-				while(!buffer.empty()){
-					temp_buffer.push_back(buffer.front());
-					buffer.pop_front();
+				if(connect_now){
+					buffer.clear();
+					connect();
+					connect_now = false;
+					connect_cond.notify_one();
+				} else if(disconnect_now){
+					//printf("logger_client::operator()(): disconnect_now == true 1");
+					buffer.clear();
+					disconnect();
+					//printf("logger_client::operator()(): disconnect_now == true 2");
+					disconnect_now = false;
+					connect_cond.notify_one();
+					//printf("logger_client::operator()(): disconnect_now == true 3");
+				} else{
+					// move data from queue to temp buffer
+					while(!buffer.empty()){
+						temp_buffer.push_back(buffer.front());
+						buffer.pop_front();
+					}
 				}
 			}
 
@@ -94,13 +109,6 @@ void logger_client::operator()()
 			while (!temp_buffer.empty()) {
 				send_message(temp_buffer.front());
 				temp_buffer.pop_front();
-			}
-
-			if(reconnect_now){
-				reconnect_now = false;
-				disconnect();
-				sleep(1);
-				connect();
 			}
 		} while(!terminate);
 		disconnect();
@@ -160,13 +168,37 @@ void logger_client::set_filename_prefix(const std::string& filename_prefix)
 	this->filename_prefix = filename_prefix;
 }
 
-void logger_client::reconnect()
+void logger_client::set_connect()
 {
-	reconnect_now = true;
-	{
-		boost::mutex::scoped_lock lock(queue_mutex);
-		cond.notify_one();
+	//printf("logger_client::set_connect() 1\n");
+	//boost::mutex::scoped_lock lock(queue_mutex);
+	//printf("logger_client::set_connect() 2\n");
+	connect_now = true;
+	cond.notify_one();
+	//printf("logger_client::set_connect() 3\n");
+	boost::mutex::scoped_lock lock2(connect_mutex);
+	//printf("logger_client::set_connect() 4\n");
+	while(!connected){
+		//printf("logger_client::set_connect() 5\n");
+		connect_cond.wait(lock2);
 	}
+	//printf("logger_client::set_connect() 6\n");
+}
+void logger_client::set_disconnect()
+{
+	//printf("logger_client::set_disconnect() 1\n");
+	//boost::mutex::scoped_lock lock(queue_mutex);
+	//printf("logger_client::set_disconnect() 2\n");
+	disconnect_now = true;
+	cond.notify_one();
+	//printf("logger_client::set_disconnect() 3\n");
+	boost::mutex::scoped_lock lock2(connect_mutex);
+	//printf("logger_client::set_disconnect() 4\n");
+	while(connected){
+		//printf("logger_client::set_disconnect() 5\n");
+		connect_cond.wait(lock2);
+	}
+	//printf("logger_client::set_disconnect() 6\n");
 }
 
 } //namespace logger

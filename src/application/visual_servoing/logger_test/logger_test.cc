@@ -54,6 +54,9 @@ int main(int argc, char *argv[])
 	double time_sum = 0.0;
 
 	for(int j=0; j<number_of_reconnections; ++j){
+		cout<<"Connecting... 1\n";
+		log.set_connect();
+
 		cout<<"Sending messages...\n";
 		for(int i=0; i<messages_count; ++i){
 			usleep(delay);
@@ -82,11 +85,10 @@ int main(int argc, char *argv[])
 			cout<<"max_time = "<<max_time<<endl;
 		}
 		cout<<"All messages sent.\n";
-		if(j < number_of_reconnections - 1){
-			cout<<"Reconnecting...\n";
-			log.reconnect();
-			sleep(1);
-		}
+
+		cout<<"Disconnecting...\n";
+		log.set_disconnect();
+		cout<<"Disconnected...\n";
 	}
 
 
