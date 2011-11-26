@@ -22,12 +22,12 @@ namespace smb {
 //! * The encoder has 2400 CPT (Counts per turn).
 //! * The gear ratio is 50.
 //! * Motor to motor radio is ??? // TODO: CHECK!!
-const double rotational_legs_mp2i_ratio = M_PI / (2400 * 50 * 2.5);
+const double rotational_legs_mp2i_ratio = -M_PI / (2400 * 50 * 2.5);
 
 //! Parameters for conversion for rotational DOFs are:
 //! * The encoder has 2400 CPT (Counts per turn).
 //! * The gear ratio is 50.
-const double rotational_spkm_mp2i_ratio = M_PI / (2400 * 50);
+const double rotational_spkm_mp2i_ratio = -M_PI / (2400 * 50);
 
 //! Initialization of motor to internal ratios.
 const double model::mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS] = { rotational_legs_mp2i_ratio, rotational_spkm_mp2i_ratio };
