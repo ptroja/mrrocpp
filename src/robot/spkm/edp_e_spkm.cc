@@ -545,6 +545,22 @@ void effector::execute_motor_motion()
 						if (Delta[i] != 0) {
 							axes[i]->setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
 							axes[i]->setPositionProfileType(0); // Trapezoidal velocity profile
+
+							// Adjust velocity settings results in than 1 (minimal value accepted by the EPOS2)
+							if(Vnew[i] > 0 && Vnew[i] * maxon::epos::SECONDS_PER_MINUTE < 1.0) {
+								Vnew[i] = 1.1/maxon::epos::SECONDS_PER_MINUTE;
+							}
+
+							// Adjust acceleration settings which are less than 1 (minimal value accepted by the EPOS2)
+							if(Anew[i] > 0 && Anew[i] < 1) {
+								Anew[i] = 1;
+							}
+
+							// Adjust deceleration settings which are less than 1 (minimal value accepted by the EPOS2)
+							if(Dnew[i] > 0 && Dnew[i] < 1) {
+								Dnew[i] = 1;
+							}
+
 							axes[i]->setProfileVelocity(Vnew[i] * maxon::epos::SECONDS_PER_MINUTE);
 							axes[i]->setProfileAcceleration(Anew[i]);
 							axes[i]->setProfileDeceleration(Dnew[i]);
