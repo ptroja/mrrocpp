@@ -33,6 +33,11 @@ public:
 	 * @param _robot_name Unique robot name.
 	 */
 	robot(const lib::robot_name_t & _robot_name);
+
+	virtual ~robot()
+	{
+
+	}
 };
 
 } // namespace ecp_mp

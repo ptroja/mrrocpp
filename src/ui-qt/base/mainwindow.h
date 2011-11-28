@@ -10,6 +10,7 @@
 #include "ui_robot.h"
 #include "signal_dispatcher.h"
 #include "menu_bar.h"
+#include "ToolBar.h"
 
 namespace Ui {
 class MainWindow;
@@ -63,12 +64,16 @@ public:
 	Ui::MenuBar* getMenuBar();
 
 	mrrocpp::ui::common::Interface* getInterface();
-	void setMenu();
+	//void setMenu();
 	void clear_console();
+
+	void menuall_Preset_Positions_setEnabled(bool value);
+
 
 private:
 	Ui::MainWindow *ui;
 	Ui::MenuBar *menuBar;
+	Ui::ToolBar *toolBar;
 	mrrocpp::ui::common::Interface& interface;
 	Ui::SignalDispatcher *signalDispatcher;
 

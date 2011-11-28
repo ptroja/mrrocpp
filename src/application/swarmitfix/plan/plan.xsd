@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-    <xs:annotation>
-      <xs:documentation>distance from wrist center to head center in local wrist system along X</xs:documentation></xs:annotation>
-    <xs:element name="plan">
+  <xs:element name="plan">
     <xs:complexType>
       <xs:sequence>
         <xs:element name="svar">
+          <xs:annotation>
+            <xs:documentation>segment-related variables</xs:documentation>
+          </xs:annotation>
           <xs:complexType>
             <xs:sequence>
               <xs:element maxOccurs="unbounded" name="item">
                 <xs:complexType>
-                  <xs:complexContent>
-                    <xs:extension base="State">
-                      <xs:sequence>
-                        <xs:element ref="sHind"/>
-                        <xs:element ref="eHind"/>
-                        <xs:element ref="numH"/>
-                        <xs:element ref="sBind"/>
-                        <xs:element ref="eBind"/>
-                        <xs:element ref="numB"/>
-                        <xs:element ref="sPind"/>
-                        <xs:element ref="ePind"/>
-                        <xs:element ref="numP"/>
-                        <xs:element ref="segInd"/>
-                      </xs:sequence>                      
-                    </xs:extension>
-                  </xs:complexContent>
+                  <xs:sequence>
+                    <xs:element name="agent" type="xs:anyType"/>
+                    <xs:element name="TBeg" type="xs:anyType"/>
+                    <xs:element name="TEnd" type="xs:anyType"/>
+                    <xs:element ref="sHind"/>
+                    <xs:element ref="eHind"/>
+                    <xs:element ref="numH"/>
+                    <xs:element ref="sBind"/>
+                    <xs:element ref="eBind"/>
+                    <xs:element ref="numB"/>
+                    <xs:element ref="sPind"/>
+                    <xs:element ref="ePind"/>
+                    <xs:element ref="numP"/>
+                    <xs:element ref="segInd"/>
+                  </xs:sequence>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
@@ -112,7 +112,7 @@
               <xs:element maxOccurs="unbounded" name="item">
                 <xs:complexType>
                   <xs:complexContent>
-                    <xs:extension base="State">                      
+                    <xs:extension base="State">
                       <xs:sequence>
                         <xs:element ref="ind"/>
                         <xs:element ref="alpha0"/>
@@ -135,7 +135,7 @@
                     </xs:extension>
                   </xs:complexContent>
                 </xs:complexType>
-              </xs:element>              
+              </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -203,7 +203,7 @@
               <xs:element ref="beta"/>
               <xs:element ref="gamma"/>
               <xs:element ref="len"/>
-              <xs:element ref="index"/>              
+              <xs:element ref="index"/>
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -283,7 +283,8 @@
   <xs:element name="ind" type="xs:integer">
     <xs:annotation>
       <xs:documentation>execution index along time axis</xs:documentation>
-    </xs:annotation></xs:element>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="bCind" type="xs:integer"/>
   <xs:element name="cx" type="xs:decimal"/>
   <xs:element name="cy" type="xs:decimal"/>
@@ -298,7 +299,8 @@
     <xs:annotation>
       <xs:documentation>delta (rotation) angle in radians from -2pi +1/3 pi to 2pi - 1/3 pi
 </xs:documentation>
-    </xs:annotation></xs:element>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="pin" type="xs:integer">
     <xs:annotation>
       <xs:documentation>
@@ -343,33 +345,43 @@
   <xs:element name="alpha0" type="xs:decimal">
     <xs:annotation>
       <xs:documentation>orientation in XY plane of pkm origin with respect to global (bench) origin</xs:documentation>
-    </xs:annotation></xs:element>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="l1" type="xs:decimal">
     <xs:annotation>
       <xs:documentation>1st PKM's leg parameter</xs:documentation>
-    </xs:annotation></xs:element>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="l2" type="xs:decimal">
     <xs:annotation>
       <xs:documentation>2nd PKM's leg parameter</xs:documentation>
-    </xs:annotation></xs:element>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="l3" type="xs:decimal">
     <xs:annotation>
       <xs:documentation>3rd PKM's leg parameter</xs:documentation>
-    </xs:annotation></xs:element>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="psi1" type="xs:decimal">
     <xs:annotation>
       <xs:documentation>orientation of spherical wrist</xs:documentation>
-    </xs:annotation></xs:element>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="psi2" type="xs:decimal">
     <xs:annotation>
-      <xs:documentation>orientation of spherical wrist</xs:documentation></xs:annotation></xs:element>
+      <xs:documentation>orientation of spherical wrist</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="psi3" type="xs:decimal">
     <xs:annotation>
-      <xs:documentation>orientation of spherical wrist</xs:documentation></xs:annotation></xs:element>
+      <xs:documentation>orientation of spherical wrist</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="beta7" type="xs:decimal">
     <xs:annotation>
       <xs:documentation>The seventh DOF: orientation of the head around current head-related Z-xis in space; in local pkm system - keep it within ((-pi, pi))</xs:documentation>
-    </xs:annotation></xs:element>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="pkmbaseToFixedPkm" type="xs:decimal"/>
   <xs:element name="hlowered" type="xs:decimal"/>
   <xs:element name="Dz" type="xs:integer"/>
@@ -378,21 +390,29 @@
       <xs:documentation>in neutral position the head is within this radius over the base center</xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="PX" type="xs:decimal"/>
+  <xs:element name="PX" type="xs:decimal">
+    <xs:annotation>
+      <xs:documentation>distance from wrist center to head center in local wrist system along X</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="PZ" type="xs:decimal">
     <xs:annotation>
       <xs:documentation>distance along Z in local wrist</xs:documentation>
-    </xs:annotation></xs:element>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="COSGA" type="xs:decimal"/>
   <xs:element name="SINGA" type="xs:decimal"/>
   <xs:element name="agent" type="xs:string"/>
-  <xs:element name="TBeg" type="xs:string">
+  <xs:element name="TBeg" type="xs:float">
     <xs:annotation>
       <xs:documentation>time before the transition should be completed</xs:documentation>
-    </xs:annotation></xs:element>
-  <xs:element name="TEnd" type="xs:string">
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="TEnd" type="xs:float">
     <xs:annotation>
-      <xs:documentation>time after the next transition should start</xs:documentation></xs:annotation></xs:element>
+      <xs:documentation>time after the next transition should start</xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="sP" type="xs:integer"/>
   <xs:element name="eP" type="xs:integer"/>
   <xs:element name="sPos" type="xs:string"/>
@@ -415,5 +435,5 @@
       <xs:element ref="TBeg"/>
       <xs:element ref="TEnd"/>
     </xs:sequence>
-  </xs:complexType>  
+  </xs:complexType>
 </xs:schema>

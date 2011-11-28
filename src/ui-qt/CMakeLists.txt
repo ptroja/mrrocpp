@@ -48,6 +48,7 @@ SET(GUI_CXX_SRCS
     base/main.cpp
     base/mainwindow.cpp
     base/menu_bar.cpp
+    base/ToolBar.cpp
     base/allrobots.cpp
     base/mp.cpp
     base/wgt_base.cpp
@@ -116,6 +117,7 @@ SET(GUI_MOC_SRCS
 	polycrank/ui_r_polycrank.h
 	base/signal_dispatcher.h
 	base/menu_bar.h
+	base/ToolBar.h
 	base/menu_bar_action.h
 	bird_hand/ui_r_bird_hand.h
 	spkm/ui_r_spkm.h
@@ -174,6 +176,7 @@ ADD_EXECUTABLE(
 	ui-qt
 	${GUI_CXX_SRCS}
 	base/menu_bar.cpp
+#	base/ToolBar.cpp
 	base/allrobots.cpp
 	base/mp.cpp
 	base/menu_bar_action.cpp

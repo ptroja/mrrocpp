@@ -19,7 +19,7 @@ enum MT_ORDER
 
 enum ERROR_TYPE
 {
-	NO_ERROR, Fatal_erroR, NonFatal_erroR_1, NonFatal_erroR_2, NonFatal_erroR_3, NonFatal_erroR_4, System_erroR
+	NO_ERROR, Fatal_erroR, NonFatal_erroR_2, NonFatal_erroR_3, NonFatal_erroR_4, System_erroR
 };
 
 enum TRANSLATION_ENUM

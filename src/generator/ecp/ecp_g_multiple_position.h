@@ -11,9 +11,10 @@
 #include <cstdio>
 #include <vector>
 
+#include "base/ecp/ecp_exceptions.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
-#include "base/ecp/ECP_error.h"
+
 #include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "generator/ecp/ecp_g_get_position.h"
 #include "base/ecp/ecp_generator.h"
@@ -192,13 +193,14 @@ protected:
 
 			//------------------ DEBUG END ---------------
 
-			pose_vector_iterator->start_position = get_pos->get_position_vector();//get actual position of the robot
+			pose_vector_iterator->start_position = get_pos->get_position_vector(); //get actual position of the robot
 			delete get_pos;
 		} else if (motion_type == lib::RELATIVE) {
 			pose_vector_iterator->start_position = std::vector <double>(axes_num, 0);
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
-			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(ECP_ERRORS));
+			//TODO change the second argument
 		}
 	}
 	/**
@@ -225,19 +227,19 @@ protected:
 
 		std::size_t i; //loop counter
 
-		bool trueFlag = true;//flag set to false if interpolation is not successful at some point
+		bool trueFlag = true; //flag set to false if interpolation is not successful at some point
 
 		if (motion_type == lib::ABSOLUTE) {
-			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
-                                //printf("inter 1: %f", pose_vector_iterator->coeffs[i][0]);
-                                //printf("inter 2: %f", pose_vector_iterator->coeffs[i][1]);
+			for (i = 0; i < pose_vector.size(); i++) { //interpolate trajectory, fill in the coordinate list
+				//printf("inter 1: %f", pose_vector_iterator->coeffs[i][0]);
+				//printf("inter 2: %f", pose_vector_iterator->coeffs[i][1]);
 				if (inter.interpolate_absolute_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
 					trueFlag = false;
 				}
 				pose_vector_iterator++;
 			}
 		} else if (motion_type == lib::RELATIVE && angle_axis_absolute_transformed_into_relative == true) {
-			for (i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+			for (i = 0; i < pose_vector.size(); i++) { //interpolate trajectory, fill in the coordinate list
 				if (inter.interpolate_angle_axis_absolute_pose_transformed_into_relative(pose_vector_iterator, coordinate_vector, mc)
 						== false) {
 					trueFlag = false;
@@ -246,7 +248,7 @@ protected:
 			}
 			set_absolute();
 		} else if (motion_type == lib::RELATIVE) {
-			for (std::size_t i = 0; i < pose_vector.size(); i++) {//interpolate trajectory, fill in the coordinate list
+			for (std::size_t i = 0; i < pose_vector.size(); i++) { //interpolate trajectory, fill in the coordinate list
 				if (inter.interpolate_relative_pose(pose_vector_iterator, coordinate_vector, mc) == false) {
 					trueFlag = false;
 				}
@@ -254,7 +256,8 @@ protected:
 			}
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
-			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(ECP_ERRORS));
+			//TODO change the second argument
 		}
 
 		return trueFlag;
@@ -278,7 +281,8 @@ protected:
 		for (std::size_t i = 0; i < coordinate_vector.size(); i++) {
 			tempIter = (*coordinate_vector_iterator).begin();
 			printf("%zd:\t", (i + 1));
-			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+			for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end();
+					tempIter++) {
 				printf(" %f\t", *tempIter);
 			}
 			coordinate_vector_iterator++;
@@ -287,22 +291,22 @@ protected:
 		flushall();
 	}
 
-        double getCurrentModule(int i)
-        {
-            return the_robot->reply_package.arm.measured_current.average_module[i];
-        }
+	double getCurrentModule(int i)
+	{
+		return the_robot->reply_package.arm.measured_current.average_module[i];
+	}
 
-        double getCurrentCubic(int i)
-        {
-            return the_robot->reply_package.arm.measured_current.average_cubic[i];
-        }
+	double getCurrentCubic(int i)
+	{
+		return the_robot->reply_package.arm.measured_current.average_cubic[i];
+	}
 
 public:
 	/**
 	 * Constructor.
 	 */
 	multiple_position(common::task::task& _ecp_task) :
-		common::generator::generator(_ecp_task)
+			common::generator::generator(_ecp_task)
 	{
 		debug = false;
 		angle_axis_absolute_transformed_into_relative = false;
@@ -353,7 +357,8 @@ public:
 			the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 		} else {
 			sr_ecp_msg.message("Wrong motion type");
-			throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(ECP_ERRORS));
+			//TODO change the second argument
 		}
 
 		switch (pose_spec)
@@ -390,7 +395,7 @@ public:
 				break;
 			default:
 				reset();
-				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 		}
 
 		coordinate_vector_iterator = coordinate_vector.begin();
@@ -410,11 +415,11 @@ public:
 
 		if (coordinate_vector_iterator == coordinate_vector.end()) {
 			sr_ecp_msg.message("Motion finished");
-			reset();//reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
+			reset(); //reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
 			return false;
 		}
 
-		int i;//loop counter
+		int i; //loop counter
 
 		if (coordinate_vector.empty()) {
 
@@ -423,7 +428,7 @@ public:
 			return false;
 		}
 
-		the_robot->communicate_with_edp = true;//turn on the communication with EDP
+		the_robot->communicate_with_edp = true; //turn on the communication with EDP
 		the_robot->ecp_command.instruction_type = lib::SET;
 
 		double coordinates[axes_num];
@@ -469,7 +474,8 @@ public:
 
 				i = 0;
 
-				for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+				for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end();
+						tempIter++) {
 					coordinates[i] = *tempIter;
 					if (debug) {
 						printf("%f\t", *tempIter);
@@ -490,7 +496,8 @@ public:
 
 				i = 0;
 
-				for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+				for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end();
+						tempIter++) {
 					coordinates[i] = *tempIter;
 					if (debug) {
 						printf("%f\t", *tempIter);
@@ -509,8 +516,8 @@ public:
 
 			default:
 				reset();
-				throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
-		}// end:switch
+				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
+		} // end:switch
 
 		coordinate_vector_iterator++;
 
@@ -537,10 +544,9 @@ public:
 
 		calculated = calculate();
 
-                if (!calculated)
-                {
-                    return false;
-                }
+		if (!calculated) {
+			return false;
+		}
 
 		if (debug) {
 			print_pose_vector();
@@ -552,7 +558,7 @@ public:
 			print_coordinate_vector();
 		}
 
-                return interpolated;
+		return interpolated;
 	}
 	/**
 	 * Sets the number of axes in which the generator will move the robot.
@@ -581,15 +587,15 @@ public:
 	 */
 	virtual void reset()
 	{
-                //sr_ecp_msg.message("reset 1");
-                pose_vector.clear();
-                //sr_ecp_msg.message("reset 2");
+		//sr_ecp_msg.message("reset 1");
+		pose_vector.clear();
+		//sr_ecp_msg.message("reset 2");
 		coordinate_vector.clear();
-                //sr_ecp_msg.message("reset 3");
+		//sr_ecp_msg.message("reset 3");
 		calculated = false;
 		interpolated = false;
 		angle_axis_absolute_transformed_into_relative = false;
-                sr_ecp_msg.message("Generator reset");
+		sr_ecp_msg.message("Generator reset");
 	}
 	/**
 	 * Detection of possible jerks. Method scans the vector of coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.
@@ -611,7 +617,7 @@ public:
 			std::vector <double> temp1 = pose_vector.begin()->start_position;
 			std::vector <double> temp2 = (*coordinate_vector_iterator);
 
-			std::size_t i, j;//loop counters
+			std::size_t i, j; //loop counters
 
 			for (i = 0; i < axes_num; i++) {
 				if (motion_type == lib::ABSOLUTE) {
@@ -636,7 +642,8 @@ public:
 					}
 				} else {
 					sr_ecp_msg.message("Wrong motion type");
-					throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(ECP_ERRORS));
+					//TODO change the second argument
 				}
 			}
 
@@ -645,7 +652,8 @@ public:
 			for (i = 1; i < coordinate_vector.size(); i++) {
 
 				j = 0;
-				for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end(); tempIter++) {
+				for (tempIter = (*coordinate_vector_iterator).begin(); tempIter != (*coordinate_vector_iterator).end();
+						tempIter++) {
 					if (motion_type == lib::ABSOLUTE) {
 						if (fabs((fabs(temp1[j] - temp2[j]) / mc) - (fabs(temp2[j] - *tempIter) / mc)) / mc > max_acc) {
 							sr_ecp_msg.message("Possible jerk detected!");
@@ -668,7 +676,8 @@ public:
 						}
 					} else {
 						sr_ecp_msg.message("Wrong motion type");
-						throw ECP_error(lib::NON_FATAL_ERROR, ECP_ERRORS);//TODO change the second argument
+						BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(ECP_ERRORS));
+						//TODO change the second argument
 					}
 
 					j++;

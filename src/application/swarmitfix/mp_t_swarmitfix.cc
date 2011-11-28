@@ -1,19 +1,10 @@
-#include <string>
-
+// Start of user code user defined headers
 #include <boost/foreach.hpp>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/sr/srlib.h"
 
-#include "base/mp/mp_task.h"
-#include "base/mp/MP_main_error.h"
-#include "mp_t_swarmitfix.h"
-#include "base/lib/single_thread_port.h"
-#include "base/lib/mrmath/mrmath.h"
-#include "robot/maxon/dp_epos.h"
-#include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_spkm.h"
 
 #include "robot/shead/mp_r_shead1.h"
@@ -22,12 +13,12 @@
 #include "robot/spkm/mp_r_spkm2.h"
 #include "robot/smb/mp_r_smb1.h"
 #include "robot/smb/mp_r_smb2.h"
+// End of user code
 
-#include "base/lib/swarmtypes.h"
-#include "robot/spkm/dp_spkm.h"
+#include "base/lib/sr/srlib.h"
+#include "base/mp/mp_task.h"
 
-#include "base/lib/agent/InputBuffer.h"
-#include "base/lib/agent/OutputBuffer.h"
+#include "mp_t_swarmitfix.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -41,58 +32,149 @@ task* return_created_mp_task(lib::configurator &_config)
 swarmitfix::swarmitfix(lib::configurator &_config) :
 		task(_config)
 {
-	// Initialize internal memory variables
-	current_plan_status = ONGOING;
+	// Create optional Input buffers
+	if(IS_MP_ROBOT_ACTIVE(spkm2)) {
+		IO.transmitters.spkm2.inputs.notification.Create(*this, lib::spkm2::ROBOT_NAME+"notification");
+	}
+	if(IS_MP_ROBOT_ACTIVE(smb2)) {
+		IO.transmitters.smb2.inputs.notification.Create(*this, lib::smb2::ROBOT_NAME+"notification");
+	}
+	if(IS_MP_ROBOT_ACTIVE(spkm1)) {
+		IO.transmitters.spkm1.inputs.notification.Create(*this, lib::spkm1::ROBOT_NAME+"notification");
+	}
+	if(IS_MP_ROBOT_ACTIVE(smb1)) {
+		IO.transmitters.smb1.inputs.notification.Create(*this, lib::smb1::ROBOT_NAME+"notification");
+	}
 
 	// Call the robot activation so we can support only the active ones
 	create_robots();
 
-	// Initialize status of the active robots
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		current_workers_status[robot_node.second->robot_name] = IDLE;
+	// Create optional Output buffers
+	if(is_robot_activated(lib::spkm2::ROBOT_NAME)) {
+		IO.transmitters.spkm2.outputs.command.Create(robot_m[lib::spkm2::ROBOT_NAME]->ecp, "command");
 	}
+	if(is_robot_activated(lib::spkm1::ROBOT_NAME)) {
+		IO.transmitters.spkm1.outputs.command.Create(robot_m[lib::spkm1::ROBOT_NAME]->ecp, "command");
+	}
+	
+	// Start of user code Initialize internal memory variables
+// End of user code
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void swarmitfix::create_robots()
 {
-	IOBuffers.insert(lib::spkm1::ROBOT_NAME, new InputBuffer<lib::notification_t>(lib::spkm1::ROBOT_NAME+lib::notifyBufferId));
-	//IOBuffersv.push_back(new InputBuffer<lib::notification_t>(lib::spkm1::ROBOT_NAME+lib::notifyBufferId));
-
+	ACTIVATE_MP_ROBOT(smb2);
+	ACTIVATE_MP_ROBOT(smb1);
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
-	ACTIVATE_MP_ROBOT(smb1);
-	ACTIVATE_MP_ROBOT(smb2);
-	ACTIVATE_MP_ROBOT(shead1);
-	ACTIVATE_MP_ROBOT(shead2);
 }
 
 void swarmitfix::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("swarmitfix task started");
+	sr_ecp_msg->message("task started");
 
 	do {
-		if (current_plan_status == ONGOING) {
+		if (b1_initial_condition() == true) {
 			do {
+				if(b1_terminal_condition() == true)
+					break;
+					
 				if(ReceiveSingleMessage(false)) {
-					if(current_plan_status != ONGOING)
+					if(b1_terminal_condition() == true)					
 						break;
 				}
 
-				if(robot_m[lib::spkm1::ROBOT_NAME]->reply.isFresh()) {
-					robot_m[lib::spkm1::ROBOT_NAME]->reply.markAsUsed();
+				// Check if right set of data is available
+				if(IO.sensors.planner.inputs.trigger->isFresh())
+				{
+					// Mark data in buffers as used 
+					IO.sensors.planner.inputs.trigger->markAsUsed();
 
-					current_workers_status[lib::spkm1::ROBOT_NAME] = IDLE;
+					// Call the transition function routine
+					b1_plan_progress();
+					
+					continue;
 				}
+				
+				// Check if right set of data is available
+				if(IO.transmitters.spkm1.inputs.notification->isFresh())
+				{
+					// Mark data in buffers as used 
+					IO.transmitters.spkm1.inputs.notification->markAsUsed();
 
+					// Call the transition function routine
+					b1_handle_spkm1_notification();
+					
+					continue;
+				}
+				
+				// Check if right set of data is available
+				if(IO.transmitters.spkm2.inputs.notification->isFresh())
+				{
+					// Mark data in buffers as used 
+					IO.transmitters.spkm2.inputs.notification->markAsUsed();
+
+					// Call the transition function routine
+					b1_handle_spkm2_notification();
+					
+					continue;
+				}
+				
+				// Check if right set of data is available
+				if(IO.transmitters.smb1.inputs.notification->isFresh())
+				{
+					// Mark data in buffers as used 
+					IO.transmitters.smb1.inputs.notification->markAsUsed();
+
+					// Call the transition function routine
+					b1_handle_smb1_notification();
+					
+					continue;
+				}
+				
+				// Check if right set of data is available
+				if(IO.transmitters.smb2.inputs.notification->isFresh())
+				{
+					// Mark data in buffers as used 
+					IO.transmitters.smb2.inputs.notification->markAsUsed();
+
+					// Call the transition function routine
+					b1_handle_smb2_notification();
+					
+					continue;
+				}
+				
+				// Blocking for a new message has the lowest priority 
+				ReceiveSingleMessage(true);
 			} while (true);
 
 			// ...
 			continue;
 		}
+		if (b2_initial_condition() == true) {
+			do {
+				if(b2_terminal_condition() == true)
+					break;
+					
+				if(ReceiveSingleMessage(false)) {
+					if(b2_terminal_condition() == true)					
+						break;
+				}
 
-		if (current_plan_status == FAILURE) {
+				// There is no data dependency for this transition function				
+				{
+
+					// Call the transition function routine
+					b2_stop_all();
+					
+					continue;
+				}
+				
+				// Blocking for a new message has the lowest priority 
+				ReceiveSingleMessage(true);
+			} while (true);
+
 			// ...
 			continue;
 		}

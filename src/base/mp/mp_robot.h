@@ -52,13 +52,18 @@ private:
 	 */
 	lib::child ECP_pid;
 
+public:
+	//! Remote agent proxy
+	RemoteAgent ecp;
+
+private:
 	//! Remote agent's data buffer
 	OutputBuffer <lib::MP_COMMAND_PACKAGE> command;
 
 	/**
 	 * @brief reference to sr_ecp object for sending messages to UI_SR console
 	 */
-	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
+	lib::sr_ecp & sr_ecp_msg; // obiekt do komunikacji z SR
 
 	/**
 	 * @brief send a single command to the ECP
@@ -96,10 +101,6 @@ private:
 	 * @brief ECP errors handler
 	 */
 	void ecp_errors_handler();
-
-protected:
-	//! Remote agent proxy
-	RemoteAgent ecp;
 
 public:
 	/**
@@ -145,33 +146,7 @@ public:
 	virtual ~robot();
 };
 
-/*!
- * @brief MP robot error handling class
- *
- * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
- * @ingroup mp
- */
-class MP_error
-{
-public:
 
-	/**
-	 * @brief error class (type)
-	 */
-	const lib::error_class_t error_class;
-
-	/**
-	 * @brief error number
-	 */
-	const uint64_t error_no;
-
-	/**
-	 * @brief constructor
-	 * @param err0 error class
-	 * @param err1 error number
-	 */
-	MP_error(lib::error_class_t err0, uint64_t err1);
-};
 
 } // namespace robot
 } // namespace mp

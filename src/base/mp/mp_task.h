@@ -9,11 +9,13 @@
 #ifndef MP_TASK_H_
 #define MP_TASK_H_
 
+#include <ostream>
+
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
 #include "base/lib/agent/InputBuffer.h"
-#include "base/lib/messip/messip.h"
+#include "base/lib/agent/OutputBuffer.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -34,20 +36,68 @@ namespace task {
  */
 
 #define ACTIVATE_MP_ROBOT(__robot_name) \
+	if(robot_m.find(lib::__robot_name::ROBOT_NAME) == robot_m.end()) {\
 		if (config.exists_and_true ("is_active", "[edp_" #__robot_name "]")) {\
-			if(robot_m.find(lib::__robot_name::ROBOT_NAME) == robot_m.end()) {\
-				robot::robot* created_robot = new robot::__robot_name(*this);\
-				robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
-			}\
-		}
+			robot::robot* created_robot = new robot::__robot_name(*this);\
+			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
+		}\
+	}
 
 #define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
+	if(robot_m.find(lib::__robot_name::ROBOT_NAME) == robot_m.end()) {\
 		if (config.exists_and_true ("is_active", "[edp_" #__robot_name "]")) {\
-			if(robot_m.find(lib::__robot_name::ROBOT_NAME) == robot_m.end()) {\
-				robot::robot* created_robot = new robot::robot(lib::__robot_name::ROBOT_NAME, *this, 0);\
-				robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
-			}\
+			robot::robot* created_robot = new robot::robot(lib::__robot_name::ROBOT_NAME, *this, 0);\
+			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
+		}\
+	}
+
+//! Macro for checking if robot is marked as activate in the config file
+#define IS_MP_ROBOT_ACTIVE(__robot_name) \
+	(config.exists_and_true ("is_active", "[edp_" #__robot_name "]"))
+
+//! Type for optionally active input data buffer
+template <class T>
+class InputPtr : private boost::shared_ptr<InputBuffer<T> > {
+	//! Underlying implementation of 'optional' concept
+	typedef boost::shared_ptr<InputBuffer<T> > ptrType;
+
+public:
+	//! Create input buffer and register within an agent
+	void Create(Agent & owner, const std::string & name, const T & default_value = T())
+	{
+		if(ptrType::get()) {
+	        std::ostringstream tmp;
+	        tmp << "optional Input buffer \"" << name << "\"already created";
+			throw std::runtime_error(tmp.str());
 		}
+		ptrType::operator=((ptrType) new InputBuffer<T>(owner, name, default_value));
+	}
+
+	//! Reuse access operator from the underlying 'optional' concept type
+	using ptrType::operator->;
+};
+
+//! Type for optionally inactive output data buffer
+template <class T>
+struct OutputPtr : private boost::shared_ptr<OutputBuffer<T> > {
+	//! Underlying implementation of 'optional' concept
+	typedef boost::shared_ptr<OutputBuffer<T> > ptrType;
+
+public:
+	//! Create input buffer and register within an agent
+	void Create(RemoteAgent & owner, const std::string & name)
+	{
+		if(ptrType::get()) {
+	        std::ostringstream tmp;
+	        tmp << "optional Output buffer \"" << name << "\"already created";
+			throw std::runtime_error(tmp.str());
+		}
+		ptrType::operator=((ptrType) new OutputBuffer<T>(owner, name));
+	}
+
+	//! Reuse access operator from the underlying 'optional' concept type
+	using ptrType::operator->;
+};
 
 /*!
  * @brief Base class of all mp tasks
@@ -213,6 +263,15 @@ public:
 	 * @brief receives pulse from UI or ECP
 	 */
 	void receive_ui_or_ecp_message(generator::generator& the_generator);
+
+	/**
+	 * @brief Check if the robot has been created and activated
+	 * @param name robot name
+	 */
+	bool is_robot_activated(const lib::robot_name_t & name) const
+	{
+		return ((robot_m.find(name) != robot_m.end()) ? true : false);
+	}
 
 private:
 	friend class robot::robot;

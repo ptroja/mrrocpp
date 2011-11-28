@@ -17,20 +17,14 @@ namespace ecp {
 namespace shead {
 
 robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-	ecp::common::robot::ecp_robot(_robot_name, lib::shead::NUM_OF_SERVOS, _config, _sr_ecp),
-			shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
-			shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
-			shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
+		ecp::common::robot::ecp_robot(_robot_name, lib::shead::NUM_OF_SERVOS, _config, _sr_ecp), shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager), shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager), shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 
 robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object) :
-	ecp::common::robot::ecp_robot(_robot_name, lib::shead::NUM_OF_SERVOS, _ecp_object),
-			shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager),
-			shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
-			shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
+		ecp::common::robot::ecp_robot(_robot_name, lib::shead::NUM_OF_SERVOS, _ecp_object), shead_head_soldification_data_port(lib::shead::HEAD_SOLIDIFICATION_DATA_PORT, port_manager), shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager), shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -66,7 +60,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.head_solidification = shead_head_soldification_data_port.data;
 
 		if (is_new_data) {
-			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
 		} else {
 			is_new_data = true;
 		}
@@ -83,7 +77,7 @@ void robot::create_command()
 		ecp_edp_cbuffer.vacuum_activation = shead_vacuum_activation_data_port.data;
 
 		if (is_new_data) {
-			throw common::robot::ECP_error(lib::NON_FATAL_ERROR, INVALID_COMMAND_TO_EDP);
+			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
 		} else {
 			is_new_data = true;
 		}

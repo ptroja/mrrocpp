@@ -21,6 +21,13 @@
 #define FAI_SINGLE_DELAY 20
 #define FAI_DELAY_MAX_ITERATION 250
 
+#define EPOS_L1_HAL_UP 11
+#define EPOS_L3_HAL_UP 13
+#define EPOS_L2_HAL_UP 15
+#define EPOS_L1_HAL_DOWN 10
+#define EPOS_L3_HAL_DOWN 12
+#define EPOS_L2_HAL_DOWN 14
+
 namespace mrrocpp {
 namespace edp {
 namespace smb {

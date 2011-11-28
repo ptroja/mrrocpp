@@ -33,6 +33,7 @@ public:
 	virtual ~object_reached_termination_condition();
 	virtual void reset();
 	virtual void update(const mrrocpp::ecp::common::generator::visual_servo_manager* vsm);
+	lib::Homog_matrix get_position() const;
 protected:
 	double max_linear_speed;
 	double max_angular_speed;
@@ -42,6 +43,8 @@ protected:
 	double max_angular_error;
 	int min_steps;
 	int steps_delay;
+
+	lib::Homog_matrix position;
 };
 
 /** @} */

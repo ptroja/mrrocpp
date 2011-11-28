@@ -9,18 +9,19 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(plantest
 	${PLAN_SRCS}
-	plan/ParsePlan.cc
-	plan_utils.cc
+	ParsePlan.cc planner.cc
+	#plan_utils.cc
 )
 
-target_link_libraries(plantest ${XERCES_LIBRARIES} mrrocpp)
-endif(XSD_FOUND AND XERCES_FOUND)
+target_link_libraries(plantest ${Boost_THREAD_LIBRARY} ${XERCES_LIBRARIES})
 
 add_executable(mp_swarmitfix
-	mp_t_swarmitfix.cc
+	mp_t_swarmitfix.cc mp_t_swarmitfix_logic.cc planner.cc ${PLAN_SRCS}
 )
 
-target_link_libraries(mp_swarmitfix mp)
+target_link_libraries(mp_swarmitfix ${XERCES_LIBRARIES} mp)
+
+endif(XSD_FOUND AND XERCES_FOUND)
 
 add_executable(ecp_spkm
 	ecp_g_spkm.cc

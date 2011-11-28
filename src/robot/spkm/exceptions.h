@@ -21,11 +21,28 @@ namespace spkm {
 //! Pose specification type.
 typedef boost::error_info <struct pose_specification_, mrrocpp::lib::spkm::POSE_SPECIFICATION> pose_specification;
 
+//! Number of angle that caused the exception.
+typedef boost::error_info <struct angle_number_, int> angle_number;
+
 /*!
  * \brief Exception thrown when cartesian pose is required, but unknown.
  * \author Tomasz Kornuta
  */
 REGISTER_NON_FATAL_ERROR(nfe_current_cartesian_pose_unknown, "Required current cartesian pose is unknown")
+
+/*!
+ * \brief Exception thrown when thyk alpha limit is exceeded.
+ * \author Tomasz Kornuta
+ */
+REGISTER_NON_FATAL_ERROR(nfe_thyk_alpha_limit_exceeded, "Thyk alpha limit is exceeded")
+
+/*!
+ * \brief Exception thrown when thyk beta limit is exceeded.
+ * \author Tomasz Kornuta
+ */
+REGISTER_NON_FATAL_ERROR(nfe_thyk_beta_limit_exceeded, "Thyk beta limit is exceeded")
+
+
 
 } // namespace spkm
 } // namespace edp

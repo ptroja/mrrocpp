@@ -9,15 +9,8 @@
 
 #include "ecp_t_objectfollower_pb_eih.h"
 
-#include "../defines.h"
-
-#ifdef ROBOT_P
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#endif
-
-#ifdef ROBOT_OT
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
-#endif
 
 #include "../ecp_mp_g_visual_servo_tester.h"
 
@@ -38,12 +31,14 @@ ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configura
 	common::task::task(config)
 {
 	try{
-#ifdef ROBOT_P
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
-#endif
-#ifdef ROBOT_OT
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6ot_m::robot(*this);
-#endif
+		std::string robot_name = config.value<std::string>("robot_name", "[visualservo_tester]");
+		if(robot_name == lib::irp6p_m::ROBOT_NAME){
+			ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
+		} else if(robot_name == lib::irp6ot_m::ROBOT_NAME){
+			ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6ot_m::robot(*this);
+		} else {
+			throw std::runtime_error("ecp_t_objectfollower_pb_eih option robot_name in config file has unknown value: " + robot_name);
+		}
 
 		char config_section_name[] = { "[object_follower_pb]" };
 
@@ -72,7 +67,7 @@ ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configura
 		//sm->add_termination_condition(term_cond);
 		log_dbg("ecp_t_objectfollower_pb: configuring visual_servo_manager\n");
 		sm->configure();
-	}catch(exception& ex){
+	}catch(std::exception& ex){
 		sr_ecp_msg->message(lib::FATAL_ERROR, string("ERROR in ecp_t_objectfollower_pb_eih: ") + ex.what());
 		throw ex;
 	}

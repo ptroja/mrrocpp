@@ -11,31 +11,29 @@
 #include <string>
 
 #include "RemoteAgent.h"
+#include "BufferBase.h"
 #include "base/lib/xdr/xdr_oarchive.hpp"
 
 /**
  * Remote data buffer proxy
  */
 template <class T>
-class OutputBuffer {
+class OutputBuffer : public BufferBase {
 private:
-	//! name of the buffer
-	const std::string name;
-
-	//! owner of the buffer
-	RemoteAgent &owner;
+	//! Owner of the buffer
+	RemoteAgent & owner;
 
 public:
 	//! Construct remote buffer proxy
 	OutputBuffer(RemoteAgent & _owner, const std::string & _name)
-		: name(_name), owner(_owner)
+		: BufferBase(_name), owner(_owner)
 	{
 	}
 
 	//! Set the contents of the remote buffer
 	void Send(const T & data) {
 		xdr_oarchive<> oa;
-		oa << name;
+		oa << this->getName();
 		oa << data;
 
 		owner.Send(oa);

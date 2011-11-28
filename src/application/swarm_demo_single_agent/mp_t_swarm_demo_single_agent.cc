@@ -8,7 +8,7 @@
 #include "base/lib/sr/srlib.h"
 
 #include "base/mp/mp_task.h"
-#include "base/mp/MP_main_error.h"
+
 #include "mp_t_swarm_demo_single_agent.h"
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mrmath/mrmath.h"
@@ -58,7 +58,7 @@ void swarmitfix::move_smb(int leg_number, double rotation)
 
 	// smb - unosimy dwie nogi
 	sr_ecp_msg->message("5");
-	sr_ecp_msg->message("PODNOSZEBIE NOG za 1s");
+	sr_ecp_msg->message("PODNOSZEBIE NOG za 3s");
 
 	wait_ms(3000);
 
@@ -89,7 +89,7 @@ void swarmitfix::move_smb(int leg_number, double rotation)
 	// smb - opusczamy dwie nogi, ktore byly w gorze
 	sr_ecp_msg->message("7");
 
-	sr_ecp_msg->message("Opuszczanie DWOCH NOG za 1s");
+	sr_ecp_msg->message("Opuszczanie DWOCH NOG za 3s");
 
 	wait_ms(3000);
 
@@ -106,12 +106,12 @@ void swarmitfix::main_task_algorithm(void)
 	sr_ecp_msg->message("1");
 
 	move_smb_legs(lib::smb::DOWN, lib::smb::DOWN, lib::smb::DOWN);
-	move_smb(2, 1);
-	move_smb(3, 1);
-	move_smb(1, 1);
-	move_smb(2, 1);
-	move_smb(3, 1);
-	move_smb(1, -5);
+	move_smb(2, -1);
+	move_smb(1, -1);
+	move_smb(3, -1);
+	move_smb(2, -1);
+	move_smb(1, -1);
+	move_smb(3, 5);
 
 // smb - podnosimy wszystkie nogi
 	sr_ecp_msg->message("14");

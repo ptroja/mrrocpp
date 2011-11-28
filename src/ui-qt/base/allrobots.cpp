@@ -68,18 +68,18 @@ void AllRobots::manage_interface()
 						|| (interface->mp->mp_state.state == UI_MP_PERMITED_TO_RUN)))
 				|| (all_edps == UI_ALL_EDPS_NONE_LOADED)) {
 
-			mw->getMenuBar()->actionConfiguration->setEnabled(true);
-
+			mw->getMenuBar()->actionOpen_Configuration->setEnabled(true);
+			mw->getMenuBar()->actionReload_Configuration->setEnabled(true);
 		} else {
-			mw->getMenuBar()->actionConfiguration->setEnabled(false);
-
+			mw->getMenuBar()->actionOpen_Configuration->setEnabled(false);
+			mw->getMenuBar()->actionReload_Configuration->setEnabled(false);
 		}
 
 		switch (all_edps)
 		{
 			case UI_ALL_EDPS_NONE_ACTIVATED:
 				mw->get_ui()->label_all_edps_notification->setText("NONE_ACTIVATED");
-				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+				mw->menuall_Preset_Positions_setEnabled(false);
 				mw->getMenuBar()->menuRobot->setEnabled(false);
 				mw->getMenuBar()->menuAll_Robots->setEnabled(false);
 				mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
@@ -91,7 +91,7 @@ void AllRobots::manage_interface()
 				mw->getMenuBar()->menuRobot->setEnabled(true);
 				mw->getMenuBar()->menuAll_Robots->setEnabled(true);
 				mw->getMenuBar()->actionall_EDP_Load->setEnabled(true);
-				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+				mw->menuall_Preset_Positions_setEnabled(false);
 				mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
 
 				break;
@@ -106,17 +106,17 @@ void AllRobots::manage_interface()
 				{
 					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
 					case UI_ALL_EDPS_NONE_SYNCHRONISED:
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+						mw->menuall_Preset_Positions_setEnabled(false);
 						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_SOME_SYNCHRONISED:
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+						mw->menuall_Preset_Positions_setEnabled(true);
 						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_ALL_SYNCHRONISED:
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+						mw->menuall_Preset_Positions_setEnabled(true);
 
 						break;
 					default:
@@ -136,40 +136,40 @@ void AllRobots::manage_interface()
 					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
 					case UI_ALL_EDPS_NONE_SYNCHRONISED:
 						mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+						mw->menuall_Preset_Positions_setEnabled(false);
 						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_SOME_SYNCHRONISED:
 						mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+						mw->menuall_Preset_Positions_setEnabled(true);
 						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_ALL_SYNCHRONISED:
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+						mw->menuall_Preset_Positions_setEnabled(true);
 
 						switch (interface->mp->mp_state.state)
 						{
 							case common::UI_MP_NOT_PERMITED_TO_RUN:
 								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
-								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+								mw->menuall_Preset_Positions_setEnabled(true);
 
 								break;
 							case common::UI_MP_PERMITED_TO_RUN:
 								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
-								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+								mw->menuall_Preset_Positions_setEnabled(true);
 
 								break;
 							case common::UI_MP_WAITING_FOR_START_PULSE:
 								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
-								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+								mw->menuall_Preset_Positions_setEnabled(true);
 
 								break;
 							case common::UI_MP_TASK_RUNNING:
 							case common::UI_MP_TASK_PAUSED:
 								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
-								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+								mw->menuall_Preset_Positions_setEnabled(false);
 
 								break;
 							default:

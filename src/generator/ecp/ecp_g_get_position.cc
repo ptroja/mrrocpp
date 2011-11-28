@@ -5,8 +5,9 @@
  * @ingroup generators
  */
 
+#include "base/ecp/ecp_exceptions.h"
 #include "base/ecp/ecp_robot.h"
-#include "base/ecp/ECP_error.h"
+
 #include "ecp_g_get_position.h"
 
 namespace mrrocpp {
@@ -17,9 +18,9 @@ namespace generator {
 using namespace std;
 
 get_position::get_position(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
-	common::generator::generator(_ecp_task)
+		common::generator::generator(_ecp_task)
 {
-	position = vector <double> ();
+	position = vector <double>();
 	this->axes_num = axes_num;
 	this->pose_spec = pose_spec;
 }
@@ -51,7 +52,7 @@ bool get_position::first_step()
 			the_robot->ecp_command.get_arm_type = lib::JOINT;
 			break;
 		default:
-			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 	}
 	return true;
 }
@@ -74,7 +75,7 @@ bool get_position::next_step()
 			euler_vector.to_vector(position);
 
 		} else {
-			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 		}
 
 	} else if (pose_spec == lib::ECP_JOINT || pose_spec == lib::ECP_MOTOR) {
@@ -82,7 +83,7 @@ bool get_position::next_step()
 			position.push_back(the_robot->reply_package.arm.pf_def.arm_coordinates[i]);
 		}
 	} else {
-		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 	}
 	return false;
 }

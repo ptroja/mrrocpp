@@ -9,6 +9,7 @@ configs/default_file.cfg
 .cproject
 .qnx_internal.mk
 .settings/
+.autotools
 common.mk
 *.patch
 GPATH

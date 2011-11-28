@@ -14,14 +14,14 @@
 #include <fstream>
 #include <unistd.h>
 
+#include "base/ecp/ecp_exceptions.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
-#include "base/ecp/ECP_error.h"
+
 #include "generator/ecp/ecp_g_teach_in.h"
 
 #include "base/lib/messip/messip_dataport.h"
-
 
 namespace mrrocpp {
 namespace ecp {
@@ -37,7 +37,7 @@ namespace generator {
 // ####################################################################################################
 
 teach_in::teach_in(common::task::task& _ecp_task) :
-	common::generator::generator(_ecp_task)
+		common::generator::generator(_ecp_task)
 {
 	pose_list.clear();
 	pose_list_iterator = pose_list.end();
@@ -67,14 +67,14 @@ void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
 	for (;;) {
 		// Polecenie uczenia do UI
 
-		if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
+		if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 
 		{ // Y&W
 
 			e = errno;
 			perror("ecp teach(): Send() to UI failed");
 			sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-			throw ECP_error(lib::SYSTEM_ERROR, 0);
+			BOOST_THROW_EXCEPTION(exception::se_g());
 		}
 		if (ui_to_ecp_rep.reply == lib::QUIT) // Koniec uczenia
 			break;
@@ -89,7 +89,6 @@ void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
 	}; // end: for(;;)
 	initiate_pose_list();
 } // end: teach()
-
 
 // --------------------------------------------------------------------------
 // Zapis trajektorii do pliku
@@ -108,13 +107,13 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 	strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
 	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 
-	if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
+	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 
-	{// by Y&W
+	{ // by Y&W
 		e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-		throw ECP_error(lib::SYSTEM_ERROR, 0);
+		BOOST_THROW_EXCEPTION(exception::se_g());
 	}
 	if (ui_to_ecp_rep.reply == lib::QUIT) { // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return;
@@ -138,13 +137,13 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 	cwd = getcwd(NULL, 0);
 	if (chdir(ui_to_ecp_rep.path) != 0) {
 		perror(ui_to_ecp_rep.path);
-		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_DIRECTORY));
 	}
 	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
 	e = errno;
 	if (!to_file) {
 		perror(ui_to_ecp_rep.filename);
-		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
 	} else {
 		initiate_pose_list();
 		number_of_poses = pose_list_length();
@@ -166,7 +165,6 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 } // end: irp6_on_track_save_file()
 // --------------------------------------------------------------------------
 
-
 // --------------------------------------------------------------------------
 // Wczytanie trajektorii z pliku
 bool teach_in::load_file_from_ui()
@@ -180,27 +178,25 @@ bool teach_in::load_file_from_ui()
 
 	ecp_to_ui_msg.ecp_message = lib::LOAD_FILE; // Polecenie wprowadzenia nazwy odczytywanego pliku
 
+	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 
-	if(messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
-
-	{// by Y&W
+	{ // by Y&W
 		e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-		throw ECP_error(lib::SYSTEM_ERROR, 0);
+		BOOST_THROW_EXCEPTION(exception::se_g());
 	}
 	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return false;
 	if (chdir(ui_to_ecp_rep.path) != 0) {
 		perror(ui_to_ecp_rep.path);
-		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_DIRECTORY);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_DIRECTORY));
 	}
 
 	return load_file_with_path(ui_to_ecp_rep.filename);
 
 } // end: load_file()
 // --------------------------------------------------------------------------
-
 
 bool teach_in::load_file_with_path(const char* file_name)
 {
@@ -216,15 +212,14 @@ bool teach_in::load_file_with_path(const char* file_name)
 	int extra_info = 0; // by Y - dodatkowe info do dowolnego wykorzystania
 	double motion_time; // Czas dojscia do wspolrzednych
 
-
 	std::ifstream from_file(file_name); // otworz plik do odczytu
 	if (!from_file.good()) {
 		perror(file_name);
-		throw ECP_error(lib::NON_FATAL_ERROR, NON_EXISTENT_FILE);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
 	}
 
 	if (!(from_file >> coordinate_type)) {
-		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
 	}
 
 	// Usuwanie spacji i tabulacji
@@ -232,8 +227,8 @@ bool teach_in::load_file_with_path(const char* file_name)
 	j = 0;
 	while (coordinate_type[i] == ' ' || coordinate_type[i] == '\t')
 		i++;
-	while (coordinate_type[i] != ' ' && coordinate_type[i] != '\t' && coordinate_type[i] != '\n' && coordinate_type[i]
-			!= '\r' && coordinate_type[j] != '\0') {
+	while (coordinate_type[i] != ' ' && coordinate_type[i] != '\t' && coordinate_type[i] != '\n'
+			&& coordinate_type[i] != '\r' && coordinate_type[j] != '\0') {
 		coordinate_type[j] = toupper(coordinate_type[i]);
 		i++;
 		j++;
@@ -248,25 +243,25 @@ bool teach_in::load_file_with_path(const char* file_name)
 	else if (!strcmp(coordinate_type, "lib::PF_VELOCITY"))
 		ps = lib::ECP_PF_VELOCITY;
 	else {
-		throw ECP_error(lib::NON_FATAL_ERROR, NON_TRAJECTORY_FILE);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_TRAJECTORY_FILE));
 	}
 	if (!(from_file >> number_of_poses)) {
-		throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
 	}
 	flush_pose_list(); // Usuniecie listy pozycji, o ile istnieje
 	for (i = 0; i < number_of_poses; i++) {
 		if (!(from_file >> motion_time)) {
-			throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
 		}
 		for (j = 0; j < lib::MAX_SERVOS_NR; j++) {
 			if (!(from_file >> coordinates[j])) { // Zabezpieczenie przed danymi nienumerycznymi
-				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
 			}
 		}
 
 		if (ps == lib::ECP_PF_VELOCITY) { // by Y
 			if (!(from_file >> extra_info)) { // Zabezpieczenie przed danymi nienumerycznymi
-				throw ECP_error(lib::NON_FATAL_ERROR, READ_FILE_ERROR);
+				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
 			}
 			if (first_time) {
 				// Tworzymy glowe listy
@@ -290,7 +285,6 @@ bool teach_in::load_file_with_path(const char* file_name)
 
 	return true;
 } // end: load_file()
-
 
 // -------------------------------------------------------
 void teach_in::flush_pose_list(void)
@@ -443,7 +437,7 @@ bool teach_in::next_step()
 			// printf("lumpu: %f\n", the_robot->ecp_command.arm.pf_def.arm_coordinates[6]);
 			break;
 		default:
-			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 	} // end: switch
 
 	next_pose_list_ptr(); // nastepna pozycja
