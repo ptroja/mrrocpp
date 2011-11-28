@@ -41,13 +41,15 @@ private:
 
 	logger_server* server;
 	int connection_fd;
-	const std::string& remote_address;
+	const std::string remote_address;
 
 	int header_size;
 
 	int last_message_number;
 
 	std::ofstream outFile;
+
+	char time_log_filename[128];
 };
 
 template<typename T>

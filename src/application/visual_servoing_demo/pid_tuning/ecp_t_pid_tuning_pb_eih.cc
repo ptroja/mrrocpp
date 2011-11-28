@@ -164,9 +164,7 @@ void ecp_t_pid_tuning_pb_eih::main_task_algorithm(void)
 
 				if(timeout_term_cond->is_condition_met()){
 					// jesli warunek timeout_termination_condition zostal spelniony
-					// zakoncz
-					sr_ecp_msg->message("Visual servo timeout - terminating.");
-					break;
+					sr_ecp_msg->message("Visual servo - timeout.");
 				} else if (obj_reached_term_cond->is_condition_met()){
 					// jesli warunek object_reached_termination_condition zostal spelniony
 					// przesun KR do object_reached_position

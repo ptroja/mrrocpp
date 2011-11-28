@@ -25,7 +25,6 @@ client_connection::client_connection(logger_server* server, int connection_fd, c
 
 	time_t timep = time(NULL);
 	struct tm* time_split = localtime(&timep);
-	char time_log_filename[128];
 	sprintf(time_log_filename, "../../msr/%s_%04d-%02d-%02d_%02d-%02d-%02d_%s.csv", cm.filename_prefix, time_split->tm_year + 1900, time_split->tm_mon
 			+ 1, time_split->tm_mday, time_split->tm_hour, time_split->tm_min, time_split->tm_sec, remote_address.c_str());
 
@@ -35,7 +34,7 @@ client_connection::client_connection(logger_server* server, int connection_fd, c
 
 client_connection::~client_connection()
 {
-	cout << "client_connection::~client_connection() (" << connection_fd << "): disconnected\n";
+	cout << "client_connection::~client_connection() (" << remote_address << ", " <<  time_log_filename <<"): disconnected\n";
 	outFile.close();
 	close(connection_fd);
 }
