@@ -61,8 +61,8 @@ private:
 	bool disconnect_now;
 	bool connected;
 
-	boost::mutex connect_mutex;
 	boost::condition_variable connect_cond;
+	boost::condition_variable disconnect_cond;
 
 	xdr_oarchive<> oa_header;
 	xdr_oarchive<> oa_data;
