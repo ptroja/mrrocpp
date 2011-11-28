@@ -10,6 +10,9 @@
 
 #include "base/lib/exception.h"
 
+#include <string>
+#include <sstream>
+
 namespace mrrocpp {
 namespace edp {
 namespace canopen {
@@ -38,6 +41,30 @@ typedef boost::error_info <struct tag_errno_code, int> errno_code;
 
 //! failed system call
 typedef boost::error_info <struct tag_errno_code, std::string> errno_call;
+
+//! Convert exception's to human-readable string
+inline std::string to_string(dictionary_index const & e)
+{
+	std::stringstream out;
+	out << std::hex << "0x" << (int) e.value();
+	return out.str();
+}
+
+//! Convert exception's to human-readable string
+inline std::string to_string(dictionary_subindex const & e)
+{
+	std::stringstream out;
+	out << std::hex << "0x" << (int) e.value();
+	return out.str();
+}
+
+//! Convert exception's to human-readable string
+inline std::string to_string(canId const & e)
+{
+	std::stringstream out;
+	out << (int) e.value();
+	return out.str();
+}
 
 } /* namespace epos */
 } /* namespace edp */
