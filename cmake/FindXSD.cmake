@@ -3,7 +3,8 @@
 # path will be in XSD_EXECUTABLE. Look in the usual locations, as well as in
 # the 'bin' directory in the path given in the XSD_ROOT environment variable.
 #
-FIND_PROGRAM( XSD_EXECUTABLE xsd
+FIND_PROGRAM( XSD_EXECUTABLE
+		   	  NAMES xsd xsdcxx
 		   	  HINTS ${RWSL_DEPS}/xsd/bin $ENV{XSD_ROOT}/bin
 			  PATHS /usr/local/xsd-3.3.0-i686-macosx/bin
 			  		/usr/local/xsd-3.3.0-x86_64-linux-gnu/bin
