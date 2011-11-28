@@ -21,6 +21,8 @@ add_executable(mp_swarmitfix
 
 target_link_libraries(mp_swarmitfix ${XERCES_LIBRARIES} mp)
 
+install(TARGETS mp_swarmitfix DESTINATION bin)
+
 endif(XSD_FOUND AND XERCES_FOUND)
 
 add_executable(ecp_spkm
@@ -51,4 +53,4 @@ target_link_libraries(ecp_spkm ecp_r_spkm ecp
 #)
 
 #install(TARGETS ecp_spkm ecp_smb ecp_shead mp_swarmitfix DESTINATION bin)
-install(TARGETS ecp_spkm mp_swarmitfix DESTINATION bin)
+install(TARGETS ecp_spkm DESTINATION bin)
