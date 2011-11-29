@@ -70,7 +70,7 @@ public:
     //! Transformation from W (SW end-effector) to S (middle of the spherical wrist).
     static const Homog4d W_S_T;
 
-	//! Parameters describing the synchronization positions of first three parallel PM axes (A=0,B=1,C=2).
+	//! Parameters describing the synchronization positions (in joints).
 	static const double synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	//! Parameters related to conversion from motor positions to joints.
