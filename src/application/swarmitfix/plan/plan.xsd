@@ -143,6 +143,8 @@
                             </xs:documentation>
                           </xs:annotation>
                         </xs:element>
+                        <xs:element name="pinX" type="xs:string" />
+                        <xs:element name="pinY" type="xs:string" />                        
                         <xs:element name="pkmTheta" type="xs:decimal">
                           <xs:annotation>
                             <xs:documentation>orientation of pkm base's

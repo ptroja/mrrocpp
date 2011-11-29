@@ -13,7 +13,7 @@ add_executable(plantest
 	#plan_utils.cc
 )
 
-target_link_libraries(plantest ${Boost_THREAD_LIBRARY} ${XERCES_LIBRARIES})
+target_link_libraries(plantest ${Boost_THREAD_LIBRARY} ${XERCES_LIBRARIES} mrrocpp)
 
 add_executable(mp_swarmitfix
 	mp_t_swarmitfix.cc mp_t_swarmitfix_logic.cc mp_t_swarmtest.cc planner.cc ${PLAN_SRCS}
