@@ -172,13 +172,18 @@ void build_tower::main_task_algorithm(void)
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-		wait_ms(8000);
+		wait_ms(4000);
+
+		sr_ecp_msg->message("Waiting for blue block...");
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/build_tower/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
+		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+		wait_ms(4000);
 
 		int param = 100*present_position[0] + 10*present_position[1] + present_position[2];
 
-		//TODO: przekazywanie pozycji do ecp
 		sr_ecp_msg->message("Reaching the tower place...");		//zakladam, ze pozycja jest niezmienna
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, param, "../../src/application/build_tower/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, param, "../../src/application/build_tower/con/pos_build_start.coo", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		wait_ms(4000);

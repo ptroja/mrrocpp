@@ -38,13 +38,14 @@ protected:
 	common::generator::tff_gripper_approach* gtga;
 	common::generator::newsmooth* sg;
 
+	void get_coordinates_from_file(const char*);
+
 public:
 
 	build_tower(lib::configurator &_config);
 
 	// methods for ECP template to redefine in concrete classes
 	void mp_2_ecp_next_state_string_handler(void);
-
 };
 
 }

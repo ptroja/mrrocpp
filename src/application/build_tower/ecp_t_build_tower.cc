@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <fstream>
 
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_ecp.h"
@@ -26,8 +27,8 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
-#define BLOCK_WIDTH 3.1
-#define BLOCK_HEIGHT 1.9
+#define BLOCK_WIDTH 0.031
+#define BLOCK_HEIGHT 0.019
 
 using namespace mrrocpp::ecp::common::generator;
 using namespace logger;
@@ -90,29 +91,27 @@ void build_tower::mp_2_ecp_next_state_string_handler(void)
 
 		sr_ecp_msg->message("change_pos values set");
 
-		if(!(sg->load_trajectory_from_file(file_name))) {
-			//TODO: throw exception
-			sr_ecp_msg->message("error in loading trajectory from file");
+		std::vector <double> build_start_coordinates(6);
+		std::ifstream f_stream(file_name);
+
+		for(int i = 0; i < 6; i++) {
+			if(!(f_stream >> build_start_coordinates[i])) {
+				return;
+			}
 		}
 
-		sr_ecp_msg->message("after loading trajectory from file");
-
-		double base_pos[6];
-
-		for (int i = 0; i < 6; i++) {
-			//TODO: odczytanie konfiguracji z pliku
-			//base_pos[i] = sg->pose_vector_iterator->coordinates[i];
+		/*
+		std::cout << "coordinates: " << std::endl;
+		for(int i = 0; i < 6; ++i) {
+			std::cout << build_start_coordinates[i] << std::endl;
 		}
+		*/
 
 		sr_ecp_msg->message("after load coordinates");
 
-		lib::setValuesInArray(base_pos, (char*) mp_command.ecp_next_state.data);
-
-		sr_ecp_msg->message("after loading base position");
-
 		int do_move = 0;	//czy zmieniac pozycje
 		for(int i = 0; i < 6; ++i) {
-			if(abs(base_pos[i]) < 4 && base_pos[i] != 0) {
+			if(abs(build_start_coordinates[i]) < 4 && build_start_coordinates[i] != 0) {
 				do_move = 1;
 			}
 		}
@@ -124,23 +123,21 @@ void build_tower::mp_2_ecp_next_state_string_handler(void)
 
 			std::vector <double> coordinates(6);
 
-			/*
-			coordinates[0] = 0.966 + change_pos[0]*BLOCK_WIDTH;
-			coordinates[1] = 2.320 + change_pos[1]*BLOCK_WIDTH;
-			coordinates[2] = 0.088 + change_pos[2]*BLOCK_WIDTH;
-			coordinates[3] = 0.217 + change_pos[3]*BLOCK_WIDTH;
-			coordinates[4] = 3.107 + change_pos[4]*BLOCK_WIDTH;
-			coordinates[5] = 0.073 + change_pos[5]*BLOCK_WIDTH;
-			*/
-
 			sr_ecp_msg->message("after reset and set_absoulute");
 
-			coordinates[0] = base_pos[0] + change_pos[0]*BLOCK_WIDTH;
-			coordinates[1] = base_pos[1] + change_pos[1]*BLOCK_WIDTH;
-			coordinates[2] = base_pos[2] + change_pos[2]*BLOCK_WIDTH;
-			coordinates[3] = base_pos[3] + change_pos[3]*BLOCK_WIDTH;
-			coordinates[4] = 0.0 + change_pos[4]*BLOCK_WIDTH;
-			coordinates[5] = 0.0 + change_pos[5]*BLOCK_WIDTH;
+			coordinates[0] = build_start_coordinates[0] - change_pos[0]*BLOCK_WIDTH;
+			coordinates[1] = build_start_coordinates[1] - change_pos[1]*BLOCK_WIDTH;
+			coordinates[2] = build_start_coordinates[2] - change_pos[2]*BLOCK_WIDTH;
+			coordinates[3] = build_start_coordinates[3] - change_pos[3]*BLOCK_WIDTH;
+			coordinates[4] = build_start_coordinates[4] - change_pos[4]*BLOCK_WIDTH;
+			coordinates[5] = build_start_coordinates[5] - change_pos[5]*BLOCK_WIDTH;
+
+			/*
+			std::cout << "coordinates: " << std::endl;
+			for(int i = 0; i < 6; ++i) {
+				std::cout << coordinates[i] << std::endl;
+			}
+			*/
 
 			sr_ecp_msg->message("coordinates ready");
 
@@ -155,18 +152,6 @@ void build_tower::mp_2_ecp_next_state_string_handler(void)
 
 			sr_ecp_msg->message("smooth generator configuration end");
 
-		}
-		else
-		{
-			std::cout << "JESTEM TU I NIE WIEM CO ROBIC" << std::endl;
-			/*sg->reset();
-			sg->set_absolute();
-			sg->load_trajectory_from_file(path.c_str());
-			if(sg->calculate_interpolate())
-			{
-				sg->Move();
-			}
-			*/
 		}
 
 	}
