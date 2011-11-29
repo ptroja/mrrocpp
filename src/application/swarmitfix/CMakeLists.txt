@@ -16,7 +16,7 @@ add_executable(plantest
 target_link_libraries(plantest ${Boost_THREAD_LIBRARY} ${XERCES_LIBRARIES})
 
 add_executable(mp_swarmitfix
-	mp_t_swarmitfix.cc mp_t_swarmitfix_logic.cc planner.cc ${PLAN_SRCS}
+	mp_t_swarmitfix.cc mp_t_swarmitfix_logic.cc mp_t_swarmtest.cc planner.cc ${PLAN_SRCS}
 )
 
 target_link_libraries(mp_swarmitfix ${XERCES_LIBRARIES} mp)
