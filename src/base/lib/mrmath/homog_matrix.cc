@@ -144,8 +144,8 @@ Homog_matrix::Homog_matrix(const std::string & str)
 	// Prepare char-separated tokenizer
 	typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
 
-	// Setup skipped delimiters and kept delimiters
-	boost::char_separator<char> sep("[; \t]\r\n", "[;]");
+	// Setup skipped skip-delimiters and kept-delimiters
+	boost::char_separator<char> sep(" \t\r\n", "[;]");
 
 	// Instantiate tokenizer
 	tokenizer tokens(str, sep);
