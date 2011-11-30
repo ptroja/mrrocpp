@@ -47,6 +47,14 @@ typedef struct _segment
 	//! - OR the contact was NOT expected and did happened.
 	bool guarded_motion;
 
+	//! Constructor with reasonable defaults
+	_segment() :
+		motion_type(lib::epos::SYNC_POLYNOMIAL),
+		duration(0),
+		guarded_motion(false)
+	{
+	}
+
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
