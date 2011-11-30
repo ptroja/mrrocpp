@@ -266,6 +266,17 @@ int wgt_shead_command::move_it()
 
  }
  */
+
+void wgt_shead_command::on_pushButton_sol_execute_clicked()
+{
+
+}
+
+void wgt_shead_command::on_pushButton_vac_execute_clicked()
+{
+
+}
+
 void wgt_shead_command::on_pushButton_m_execute_clicked()
 {
 	get_desired_position();
