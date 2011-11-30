@@ -13,13 +13,15 @@ add_executable(plantest
 	#plan_utils.cc
 )
 
-target_link_libraries(plantest ${Boost_THREAD_LIBRARY} ${XERCES_LIBRARIES})
+target_link_libraries(plantest ${Boost_THREAD_LIBRARY} ${XERCES_LIBRARIES} mrrocpp)
 
 add_executable(mp_swarmitfix
-	mp_t_swarmitfix.cc mp_t_swarmitfix_logic.cc planner.cc ${PLAN_SRCS}
+	mp_t_swarmitfix.cc mp_t_swarmitfix_logic.cc mp_t_swarmtest.cc planner.cc ${PLAN_SRCS}
 )
 
 target_link_libraries(mp_swarmitfix ${XERCES_LIBRARIES} mp)
+
+install(TARGETS mp_swarmitfix DESTINATION bin)
 
 endif(XSD_FOUND AND XERCES_FOUND)
 
@@ -51,4 +53,4 @@ target_link_libraries(ecp_spkm ecp_r_spkm ecp
 #)
 
 #install(TARGETS ecp_spkm ecp_smb ecp_shead mp_swarmitfix DESTINATION bin)
-install(TARGETS ecp_spkm mp_swarmitfix DESTINATION bin)
+install(TARGETS ecp_spkm DESTINATION bin)

@@ -8,21 +8,18 @@
 #include <iostream>
 #include <memory>
 
-#include <boost/thread/thread.hpp>
+#include "plan.hxx"
 
-#include "planner.h"
 #include "base/lib/mrmath/homog_matrix.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-	// Check for input arguments
-	if(argc < 2) {
+	if(argc < 1) {
 		cerr << "Usage: " << argv[0] << " plan_file.xml" << endl;
 		return -1;
 	}
-
 	try {
 		const Plan p = *plan(argv[1], xml_schema::Flags::dont_validate);
 
@@ -38,19 +35,12 @@ int main(int argc, char *argv[])
 			if(pkmCmd.agent() != 1)
 				continue;
 
-			mrrocpp::lib::Homog_matrix hm(pkmCmd.pkmToWrist());
-
+			// mrrocpp::lib::Homog_matrix hm(pkmCmd.pkmToWrist());
 			std::cerr << pkmCmd.pkmToWrist() << std::endl;
-			std::cerr << hm << std::endl << std::endl;
+
+			// std::cerr << hm << std::endl;
 			//std::cerr << "[" << pkmCmd.l1() << "," << pkmCmd.l2() << "," << pkmCmd.l3() << "]" << std::endl;
 		}
-
-		// Create planner object
-		//planner pp(argv[1]);
-
-		// Start execution
-		//pp.start();
-
 	} catch (const xml_schema::Exception& e) {
 		cerr << e << endl;
 		return 1;

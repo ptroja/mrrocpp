@@ -30,6 +30,11 @@ planner::~planner()
 	worker.join();
 }
 
+const Plan * planner::getPlan(void) const
+{
+	return p.get();
+}
+
 void planner::start()
 {
 	// Lock access to the state variable

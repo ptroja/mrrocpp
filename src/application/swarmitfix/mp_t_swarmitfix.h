@@ -231,6 +231,9 @@ public:
 
 	// methods for mp template
 	void main_task_algorithm(void);
+
+	//! Alternative task for testing (reuses the same I/O buffers as the final task)
+	void main_test_algorithm(void);
 };
 
 /** @} */// end of swarmitfix

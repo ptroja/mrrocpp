@@ -15,9 +15,8 @@ namespace mrrocpp {
 namespace kinematics {
 namespace spkm {
 
-//! Initialization of parameters describing the synchronisation positions of first three parallel PM axes (A=0,B=1,C=2).
-const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS] = {  0.242, 0.242, 0.242, 0.0, 0.0, 0.0};
-// TODO: nowe wartości po zmianie sposobu synchronizacji -> 0.242, 0.265, 0.242
+//! Initialization of parameters describing the synchronisation positions (in joints).
+const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS] = {  0.2405, 0.242, 0.2405, 0.0, 0.0, -0.2906};
 
 //! Initialization of parameters related to conversion from motor positions to joints.
 //! Parameters for conversion for linear DOFs are:
@@ -30,7 +29,7 @@ const double linear_mp2i_ratio = 0.005 / (4 * 500 * 9);
 //! * The encoder has 2000 CPT (Counts per turn).
 //! * Quadcounts = 4 x Encoder Counts.
 //! * The gear ratio is equal to 100.
-const double rotational_mp2i_ratio = 2*M_PI / (4 * 2000 * 100);
+const double rotational_mp2i_ratio = -2*M_PI / (4 * 2000 * 100);
 const double kinematic_parameters_spkm::mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { linear_mp2i_ratio, linear_mp2i_ratio, linear_mp2i_ratio, rotational_mp2i_ratio, rotational_mp2i_ratio, rotational_mp2i_ratio };
 
 //! Initialization of the encoder resolution. Equals to the Counts Per Turn (CPT) x 4.
