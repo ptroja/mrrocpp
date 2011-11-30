@@ -28,9 +28,17 @@ void swarmitfix::main_test_algorithm(void)
 		if(pkmCmd.agent() != 1)
 			continue;
 
+		// Goal pose
 		lib::Homog_matrix hm(pkmCmd.pkmToWrist());
 
 		std::cerr << "[" << pkmCmd.l1() << "," << pkmCmd.l2() << "," << pkmCmd.l3() << "]" << std::endl;
+
+		// Setup variant for the PKM
+		lib::spkm::next_state_t cmd(lib::spkm::POSE_LIST);
+		cmd.segments.push_back(hm);
+
+		// Send command with the output buffer
+		IO.transmitters.spkm2.outputs.command->Send(cmd);
 	}
 
 	return;

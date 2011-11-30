@@ -24,7 +24,7 @@ namespace lib {
 namespace spkm {
 
 /*!
- * @brief SwarmItFix Parallel Kinematic Machine mp to ecp command
+ * @brief SwarmItFix Parallel Kinematic Machine mp to ecp variant
  * @ingroup spkm
  */
 typedef struct _segment
@@ -48,7 +48,7 @@ typedef struct _segment
 	bool guarded_motion;
 
 	//! Constructor with reasonable defaults
-	_segment() :
+	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix()) :
 		motion_type(lib::epos::SYNC_POLYNOMIAL),
 		duration(0),
 		guarded_motion(false)
@@ -67,7 +67,7 @@ typedef struct _segment
 } segment_t;
 
 /**
- * ECP command variant
+ * ECP variant variant
  */
 typedef enum _command_variant { POSE_LIST, STOP } command_variant;
 
@@ -76,13 +76,19 @@ typedef enum _command_variant { POSE_LIST, STOP } command_variant;
  */
 typedef struct _next_state_t
 {
-	command_variant command;
+	command_variant variant;
 
 	//! Type for sequence of motions of SPKM robot
-	typedef std::vector<spkm::segment_t> spkm_segment_sequence_t;
+	typedef std::vector<spkm::segment_t> segment_sequence_t;
 
 	//! Sequence of motion segments for SPKM robot
-	spkm_segment_sequence_t spkm_segment_sequence;
+	segment_sequence_t segments;
+
+	//! Constructor with safe defaults
+	_next_state_t(command_variant _variant = STOP) :
+		variant(_variant)
+	{
+	}
 
 private:
 	//! Give access to boost::serialization framework
@@ -92,10 +98,10 @@ private:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & command;
-		switch (command) {
+		ar & variant;
+		switch (variant) {
 			case POSE_LIST:
-				ar & spkm_segment_sequence;
+				ar & segments;
 				break;
 			default:
 				break;
@@ -104,7 +110,7 @@ private:
 } next_state_t;
 
 /*!
- * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum
+ * @brief SwarmItFix Parallel Kinematic Machine EDP variant buffer variant enum
  * @ingroup spkm
  */
 enum CBUFFER_VARIANT
@@ -122,12 +128,12 @@ typedef enum _POSE_SPECIFICATION
 } POSE_SPECIFICATION;
 
 /*!
- * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer
+ * @brief SwarmItFix Parallel Kinematic Machine EDP variant buffer
  * @ingroup spkm
  */
 struct cbuffer
 {
-	//! Variant of the command
+	//! Variant of the variant
 	CBUFFER_VARIANT variant;
 
 	//! Pose specification type
