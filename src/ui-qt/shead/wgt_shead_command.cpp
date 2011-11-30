@@ -15,17 +15,17 @@ wgt_shead_command::wgt_shead_command(QString _widget_label, mrrocpp::ui::common:
 
 	// utworzenie list widgetow
 
-	checkBox_fl_up_Vector.append(ui.checkBox_fl1_up);
+//	checkBox_fl_up_Vector.append(ui.checkBox_fl1_up);
 
-	checkBox_fl_down_Vector.append(ui.checkBox_fl1_down);
+//	checkBox_fl_down_Vector.append(ui.checkBox_fl1_down);
 
-	checkBox_fl_attached_Vector.append(ui.checkBox_fl1_attached);
+//	checkBox_fl_attached_Vector.append(ui.checkBox_fl1_attached);
 
 	checkBox_m_mip_Vector.append(ui.checkBox_ml_mip);
 
-	radioButton_fl_up_Vector.append(ui.radioButton_fl1_up);
+	//radioButton_fl_up_Vector.append(ui.radioButton_fl1_up);
 
-	radioButton_fl_down_Vector.append(ui.radioButton_fl1_down);
+//	radioButton_fl_down_Vector.append(ui.radioButton_fl1_down);
 
 	doubleSpinBox_m_current_position_Vector.append(ui.doubleSpinBox_ml_current_position);
 
