@@ -9,7 +9,10 @@
  * @ingroup spkm
  */
 
+#include <vector>
+
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include "base/lib/mrmath/homog_matrix.h"
 #include "robot/maxon/dp_epos.h"
@@ -54,6 +57,43 @@ typedef struct _segment
 		ar & BOOST_SERIALIZATION_NVP(guarded_motion);
 	}
 } segment_t;
+
+/**
+ * ECP command variant
+ */
+typedef enum _command_variant { POSE_LIST, STOP } command_variant;
+
+/*!
+ *  Command for ECP agent
+ */
+typedef struct _next_state_t
+{
+	command_variant command;
+
+	//! Type for sequence of motions of SPKM robot
+	typedef std::vector<spkm::segment_t> spkm_segment_sequence_t;
+
+	//! Sequence of motion segments for SPKM robot
+	spkm_segment_sequence_t spkm_segment_sequence;
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & command;
+		switch (command) {
+			case POSE_LIST:
+				ar & spkm_segment_sequence;
+				break;
+			default:
+				break;
+		}
+	}
+} next_state_t;
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum

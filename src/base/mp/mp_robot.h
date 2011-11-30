@@ -14,7 +14,8 @@
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp_mp/ecp_mp_robot.h"
 #include "base/lib/agent/RemoteAgent.h"
-#include "base/lib/agent/DataBuffer.h"
+#include "base/lib/agent/InputBuffer.h"
+#include "base/lib/agent/OutputBuffer.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -51,16 +52,18 @@ private:
 	 */
 	lib::child ECP_pid;
 
-	//! Pointer to the remote agent proxy
+public:
+	//! Remote agent proxy
 	RemoteAgent ecp;
 
+private:
 	//! Remote agent's data buffer
 	OutputBuffer <lib::MP_COMMAND_PACKAGE> command;
 
 	/**
 	 * @brief reference to sr_ecp object for sending messages to UI_SR console
 	 */
-	lib::sr_ecp &sr_ecp_msg; // obiekt do komunikacji z SR
+	lib::sr_ecp & sr_ecp_msg; // obiekt do komunikacji z SR
 
 	/**
 	 * @brief send a single command to the ECP
@@ -95,7 +98,7 @@ private:
 	void resume_ecp(void);
 
 	/**
-	 * @brief ecp_errorrs_handler and detector
+	 * @brief ECP errors handler
 	 */
 	void ecp_errors_handler();
 
@@ -121,9 +124,9 @@ public:
 	/**
 	 * @brief the communication with EDP flag
 	 *
-	 * if the flag is set (default) the MP communicates with ECP in Move method of generator\n
-	 * Sometimes it is needed to disable communication e.g. when there is a need to communicate only With MP or VSP\n
-	 * in the following iterations of Move
+	 * if the flag is set (default) the MP communicates with ECP in Move method of generator.
+	 * Sometimes it is needed to disable communication, e.g. when there is a need to communicate only with MP or VSP.
+	 * in the following iterations of Move.
 	 */
 	bool communicate_with_ecp;
 

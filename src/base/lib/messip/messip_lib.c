@@ -1048,6 +1048,11 @@ messip_channel_connect0( messip_cnx_t * cnx,
 	if ( msgreply.ok == MESSIP_NOK )
 	{
 //		fprintf(stderr, "Locate channel has failed: %s\n", name);
+
+		// set the errno for reasonable error message
+		errno = ENOENT;
+
+		// failure exit status
 		return NULL;
 	}
 

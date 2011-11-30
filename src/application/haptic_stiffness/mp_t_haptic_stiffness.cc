@@ -40,10 +40,8 @@ haptic_stiffness::haptic_stiffness(lib::configurator &_config) :
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void haptic_stiffness::create_robots()
 {
-
 	ACTIVATE_MP_ROBOT(irp6ot_m);
 	ACTIVATE_MP_ROBOT(irp6p_m);
-
 }
 
 void haptic_stiffness::configure_edp_force_sensor(bool configure_track, bool configure_postument)

@@ -31,7 +31,13 @@ namespace common {
 namespace task {
 
 task_base::task_base(lib::configurator &_config) :
-		ecp_mp::task::task(_config), MP(lib::MP_SECTION), reply(MP, _config.section_name), command("command"), mp_command(command.access), continuous_coordination(false)
+	ecp_mp::task::task(_config),
+	MP(lib::MP_SECTION),
+	reply(MP, _config.section_name),
+	command(*this, "command"),
+	mp_command(command.access),
+	mp_2_ecp_next_state_string(mp_command.ecp_next_state.next_state),
+	continuous_coordination(false)
 {
 	initialize_communication();
 }
@@ -103,8 +109,6 @@ void task_base::initialize_communication()
 		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "Failed  Failed to name attach (trigger pulse)");
 		BOOST_THROW_EXCEPTION(exception::se());
 	}
-
-	registerBuffer(command);
 }
 // -------------------------------------------------------------------
 
@@ -124,7 +128,6 @@ void task_base::set_ecp_reply(lib::ECP_REPLY ecp_r)
 void task_base::termination_notice(void)
 {
 	if (mp_command_type() != lib::END_MOTION) {
-
 		set_ecp_reply(lib::TASK_TERMINATED);
 		reply.Send(ecp_reply);
 	}
@@ -202,62 +205,41 @@ void task_base::wait_for_start(void)
 // Oczekiwanie na kolejne zlecenie od MP
 void task_base::get_next_state(void)
 {
-
-//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state poczatek");
-
 	bool next_state_received = false;
 
 	while (!next_state_received) {
 		while (!command.isFresh()) {
-			//		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 1");
-
 			ReceiveSingleMessage(true);
-			//		sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 2");
-
 		}
-		//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state 3");
 
 		command.markAsUsed();
 
 		switch (mp_command.command)
 		{
 			case lib::NEXT_STATE:
-				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::NEXT_STATE");
-
 				// Reply with ACK
+				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 				reply.Send(ecp_reply);
+
 				next_state_received = true;
 				break;
 			case lib::PAUSE_TASK:
-				//	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::PAUSE_TASK");
-
-				// Reply with ACK
-				//	reply.Send(ecp_reply);
 				wait_for_resume();
 				break;
 			case lib::STOP:
-				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::STOP");
-
 				// Reply with ACK
+				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
 				reply.Send(ecp_reply);
 				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(ECP_STOP_ACCEPTED));
 				break;
 			default:
-				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
-				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "get_next_state lib::INCORRECT_MP_COMMAND");
-
 				// Reply with NACK
+				set_ecp_reply(lib::INCORRECT_MP_COMMAND);
 				reply.Send(ecp_reply);
 				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_MP_COMMAND));
 				break;
 		}
 	}
-
-	// Extract the next command to the local variable
-	mp_2_ecp_next_state_string = mp_command.ecp_next_state.next_state;
 }
 
 // Receive a message from MP

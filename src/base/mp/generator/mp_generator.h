@@ -58,7 +58,7 @@ public:
 	/*!
 	 * @brief decides if MP should wait for ECP_pulse
 	 */
-	bool wait_for_ECP_pulse;
+	bool wait_for_ECP_message;
 
 	/*!
 	 * @brief stl map of all mp robots

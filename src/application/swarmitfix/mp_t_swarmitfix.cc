@@ -1,19 +1,10 @@
-#include <iostream>
-#include <string>
-#include <sstream>
+// Start of user code user defined headers
+#include <boost/foreach.hpp>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/sr/srlib.h"
 
-#include "base/mp/mp_task.h"
-
-#include "mp_t_swarmitfix.h"
-#include "base/lib/single_thread_port.h"
-#include "base/lib/mrmath/mrmath.h"
-#include "robot/maxon/dp_epos.h"
-#include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_spkm.h"
 
 #include "robot/shead/mp_r_shead1.h"
@@ -22,6 +13,12 @@
 #include "robot/spkm/mp_r_spkm2.h"
 #include "robot/smb/mp_r_smb1.h"
 #include "robot/smb/mp_r_smb2.h"
+// End of user code
+
+#include "base/lib/sr/srlib.h"
+#include "base/mp/mp_task.h"
+
+#include "mp_t_swarmitfix.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -32,81 +29,161 @@ task* return_created_mp_task(lib::configurator &_config)
 	return new swarmitfix(_config);
 }
 
-// powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
-void swarmitfix::create_robots()
-{
-	ACTIVATE_MP_ROBOT(spkm1);
-	ACTIVATE_MP_ROBOT(spkm2);
-	ACTIVATE_MP_ROBOT(smb1);
-	ACTIVATE_MP_ROBOT(smb2);
-	ACTIVATE_MP_ROBOT(shead1);
-	ACTIVATE_MP_ROBOT(shead2);
-}
-
 swarmitfix::swarmitfix(lib::configurator &_config) :
 		task(_config)
 {
+	// Create optional Input buffers
+	if(IS_MP_ROBOT_ACTIVE(spkm2)) {
+		IO.transmitters.spkm2.inputs.notification.Create(*this, lib::spkm2::ROBOT_NAME+"notification");
+	}
+	if(IS_MP_ROBOT_ACTIVE(smb2)) {
+		IO.transmitters.smb2.inputs.notification.Create(*this, lib::smb2::ROBOT_NAME+"notification");
+	}
+	if(IS_MP_ROBOT_ACTIVE(spkm1)) {
+		IO.transmitters.spkm1.inputs.notification.Create(*this, lib::spkm1::ROBOT_NAME+"notification");
+	}
+	if(IS_MP_ROBOT_ACTIVE(smb1)) {
+		IO.transmitters.smb1.inputs.notification.Create(*this, lib::smb1::ROBOT_NAME+"notification");
+	}
 
+	// Call the robot activation so we can support only the active ones
+	create_robots();
+
+	// Create optional Output buffers
+	if(is_robot_activated(lib::spkm2::ROBOT_NAME)) {
+		IO.transmitters.spkm2.outputs.command.Create(robot_m[lib::spkm2::ROBOT_NAME]->ecp, "command");
+	}
+	if(is_robot_activated(lib::spkm1::ROBOT_NAME)) {
+		IO.transmitters.spkm1.outputs.command.Create(robot_m[lib::spkm1::ROBOT_NAME]->ecp, "command");
+	}
+	
+	// Start of user code Initialize internal memory variables
+// End of user code
+}
+
+// powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
+void swarmitfix::create_robots()
+{
+	ACTIVATE_MP_ROBOT(smb2);
+	ACTIVATE_MP_ROBOT(smb1);
+	ACTIVATE_MP_ROBOT(spkm1);
+	ACTIVATE_MP_ROBOT(spkm2);
 }
 
 void swarmitfix::main_task_algorithm(void)
 {
-	sr_ecp_msg->message("New swarmitfix series");
+	sr_ecp_msg->message("task started");
 
-	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecp_state(ecp_mp::spkm::generator::ECP_GEN_POSE_LIST, 0, "", 0, lib::spkm1::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::smb1::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::shead1::ROBOT_NAME);
+	do {
+		if (b1_initial_condition() == true) {
+			do {
+				if(b1_terminal_condition() == true)
+					break;
+					
+				if(ReceiveSingleMessage(false)) {
+					if(b1_terminal_condition() == true)					
+						break;
+				}
 
-	double a = 2.88;
+				// Check if right set of data is available
+				if(IO.sensors.planner.inputs.trigger->isFresh())
+				{
+					// Mark data in buffers as used 
+					IO.sensors.planner.inputs.trigger->markAsUsed();
 
-	std::string astring;
+					// Call the transition function routine
+					b1_plan_progress();
+					
+					continue;
+				}
+				
+				// Check if right set of data is available
+				if(IO.transmitters.spkm1.inputs.notification->isFresh())
+				{
+					// Mark data in buffers as used 
+					IO.transmitters.spkm1.inputs.notification->markAsUsed();
 
-	astring = "11";
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	ss << a;
-	astring = ss.str();
-	lib::single_thread_port_manager port_manager;
+					// Call the transition function routine
+					b1_handle_spkm1_notification();
+					
+					continue;
+				}
+				
+				// Check if right set of data is available
+				if(IO.transmitters.spkm2.inputs.notification->isFresh())
+				{
+					// Mark data in buffers as used 
+					IO.transmitters.spkm2.inputs.notification->markAsUsed();
 
-	lib::single_thread_port <int> int_port("int_port_label", port_manager);
-	lib::single_thread_port <int>* int_port_from_manager;
+					// Call the transition function routine
+					b1_handle_spkm2_notification();
+					
+					continue;
+				}
+				
+				// Check if right set of data is available
+				if(IO.transmitters.smb1.inputs.notification->isFresh())
+				{
+					// Mark data in buffers as used 
+					IO.transmitters.smb1.inputs.notification->markAsUsed();
 
-	int_port_from_manager = port_manager.get_port <int>("int_port_label");
+					// Call the transition function routine
+					b1_handle_smb1_notification();
+					
+					continue;
+				}
+				
+				// Check if right set of data is available
+				if(IO.transmitters.smb2.inputs.notification->isFresh())
+				{
+					// Mark data in buffers as used 
+					IO.transmitters.smb2.inputs.notification->markAsUsed();
 
-	int_port_from_manager->data = 16;
+					// Call the transition function routine
+					b1_handle_smb2_notification();
+					
+					continue;
+				}
+				
+				// Blocking for a new message has the lowest priority 
+				ReceiveSingleMessage(true);
+			} while (true);
 
-	int_port_from_manager->set();
-	int_port_from_manager->get();
+			// ...
+			continue;
+		}
+		if (b2_initial_condition() == true) {
+			do {
+				if(b2_terminal_condition() == true)
+					break;
+					
+				if(ReceiveSingleMessage(false)) {
+					if(b2_terminal_condition() == true)					
+						break;
+				}
 
-	ss << " " << int_port_from_manager->data;
+				// There is no data dependency for this transition function				
+				{
 
-	sr_ecp_msg->message(ss.str().c_str());
+					// Call the transition function routine
+					b2_stop_all();
+					
+					continue;
+				}
+				
+				// Blocking for a new message has the lowest priority 
+				ReceiveSingleMessage(true);
+			} while (true);
 
-	send_end_motion_to_ecps(1, lib::spkm1::ROBOT_NAME.c_str());
-	/*
-	 sr_ecp_msg->message("2");
-	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_SLEEP, (int) 5, "",  0,1,
-	 lib::spkm::ROBOT_NAME);
-	 sr_ecp_msg->message("3");
-	 wait_for_task_termination(false, 1,  lib::spkm::ROBOT_NAME);
-	 */
-	sr_ecp_msg->message("4");
+			// ...
+			continue;
+		}
 
-	char tmp_string[lib::MP_2_ECP_STRING_SIZE];
-
-	lib::epos::epos_cubic_command epos_params;
-
-	epos_params.em[4] = 3.7;
-
-	memcpy(tmp_string, &epos_params, sizeof(epos_params));
-
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_EPOS_CUBIC, (int) 5, tmp_string, sizeof(epos_params), 1, lib::spkm::ROBOT_NAME.c_str());
-	sr_ecp_msg->message("5");
-	wait_for_task_termination(false, 1, lib::spkm1::ROBOT_NAME.c_str());
+		// Fallback to wait for change in the agent state
+		ReceiveSingleMessage(true);
+	} while(true);
 
 	sr_ecp_msg->message("END");
-
-	send_end_motion_to_ecps(2, lib::smb1::ROBOT_NAME.c_str(), lib::shead1::ROBOT_NAME.c_str());
 }
 
 } // namespace task

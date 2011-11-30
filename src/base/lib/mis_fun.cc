@@ -28,8 +28,6 @@ namespace lib {
 //! Set the process scheduler
 void set_process_sched()
 {
-
-	//	int policy;
 	struct sched_param param;
 
 	int policy_priority_min = sched_get_priority_min(SCHED_FIFO);
@@ -42,13 +40,13 @@ void set_process_sched()
 	if (sched_setscheduler(getpid(), SCHED_FIFO, &param) == -1) {
 		perror("sched_setscheduler() ");
 	}
-
 }
 
 void set_thread_priority(pthread_t thread, int sched_priority_l)
 {
 	int policy;
 	struct sched_param param;
+
 	if (pthread_getschedparam(thread, &policy, &param)) {
 		perror("pthread_getschedparam() ");
 	}
@@ -65,7 +63,6 @@ void set_thread_priority(pthread_t thread, int sched_priority_l)
 	}
 
 	//pthread_setscheduler(thread, SCHED_FIFO, sched_priority_l);
-
 
 	if ((sched_priority_l < policy_priority_min) || (sched_priority_l > policy_priority_max)) {
 		fprintf(stderr, "requested thread priority (%d) not in <%d:%d> priority range\n", sched_priority_l, policy_priority_min, policy_priority_max);
