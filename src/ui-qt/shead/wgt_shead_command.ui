@@ -293,7 +293,7 @@ p, li { white-space: pre-wrap; }
                <item row="0" column="0">
                 <widget class="QLabel" name="label_14">
                  <property name="text">
-                  <string>up</string>
+                  <string>active</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -303,7 +303,7 @@ p, li { white-space: pre-wrap; }
                <item row="0" column="1">
                 <widget class="QLabel" name="label_15">
                  <property name="text">
-                  <string>down</string>
+                  <string>inactive</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -313,7 +313,7 @@ p, li { white-space: pre-wrap; }
                <item row="0" column="2">
                 <widget class="QLabel" name="label_19">
                  <property name="text">
-                  <string>attached</string>
+                  <string>int</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -338,58 +338,24 @@ p, li { white-space: pre-wrap; }
                 <height>0</height>
                </size>
               </property>
-              <layout class="QGridLayout" name="gridLayout_6">
-               <item row="0" column="0">
-                <widget class="QCheckBox" name="checkBox_fl_all_undetachable_2">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>140</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>140</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_25">
+               <item>
+                <widget class="QLabel" name="label_26">
                  <property name="text">
-                  <string>undetachable</string>
+                  <string>activate</string>
                  </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
-                <widget class="QPushButton" name="pushButton_fl_all_up_2">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>27</height>
-                  </size>
-                 </property>
+               <item>
+                <widget class="QLabel" name="label_29">
                  <property name="text">
-                  <string>up</string>
+                  <string>desactivate</string>
                  </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QPushButton" name="pushButton_fl_all_down_2">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>down</string>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -561,34 +527,6 @@ p, li { white-space: pre-wrap; }
                <property name="margin">
                 <number>3</number>
                </property>
-               <item>
-                <widget class="QCheckBox" name="checkBox_fl1_udetachable_2">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>130</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>use carefully !</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
                <item>
                 <widget class="QRadioButton" name="radioButton_fl1_up_2">
                  <property name="maximumSize">
@@ -774,7 +712,7 @@ E</string>
                <item row="0" column="0">
                 <widget class="QLabel" name="label">
                  <property name="text">
-                  <string>up</string>
+                  <string>active</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -784,7 +722,7 @@ E</string>
                <item row="0" column="1">
                 <widget class="QLabel" name="label_4">
                  <property name="text">
-                  <string>down</string>
+                  <string>inactive</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -794,7 +732,7 @@ E</string>
                <item row="0" column="2">
                 <widget class="QLabel" name="label_9">
                  <property name="text">
-                  <string>attached</string>
+                  <string>int</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -819,58 +757,24 @@ E</string>
                 <height>0</height>
                </size>
               </property>
-              <layout class="QGridLayout" name="gridLayout_2">
-               <item row="0" column="0">
-                <widget class="QCheckBox" name="checkBox_fl_all_undetachable">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>140</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>140</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_26">
+               <item>
+                <widget class="QLabel" name="label_27">
                  <property name="text">
-                  <string>undetachable</string>
+                  <string>activate</string>
                  </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
-                <widget class="QPushButton" name="pushButton_fl_all_up">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>27</height>
-                  </size>
-                 </property>
+               <item>
+                <widget class="QLabel" name="label_30">
                  <property name="text">
-                  <string>up</string>
+                  <string>desactivate</string>
                  </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QPushButton" name="pushButton_fl_all_down">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>27</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>down</string>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -1042,34 +946,6 @@ E</string>
                <property name="margin">
                 <number>3</number>
                </property>
-               <item>
-                <widget class="QCheckBox" name="checkBox_fl1_udetachable">
-                 <property name="enabled">
-                  <bool>true</bool>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>130</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>20</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>use carefully !</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="checked">
-                  <bool>false</bool>
-                 </property>
-                </widget>
-               </item>
                <item>
                 <widget class="QRadioButton" name="radioButton_fl1_up">
                  <property name="maximumSize">

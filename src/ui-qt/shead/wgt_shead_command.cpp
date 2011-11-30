@@ -19,8 +19,6 @@ wgt_shead_command::wgt_shead_command(QString _widget_label, mrrocpp::ui::common:
 
 	checkBox_fl_down_Vector.append(ui.checkBox_fl1_down);
 
-	checkBox_fl_undetachable_Vector.append(ui.checkBox_fl1_udetachable);
-
 	checkBox_fl_attached_Vector.append(ui.checkBox_fl1_attached);
 
 	checkBox_m_mip_Vector.append(ui.checkBox_ml_mip);
@@ -235,15 +233,6 @@ void wgt_shead_command::on_pushButton_fl_execute_clicked()
 				fc.leg[i] = lib::smb::UP;
 			} else if (radioButton_fl_down_Vector[i]->isChecked()) {
 				fc.leg[i] = lib::smb::DOWN;
-			}
-
-			fc.undetachable[i] = false;
-			if (checkBox_fl_undetachable_Vector[i]->isChecked()) {
-				if (ui.checkBox_fl_all_undetachable->isChecked()) {
-					fc.undetachable[i] = true;
-				} else {
-					interface.ui_msg->message(lib::NON_FATAL_ERROR, "special undetachable mode not set");
-				}
 			}
 
 		}
