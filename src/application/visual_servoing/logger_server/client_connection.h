@@ -49,7 +49,7 @@ private:
 
 	std::ofstream outFile;
 
-	char time_log_filename[128];
+	char time_log_filename[2048];
 };
 
 template<typename T>

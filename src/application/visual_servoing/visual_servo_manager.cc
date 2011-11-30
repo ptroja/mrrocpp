@@ -93,7 +93,7 @@ bool visual_servo_manager::first_step()
 	for (size_t i = 0; i < termination_conditions.size(); ++i) {
 		termination_conditions[i]->reset();
 	}
-	log_dbg("visual_servo_manager::first_step() end\n");
+//	log_dbg("visual_servo_manager::first_step() end\n");
 
 //	clock_gettime(CLOCK_REALTIME, &prev_timestamp);
 //	c = 0;
