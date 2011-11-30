@@ -11,6 +11,7 @@
 
 #include <string>
 
+#include "robot/maxon/dp_epos.h"
 #include "const_shead.h"
 
 namespace mrrocpp {
