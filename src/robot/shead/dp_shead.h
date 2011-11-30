@@ -82,6 +82,20 @@ struct reply
 {
 	STATE_OF_THE_SOLDIFICATION head_state;
 	STATE_OF_THE_VACUUM vacuum_state;
+	bool contacts[3];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & head_state;
+		ar & vacuum_state;
+		ar & contacts;
+	}
+
 }__attribute__((__packed__));
 
 /*!
@@ -90,7 +104,7 @@ struct reply
  */
 enum CBUFFER_VARIANT
 {
-	CBUFFER_SOLIDIFICATION_ACTIVATION, CBUFFER_VACUUM_ACTIVATION
+	POSE, QUICKSTOP, CLEAR_FAULT, SOLIDIFICATION, VACUUM
 };
 
 /*!
@@ -99,12 +113,78 @@ enum CBUFFER_VARIANT
  */
 struct cbuffer
 {
+
+	//! Variant of the command
 	CBUFFER_VARIANT variant;
-	union
+
+	lib::shead::SOLIDIFICATION_ACTIVATION head_solidification;
+	lib::shead::VACUUM_ACTIVATION vacuum_activation;
+
+	//! Pose specification type
+	POSE_SPECIFICATION set_pose_specification;
+
+	//! Pose specification type
+	POSE_SPECIFICATION get_pose_specification;
+
+	//! Motion interpolation variant
+	lib::epos::EPOS_MOTION_VARIANT motion_variant;
+
+	//! Motion time - used in the Interpolated Position Mode.
+	double estimated_time;
+
+	int32_t motor_pos[NUM_OF_SERVOS];
+
+	double joint_pos[NUM_OF_SERVOS];
+
+	double goal_pos[6];
+
+	//! Allowed time for the motion in seconds.
+	//! If 0, then the motion time will be limited by the motor parameters.
+	//! If > 0 and greater than a limit imposed by the motors, then the motion will be slowed down.
+	//! In another case, the NACK will be replied.
+	double duration;
+
+	//! True if the contact is expected during the motion.
+	//! The NACK will be replied if:
+	//! - the contact was expected and did not happened
+	//! - OR the contact was NOT expected and did happened.
+	bool guarded_motion;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
 	{
-		lib::shead::SOLIDIFICATION_ACTIVATION head_solidification;
-		lib::shead::VACUUM_ACTIVATION vacuum_activation;
-	};
+		ar & variant;
+		ar & head_solidification;
+		ar & vacuum_activation;
+		ar & get_pose_specification;
+		switch (variant)
+		{
+			case POSE:
+				ar & set_pose_specification;
+				switch (set_pose_specification)
+				{
+					case FRAME:
+						ar & goal_pos;
+						break;
+					case JOINT:
+						ar & joint_pos;
+						break;
+					case MOTOR:
+						ar & motor_pos;
+						break;
+				}
+				ar & motion_variant;
+				ar & estimated_time;
+				break;
+			default:
+				break;
+		};
+	}
+
 }__attribute__((__packed__));
 
 /*!
@@ -114,6 +194,19 @@ struct cbuffer
 struct rbuffer
 {
 	reply shead_reply;
+	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & shead_reply;
+		ar & epos_controller;
+	}
+
 }__attribute__((__packed__));
 
 } // namespace shead

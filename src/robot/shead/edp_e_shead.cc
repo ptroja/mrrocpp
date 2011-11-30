@@ -79,7 +79,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	switch (ecp_edp_cbuffer.variant)
 	{
-		case lib::shead::CBUFFER_SOLIDIFICATION_ACTIVATION: {
+		case lib::shead::SOLIDIFICATION: {
 			lib::shead::SOLIDIFICATION_ACTIVATION head_solidification;
 
 			memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification), sizeof(head_solidification));
@@ -92,7 +92,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		}
 			break;
-		case lib::shead::CBUFFER_VACUUM_ACTIVATION: {
+		case lib::shead::VACUUM: {
 			lib::shead::VACUUM_ACTIVATION vacuum_activation;
 
 			memcpy(&vacuum_activation, &(ecp_edp_cbuffer.vacuum_activation), sizeof(vacuum_activation));
