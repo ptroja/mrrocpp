@@ -83,33 +83,33 @@ int wgt_shead_command::init()
 		if (robot->state.edp.pid != -1) {
 			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				/*
 
-				 synchro_depended_widgets_disable(false);
-				 if (ui.radioButton_m_motor->isChecked()) {
-				 robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.set_request();
-				 } else if (ui.radioButton_m_joint->isChecked()) {
-				 robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.set_request();
-				 } else if (ui.radioButton_m_ext->isChecked()) {
-				 robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_request();
-				 }
+				synchro_depended_widgets_disable(false);
+				if (ui.radioButton_m_motor->isChecked()) {
+					robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.set_request();
+				} else if (ui.radioButton_m_joint->isChecked()) {
+					robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.set_request();
+				} else if (ui.radioButton_m_ext->isChecked()) {
+					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_request();
+				}
+				/*
 				 robot->ui_ecp_robot->the_robot->shead_multi_leg_reply_data_request_port.set_request();
 				 robot->ui_ecp_robot->execute_motion();
 				 robot->ui_ecp_robot->the_robot->shead_multi_leg_reply_data_request_port.get();
-				 lib::epos::epos_reply *er;
+				 */
+				lib::epos::epos_reply *er;
 
-				 if (ui.radioButton_m_motor->isChecked()) {
-
-				 robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.get();
-				 er = &robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
-				 } else if (ui.radioButton_m_joint->isChecked()) {
-				 robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.get();
-				 er = &robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.data;
-				 } else if (ui.radioButton_m_ext->isChecked()) {
-				 robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
-				 er = &robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
-				 }
-
+				if (ui.radioButton_m_motor->isChecked()) {
+					robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.get();
+					er = &robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
+				} else if (ui.radioButton_m_joint->isChecked()) {
+					robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.get();
+					er = &robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.data;
+				} else if (ui.radioButton_m_ext->isChecked()) {
+					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
+					er = &robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
+				}
+				/*
 				 // sets leg state
 
 				 lib::shead::multi_leg_reply_td &mlr =
@@ -187,25 +187,25 @@ int wgt_shead_command::move_it()
 	try {
 
 		if (robot->state.edp.pid != -1) {
-			/*
-			 lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
-			 if (ui.radioButton_m_motor->isChecked()) {
-			 robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
-			 } else if (ui.radioButton_m_joint->isChecked()) {
-			 robot->ui_ecp_robot->move_joints(robot->desired_pos, motion_variant);
-			 } else if (ui.radioButton_m_ext->isChecked()) {
-			 robot->ui_ecp_robot->move_external(robot->desired_pos, motion_variant, 10);
-			 }
+			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
-			 if (robot->state.edp.is_synchronised) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
-			 for (int i = 0; i < robot->number_of_servos; i++) {
-			 doubleSpinBox_m_absolute_Vector[i]->setValue(robot->desired_pos[i]);
-			 }
+			if (ui.radioButton_m_motor->isChecked()) {
+				robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
+			} else if (ui.radioButton_m_joint->isChecked()) {
+				robot->ui_ecp_robot->move_joints(robot->desired_pos, motion_variant);
+			} else if (ui.radioButton_m_ext->isChecked()) {
+				robot->ui_ecp_robot->move_external(robot->desired_pos, motion_variant, 10);
+			}
 
-			 init();
-			 }
-			 */
+			if (robot->state.edp.is_synchronised) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
+				for (int i = 0; i < robot->number_of_servos; i++) {
+					doubleSpinBox_m_absolute_Vector[i]->setValue(robot->desired_pos[i]);
+				}
+
+				init();
+			}
+
 		} // end if (robot->state.edp.pid!=-1)
 	} // end try
 
