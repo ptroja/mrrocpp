@@ -29,7 +29,20 @@ void swarmitfix::main_test_algorithm(void)
 			continue;
 
 		// Goal pose
-		lib::Homog_matrix hm(pkmCmd.pkmToWrist());
+		lib::Homog_matrix hm;
+
+		if(pkmCmd.pkmToWrist().present()) {
+			hm = lib::Homog_matrix(pkmCmd.pkmToWrist().get());
+		} else if (pkmCmd.Xyz_Angle_Axis().present()) {
+			hm = lib::Xyz_Angle_Axis_vector(
+					pkmCmd.Xyz_Angle_Axis()->x(),
+					pkmCmd.Xyz_Angle_Axis()->y(),
+					pkmCmd.Xyz_Angle_Axis()->z(),
+					pkmCmd.Xyz_Angle_Axis()->ax(),
+					pkmCmd.Xyz_Angle_Axis()->ay(),
+					pkmCmd.Xyz_Angle_Axis()->az()
+					);
+		}
 
 		std::cerr << "[" << pkmCmd.l1() << "," << pkmCmd.l2() << "," << pkmCmd.l3() << "]" << std::endl;
 

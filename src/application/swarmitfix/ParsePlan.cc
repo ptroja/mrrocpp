@@ -7,11 +7,13 @@
 
 #include <iostream>
 #include <memory>
+#include <exception>
 
 #include <boost/thread/thread.hpp>
 
 #include "planner.h"
 #include "base/lib/mrmath/homog_matrix.h"
+#include "base/lib/mrmath/mrmath.h"
 
 using namespace std;
 
@@ -38,7 +40,24 @@ int main(int argc, char *argv[])
 			if(pkmCmd.agent() != 1)
 				continue;
 
-			mrrocpp::lib::Homog_matrix hm(pkmCmd.pkmToWrist());
+			// Goal pose
+			mrrocpp::lib::Homog_matrix hm;
+
+			if(pkmCmd.pkmToWrist().present()) {
+				hm = mrrocpp::lib::Homog_matrix(pkmCmd.pkmToWrist().get());
+			} else if (pkmCmd.Xyz_Angle_Axis().present()) {
+				hm = mrrocpp::lib::Xyz_Angle_Axis_vector(
+						pkmCmd.Xyz_Angle_Axis()->x(),
+						pkmCmd.Xyz_Angle_Axis()->y(),
+						pkmCmd.Xyz_Angle_Axis()->z(),
+						pkmCmd.Xyz_Angle_Axis()->ax(),
+						pkmCmd.Xyz_Angle_Axis()->ay(),
+						pkmCmd.Xyz_Angle_Axis()->az()
+						);
+			} else {
+				// This should be already checked by XML validation
+				throw std::runtime_error("Goal pose not defined");
+			}
 
 			std::cerr << pkmCmd.pkmToWrist() << std::endl;
 			std::cerr << hm << std::endl << std::endl;

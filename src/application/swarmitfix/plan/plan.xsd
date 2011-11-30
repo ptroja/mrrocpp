@@ -189,7 +189,21 @@
                         <xs:element ref="psi2"/>
                         <xs:element ref="psi3"/>
                         <xs:element ref="beta7"/>
-                        <xs:element name="pkmToWrist" type="xs:string"/>
+                        <xs:choice minOccurs="1" maxOccurs="1">
+                          <xs:element name="pkmToWrist" type="xs:string"/>
+                          <xs:element name="Xyz_Angle_Axis">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="x" type="xs:double"></xs:element>
+                                <xs:element name="y" type="xs:double"></xs:element>
+                                <xs:element name="z" type="xs:double"></xs:element>
+                                <xs:element name="ax" type="xs:double"></xs:element>
+                                <xs:element name="ay" type="xs:double"></xs:element>
+                                <xs:element name="az" type="xs:double"></xs:element>
+                              </xs:sequence>                              
+                            </xs:complexType>                            
+                          </xs:element>
+                        </xs:choice>                       
                         <xs:element ref="pkmbaseToFixedPkm"/>
                         <xs:element ref="hlowered"/>
                         <xs:element ref="Dz"/>
