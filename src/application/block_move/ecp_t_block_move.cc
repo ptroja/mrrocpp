@@ -79,6 +79,7 @@ block_move::block_move(lib::configurator &_config) :
 	//utworzenie generatora ruchu
 	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, vs_config_section_name.c_str(), vs));
 	sm->add_position_constraint(cube);
+	sm->configure();
 
 	sr_ecp_msg->message("ecp BLOCK MOVE loaded");
 }
@@ -104,15 +105,14 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 		Types::Mrrocpp_Proxy::BReading br;
 		br = ds_rpc->call_remote_procedure<Types::Mrrocpp_Proxy::BReading>((int) param);
 
-
 		sr_ecp_msg->message("configurate servovision...");
 
 		sm->add_termination_condition(object_reached_term_cond);
 		sm->add_termination_condition(timeout_term_cond);
-		sm->configure();
+
+		sr_ecp_msg->message("servovision...");
 
 		sm->Move();
-		//sm->reset();
 
 		sr_ecp_msg->message("tff_gripper_approach end");
 	}
