@@ -26,7 +26,7 @@
 //#include "robot/irp6p_tfg/const_irp6p_tfg.h"
 
 #define BLOCK_WIDTH 0.031
-#define BLOCK_HEIGHT 0.019
+#define BLOCK_HEIGHT 0.0195
 
 using namespace mrrocpp::ecp_mp::sensor::discode;
 using namespace mrrocpp::ecp::common::generator;
@@ -74,7 +74,7 @@ block_move::block_move(lib::configurator &_config) :
 	ds = shared_ptr <discode_sensor> (new discode_sensor(config, vs_config_section_name));
 	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, ds, vs_config_section_name, config));
 	object_reached_term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(config, vs_config_section_name));
-	timeout_term_cond = shared_ptr <termination_condition> (new timeout_termination_condition(5));
+	timeout_term_cond = shared_ptr <termination_condition> (new timeout_termination_condition(7));
 
 	//utworzenie generatora ruchu
 	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, vs_config_section_name.c_str(), vs));
@@ -90,7 +90,7 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 		sr_ecp_msg->message("configurate tff_gripper_approach...");
 
-		gtga->configure(0.02, 330, 3);
+		gtga->configure(0.01, 590, 2);
 		gtga->Move();
 
 		sr_ecp_msg->message("tff_gripper_approach end");
@@ -128,8 +128,8 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 		int change_pos[6];
 
-		change_pos[2] = param % 10;
-		change_pos[1] = (param % 100 - change_pos[2])/10;
+		change_pos[2] = 0 - param % 10;
+		change_pos[1] = 0 - (param % 100 + change_pos[2])/10;
 		change_pos[0] = (param % 1000 - change_pos[1])/100;
 		change_pos[3] = 0;
 		change_pos[4] = 0;
@@ -173,7 +173,7 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 			coordinates[0] = build_start_coordinates[0] - change_pos[0]*BLOCK_WIDTH;
 			coordinates[1] = build_start_coordinates[1] - change_pos[1]*BLOCK_WIDTH;
-			coordinates[2] = build_start_coordinates[2] - change_pos[2]*BLOCK_WIDTH;
+			coordinates[2] = build_start_coordinates[2] - change_pos[2]*BLOCK_HEIGHT;
 			coordinates[3] = build_start_coordinates[3] - change_pos[3]*BLOCK_WIDTH;
 			coordinates[4] = build_start_coordinates[4] - change_pos[4]*BLOCK_WIDTH;
 			coordinates[5] = build_start_coordinates[5] - change_pos[5]*BLOCK_WIDTH;
