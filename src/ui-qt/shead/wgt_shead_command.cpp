@@ -1,6 +1,6 @@
-#include "../smb/ui_ecp_r_smb.h"
-#include "../smb/ui_r_smb.h"
-#include "robot/smb/const_smb.h"
+#include "ui_ecp_r_shead.h"
+#include "ui_r_shead.h"
+#include "robot/shead/const_shead.h"
 
 #include "wgt_shead_command.h"
 #include "../base/interface.h"
@@ -11,7 +11,7 @@ wgt_shead_command::wgt_shead_command(QString _widget_label, mrrocpp::ui::common:
 		wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
-	robot = dynamic_cast <mrrocpp::ui::smb::UiRobot *>(_robot);
+	robot = dynamic_cast <mrrocpp::ui::shead::UiRobot *>(_robot);
 
 	// utworzenie list widgetow
 
@@ -83,47 +83,49 @@ int wgt_shead_command::init()
 		if (robot->state.edp.pid != -1) {
 			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
-				synchro_depended_widgets_disable(false);
-				if (ui.radioButton_m_motor->isChecked()) {
-					robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.set_request();
-				} else if (ui.radioButton_m_joint->isChecked()) {
-					robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.set_request();
-				} else if (ui.radioButton_m_ext->isChecked()) {
-					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_request();
-				}
-				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.set_request();
-				robot->ui_ecp_robot->execute_motion();
-				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.get();
-				lib::epos::epos_reply *er;
+				/*
 
-				if (ui.radioButton_m_motor->isChecked()) {
+				 synchro_depended_widgets_disable(false);
+				 if (ui.radioButton_m_motor->isChecked()) {
+				 robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.set_request();
+				 } else if (ui.radioButton_m_joint->isChecked()) {
+				 robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.set_request();
+				 } else if (ui.radioButton_m_ext->isChecked()) {
+				 robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_request();
+				 }
+				 robot->ui_ecp_robot->the_robot->shead_multi_leg_reply_data_request_port.set_request();
+				 robot->ui_ecp_robot->execute_motion();
+				 robot->ui_ecp_robot->the_robot->shead_multi_leg_reply_data_request_port.get();
+				 lib::epos::epos_reply *er;
 
-					robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.get();
-					er = &robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
-				} else if (ui.radioButton_m_joint->isChecked()) {
-					robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.get();
-					er = &robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.data;
-				} else if (ui.radioButton_m_ext->isChecked()) {
-					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
-					er = &robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
-				}
+				 if (ui.radioButton_m_motor->isChecked()) {
 
-				// sets leg state
+				 robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.get();
+				 er = &robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
+				 } else if (ui.radioButton_m_joint->isChecked()) {
+				 robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.get();
+				 er = &robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.data;
+				 } else if (ui.radioButton_m_ext->isChecked()) {
+				 robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
+				 er = &robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
+				 }
 
-				lib::smb::multi_leg_reply_td &mlr =
-						robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.data;
+				 // sets leg state
 
-				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-					checkBox_fl_up_Vector[i]->setChecked(mlr.leg[i].is_up);
-					checkBox_fl_down_Vector[i]->setChecked(mlr.leg[i].is_down);
-					checkBox_fl_attached_Vector[i]->setChecked(mlr.leg[i].is_attached);
-				}
+				 lib::shead::multi_leg_reply_td &mlr =
+				 robot->ui_ecp_robot->the_robot->shead_multi_leg_reply_data_request_port.data;
 
-				for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
-					checkBox_m_mip_Vector[i]->setChecked(er->epos_controller[i].motion_in_progress);
-					doubleSpinBox_m_current_position_Vector[i]->setValue(er->epos_controller[i].position);
-				}
+				 for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
+				 checkBox_fl_up_Vector[i]->setChecked(mlr.leg[i].is_up);
+				 checkBox_fl_down_Vector[i]->setChecked(mlr.leg[i].is_down);
+				 checkBox_fl_attached_Vector[i]->setChecked(mlr.leg[i].is_attached);
+				 }
 
+				 for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
+				 checkBox_m_mip_Vector[i]->setChecked(er->epos_controller[i].motion_in_progress);
+				 doubleSpinBox_m_current_position_Vector[i]->setValue(er->epos_controller[i].position);
+				 }
+				 */
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
 				synchro_depended_widgets_disable(true);
@@ -185,30 +187,25 @@ int wgt_shead_command::move_it()
 	try {
 
 		if (robot->state.edp.pid != -1) {
-
-			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 			/*
-			 motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
-			 motion_variant = lib::epos::SYNC_TRAPEZOIDAL;
-			 motion_variant = lib::epos::SYNC_POLYNOMIAL;
-			 motion_variant = lib::epos::OPERATIONAL;
+			 lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+
+			 if (ui.radioButton_m_motor->isChecked()) {
+			 robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
+			 } else if (ui.radioButton_m_joint->isChecked()) {
+			 robot->ui_ecp_robot->move_joints(robot->desired_pos, motion_variant);
+			 } else if (ui.radioButton_m_ext->isChecked()) {
+			 robot->ui_ecp_robot->move_external(robot->desired_pos, motion_variant, 10);
+			 }
+
+			 if (robot->state.edp.is_synchronised) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
+			 for (int i = 0; i < robot->number_of_servos; i++) {
+			 doubleSpinBox_m_absolute_Vector[i]->setValue(robot->desired_pos[i]);
+			 }
+
+			 init();
+			 }
 			 */
-
-			if (ui.radioButton_m_motor->isChecked()) {
-				robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
-			} else if (ui.radioButton_m_joint->isChecked()) {
-				robot->ui_ecp_robot->move_joints(robot->desired_pos, motion_variant);
-			} else if (ui.radioButton_m_ext->isChecked()) {
-				robot->ui_ecp_robot->move_external(robot->desired_pos, motion_variant, 10);
-			}
-
-			if ((robot->state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
-				for (int i = 0; i < robot->number_of_servos; i++) {
-					doubleSpinBox_m_absolute_Vector[i]->setValue(robot->desired_pos[i]);
-				}
-
-				init();
-			}
 		} // end if (robot->state.edp.pid!=-1)
 	} // end try
 
@@ -222,25 +219,25 @@ int wgt_shead_command::move_it()
 void wgt_shead_command::on_pushButton_fl_execute_clicked()
 {
 	try {
+		/*
+		 lib::shead::festo_command_td &fc = robot->ui_ecp_robot->the_robot->shead_festo_command_data_port.data;
 
-		lib::smb::festo_command_td &fc = robot->ui_ecp_robot->the_robot->smb_festo_command_data_port.data;
+		 // dla kazdej z nog
+		 for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
+		 // wybierz wariant
 
-		// dla kazdej z nog
-		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			// wybierz wariant
+		 if (radioButton_fl_up_Vector[i]->isChecked()) {
+		 fc.leg[i] = lib::shead::UP;
+		 } else if (radioButton_fl_down_Vector[i]->isChecked()) {
+		 fc.leg[i] = lib::shead::DOWN;
+		 }
 
-			if (radioButton_fl_up_Vector[i]->isChecked()) {
-				fc.leg[i] = lib::smb::UP;
-			} else if (radioButton_fl_down_Vector[i]->isChecked()) {
-				fc.leg[i] = lib::smb::DOWN;
-			}
+		 }
+		 robot->ui_ecp_robot->the_robot->shead_festo_command_data_port.set();
+		 robot->ui_ecp_robot->execute_motion();
 
-		}
-		robot->ui_ecp_robot->the_robot->smb_festo_command_data_port.set();
-		robot->ui_ecp_robot->execute_motion();
-
-		init();
-
+		 init();
+		 */
 	} // end try
 	CATCH_SECTION_UI_PTR
 
@@ -249,19 +246,23 @@ void wgt_shead_command::on_pushButton_fl_execute_clicked()
 void wgt_shead_command::on_pushButton_fl_all_up_clicked()
 {
 // dla kazdej z nog
-	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-		// wybierz wariant
-		radioButton_fl_up_Vector[i]->setChecked(true);
-	}
+	/*
+	 for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
+	 // wybierz wariant
+	 radioButton_fl_up_Vector[i]->setChecked(true);
+	 }
+	 */
 }
 
 void wgt_shead_command::on_pushButton_fl_all_down_clicked()
 {
 // dla kazdej z nog
-	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-		// wybierz wariant
-		radioButton_fl_down_Vector[i]->setChecked(true);
-	}
+	/*
+	 for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
+	 // wybierz wariant
+	 radioButton_fl_down_Vector[i]->setChecked(true);
+	 }
+	 */
 }
 
 void wgt_shead_command::on_pushButton_m_execute_clicked()
@@ -316,7 +317,7 @@ void wgt_shead_command::on_pushButton_ms_rigth_clicked()
 void wgt_shead_command::on_pushButton_stop_clicked()
 {
 	interface.ui_msg->message("on_pushButton_stop_clicked");
-	robot->execute_stop_motor();
+//	robot->execute_stop_motor();
 }
 
 void wgt_shead_command::on_radioButton_m_motor_toggled()

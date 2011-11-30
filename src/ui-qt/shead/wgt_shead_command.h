@@ -14,7 +14,7 @@ namespace common {
 class Interface;
 class UiRobot;
 }
-namespace smb {
+namespace shead {
 class UiRobot;
 const std::string WGT_SHEAD_COMMAND = "WGT_SHEAD_COMMAND";
 }
@@ -51,7 +51,7 @@ public:
 
 private:
 	Ui::wgt_shead_commandClass ui;
-	mrrocpp::ui::smb::UiRobot* robot;
+	mrrocpp::ui::shead::UiRobot* robot;
 
 	int init();
 
