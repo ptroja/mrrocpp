@@ -44,7 +44,7 @@ public:
 	/**
 	 * @brief head soldification command data port
 	 */
-	lib::single_thread_port <lib::shead::HEAD_SOLIDIFICATION> shead_head_soldification_data_port;
+	lib::single_thread_port <lib::shead::SOLIDIFICATION_ACTIVATION> shead_head_soldification_data_port;
 
 	/**
 	 * @brief vacuum activation command data port

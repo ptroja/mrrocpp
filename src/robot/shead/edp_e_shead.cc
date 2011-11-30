@@ -79,8 +79,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	switch (ecp_edp_cbuffer.variant)
 	{
-		case lib::shead::CBUFFER_HEAD_SOLIDIFICATION: {
-			lib::shead::HEAD_SOLIDIFICATION head_solidification;
+		case lib::shead::CBUFFER_SOLIDIFICATION_ACTIVATION: {
+			lib::shead::SOLIDIFICATION_ACTIVATION head_solidification;
 
 			memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification), sizeof(head_solidification));
 

@@ -19,7 +19,7 @@ head_soldify::head_soldify(common::task::task& _ecp_task) :
 {
 
 	shead_head_soldification_data_port
-			= the_robot->port_manager.get_port <lib::shead::HEAD_SOLIDIFICATION> (lib::shead::HEAD_SOLIDIFICATION_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::shead::SOLIDIFICATION_ACTIVATION> (lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT);
 	shead_reply_data_request_port
 			= the_robot->port_manager.get_request_port <lib::shead::reply> (lib::shead::REPLY_DATA_REQUEST_PORT);
 
@@ -68,7 +68,7 @@ head_desoldify::head_desoldify(common::task::task& _ecp_task) :
 	common::generator::generator(_ecp_task)
 {
 	shead_head_soldification_data_port
-			= the_robot->port_manager.get_port <lib::shead::HEAD_SOLIDIFICATION> (lib::shead::HEAD_SOLIDIFICATION_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::shead::SOLIDIFICATION_ACTIVATION> (lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT);
 	shead_reply_data_request_port
 			= the_robot->port_manager.get_request_port <lib::shead::reply> (lib::shead::REPLY_DATA_REQUEST_PORT);
 }

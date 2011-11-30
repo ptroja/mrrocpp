@@ -21,7 +21,7 @@ namespace shead {
  * @brief SwarmItFix Head head soldification command data port
  * @ingroup shead
  */
-const std::string HEAD_SOLIDIFICATION_DATA_PORT = "SHEAD_HEAD_SOLIDIFICATION_DATA_PORT";
+const std::string SOLIDIFICATION_ACTIVATION_DATA_PORT = "SHEAD_SOLIDIFICATION_ACTIVATION_DATA_PORT";
 
 /*!
  * @brief SwarmItFix Head head vacuum activation command data port
@@ -57,9 +57,9 @@ enum STATE_OF_THE_VACUUM
  * @brief SwarmItFix Head EDP head soldification command enum
  * @ingroup shead
  */
-enum HEAD_SOLIDIFICATION
+enum SOLIDIFICATION_ACTIVATION
 {
-	SOLIDIFY, DESOLIDIFY, HEAD_SOLIDIFICATION_NO_ACTION
+	SOLIDIFY, DESOLIDIFY
 };
 // namespace mrrocpp
 
@@ -69,7 +69,7 @@ enum HEAD_SOLIDIFICATION
  */
 enum VACUUM_ACTIVATION
 {
-	VACUUM_ON, VACUUM_OFF, VACUUM_ACTIVATION_NO_ACTION
+	VACUUM_ON, VACUUM_OFF
 };
 // namespace mrrocpp
 
@@ -89,7 +89,7 @@ struct reply
  */
 enum CBUFFER_VARIANT
 {
-	CBUFFER_HEAD_SOLIDIFICATION, CBUFFER_VACUUM_ACTIVATION
+	CBUFFER_SOLIDIFICATION_ACTIVATION, CBUFFER_VACUUM_ACTIVATION
 };
 
 /*!
@@ -101,7 +101,7 @@ struct cbuffer
 	CBUFFER_VARIANT variant;
 	union
 	{
-		lib::shead::HEAD_SOLIDIFICATION head_solidification;
+		lib::shead::SOLIDIFICATION_ACTIVATION head_solidification;
 		lib::shead::VACUUM_ACTIVATION vacuum_activation;
 	};
 }__attribute__((__packed__));
