@@ -39,9 +39,9 @@ const std::string REPLY_DATA_REQUEST_PORT = "SHEAD_REPLY_DATA_REQUEST_PORT";
  * @brief SwarmItFix Head EDP state of the head soldification enum
  * @ingroup shead
  */
-enum STATE_OF_THE_HEAD
+enum STATE_OF_THE_SOLDIFICATION
 {
-	HEAD_STATE_SOLDIFIED, HEAD_STATE_DESOLDIFIED, HEAD_STATE_INTERMEDIATE
+	SOLDIFICATION_STATE_ON, SOLDIFICATION_STATE_OFF, SOLDIFICATION_STATE_INTERMEDIATE
 };
 
 /*!
@@ -79,7 +79,7 @@ enum VACUUM_ACTIVATION
  */
 struct reply
 {
-	STATE_OF_THE_HEAD head_state;
+	STATE_OF_THE_SOLDIFICATION head_state;
 	STATE_OF_THE_VACUUM vacuum_state;
 }__attribute__((__packed__));
 
