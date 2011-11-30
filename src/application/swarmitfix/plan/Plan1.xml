@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <plan>
    <svar>
+      <item>
+      <agent/>
+      <TBeg/>
+      <TEnd/>
       <sHind>1</sHind>
       <eHind>5</eHind>
       <numH>5</numH>
@@ -11,9 +15,7 @@
       <ePind>21</ePind>
       <numP>25</numP>
       <segInd>1</segInd>
-      <agent/>
-      <TBeg/>
-      <TEnd/>
+      </item>
    </svar>
    <sNum>1</sNum>
    <head>
@@ -834,6 +836,7 @@
    <pNum>17</pNum>
    <trajectory>
       <lineList>
+         <item>
          <sP>1</sP>
          <eP>2</eP>
          <sPos>[100 100 161]</sPos>
@@ -848,6 +851,7 @@
          <gamma>1.5707963267949</gamma>
          <len>36.0555127546399</len>
          <index/>
+         </item>
       </lineList>
       <numOfLines>1</numOfLines>
       <runLen>0</runLen>
