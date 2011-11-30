@@ -74,6 +74,30 @@ int UiRobot::synchronise_int()
 
 }
 
+int UiRobot::execute_clear_fault()
+{
+	try {
+
+		ui_ecp_robot->clear_fault();
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	return 1;
+}
+
+int UiRobot::execute_stop_motor()
+{
+	try {
+
+		ui_ecp_robot->stop_motors();
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	return 1;
+}
+
 UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 		common::UiRobot(_interface, _robot_name, lib::shead::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
