@@ -73,19 +73,16 @@ private slots:
 
 	// buttons callbacks
 
-	void on_pushButton_fl_execute_clicked();
-	void on_pushButton_fl_all_up_clicked();
-	void on_pushButton_fl_all_down_clicked();
+//	void on_pushButton_fl_execute_clicked();
+//	void on_pushButton_fl_all_up_clicked();
+//	void on_pushButton_fl_all_down_clicked();
 	void on_pushButton_m_execute_clicked();
 	void on_pushButton_stop_clicked();
 
 	void on_pushButton_read_clicked();
 	void on_pushButton_ml_copy_clicked();
-	void on_pushButton_ms_copy_clicked();
 	void on_pushButton_ml_left_clicked();
 	void on_pushButton_ml_rigth_clicked();
-	void on_pushButton_ms_left_clicked();
-	void on_pushButton_ms_rigth_clicked();
 
 	void on_radioButton_m_motor_toggled();
 	void on_radioButton_m_joint_toggled();

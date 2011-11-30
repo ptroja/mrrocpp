@@ -216,55 +216,56 @@ int wgt_shead_command::move_it()
 
 // buttons callbacks
 
-void wgt_shead_command::on_pushButton_fl_execute_clicked()
-{
-	try {
-		/*
-		 lib::shead::festo_command_td &fc = robot->ui_ecp_robot->the_robot->shead_festo_command_data_port.data;
+/*
+ void wgt_shead_command::on_pushButton_fl_execute_clicked()
+ {
+ try {
 
-		 // dla kazdej z nog
-		 for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
-		 // wybierz wariant
+ lib::shead::festo_command_td &fc = robot->ui_ecp_robot->the_robot->shead_festo_command_data_port.data;
 
-		 if (radioButton_fl_up_Vector[i]->isChecked()) {
-		 fc.leg[i] = lib::shead::UP;
-		 } else if (radioButton_fl_down_Vector[i]->isChecked()) {
-		 fc.leg[i] = lib::shead::DOWN;
-		 }
+ // dla kazdej z nog
+ for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
+ // wybierz wariant
 
-		 }
-		 robot->ui_ecp_robot->the_robot->shead_festo_command_data_port.set();
-		 robot->ui_ecp_robot->execute_motion();
+ if (radioButton_fl_up_Vector[i]->isChecked()) {
+ fc.leg[i] = lib::shead::UP;
+ } else if (radioButton_fl_down_Vector[i]->isChecked()) {
+ fc.leg[i] = lib::shead::DOWN;
+ }
 
-		 init();
-		 */
-	} // end try
-	CATCH_SECTION_UI_PTR
+ }
+ robot->ui_ecp_robot->the_robot->shead_festo_command_data_port.set();
+ robot->ui_ecp_robot->execute_motion();
 
-}
+ init();
 
-void wgt_shead_command::on_pushButton_fl_all_up_clicked()
-{
-// dla kazdej z nog
-	/*
-	 for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
-	 // wybierz wariant
-	 radioButton_fl_up_Vector[i]->setChecked(true);
-	 }
-	 */
-}
+ } // end try
+ CATCH_SECTION_UI_PTR
 
-void wgt_shead_command::on_pushButton_fl_all_down_clicked()
-{
-// dla kazdej z nog
-	/*
-	 for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
-	 // wybierz wariant
-	 radioButton_fl_down_Vector[i]->setChecked(true);
-	 }
-	 */
-}
+ }
 
+ void wgt_shead_command::on_pushButton_fl_all_up_clicked()
+ {
+ // dla kazdej z nog
+
+ for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
+ // wybierz wariant
+ radioButton_fl_up_Vector[i]->setChecked(true);
+ }
+
+ }
+
+ void wgt_shead_command::on_pushButton_fl_all_down_clicked()
+ {
+ // dla kazdej z nog
+
+ for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
+ // wybierz wariant
+ radioButton_fl_down_Vector[i]->setChecked(true);
+ }
+
+ }
+ */
 void wgt_shead_command::on_pushButton_m_execute_clicked()
 {
 	get_desired_position();
@@ -281,11 +282,6 @@ void wgt_shead_command::on_pushButton_ml_copy_clicked()
 	ui.doubleSpinBox_ml_absolute->setValue(ui.doubleSpinBox_ml_current_position->value());
 }
 
-void wgt_shead_command::on_pushButton_ms_copy_clicked()
-{
-//	ui.doubleSpinBox_ms_absolute->setValue(ui.doubleSpinBox_ms_current_position->value());
-}
-
 void wgt_shead_command::on_pushButton_ml_left_clicked()
 {
 	get_desired_position();
@@ -297,20 +293,6 @@ void wgt_shead_command::on_pushButton_ml_rigth_clicked()
 {
 	get_desired_position();
 	robot->desired_pos[0] += doubleSpinBox_m_relative_Vector[0]->value();
-	move_it();
-}
-
-void wgt_shead_command::on_pushButton_ms_left_clicked()
-{
-	get_desired_position();
-	robot->desired_pos[1] -= doubleSpinBox_m_relative_Vector[1]->value();
-	move_it();
-}
-
-void wgt_shead_command::on_pushButton_ms_rigth_clicked()
-{
-	get_desired_position();
-	robot->desired_pos[1] += doubleSpinBox_m_relative_Vector[1]->value();
 	move_it();
 }
 
@@ -341,7 +323,6 @@ void wgt_shead_command::on_radioButton_m_motor_toggled()
 		init();
 
 		on_pushButton_ml_copy_clicked();
-		on_pushButton_ms_copy_clicked();
 	}
 }
 
@@ -366,7 +347,6 @@ void wgt_shead_command::on_radioButton_m_joint_toggled()
 		init();
 
 		on_pushButton_ml_copy_clicked();
-		on_pushButton_ms_copy_clicked();
 	}
 }
 
@@ -391,7 +371,6 @@ void wgt_shead_command::on_radioButton_m_ext_toggled()
 		init();
 
 		on_pushButton_ml_copy_clicked();
-		on_pushButton_ms_copy_clicked();
 	}
 }
 
