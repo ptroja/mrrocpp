@@ -19,6 +19,15 @@ namespace lib {
 namespace shead {
 
 /*!
+ * Pose specification variants
+ * @ingroup shead
+ */
+typedef enum _POSE_SPECIFICATION
+{
+	FRAME, JOINT, MOTOR
+} POSE_SPECIFICATION;
+
+/*!
  * @brief SwarmItFix Head head soldification command data port
  * @ingroup shead
  */

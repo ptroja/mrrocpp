@@ -77,6 +77,83 @@ void robot::create_command()
 
 	is_new_data = false;
 
+	if (epos_motor_command_data_port.get() == mrrocpp::lib::NewData) {
+		ecp_command.set_type = ARM_DEFINITION;
+		if (!is_synchronised()) {
+			ecp_command.motion_type = lib::RELATIVE;
+			ecp_command.set_arm_type = lib::MOTOR;
+		}
+
+		ecp_edp_cbuffer.variant = lib::shead::POSE;
+
+		ecp_edp_cbuffer.set_pose_specification = lib::shead::MOTOR;
+
+		ecp_edp_cbuffer.motion_variant = epos_motor_command_data_port.data.motion_variant;
+		ecp_edp_cbuffer.estimated_time = epos_motor_command_data_port.data.estimated_time;
+
+		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; ++i) {
+			ecp_edp_cbuffer.motor_pos[i] = epos_motor_command_data_port.data.desired_position[i];
+		}
+
+		check_then_set_command_flag(is_new_data);
+	}
+
+	if (epos_joint_command_data_port.get() == mrrocpp::lib::NewData) {
+		ecp_command.set_type = ARM_DEFINITION;
+
+		ecp_edp_cbuffer.variant = lib::shead::POSE;
+
+		ecp_edp_cbuffer.set_pose_specification = lib::shead::JOINT;
+
+		ecp_edp_cbuffer.motion_variant = epos_joint_command_data_port.data.motion_variant;
+		ecp_edp_cbuffer.estimated_time = epos_joint_command_data_port.data.estimated_time;
+		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; ++i) {
+			ecp_edp_cbuffer.joint_pos[i] = epos_joint_command_data_port.data.desired_position[i];
+		}
+
+		check_then_set_command_flag(is_new_data);
+	}
+
+	if (epos_external_command_data_port.get() == mrrocpp::lib::NewData) {
+		ecp_command.set_type = ARM_DEFINITION;
+
+		ecp_edp_cbuffer.variant = lib::shead::POSE;
+
+		ecp_edp_cbuffer.set_pose_specification = lib::shead::FRAME;
+
+		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
+		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;
+
+		for (int i = 0; i < 6; ++i) {
+			ecp_edp_cbuffer.goal_pos[i] = epos_external_command_data_port.data.desired_position[i];
+		}
+
+		check_then_set_command_flag(is_new_data);
+	}
+
+	if (epos_brake_command_data_port.get() == mrrocpp::lib::NewData) {
+		ecp_command.set_type = ARM_DEFINITION;
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_edp_cbuffer.variant = lib::shead::QUICKSTOP;
+
+		check_then_set_command_flag(is_new_data);
+	}
+
+	if (epos_clear_fault_data_port.get() == mrrocpp::lib::NewData) {
+		ecp_command.set_type = ARM_DEFINITION;
+		// generator command interpretation
+		// narazie proste przepisanie
+		if (!is_synchronised()) {
+			ecp_command.motion_type = lib::RELATIVE;
+			ecp_command.set_arm_type = lib::MOTOR;
+		}
+		ecp_edp_cbuffer.variant = lib::shead::CLEAR_FAULT;
+
+		check_then_set_command_flag(is_new_data);
+	}
+
 	if (shead_head_soldification_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
@@ -112,7 +189,29 @@ void robot::create_command()
 
 	}
 
-	is_new_request = shead_reply_data_request_port.is_new_request();
+	if (epos_motor_reply_data_request_port.is_new_request()) {
+		ecp_edp_cbuffer.get_pose_specification = lib::shead::MOTOR;
+		//	ecp_command.get_arm_type = lib::MOTOR;
+		//sr_ecp_msg.message("epos_motor_reply_data_request_port");
+
+		check_then_set_command_flag(is_new_request);
+	}
+
+	if (epos_joint_reply_data_request_port.is_new_request()) {
+		ecp_edp_cbuffer.get_pose_specification = lib::shead::JOINT;
+		//ecp_command.get_arm_type = lib::JOINT;
+		//	sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
+		check_then_set_command_flag(is_new_request);
+	}
+
+	if (epos_external_reply_data_request_port.is_new_request()) {
+		ecp_edp_cbuffer.get_pose_specification = lib::shead::FRAME;
+		//ecp_command.get_arm_type = lib::FRAME;
+		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
+		check_then_set_command_flag(is_new_request);
+	}
+
+	is_new_request = is_new_request || shead_reply_data_request_port.is_new_request();
 
 	communicate_with_edp = true;
 
@@ -145,6 +244,54 @@ void robot::get_reply()
 
 	// generator reply generation
 
+	if (epos_motor_reply_data_request_port.is_new_request()) {
+		// generator reply generation
+		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
+			epos_motor_reply_data_request_port.data.epos_controller[i].position =
+					edp_ecp_rbuffer.epos_controller[i].position;
+			epos_motor_reply_data_request_port.data.epos_controller[i].current =
+					edp_ecp_rbuffer.epos_controller[i].current;
+			epos_motor_reply_data_request_port.data.epos_controller[i].motion_in_progress =
+					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
+		}
+		epos_motor_reply_data_request_port.set();
+	}
+
+	if (epos_joint_reply_data_request_port.is_new_request()) {
+		// generator reply generation
+		sr_ecp_msg.message("ECP get_reply epos_joint_reply_data_request_port");
+
+		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
+			epos_joint_reply_data_request_port.data.epos_controller[i].position =
+					edp_ecp_rbuffer.epos_controller[i].position;
+			epos_joint_reply_data_request_port.data.epos_controller[i].current =
+					edp_ecp_rbuffer.epos_controller[i].current;
+			epos_joint_reply_data_request_port.data.epos_controller[i].motion_in_progress =
+					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
+		}
+		//	epos_joint_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
+
+		epos_joint_reply_data_request_port.set();
+	}
+
+	if (epos_external_reply_data_request_port.is_new_request()) {
+		sr_ecp_msg.message("ECP get_reply epos_external_reply_data_request_port");
+		// generator reply generation
+		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
+			epos_external_reply_data_request_port.data.epos_controller[i].position =
+					edp_ecp_rbuffer.epos_controller[i].position;
+			epos_external_reply_data_request_port.data.epos_controller[i].current =
+					edp_ecp_rbuffer.epos_controller[i].current;
+			epos_external_reply_data_request_port.data.epos_controller[i].motion_in_progress =
+					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
+		}
+		//	epos_external_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
+
+		//	epos_external_reply_data_request_port.data.current_frame = edp_ecp_rbuffer.current_pose;
+
+		epos_external_reply_data_request_port.set();
+	}
+
 	if (shead_reply_data_request_port.is_new_request()) {
 		shead_reply_data_request_port.data = edp_ecp_rbuffer.shead_reply;
 
@@ -153,7 +300,7 @@ void robot::get_reply()
 
 }
 
-} // namespace smb
+} // namespace shead
 } // namespace ecp
 } // namespace mrrocpp
 
