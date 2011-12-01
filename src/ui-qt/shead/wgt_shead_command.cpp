@@ -258,57 +258,6 @@ int wgt_shead_command::move_it()
 
 // buttons callbacks
 
-/*
- void wgt_shead_command::on_pushButton_fl_execute_clicked()
- {
- try {
-
- lib::shead::festo_command_td &fc = robot->ui_ecp_robot->the_robot->shead_festo_command_data_port.data;
-
- // dla kazdej z nog
- for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
- // wybierz wariant
-
- if (radioButton_fl_up_Vector[i]->isChecked()) {
- fc.leg[i] = lib::shead::UP;
- } else if (radioButton_fl_down_Vector[i]->isChecked()) {
- fc.leg[i] = lib::shead::DOWN;
- }
-
- }
- robot->ui_ecp_robot->the_robot->shead_festo_command_data_port.set();
- robot->ui_ecp_robot->execute_motion();
-
- init();
-
- } // end try
- CATCH_SECTION_UI_PTR
-
- }
-
- void wgt_shead_command::on_pushButton_fl_all_up_clicked()
- {
- // dla kazdej z nog
-
- for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
- // wybierz wariant
- radioButton_fl_up_Vector[i]->setChecked(true);
- }
-
- }
-
- void wgt_shead_command::on_pushButton_fl_all_down_clicked()
- {
- // dla kazdej z nog
-
- for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
- // wybierz wariant
- radioButton_fl_down_Vector[i]->setChecked(true);
- }
-
- }
- */
-
 void wgt_shead_command::on_pushButton_sol_execute_clicked()
 {
 	interface.ui_msg->message("on_pushButton_sol_execute_clicked");
