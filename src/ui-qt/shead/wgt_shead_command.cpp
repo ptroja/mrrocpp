@@ -133,7 +133,7 @@ int wgt_shead_command::init()
 				}
 
 				// sets vacumization state
-				switch (rep.soldification_state)
+				switch (rep.vacuum_state)
 				{
 					case lib::shead::VACUUM_STATE_ON: {
 						ui.checkBox_vac_on->setChecked(true);

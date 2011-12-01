@@ -106,11 +106,25 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	switch (ecp_edp_cbuffer.variant)
 	{
+		case lib::shead::POSE: {
+			msg->message("POSE");
+		}
+			break;
+
+		case lib::shead::QUICKSTOP: {
+			msg->message("QUICKSTOP");
+		}
+			break;
+
+		case lib::shead::CLEAR_FAULT: {
+			msg->message("CLEAR_FAULT");
+		}
+			break;
 		case lib::shead::SOLIDIFICATION: {
 			lib::shead::SOLIDIFICATION_ACTIVATION head_solidification;
 
 			memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification), sizeof(head_solidification));
-
+			ss << "SOLIDIFICATION: " << head_solidification;
 			msg->message(ss.str().c_str());
 
 			// previously computed parameters send to epos2 controllers
@@ -123,6 +137,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			lib::shead::VACUUM_ACTIVATION vacuum_activation;
 
 			memcpy(&vacuum_activation, &(ecp_edp_cbuffer.vacuum_activation), sizeof(vacuum_activation));
+			ss << "VACUUM: " << vacuum_activation;
+			msg->message(ss.str().c_str());
 		}
 			break;
 		default:
@@ -147,6 +163,9 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//	printf("%s\n", ss.str().c_str());
 
 	reply.servo_step = step_counter;
+	edp_ecp_rbuffer.shead_reply.soldification_state = lib::shead::SOLDIFICATION_STATE_INTERMEDIATE;
+	edp_ecp_rbuffer.shead_reply.vacuum_state = lib::shead::VACUUM_STATE_OFF;
+	edp_ecp_rbuffer.shead_reply.contacts[1] = true;
 }
 /*--------------------------------------------------------------------------*/
 
@@ -177,7 +196,7 @@ void effector::reply_serialization(void)
 	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
 }
 
-} // namespace smb
+} // namespace shead
 
 } // namespace edp
 } // namespace mrrocpp
