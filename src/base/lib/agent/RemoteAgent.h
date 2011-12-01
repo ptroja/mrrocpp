@@ -55,7 +55,7 @@ public:
 				usleep(lib::CONNECT_DELAY);
 			} else {
 				fprintf(stderr, "Connect to failed at channel '%s'\n", _name.c_str());
-				throw std::logic_error("Connect from remote agent failed");
+				throw std::logic_error("Connect to remote agent failed");
 			}
 		}
 	}
