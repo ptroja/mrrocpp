@@ -110,21 +110,21 @@ int wgt_shead_command::init()
 				switch (rep.soldification_state)
 				{
 					case lib::shead::SOLDIFICATION_STATE_ON: {
-						ui.checkBox_sol_on->setEnabled(true);
-						ui.checkBox_sol_off->setEnabled(false);
-						ui.checkBox_sol_int->setEnabled(false);
+						ui.checkBox_sol_on->setChecked(true);
+						ui.checkBox_sol_off->setChecked(false);
+						ui.checkBox_sol_int->setChecked(false);
 					}
 						break;
 					case lib::shead::SOLDIFICATION_STATE_OFF: {
-						ui.checkBox_sol_on->setEnabled(false);
-						ui.checkBox_sol_off->setEnabled(true);
-						ui.checkBox_sol_int->setEnabled(false);
+						ui.checkBox_sol_on->setChecked(false);
+						ui.checkBox_sol_off->setChecked(true);
+						ui.checkBox_sol_int->setChecked(false);
 					}
 						break;
 					case lib::shead::SOLDIFICATION_STATE_INTERMEDIATE: {
-						ui.checkBox_sol_on->setEnabled(false);
-						ui.checkBox_sol_off->setEnabled(false);
-						ui.checkBox_sol_int->setEnabled(true);
+						ui.checkBox_sol_on->setChecked(false);
+						ui.checkBox_sol_off->setChecked(false);
+						ui.checkBox_sol_int->setChecked(true);
 					}
 						break;
 					default: {
@@ -136,9 +136,9 @@ int wgt_shead_command::init()
 				switch (rep.soldification_state)
 				{
 					case lib::shead::VACUUM_STATE_ON: {
-						ui.checkBox_vac_on->setEnabled(true);
-						ui.checkBox_vac_off->setEnabled(false);
-						ui.checkBox_vac_int->setEnabled(false);
+						ui.checkBox_vac_on->setChecked(true);
+						ui.checkBox_vac_off->setChecked(false);
+						ui.checkBox_vac_int->setChecked(false);
 					}
 						break;
 					case lib::shead::VACUUM_STATE_OFF: {
