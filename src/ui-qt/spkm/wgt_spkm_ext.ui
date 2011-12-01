@@ -609,7 +609,7 @@
    <item row="5" column="4">
     <widget class="QLabel" name="label_20">
      <property name="text">
-      <string>ax</string>
+      <string>oz</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -758,7 +758,7 @@
    <item row="6" column="4">
     <widget class="QLabel" name="label_21">
      <property name="text">
-      <string>ay</string>
+      <string>oy</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -910,7 +910,7 @@
    <item row="7" column="4">
     <widget class="QLabel" name="label_17">
      <property name="text">
-      <string>az</string>
+      <string>oz</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -1005,7 +1005,7 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="2" colspan="2">
+   <item row="8" column="1" colspan="3">
     <widget class="QPushButton" name="pushButton_stop">
      <property name="text">
       <string>Stop</string>
@@ -1174,6 +1174,13 @@
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1" colspan="3">
+    <widget class="QPushButton" name="pushButton_exportxml">
+     <property name="text">
+      <string>Export XML</string>
      </property>
     </widget>
    </item>
