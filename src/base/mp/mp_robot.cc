@@ -33,7 +33,7 @@ robot::robot(const lib::robot_name_t & l_robot_name, task::task &mp_object_l, in
 	number_of_servos(_number_of_servos),
 	ECP_pid(mp_object_l.config, mp_object_l.config.get_ecp_section(robot_name)),
 	ecp(mp_object_l.config.get_ecp_section(robot_name)),
-	command(ecp, "command"),
+	command(ecp, "MP_COMMAND"),
 	sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
 	reply(mp_object_l, mp_object_l.config.get_ecp_section(robot_name)),
 	ecp_reply_package(reply.access),
