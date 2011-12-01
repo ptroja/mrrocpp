@@ -43,6 +43,9 @@ Q_OBJECT
 
 public:
 
+	double current_pos[lib::shead::NUM_OF_SERVOS]; // pozycja biezaca
+	double desired_pos[lib::shead::NUM_OF_SERVOS]; // pozycja zadana
+
 	EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name);

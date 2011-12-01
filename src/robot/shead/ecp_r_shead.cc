@@ -164,11 +164,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.head_solidification = shead_head_soldification_data_port.data;
 
-		if (is_new_data) {
-			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
-		} else {
-			is_new_data = true;
-		}
+		check_then_set_command_flag(is_new_data);
 	}
 
 	if (shead_vacuum_activation_data_port.get() == mrrocpp::lib::NewData) {
@@ -181,11 +177,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.vacuum_activation = shead_vacuum_activation_data_port.data;
 
-		if (is_new_data) {
-			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
-		} else {
-			is_new_data = true;
-		}
+		check_then_set_command_flag(is_new_data);
 
 	}
 

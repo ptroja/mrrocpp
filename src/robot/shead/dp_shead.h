@@ -89,7 +89,7 @@ enum VACUUM_ACTIVATION
  */
 struct reply
 {
-	STATE_OF_THE_SOLDIFICATION head_state;
+	STATE_OF_THE_SOLDIFICATION soldification_state;
 	STATE_OF_THE_VACUUM vacuum_state;
 	bool contacts[3];
 
@@ -100,7 +100,7 @@ struct reply
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & head_state;
+		ar & soldification_state;
 		ar & vacuum_state;
 		ar & contacts;
 	}

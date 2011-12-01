@@ -41,8 +41,9 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 void effector::check_controller_state()
 {
-	if (robot_test_mode)
+	if (robot_test_mode){
 		return;
+	}
 
 	// Try to get state of each axis
 	unsigned int powerOn = 0;
