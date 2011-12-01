@@ -391,7 +391,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					 legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
 					 legs_rotation_node->monitorHomingStatus();*/
 					// Instead of homing - set current position as zero.
-					legs_relative_zero_position = legs_rotation_node->getActualPosition();
+					if (!robot_test_mode) {
+						legs_relative_zero_position = legs_rotation_node->getActualPosition();
+					}
 				}
 				break;
 			}

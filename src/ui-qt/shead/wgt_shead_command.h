@@ -14,7 +14,7 @@ namespace common {
 class Interface;
 class UiRobot;
 }
-namespace smb {
+namespace shead {
 class UiRobot;
 const std::string WGT_SHEAD_COMMAND = "WGT_SHEAD_COMMAND";
 }
@@ -51,7 +51,7 @@ public:
 
 private:
 	Ui::wgt_shead_commandClass ui;
-	mrrocpp::ui::smb::UiRobot* robot;
+	mrrocpp::ui::shead::UiRobot* robot;
 
 	int init();
 
@@ -73,19 +73,20 @@ private slots:
 
 	// buttons callbacks
 
-	void on_pushButton_fl_execute_clicked();
-	void on_pushButton_fl_all_up_clicked();
-	void on_pushButton_fl_all_down_clicked();
+//	void on_pushButton_fl_execute_clicked();
+//	void on_pushButton_fl_all_up_clicked();
+//	void on_pushButton_fl_all_down_clicked();
+
+	void on_pushButton_sol_execute_clicked();
+	void on_pushButton_vac_execute_clicked();
+
 	void on_pushButton_m_execute_clicked();
 	void on_pushButton_stop_clicked();
 
 	void on_pushButton_read_clicked();
 	void on_pushButton_ml_copy_clicked();
-	void on_pushButton_ms_copy_clicked();
 	void on_pushButton_ml_left_clicked();
 	void on_pushButton_ml_rigth_clicked();
-	void on_pushButton_ms_left_clicked();
-	void on_pushButton_ms_rigth_clicked();
 
 	void on_radioButton_m_motor_toggled();
 	void on_radioButton_m_joint_toggled();
