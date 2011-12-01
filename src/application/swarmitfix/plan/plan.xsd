@@ -54,15 +54,38 @@
                             </xs:documentation>
                           </xs:annotation>
                         </xs:element>
-                        <xs:element ref="line"/>
-                        <xs:element ref="lineseg"/>
+                        <xs:element name="line">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="sP" type="xs:integer"/>
+                              <xs:element name="eP" type="xs:integer"/>
+                              <xs:element name="sPos" type="xs:string"/>
+                              <xs:element name="ePos" type="xs:string"/>
+                              <xs:element name="a" type="xs:double"/>
+                              <xs:element name="b" type="xs:integer"/>
+                              <xs:element name="c" type="xs:double"/>
+                              <xs:element name="norm" type="xs:double"/>
+                              <xs:element name="norm2" type="xs:double"/>
+                              <xs:element name="alfa" type="xs:double"/>
+                              <xs:element name="beta" type="xs:double"/>
+                              <xs:element name="gamma" type="xs:double"/>
+                              <xs:element name="len" type="xs:double"/>
+                              <xs:element name="index">
+                                <xs:complexType/>
+                              </xs:element>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="lineseg">
+                          <xs:complexType/>
+                        </xs:element>
                         <xs:element name="actions" type="xs:string"/>
                         <xs:element ref="numActions"/>
-                        <xs:element ref="k1"/>
-                        <xs:element ref="k2"/>
-                        <xs:element ref="ABeg"/>
-                        <xs:element ref="AHoldMin"/>
-                        <xs:element ref="AHoldMax"/>
+                        <xs:element name="k1" type="xs:double"/>
+                        <xs:element name="k2" type="xs:double"/>                        
+                        <xs:element name="ABeg" type="xs:double"/>
+                        <xs:element name="AHoldMax" type="xs:double"/>
+                        <xs:element name="AHoldMin" type="xs:double"/>                       
                       </xs:sequence>
                     </xs:extension>
                   </xs:complexContent>
@@ -80,7 +103,11 @@
                     <xs:extension base="State">
                       <xs:sequence>
                         <xs:element ref="ind"/>
-                        <xs:element ref="bCind"/>
+                        <xs:element name="bCind" type="xs:int">
+                          <xs:annotation>
+                            <xs:documentation>index into base center matrix of BaseCsp</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
                         <xs:element name="cx" type="xs:double">
                           <xs:annotation>
                             <xs:documentation>base center on the bench
@@ -117,9 +144,24 @@
                         <xs:element name="actions">
                           <xs:complexType>
                             <xs:sequence>
-                              <xs:element ref="pin"/>
-                              <xs:element ref="dTheta"/>
-                              <xs:element ref="dPkmTheta"/>
+                              <xs:element name="pin" type="xs:integer">
+                                <xs:annotation>
+                                  <xs:documentation>
+                                    by which pin to rotate: 1 - left, 2 - right, 3 -
+                                    upper, 0 - no
+                                    base rotation
+                                  </xs:documentation>
+                                </xs:annotation>
+                              </xs:element>
+                              <xs:element name="dTheta" type="xs:double">
+                                <xs:annotation>
+                                  <xs:documentation>delta (rotation) angle in radians from -2pi +1/3
+                                    pi
+                                    to 2pi - 1/3 pi
+                                  </xs:documentation>
+                                </xs:annotation>
+                              </xs:element>                            
+                              <xs:element name="dPkmTheta" type="xs:double"/>                              
                             </xs:sequence>
                           </xs:complexType>
                         </xs:element>
@@ -150,9 +192,9 @@
                               <xs:documentation>homogeneous matrix (currenlty in Matlab string format)</xs:documentation>
                             </xs:annotation>
                           </xs:element>
-                          <xs:element name="Xyz_Angle_Axis">
+                          <xs:element name="Xyz_Euler_Zyz">
                             <xs:annotation>
-                              <xs:documentation>XYZ+angle axis coordinates</xs:documentation>
+                              <xs:documentation>Xyz Euler Zyz coordinates</xs:documentation>
                             </xs:annotation>
                             <xs:complexType>
                               <xs:sequence>
@@ -171,17 +213,17 @@
                                     <xs:documentation>Z coordinate</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
-                                <xs:element name="ax" type="xs:double">
+                                <xs:element name="ox" type="xs:double">
                                   <xs:annotation>
                                     <xs:documentation>rotation around X axis</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
-                                <xs:element name="ay" type="xs:double">
+                                <xs:element name="oy" type="xs:double">
                                   <xs:annotation>
                                     <xs:documentation>rotation around Y axis</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
-                                <xs:element name="az" type="xs:double">
+                                <xs:element name="oz" type="xs:double">
                                   <xs:annotation>
                                     <xs:documentation>rotation around Z axis</xs:documentation>
                                   </xs:annotation>
@@ -201,86 +243,13 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="numH" type="xs:integer"/>
-  <xs:element name="sBind" type="xs:integer"/>
-  <xs:element name="eBind" type="xs:integer"/>
-  <xs:element name="numB" type="xs:integer"/>
-  <xs:element name="sPind" type="xs:integer"/>
-  <xs:element name="ePind" type="xs:integer"/>
-  <xs:element name="numP" type="xs:integer"/>
-  <xs:element name="segInd" type="xs:integer"/>
   <xs:element name="ind" type="xs:integer">
     <xs:annotation>
       <xs:documentation>execution index along time axis
       </xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="bCind" type="xs:integer"/>
-  <xs:element name="cy" type="xs:double"/>
-  <xs:element name="cz" type="xs:double"/>
-  <xs:element name="ABeg" type="xs:double"/>
-  <xs:element name="AHoldMax" type="xs:double"/>
-  <xs:element name="AHoldMin" type="xs:double"/>
-  <xs:element name="dPkmTheta" type="xs:double"/>
-  <xs:element name="dTheta" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>delta (rotation) angle in radians from -2pi +1/3
-        pi
-        to 2pi - 1/3 pi
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="pin" type="xs:integer">
-    <xs:annotation>
-      <xs:documentation>
-        by which pin to rotate: 1 - left, 2 - right, 3 -
-        upper, 0 - no
-        base rotation
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="k1" type="xs:double"/>
-  <xs:element name="k2" type="xs:double"/>
-  <xs:element name="line">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="sP"/>
-        <xs:element ref="eP"/>
-        <xs:element ref="sPos"/>
-        <xs:element ref="ePos"/>
-        <xs:element ref="a"/>
-        <xs:element ref="b"/>
-        <xs:element ref="c"/>
-        <xs:element ref="norm"/>
-        <xs:element ref="norm2"/>
-        <xs:element ref="alfa"/>
-        <xs:element ref="beta"/>
-        <xs:element ref="gamma"/>
-        <xs:element ref="len"/>
-        <xs:element ref="index"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="lineseg">
-    <xs:complexType/>
-  </xs:element>
   <xs:element name="numActions" type="xs:integer"/>
-  <xs:element name="sP" type="xs:integer"/>
-  <xs:element name="eP" type="xs:integer"/>
-  <xs:element name="sPos" type="xs:string"/>
-  <xs:element name="ePos" type="xs:string"/>
-  <xs:element name="a" type="xs:double"/>
-  <xs:element name="b" type="xs:integer"/>
-  <xs:element name="c" type="xs:double"/>
-  <xs:element name="norm" type="xs:double"/>
-  <xs:element name="norm2" type="xs:double"/>
-  <xs:element name="alfa" type="xs:double"/>
-  <xs:element name="beta" type="xs:double"/>
-  <xs:element name="gamma" type="xs:double"/>
-  <xs:element name="len" type="xs:double"/>
-  <xs:element name="index">
-    <xs:complexType/>
-  </xs:element>
   <xs:complexType name="State">
     <xs:sequence>
       <xs:element name="agent" type="xs:int">

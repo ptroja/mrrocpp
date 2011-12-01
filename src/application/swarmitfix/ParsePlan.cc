@@ -40,19 +40,21 @@ int main(int argc, char *argv[])
 			if(pkmCmd.agent() != 1)
 				continue;
 
+			using namespace mrrocpp;
+
 			// Goal pose
-			mrrocpp::lib::Homog_matrix hm;
+			lib::Homog_matrix hm;
 
 			if(pkmCmd.pkmToWrist().present()) {
-				hm = mrrocpp::lib::Homog_matrix(pkmCmd.pkmToWrist().get());
-			} else if (pkmCmd.Xyz_Angle_Axis().present()) {
-				hm = mrrocpp::lib::Xyz_Angle_Axis_vector(
-						pkmCmd.Xyz_Angle_Axis()->x(),
-						pkmCmd.Xyz_Angle_Axis()->y(),
-						pkmCmd.Xyz_Angle_Axis()->z(),
-						pkmCmd.Xyz_Angle_Axis()->ax(),
-						pkmCmd.Xyz_Angle_Axis()->ay(),
-						pkmCmd.Xyz_Angle_Axis()->az()
+				hm = lib::Homog_matrix(pkmCmd.pkmToWrist().get());
+			} else if (pkmCmd.Xyz_Euler_Zyz().present()) {
+				hm = lib::Xyz_Euler_Zyz_vector(
+						pkmCmd.Xyz_Euler_Zyz()->x(),
+						pkmCmd.Xyz_Euler_Zyz()->y(),
+						pkmCmd.Xyz_Euler_Zyz()->z(),
+						pkmCmd.Xyz_Euler_Zyz()->ox(),
+						pkmCmd.Xyz_Euler_Zyz()->oy(),
+						pkmCmd.Xyz_Euler_Zyz()->oz()
 						);
 			} else {
 				// This should be already checked by XML validation
