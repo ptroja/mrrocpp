@@ -312,11 +312,49 @@ int wgt_shead_command::move_it()
 void wgt_shead_command::on_pushButton_sol_execute_clicked()
 {
 	interface.ui_msg->message("on_pushButton_sol_execute_clicked");
+
+	try {
+
+		lib::shead::SOLIDIFICATION_ACTIVATION &sa =
+				robot->ui_ecp_robot->the_robot->shead_head_soldification_data_port.data;
+
+		if (ui.radioButton_sol_activate->isChecked()) {
+			sa = lib::shead::SOLIDIFICATION_ON;
+		} else if (ui.radioButton_sol_desactivate->isChecked()) {
+			sa = lib::shead::SOLIDIFICATION_OFF;
+		}
+
+		robot->ui_ecp_robot->the_robot->shead_head_soldification_data_port.set();
+		robot->ui_ecp_robot->execute_motion();
+
+		init();
+
+	} // end try
+	CATCH_SECTION_UI_PTR
+
 }
 
 void wgt_shead_command::on_pushButton_vac_execute_clicked()
 {
 	interface.ui_msg->message("on_pushButton_vac_execute_clicked");
+
+	try {
+
+		lib::shead::VACUUM_ACTIVATION &va = robot->ui_ecp_robot->the_robot->shead_vacuum_activation_data_port.data;
+
+		if (ui.radioButton_vac_activate->isChecked()) {
+			va = lib::shead::VACUUM_ON;
+		} else if (ui.radioButton_vac_desactivate->isChecked()) {
+			va = lib::shead::VACUUM_OFF;
+		}
+
+		robot->ui_ecp_robot->the_robot->shead_vacuum_activation_data_port.set();
+		robot->ui_ecp_robot->execute_motion();
+
+		init();
+
+	} // end try
+	CATCH_SECTION_UI_PTR
 }
 
 void wgt_shead_command::on_pushButton_m_execute_clicked()
@@ -352,7 +390,7 @@ void wgt_shead_command::on_pushButton_ml_rigth_clicked()
 void wgt_shead_command::on_pushButton_stop_clicked()
 {
 	interface.ui_msg->message("on_pushButton_stop_clicked");
-//	robot->execute_stop_motor();
+	robot->execute_stop_motor();
 }
 
 void wgt_shead_command::on_radioButton_m_motor_toggled()
