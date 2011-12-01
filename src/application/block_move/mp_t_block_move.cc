@@ -31,7 +31,10 @@
 #include "../visual_servoing/visual_servoing.h"
 #include "../visual_servoing_demo/ecp_mp_g_visual_servo_tester.h"
 
+#define BLOCK_SIZE 4
 #define COORD_N 3
+#define BLOCK_REACHING 0
+#define BUILDING 1
 
 typedef list<BlockPosition> block_position_list;
 
@@ -142,6 +145,22 @@ block_position_list block_move::create_plan(block_position_list l)
 {
 	sr_ecp_msg->message("Creating plan");
 
+	block_position_list plan;
+	int max_z = 0;
+
+	for(block_position_list::iterator it = l.begin(); it != l.end(); ++it) {
+
+		pos_it = it.getPosition();
+
+		if(pos_it[0] >= 0 && pos_it[0] < BLOCK_SIZE && pos_it[1] >= 0 && pos_it[1] < BLOCK_SIZE && pos_it[2] > 0) {
+			plan.push_back(*it);
+		}
+
+		if(pos_it[2] > max_z) max_z = pos_it[2];
+	}
+
+	//mam wszystkie z planszy, niezależnie od z
+
 	return l;
 }
 
@@ -183,7 +202,13 @@ void block_move::main_task_algorithm(void)
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		sr_ecp_msg->message("Force approach");
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, BLOCK_REACHING, "", 0, lib::irp6p_m::ROBOT_NAME);
+		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+		wait_ms(4000);
+
+		sr_ecp_msg->message("Go up");
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_to_p0.trj", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		wait_ms(4000);
@@ -203,7 +228,7 @@ void block_move::main_task_algorithm(void)
 		wait_ms(4000);
 
 		sr_ecp_msg->message("Force approach");
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, BUILDING, "", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		wait_ms(4000);
