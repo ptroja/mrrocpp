@@ -142,15 +142,15 @@ int wgt_shead_command::init()
 					}
 						break;
 					case lib::shead::VACUUM_STATE_OFF: {
-						ui.checkBox_vac_on->setEnabled(false);
-						ui.checkBox_vac_off->setEnabled(true);
-						ui.checkBox_vac_int->setEnabled(false);
+						ui.checkBox_vac_on->setChecked(false);
+						ui.checkBox_vac_off->setChecked(true);
+						ui.checkBox_vac_int->setChecked(false);
 					}
 						break;
 					case lib::shead::VACUUM_STATE_INTERMEDIATE: {
-						ui.checkBox_vac_on->setEnabled(false);
-						ui.checkBox_vac_off->setEnabled(false);
-						ui.checkBox_vac_int->setEnabled(true);
+						ui.checkBox_vac_on->setChecked(false);
+						ui.checkBox_vac_off->setChecked(false);
+						ui.checkBox_vac_int->setChecked(true);
 					}
 						break;
 					default: {

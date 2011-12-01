@@ -37,11 +37,38 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	reset_variables();
 }
 
+void effector::synchronise(void)
+{
+	try {
+		if (robot_test_mode) {
+			controller_state_edp_buf.is_synchronised = true;
+			return;
+		}
+
+	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_FATAL_ERROR(e_)
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+	} catch (...) {
+		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+	}
+}
+
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
 
-	if (robot_test_mode)
-		controller_state_edp_buf.is_synchronised = true;
+	if (robot_test_mode) {
+		return;
+	}
 
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
