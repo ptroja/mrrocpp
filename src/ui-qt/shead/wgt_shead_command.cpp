@@ -15,17 +15,11 @@ wgt_shead_command::wgt_shead_command(QString _widget_label, mrrocpp::ui::common:
 
 	// utworzenie list widgetow
 
-//	checkBox_fl_up_Vector.append(ui.checkBox_fl1_up);
-
-//	checkBox_fl_down_Vector.append(ui.checkBox_fl1_down);
-
-//	checkBox_fl_attached_Vector.append(ui.checkBox_fl1_attached);
-
 	checkBox_m_mip_Vector.append(ui.checkBox_ml_mip);
 
-	//radioButton_fl_up_Vector.append(ui.radioButton_fl1_up);
-
-//	radioButton_fl_down_Vector.append(ui.radioButton_fl1_down);
+	checkBox_contacts_Vector.append(ui.checkBox_con_p1);
+	checkBox_contacts_Vector.append(ui.checkBox_con_p2);
+	checkBox_contacts_Vector.append(ui.checkBox_con_p3);
 
 	doubleSpinBox_m_current_position_Vector.append(ui.doubleSpinBox_ml_current_position);
 
@@ -92,11 +86,11 @@ int wgt_shead_command::init()
 				} else if (ui.radioButton_m_ext->isChecked()) {
 					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_request();
 				}
-				/*
-				 robot->ui_ecp_robot->the_robot->shead_multi_leg_reply_data_request_port.set_request();
-				 robot->ui_ecp_robot->execute_motion();
-				 robot->ui_ecp_robot->the_robot->shead_multi_leg_reply_data_request_port.get();
-				 */
+
+				robot->ui_ecp_robot->the_robot->shead_reply_data_request_port.set_request();
+				robot->ui_ecp_robot->execute_motion();
+				robot->ui_ecp_robot->the_robot->shead_reply_data_request_port.get();
+
 				lib::epos::epos_reply *er;
 
 				if (ui.radioButton_m_motor->isChecked()) {
@@ -109,23 +103,71 @@ int wgt_shead_command::init()
 					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
 					er = &robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
 				}
-				/*
-				 // sets leg state
 
-				 lib::shead::multi_leg_reply_td &mlr =
-				 robot->ui_ecp_robot->the_robot->shead_multi_leg_reply_data_request_port.data;
+				lib::shead::reply &rep = robot->ui_ecp_robot->the_robot->shead_reply_data_request_port.data;
 
-				 for (int i = 0; i < lib::shead::LEG_CLAMP_NUMBER; i++) {
-				 checkBox_fl_up_Vector[i]->setChecked(mlr.leg[i].is_up);
-				 checkBox_fl_down_Vector[i]->setChecked(mlr.leg[i].is_down);
-				 checkBox_fl_attached_Vector[i]->setChecked(mlr.leg[i].is_attached);
-				 }
+				// sets soldification state
+				switch (rep.soldification_state)
+				{
+					case lib::shead::SOLDIFICATION_STATE_ON: {
+						ui.checkBox_sol_on->setEnabled(true);
+						ui.checkBox_sol_off->setEnabled(false);
+						ui.checkBox_sol_int->setEnabled(false);
+					}
+						break;
+					case lib::shead::SOLDIFICATION_STATE_OFF: {
+						ui.checkBox_sol_on->setEnabled(false);
+						ui.checkBox_sol_off->setEnabled(true);
+						ui.checkBox_sol_int->setEnabled(false);
+					}
+						break;
+					case lib::shead::SOLDIFICATION_STATE_INTERMEDIATE: {
+						ui.checkBox_sol_on->setEnabled(false);
+						ui.checkBox_sol_off->setEnabled(false);
+						ui.checkBox_sol_int->setEnabled(true);
+					}
+						break;
+					default: {
+					}
+						break;
+				}
 
-				 for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
-				 checkBox_m_mip_Vector[i]->setChecked(er->epos_controller[i].motion_in_progress);
-				 doubleSpinBox_m_current_position_Vector[i]->setValue(er->epos_controller[i].position);
-				 }
-				 */
+				// sets vacumization state
+				switch (rep.soldification_state)
+				{
+					case lib::shead::VACUUM_STATE_ON: {
+						ui.checkBox_vac_on->setEnabled(true);
+						ui.checkBox_vac_off->setEnabled(false);
+						ui.checkBox_vac_int->setEnabled(false);
+					}
+						break;
+					case lib::shead::VACUUM_STATE_OFF: {
+						ui.checkBox_vac_on->setEnabled(false);
+						ui.checkBox_vac_off->setEnabled(true);
+						ui.checkBox_vac_int->setEnabled(false);
+					}
+						break;
+					case lib::shead::VACUUM_STATE_INTERMEDIATE: {
+						ui.checkBox_vac_on->setEnabled(false);
+						ui.checkBox_vac_off->setEnabled(false);
+						ui.checkBox_vac_int->setEnabled(true);
+					}
+						break;
+					default: {
+					}
+						break;
+				}
+
+				// sets head contact state
+				for (int i = 0; i < 3; i++) {
+					checkBox_contacts_Vector[i]->setChecked(rep.contacts[i]);
+				}
+
+				for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
+					checkBox_m_mip_Vector[i]->setChecked(er->epos_controller[i].motion_in_progress);
+					doubleSpinBox_m_current_position_Vector[i]->setValue(er->epos_controller[i].position);
+				}
+
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie
 				synchro_depended_widgets_disable(true);
@@ -269,12 +311,12 @@ int wgt_shead_command::move_it()
 
 void wgt_shead_command::on_pushButton_sol_execute_clicked()
 {
-
+	interface.ui_msg->message("on_pushButton_sol_execute_clicked");
 }
 
 void wgt_shead_command::on_pushButton_vac_execute_clicked()
 {
-
+	interface.ui_msg->message("on_pushButton_vac_execute_clicked");
 }
 
 void wgt_shead_command::on_pushButton_m_execute_clicked()

@@ -30,16 +30,8 @@ public:
 			0);
 	~wgt_shead_command();
 
-	QVector <QCheckBox*> checkBox_fl_up_Vector;
-	QVector <QCheckBox*> checkBox_fl_down_Vector;
-	QVector <QCheckBox*> checkBox_fl_attached_Vector;
-	QVector <QCheckBox*> checkBox_fl_undetachable_Vector;
-
 	QVector <QCheckBox*> checkBox_m_mip_Vector;
-	QVector <QCheckBox*> checkBox_m_no_Vector;
-
-	QVector <QRadioButton*> radioButton_fl_up_Vector;
-	QVector <QRadioButton*> radioButton_fl_down_Vector;
+	QVector <QCheckBox*> checkBox_contacts_Vector;
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_m_current_position_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_m_absolute_Vector;
