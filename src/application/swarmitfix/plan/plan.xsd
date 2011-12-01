@@ -3,36 +3,6 @@
   <xs:element name="plan">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="svar">
-          <xs:annotation>
-            <xs:documentation>segment-related variables
-            </xs:documentation>
-          </xs:annotation>
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element maxOccurs="unbounded" name="item">
-                <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="agent" type="xs:anyType"/>
-                    <xs:element name="TBeg" type="xs:anyType"/>
-                    <xs:element name="TEnd" type="xs:anyType"/>
-                    <xs:element name="sHind" type="xs:integer"/>
-                    <xs:element name="eHind" type="xs:integer"/>
-                    <xs:element ref="numH"/>
-                    <xs:element ref="sBind"/>
-                    <xs:element ref="eBind"/>
-                    <xs:element ref="numB"/>
-                    <xs:element ref="sPind"/>
-                    <xs:element ref="ePind"/>
-                    <xs:element ref="numP"/>
-                    <xs:element ref="segInd"/>
-                  </xs:sequence>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element ref="sNum"/>
         <xs:element name="head">
           <xs:complexType>
             <xs:sequence>
@@ -93,14 +63,6 @@
                         <xs:element ref="ABeg"/>
                         <xs:element ref="AHoldMin"/>
                         <xs:element ref="AHoldMax"/>
-                        <xs:element ref="b"/>
-                        <xs:element ref="bcx"/>
-                        <xs:element ref="bcy"/>
-                        <xs:element ref="dmin"/>
-                        <xs:element ref="dmax"/>
-                        <xs:element ref="dcen"/>
-                        <xs:element ref="dh"/>
-                        <xs:element ref="eps"/>
                       </xs:sequence>
                     </xs:extension>
                   </xs:complexContent>
@@ -109,7 +71,6 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element ref="hNum"/>
         <xs:element name="mbase">
           <xs:complexType>
             <xs:sequence>
@@ -171,7 +132,6 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element ref="bNum"/>
         <xs:element name="pkm">
           <xs:complexType>
             <xs:sequence>
@@ -181,14 +141,6 @@
                     <xs:extension base="State">
                       <xs:sequence>
                         <xs:element ref="ind"/>
-                        <xs:element ref="alpha0"/>
-                        <xs:element ref="l1"/>
-                        <xs:element ref="l2"/>
-                        <xs:element ref="l3"/>
-                        <xs:element ref="psi1"/>
-                        <xs:element ref="psi2"/>
-                        <xs:element ref="psi3"/>
-                        <xs:element ref="beta7"/>
                         <xs:choice minOccurs="1" maxOccurs="1">
                           <xs:annotation>
                             <xs:documentation>pose expressed in one of the supported coordiate systems</xs:documentation>
@@ -238,14 +190,6 @@
                             </xs:complexType>
                           </xs:element>
                         </xs:choice>
-                        <xs:element ref="pkmbaseToFixedPkm"/>
-                        <xs:element ref="hlowered"/>
-                        <xs:element ref="Dz"/>
-                        <xs:element ref="maxPkmNeutralDist"/>
-                        <xs:element ref="PX"/>
-                        <xs:element ref="PZ"/>
-                        <xs:element ref="COSGA"/>
-                        <xs:element ref="SINGA"/>
                       </xs:sequence>
                     </xs:extension>
                   </xs:complexContent>
@@ -254,137 +198,9 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element ref="pNum"/>
-        <xs:element ref="trajectory"/>
-        <xs:element ref="workpiece"/>
-        <xs:element ref="MaxHeadPerSegNum"/>
-        <xs:element ref="MaxPkmPerHeadNum"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="sNum" type="xs:nonNegativeInteger">
-    <xs:annotation>
-      <xs:documentation>Number of ... elements</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="hNum" type="xs:nonNegativeInteger"/>
-  <xs:element name="bNum" type="xs:nonNegativeInteger"/>
-  <xs:element name="pNum" type="xs:nonNegativeInteger"/>
-  <xs:element name="trajectory">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="lineList"/>
-        <xs:element ref="numOfLines"/>
-        <xs:element ref="runLen"/>
-        <xs:element ref="Fpar"/>
-        <xs:element ref="Gpar"/>
-        <xs:element ref="profile"/>
-        <xs:element ref="tool_speed"/>
-        <xs:element ref="F"/>
-        <xs:element ref="G"/>
-        <xs:element ref="NumOfHeadCoordinates"/>
-        <xs:element ref="NumOfPKMCoordinates"/>
-        <xs:element ref="Parabolic_Profile"/>
-        <xs:element ref="Trapezoidal_Profile"/>
-        <xs:element ref="Milling_Speed"/>
-        <xs:element ref="Drilling_Speed"/>
-        <xs:element ref="MBase_Max_Speed"/>
-        <xs:element ref="MBase_Max_Accel"/>
-        <xs:element ref="Head_Max_Speed"/>
-        <xs:element ref="Head_Max_Accel"/>
-        <xs:element ref="PKM_Platform_Max_Speed"/>
-        <xs:element ref="PKM_Platform_Max_Accel"/>
-        <xs:element ref="PKM_Max_Speed"/>
-        <xs:element ref="PKM_Max_Accel"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="lineList">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" name="item">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element ref="sP"/>
-              <xs:element ref="eP"/>
-              <xs:element ref="sPos"/>
-              <xs:element ref="ePos"/>
-              <xs:element ref="a"/>
-              <xs:element ref="b"/>
-              <xs:element ref="c"/>
-              <xs:element ref="norm"/>
-              <xs:element ref="norm2"/>
-              <xs:element ref="alfa"/>
-              <xs:element ref="beta"/>
-              <xs:element ref="gamma"/>
-              <xs:element ref="len"/>
-              <xs:element ref="index"/>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="numOfLines" type="xs:nonNegativeInteger"/>
-  <xs:element name="runLen" type="xs:string"/>
-  <xs:element name="Fpar" type="xs:integer"/>
-  <xs:element name="Gpar" type="xs:integer"/>
-  <xs:element name="profile" type="xs:integer"/>
-  <xs:element name="tool_speed" type="xs:double"/>
-  <xs:element name="F" type="xs:double"/>
-  <xs:element name="G" type="xs:integer"/>
-  <xs:element name="NumOfHeadCoordinates" type="xs:integer"/>
-  <xs:element name="NumOfPKMCoordinates" type="xs:integer"/>
-  <xs:element name="Parabolic_Profile" type="xs:integer"/>
-  <xs:element name="Trapezoidal_Profile" type="xs:integer"/>
-  <xs:element name="Milling_Speed" type="xs:integer"/>
-  <xs:element name="Drilling_Speed" type="xs:double"/>
-  <xs:element name="MBase_Max_Speed" type="xs:double"/>
-  <xs:element name="MBase_Max_Accel" type="xs:double"/>
-  <xs:element name="Head_Max_Speed" type="xs:string"/>
-  <xs:element name="Head_Max_Accel" type="xs:string"/>
-  <xs:element name="PKM_Platform_Max_Speed" type="xs:double"/>
-  <xs:element name="PKM_Platform_Max_Accel" type="xs:double"/>
-  <xs:element name="PKM_Max_Speed" type="xs:string"/>
-  <xs:element name="PKM_Max_Accel" type="xs:string"/>
-  <xs:element name="workpiece">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="cam"/>
-        <xs:element ref="cad"/>
-        <xs:element ref="angles"/>
-        <xs:element ref="vTypes"/>
-        <xs:element ref="closed"/>
-        <xs:element ref="CenX"/>
-        <xs:element ref="CenY"/>
-        <xs:element ref="CenZ"/>
-        <xs:element ref="RadX"/>
-        <xs:element ref="RadY"/>
-        <xs:element ref="operation"/>
-        <xs:element ref="VDistThresh"/>
-        <xs:element ref="VDist2Thresh"/>
-        <xs:element ref="Milling"/>
-        <xs:element ref="Drilling"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="cam" type="xs:string"/>
-  <xs:element name="cad" type="xs:string"/>
-  <xs:element name="angles" type="xs:string"/>
-  <xs:element name="vTypes" type="xs:string"/>
-  <xs:element name="closed" type="xs:integer"/>
-  <xs:element name="CenX" type="xs:integer"/>
-  <xs:element name="CenY" type="xs:integer"/>
-  <xs:element name="CenZ" type="xs:integer"/>
-  <xs:element name="RadX" type="xs:double"/>
-  <xs:element name="RadY" type="xs:integer"/>
-  <xs:element name="operation" type="xs:integer"/>
-  <xs:element name="VDistThresh" type="xs:double"/>
-  <xs:element name="VDist2Thresh" type="xs:integer"/>
-  <xs:element name="Milling" type="xs:integer"/>
-  <xs:element name="Drilling" type="xs:integer"/>
-  <xs:element name="MaxHeadPerSegNum" type="xs:integer"/>
-  <xs:element name="MaxPkmPerHeadNum" type="xs:integer"/>
   <xs:element name="numH" type="xs:integer"/>
   <xs:element name="sBind" type="xs:integer"/>
   <xs:element name="eBind" type="xs:integer"/>
@@ -449,94 +265,6 @@
     <xs:complexType/>
   </xs:element>
   <xs:element name="numActions" type="xs:integer"/>
-  <xs:element name="bcx" type="xs:double"/>
-  <xs:element name="bcy" type="xs:double"/>
-  <xs:element name="dmin" type="xs:double"/>
-  <xs:element name="dmax" type="xs:double"/>
-  <xs:element name="dcen" type="xs:double"/>
-  <xs:element name="dh" type="xs:double"/>
-  <xs:element name="eps" type="xs:double"/>
-  <xs:element name="alpha0" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>orientation in XY plane of pkm origin with
-        respect
-        to global (bench) origin
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="l1" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>1st PKM's leg parameter</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="l2" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>2nd PKM's leg parameter</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="l3" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>3rd PKM's leg parameter</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="psi1" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>orientation of spherical wrist
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="psi2" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>orientation of spherical wrist
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="psi3" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>orientation of spherical wrist
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="beta7" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>The seventh DOF: orientation of the head around
-        current head-related Z-xis in space; in local pkm system - keep
-        it
-        within ((-pi, pi))
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="pkmbaseToFixedPkm" type="xs:double"/>
-  <xs:element name="hlowered" type="xs:double"/>
-  <xs:element name="Dz" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>height of base = distance of pkm origin from base origin - translation along Z</xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="maxPkmNeutralDist" type="xs:integer">
-    <xs:annotation>
-      <xs:documentation>in neutral position the head is within this
-        radius
-        over the base center
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="PX" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>distance from wrist center to head center in
-        local
-        wrist system along X
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="PZ" type="xs:double">
-    <xs:annotation>
-      <xs:documentation>distance along Z in local wrist
-      </xs:documentation>
-    </xs:annotation>
-  </xs:element>
-  <xs:element name="COSGA" type="xs:double"/>
-  <xs:element name="SINGA" type="xs:double"/>
   <xs:element name="sP" type="xs:integer"/>
   <xs:element name="eP" type="xs:integer"/>
   <xs:element name="sPos" type="xs:string"/>

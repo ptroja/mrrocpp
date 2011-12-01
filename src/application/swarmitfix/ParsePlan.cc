@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	try {
 		const Plan p = *plan(argv[1], xml_schema::Flags::dont_validate);
 
-		cerr << p.hNum() << endl;
+		// cerr << p.hNum() << endl;
 
 		for(Plan::PkmType::ItemConstIterator it = p.pkm().item().begin();
 				it != p.pkm().item().end();

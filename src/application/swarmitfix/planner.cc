@@ -75,7 +75,7 @@ void planner::resume()
 void planner::operator()()
 {
 	std::cerr << "planner task started" << std::endl;
-	std::cerr << "pNum " << p->pNum() << std::endl;
+	// std::cerr << "pNum " << p->pNum() << std::endl;
 
 	// Never-ending planner operation
 	do
@@ -101,7 +101,7 @@ void planner::operator()()
 				++it) {
 			const Plan::PkmType::ItemType & pCmd = *it;
 
-			std::cerr << "[" << pCmd.l1() << "," << pCmd.l2() << "," << pCmd.l3() << "]" << std::endl;
+			//std::cerr << "[" << pCmd.l1() << "," << pCmd.l2() << "," << pCmd.l3() << "]" << std::endl;
 
 			next_trigger = startup + boost::posix_time::seconds(pCmd.TBeg());
 

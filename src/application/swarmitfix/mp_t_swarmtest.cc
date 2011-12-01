@@ -44,8 +44,6 @@ void swarmitfix::main_test_algorithm(void)
 					);
 		}
 
-		std::cerr << "[" << pkmCmd.l1() << "," << pkmCmd.l2() << "," << pkmCmd.l3() << "]" << std::endl;
-
 		// Setup variant for the PKM
 		lib::spkm::next_state_t cmd(lib::spkm::POSE_LIST);
 		cmd.segments.push_back(hm);
