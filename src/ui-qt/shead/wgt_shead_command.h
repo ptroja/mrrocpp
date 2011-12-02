@@ -8,13 +8,15 @@
 #include "../base/wgt_base.h"
 #include <QTimer>
 
+#include <boost/shared_ptr.hpp>
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
 class UiRobot;
 }
-namespace smb {
+namespace shead {
 class UiRobot;
 const std::string WGT_SHEAD_COMMAND = "WGT_SHEAD_COMMAND";
 }
@@ -30,16 +32,8 @@ public:
 			0);
 	~wgt_shead_command();
 
-	QVector <QCheckBox*> checkBox_fl_up_Vector;
-	QVector <QCheckBox*> checkBox_fl_down_Vector;
-	QVector <QCheckBox*> checkBox_fl_attached_Vector;
-	QVector <QCheckBox*> checkBox_fl_undetachable_Vector;
-
 	QVector <QCheckBox*> checkBox_m_mip_Vector;
-	QVector <QCheckBox*> checkBox_m_no_Vector;
-
-	QVector <QRadioButton*> radioButton_fl_up_Vector;
-	QVector <QRadioButton*> radioButton_fl_down_Vector;
+	QVector <QCheckBox*> checkBox_contacts_Vector;
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_m_current_position_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_m_absolute_Vector;
@@ -51,7 +45,7 @@ public:
 
 private:
 	Ui::wgt_shead_commandClass ui;
-	mrrocpp::ui::smb::UiRobot* robot;
+	mrrocpp::ui::shead::UiRobot* robot;
 
 	int init();
 
@@ -60,7 +54,7 @@ private:
 	int get_desired_position();
 	int move_it();
 
-	QTimer *timer;
+	boost::shared_ptr <QTimer> timer;
 
 signals:
 	void synchro_depended_init_signal();
@@ -73,19 +67,20 @@ private slots:
 
 	// buttons callbacks
 
-	void on_pushButton_fl_execute_clicked();
-	void on_pushButton_fl_all_up_clicked();
-	void on_pushButton_fl_all_down_clicked();
+//	void on_pushButton_fl_execute_clicked();
+//	void on_pushButton_fl_all_up_clicked();
+//	void on_pushButton_fl_all_down_clicked();
+
+	void on_pushButton_sol_execute_clicked();
+	void on_pushButton_vac_execute_clicked();
+
 	void on_pushButton_m_execute_clicked();
 	void on_pushButton_stop_clicked();
 
 	void on_pushButton_read_clicked();
 	void on_pushButton_ml_copy_clicked();
-	void on_pushButton_ms_copy_clicked();
 	void on_pushButton_ml_left_clicked();
 	void on_pushButton_ml_rigth_clicked();
-	void on_pushButton_ms_left_clicked();
-	void on_pushButton_ms_rigth_clicked();
 
 	void on_radioButton_m_motor_toggled();
 	void on_radioButton_m_joint_toggled();

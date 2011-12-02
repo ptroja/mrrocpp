@@ -12,7 +12,7 @@ namespace shead1 {
 UiRobot::UiRobot(common::Interface& _interface) :
 	shead::UiRobot(_interface, lib::shead1::ROBOT_NAME)
 {
-
+	add_wgt <wgt_shead_command>(shead::WGT_SHEAD_COMMAND, "Shead1 command");
 }
 
 void UiRobot::create_ui_ecp_robot()

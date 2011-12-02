@@ -193,7 +193,16 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 }
 
 motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name) :
-		effector(_shell, l_robot_name), servo_current_motor_pos(lib::MAX_SERVOS_NR), servo_current_joints(lib::MAX_SERVOS_NR), desired_joints(lib::MAX_SERVOS_NR), current_joints(lib::MAX_SERVOS_NR), desired_motor_pos_old(lib::MAX_SERVOS_NR), desired_motor_pos_new(lib::MAX_SERVOS_NR), current_motor_pos(lib::MAX_SERVOS_NR), step_counter(0), number_of_servos(-1)
+		effector(_shell, l_robot_name),
+		servo_current_motor_pos(lib::MAX_SERVOS_NR),
+		servo_current_joints(lib::MAX_SERVOS_NR),
+		desired_joints(lib::MAX_SERVOS_NR),
+		current_joints(lib::MAX_SERVOS_NR),
+		desired_motor_pos_old(lib::MAX_SERVOS_NR),
+		desired_motor_pos_new(lib::MAX_SERVOS_NR),
+		current_motor_pos(lib::MAX_SERVOS_NR),
+		step_counter(0),
+		number_of_servos(-1)
 {
 	controller_state_edp_buf.is_synchronised = false;
 	controller_state_edp_buf.is_power_on = true;

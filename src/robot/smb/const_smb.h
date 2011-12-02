@@ -27,7 +27,6 @@ const int NUM_OF_SERVOS = 2;
  */
 const int LEG_CLAMP_NUMBER = 3;
 
-
 /*!
  * @brief SwarmItFix Mobile Base leg position variants from all legs point of view
  * @ingroup smb
@@ -54,7 +53,6 @@ typedef enum _POSE_SPECIFICATION
 {
 	FRAME, JOINT, MOTOR
 } POSE_SPECIFICATION;
-
 
 } // namespace smb
 } // namespace lib

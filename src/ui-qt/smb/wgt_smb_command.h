@@ -8,6 +8,8 @@
 #include "../base/wgt_base.h"
 #include <QTimer>
 
+#include <boost/shared_ptr.hpp>
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -60,7 +62,7 @@ private:
 	int get_desired_position();
 	int move_it();
 
-	QTimer *timer;
+	boost::shared_ptr <QTimer> timer;
 
 signals:
 	void synchro_depended_init_signal();

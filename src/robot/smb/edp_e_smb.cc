@@ -41,8 +41,9 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 void effector::check_controller_state()
 {
-	if (robot_test_mode)
+	if (robot_test_mode){
 		return;
+	}
 
 	// Try to get state of each axis
 	unsigned int powerOn = 0;
@@ -391,7 +392,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					 legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
 					 legs_rotation_node->monitorHomingStatus();*/
 					// Instead of homing - set current position as zero.
-					legs_relative_zero_position = legs_rotation_node->getActualPosition();
+					if (!robot_test_mode) {
+						legs_relative_zero_position = legs_rotation_node->getActualPosition();
+					}
 				}
 				break;
 			}
