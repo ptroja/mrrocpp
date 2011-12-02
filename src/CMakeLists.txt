@@ -135,11 +135,8 @@ endif (UBUNTU32BIT)
 
 # Warning messages (GCC)
 if(CMAKE_COMPILER_IS_GNUCXX)
-    	MESSAGE(STATUS "Compiler is GNUCXX")
 	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
-else(CMAKE_COMPILER_IS_GNUCXX)	
-    	MESSAGE(STATUS "Compiler is *not* GNUCXX")
 endif(CMAKE_COMPILER_IS_GNUCXX)	
 
 # configure a header file to pass some of the CMake settings
