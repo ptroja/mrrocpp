@@ -149,10 +149,13 @@ struct cbuffer
 	//! Motion time - used in the Interpolated Position Mode.
 	double estimated_time;
 
+	//! SPKM desired motor positions.
 	int32_t motor_pos[NUM_OF_SERVOS];
 
+	//! SPKM desired joint positions.
 	double joint_pos[NUM_OF_SERVOS];
 
+	//! SPKM desired cartesian pose - in XYZ Euler ZYZ form.
 	double goal_pos[6];
 
 	//! Allowed time for the motion in seconds.
