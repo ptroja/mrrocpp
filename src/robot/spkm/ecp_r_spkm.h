@@ -9,9 +9,18 @@
  * @ingroup spkm
  */
 
+#include <boost/shared_ptr.hpp>
+
 #include "base/ecp/ecp_robot.h"
-#include "const_spkm.h"
+#include "base/ecp/ecp_task.h"
+
+#include "base/lib/agent/InputBuffer.h"
+#include "base/lib/agent/RemoteAgent.h"
+
 #include "base/kinematics/kinematics_manager.h"
+
+#include "base/lib/swarmtypes.h"
+#include "dp_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -103,6 +112,16 @@ public:
 	 * basing on edp reply buffer
 	 */
 	void get_reply();
+
+	/**
+	 * Input buffer for MP commands
+	 */
+	boost::shared_ptr<InputBuffer<lib::spkm::next_state_t> > nextstateBuffer;
+
+	/**
+	 * Output buffer for MP notifications
+	 */
+	boost::shared_ptr<OutputBuffer<lib::notification_t> > notifyBuffer;
 };
 } // namespace spkm
 } // namespace ecp

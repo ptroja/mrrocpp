@@ -52,8 +52,8 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	doubleSpinBox_m_relative_Vector.append(ui.doubleSpinBox_ms_relative);
 
 	// uruchomienei timera
-	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(timer_slot()));
+	timer = (boost::shared_ptr <QTimer>) new QTimer(this);
+	connect(timer.get(), SIGNAL(timeout()), this, SLOT(timer_slot()));
 	timer->start(interface.position_refresh_interval);
 
 	// podpiecie pozostalych sygnalow do slotow

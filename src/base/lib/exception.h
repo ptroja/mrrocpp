@@ -13,9 +13,10 @@
 #define __TRANSFORMER_ERROR_H
 
 #include <stdint.h>
-#include <sys/time.h>
 #include <boost/exception/all.hpp>
 #include <boost/exception/diagnostic_information.hpp>
+#include <boost/thread/thread_time.hpp>
+#include <boost/date_time/posix_time/time_formatters.hpp>
 
 namespace mrrocpp {
 namespace lib {
@@ -39,8 +40,14 @@ namespace exception {
 //! A single line description of error.
 typedef boost::error_info <struct mrrocpp_error_description_, char const *> mrrocpp_error_description;
 
-//! Moment in which error was detected.
-typedef boost::error_info <struct time_, struct timeval> mrrocpp_error_time;
+//! Time when error was detected.
+typedef boost::error_info <struct timestamp, boost::system_time> mrrocpp_error_time;
+
+//! Convert exception's timestamp to human-readable string
+inline std::string to_string(mrrocpp_error_time const & e)
+{
+	return boost::posix_time::to_simple_string(e.value());
+}
 
 //! error0 for old mrroc++ exceptions
 typedef boost::error_info <struct error0_, uint64_t> mrrocpp_error0;
@@ -68,13 +75,8 @@ public:
 	mrrocpp_error() :
 			error_class(ercl)
 	{
-		// Get current time.
-		struct timeval tv;
-		if (gettimeofday(&tv, NULL) == -1) {
-			perror("gettimeofday()");
-		}
 		// Add it to diagnostic information.
-		*this << mrrocpp_error_time(tv);
+		*this << mrrocpp_error_time(boost::get_system_time());
 	}
 
 	/*!
@@ -91,9 +93,6 @@ public:
 	{
 		return diagnostic_information_what(*this);
 	}
-
-	// TODO: timestampe based on boost::posix_time
-
 };
 
 /*!

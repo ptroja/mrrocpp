@@ -41,8 +41,8 @@ wgt_spkm_ext::wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface
 	radioButton_mip_Vector.append(ui.radioButton_mip_4);
 	radioButton_mip_Vector.append(ui.radioButton_mip_5);
 
-	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(timer_slot()));
+	timer = (boost::shared_ptr <QTimer>) new QTimer(this);
+	connect(timer.get(), SIGNAL(timeout()), this, SLOT(timer_slot()));
 	timer->start(interface.position_refresh_interval);
 	ui.radioButton_non_sync_trapezoidal->setChecked(true);
 }
@@ -145,6 +145,25 @@ void wgt_spkm_ext::on_pushButton_export_clicked()
 	for (int i = 0; i < 6; i++) {
 		buffer << " " << doubleSpinBox_des_Vector[i]->value();
 	}
+
+	interface.ui_msg->message(buffer.str());
+
+}
+
+void wgt_spkm_ext::on_pushButton_exportxml_clicked()
+{
+	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
+
+	buffer << "edp_spkm EULER XML POSITION\n";
+
+	buffer << "<Xyz_Euler_Zyz>\n";
+	buffer << "<x>" << doubleSpinBox_des_Vector[0]->value() << "<\\x>";
+	buffer << "<y>" << doubleSpinBox_des_Vector[1]->value() << "<\\y>";
+	buffer << "<z>" << doubleSpinBox_des_Vector[2]->value() << "<\\z>\n";
+	buffer << "<ox>" << doubleSpinBox_des_Vector[3]->value() << "<\\ox>";
+	buffer << "<oy>" << doubleSpinBox_des_Vector[4]->value() << "<\\oy>";
+	buffer << "<oz>" << doubleSpinBox_des_Vector[5]->value() << "<\\oz>\n";
+	buffer << "</Xyz_Euler_Zyz>\n";
 
 	interface.ui_msg->message(buffer.str());
 

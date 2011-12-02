@@ -8,6 +8,8 @@
 #include "../base/wgt_base.h"
 #include <QTimer>
 
+#include <boost/shared_ptr.hpp>
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -26,15 +28,22 @@ class wgt_spkm_int : public wgt_base
 Q_OBJECT
 
 public:
-	wgt_spkm_int(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent=0);
+	wgt_spkm_int(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
+			0);
 	~wgt_spkm_int();
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_mcur_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
 	QVector <QRadioButton*> radioButton_mip_Vector;
-	virtual void add_button(QPushButton *button, int row, int space){};
-	virtual void setup_ui(){};
+	virtual void add_button(QPushButton *button, int row, int space)
+	{
+	}
+	;
+	virtual void setup_ui()
+	{
+	}
+	;
 private:
 	Ui::wgt_spkm_intClass ui;
 	mrrocpp::ui::spkm::UiRobot* robot;
@@ -46,7 +55,7 @@ private:
 	int get_desired_position();
 	int move_it();
 
-	QTimer *timer;
+	boost::shared_ptr <QTimer> timer;
 
 private slots:
 	void timer_slot();

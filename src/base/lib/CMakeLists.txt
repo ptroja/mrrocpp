@@ -36,7 +36,7 @@ add_library(mrrocpp
 	trajectory_pose/bang_bang_trajectory_pose.cc
 	trajectory_pose/trajectory_pose.cc
 	trajectory_pose/constant_velocity_trajectory_pose.cc
-        trajectory_pose/spline_trajectory_pose.cc
+    trajectory_pose/spline_trajectory_pose.cc
 	periodic_timer.cc
 	compat.c
 	ping.cc
@@ -48,6 +48,6 @@ add_executable(pvat_test
 
 target_link_libraries (mrrocpp sr)
 
-target_link_libraries(mrrocpp ${Boost_SERIALIZATION_LIBRARY})
+target_link_libraries(mrrocpp ${Boost_SERIALIZATION_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_DATE_TIME_LIBRARY})
 
 install(TARGETS mrrocpp DESTINATION lib)

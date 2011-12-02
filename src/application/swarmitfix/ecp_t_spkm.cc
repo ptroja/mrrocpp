@@ -1,6 +1,7 @@
 #include "base/lib/sr/srlib.h"
 
 #include "robot/spkm/ecp_r_spkm1.h"
+#include "robot/spkm/ecp_r_spkm2.h"
 
 #include "ecp_t_spkm.h"
 #include "ecp_g_spkm.h"
@@ -11,12 +12,17 @@ namespace ecp {
 namespace spkm {
 namespace task {
 
-// KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
 	task_t(_config)
 {
 	// Create the robot object
-	ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm1::robot(*this);
+	if (config.robot_name == lib::spkm1::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm1::robot(*this);
+	} else if (config.robot_name == lib::spkm2::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm2::robot(*this);
+	} else {
+		throw std::runtime_error(config.robot_name + ": unknown robot");
+	}
 
 	// Create the generators
 	g_pose = (boost::shared_ptr <generator::spkm_pose>) new generator::spkm_pose(*this);

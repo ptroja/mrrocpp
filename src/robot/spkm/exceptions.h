@@ -14,7 +14,7 @@
 #include <string>
 
 #include "base/edp/edp_exceptions.h"
-#include "const_spkm.h"
+#include "dp_spkm.h"
 
 namespace mrrocpp {
 namespace edp {

@@ -210,6 +210,7 @@ struct rbuffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		ar & multi_leg_reply;
 		ar & epos_controller;
 	}
 

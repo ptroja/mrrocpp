@@ -1,17 +1,16 @@
-#ifndef _DATABUFFER_H
-#define _DATABUFFER_H
+#ifndef _INPUTBUFFER_H
+#define _INPUTBUFFER_H
 
 #include <boost/thread/thread_time.hpp>
 
+#include "InputBufferBase.h"
 #include "base/lib/xdr/xdr_iarchive.hpp"
-
-#include "Agent.h"
 
 /**
  * Input data buffer
  */
 template <class T>
-class InputBuffer : public DataBufferBase {
+class InputBuffer : public InputBufferBase {
 	//! Agent needs an access to Store/Update methods
 	friend class Agent;
 
@@ -43,8 +42,8 @@ private:
 
 public:
 	//! Constructor
-	InputBuffer(const std::string & _name, const T & _default_value = T())
-		: DataBufferBase(_name), data(_default_value),
+	InputBuffer(Agent & _owner, const std::string & _name, const T & _default_value = T())
+		: InputBufferBase(_owner, _name), data(_default_value),
 		fresh(false), access(data)
 	{
 	}
@@ -89,4 +88,4 @@ public:
 	const T & access;
 };
 
-#endif /* _DATABUFFER_H */
+#endif /* _INPUTBUFFER_H */

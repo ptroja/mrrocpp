@@ -6,7 +6,12 @@
  * @ingroup spkm
  */
 
+#include "base/mp/mp_task.h"
+
+#include "base/lib/swarmtypes.h"
 #include "mp_r_spkm.h"
+
+#include "robot/spkm/const_spkm.h"
 
 namespace mrrocpp {
 namespace mp {

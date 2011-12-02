@@ -23,6 +23,7 @@
 
 #include "base/lib/messip/messip_dataport.h"
 #include "base/lib/agent/RemoteAgent.h"
+#include "base/lib/agent/OutputBuffer.h"
 
 enum UI_NOTIFICATION_STATE_ENUM
 {
