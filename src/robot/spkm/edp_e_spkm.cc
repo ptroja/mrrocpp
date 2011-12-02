@@ -439,7 +439,7 @@ void effector::parse_motor_command()
 				break;
 			case lib::spkm::XYZ_EULER_ZYZ:
 				// debug display
-				cout << "FRAME: [";
+				cout << "XYZ_EULER_ZYZ: [";
 				for (unsigned int i = 0; i < 6; ++i) {
 					cout << ecp_edp_cbuffer.goal_pos[i] << ", ";
 				}

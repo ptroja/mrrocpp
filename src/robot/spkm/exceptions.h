@@ -29,7 +29,7 @@ inline std::string to_string(pose_specification const & e)
 	switch (e.value())
 	{
 		case lib::spkm::XYZ_EULER_ZYZ:
-			return "FRAME";
+			return "XYZ_EULER_ZYZ";
 		case lib::spkm::JOINT:
 			return "JOINT";
 		case lib::spkm::MOTOR:
