@@ -45,6 +45,7 @@ reader_config::reader_config() :
 		uchyb[i] = false;
 		abs_pos[i] = false;
 		current_joints[i] = false;
+                desired_joints[i] = false;
 	}
 
 	for (int i = 0; i < 6; ++i) {
@@ -126,6 +127,9 @@ void reader_buffer::operator()()
 
 		sprintf(tmp_string, "current_joints_%d", j);
 		reader_cnf.current_joints[j] = master.config.check_config(tmp_string);
+
+                sprintf(tmp_string, "desired_joints_%d", j);
+                reader_cnf.desired_joints[j] = master.config.check_config(tmp_string);
 
 		sprintf(tmp_string, "measured_current_%d", j);
 		reader_cnf.measured_current[j] = master.config.check_config(tmp_string);
@@ -333,6 +337,11 @@ void reader_buffer::write_data_old_format(std::ofstream& outfile, const reader_d
 			outfile << data.current_joints[j] << " ";
 	}
 
+        for (int j = 0; j < master.number_of_servos; j++) {
+                if (reader_cnf.desired_joints[j])
+                        outfile << data.desired_joints[j] << " ";
+        }
+
 	outfile << "f: ";
 
 	for (int j = 0; j < 6; j++) {
@@ -404,6 +413,11 @@ void reader_buffer::write_header_csv(std::ofstream& outfile)
 			outfile << "current_joints[" << j << "];";
 	}
 
+        for (int j = 0; j < master.number_of_servos; j++) {
+                if (reader_cnf.desired_joints[j])
+                        outfile << "desired_joints[" << j << "];";
+        }
+
 	for (int j = 0; j < 6; j++) {
 		if (reader_cnf.force[j])
 			outfile << "force[" << j << "];";
@@ -462,6 +476,11 @@ void reader_buffer::write_data_csv(std::ofstream& outfile, const reader_data & d
 		if (reader_cnf.current_joints[j])
 			outfile << data.current_joints[j] << ";";
 	}
+
+        for (int j = 0; j < master.number_of_servos; j++) {
+                if (reader_cnf.desired_joints[j])
+                        outfile << data.desired_joints[j] << ";";
+        }
 
 	for (int j = 0; j < 6; j++) {
 		if (reader_cnf.force[j])

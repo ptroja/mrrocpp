@@ -106,6 +106,10 @@ void sub_task_smooth_gen_test::conditional_execution()
 	std::vector <double> coordinates2(7);//track
 	std::vector <double> coordinates3(7);//polycrank
 
+        //network_path = "../../src/application/generator_tester/optimizedTraj.trj";
+        //sgenjoint->load_coordinates_from_file(network_path.c_str());
+        //sgenjoint->Move();
+
 	// JOINT ABSOLUTE
         sr_ecp_msg.message("Joint absolute");
 	sgenjoint->reset();
@@ -215,7 +219,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks(1) == 0) {
 		sgenjoint->Move();
 	}
-	// JOINT ABSOLUTE END
+        // JOINT ABSOLUTE END*/
 
 
         /*// JOINT RELATIVE
@@ -282,7 +286,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks(1) == 0) {
 		sgenjoint->Move();
 	}
-	// JOINT RELATIVE END
+        // JOINT RELATIVE END
 
 
 	// MOTOR ABSOLUTE
