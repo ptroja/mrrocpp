@@ -124,12 +124,15 @@ void ecp_t_pid_tuning_pb_eih::main_task_algorithm(void)
 				reg->Kp(regulator_axis, regulator_axis) = k_p;
 
 				std::stringstream ss;
-				ss << "PID_Tuning_k_p_" << k_p;
 
-				std::string log_filename_prefix = ss.str();
+				ss.precision(3);
 
-				sm->log_client->set_filename_prefix(log_filename_prefix);
-				vs->log_client->set_filename_prefix(log_filename_prefix);
+				ss << "PID_Tuning_k_p_" << scientific << k_p << "_vs_manager";
+				sm->log_client->set_filename_prefix(ss.str());
+
+				ss.str("");
+				ss << "PID_Tuning_k_p_"<< scientific << k_p << "_vs";
+				vs->log_client->set_filename_prefix(ss.str());
 
 				// przesun KR do object_reached_position
 				newsmooth_gen->reset();
