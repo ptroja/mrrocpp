@@ -29,9 +29,6 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 {
 	// Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
-
-	// Create bypass data buffer for communication with MP
-	nextstateBuffer = (boost::shared_ptr<InputBuffer<lib::spkm::next_state_t> >) new InputBuffer<lib::spkm::next_state_t>(_ecp_object, lib::commandBufferId);
 }
 
 void robot::create_command()
