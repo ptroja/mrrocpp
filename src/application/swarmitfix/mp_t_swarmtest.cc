@@ -46,10 +46,20 @@ void swarmitfix::main_test_algorithm(void)
 
 		// Setup variant for the PKM
 		lib::spkm::next_state_t cmd(lib::spkm::POSE_LIST);
+
 		cmd.segments.push_back(hm);
+
+		std::cerr << "HM is\n" << hm << std::endl;
 
 		// Send command with the output buffer
 		IO.transmitters.spkm2.outputs.command->Send(cmd);
+
+		while(!IO.transmitters.spkm2.inputs.notification->isFresh()) {
+			std::cout << "MP blocking for SPKM2 notification" << std::endl;
+			ReceiveSingleMessage(true);
+		}
+
+		IO.transmitters.spkm2.inputs.notification->markAsUsed();
 	}
 
 	return;
