@@ -2,6 +2,7 @@
 
 #include "planner.h"
 #include "base/lib/mrmath/homog_matrix.h"
+#include "base/mp/mp_exceptions.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -12,7 +13,7 @@ void swarmitfix::main_test_algorithm(void)
 	sr_ecp_msg->message("swarm test started");
 
 	// Create planner object
-	planner pp(config.value<std::string>("planpath"));
+	// planner pp(config.value<std::string>("planpath"));
 
 	sr_ecp_msg->message("plan OK");
 
@@ -60,6 +61,10 @@ void swarmitfix::main_test_algorithm(void)
 		}
 
 		IO.transmitters.spkm2.inputs.notification->markAsUsed();
+
+		if(IO.transmitters.spkm2.inputs.notification->Get() == lib::NACK) {
+			BOOST_THROW_EXCEPTION(exception::nfe());
+		}
 	}
 
 	return;

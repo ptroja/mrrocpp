@@ -40,21 +40,35 @@ void swarmitfix::main_task_algorithm(void)
 {
 	std::cerr << "> swarmitfix::main_task_algorithm" << std::endl;
 
+	// Loop execution coordinator's commands
 	while(true) {
+		// Wait for new coordinator's command
 		while(!nextstateBuffer.isFresh()) {
 			ReceiveSingleMessage(true);
 		}
 
-		switch(nextstateBuffer.Get().variant) {
-			case lib::spkm::POSE_LIST:
-				g_pose->Move();
-				break;
-			default:
-				g_quickstop->Move();
-				break;
+		try {
+			// Mark command as used
+			nextstateBuffer.markAsUsed();
+
+			// Dispatch to selected generator
+			switch(nextstateBuffer.Get().variant) {
+				case lib::spkm::POSE_LIST:
+					g_pose->Move();
+					break;
+				default:
+					g_quickstop->Move();
+					break;
+			}
+
+		} catch (std::exception & e) {
+			// Report problem and re-throw exception to the process shell
+			notifyBuffer->Send(lib::NACK);
+			throw;
 		}
 
-		nextstateBuffer.markAsUsed();
+		// Reply with acknowledgment
+		notifyBuffer->Send(lib::ACK);
 	}
 }
 
