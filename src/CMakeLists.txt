@@ -92,8 +92,10 @@ if (UBUNTU32BIT)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
 
 	# Warning messages (GCC)
-	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+	if(CMAKE_COMPILER_IS_GNUCXX)
+		set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+	endif(CMAKE_COMPILER_IS_GNUCXX)	
 
 	# keep this flag in production code
 	add_definitions (-DEIGEN_DONT_ALIGN)
