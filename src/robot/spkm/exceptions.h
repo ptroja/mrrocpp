@@ -28,7 +28,7 @@ inline std::string to_string(pose_specification const & e)
 {
 	switch (e.value())
 	{
-		case lib::spkm::FRAME:
+		case lib::spkm::XYZ_EULER_ZYZ:
 			return "FRAME";
 		case lib::spkm::JOINT:
 			return "JOINT";

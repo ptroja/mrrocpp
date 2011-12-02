@@ -125,7 +125,7 @@ enum CBUFFER_VARIANT
  */
 typedef enum _POSE_SPECIFICATION
 {
-	FRAME, JOINT, MOTOR
+	XYZ_EULER_ZYZ, JOINT, MOTOR
 } POSE_SPECIFICATION;
 
 /*!
@@ -183,7 +183,7 @@ struct cbuffer
 				ar & set_pose_specification;
 				switch (set_pose_specification)
 				{
-					case FRAME:
+					case XYZ_EULER_ZYZ:
 						ar & goal_pos;
 						break;
 					case JOINT:

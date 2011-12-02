@@ -88,7 +88,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
-		ecp_edp_cbuffer.set_pose_specification = lib::spkm::FRAME;
+		ecp_edp_cbuffer.set_pose_specification = lib::spkm::XYZ_EULER_ZYZ;
 
 		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;
@@ -139,7 +139,7 @@ void robot::create_command()
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
-		ecp_edp_cbuffer.get_pose_specification = lib::spkm::FRAME;
+		ecp_edp_cbuffer.get_pose_specification = lib::spkm::XYZ_EULER_ZYZ;
 		//ecp_command.get_arm_type = lib::FRAME;
 		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
