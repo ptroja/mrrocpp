@@ -34,7 +34,7 @@ visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator,
 		std::string server_addr = configurator.value <std::string> ("vs_log_server_addr", section_name);
 		int server_port = configurator.value <int> ("vs_log_server_port", section_name);
 
-		log_client = boost::shared_ptr <logger_client>(new logger_client(capacity, server_addr, server_port, "requestSentTime;sendTime;receiveTime;processingStart;processingEnd;object_visible;new_position;"));
+		log_client = boost::shared_ptr <logger_client>(new logger_client(capacity, server_addr, server_port, "requestSentTime;sendTime;receiveTime;processingStart;processingEnd;object_visible;new_position;;;;;;;;;;;;error;;;"));
 	}
 
 	log_dbg("visual_servo::visual_servo() end\n");
@@ -124,6 +124,10 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 	sprintf(msg.text, "%d;", (int) object_visible);
 
 	msg.append_Homog_matrix(new_position);
+
+	if (object_visible) {
+		msg.append_matrix(error);
+	}
 
 	// write log message
 	if (log_client.get() != NULL) {
