@@ -112,16 +112,6 @@ public:
 	 * basing on edp reply buffer
 	 */
 	void get_reply();
-
-	/**
-	 * Input buffer for MP commands
-	 */
-	boost::shared_ptr<InputBuffer<lib::spkm::next_state_t> > nextstateBuffer;
-
-	/**
-	 * Output buffer for MP notifications
-	 */
-	boost::shared_ptr<OutputBuffer<lib::notification_t> > notifyBuffer;
 };
 } // namespace spkm
 } // namespace ecp

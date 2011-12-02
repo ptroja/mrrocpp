@@ -1,5 +1,8 @@
-#include <cstdio>
+#include <cmath>
 #include <ostream>
+
+#include <boost/tokenizer.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <Eigen/Core>
 #include <Eigen/Geometry>
@@ -134,6 +137,47 @@ Homog_matrix::Homog_matrix(double r11, double r12, double r13, double t1, double
 	matrix_m[2][1] = r32;
 	matrix_m[2][2] = r33;
 	matrix_m[2][3] = t3;
+}
+
+Homog_matrix::Homog_matrix(const std::string & str)
+{
+	// Prepare char-separated tokenizer
+	typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+
+	// Setup skipped skip-delimiters and kept-delimiters
+	boost::char_separator<char> sep(" \t\r\n", "[;]");
+
+	// Instantiate tokenizer
+	tokenizer tokens(str, sep);
+
+	// Setup token iterator
+	tokenizer::iterator tok_iter = tokens.begin();
+
+	// Parse matrix string
+	if(*tok_iter++ != "[") throw std::runtime_error("Opening bracket expected");
+	matrix_m[0][0] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[0][1] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[0][2] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[0][3] = boost::lexical_cast<double>(*tok_iter++);
+	if(*tok_iter++ != ";") throw std::runtime_error("1st semicolon expected");
+	matrix_m[1][0] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[1][1] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[1][2] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[1][3] = boost::lexical_cast<double>(*tok_iter++);
+	if(*tok_iter++ != ";") throw std::runtime_error("2nd semicolon expected");
+	matrix_m[2][0] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[2][1] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[2][2] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[2][3] = boost::lexical_cast<double>(*tok_iter++);
+	if(*tok_iter++ != ";") throw std::runtime_error("3rd semicolon expected");
+	if(boost::lexical_cast<double>(*tok_iter++) != 0) throw std::runtime_error("1st zero expected");
+	if(boost::lexical_cast<double>(*tok_iter++) != 0) throw std::runtime_error("2nd zero expected");
+	if(boost::lexical_cast<double>(*tok_iter++) != 0) throw std::runtime_error("3rd zero expected");
+	if(boost::lexical_cast<double>(*tok_iter++) != 1) throw std::runtime_error("1 zero expected");
+	if(*tok_iter++ != "]") throw std::runtime_error("Closing bracket expected");
+
+	// Check if all tokens has been parsed
+	if(tok_iter != tokens.end()) throw std::runtime_error("End-of-string expected");
 }
 
 Homog_matrix::Homog_matrix(const Eigen::Matrix <double, 3, 4>& eigen_matrix)
@@ -896,4 +940,3 @@ Homog_matrix Homog_matrix::interpolate(double t, const Homog_matrix& other)
 
 } // namespace lib
 } // namespace mrrocpp
-
