@@ -49,6 +49,7 @@ typedef struct _segment
 
 	//! Constructor with reasonable defaults
 	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix()) :
+		goal_pose(_goal),
 		motion_type(lib::epos::SYNC_POLYNOMIAL),
 		duration(0),
 		guarded_motion(false)
