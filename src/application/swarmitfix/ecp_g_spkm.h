@@ -19,22 +19,25 @@ namespace generator {
 
 class spkm_pose : public common::generator::_generator<ecp::spkm::robot>
 {
-private:
-	//! Motion segment iterator
-	lib::spkm::next_state_t::spkm_segment_sequence_t::const_iterator segment_iterator;
-
-	//! Request execution of a single motion segment
-	void request_segment_execution(robot_t & robot, const lib::spkm::segment_t & segment);
-
 public:
 	//! Constructor
-	spkm_pose(task_t & _ecp_task);
+	spkm_pose(task_t & _ecp_task, const lib::spkm::next_state_t::segment_sequence_t & _segments);
 
 	//! first step generation
 	bool first_step();
 
 	//! next step generation
 	bool next_step();
+
+private:
+	//! Motion segment iterator
+	lib::spkm::next_state_t::segment_sequence_t::const_iterator segment_iterator;
+
+	//! Request execution of a single motion segment
+	void request_segment_execution(robot_t & robot, const lib::spkm::segment_t & segment);
+
+	//! Motion segments
+	const lib::spkm::next_state_t::segment_sequence_t & segments;
 };
 
 class spkm_quickstop : public common::generator::_generator<ecp::spkm::robot>

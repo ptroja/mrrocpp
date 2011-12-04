@@ -1,85 +1,75 @@
-// Start of user code user defined headers
-#include <boost/foreach.hpp>
-
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "ecp_mp_g_spkm.h"
-
-#include "robot/shead/mp_r_shead1.h"
-#include "robot/shead/mp_r_shead2.h"
-#include "robot/spkm/mp_r_spkm1.h"
-#include "robot/spkm/mp_r_spkm2.h"
-#include "robot/smb/mp_r_smb1.h"
-#include "robot/smb/mp_r_smb2.h"
-// End of user code
-
-#include "base/lib/sr/srlib.h"
-#include "base/mp/mp_task.h"
-
 #include "mp_t_swarmitfix.h"
+
+#include "planner.h"
+#include "base/lib/mrmath/homog_matrix.h"
+#include "base/mp/mp_exceptions.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
-task* return_created_mp_task(lib::configurator &_config)
+void swarmitfix::main_test_algorithm(void)
 {
-	return new swarmitfix(_config);
-}
+	sr_ecp_msg->message("swarm test started");
 
-swarmitfix::swarmitfix(lib::configurator &_config) :
-		task(_config),
-		pp(_config.value<std::string>("planpath"))
-{
-	// Create optional Input buffers
-	if(IS_MP_ROBOT_ACTIVE(spkm2)) {
-		IO.transmitters.spkm2.inputs.notification.Create(*this, lib::spkm2::ROBOT_NAME+"notification");
-	}
-	if(IS_MP_ROBOT_ACTIVE(smb2)) {
-		IO.transmitters.smb2.inputs.notification.Create(*this, lib::smb2::ROBOT_NAME+"notification");
-	}
-	if(IS_MP_ROBOT_ACTIVE(spkm1)) {
-		IO.transmitters.spkm1.inputs.notification.Create(*this, lib::spkm1::ROBOT_NAME+"notification");
-	}
-	if(IS_MP_ROBOT_ACTIVE(smb1)) {
-		IO.transmitters.smb1.inputs.notification.Create(*this, lib::smb1::ROBOT_NAME+"notification");
-	}
+	// Create planner object
+	// planner pp(config.value<std::string>("planpath"));
 
-	// Call the robot activation so we can support only the active ones
-	create_robots();
+	sr_ecp_msg->message("plan OK");
 
-	// Create optional Output buffers
-	if(is_robot_activated(lib::spkm2::ROBOT_NAME)) {
-		IO.transmitters.spkm2.outputs.command.Create(robot_m[lib::spkm2::ROBOT_NAME]->ecp, "command");
+	const Plan * p = pp.getPlan();
+
+	for(Plan::PkmType::ItemConstIterator it = p->pkm().item().begin();
+			it != p->pkm().item().end();
+			++it) {
+
+		const Plan::PkmType::ItemType & pkmCmd = *it;
+
+		// Test only 1st agent
+		if(pkmCmd.agent() != 1)
+			continue;
+
+		// Goal pose
+		lib::Homog_matrix hm;
+
+		if(pkmCmd.pkmToWrist().present()) {
+			hm = lib::Homog_matrix(pkmCmd.pkmToWrist().get());
+		} else if (pkmCmd.Xyz_Euler_Zyz().present()) {
+			hm = lib::Xyz_Euler_Zyz_vector(
+					pkmCmd.Xyz_Euler_Zyz()->x(),
+					pkmCmd.Xyz_Euler_Zyz()->y(),
+					pkmCmd.Xyz_Euler_Zyz()->z(),
+					pkmCmd.Xyz_Euler_Zyz()->ox(),
+					pkmCmd.Xyz_Euler_Zyz()->oy(),
+					pkmCmd.Xyz_Euler_Zyz()->oz()
+					);
+		}
+
+		// Setup variant for the PKM
+		lib::spkm::next_state_t cmd(lib::spkm::POSE_LIST);
+
+		cmd.segments.push_back(hm);
+
+		std::cerr << "HM is\n" << hm << std::endl;
+
+		// Send command with the output buffer
+		IO.transmitters.spkm2.outputs.command->Send(cmd);
+
+		while(!IO.transmitters.spkm2.inputs.notification->isFresh()) {
+			std::cout << "MP blocking for SPKM2 notification" << std::endl;
+			ReceiveSingleMessage(true);
+		}
+
+		IO.transmitters.spkm2.inputs.notification->markAsUsed();
+
+		if(IO.transmitters.spkm2.inputs.notification->Get() == lib::NACK) {
+			BOOST_THROW_EXCEPTION(exception::nfe());
+		}
 	}
-	if(is_robot_activated(lib::spkm1::ROBOT_NAME)) {
-		IO.transmitters.spkm1.outputs.command.Create(robot_m[lib::spkm1::ROBOT_NAME]->ecp, "command");
-	}
-	
-	// Start of user code Initialize internal memory variables
-// End of user code
-}
-
-// powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
-void swarmitfix::create_robots()
-{
-	ACTIVATE_MP_ROBOT(smb2);
-	ACTIVATE_MP_ROBOT(smb1);
-	ACTIVATE_MP_ROBOT(spkm1);
-	ACTIVATE_MP_ROBOT(spkm2);
-}
-
-void swarmitfix::main_task_algorithm(void)
-{
-	// For now just call the test algorithm and return
-	main_test_algorithm();
 
 	return;
 
-	// This is the main task code
-	sr_ecp_msg->message("task started");
+
 
 	do {
 		if (b1_initial_condition() == true) {

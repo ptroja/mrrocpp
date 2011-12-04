@@ -10,9 +10,9 @@
 #define __HOMOG_MATRIX_H
 
 #include <ostream>
-#include <cstring>
 #include <cassert>
-#include <cmath>
+
+#include <string>
 
 #include <Eigen/Core>
 
@@ -122,6 +122,13 @@ public:
 	 * @param[in] r??,t? rotation and translation matrix elements
 	 */
 	Homog_matrix(double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32, double r33, double t3);
+
+	/*!
+	 * Constructor from values given as Matlab-style matrix string
+	 *
+	 * @param[in] s string in the form "[ r11 r12 r13 t1; r21 r22 r23 t2; r31 r32 r33 t3; 0 0 0 1 ]"
+	 */
+	Homog_matrix(const std::string & s);
 
 	/*!
 	 * Get the matrix with removed translation

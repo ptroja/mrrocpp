@@ -51,7 +51,7 @@ typedef messip_channel_t * fd_server_t;
 //------------------------------------------------------------------------------
 /*!
  *  Type of command sent from MP to ECP.
- *  NEXT_POSE to command continous coordination
+ *  NEXT_POSE to command continuous coordination
  */
 enum MP_COMMAND
 {

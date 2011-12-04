@@ -33,7 +33,7 @@ const double rotational_spkm_mp2i_ratio = -M_PI / (2400 * 50);
 const double model::mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS] = { rotational_legs_mp2i_ratio, rotational_spkm_mp2i_ratio };
 
 //! Initialization of parameters describing the synchronisation position  (in motor increments).
-const int32_t model::synchro_motor_positions[mrrocpp::lib::smb::NUM_OF_SERVOS] = { 0, -11970 };
+const int32_t model::synchro_motor_positions[mrrocpp::lib::smb::NUM_OF_SERVOS] = { 0, -1970 };
 
 //! Initialization of upper motors limits for PKM.
 const int32_t model::upper_pkm_motor_pos_limits = { 120000 };

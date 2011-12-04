@@ -16,8 +16,8 @@ namespace lib {
 //! Message sent from ECPs to MP
 typedef enum _notification { ACK, NACK } notification_t;
 
-const std::string notifyBufferId = "_NOTIFICATION";
-const std::string commandBufferId = "COMMAND";
+const std::string notifyBufferId = "notification";
+const std::string commandBufferId = "command";
 
 }
 }

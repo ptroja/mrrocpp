@@ -36,6 +36,9 @@ public:
 	//! Resume execution of the plan
 	void resume();
 
+	//! Access to the plan data
+	const Plan * getPlan(void) const;
+
 private:
 	//! Reference to the plan
 	boost::shared_ptr<Plan> p;
