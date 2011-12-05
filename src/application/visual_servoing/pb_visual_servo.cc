@@ -74,8 +74,8 @@ void pb_visual_servo::predict_reading()
 	lib::Homog_matrix hm0 = reading_t_minus_2.objectPosition;
 	lib::Homog_matrix hm1 = reading_t_minus_1.objectPosition;
 
-	int sec = reading_t_minus_2.processingStartSeconds - reading_t_minus_1.processingStartSeconds;
-	int nsec = reading_t_minus_2.processingStartNanoseconds - reading_t_minus_1.processingStartNanoseconds;
+	int sec = reading_t_minus_1.processingStartSeconds - reading_t_minus_2.processingStartSeconds;
+	int nsec = reading_t_minus_1.processingStartNanoseconds - reading_t_minus_2.processingStartNanoseconds;
 	double delta_t_1 = sec + 1e-9*nsec;
 
 	sec = ts.tv_sec - reading_t_minus_2.processingStartSeconds;
