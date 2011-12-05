@@ -128,9 +128,9 @@ block_position_list block_move::get_list_from_file(const char* file_name)
 			}
 		}
 
-		for(int j = 0; j < number_of_coordinates; ++j) {
+		/*for(int j = 0; j < number_of_coordinates; ++j) {
 			cout << positions[j] << " ";
-		}
+		}*/
 
 		block_pos = new BlockPosition(col, positions);
 		pb_lst.push_back(*block_pos);
@@ -145,21 +145,24 @@ block_position_list block_move::create_plan(block_position_list l)
 {
 	sr_ecp_msg->message("Creating plan");
 
+	vector <int> pos_it(3);
 	block_position_list plan;
-	int max_z = 0;
+
+	l.sort();
 
 	for(block_position_list::iterator it = l.begin(); it != l.end(); ++it) {
 
-		pos_it = it.getPosition();
+		//(*it).print();
+
+		pos_it = (*it).getPosition();
 
 		if(pos_it[0] >= 0 && pos_it[0] < BLOCK_SIZE && pos_it[1] >= 0 && pos_it[1] < BLOCK_SIZE && pos_it[2] > 0) {
 			plan.push_back(*it);
 		}
-
-		if(pos_it[2] > max_z) max_z = pos_it[2];
 	}
 
 	//mam wszystkie z planszy, niezależnie od z
+	sr_ecp_msg->message("Creating plan end");
 
 	return l;
 }
@@ -179,12 +182,7 @@ void block_move::main_task_algorithm(void)
 		present_color = (*i).getColor();
 		present_position = (*i).getPosition();
 
-		cout << "color: " << present_color << endl;
-		cout << "position: " << endl;
-		for(int j = 0; j < 3; ++j) {
-			cout << present_position[j] << " ";
-		}
-		cout << endl;
+		(*i).print();
 
 		sr_ecp_msg->message("Start position");
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
@@ -195,7 +193,7 @@ void block_move::main_task_algorithm(void)
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-		wait_ms(8000);
+		wait_ms(4000);
 
 		sr_ecp_msg->message("Servovision");
 		set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, present_color, "", 0, lib::irp6p_m::ROBOT_NAME);

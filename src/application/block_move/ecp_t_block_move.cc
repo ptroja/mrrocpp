@@ -46,7 +46,7 @@ block_move::block_move(lib::configurator &_config) :
 	common::task::task(_config)
 {
 	if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
+		ecp_m_robot = shared_ptr <robot_t> (new irp6p_m::robot(*this));
 	} else {
 		throw std::runtime_error("Robot not supported");
 	}
