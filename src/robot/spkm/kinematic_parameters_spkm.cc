@@ -47,7 +47,7 @@ const int32_t kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::sp
 
 //! Initialization of upper joints vector.
 //! Those are the "safe" limits, not related to synchronization sensors positions.
-const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.28, 0.292, 0.28, 2.7489, 0.4712, 2.6704 };
+const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.28, 0.292, 0.28, 2.7489, 0.7, 2.6704 };
 
 //! Initialization of lower joints limits vector.
 //! The lower values are related to positions of synchronization sensors.
