@@ -51,7 +51,7 @@ const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::
 
 //! Initialization of lower joints limits vector.
 //! The lower values are related to positions of synchronization sensors.
-const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.242, 0.242, 0.242, -2.2777, -0.5498, -2.4347 };
+const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.242, 0.242, 0.242, -2.2777, -1.5708, -2.4347 };
 
 //! Initialization of upper thyk alpha angle limit.
 //! Those values were determined experimentally.
