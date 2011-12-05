@@ -273,7 +273,7 @@ void effector::synchronise(void)
 		// Step2: Homing.
 		// Activate homing mode.
 		//pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, 1970);
-		// Step-by-step homing in order to omit the offset setting (which will be stored in the EPOS for every agent separatelly).
+		// Step-by-step homing in order to omit the offset setting (the value will be stored in the EPOS for every agent separatelly).
 		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
 		pkm_rotation_node->reset();
 		pkm_rotation_node->startHoming();
