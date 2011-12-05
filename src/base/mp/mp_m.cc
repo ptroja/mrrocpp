@@ -146,6 +146,7 @@ int main(int argc, char *argv[], char **arge)
 					break;
 				default:
 					perror("Message to SR has been already sent");
+					break;
 			}/* end:switch */
 			if (mp::common::mp_t) {
 				mp::common::mp_t->sr_ecp_msg->message("To terminate MP click STOP icon");
@@ -263,6 +264,7 @@ int main(int argc, char *argv[], char **arge)
 					default:
 						perror("Unidentified mp error");
 						mp::common::mp_t->stop_and_terminate();
+						break;
 				}/*end:switch*/
 			}
 
@@ -284,6 +286,7 @@ int main(int argc, char *argv[], char **arge)
 						break;
 					default:
 						perror("Unidentified mp error");
+						break;
 				}/*end:switch */
 				mp::common::mp_t->stop_and_terminate();
 

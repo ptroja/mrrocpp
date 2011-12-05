@@ -14,8 +14,9 @@
 #include "base/lib/agent/Agent.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 #include "base/ecp/ecp_robot.h"
-#include "base/lib/agent/DataBuffer.h"
 #include "base/lib/agent/RemoteAgent.h"
+#include "base/lib/agent/InputBuffer.h"
+#include "base/lib/agent/OutputBuffer.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -60,11 +61,6 @@ private:
 	lib::fd_server_t trigger_attach;
 
 	/**
-	 * @brief MP server communication channel descriptor to send pulses
-	 */
-	RemoteAgent MP;
-
-	/**
 	 * @brief Returns MP command type
 	 * @return mp command variant
 	 */
@@ -75,7 +71,6 @@ private:
 	 */
 	void initialize_communication(void);
 protected:
-
 	/**
 	 * @brief Gets next state from MP
 	 */
@@ -89,6 +84,11 @@ protected:
 
 public:
 	// TODO: following packages should be 'protected'
+	/**
+	 * @brief MP server proxy
+	 */
+	RemoteAgent MP;
+
 	/**
 	 * @brief Reply to MP
 	 * @note This data type is task dependent, so it should be a parameter of a template class
@@ -114,7 +114,7 @@ public:
 	/**
 	 * @brief buffered next state label sent by MP
 	 */
-	std::string mp_2_ecp_next_state_string;
+	const std::string & mp_2_ecp_next_state_string;
 
 	/**
 	 * @brief ECP subtasks container
@@ -163,7 +163,7 @@ public:
 	virtual void ecp_stop_accepted_handler(void);
 
 	/**
-	 * @brief sends the message to MP after task execution is finished
+	 * @brief sends the message to MP after task execution is completed
 	 */
 	void termination_notice(void);
 

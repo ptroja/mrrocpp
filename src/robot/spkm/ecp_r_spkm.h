@@ -9,9 +9,18 @@
  * @ingroup spkm
  */
 
+#include <boost/shared_ptr.hpp>
+
 #include "base/ecp/ecp_robot.h"
-#include "const_spkm.h"
+#include "base/ecp/ecp_task.h"
+
+#include "base/lib/agent/InputBuffer.h"
+#include "base/lib/agent/RemoteAgent.h"
+
 #include "base/kinematics/kinematics_manager.h"
+
+#include "base/lib/swarmtypes.h"
+#include "dp_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {

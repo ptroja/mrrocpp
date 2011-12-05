@@ -39,7 +39,9 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @ingroup conveyor
  */
 
-const std::string ports_strings[] = { "/dev/ttyMI15" };
+const std::string ports_strings[] =
+//{ "/dev/ttyMI15" };
+		{ "/dev/ttyMI7" };
 
 /*!
  * @brief Conveyor two finger gripper overcurrent threshold [mA]

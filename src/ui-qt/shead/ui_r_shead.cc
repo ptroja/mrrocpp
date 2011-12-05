@@ -41,8 +41,61 @@ int UiRobot::synchronise()
 
 {
 
+	eb.command(boost::bind(&ui::shead::UiRobot::synchronise_int, &(*this)));
+
 	return 1;
 
+}
+
+int UiRobot::synchronise_int()
+
+{
+
+	interface.set_ui_state_notification(UI_N_SYNCHRONISATION);
+
+	// wychwytania ew. bledow ECP::robot
+	try {
+
+		if ((is_edp_loaded()) && (state.edp.is_synchronised == false)) {
+			ui_ecp_robot->the_robot->synchronise();
+			state.edp.is_synchronised = ui_ecp_robot->the_robot->is_synchronised();
+		} else {
+			// 	printf("edp spkm niepowolane, synchronizacja niedozwolona\n");
+		}
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	// modyfikacje menu
+	interface.manage_interface();
+	wgts[WGT_SHEAD_COMMAND]->synchro_depended_init();
+
+	return 1;
+
+}
+
+int UiRobot::execute_clear_fault()
+{
+	try {
+
+		ui_ecp_robot->clear_fault();
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	return 1;
+}
+
+int UiRobot::execute_stop_motor()
+{
+	try {
+
+		ui_ecp_robot->stop_motors();
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	return 1;
 }
 
 UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
@@ -53,43 +106,46 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 
 int UiRobot::manage_interface()
 {
-//	MainWindow *mw = interface.get_main_window();
 	common::UiRobot::manage_interface();
 
 	switch (state.edp.state)
 	{
+
 		case common::UI_EDP_INACTIVE:
 
 			break;
 		case common::UI_EDP_OFF:
-
+			action_Clear_Fault->setEnabled(false);
+			action_Synchronisation->setEnabled(false);
+			action_command->setEnabled(false);
 			break;
 		case common::UI_EDP_WAITING_TO_START_READER:
 		case common::UI_EDP_WAITING_TO_STOP_READER:
 
+			action_Clear_Fault->setEnabled(true);
+			action_command->setEnabled(true);
+
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
+				action_Synchronisation->setEnabled(false);
 
 				switch (interface.mp->mp_state.state)
 				{
 					case common::UI_MP_NOT_PERMITED_TO_RUN:
 					case common::UI_MP_PERMITED_TO_RUN:
-
-						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
-
+						action_command->setEnabled(true);
 						break;
 					case common::UI_MP_TASK_RUNNING:
-
-						break;
 					case common::UI_MP_TASK_PAUSED:
-
+						action_command->setEnabled(false);
 						break;
 					default:
 						break;
 				}
 			} else // jesli robot jest niezsynchronizowany
 			{
+				action_Synchronisation->setEnabled(true);
 
 			}
 			break;
@@ -103,9 +159,23 @@ int UiRobot::manage_interface()
 void UiRobot::setup_menubar()
 {
 	common::UiRobot::setup_menubar();
-//	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::MenuBar *menuBar = interface.get_main_window()->getMenuBar();
+	Ui::SignalDispatcher *signalDispatcher = interface.get_main_window()->getSignalDispatcher();
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "S&head", 0, QApplication::UnicodeUTF8));
+
+	action_Synchronisation = new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
+	action_command = new Ui::MenuBarAction(QString("&Command"), wgts[WGT_SHEAD_COMMAND], signalDispatcher, menuBar);
+	action_Clear_Fault = new Ui::MenuBarAction(QString("&Clear Fault"), this, menuBar);
+
+	robot_menu->addAction(action_Synchronisation);
+	robot_menu->addAction(action_command);
+	robot_menu->addSeparator();
+	robot_menu->addAction(action_Clear_Fault);
+
+	// connections
+	connect(action_Synchronisation, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Synchronisation_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(action_Clear_Fault, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_Clear_Fault_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 
 }
 

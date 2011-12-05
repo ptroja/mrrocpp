@@ -30,8 +30,10 @@ kinematic_model_spkm::kinematic_model_spkm(void)
 
 void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_position) const
 {
+	cout<<"check_motor_position"<<endl;
 	// Check upper limit for every motor.
 	for (int i = 0; i < 6; ++i) {
+		cout<<"Check motor pos: "<<i<<endl;
 		if (motor_position[i] > params.upper_motor_pos_limits[i])
 			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(UPPER_LIMIT) << desired_value(motor_position[i]));
 		else if (motor_position[i] < params.lower_motor_pos_limits[i])
@@ -110,15 +112,15 @@ void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_
 	//check_joints(local_desired_joints);
 
 	// Compute desired motor positions for linear axes.
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 6; ++i) {
 		local_desired_motor_pos_new[i] = (params.synchro_positions[i] - local_desired_joints[i])
 				/ params.mp2i_ratios[i];
 	}
 
 	// Compute desired motor positions for rotary axes.
-	for (int i = 3; i < 6; ++i) {
+/*	for (int i = 3; i < 6; ++i) {
 		local_desired_motor_pos_new[i] = local_desired_joints[i] / params.mp2i_ratios[i];
-	}
+	}*/
 
 	// Postcondition
 	//check_motor_position(local_desired_motor_pos_new);
@@ -130,15 +132,15 @@ void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_
 	//check_motor_position(local_current_motor_pos);
 
 	// Linear axes
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 6; ++i) {
 		// Add different translation (in mm) depending on axis number (A=0, B=1, C=2).
 		local_current_joints[i] = params.synchro_positions[i] - local_current_motor_pos[i] * params.mp2i_ratios[i];
 	}
 
 	// Rotary axes
-	for (int i = 3; i < 6; ++i) {
+/*	for (int i = 3; i < 6; ++i) {
 		local_current_joints[i] = local_current_motor_pos[i] * params.mp2i_ratios[i];
-	}
+	}*/
 
 	// Postcondition
 	//check_joints(local_current_joints);

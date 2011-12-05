@@ -595,17 +595,14 @@ int epos::printState()
 
 void epos::reset()
 {
-	// Local variables
-	int state, timeout;
-
 	// Wakeup time
 	boost::system_time wakeup;
 
 	// TODO: handle initial error conditions
-	state = getState();
+	actual_state_t state = getState();
 
 	// FAULT
-	if (state == 11) {
+	if (state == FAULT) {
 		UNSIGNED8 errReg = getErrorRegister();
 		if (errReg) {
 			printf("printErrorRegister() = 0x%02x\n", errReg);
@@ -624,13 +621,13 @@ void epos::reset()
 	}
 
 	// Shutdown
-	setControlword(0x0006);
+	setState(SHUTDOWN);
 
 	// Setup the wakeup time
 	wakeup = boost::get_system_time();
 
 	// TODO: handle error conditions
-	timeout = 5;
+	int retry = 5;
 	do {
 		state = getState();
 
@@ -650,25 +647,25 @@ void epos::reset()
 		// Wait for device state to change
 		boost::thread::sleep(wakeup);
 
-	} while (timeout--);
+	} while (retry--);
 
-	if (timeout == 0) {
+	if (retry == 0) {
 		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Timeout shutting device down"));
 	}
 
 	// Ready-to-switch-On expected
-	if (state != 3) {
+	if (state != READY_TO_SWITCH_ON) {
 		std::cout << "XXX state = " << state << std::endl;
 		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Ready-to-switch-On expected"));
 	}
 
 	// Enable
-	setControlword(0x000f);
+	setState(ENABLE_OPERATION);
 
 	// Setup the wakeup time
 	wakeup = boost::get_system_time();
 
-	timeout = 5;
+	retry = 5;
 	do {
 		state = getState();
 
@@ -692,9 +689,9 @@ void epos::reset()
 		// Wait for device state to change
 		boost::thread::sleep(wakeup);
 
-	} while (timeout--);
+	} while (retry--);
 
-	if (timeout == 0) {
+	if (retry == 0) {
 		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Timeout enabling device"));
 	}
 
@@ -704,7 +701,7 @@ void epos::reset()
 	state = getState();
 
 	// Operation Enabled expected
-	if (state != 7) {
+	if (state != OPERATION_ENABLE) {
 		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Ready-to-switch-On expected"));
 	}
 }
@@ -919,7 +916,7 @@ void epos::startRelativeMotion()
 void epos::setOperationMode(operational_mode_t m)
 {
 	if (OpMode != m) {
-		WriteObjectValue(0x6060, 0x00, (int8_t) m);
+		WriteObjectValue<INTEGER8>(0x6060, 0x00, (int8_t) m);
 
 		OpMode = m;
 	}

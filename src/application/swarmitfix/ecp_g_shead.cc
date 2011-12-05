@@ -19,7 +19,7 @@ head_soldify::head_soldify(common::task::task& _ecp_task) :
 {
 
 	shead_head_soldification_data_port
-			= the_robot->port_manager.get_port <lib::shead::HEAD_SOLIDIFICATION> (lib::shead::HEAD_SOLIDIFICATION_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::shead::SOLIDIFICATION_ACTIVATION> (lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT);
 	shead_reply_data_request_port
 			= the_robot->port_manager.get_request_port <lib::shead::reply> (lib::shead::REPLY_DATA_REQUEST_PORT);
 
@@ -42,7 +42,7 @@ bool head_soldify::next_step()
 
 	shead_reply_data_request_port->get();
 
-	lib::shead::STATE_OF_THE_HEAD motion_in_progress = shead_reply_data_request_port->data.head_state;
+	lib::shead::STATE_OF_THE_SOLDIFICATION motion_in_progress = shead_reply_data_request_port->data.head_state;
 
 	if (motion_in_progress == lib::shead::HEAD_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();
@@ -68,7 +68,7 @@ head_desoldify::head_desoldify(common::task::task& _ecp_task) :
 	common::generator::generator(_ecp_task)
 {
 	shead_head_soldification_data_port
-			= the_robot->port_manager.get_port <lib::shead::HEAD_SOLIDIFICATION> (lib::shead::HEAD_SOLIDIFICATION_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::shead::SOLIDIFICATION_ACTIVATION> (lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT);
 	shead_reply_data_request_port
 			= the_robot->port_manager.get_request_port <lib::shead::reply> (lib::shead::REPLY_DATA_REQUEST_PORT);
 }
@@ -90,7 +90,7 @@ bool head_desoldify::next_step()
 
 	shead_reply_data_request_port->get();
 
-	lib::shead::STATE_OF_THE_HEAD motion_in_progress = shead_reply_data_request_port->data.head_state;
+	lib::shead::STATE_OF_THE_SOLDIFICATION motion_in_progress = shead_reply_data_request_port->data.head_state;
 
 	if (motion_in_progress == lib::shead::HEAD_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();

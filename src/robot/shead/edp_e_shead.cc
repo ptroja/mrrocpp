@@ -37,11 +37,38 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	reset_variables();
 }
 
+void effector::synchronise(void)
+{
+	try {
+		if (robot_test_mode) {
+			controller_state_edp_buf.is_synchronised = true;
+			return;
+		}
+
+	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_NON_FATAL_ERROR(e_)
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_FATAL_ERROR(e_)
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+		// Standard error handling.
+		HANDLE_MRROCPP_SYSTEM_ERROR(e_)
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+	} catch (...) {
+		msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error");
+		BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(UNKNOWN_SYNCHRO_ERROR) << mrrocpp_error1(SYNCHRO_ERROR));
+	}
+}
+
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
 
-	if (robot_test_mode)
-		controller_state_edp_buf.is_synchronised = true;
+	if (robot_test_mode) {
+		return;
+	}
 
 	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
 	reply.controller_state = controller_state_edp_buf;
@@ -79,11 +106,25 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	switch (ecp_edp_cbuffer.variant)
 	{
-		case lib::shead::CBUFFER_HEAD_SOLIDIFICATION: {
-			lib::shead::HEAD_SOLIDIFICATION head_solidification;
+		case lib::shead::POSE: {
+			msg->message("POSE");
+		}
+			break;
+
+		case lib::shead::QUICKSTOP: {
+			msg->message("QUICKSTOP");
+		}
+			break;
+
+		case lib::shead::CLEAR_FAULT: {
+			msg->message("CLEAR_FAULT");
+		}
+			break;
+		case lib::shead::SOLIDIFICATION: {
+			lib::shead::SOLIDIFICATION_ACTIVATION head_solidification;
 
 			memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification), sizeof(head_solidification));
-
+			ss << "SOLIDIFICATION: " << head_solidification;
 			msg->message(ss.str().c_str());
 
 			// previously computed parameters send to epos2 controllers
@@ -92,10 +133,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		}
 			break;
-		case lib::shead::CBUFFER_VACUUM_ACTIVATION: {
+		case lib::shead::VACUUM: {
 			lib::shead::VACUUM_ACTIVATION vacuum_activation;
 
 			memcpy(&vacuum_activation, &(ecp_edp_cbuffer.vacuum_activation), sizeof(vacuum_activation));
+			ss << "VACUUM: " << vacuum_activation;
+			msg->message(ss.str().c_str());
 		}
 			break;
 		default:
@@ -120,6 +163,9 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	//	printf("%s\n", ss.str().c_str());
 
 	reply.servo_step = step_counter;
+	edp_ecp_rbuffer.shead_reply.soldification_state = lib::shead::SOLDIFICATION_STATE_INTERMEDIATE;
+	edp_ecp_rbuffer.shead_reply.vacuum_state = lib::shead::VACUUM_STATE_OFF;
+	edp_ecp_rbuffer.shead_reply.contacts[1] = true;
 }
 /*--------------------------------------------------------------------------*/
 
@@ -150,7 +196,7 @@ void effector::reply_serialization(void)
 	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
 }
 
-} // namespace smb
+} // namespace shead
 
 } // namespace edp
 } // namespace mrrocpp

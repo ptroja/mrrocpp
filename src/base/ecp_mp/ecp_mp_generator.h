@@ -30,6 +30,12 @@ namespace generator {
  */
 class generator
 {
+private:
+	/**
+	 * @brief trigger received flag
+	 */
+	bool trigger;
+
 protected:
 	/**
 	 * @brief the reference to sr communication object in multi thread version
@@ -37,11 +43,6 @@ protected:
 	lib::sr_ecp& sr_ecp_msg;
 
 public:
-	/**
-	 * @brief trigger received flag
-	 */
-	bool trigger;
-
 	/**
 	 * @brief Constructor
 	 * @param _sr_ecp_msg the reference to sr communication object in multi thread version
@@ -53,6 +54,11 @@ public:
 	 * @return initial trigger flag state
 	 */
 	bool check_and_null_trigger(); // zwraca wartosc trigger i zeruje go
+
+	/**
+	 * @brief sets trigger flag
+	 */
+	void set_trigger();
 
 	/**
 	 * @brief current macrostep number

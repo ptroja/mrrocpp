@@ -8,7 +8,8 @@
 #include "Agent.h"
 #include "RemoteAgent.h"
 
-#include "DataBuffer.h"
+#include "InputBuffer.h"
+#include "OutputBuffer.h"
 
 class IntWriter : public Agent {
 private:

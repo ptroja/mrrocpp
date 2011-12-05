@@ -165,85 +165,92 @@ void gateway_socketcan::handleCanOpenMgmt(const struct can_frame & frame)
 
 unsigned int gateway_socketcan::ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex)
 {
-	struct can_frame frame;
+	try {
+		struct can_frame frame;
 
-	frame.can_id = 0x600 + nodeId;
-	frame.can_dlc = 8;
-	frame.data[0] = 0x40;	// Initiate Domain Upload, client => server
-	frame.data[1] = (index & 0xFF); // index high BYTE
-	frame.data[2] = (index >> 8);   // index low BYTE
-	frame.data[3] = subindex;
-	frame.data[4] = 0;	// don't care, should be zero
-	frame.data[5] = 0;
-	frame.data[6] = 0;
-	frame.data[7] = 0;
+		frame.can_id = 0x600 + nodeId;
+		frame.can_dlc = 8;
+		frame.data[0] = 0x40;	// Initiate Domain Upload, client => server
+		frame.data[1] = (index & 0xFF); // index high BYTE
+		frame.data[2] = (index >> 8);   // index low BYTE
+		frame.data[3] = subindex;
+		frame.data[4] = 0;	// don't care, should be zero
+		frame.data[5] = 0;
+		frame.data[6] = 0;
+		frame.data[7] = 0;
 
-	writeToWire(frame);
+		writeToWire(frame);
 
-	// wait for reply
-	while(readFromWire(frame) != (0x580 + nodeId)) {
-		handleCanOpenMgmt(frame);
+		// wait for reply
+		while(readFromWire(frame) != (0x580 + nodeId)) {
+			handleCanOpenMgmt(frame);
+		}
+
+		/*
+		 * SCS: server command specifier replies
+		 * 011 <= Initiate Domain Download (WriteObject)
+		 * 001 <= Download Domain Segment
+		 * 010 <= Initiate Domain Upload (ReadObject)
+		 * 000 <= Upload Domain Segment
+		 */
+
+		// check for Abort Transfer message
+		if (SCS(frame.data[0]) == 4) {
+			E_error = *((uint32_t*) &frame.data[4]);
+			// ??? do we also need to check the reply address (index, subindex)?
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("SDO transfer aborted"));
+		} else {
+			E_error = 0;
+		}
+
+		// check the reply SCS
+		if (SCS(frame.data[0]) != 2) {
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected SCS (server command specifier) received"));
+		}
+
+		// check the reply "expedited" field
+		if (TRANSFER_TYPE(frame.data[0]) != TRANSFER_EXPEDITED) {
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("expedited reply message expected"));
+		}
+
+		// check the size indicator
+		if (SIZE_INDICATOR(frame.data[0]) != SIZE_INDICATED) {
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("object data size not indicated in reply"));
+		}
+
+		// adress (index, subindex) of the reply object
+		WORD r_index = (frame.data[2] << 8) | (frame.data[1]);
+		BYTE r_subindex = (frame.data[3]);
+
+		if ((r_index != index) || (r_subindex != subindex)) {
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected reply object address (index, subindex)"));
+		}
+
+		switch (BYTES_WITHOUT_DATA(frame.data[0])) {
+			// answer is 32 bit long
+			case 0:
+				*((DWORD *) &ans[3]) = *((DWORD *) &frame.data[4]);
+				return 4;
+			// answer is 16 bit long
+			case 2:
+				ans[3] = *((WORD *) &frame.data[4]);
+				break;
+			// answer is 8 bit long
+			case 3:
+				ans[3] = frame.data[4];
+				break;
+			default:
+				BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unsupported reply data size"));
+				break;
+		}
+
+		return (4 - BYTES_WITHOUT_DATA(frame.data[0]));
+	} catch (se_canopen_error & e) {
+		e << dictionary_index(index);
+		e << dictionary_subindex(subindex);
+		e << canId(nodeId);
+		throw;
 	}
-
-	/*
-	 * SCS: server command specifier replies
-	 * 011 <= Initiate Domain Download (WriteObject)
-	 * 001 <= Download Domain Segment
-	 * 010 <= Initiate Domain Upload (ReadObject)
-	 * 000 <= Upload Domain Segment
-	 */
-
-	// check for Abort Transfer message
-	if (SCS(frame.data[0]) == 4) {
-		E_error = *((uint32_t*) &frame.data[4]);
-		// ??? do we also need to check the reply address (index, subindex)?
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("SDO transfer aborted"));
-	} else {
-		E_error = 0;
-	}
-
-	// check the reply SCS
-	if (SCS(frame.data[0]) != 2) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected SCS (server command specifier) received"));
-	}
-
-	// check the reply "expedited" field
-	if (TRANSFER_TYPE(frame.data[0]) != TRANSFER_EXPEDITED) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("expedited reply message expected"));
-	}
-
-	// check the size indicator
-	if (SIZE_INDICATOR(frame.data[0]) != SIZE_INDICATED) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("object data size not indicated in reply"));
-	}
-
-	// adress (index, subindex) of the reply object
-	WORD r_index = (frame.data[2] << 8) | (frame.data[1]);
-	BYTE r_subindex = (frame.data[3]);
-
-	if ((r_index != index) || (r_subindex != subindex)) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected reply object address (index, subindex)"));
-	}
-
-	switch (BYTES_WITHOUT_DATA(frame.data[0])) {
-		// answer is 32 bit long
-		case 0:
-			*((DWORD *) &ans[3]) = *((DWORD *) &frame.data[4]);
-			return 4;
-		// answer is 16 bit long
-		case 2:
-			ans[3] = *((WORD *) &frame.data[4]);
-			break;
-		// answer is 8 bit long
-		case 3:
-			ans[3] = frame.data[4];
-			break;
-		default:
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unsupported reply data size"));
-			break;
-	}
-
-	return (4 - BYTES_WITHOUT_DATA(frame.data[0]));
 }
 
 #if 0
@@ -286,52 +293,59 @@ static int SegmentRead(WORD **ptr) {
 
 void gateway_socketcan::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, uint32_t data)
 {
-	struct can_frame frame;
+	try {
+		struct can_frame frame;
 
-	frame.can_id = 0x600 + nodeId;
-	frame.can_dlc = 8;
-	frame.data[0] = 0x22;	// Initiate Domain Download, expedited transfer, client => server,
-	frame.data[1] = (index & 0xFF); // index high BYTE
-	frame.data[2] = (index >> 8);   // index low BYTE
-	frame.data[3] = subindex;
+		frame.can_id = 0x600 + nodeId;
+		frame.can_dlc = 8;
+		frame.data[0] = 0x22;	// Initiate Domain Download, expedited transfer, client => server,
+		frame.data[1] = (index & 0xFF); // index high BYTE
+		frame.data[2] = (index >> 8);   // index low BYTE
+		frame.data[3] = subindex;
 
-	*((uint32_t *) &frame.data[4]) = data;
+		*((uint32_t *) &frame.data[4]) = data;
 
-	writeToWire(frame);
+		writeToWire(frame);
 
-	// wait for reply
-	while(readFromWire(frame) != (0x580 + nodeId)) {
-		handleCanOpenMgmt(frame);
-	}
+		// wait for reply
+		while(readFromWire(frame) != (0x580 + nodeId)) {
+			handleCanOpenMgmt(frame);
+		}
 
-	/*
-	 * SCS: server command specifier replies
-	 * 011 <= Initiate Domain Download (WriteObject)
-	 * 001 <= Download Domain Segment
-	 * 010 <= Initiate Domain Upload (ReadObject)
-	 * 000 <= Upload Domain Segment
-	 */
+		/*
+		 * SCS: server command specifier replies
+		 * 011 <= Initiate Domain Download (WriteObject)
+		 * 001 <= Download Domain Segment
+		 * 010 <= Initiate Domain Upload (ReadObject)
+		 * 000 <= Upload Domain Segment
+		 */
 
-	// check for Abort Transfer message
-	if (SCS(frame.data[0]) == 4) {
-		E_error = *((uint32_t*) &frame.data[4]);
-		// ??? do we also need to check the reply address (index, subindex)?
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("SDO transfer aborted"));
-	} else {
-		E_error = 0;
-	}
+		// check for Abort Transfer message
+		if (SCS(frame.data[0]) == 4) {
+			E_error = *((uint32_t*) &frame.data[4]);
+			// ??? do we also need to check the reply address (index, subindex)?
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("SDO transfer aborted"));
+		} else {
+			E_error = 0;
+		}
 
-	// check the reply SCS
-	if (SCS(frame.data[0]) != 3) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected SCS (server command specifier) received"));
-	}
+		// check the reply SCS
+		if (SCS(frame.data[0]) != 3) {
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected SCS (server command specifier) received"));
+		}
 
-	// adress (index, subindex) of the reply object
-	WORD r_index = (frame.data[2] << 8) | (frame.data[1]);
-	BYTE r_subindex = (frame.data[3]);
+		// adress (index, subindex) of the reply object
+		WORD r_index = (frame.data[2] << 8) | (frame.data[1]);
+		BYTE r_subindex = (frame.data[3]);
 
-	if ((r_index != index) || (r_subindex != subindex)) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected reply object address (index, subindex)"));
+		if ((r_index != index) || (r_subindex != subindex)) {
+			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected reply object address (index, subindex)"));
+		}
+	} catch (se_canopen_error & e) {
+		e << dictionary_index(index);
+		e << dictionary_subindex(subindex);
+		e << canId(nodeId);
+		throw;
 	}
 }
 
@@ -357,6 +371,7 @@ void gateway_socketcan::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t l
 
 void gateway_socketcan::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier)
 {
+	try {
 	struct can_frame frame;
 
 	frame.can_id = 0x0000;
@@ -365,6 +380,10 @@ void gateway_socketcan::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifie
 	frame.data[1] = nodeId;
 
 	writeToWire(frame);
+	} catch (se_canopen_error & e) {
+		e << canId(nodeId);
+		throw;
+	}
 }
 
 void gateway_socketcan::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8])

@@ -48,6 +48,9 @@ protected:
 	//! Smallest values that the motor rotating the PKM can reach.
 	static const int32_t lower_pkm_motor_pos_limits;
 
+	//! Parameters describing the synchronization positions (in motor increments).
+	static const int32_t synchro_motor_positions[mrrocpp::lib::smb::NUM_OF_SERVOS];
+
 public:
 
 	//! Constructor.

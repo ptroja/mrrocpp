@@ -18,9 +18,9 @@ namespace generator {
 class head_soldify : public common::generator::generator
 {
 private:
-	lib::shead::HEAD_SOLIDIFICATION mp_ecp_shead_head_soldification_structure;
+	lib::shead::SOLIDIFICATION_ACTIVATION mp_ecp_shead_head_soldification_structure;
 
-	lib::single_thread_port <lib::shead::HEAD_SOLIDIFICATION> * shead_head_soldification_data_port;
+	lib::single_thread_port <lib::shead::SOLIDIFICATION_ACTIVATION> * shead_head_soldification_data_port;
 
 	lib::single_thread_request_port <lib::shead::reply> * shead_reply_data_request_port;
 
@@ -37,10 +37,10 @@ public:
 class head_desoldify : public common::generator::generator
 {
 private:
-	lib::shead::HEAD_SOLIDIFICATION mp_ecp_shead_head_soldification_structure;
+	lib::shead::SOLIDIFICATION_ACTIVATION mp_ecp_shead_head_soldification_structure;
 
-	lib::single_thread_port <lib::shead::HEAD_SOLIDIFICATION> * shead_head_soldification_data_port;
-	lib::shead::HEAD_SOLIDIFICATION ecp_edp_shead_head_soldification_structure;
+	lib::single_thread_port <lib::shead::SOLIDIFICATION_ACTIVATION> * shead_head_soldification_data_port;
+	lib::shead::SOLIDIFICATION_ACTIVATION ecp_edp_shead_head_soldification_structure;
 
 	lib::single_thread_request_port <lib::shead::reply> * shead_reply_data_request_port;
 	lib::shead::reply ecp_edp_shead_reply_structure;
