@@ -154,15 +154,15 @@ void wgt_spkm_ext::on_pushButton_exportxml_clicked()
 {
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
 
-	buffer << "edp_spkm EULER XML POSITION\n";
+	buffer << "edp_spkm EULER POSE (XML)\n";
 
 	buffer << "<Xyz_Euler_Zyz>\n";
-	buffer << "<x>" << doubleSpinBox_des_Vector[0]->value() << "<\\x>";
-	buffer << "<y>" << doubleSpinBox_des_Vector[1]->value() << "<\\y>";
-	buffer << "<z>" << doubleSpinBox_des_Vector[2]->value() << "<\\z>\n";
-	buffer << "<ox>" << doubleSpinBox_des_Vector[3]->value() << "<\\ox>";
-	buffer << "<oy>" << doubleSpinBox_des_Vector[4]->value() << "<\\oy>";
-	buffer << "<oz>" << doubleSpinBox_des_Vector[5]->value() << "<\\oz>\n";
+	buffer << "<x>" << doubleSpinBox_des_Vector[0]->value() << "</x>";
+	buffer << "<y>" << doubleSpinBox_des_Vector[1]->value() << "</y>";
+	buffer << "<z>" << doubleSpinBox_des_Vector[2]->value() << "</z>\n";
+	buffer << "<ox>" << doubleSpinBox_des_Vector[3]->value() << "</ox>";
+	buffer << "<oy>" << doubleSpinBox_des_Vector[4]->value() << "</oy>";
+	buffer << "<oz>" << doubleSpinBox_des_Vector[5]->value() << "</oz>\n";
 	buffer << "</Xyz_Euler_Zyz>\n";
 
 	interface.ui_msg->message(buffer.str());

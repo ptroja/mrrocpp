@@ -61,11 +61,6 @@ private:
 	lib::fd_server_t trigger_attach;
 
 	/**
-	 * @brief MP server communication channel descriptor to send pulses
-	 */
-	RemoteAgent MP;
-
-	/**
 	 * @brief Returns MP command type
 	 * @return mp command variant
 	 */
@@ -76,7 +71,6 @@ private:
 	 */
 	void initialize_communication(void);
 protected:
-
 	/**
 	 * @brief Gets next state from MP
 	 */
@@ -90,6 +84,11 @@ protected:
 
 public:
 	// TODO: following packages should be 'protected'
+	/**
+	 * @brief MP server proxy
+	 */
+	RemoteAgent MP;
+
 	/**
 	 * @brief Reply to MP
 	 * @note This data type is task dependent, so it should be a parameter of a template class

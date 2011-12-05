@@ -9,6 +9,7 @@
 
 #include "base/lib/swarmtypes.h"
 #include "robot/spkm/dp_spkm.h"
+#include "planner.h"
 
 
 namespace mrrocpp {
@@ -181,6 +182,10 @@ typedef enum _WORKER_STATUS { IDLE, BUSY } WorkerStatus;
 
 //! Associative container type for worker status
 typedef boost::unordered_map<const lib::robot_name_t, WorkerStatus> WorkersStatus;
+
+//! Planner object
+planner pp;
+
 // End of user code
 	
 	//! Internal memory variable: Current plan status	
@@ -231,6 +236,9 @@ public:
 
 	// methods for mp template
 	void main_task_algorithm(void);
+
+	//! Alternative task for testing (reuses the same I/O buffers as the final task)
+	void main_test_algorithm(void);
 };
 
 /** @} */// end of swarmitfix

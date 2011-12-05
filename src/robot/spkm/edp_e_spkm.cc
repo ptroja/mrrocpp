@@ -39,11 +39,11 @@ using namespace mrrocpp::lib::pvat;
 using namespace std;
 
 const uint32_t effector::Vdefault[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
-const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 30000UL, 30000UL };
-const uint32_t effector::Ddefault[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 30000UL, 30000UL };
+const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
+const uint32_t effector::Ddefault[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
 
 const uint32_t effector::MotorVmax[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
-const uint32_t effector::MotorAmax[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 30000UL, 30000UL };
+const uint32_t effector::MotorAmax[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		manip_effector(_shell, l_robot_name)
@@ -379,7 +379,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		desired_motor_pos_old = desired_motor_pos_new;
 
 		// Check whether the motion was performed in the cartesian space - then we know where manipulator will be when the next command arrives:).
-		is_previous_cartesian_pose_known = (ecp_edp_cbuffer.set_pose_specification == lib::spkm::FRAME);
+		is_previous_cartesian_pose_known = (ecp_edp_cbuffer.set_pose_specification == lib::spkm::XYZ_EULER_ZYZ);
 		if (is_previous_cartesian_pose_known)
 			current_end_effector_frame = desired_end_effector_frame;
 
@@ -437,9 +437,9 @@ void effector::parse_motor_command()
 				get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
 
 				break;
-			case lib::spkm::FRAME:
+			case lib::spkm::XYZ_EULER_ZYZ:
 				// debug display
-				cout << "FRAME: [";
+				cout << "XYZ_EULER_ZYZ: [";
 				for (unsigned int i = 0; i < 6; ++i) {
 					cout << ecp_edp_cbuffer.goal_pos[i] << ", ";
 				}
@@ -946,7 +946,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						edp_ecp_rbuffer.epos_controller[i].position = current_joints[i];
 					}
 					break;
-				case lib::spkm::FRAME: {
+				case lib::spkm::XYZ_EULER_ZYZ: {
 					msg->message("EDP get_arm_position FRAME");
 
 					edp_ecp_rbuffer.current_pose = lib::Homog_matrix();

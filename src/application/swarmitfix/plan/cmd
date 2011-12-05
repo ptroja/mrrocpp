@@ -1,8 +1,0 @@
-~/ports/xsd-3.3.0-i686-linux-gnu/bin/xsd cxx-tree \
-	--function-naming lcc \
-	--type-regex '/ (.+)/\u$1_t/' \
-	--root-element plan \
-	plan.xsd
-
-xsltproc reverse.xsl PlanXML.xml >PlanReverted.xml
-xmllint --format PlanReverted.xml >foo

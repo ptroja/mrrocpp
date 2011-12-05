@@ -13,7 +13,8 @@ namespace spkm {
 namespace task {
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
-	task_t(_config)
+	task_t(_config),
+	nextstateBuffer(*this, lib::commandBufferId)
 {
 	// Create the robot object
 	if (config.robot_name == lib::spkm1::ROBOT_NAME) {
@@ -24,23 +25,50 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 		throw std::runtime_error(config.robot_name + ": unknown robot");
 	}
 
+	// Create task-dependent IO buffers
+	notifyBuffer = (boost::shared_ptr<OutputBuffer<lib::notification_t> >)
+			new OutputBuffer<lib::notification_t>(MP, ecp_m_robot->robot_name+lib::notifyBufferId);
+
 	// Create the generators
-	g_pose = (boost::shared_ptr <generator::spkm_pose>) new generator::spkm_pose(*this);
+	g_pose = (boost::shared_ptr <generator::spkm_pose>) new generator::spkm_pose(*this, nextstateBuffer.access.segments);
 	g_quickstop = (boost::shared_ptr <generator::spkm_quickstop>) new generator::spkm_quickstop(*this);
 
 	sr_ecp_msg->message("ecp spkm loaded");
 }
 
-void swarmitfix::mp_2_ecp_next_state_string_handler(void)
+void swarmitfix::main_task_algorithm(void)
 {
-	if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_GEN_QUICKSTOP) {
+	std::cerr << "> swarmitfix::main_task_algorithm" << std::endl;
 
-		g_quickstop->Move();
+	// Loop execution coordinator's commands
+	while(true) {
+		// Wait for new coordinator's command
+		while(!nextstateBuffer.isFresh()) {
+			ReceiveSingleMessage(true);
+		}
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_GEN_POSE_LIST) {
+		try {
+			// Mark command as used
+			nextstateBuffer.markAsUsed();
 
-		g_pose->Move();
+			// Dispatch to selected generator
+			switch(nextstateBuffer.Get().variant) {
+				case lib::spkm::POSE_LIST:
+					g_pose->Move();
+					break;
+				default:
+					g_quickstop->Move();
+					break;
+			}
 
+		} catch (std::exception & e) {
+			// Report problem and re-throw exception to the process shell
+			notifyBuffer->Send(lib::NACK);
+			throw;
+		}
+
+		// Reply with acknowledgment
+		notifyBuffer->Send(lib::ACK);
 	}
 }
 

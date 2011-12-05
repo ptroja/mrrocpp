@@ -84,7 +84,7 @@ void swarmitfix::b2_stop_all()
 {
 	lib::spkm::next_state_t spkm_stop_command;
 
-	spkm_stop_command.command = lib::spkm::STOP;
+	spkm_stop_command.variant = lib::spkm::STOP;
 
 	if(current_workers_status[lib::spkm1::ROBOT_NAME] == BUSY) {
 		IO.transmitters.spkm1.outputs.command->Send(spkm_stop_command);

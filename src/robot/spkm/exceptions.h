@@ -11,6 +11,8 @@
 #ifndef SPKM_EXCEPTION_H_
 #define SPKM_EXCEPTION_H_
 
+#include <string>
+
 #include "base/edp/edp_exceptions.h"
 #include "dp_spkm.h"
 
@@ -20,6 +22,22 @@ namespace spkm {
 
 //! Pose specification type.
 typedef boost::error_info <struct pose_specification_, mrrocpp::lib::spkm::POSE_SPECIFICATION> pose_specification;
+
+//! Convert exception's to human-readable string
+inline std::string to_string(pose_specification const & e)
+{
+	switch (e.value())
+	{
+		case lib::spkm::XYZ_EULER_ZYZ:
+			return "XYZ_EULER_ZYZ";
+		case lib::spkm::JOINT:
+			return "JOINT";
+		case lib::spkm::MOTOR:
+			return "MOTOR";
+		default:
+			return "UNKNOWN";
+	}
+}
 
 //! Number of angle that caused the exception.
 typedef boost::error_info <struct angle_number_, int> angle_number;
