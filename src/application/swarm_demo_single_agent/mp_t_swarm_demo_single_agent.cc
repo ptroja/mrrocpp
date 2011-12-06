@@ -183,6 +183,26 @@ void swarmitfix::move_spkm_joints(double x1, double x2, double x3, double x4, do
 
 }
 
+void swarmitfix::move_spkm_ext(double x1, double x2, double x3, double x4, double x5, double x6)
+{
+	lib::epos::epos_simple_command mp_ecp_spkm_epos_simple_command;
+	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
+	mp_ecp_spkm_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+
+	mp_ecp_spkm_epos_simple_command.desired_position[0] = x1;
+	mp_ecp_spkm_epos_simple_command.desired_position[1] = x2;
+	mp_ecp_spkm_epos_simple_command.desired_position[2] = x3;
+	mp_ecp_spkm_epos_simple_command.desired_position[3] = x4;
+	mp_ecp_spkm_epos_simple_command.desired_position[4] = x5;
+	mp_ecp_spkm_epos_simple_command.desired_position[5] = x6;
+
+	memcpy(mp_ecp_string, &mp_ecp_spkm_epos_simple_command, sizeof(mp_ecp_spkm_epos_simple_command));
+
+	set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm2::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::spkm2::ROBOT_NAME.c_str());
+
+}
+
 } // namespace task
 } // namespace mp
 } // namespace mrrocpp
