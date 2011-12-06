@@ -27,13 +27,14 @@ wgt_spkm_ext::wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface
 	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p4);
 	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p5);
 
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_0);
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_1);
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_2);
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_3);
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_4);
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_5);
-
+	/*
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_0);
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_1);
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_2);
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_3);
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_4);
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_5);
+	 */
 	radioButton_mip_Vector.append(ui.radioButton_mip_0);
 	radioButton_mip_Vector.append(ui.radioButton_mip_1);
 	radioButton_mip_Vector.append(ui.radioButton_mip_2);
@@ -82,7 +83,9 @@ int wgt_spkm_ext::init()
 				robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
 
 				for (int i = 0; i < 6; i++) {
-					set_single_axis(i, doubleSpinBox_mcur_Vector[i], radioButton_mip_Vector[i]);
+					set_single_axis(i,
+					// doubleSpinBox_mcur_Vector[i],
+					radioButton_mip_Vector[i]);
 				}
 
 				lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
@@ -110,10 +113,12 @@ int wgt_spkm_ext::init()
 	return 1;
 }
 
-int wgt_spkm_ext::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QAbstractButton* qab_mip)
+int wgt_spkm_ext::set_single_axis(int axis,
+// QDoubleSpinBox* qdsb_mcur,
+QAbstractButton* qab_mip)
 {
 	lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
-	qdsb_mcur->setValue(er.epos_controller[axis].current);
+//	qdsb_mcur->setValue(er.epos_controller[axis].current);
 
 	if (er.epos_controller[axis].motion_in_progress) {
 		qab_mip->setChecked(true);
