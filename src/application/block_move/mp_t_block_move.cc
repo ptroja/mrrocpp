@@ -150,18 +150,29 @@ block_position_list block_move::create_plan(block_position_list l)
 
 	l.sort();
 
+	int t_map[BLOCK_SIZE][BLOCK_SIZE];
+	for(int i = 0; i < BLOCK_SIZE; ++i) {
+		for(int j = 0; j < BLOCK_SIZE; ++i) {
+			t_map[i][j] = 0;
+		}
+	}
+
 	for(block_position_list::iterator it = l.begin(); it != l.end(); ++it) {
 
 		//(*it).print();
 
 		pos_it = (*it).getPosition();
 
-		if(pos_it[0] >= 0 && pos_it[0] < BLOCK_SIZE && pos_it[1] >= 0 && pos_it[1] < BLOCK_SIZE && pos_it[2] > 0) {
+		//check if range matches and if block is stable
+		if(pos_it[0] >= 0 && pos_it[0] < BLOCK_SIZE && pos_it[1] >= 0 && pos_it[1] < BLOCK_SIZE && pos_it[2] > 0 &&
+		   t_map[pos_it[0]][pos_it[1]] == pos_it[2] - 1) {
+				t_map[pos_it[0]][pos_it[1]] += 1;
+		}
+		else {
 			plan.push_back(*it);
 		}
 	}
 
-	//mam wszystkie z planszy, niezależnie od z
 	sr_ecp_msg->message("Creating plan end");
 
 	return l;
@@ -171,7 +182,8 @@ void block_move::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("Block Move MP Start");
 
-	//TODO: connect block_move application with build_tower application
+	//TODO: block length recognition
+
 	block_position_list list_from_file = get_list_from_file("../../src/application/block_move/con/structure.con");
 	planned_list = create_plan(list_from_file);
 
@@ -183,6 +195,8 @@ void block_move::main_task_algorithm(void)
 		present_position = (*i).getPosition();
 
 		(*i).print();
+
+		//TODO: servo - platform localization + saving position
 
 		sr_ecp_msg->message("Start position");
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
