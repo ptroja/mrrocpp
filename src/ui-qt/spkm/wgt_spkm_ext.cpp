@@ -27,13 +27,14 @@ wgt_spkm_ext::wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface
 	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p4);
 	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p5);
 
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_0);
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_1);
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_2);
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_3);
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_4);
-	doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_5);
-
+	/*
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_0);
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_1);
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_2);
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_3);
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_4);
+	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_5);
+	 */
 	radioButton_mip_Vector.append(ui.radioButton_mip_0);
 	radioButton_mip_Vector.append(ui.radioButton_mip_1);
 	radioButton_mip_Vector.append(ui.radioButton_mip_2);
@@ -82,7 +83,9 @@ int wgt_spkm_ext::init()
 				robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
 
 				for (int i = 0; i < 6; i++) {
-					set_single_axis(i, doubleSpinBox_mcur_Vector[i], radioButton_mip_Vector[i]);
+					set_single_axis(i,
+					// doubleSpinBox_mcur_Vector[i],
+					radioButton_mip_Vector[i]);
 				}
 
 				lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
@@ -110,10 +113,12 @@ int wgt_spkm_ext::init()
 	return 1;
 }
 
-int wgt_spkm_ext::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QAbstractButton* qab_mip)
+int wgt_spkm_ext::set_single_axis(int axis,
+// QDoubleSpinBox* qdsb_mcur,
+QAbstractButton* qab_mip)
 {
 	lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
-	qdsb_mcur->setValue(er.epos_controller[axis].current);
+//	qdsb_mcur->setValue(er.epos_controller[axis].current);
 
 	if (er.epos_controller[axis].motion_in_progress) {
 		qab_mip->setChecked(true);
@@ -160,9 +165,9 @@ void wgt_spkm_ext::on_pushButton_exportxml_clicked()
 	buffer << "<x>" << doubleSpinBox_des_Vector[0]->value() << "</x>";
 	buffer << "<y>" << doubleSpinBox_des_Vector[1]->value() << "</y>";
 	buffer << "<z>" << doubleSpinBox_des_Vector[2]->value() << "</z>\n";
-	buffer << "<ox>" << doubleSpinBox_des_Vector[3]->value() << "</ox>";
-	buffer << "<oy>" << doubleSpinBox_des_Vector[4]->value() << "</oy>";
-	buffer << "<oz>" << doubleSpinBox_des_Vector[5]->value() << "</oz>\n";
+	buffer << "<alpha>" << doubleSpinBox_des_Vector[3]->value() << "</alpha>";
+	buffer << "<beta>" << doubleSpinBox_des_Vector[4]->value() << "</beta>";
+	buffer << "<gamma>" << doubleSpinBox_des_Vector[5]->value() << "</gamma>\n";
 	buffer << "</Xyz_Euler_Zyz>\n";
 
 	interface.ui_msg->message(buffer.str());
@@ -210,84 +215,84 @@ void wgt_spkm_ext::on_pushButton_execute_clicked()
 void wgt_spkm_ext::on_pushButton_0l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[0] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[0] -= ui.doubleSpinBox_step_p0->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_1l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[1] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[1] -= ui.doubleSpinBox_step_p1->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_2l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[2] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[2] -= ui.doubleSpinBox_step_p2->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_3l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[3] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[3] -= ui.doubleSpinBox_step_p3->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_4l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[4] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[4] -= ui.doubleSpinBox_step_p4->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_5l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[5] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[5] -= ui.doubleSpinBox_step_p5->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_0r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[0] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[0] += ui.doubleSpinBox_step_p0->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_1r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[1] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[1] += ui.doubleSpinBox_step_p1->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_2r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[2] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[2] += ui.doubleSpinBox_step_p2->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_3r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[3] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[3] += ui.doubleSpinBox_step_p3->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_4r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[4] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[4] += ui.doubleSpinBox_step_p4->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_5r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[5] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[5] += ui.doubleSpinBox_step_p5->value();
 	move_it();
 }
 

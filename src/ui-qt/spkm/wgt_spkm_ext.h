@@ -33,7 +33,7 @@ public:
 	~wgt_spkm_ext();
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
-	QVector <QDoubleSpinBox*> doubleSpinBox_mcur_Vector;
+	//QVector <QDoubleSpinBox*> doubleSpinBox_mcur_Vector;
 	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
 	QVector <QRadioButton*> radioButton_mip_Vector;
 
@@ -44,7 +44,9 @@ private:
 	int init();
 	int copy();
 
-	int set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QAbstractButton* qab_mip);
+	int set_single_axis(int axis,
+	//	QDoubleSpinBox* qdsb_mcur,
+	QAbstractButton* qab_mip);
 	int get_desired_position();
 	int move_it();
 	boost::shared_ptr <QTimer> timer;

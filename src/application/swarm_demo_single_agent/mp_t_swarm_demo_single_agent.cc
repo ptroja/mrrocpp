@@ -65,16 +65,16 @@ void swarmitfix::move_smb(int leg_number, double rotation)
 	switch (leg_number)
 	{
 		case 1: {
-			move_smb_legs(lib::smb::DOWN, lib::smb::UP, lib::smb::UP);
+			move_smb_legs(lib::smb::OUT, lib::smb::IN, lib::smb::IN);
 		}
 			break;
 		case 2: {
-			move_smb_legs(lib::smb::UP, lib::smb::DOWN, lib::smb::UP);
+			move_smb_legs(lib::smb::IN, lib::smb::OUT, lib::smb::IN);
 
 		}
 			break;
 		case 3: {
-			move_smb_legs(lib::smb::UP, lib::smb::UP, lib::smb::DOWN);
+			move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::OUT);
 		}
 			break;
 		default:
@@ -93,7 +93,7 @@ void swarmitfix::move_smb(int leg_number, double rotation)
 
 	wait_ms(3000);
 
-	move_smb_legs(lib::smb::DOWN, lib::smb::DOWN, lib::smb::DOWN);
+	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 }
 
 void swarmitfix::main_task_algorithm(void)
@@ -105,7 +105,7 @@ void swarmitfix::main_task_algorithm(void)
 // smb - najpierw idziemy robotem w gore (wszystkie nogi w dol)
 	sr_ecp_msg->message("1");
 
-	move_smb_legs(lib::smb::DOWN, lib::smb::DOWN, lib::smb::DOWN);
+	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 	move_smb(2, -1);
 	move_smb(1, -1);
 	move_smb(3, -1);
@@ -120,7 +120,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	wait_ms(1000);
 
-	move_smb_legs(lib::smb::UP, lib::smb::UP, lib::smb::UP);
+	move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::IN);
 
 // KONIEC
 	sr_ecp_msg->message("END");
