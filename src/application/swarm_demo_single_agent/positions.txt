@@ -2,7 +2,7 @@
 function points()
 
     % Pose NEUTRAL
-    % edp_spkm EXTERNAL POSITION: 0.2456 0.2849 0.2456 0 -0.7347 0.1
+    % edp_spkm EXTERNAL POSITION: -0.1 0 0.38 0 -0.868 0.1
 
 
     % Pose 0 

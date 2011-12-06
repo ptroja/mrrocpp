@@ -142,7 +142,7 @@ void swarmitfix::main_task_algorithm(void)
 {
 
 	sr_ecp_msg->message("New experimental series");
-
+	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
 // znajdujemy sie w pozycji bazy jezdnej A
 // smb - najpierw idziemy robotem w gore (wszystkie nogi w dol)
 	sr_ecp_msg->message("1");
@@ -156,7 +156,7 @@ void swarmitfix::main_task_algorithm(void)
 	move_spkm_external(0, 0, 0.439, 0, -0.72, 0.03);
 	wait_ms(1000);
 
-	move_spkm_external(0.2456, 0.2849, 0.2456, 0, -0.7347, 0.1);
+	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
 
 	// Pose 1
 
@@ -165,7 +165,7 @@ void swarmitfix::main_task_algorithm(void)
 	move_spkm_external(-0.09, 0, 0.44, 0, -0.843, -0.03);
 	wait_ms(1000);
 
-	move_spkm_external(0.2456, 0.2849, 0.2456, 0, -0.7347, 0.1);
+	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
 
 	// Pose 2
 
@@ -174,7 +174,7 @@ void swarmitfix::main_task_algorithm(void)
 	move_spkm_external(-0.1, 0, 0.438, 0, -0.81, 0.11);
 	wait_ms(1000);
 
-	move_spkm_external(0.2456, 0.2849, 0.2456, 0, -0.7347, 0.1);
+	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
 
 	// move to smb position 2
 
@@ -187,7 +187,7 @@ void swarmitfix::main_task_algorithm(void)
 	move_spkm_external(-0.1, 0, 0.429, 0, -0.868, 0.09);
 	wait_ms(1000);
 
-	move_spkm_external(0.2456, 0.2849, 0.2456, 0, -0.7347, 0.1);
+	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
 
 	// Pose 4
 
@@ -196,7 +196,7 @@ void swarmitfix::main_task_algorithm(void)
 	move_spkm_external(-0.05, 0, 0.445, 0, -0.81, -0.1);
 	wait_ms(1000);
 
-	move_spkm_external(0.2456, 0.2849, 0.2456, 0, -0.7347, 0.1);
+	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
 
 	// Pose 5
 
@@ -205,7 +205,7 @@ void swarmitfix::main_task_algorithm(void)
 	move_spkm_external(-0.1, 0, 0.424, 0, -0.83, -0.02);
 	wait_ms(1000);
 
-	move_spkm_external(0.2456, 0.2849, 0.2456, 0, -0.7347, 0.1);
+	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
 
 	rotate_smb(3, -1);
 	move_smb_external(0, 0);
