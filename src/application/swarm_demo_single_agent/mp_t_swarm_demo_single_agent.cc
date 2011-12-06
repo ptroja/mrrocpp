@@ -151,6 +151,8 @@ void swarmitfix::main_task_algorithm(void)
 
 	move_smb_external(0, 1.583);
 
+	move_spkm_external(0, 0, 0.439, 0, -0.72, 0.03);
+	wait_ms(1000);
 	/*
 	 move_smb_and_spkm(2, -1);
 	 move_smb_and_spkm(1, -1);
@@ -159,8 +161,11 @@ void swarmitfix::main_task_algorithm(void)
 	 move_smb_and_spkm(1, -1);
 	 move_smb_and_spkm(3, 5);
 	 */
-// smb - podnosimy wszystkie nogi
+
+	move_spkm_external(-0.004, 0, 0.4, 0, -0.9028, 0);
 	move_smb_external(0, 0);
+
+	// smb - wsuwamy wszystkie nogi
 
 	sr_ecp_msg->message("14");
 
