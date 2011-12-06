@@ -39,7 +39,49 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 }
 
-void swarmitfix::move_smb(int leg_number, double rotation)
+void swarmitfix::rotate_smb(int leg_number, double rotation)
+{
+	// smb - unosimy dwie nogi
+	sr_ecp_msg->message("5");
+	sr_ecp_msg->message("PODNOSZEBIE NOG za 3s");
+
+	wait_ms(3000);
+
+	switch (leg_number)
+	{
+		case 1: {
+			move_smb_legs(lib::smb::OUT, lib::smb::IN, lib::smb::IN);
+		}
+			break;
+		case 2: {
+			move_smb_legs(lib::smb::IN, lib::smb::OUT, lib::smb::IN);
+
+		}
+			break;
+		case 3: {
+			move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::OUT);
+		}
+			break;
+		default:
+			break;
+	}
+
+	// smb - obracamy sie wokol opuszczonej nogi do pozycji bazy jezdnej B
+	sr_ecp_msg->message("6");
+
+	move_smb_external(rotation, 0);
+
+	// smb - opusczamy dwie nogi, ktore byly w gorze
+	sr_ecp_msg->message("7");
+
+	sr_ecp_msg->message("Opuszczanie DWOCH NOG za 3s");
+
+	wait_ms(3000);
+
+	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+}
+
+void swarmitfix::move_smb_and_spkm(int leg_number, double rotation)
 {
 	// spkm - przemieszczamy manipulator do pozycji podparcia dykty
 	sr_ecp_msg->message("2");
@@ -106,13 +148,15 @@ void swarmitfix::main_task_algorithm(void)
 	sr_ecp_msg->message("1");
 
 	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
-	move_smb(2, -1);
-	move_smb(1, -1);
-	move_smb(3, -1);
-	move_smb(2, -1);
-	move_smb(1, -1);
-	move_smb(3, 5);
 
+	/*
+	 move_smb_and_spkm(2, -1);
+	 move_smb_and_spkm(1, -1);
+	 move_smb_and_spkm(3, -1);
+	 move_smb_and_spkm(2, -1);
+	 move_smb_and_spkm(1, -1);
+	 move_smb_and_spkm(3, 5);
+	 */
 // smb - podnosimy wszystkie nogi
 	sr_ecp_msg->message("14");
 
