@@ -106,11 +106,11 @@ void sub_task_smooth_gen_test::conditional_execution()
 	std::vector <double> coordinates2(7);//track
 	std::vector <double> coordinates3(7);//polycrank
 
-        //network_path = "../../src/application/generator_tester/optimizedTraj.trj";
-        //sgenjoint->load_coordinates_from_file(network_path.c_str());
-        //sgenjoint->Move();
+        network_path = "../../src/application/generator_tester/optimizedTraj.trj";
+        sgenjoint->load_coordinates_from_file(network_path.c_str());
+        sgenjoint->Move();
 
-	// JOINT ABSOLUTE
+        /*// JOINT ABSOLUTE
         sr_ecp_msg.message("Joint absolute");
 	sgenjoint->reset();
 	sgenjoint->set_absolute();
