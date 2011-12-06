@@ -210,84 +210,84 @@ void wgt_spkm_ext::on_pushButton_execute_clicked()
 void wgt_spkm_ext::on_pushButton_0l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[0] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[0] -= ui.doubleSpinBox_step_p0->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_1l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[1] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[1] -= ui.doubleSpinBox_step_p1->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_2l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[2] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[2] -= ui.doubleSpinBox_step_p2->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_3l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[3] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[3] -= ui.doubleSpinBox_step_p3->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_4l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[4] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[4] -= ui.doubleSpinBox_step_p4->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_5l_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[5] -= ui.doubleSpinBox_step->value();
+	robot->desired_pos[5] -= ui.doubleSpinBox_step_p5->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_0r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[0] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[0] += ui.doubleSpinBox_step_p0->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_1r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[1] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[1] += ui.doubleSpinBox_step_p1->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_2r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[2] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[2] += ui.doubleSpinBox_step_p2->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_3r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[3] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[3] += ui.doubleSpinBox_step_p3->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_4r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[4] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[4] += ui.doubleSpinBox_step_p4->value();
 	move_it();
 }
 
 void wgt_spkm_ext::on_pushButton_5r_clicked()
 {
 	get_desired_position();
-	robot->desired_pos[5] += ui.doubleSpinBox_step->value();
+	robot->desired_pos[5] += ui.doubleSpinBox_step_p5->value();
 	move_it();
 }
 
