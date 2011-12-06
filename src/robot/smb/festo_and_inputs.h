@@ -165,7 +165,7 @@ public:
 	 * \brief checks if upper halotron of particular leg is active
 	 * \param leg_number counter from 1
 	 */
-	bool is_upper_halotron_active(int leg_number);
+	bool is_inper_halotron_active(int leg_number);
 
 	/*!
 	 * \brief checks if lower halotron of particular leg is active

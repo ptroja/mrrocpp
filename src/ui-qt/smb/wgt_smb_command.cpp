@@ -132,8 +132,8 @@ int wgt_smb_command::init()
 						robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.data;
 
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-					checkBox_fl_in_Vector[i]->setChecked(mlr.leg[i].is_up);
-					checkBox_fl_out_Vector[i]->setChecked(mlr.leg[i].is_down);
+					checkBox_fl_in_Vector[i]->setChecked(mlr.leg[i].is_in);
+					checkBox_fl_out_Vector[i]->setChecked(mlr.leg[i].is_out);
 					checkBox_fl_attached_Vector[i]->setChecked(mlr.leg[i].is_attached);
 				}
 
@@ -249,9 +249,9 @@ void wgt_smb_command::on_pushButton_fl_execute_clicked()
 			// wybierz wariant
 
 			if (radioButton_fl_in_Vector[i]->isChecked()) {
-				fc.leg[i] = lib::smb::UP;
+				fc.leg[i] = lib::smb::IN;
 			} else if (radioButton_fl_out_Vector[i]->isChecked()) {
-				fc.leg[i] = lib::smb::DOWN;
+				fc.leg[i] = lib::smb::OUT;
 			}
 
 			fc.undetachable[i] = false;
