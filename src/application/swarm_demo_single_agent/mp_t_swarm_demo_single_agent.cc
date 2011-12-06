@@ -143,6 +143,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	sr_ecp_msg->message("New experimental series");
 	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
+//	move_spkm_joints(0.28, 0.292, 0.28, 0, 0, 0);
 // znajdujemy sie w pozycji bazy jezdnej A
 // smb - najpierw idziemy robotem w gore (wszystkie nogi w dol)
 	sr_ecp_msg->message("1");

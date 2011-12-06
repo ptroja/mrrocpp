@@ -544,17 +544,17 @@ void effector::execute_motor_motion()
 							axes[i]->setPositionProfileType(0); // Trapezoidal velocity profile
 
 							// Adjust velocity settings results in than 1 (minimal value accepted by the EPOS2)
-							if(Vnew[i] > 0 && Vnew[i] * maxon::epos::SECONDS_PER_MINUTE < 1.0) {
-								Vnew[i] = 1.1/maxon::epos::SECONDS_PER_MINUTE;
+							if (Vnew[i] > 0 && Vnew[i] * maxon::epos::SECONDS_PER_MINUTE < 1.0) {
+								Vnew[i] = 1.1 / maxon::epos::SECONDS_PER_MINUTE;
 							}
 
 							// Adjust acceleration settings which are less than 1 (minimal value accepted by the EPOS2)
-							if(Anew[i] > 0 && Anew[i] < 1) {
+							if (Anew[i] > 0 && Anew[i] < 1) {
 								Anew[i] = 1;
 							}
 
 							// Adjust deceleration settings which are less than 1 (minimal value accepted by the EPOS2)
-							if(Dnew[i] > 0 && Dnew[i] < 1) {
+							if (Dnew[i] > 0 && Dnew[i] < 1) {
 								Dnew[i] = 1;
 							}
 
@@ -932,6 +932,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					if (!robot_test_mode) {
 						for (size_t i = 0; i < axes.size(); ++i) {
 							current_motor_pos[i] = axes[i]->getActualPosition();
+							edp_ecp_rbuffer.epos_controller[i].current = axes[i]->getActualCurrent();
+							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
 						}
 					}
 
@@ -947,6 +949,14 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					msg->message("EDP get_arm_position FRAME");
 
 					edp_ecp_rbuffer.current_pose = lib::Homog_matrix();
+
+					if (!robot_test_mode) {
+						for (size_t i = 0; i < axes.size(); ++i) {
+							edp_ecp_rbuffer.epos_controller[i].current = axes[i]->getActualCurrent();
+							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
+						}
+					}
+
 				}
 					break;
 				default:
