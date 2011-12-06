@@ -160,9 +160,9 @@ void wgt_spkm_ext::on_pushButton_exportxml_clicked()
 	buffer << "<x>" << doubleSpinBox_des_Vector[0]->value() << "</x>";
 	buffer << "<y>" << doubleSpinBox_des_Vector[1]->value() << "</y>";
 	buffer << "<z>" << doubleSpinBox_des_Vector[2]->value() << "</z>\n";
-	buffer << "<ox>" << doubleSpinBox_des_Vector[3]->value() << "</ox>";
-	buffer << "<oy>" << doubleSpinBox_des_Vector[4]->value() << "</oy>";
-	buffer << "<oz>" << doubleSpinBox_des_Vector[5]->value() << "</oz>\n";
+	buffer << "<alpha>" << doubleSpinBox_des_Vector[3]->value() << "</alpha>";
+	buffer << "<beta>" << doubleSpinBox_des_Vector[4]->value() << "</beta>";
+	buffer << "<gamma>" << doubleSpinBox_des_Vector[5]->value() << "</gamma>\n";
 	buffer << "</Xyz_Euler_Zyz>\n";
 
 	interface.ui_msg->message(buffer.str());

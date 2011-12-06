@@ -609,7 +609,7 @@
    <item row="5" column="4">
     <widget class="QLabel" name="label_20">
      <property name="text">
-      <string>oz</string>
+      <string>alpha</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -758,7 +758,7 @@
    <item row="6" column="4">
     <widget class="QLabel" name="label_21">
      <property name="text">
-      <string>oy</string>
+      <string>beta</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -910,7 +910,7 @@
    <item row="7" column="4">
     <widget class="QLabel" name="label_17">
      <property name="text">
-      <string>oz</string>
+      <string>gamma</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
