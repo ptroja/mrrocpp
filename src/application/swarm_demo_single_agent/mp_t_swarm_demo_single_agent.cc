@@ -183,7 +183,7 @@ void swarmitfix::move_spkm_joints(double x1, double x2, double x3, double x4, do
 
 }
 
-void swarmitfix::move_spkm_ext(double x1, double x2, double x3, double x4, double x5, double x6)
+void swarmitfix::move_spkm_external(double x1, double x2, double x3, double x4, double x5, double x6)
 {
 	lib::epos::epos_simple_command mp_ecp_spkm_epos_simple_command;
 	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
@@ -198,7 +198,7 @@ void swarmitfix::move_spkm_ext(double x1, double x2, double x3, double x4, doubl
 
 	memcpy(mp_ecp_string, &mp_ecp_spkm_epos_simple_command, sizeof(mp_ecp_spkm_epos_simple_command));
 
-	set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm2::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::spkm::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm2::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::spkm2::ROBOT_NAME.c_str());
 
 }
