@@ -61,7 +61,7 @@ private:
 
 	/*
 	 * \brief Variable storing the relative zero position of the motor rotating legs.
-	 * Set when all legs are down.
+	 * Set when all legs are out.
 	 */
 	int32_t legs_relative_zero_position;
 
@@ -85,7 +85,6 @@ private:
 	 * \author tkornuta
 	 */
 	void execute_motor_motion();
-
 
 	/*!
 	 * \brief pointer to festo_and_inputs class
@@ -155,8 +154,6 @@ public:
 	 */
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction);
 
-
-
 	void get_controller_state(lib::c_buffer &instruction);
 
 	/*!
@@ -165,7 +162,6 @@ public:
 	 * This method synchronizes motors of the robots.
 	 */
 	void synchronise();
-
 
 	/*!
 	 * @brief Method responsible for computation of relative PKM axis position on the base of potentiometer reading.

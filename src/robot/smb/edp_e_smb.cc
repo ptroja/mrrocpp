@@ -391,7 +391,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					fai->command();
 				}
 				// If all legs are currently down - reset legs rotation.
-				if (current_legs_state() == lib::smb::ALL_DOWN) {
+				if (current_legs_state() == lib::smb::ALL_OUT) {
 					msg->message("ALL_DOWN");
 					/*// Homing of the motor controlling the legs rotation - set current position as 0.
 					 legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
@@ -425,7 +425,7 @@ void effector::parse_motor_command()
 {
 	// The TWO_UP_ONE_DOWN is the only state in which control of both motors (legs and SPKM rotations) is possible.
 	// In other states control of the motor rotating the legs (lower SMB motor) is prohibited!
-	if (current_legs_state() != lib::smb::TWO_UP_ONE_DOWN) {
+	if (current_legs_state() != lib::smb::TWO_IN_ONE_OUT) {
 
 		// Check the difference between current and desired values.
 		// Check motors.
