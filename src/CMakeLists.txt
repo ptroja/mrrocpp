@@ -91,10 +91,6 @@ if (UBUNTU32BIT)
 	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -m32")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
 
-	# Warning messages (GCC)
-	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
-
 	# keep this flag in production code
 	add_definitions (-DEIGEN_DONT_ALIGN)
 
@@ -133,13 +129,15 @@ else (UBUNTU32BIT) # Linux, MacOS, etc.
 	CHECK_SYMBOL_EXISTS(kqueue sys/event.h HAVE_KQUEUE)
 	CHECK_SYMBOL_EXISTS(mlockall sys/mman.h HAVE_MLOCKALL)
 
-	# Warning messages (GCC)
-	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
-
 	# keep this flag until we fix alignment 'new' operator issue
 	add_definitions (-DEIGEN_DONT_ALIGN)
 endif (UBUNTU32BIT)
+
+# Warning messages (GCC)
+if(CMAKE_COMPILER_IS_GNUCXX)
+	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+endif(CMAKE_COMPILER_IS_GNUCXX)	
 
 # configure a header file to pass some of the CMake settings
 # to the source code

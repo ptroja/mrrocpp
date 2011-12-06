@@ -58,9 +58,6 @@ int UiRobot::manage_interface()
 		case common::UI_EDP_WAITING_TO_START_READER:
 		case common::UI_EDP_WAITING_TO_STOP_READER:
 
-
-
-
 			action_Clear_Fault->setEnabled(true);
 			action_command->setEnabled(true);
 
@@ -137,7 +134,6 @@ int UiRobot::synchronise_int()
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		// dla robota spkm
 
 		if ((is_edp_loaded()) && (state.edp.is_synchronised == false)) {
 			ui_ecp_robot->the_robot->synchronise();

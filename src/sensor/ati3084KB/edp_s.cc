@@ -26,9 +26,11 @@ namespace mrrocpp {
 namespace edp {
 namespace sensor {
 
-#define MUX0 1
-#define MUX1 2
-#define MUX2 0
+#define MUX0 0
+#define MUX1 1
+#define MUX2 2
+
+#define DOSD 3
 
 ATI3084_force::ATI3084_force(common::manip_effector &_master) :
 		force(_master), dev_name("/dev/comedi0")
@@ -55,11 +57,6 @@ void ATI3084_force::connect_to_hardware(void)
 
 		throw std::runtime_error("Could not open device");
 	}
-
-	// Setup digital outputs
-	comedi_dio_config(device, 2, 0, COMEDI_OUTPUT);
-	comedi_dio_config(device, 2, 1, COMEDI_OUTPUT);
-	comedi_dio_config(device, 2, 2, COMEDI_OUTPUT);
 
 	maxdata = comedi_get_maxdata(device, 0, 0);
 	rangetype = comedi_get_range(device, 0, 0, 0);
@@ -110,35 +107,35 @@ void ATI3084_force::wait_for_particular_event()
 		fprintf(stderr, "clock_nanosleep(): %s\n", strerror(err));
 	}
 
-	comedi_dio_write(device, 2, MUX0, 0);
-	comedi_dio_write(device, 2, MUX1, 0);
-	comedi_dio_write(device, 2, MUX2, 0);
+	comedi_dio_write(device, DOSD, MUX0, 0);
+	comedi_dio_write(device, DOSD, MUX1, 0);
+	comedi_dio_write(device, DOSD, MUX2, 0);
 
 	usleep(100);
 	comedi_data_read(device, 0, 0, 0, AREF_DIFF, &adc_data[0]);
 	////// G1
 
-	comedi_dio_write(device, 2, MUX0, 1);
+	comedi_dio_write(device, DOSD, MUX0, 1);
 	usleep(100);
 	comedi_data_read(device, 0, 0, 0, AREF_DIFF, &adc_data[1]);
 	////// G2
 
-	comedi_dio_write(device, 2, MUX1, 1);
+	comedi_dio_write(device, DOSD, MUX1, 1);
 	usleep(100);
 	comedi_data_read(device, 0, 0, 0, AREF_DIFF, &adc_data[2]);
 	////// G3
 
-	comedi_dio_write(device, 2, MUX0, 0);
+	comedi_dio_write(device, DOSD, MUX0, 0);
 	usleep(100);
 	comedi_data_read(device, 0, 0, 0, AREF_DIFF, &adc_data[3]);
 	////// G4
 
-	comedi_dio_write(device, 2, MUX2, 1);
+	comedi_dio_write(device, DOSD, MUX2, 1);
 	usleep(100);
 	comedi_data_read(device, 0, 0, 0, AREF_DIFF, &adc_data[4]);
 	////// G5
 
-	comedi_dio_write(device, 2, MUX0, 1);
+	comedi_dio_write(device, DOSD, MUX0, 1);
 	usleep(100);
 	comedi_data_read(device, 0, 0, 0, AREF_DIFF, &adc_data[5]);
 	////// G6

@@ -41,8 +41,8 @@ const int LAST_MOXA_PORT_NUM = 6;
  */
 
 const std::string ports_strings[] =
-		{"/dev/ttyMI7", "/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5" };
-
+//{"/dev/ttyMI7", "/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5" };
+		{ "/dev/ttyMI15", "/dev/ttyMI8", "/dev/ttyMI9", "/dev/ttyMI10", "/dev/ttyMI11", "/dev/ttyMI12", "/dev/ttyMI13" };
 /*!
  * @brief IRp6 on track overcurrent threshold [mA]
  * @ingroup irp6ot_m

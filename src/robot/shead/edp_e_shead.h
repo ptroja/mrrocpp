@@ -55,6 +55,13 @@ public:
 	 */
 	void create_threads();
 
+	/*!
+	 * @brief motors synchronization
+	 *
+	 * This method synchronizes motors of the robots.
+	 */
+	void synchronise();
+
 	void get_controller_state(lib::c_buffer &instruction);
 
 	/*!

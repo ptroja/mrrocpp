@@ -8,10 +8,10 @@
 #include "../base/ui_robot.h"
 
 wgt_spkm_int::wgt_spkm_int(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
-	wgt_base(_widget_label, _interface, parent)
+		wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
-	robot = dynamic_cast<mrrocpp::ui::spkm::UiRobot *>(_robot);
+	robot = dynamic_cast <mrrocpp::ui::spkm::UiRobot *>(_robot);
 
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p0);
 	doubleSpinBox_cur_Vector.append(ui.doubleSpinBox_cur_p1);
@@ -41,8 +41,8 @@ wgt_spkm_int::wgt_spkm_int(QString _widget_label, mrrocpp::ui::common::Interface
 	radioButton_mip_Vector.append(ui.radioButton_mip_4);
 	radioButton_mip_Vector.append(ui.radioButton_mip_5);
 
-	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(timer_slot()));
+	timer = (boost::shared_ptr <QTimer>) new QTimer(this);
+	connect(timer.get(), SIGNAL(timeout()), this, SLOT(timer_slot()));
 	timer->start(interface.position_refresh_interval);
 
 	ui.radioButton_non_sync_trapezoidal->setChecked(true);

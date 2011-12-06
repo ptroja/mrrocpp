@@ -16,8 +16,6 @@
 
 #include <boost/serialization/serialization.hpp>
 
-#include "base/lib/messip/messip.h"
-
 #include "base/lib/typedefs.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/Sender.h"
@@ -166,9 +164,7 @@ public:
 
 		// Send message.
 		send_package(sr_message);
-
 	}
-
 };
 
 } // namespace lib

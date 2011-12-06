@@ -2,7 +2,7 @@
 #define MP_R_SPKM_H_
 
 /*!
- * @file
+ * @file mp_r_spkm.h
  * @brief File contains mp robot class declaration for SwarmItFix Parallel Kinematic Machine
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
@@ -10,7 +10,6 @@
  */
 
 #include "base/mp/mp_robot.h"
-#include "const_spkm.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -35,4 +34,5 @@ public:
 } // namespace robot
 } // namespace mp
 } // namespace mrrocpp
+
 #endif /*MP_R_SPKM_H_*/

@@ -27,7 +27,7 @@ namespace generator {
 continously_coordinated::continously_coordinated(task::task& _mp_task) :
 	generator(_mp_task), cycle_counter(0)
 {
-	wait_for_ECP_pulse = true;
+	wait_for_ECP_message = true;
 }
 
 // ----------------------------------------------------------------------------------------------

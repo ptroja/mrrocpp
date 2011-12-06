@@ -42,14 +42,54 @@ protected:
 public:
 
 	/**
+	 * @brief epos motor motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_motor_command_data_port;
+
+	/**
+	 * @brief epos joint motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_joint_command_data_port;
+
+	/**
+	 * @brief epos external motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_external_command_data_port;
+
+	/**
+	 * @brief epos brake command data port
+	 */
+	lib::single_thread_port <bool> epos_brake_command_data_port;
+
+	/**
+	 * @brief epos clear fault command data port
+	 */
+	lib::single_thread_port <bool> epos_clear_fault_data_port;
+
+	/**
 	 * @brief head soldification command data port
 	 */
-	lib::single_thread_port <lib::shead::HEAD_SOLIDIFICATION> shead_head_soldification_data_port;
+	lib::single_thread_port <lib::shead::SOLIDIFICATION_ACTIVATION> shead_head_soldification_data_port;
 
 	/**
 	 * @brief vacuum activation command data port
 	 */
 	lib::single_thread_port <lib::shead::VACUUM_ACTIVATION> shead_vacuum_activation_data_port;
+
+	/**
+	 * @brief epos motion status reply data request port
+	 */
+	lib::single_thread_request_port <lib::epos::epos_reply> epos_motor_reply_data_request_port;
+
+	/**
+	 * @brief epos motion status with joint reply data request port
+	 */
+	lib::single_thread_request_port <lib::epos::epos_reply> epos_joint_reply_data_request_port;
+
+	/**
+	 * @brief epos motion status with external reply data request port
+	 */
+	lib::single_thread_request_port <lib::epos::epos_reply> epos_external_reply_data_request_port;
 
 	/**
 	 * @brief Head state reply data request port
