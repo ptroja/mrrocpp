@@ -21,8 +21,9 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	// Create the generators
 
 	g_joint_epos_command = new spkm::generator::joint_epos_command(*this);
+	g_external_epos_command = new spkm::generator::external_epos_command(*this);
 
-	sr_ecp_msg->message("ecp spkm swarm dempo single agent loaded");
+	sr_ecp_msg->message("ecp spkm swarm demo single agent loaded");
 }
 
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)
@@ -31,6 +32,12 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 	if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND) {
 
 		g_joint_epos_command->Move();
+
+	}
+
+	if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_EXTERNAL_EPOS_COMMAND) {
+
+		g_external_epos_command->Move();
 
 	}
 

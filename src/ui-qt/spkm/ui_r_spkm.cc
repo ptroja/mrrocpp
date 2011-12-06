@@ -165,7 +165,7 @@ void UiRobot::setup_menubar()
 	actionspkm_Synchronisation = new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
 	actionspkm_Motors = new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_SPKM_INC], signalDispatcher, menuBar);
 	actionspkm_Motors_post = new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_SPKM_INC], signalDispatcher, menuBar);
-	actionspkm_Joints = new Ui::MenuBarAction(QString("&JOINTS"), wgts[WGT_SPKM_INT], signalDispatcher, menuBar);
+	actionspkm_Joints = new Ui::MenuBarAction(QString("&Joints"), wgts[WGT_SPKM_INT], signalDispatcher, menuBar);
 	actionspkm_External = new Ui::MenuBarAction(QString("&External"), wgts[WGT_SPKM_EXT], signalDispatcher, menuBar);
 	actionspkm_Synchro_Position = new Ui::MenuBarAction(QString("&Synchro Position"), this, menuBar);
 	actionspkm_Front_Position = new Ui::MenuBarAction(QString("&Front Position"), this, menuBar);

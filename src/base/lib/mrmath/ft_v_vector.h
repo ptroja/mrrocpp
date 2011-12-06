@@ -9,6 +9,9 @@
 namespace mrrocpp {
 namespace lib {
 
+// Forward declaration
+class Homog_matrix;
+
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Ft_v_vector : public Eigen::Matrix<double, 6, 1>
 {
@@ -94,7 +97,7 @@ public:
 
 	Xyz_Angle_Axis_vector();
 	Xyz_Angle_Axis_vector(const double t[6]);
-	Xyz_Angle_Axis_vector(double fx, double fy, double fz, double tx, double ty, double tz);
+	Xyz_Angle_Axis_vector(double x, double y, double z, double ax, double ay, double az);
 
 	//! Wektor predkosci jako odleglosc dwoch pozycji zadanych w postaci ramek
 	//! @author Sibi

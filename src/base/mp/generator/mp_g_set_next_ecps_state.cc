@@ -25,12 +25,12 @@ namespace generator {
 set_next_ecps_state::set_next_ecps_state(task::task& _mp_task) :
 		generator(_mp_task)
 {
-	wait_for_ECP_pulse = true;
+	wait_for_ECP_message = true;
 }
 
 void set_next_ecps_state::configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string, int str_len)
 {
-	strcpy(ecp_next_state.next_state, l_mp_2_ecp_next_state.c_str());
+	ecp_next_state.next_state = l_mp_2_ecp_next_state;
 	ecp_next_state.variant = l_mp_2_ecp_next_state_variant;
 	if (l_mp_2_ecp_next_state_string) {
 		if (str_len == 0) {
@@ -43,7 +43,7 @@ void set_next_ecps_state::configure(const std::string & l_mp_2_ecp_next_state, i
 
 void set_next_ecps_state::configure(const lib::playerpos_goal_t &_goal)
 {
-	strcpy(ecp_next_state.next_state, ecp_mp::task::ECP_GEN_PLAYERPOS.c_str());
+	ecp_next_state.next_state = ecp_mp::task::ECP_GEN_PLAYERPOS;
 	ecp_next_state.playerpos_goal = _goal;
 }
 

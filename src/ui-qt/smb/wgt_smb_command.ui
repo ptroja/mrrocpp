@@ -136,7 +136,7 @@ p, li { white-space: pre-wrap; }
                <item row="1" column="0">
                 <widget class="QLabel" name="label">
                  <property name="text">
-                  <string>up</string>
+                  <string>in</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -146,7 +146,7 @@ p, li { white-space: pre-wrap; }
                <item row="1" column="1">
                 <widget class="QLabel" name="label_4">
                  <property name="text">
-                  <string>down</string>
+                  <string>out</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -227,7 +227,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item row="1" column="1">
-                <widget class="QPushButton" name="pushButton_fl_all_up">
+                <widget class="QPushButton" name="pushButton_fl_all_in">
                  <property name="maximumSize">
                   <size>
                    <width>40</width>
@@ -235,12 +235,12 @@ p, li { white-space: pre-wrap; }
                   </size>
                  </property>
                  <property name="text">
-                  <string>up</string>
+                  <string>in</string>
                  </property>
                 </widget>
                </item>
                <item row="1" column="2">
-                <widget class="QPushButton" name="pushButton_fl_all_down">
+                <widget class="QPushButton" name="pushButton_fl_all_out">
                  <property name="maximumSize">
                   <size>
                    <width>40</width>
@@ -248,7 +248,7 @@ p, li { white-space: pre-wrap; }
                   </size>
                  </property>
                  <property name="text">
-                  <string>down</string>
+                  <string>out</string>
                  </property>
                 </widget>
                </item>
@@ -333,7 +333,7 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QCheckBox" name="checkBox_fl1_up">
+                <widget class="QCheckBox" name="checkBox_fl1_in">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -352,7 +352,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox_fl1_down">
+                <widget class="QCheckBox" name="checkBox_fl1_out">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -449,7 +449,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_fl1_up">
+                <widget class="QRadioButton" name="radioButton_fl1_in">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -471,7 +471,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_fl1_down">
+                <widget class="QRadioButton" name="radioButton_fl1_out">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -576,7 +576,7 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QCheckBox" name="checkBox_fl2_up">
+                <widget class="QCheckBox" name="checkBox_fl2_in">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -595,7 +595,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox_fl2_down">
+                <widget class="QCheckBox" name="checkBox_fl2_out">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -692,7 +692,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_fl2_up">
+                <widget class="QRadioButton" name="radioButton_fl2_in">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -708,7 +708,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_fl2_down">
+                <widget class="QRadioButton" name="radioButton_fl2_out">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -801,7 +801,7 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QCheckBox" name="checkBox_fl3_up">
+                <widget class="QCheckBox" name="checkBox_fl3_in">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -820,7 +820,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="checkBox_fl3_down">
+                <widget class="QCheckBox" name="checkBox_fl3_out">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -917,7 +917,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_fl3_up">
+                <widget class="QRadioButton" name="radioButton_fl3_in">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>
@@ -933,7 +933,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_fl3_down">
+                <widget class="QRadioButton" name="radioButton_fl3_out">
                  <property name="maximumSize">
                   <size>
                    <width>20</width>

@@ -8,6 +8,9 @@
 #include "../base/wgt_base.h"
 #include <QTimer>
 
+#include <boost/regex.hpp>
+#include <boost/foreach.hpp>
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -50,7 +53,7 @@ private:
 	int get_desired_position();
 	int move_it();
 
-	QTimer *timer;
+	boost::shared_ptr <QTimer> timer;
 
 	void showEvent(QShowEvent * event);
 

@@ -371,14 +371,14 @@ void fsautomat::runEmptyGen(const common::State &state)
 	//run_extended_empty_gen_base(state.getNumArgument(), 1, (state.getRobot()).c_str());
 	std::vector <lib::robot_name_t> myvector;
 	myvector.push_back(state.getRobot());
-	wait_for_task_termination(true, 1, myvector);
+	wait_for_task_termination(true, myvector);
 }
 
 void fsautomat::runEmptyGenForSet(const common::State &state)
 {
 	//TODO
 	//run_extended_empty_gen_and_wait(state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet, state.robotSet->secondSet);
-	wait_for_task_termination(true, state.robotSet->firstSet.size(), state.robotSet->firstSet);
+	wait_for_task_termination(true, state.robotSet->firstSet);
 }
 
 void fsautomat::executeMotion(const common::State &state)

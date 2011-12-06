@@ -55,7 +55,7 @@ public:
 				usleep(lib::CONNECT_DELAY);
 			} else {
 				fprintf(stderr, "Connect to failed at channel '%s'\n", _name.c_str());
-				throw std::logic_error("Connect from remote agent failed");
+				throw std::logic_error("Connect to remote agent failed");
 			}
 		}
 	}
@@ -66,35 +66,6 @@ public:
 		if(messip::port_disconnect(channel, MESSIP_NOTIMEOUT) != 0) {
 			// TODO: check for results
 		}
-	}
-};
-
-/**
- * Remote data buffer proxy
- */
-template <class T>
-class OutputBuffer {
-private:
-	//! name of the buffer
-	const std::string name;
-
-	//! owner of the buffer
-	RemoteAgent &owner;
-
-public:
-	//! Construct remote buffer proxy
-	OutputBuffer(RemoteAgent & _owner, const std::string & _name)
-		: name(_name), owner(_owner)
-	{
-	}
-
-	//! Set the contents of the remote buffer
-	void Send(const T & data) {
-		xdr_oarchive<> oa;
-		oa << name;
-		oa << data;
-
-		owner.Send(oa);
 	}
 };
 

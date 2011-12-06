@@ -67,6 +67,7 @@ SET(GUI_CXX_SRCS
     spkm/wgt_spkm_int.cpp
     spkm/wgt_spkm_ext.cpp
     smb/wgt_smb_command.cpp
+    shead/wgt_shead_command.cpp
     polycrank/wgt_polycrank_int.cpp
     base/wgt_single_motor_move.cpp
     bird_hand/wgt_bird_hand_command.cpp
@@ -100,6 +101,7 @@ SET(GUI_MOC_SRCS
     spkm/wgt_spkm_int.h
     spkm/wgt_spkm_ext.h
     smb/wgt_smb_command.h
+    shead/wgt_shead_command.h
     polycrank/wgt_polycrank_int.h
     base/wgt_single_motor_move.h
     bird_hand/wgt_bird_hand_command.h
@@ -154,6 +156,7 @@ SET(GUI_UI
     spkm/wgt_spkm_int.ui
     spkm/wgt_spkm_ext.ui
     smb/wgt_smb_command.ui
+    shead/wgt_shead_command.ui
     polycrank/wgt_polycrank_int.ui
     base/wgt_single_motor_move.ui
     bird_hand/wgt_bird_hand_command.ui
