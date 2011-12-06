@@ -43,7 +43,7 @@ void swarmitfix::rotate_smb(int leg_number, double rotation)
 {
 	// smb - unosimy dwie nogi
 	sr_ecp_msg->message("5");
-	sr_ecp_msg->message("PODNOSZEBIE NOG za 3s");
+	sr_ecp_msg->message("PODNOSZENIE NOG za 3s");
 
 	wait_ms(3000);
 
@@ -100,7 +100,7 @@ void swarmitfix::move_smb_and_spkm(int leg_number, double rotation)
 
 	// smb - unosimy dwie nogi
 	sr_ecp_msg->message("5");
-	sr_ecp_msg->message("PODNOSZEBIE NOG za 3s");
+	sr_ecp_msg->message("PODNOSZENIE NOG za 3s");
 
 	wait_ms(3000);
 
@@ -285,7 +285,7 @@ void swarmitfix::move_spkm_external(double x1, double x2, double x3, double x4, 
 {
 	lib::epos::epos_simple_command mp_ecp_spkm_epos_simple_command;
 	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
-	mp_ecp_spkm_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+	mp_ecp_spkm_epos_simple_command.motion_variant = lib::epos::SYNC_TRAPEZOIDAL;
 
 	mp_ecp_spkm_epos_simple_command.desired_position[0] = x1;
 	mp_ecp_spkm_epos_simple_command.desired_position[1] = x2;
