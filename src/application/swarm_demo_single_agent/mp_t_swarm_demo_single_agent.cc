@@ -149,6 +149,8 @@ void swarmitfix::main_task_algorithm(void)
 
 	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 
+	move_smb_external(0, 1.583);
+
 	/*
 	 move_smb_and_spkm(2, -1);
 	 move_smb_and_spkm(1, -1);
@@ -158,6 +160,8 @@ void swarmitfix::main_task_algorithm(void)
 	 move_smb_and_spkm(3, 5);
 	 */
 // smb - podnosimy wszystkie nogi
+	move_smb_external(0, 0);
+
 	sr_ecp_msg->message("14");
 
 	sr_ecp_msg->message("PODNOSZEBIE WSZYSTKICH NOG za 1s");
