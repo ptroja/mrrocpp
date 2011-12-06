@@ -274,7 +274,7 @@ void wgt_smb_command::on_pushButton_fl_execute_clicked()
 
 }
 
-void wgt_smb_command::on_pushButton_fl_all_up_clicked()
+void wgt_smb_command::on_pushButton_fl_all_in_clicked()
 {
 // dla kazdej z nog
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -283,7 +283,7 @@ void wgt_smb_command::on_pushButton_fl_all_up_clicked()
 	}
 }
 
-void wgt_smb_command::on_pushButton_fl_all_down_clicked()
+void wgt_smb_command::on_pushButton_fl_all_out_clicked()
 {
 // dla kazdej z nog
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
