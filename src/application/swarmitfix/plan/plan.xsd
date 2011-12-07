@@ -219,19 +219,19 @@
                                     <xs:documentation>Z coordinate</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
-                                <xs:element name="ox" type="xs:double">
+                                <xs:element name="alpha" type="xs:double">
                                   <xs:annotation>
-                                    <xs:documentation>rotation around X axis</xs:documentation>
+                                    <xs:documentation>rotation angle</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
-                                <xs:element name="oy" type="xs:double">
+                                <xs:element name="beta" type="xs:double">
                                   <xs:annotation>
-                                    <xs:documentation>rotation around Y axis</xs:documentation>
+                                    <xs:documentation>rotation angle</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
-                                <xs:element name="oz" type="xs:double">
+                                <xs:element name="gamma" type="xs:double">
                                   <xs:annotation>
-                                    <xs:documentation>rotation around Z axis</xs:documentation>
+                                    <xs:documentation>rotation angle</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
                               </xs:sequence>

@@ -22,6 +22,9 @@
     <xsl:template match="/plan/pkm/item/PZ"/>
     <xsl:template match="/plan/pkm/item/COSGA"/>
     <xsl:template match="/plan/pkm/item/SINGA"/>
+    <xsl:template match="/plan/pkm/item/baseToPkmAlfa"/>
+    <xsl:template match="/plan/pkm/item/baseToPkmDx"/>
+    <xsl:template match="/plan/pkm/item/baseToPkmDz"/>
     <!-- Remove PKM joint coordinates -->
     <xsl:template match="/plan/pkm/item/alpha0"/>    
     <xsl:template match="/plan/pkm/item/l1"/>       
@@ -31,6 +34,30 @@
     <xsl:template match="/plan/pkm/item/psi2"/>
     <xsl:template match="/plan/pkm/item/psi3"/>
     <xsl:template match="/plan/pkm/item/beta7"/>
+    
+    
+    <!-- Rename ox,oy,oz to alpha,beta,gamma -->
+    <xsl:template match="/plan/pkm/item/Xyz_Euler_Zyz/ox">
+        <alpha>
+            <xsl:apply-templates select="node()"/>
+        </alpha>
+    </xsl:template>
+    <xsl:template match="/plan/pkm/item/Xyz_Euler_Zyz/oy">
+        <beta>
+            <xsl:apply-templates select="node()"/>
+        </beta>
+    </xsl:template>
+    <xsl:template match="/plan/pkm/item/Xyz_Euler_Zyz/oz">
+        <gamma>
+            <xsl:apply-templates select="node()"/>
+        </gamma>
+    </xsl:template>
+    
+    <!-- Choose between Homog_matrix and XYZ_Euler_Zyz representation -->
+    <!--
+    <xsl:template match="/plan/pkm/item/Xyz_Euler_Zyz"/>
+    -->
+    <xsl:template match="/plan/pkm/item/pkmToWrist"/>
     
     <!-- default action is to copy all elements --> 
     <xsl:template match="node()">
@@ -54,6 +81,14 @@
     <xsl:template match="/plan/hNum"/>
     <xsl:template match="/plan/bNum"/>
     <xsl:template match="/plan/pNum"/>
+    
+    <!-- Remove empty list items -->
+    <xsl:template match="/plan/mbase/item/actions">
+        <xsl:variable name="nA"><xsl:value-of select="../numActions"/></xsl:variable>
+        <actions>
+            <xsl:apply-templates select="item[position() &lt; $nA+1]"/>
+        </actions>
+    </xsl:template>
     
     <!-- Remove unneeded data -->
     <xsl:template match="/plan/svar"/>
