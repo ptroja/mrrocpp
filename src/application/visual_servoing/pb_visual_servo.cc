@@ -97,6 +97,12 @@ Types::Mrrocpp_Proxy::PBReading* pb_visual_servo::get_reading()
 	return &reading;
 }
 
+void pb_visual_servo::reset()
+{
+	visual_servo::reset();
+	reading.objectVisible = reading_t_minus_2.objectVisible = reading_t_minus_1.objectVisible = false;
+}
+
 bool pb_visual_servo::is_object_visible_in_latest_reading()
 {
 	//	log_dbg("pb_visual_servo::is_object_visible_in_latest_reading(): reading.objectVisible = %d\n", (int)reading.objectVisible);

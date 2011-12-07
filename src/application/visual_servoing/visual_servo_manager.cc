@@ -90,6 +90,10 @@ bool visual_servo_manager::first_step()
 	acceleration.setZero();
 	angular_acceleration.setZero();
 
+	for(size_t i =0; i<servos.size(); ++i){
+		servos[i]->reset();
+	}
+
 	for (size_t i = 0; i < termination_conditions.size(); ++i) {
 		termination_conditions[i]->reset();
 	}

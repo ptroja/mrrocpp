@@ -61,6 +61,12 @@ public:
 	bool is_object_visible();
 
 	/**
+	 * Reset visual servo state.
+	 * This method should be called when visual servo motion generator is starting.
+	 */
+	virtual void reset();
+
+	/**
 	 *
 	 * @return Error
 	 */

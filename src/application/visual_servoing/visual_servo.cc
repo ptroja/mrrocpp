@@ -142,6 +142,11 @@ bool visual_servo::is_object_visible()
 	return object_visible;
 }
 
+void visual_servo::reset()
+{
+	object_visible = false;
+}
+
 const Eigen::Matrix <double, 6, 1> & visual_servo::get_error()
 {
 	return error;
