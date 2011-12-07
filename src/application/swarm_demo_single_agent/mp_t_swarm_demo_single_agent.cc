@@ -159,15 +159,6 @@ void swarmitfix::main_task_algorithm(void)
 
 	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
 
-	// Pose 1
-
-	move_smb_external(0, -2.500);
-
-	move_spkm_external(-0.09, 0, 0.44, 0, -0.843, -0.03);
-	wait_ms(1000);
-
-	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
-
 	// Pose 2
 
 	move_smb_external(0, 0.500);
@@ -177,24 +168,33 @@ void swarmitfix::main_task_algorithm(void)
 
 	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
 
-	// move to smb position 2
+	// Pose 1
 
-	rotate_smb(3, 1);
+	move_smb_external(0, -2.500);
 
-	// Pose 3
-
-	move_smb_external(0, -1.500);
-
-	move_spkm_external(-0.1, 0, 0.429, 0, -0.868, 0.09);
+	move_spkm_external(-0.09, 0, 0.44, 0, -0.843, -0.03);
 	wait_ms(1000);
 
 	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
+
+	// move to smb position 2
+
+	rotate_smb(3, 1);
 
 	// Pose 4
 
 	move_smb_external(0, 2.0);
 
 	move_spkm_external(-0.05, 0, 0.445, 0, -0.81, -0.1);
+	wait_ms(1000);
+
+	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
+
+	// Pose 3
+
+	move_smb_external(0, -1.500);
+
+	move_spkm_external(-0.1, 0, 0.429, 0, -0.868, 0.09);
 	wait_ms(1000);
 
 	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
