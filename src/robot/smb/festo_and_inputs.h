@@ -132,28 +132,28 @@ public:
 	/*!
 	 * \brief festo command all_down variant in move_arm
 	 */
-	void command_all_down();
+	void command_all_out();
 
 	/*!
 	 * \brief moves all legs that are in the upper position down and detach them
 	 */
 
-	void move_one_or_two_down();
+	void move_one_or_two_out();
 
 	/*!
 	 * \brief festo command one_up_two_down variant in move_arm
 	 */
-	void command_one_up_two_down();
+	void command_one_in_two_out();
 
 	/*!
 	 * \brief festo command two_up_one_down variant in move_arm
 	 */
-	void command_two_up_one_down();
+	void command_two_in_one_out();
 
 	/*!
-	 * \brief festo command two_up_one_down variant in move_arm
+	 * \brief festo command command_all_in variant in move_arm
 	 */
-	void command_all_up();
+	void command_all_in();
 
 	/*!
 	 * \brief festo reply in test_mode
@@ -165,7 +165,7 @@ public:
 	 * \brief checks if upper halotron of particular leg is active
 	 * \param leg_number counter from 1
 	 */
-	bool is_upper_halotron_active(int leg_number);
+	bool is_inper_halotron_active(int leg_number);
 
 	/*!
 	 * \brief checks if lower halotron of particular leg is active
@@ -191,14 +191,14 @@ public:
 	 * \param leg_number counter from 1
 	 * \param value true or false
 	 */
-	void set_move_up(int leg_number, bool value);
+	void set_move_in(int leg_number, bool value);
 
 	/*!
 	 * \brief set the command to move down particular leg
 	 * \param leg_number counter from 1
 	 * \param value true or false
 	 */
-	void set_move_down(int leg_number, bool value);
+	void set_move_out(int leg_number, bool value);
 
 	/*!
 	 * \brief set the command to clean particular leg

@@ -126,6 +126,56 @@ REGISTER_FATAL_ERROR(fe, "Fatal error")
  */
 REGISTER_SYSTEM_ERROR(se, "System error")
 
+/*!
+ * Macro for handling MRROC++ system errors in EDP.
+ *
+ * \param ERROR Exception derived from the mrrocpp_system_error classes.
+ *
+ * \author tkornuta
+ * \date 27.10.2011
+ */
+#define HANDLE_EDP_SYSTEM_ERROR(ERROR) \
+	std::cout<< ERROR.what() << std::endl; \
+	msg->message(ERROR); \
+	BOOST_THROW_EXCEPTION(se() << mrrocpp_error0(EDP_ERROR) << mrrocpp_error1(EDP_UNIDENTIFIED_ERROR)); \
+
+/*!
+ * Macro for handling MRROC++ fatal errors in EDP.
+ *
+ * \param ERROR Exception derived from the mrrocpp_fatal_error classes.
+ *
+ * \author tkornuta
+ * \date 27.10.2011
+ */
+#define HANDLE_EDP_FATAL_ERROR(ERROR) \
+	std::cout<< ERROR.what() << std::endl; \
+	msg->message(ERROR); \
+	BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(EDP_ERROR) << mrrocpp_error1(EDP_UNIDENTIFIED_ERROR)); \
+
+/*!
+ * Macro for handling MRROC++ non-fatal errors in EDP.
+ *
+ * \param ERROR Exception derived from the mrrocpp_non_fatal_error classes.
+ *
+ * \author tkornuta
+ * \date 27.10.2011
+ */
+#define HANDLE_EDP_NON_FATAL_ERROR(ERROR) \
+	std::cout<< ERROR.what() << std::endl; \
+	msg->message(ERROR); \
+	BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(EDP_ERROR) << mrrocpp_error1(EDP_UNIDENTIFIED_ERROR)); \
+
+/*!
+ * Macro for handling unknown errors in EDP.
+ *
+ * \author tkornuta
+ * \date 02.12.2011
+ */
+#define HANDLE_EDP_UNKNOWN_ERROR() \
+	msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error"); \
+	BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(EDP_ERROR) << mrrocpp_error1(EDP_UNIDENTIFIED_ERROR)); \
+
+
 } // namespace exception
 } // namespace edp
 } // namespace mrrocpp
