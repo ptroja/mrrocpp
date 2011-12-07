@@ -737,8 +737,10 @@ void motor_driven_effector::compute_joints(const lib::c_buffer &instruction)
 	// kinematyka nie stwierdzila bledow, przepisanie wartosci
 	for (int i = 0; i < number_of_servos; i++) {
 		desired_joints[i] = desired_joints_tmp[i];
+                rb_obj->step_data.desired_joints[i] = desired_joints[i];//zapis struktury readera
 		desired_motor_pos_new[i] = desired_motor_pos_new_tmp[i];
 	}
+
 
 }
 
