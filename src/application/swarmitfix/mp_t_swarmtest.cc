@@ -39,9 +39,9 @@ void swarmitfix::main_test_algorithm(void)
 					pkmCmd.Xyz_Euler_Zyz()->x(),
 					pkmCmd.Xyz_Euler_Zyz()->y(),
 					pkmCmd.Xyz_Euler_Zyz()->z(),
-					pkmCmd.Xyz_Euler_Zyz()->ox(),
-					pkmCmd.Xyz_Euler_Zyz()->oy(),
-					pkmCmd.Xyz_Euler_Zyz()->oz()
+					pkmCmd.Xyz_Euler_Zyz()->alpha(),
+					pkmCmd.Xyz_Euler_Zyz()->beta(),
+					pkmCmd.Xyz_Euler_Zyz()->gamma()
 					);
 		}
 
