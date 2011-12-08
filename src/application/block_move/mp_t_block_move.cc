@@ -150,16 +150,21 @@ block_position_list block_move::create_plan(block_position_list l)
 
 	l.sort();
 
-	int t_map[BLOCK_SIZE][BLOCK_SIZE];
+	sr_ecp_msg->message("After sorting");
+
+	int t_map[4][4];
 	for(int i = 0; i < BLOCK_SIZE; ++i) {
-		for(int j = 0; j < BLOCK_SIZE; ++i) {
+		for(int j = 0; j < BLOCK_SIZE; ++j) {
 			t_map[i][j] = 0;
 		}
 	}
 
+	sr_ecp_msg->message("After t_map");
+
 	for(block_position_list::iterator it = l.begin(); it != l.end(); ++it) {
 
-		//(*it).print();
+		cout << "now take" << endl;
+		(*it).print();
 
 		pos_it = (*it).getPosition();
 
@@ -167,6 +172,8 @@ block_position_list block_move::create_plan(block_position_list l)
 		if(pos_it[0] >= 0 && pos_it[0] < BLOCK_SIZE && pos_it[1] >= 0 && pos_it[1] < BLOCK_SIZE && pos_it[2] > 0 &&
 		   t_map[pos_it[0]][pos_it[1]] == pos_it[2] - 1) {
 				t_map[pos_it[0]][pos_it[1]] += 1;
+				cout << "choice" << endl;
+				(*it).print();
 		}
 		else {
 			plan.push_back(*it);
@@ -175,7 +182,7 @@ block_position_list block_move::create_plan(block_position_list l)
 
 	sr_ecp_msg->message("Creating plan end");
 
-	return l;
+	return plan;
 }
 
 void block_move::main_task_algorithm(void)
@@ -200,6 +207,10 @@ void block_move::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Start position");
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
+		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+		sr_ecp_msg->message("PI/2 Rotation");
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/theta_rotation.trj", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		//Zerowanie czujników
