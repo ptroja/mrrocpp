@@ -27,6 +27,7 @@ planner::planner(const std::string & path) :
 
 planner::~planner()
 {
+	worker.interrupt();
 	worker.join();
 }
 

@@ -34,6 +34,10 @@
 #define BOOST_IARCHIVE_EXCEPTION stream_error
 #endif
 
+#if BOOST_VERSION >=104400
+#include <boost/serialization/item_version_type.hpp>
+#endif
+
 #define THROW_LOAD_EXCEPTION \
     boost::serialization::throw_exception( \
             boost::archive::archive_exception( \
@@ -69,6 +73,16 @@ public:
         t = (std::size_t) b;
         return *this;
     }
+
+#if BOOST_VERSION >=104400
+    //! conversion for std::size_t, special since it depends on the 32/64 architecture
+    xdr_oarchive &load_a_type(boost::serialization::item_version_type &t, boost::mpl::true_) {
+        unsigned int b;
+        if(!xdr_u_int(&xdrs, &b)) THROW_LOAD_EXCEPTION;
+        t = (boost::serialization::item_version_type) b;
+        return *this;
+    }
+#endif
 
     //! conversion for an enum
     template <class T>
