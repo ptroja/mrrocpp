@@ -57,6 +57,12 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	if(is_robot_activated(lib::spkm1::ROBOT_NAME)) {
 		IO.transmitters.spkm1.outputs.command.Create(robot_m[lib::spkm1::ROBOT_NAME]->ecp, "command");
 	}
+	if(is_robot_activated(lib::smb2::ROBOT_NAME)) {
+		IO.transmitters.smb2.outputs.command.Create(robot_m[lib::smb2::ROBOT_NAME]->ecp, "command");
+	}
+	if(is_robot_activated(lib::smb1::ROBOT_NAME)) {
+		IO.transmitters.smb1.outputs.command.Create(robot_m[lib::smb1::ROBOT_NAME]->ecp, "command");
+	}
 	
 	// Start of user code Initialize internal memory variables
 // End of user code

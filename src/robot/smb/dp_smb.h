@@ -9,8 +9,13 @@
  * @ingroup smb
  */
 
+#include <cmath>
+
+#include <boost/throw_exception.hpp>
+
 #include "robot/maxon/dp_epos.h"
 #include "const_smb.h"
+#include "base/lib/exception.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -28,27 +33,145 @@ const std::string FESTO_COMMAND_DATA_PORT = "FESTO_COMMAND_DATA_PORT";
  */
 const std::string MULTI_LEG_REPLY_DATA_REQUEST_PORT = "MULTI_LEG_REPLY_DATA_REQUEST_PORT";
 
+REGISTER_NON_FATAL_ERROR(action_parameter_error, "SMB action parameters error")
+
 /*!
  * @brief SwarmItFix Mobile Base mp to ecp command
  * @ingroup smb
  */
-struct mp_to_ecp_parameters
-{
-	int locking_device_clamp_number;
-	epos::EPOS_GEN_PROFILE motion_type;
-	epos::mp_to_ecp_cubic_trapezoidal_parameters cubic_trapezoidal[NUM_OF_SERVOS];
-};
-
 /*!
- * @brief SwarmItFix Mobile Base single leg status
+ * @brief SwarmItFix Mobile Base action
  * @ingroup smb
  */
-struct leg_reply
+class action
 {
-	bool is_in;
-	bool is_out;
-	bool is_attached;
+public:
+	//! Constructor with reasonable defaults
+	action() :
+		rotationPin(0),
+		dTheta(0),
+		dPkmTheta(0),
+		duration(0)
+	{
+	}
 
+	//! Get motion duration parameter
+    double getDuration() const
+    {
+    	return duration;
+    }
+
+    //! Get PKM rotation
+    double getdPkmTheta() const
+    {
+    	return dPkmTheta;
+    }
+
+    //! Get rotation pin
+    unsigned int getRotationPin() const
+    {
+    	return rotationPin;
+    }
+
+    //! Get mobile base transrotation
+    int getdTheta() const
+    {
+    	return dTheta;
+    }
+
+    //! Set motion duration parameter
+    void setDuration(double duration)
+    {
+    	if(duration < 0) {
+    		BOOST_THROW_EXCEPTION(action_parameter_error());
+    	}
+
+    	this->duration = duration;
+    }
+
+    //! Set PKM relative rotation
+    void setdPkmTheta(double dPkmTheta)
+    {
+    	if (dPkmTheta < -M_PI || dPkmTheta > M_PI) {
+    		BOOST_THROW_EXCEPTION(action_parameter_error());
+    	}
+
+    	this->dPkmTheta = dPkmTheta;
+    }
+
+    //! Set PIN to rotate about
+    void setRotationPin(unsigned int rotationPin)
+    {
+    	if(rotationPin < 0 || rotationPin > 3) {
+    		BOOST_THROW_EXCEPTION(action_parameter_error());
+    	}
+
+    	this->rotationPin = rotationPin;
+    }
+
+    //! Set mobile base relative rotation
+    void setdTheta(int dTheta)
+    {
+    	if (dTheta < 2 || dTheta > 2) {
+    		BOOST_THROW_EXCEPTION(action_parameter_error());
+    	}
+
+    	this->dTheta = dTheta;
+    }
+
+private:
+	//! Pin around which to rotate {0,1,2,3}
+	unsigned int rotationPin;
+
+	//! Rotation around pin {-2,-1,0,-2,-1}
+	int dTheta;
+
+	//! Rotation of PKM around mobile base
+	double dPkmTheta;
+
+	//! Allowed time for the motion in seconds.
+	//! If 0, then the time will be limited by the motor limits.
+	//! If > 0 and greater than a limit imposed by the motors, then the motion will be slowed down.
+	//! In another case, the NACK will be replied.
+	double duration;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & BOOST_SERIALIZATION_NVP(rotationPin);
+		ar & BOOST_SERIALIZATION_NVP(dTheta);
+		ar & BOOST_SERIALIZATION_NVP(dPkmTheta);
+		ar & BOOST_SERIALIZATION_NVP(duration);
+	}
+};
+
+/**
+ * ECP command variant
+ */
+typedef enum _command_variant { ACTION_LIST, STOP } command_variant;
+
+/*!
+ *  Command for ECP agent
+ */
+typedef struct _next_state_t
+{
+	//! Command variant
+	command_variant variant;
+
+	//! Type for sequence of actions ofmobile base
+	typedef std::vector<action> action_sequence_t;
+
+	//! Sequence of actions for mobile base
+	action_sequence_t actions;
+
+	//! Constructor with safe defaults
+	_next_state_t(command_variant _variant = STOP) :
+		variant(_variant)
+	{
+	}
+
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -56,12 +179,16 @@ struct leg_reply
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & is_in;
-		ar & is_out;
-		ar & is_attached;
+		ar & variant;
+		switch (variant) {
+			case ACTION_LIST:
+				ar & actions;
+				break;
+			default:
+				break;
+		}
 	}
-
-}__attribute__((__packed__));
+} next_state_t;
 
 /*!
  * @brief SwarmItFix Mobile Base single leg festo command
@@ -71,9 +198,6 @@ enum FESTO_LEG
 {
 	IN, OUT
 };
-// namespace mrrocpp
-
-// namespace mrrocpp
 
 /*!
  * @brief SwarmItFix Mobile Base multi pin insertion command
@@ -93,26 +217,6 @@ struct festo_command_td
 	{
 		ar & leg;
 		ar & undetachable;
-	}
-
-}__attribute__((__packed__));
-
-/*!
- * @brief SwarmItFix Mobile Base multi leg reply
- * @ingroup smb
- */
-struct multi_leg_reply_td
-{
-	leg_reply leg[LEG_CLAMP_NUMBER];
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & leg;
 	}
 
 }__attribute__((__packed__));
@@ -179,6 +283,50 @@ struct cbuffer
 			default:
 				break;
 		};
+	}
+
+}__attribute__((__packed__));
+
+/*!
+ * @brief SwarmItFix Mobile Base single leg status
+ * @ingroup smb
+ */
+struct leg_reply
+{
+	bool is_in;
+	bool is_out;
+	bool is_attached;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & is_in;
+		ar & is_out;
+		ar & is_attached;
+	}
+
+}__attribute__((__packed__));
+
+/*!
+ * @brief SwarmItFix Mobile Base multi leg reply
+ * @ingroup smb
+ */
+struct multi_leg_reply_td
+{
+	leg_reply leg[LEG_CLAMP_NUMBER];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & leg;
 	}
 
 }__attribute__((__packed__));

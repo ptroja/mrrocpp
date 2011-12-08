@@ -68,7 +68,7 @@ typedef struct _segment
 } segment_t;
 
 /**
- * ECP variant variant
+ * ECP command variant
  */
 typedef enum _command_variant { POSE_LIST, STOP } command_variant;
 
@@ -77,12 +77,13 @@ typedef enum _command_variant { POSE_LIST, STOP } command_variant;
  */
 typedef struct _next_state_t
 {
+	//! Command variant
 	command_variant variant;
 
-	//! Type for sequence of motions of SPKM robot
+	//! Type for sequence of motions of SPKM
 	typedef std::vector<spkm::segment_t> segment_sequence_t;
 
-	//! Sequence of motion segments for SPKM robot
+	//! Sequence of motion segments for SPKM
 	segment_sequence_t segments;
 
 	//! Constructor with safe defaults
