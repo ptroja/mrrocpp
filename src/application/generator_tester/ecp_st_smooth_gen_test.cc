@@ -106,23 +106,27 @@ void sub_task_smooth_gen_test::conditional_execution()
 	std::vector <double> coordinates2(7);//track
 	std::vector <double> coordinates3(7);//polycrank
 
+        //network_path = "../../src/application/generator_tester/optimizedTraj.trj";
+        //sgenjoint->load_coordinates_from_file(network_path.c_str());
+        //sgenjoint->Move();
+
 	// JOINT ABSOLUTE
         sr_ecp_msg.message("Joint absolute");
 	sgenjoint->reset();
 	sgenjoint->set_absolute();
 	if (track) {
-		network_path += "../src/application/generator_tester/trajectory.trj";
+                //network_path += "../src/application/generator_tester/trajectory.trj";
 		//sgenjoint->load_trajectory_from_file(network_path.c_str());
-		network_path = std::string(ecp_t.mrrocpp_network_path);
+                //network_path = std::string(ecp_t.mrrocpp_network_path);
 
 
-		coordinates2[0] = 0.1;
-		coordinates2[1] = -0.067;
-		coordinates2[2] = -1.342;
-		coordinates2[3] = -0.064;
-		coordinates2[4] = 1.109;
-		coordinates2[5] = 1.573;
-		coordinates2[6] = -2.664;
+                coordinates2[0] = 0.0;
+                coordinates2[1] = -0.104;
+                coordinates2[2] = -1.542;
+                coordinates2[3] = 0.020;
+                coordinates2[4] = 1.404;
+                coordinates2[5] = 3.358;
+                coordinates2[6] = -2.538;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates2);
 	} else if (postument) {
 		coordinates1[0] = -0.104;
@@ -154,13 +158,13 @@ void sub_task_smooth_gen_test::conditional_execution()
 	}
 
 	if (track) {
-		coordinates2[0] = 0.0;
-		coordinates2[1] = -0.087;
-		coordinates2[2] = -1.542;
-		coordinates2[3] = -0.044;
-		coordinates2[4] = 1.109;
-		coordinates2[5] = 4.173;
-		coordinates2[6] = -2.664;
+                coordinates2[0] = 0.0;
+                coordinates2[1] = -0.804;
+                coordinates2[2] = -1.342;
+                coordinates2[3] = 0.020;
+                coordinates2[4] = 1.034;
+                coordinates2[5] = 3.858;
+                coordinates2[6] = -2.738;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates2);
 	} else if (postument) {
                 coordinates1[0] = -0.804;
@@ -184,13 +188,13 @@ void sub_task_smooth_gen_test::conditional_execution()
 
 
 	if (track) {
-		coordinates2[0] = 0.0;
-                coordinates2[1] = -0.137;
-		coordinates2[2] = -1.542;
-		coordinates2[3] = 0.024;
-		coordinates2[4] = 1.219;
-		coordinates2[5] = 4.173;
-		coordinates2[6] = -2.664;
+                coordinates2[0] = 0.0;
+                coordinates2[1] = -0.104;
+                coordinates2[2] = -1.542;
+                coordinates2[3] = 0.020;
+                coordinates2[4] = 1.134;
+                coordinates2[5] = 3.658;
+                coordinates2[6] = -2.738;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates2);
 	} else if (postument) {
 		coordinates1[0] = -0.104;
@@ -215,7 +219,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks(1) == 0) {
 		sgenjoint->Move();
 	}
-	// JOINT ABSOLUTE END
+        // JOINT ABSOLUTE END*/
 
 
         /*// JOINT RELATIVE
@@ -282,7 +286,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks(1) == 0) {
 		sgenjoint->Move();
 	}
-	// JOINT RELATIVE END
+        // JOINT RELATIVE END
 
 
 	// MOTOR ABSOLUTE
