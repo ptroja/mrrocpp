@@ -163,45 +163,6 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error \
 	~CLASS_NAME() throw () { } \
 };
 
-/*!
- * Macro for handling MRROC++ system errors.
- *
- * \param ERROR Exception derived from the mrrocpp_system_error classes.
- *
- * \author tkornuta
- * \date 27.10.2011
- */
-
-#define HANDLE_MRROCPP_SYSTEM_ERROR(ERROR) \
-	std::cout<< ERROR.what() << std::endl; \
-	msg->message(ERROR);
-
-/*!
- * Macro for handling MRROC++ fatal errors.
- *
- * \param ERROR Exception derived from the mrrocpp_fatal_error classes.
- *
- * \author tkornuta
- * \date 27.10.2011
- */
-
-#define HANDLE_MRROCPP_FATAL_ERROR(ERROR) \
-	std::cout<< ERROR.what() << std::endl; \
-	msg->message(ERROR);
-
-/*!
- * Macro for handling MRROC++ non-fatal errors.
- *
- * \param ERROR Exception derived from the mrrocpp_non_fatal_error classes.
- *
- * \author tkornuta
- * \date 27.10.2011
- */
-
-#define HANDLE_MRROCPP_NON_FATAL_ERROR(ERROR) \
-	std::cout<< ERROR.what() << std::endl; \
-	msg->message(ERROR);
-
 
 } // namespace exception
 } // namespace common

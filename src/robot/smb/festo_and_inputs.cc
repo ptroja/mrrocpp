@@ -22,7 +22,10 @@ namespace edp {
 namespace smb {
 
 festo_and_inputs::festo_and_inputs(effector &_master) :
-		master(_master), epos_di_node(master.legs_rotation_node), cpv10(master.cpv10), robot_test_mode(master.robot_test_mode)
+		master(_master),
+		epos_di_node(master.legs_rotation_node),
+		cpv10(master.cpv10),
+		robot_test_mode(master.robot_test_mode)
 {
 	if (!(robot_test_mode)) {
 		// prepares hardware
@@ -48,10 +51,10 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 		desired_output[2] = current_output[2];
 
 	} else {
-		current_legs_state = lib::smb::ALL_UP;
+		current_legs_state = lib::smb::ALL_IN;
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = true;
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = false;
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_in = true;
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_out = false;
 		}
 
 	}
@@ -86,7 +89,7 @@ void festo_and_inputs::set_all_legs_unchecked()
 	}
 }
 
-bool festo_and_inputs::is_upper_halotron_active(int leg_number)
+bool festo_and_inputs::is_inper_halotron_active(int leg_number)
 {
 
 	switch (leg_number)
@@ -162,7 +165,7 @@ void festo_and_inputs::set_detach(int leg_number, bool value)
 	}
 }
 
-void festo_and_inputs::set_move_up(int leg_number, bool value)
+void festo_and_inputs::set_move_in(int leg_number, bool value)
 {
 	switch (leg_number)
 	{
@@ -189,7 +192,7 @@ void festo_and_inputs::set_move_up(int leg_number, bool value)
 	}
 }
 
-void festo_and_inputs::set_move_down(int leg_number, bool value)
+void festo_and_inputs::set_move_out(int leg_number, bool value)
 {
 	switch (leg_number)
 	{
@@ -244,29 +247,29 @@ void festo_and_inputs::determine_legs_state()
 {
 	if (!(robot_test_mode)) {
 		read_state();
-		int number_of_legs_up = 0;
+		int number_of_legs_in = 0;
 
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
-			if (is_upper_halotron_active(i + 1)) {
-				number_of_legs_up++;
+			if (is_inper_halotron_active(i + 1)) {
+				number_of_legs_in++;
 			}
 		}
 
-		switch (number_of_legs_up)
+		switch (number_of_legs_in)
 		{
 			case 0:
 
-				current_legs_state = lib::smb::ALL_DOWN;
+				current_legs_state = lib::smb::ALL_OUT;
 				break;
 			case 1:
-				current_legs_state = lib::smb::ONE_UP_TWO_DOWN;
+				current_legs_state = lib::smb::ONE_IN_TWO_OUT;
 				break;
 			case 2:
-				current_legs_state = lib::smb::TWO_UP_ONE_DOWN;
+				current_legs_state = lib::smb::TWO_IN_ONE_OUT;
 				break;
 			case 3:
-				current_legs_state = lib::smb::ALL_UP;
+				current_legs_state = lib::smb::ALL_IN;
 				break;
 			default:
 				break;
@@ -296,27 +299,27 @@ void festo_and_inputs::command()
 	}
 
 	// determine next_legs_state by counting numebr of legs to be up
-	int number_of_legs_up = 0;
+	int number_of_legs_in = 0;
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-		if (festo_command.leg[i] == lib::smb::UP) {
-			number_of_legs_up++;
+		if (festo_command.leg[i] == lib::smb::IN) {
+			number_of_legs_in++;
 		}
 
 	}
 
-	switch (number_of_legs_up)
+	switch (number_of_legs_in)
 	{
 		case 0:
-			next_legs_state = lib::smb::ALL_DOWN;
+			next_legs_state = lib::smb::ALL_OUT;
 			break;
 		case 1:
-			next_legs_state = lib::smb::ONE_UP_TWO_DOWN;
+			next_legs_state = lib::smb::ONE_IN_TWO_OUT;
 			break;
 		case 2:
-			next_legs_state = lib::smb::TWO_UP_ONE_DOWN;
+			next_legs_state = lib::smb::TWO_IN_ONE_OUT;
 			break;
 		case 3:
-			next_legs_state = lib::smb::ALL_UP;
+			next_legs_state = lib::smb::ALL_IN;
 			break;
 		default:
 			break;
@@ -328,17 +331,17 @@ void festo_and_inputs::command()
 
 	switch (next_legs_state)
 	{
-		case lib::smb::ALL_DOWN:
-			command_all_down();
+		case lib::smb::ALL_OUT:
+			command_all_out();
 			break;
-		case lib::smb::ONE_UP_TWO_DOWN:
-			command_one_up_two_down();
+		case lib::smb::ONE_IN_TWO_OUT:
+			command_one_in_two_out();
 			break;
-		case lib::smb::TWO_UP_ONE_DOWN:
-			command_two_up_one_down();
+		case lib::smb::TWO_IN_ONE_OUT:
+			command_two_in_one_out();
 			break;
-		case lib::smb::ALL_UP:
-			command_all_up();
+		case lib::smb::ALL_IN:
+			command_all_in();
 			break;
 		default:
 			break;
@@ -354,7 +357,7 @@ void festo_and_inputs::command()
 
 }
 
-void festo_and_inputs::move_one_or_two_down()
+void festo_and_inputs::move_one_or_two_out()
 {
 	// detach all legs that are up to prepare them to go down
 
@@ -378,8 +381,8 @@ void festo_and_inputs::move_one_or_two_down()
 	// move the legs down
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
-		set_move_down(i + 1, true);
-		set_move_up(i + 1, false);
+		set_move_out(i + 1, true);
+		set_move_in(i + 1, false);
 
 	}
 
@@ -426,40 +429,40 @@ void festo_and_inputs::move_one_or_two_down()
 	execute_command();
 }
 
-void festo_and_inputs::command_all_down()
+void festo_and_inputs::command_all_out()
 {
-	master.msg->message("command_all_down");
+	master.msg->message("command_all_out");
 	switch (current_legs_state)
 	{
-		case lib::smb::ALL_DOWN: {
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_DOWN));
+		case lib::smb::ALL_OUT: {
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_OUT));
 		}
 			break;
-		case lib::smb::ONE_UP_TWO_DOWN: {
+		case lib::smb::ONE_IN_TWO_OUT: {
 			master.msg->message("ONE_UP_TWO_DOWN");
 			if (!test_mode_set_reply()) {
-				move_one_or_two_down();
+				move_one_or_two_out();
 			}
 
 		}
 			break;
-		case lib::smb::TWO_UP_ONE_DOWN: {
+		case lib::smb::TWO_IN_ONE_OUT: {
 			master.msg->message("TWO_UP_ONE_DOWN");
 			if (!test_mode_set_reply()) {
-				move_one_or_two_down();
+				move_one_or_two_out();
 			}
 
 		}
 			break;
-		case lib::smb::ALL_UP: {
+		case lib::smb::ALL_IN: {
 			master.msg->message("ALL_UP");
 			if (!test_mode_set_reply()) {
 
 				// moves all legs down and does not detach them !
 
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-					set_move_down(i + 1, true);
-					set_move_up(i + 1, false);
+					set_move_out(i + 1, true);
+					set_move_in(i + 1, false);
 					set_detach(i + 1, false);
 				}
 
@@ -501,27 +504,27 @@ void festo_and_inputs::command_all_down()
 	}
 }
 
-void festo_and_inputs::command_one_up_two_down()
+void festo_and_inputs::command_one_in_two_out()
 {
-	BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ONE_UP_TWO_DOWN));
+	BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ONE_IN_TWO_OUT));
 }
 
-void festo_and_inputs::command_two_up_one_down()
+void festo_and_inputs::command_two_in_one_out()
 {
 
-#ifdef COMMAND_TWO_UP_ONE_DOWN_SIMULTANEOUS
+#ifdef command_two_in_one_out_SIMULTANEOUS
 	// HIGH PRESSURE VERSION WITH SIMULATNOUS LEG MOTION
 	switch(current_legs_state) {
-		case lib::smb::ALL_DOWN: {
+		case lib::smb::ALL_OUT: {
 			if (!test_mode_set_reply()) {
 
 				// detaches the leg that are to move up
 
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-					if (festo_command.leg[i] == lib::smb::UP) {
+					if (festo_command.leg[i] == lib::smb::IN) {
 						if (is_lower_halotron_active(i + 1)) {
 							set_detach(i + 1, true);
-							set_move_down(i + 1, false);
+							set_move_out(i + 1, false);
 						}
 					}
 				}
@@ -532,20 +535,20 @@ void festo_and_inputs::command_two_up_one_down()
 
 				// move equivalent legs up
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-					if (festo_command.leg[i] == lib::smb::UP) {
+					if (festo_command.leg[i] == lib::smb::IN) {
 						if (is_lower_halotron_active(i + 1)) {
-							set_move_up(i + 1, true);
+							set_move_in(i + 1, true);
 						}
 					}
 				}
 				execute_command();
 
 				// wait for legs to be in upper position
-				int number_of_legs_up = 0;
+				int number_of_legs_in = 0;
 
 				set_all_legs_unchecked();
 
-				for (int iteration = 0; number_of_legs_up < 2; iteration++) {
+				for (int iteration = 0; number_of_legs_in < 2; iteration++) {
 					delay(FAI_SINGLE_DELAY);
 
 					// if it take too long to wait break
@@ -557,10 +560,10 @@ void festo_and_inputs::command_two_up_one_down()
 
 					read_state();
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-						if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))
-								&& (festo_command.leg[i] == lib::smb::UP)) {
+						if ((!is_checked(i + 1)) && (is_inper_halotron_active(i + 1))
+								&& (festo_command.leg[i] == lib::smb::IN)) {
 							set_checked(i + 1);
-							number_of_legs_up++;
+							number_of_legs_in++;
 							set_detach(i + 1, false);
 						}
 					}
@@ -571,10 +574,10 @@ void festo_and_inputs::command_two_up_one_down()
 		}
 
 		break;
-		case lib::smb::ONE_UP_TWO_DOWN:
-		case lib::smb::TWO_UP_ONE_DOWN:
-		case lib::smb::ALL_UP: {
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_UP_ONE_DOWN));
+		case lib::smb::ONE_IN_TWO_OUT:
+		case lib::smb::TWO_IN_ONE_OUT:
+		case lib::smb::ALL_IN: {
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
 		}
 		break;
 		default:
@@ -586,7 +589,7 @@ void festo_and_inputs::command_two_up_one_down()
 	// LOW PRESSURE VERSION WITH SERIAL LEG MOTION
 	switch (current_legs_state)
 	{
-		case lib::smb::ALL_DOWN: {
+		case lib::smb::ALL_OUT: {
 			if (!test_mode_set_reply()) {
 
 				// move the legs in series
@@ -596,10 +599,10 @@ void festo_and_inputs::command_two_up_one_down()
 					// detaches the leg that are to move up
 
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-						if (festo_command.leg[i] == lib::smb::UP) {
+						if (festo_command.leg[i] == lib::smb::IN) {
 							if (is_lower_halotron_active(i + 1)) {
 								set_detach(i + 1, true);
-								set_move_down(i + 1, false);
+								set_move_out(i + 1, false);
 								break;
 							}
 						}
@@ -610,9 +613,9 @@ void festo_and_inputs::command_two_up_one_down()
 					delay(500);
 
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-						if (festo_command.leg[i] == lib::smb::UP) {
+						if (festo_command.leg[i] == lib::smb::IN) {
 							if (is_lower_halotron_active(i + 1)) {
-								set_move_up(i + 1, true);
+								set_move_in(i + 1, true);
 								break;
 							}
 						}
@@ -620,11 +623,11 @@ void festo_and_inputs::command_two_up_one_down()
 					execute_command();
 
 					// wait for legs to be in upper position
-					int number_of_legs_up = 0;
+					int number_of_legs_in = 0;
 
 					set_all_legs_unchecked();
 
-					for (int iteration = 0; number_of_legs_up < number_of_legs_moved + 1; iteration++) {
+					for (int iteration = 0; number_of_legs_in < number_of_legs_moved + 1; iteration++) {
 						delay(FAI_SINGLE_DELAY);
 
 						// if it takes too long to wait then break.
@@ -636,10 +639,10 @@ void festo_and_inputs::command_two_up_one_down()
 
 						read_state();
 						for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-							if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))
-									&& (festo_command.leg[i] == lib::smb::UP)) {
+							if ((!is_checked(i + 1)) && (is_inper_halotron_active(i + 1))
+									&& (festo_command.leg[i] == lib::smb::IN)) {
 								set_checked(i + 1);
-								number_of_legs_up++;
+								number_of_legs_in++;
 								set_detach(i + 1, false);
 							}
 						}
@@ -651,10 +654,10 @@ void festo_and_inputs::command_two_up_one_down()
 		}
 
 			break;
-		case lib::smb::ONE_UP_TWO_DOWN:
-		case lib::smb::TWO_UP_ONE_DOWN:
-		case lib::smb::ALL_UP: {
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_UP_ONE_DOWN));
+		case lib::smb::ONE_IN_TWO_OUT:
+		case lib::smb::TWO_IN_ONE_OUT:
+		case lib::smb::ALL_IN: {
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
 		}
 			break;
 		default:
@@ -666,29 +669,29 @@ void festo_and_inputs::command_two_up_one_down()
 
 }
 
-void festo_and_inputs::command_all_up()
+void festo_and_inputs::command_all_in()
 {
 	switch (current_legs_state)
 	{
-		case lib::smb::ALL_DOWN: {
+		case lib::smb::ALL_OUT: {
 			if (!test_mode_set_reply()) {
 
 				// move all legs up and do not detach them;
 
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-					set_move_down(i + 1, false);
-					set_move_up(i + 1, true);
+					set_move_out(i + 1, false);
+					set_move_in(i + 1, true);
 				}
 
 				execute_command();
 
 				// waits until all legs are in upper position
 
-				int number_of_legs_up = 0;
+				int number_of_legs_in = 0;
 
 				set_all_legs_unchecked();
 
-				for (int iteration = 0; number_of_legs_up < 3; iteration++) {
+				for (int iteration = 0; number_of_legs_in < 3; iteration++) {
 
 					delay(FAI_SINGLE_DELAY);
 
@@ -702,9 +705,9 @@ void festo_and_inputs::command_all_up()
 					read_state();
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
-						if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))) {
+						if ((!is_checked(i + 1)) && (is_inper_halotron_active(i + 1))) {
 							set_checked(i + 1);
-							number_of_legs_up++;
+							number_of_legs_in++;
 						}
 
 					}
@@ -713,10 +716,10 @@ void festo_and_inputs::command_all_up()
 		}
 
 			break;
-		case lib::smb::ONE_UP_TWO_DOWN:
-		case lib::smb::TWO_UP_ONE_DOWN:
-		case lib::smb::ALL_UP:
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_UP));
+		case lib::smb::ONE_IN_TWO_OUT:
+		case lib::smb::TWO_IN_ONE_OUT:
+		case lib::smb::ALL_IN:
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_IN));
 			break;
 		default:
 			break;
@@ -728,12 +731,12 @@ bool festo_and_inputs::test_mode_set_reply()
 {
 	if (robot_test_mode) {
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			if (festo_command.leg[i] == lib::smb::UP) {
-				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = true;
-				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = false;
+			if (festo_command.leg[i] == lib::smb::IN) {
+				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_in = true;
+				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_out = false;
 			} else {
-				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = false;
-				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = true;
+				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_in = false;
+				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_out = true;
 			}
 
 		}
@@ -759,8 +762,8 @@ void festo_and_inputs::create_reply()
 	if (!robot_test_mode) {
 		read_state();
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_down = is_lower_halotron_active(i + 1);
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_up = is_upper_halotron_active(i + 1);
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_out = is_lower_halotron_active(i + 1);
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_in = is_inper_halotron_active(i + 1);
 			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_attached = is_attached(i + 1);
 		}
 		//std::cout << "epos digital inputs = " << epos_digits << std::endl;

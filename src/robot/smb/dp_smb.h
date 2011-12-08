@@ -45,8 +45,8 @@ struct mp_to_ecp_parameters
  */
 struct leg_reply
 {
-	bool is_up;
-	bool is_down;
+	bool is_in;
+	bool is_out;
 	bool is_attached;
 
 	//! Give access to boost::serialization framework
@@ -56,8 +56,8 @@ struct leg_reply
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & is_up;
-		ar & is_down;
+		ar & is_in;
+		ar & is_out;
 		ar & is_attached;
 	}
 
@@ -69,7 +69,7 @@ struct leg_reply
  */
 enum FESTO_LEG
 {
-	UP, DOWN
+	IN, OUT
 };
 // namespace mrrocpp
 
