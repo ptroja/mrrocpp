@@ -109,7 +109,7 @@ void swarmitfix::main_test_algorithm(void)
 		// Execute command for spkm1
 		if(spkm1_it != p->pkm().item().end() && spkm1_it->ind() == ind) {
 
-			executeCommandItem(*spkm1_it, IO.transmitters.spkm1.outputs.command.get());
+			executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get());
 
 			// Fast-forward upto next command
 			fastForward(spkm1_it, 1, *p);
@@ -118,7 +118,7 @@ void swarmitfix::main_test_algorithm(void)
 		// Execute command for spkm2
 		if(spkm2_it != p->pkm().item().end() && spkm2_it->ind() == ind) {
 
-			executeCommandItem(*spkm1_it, IO.transmitters.spkm1.outputs.command.get());
+			executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get());
 
 			// Fast-forward upto next command
 			fastForward(spkm1_it, 2, *p);
