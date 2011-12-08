@@ -128,7 +128,7 @@ spkm_quickstop::spkm_quickstop(task_t & _ecp_task) :
 
 bool spkm_quickstop::first_step()
 {
-	the_robot->epos_brake_command_data_port.data = true;
+	//the_robot->epos_brake_command_data_port.data = true;
 	the_robot->epos_brake_command_data_port.set();
 
 	return true;

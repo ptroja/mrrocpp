@@ -59,7 +59,7 @@ void EcpRobot::move_external(const double final_position[6], lib::epos::EPOS_MOT
 
 void EcpRobot::clear_fault()
 {
-	the_robot->epos_clear_fault_data_port.data = true;
+//	the_robot->epos_clear_fault_data_port.data = true;
 
 	the_robot->epos_clear_fault_data_port.set();
 
@@ -68,7 +68,7 @@ void EcpRobot::clear_fault()
 
 void EcpRobot::stop_motors()
 {
-	the_robot->epos_brake_command_data_port.data = true;
+//	the_robot->epos_brake_command_data_port.data = true;
 
 	the_robot->epos_brake_command_data_port.set();
 
