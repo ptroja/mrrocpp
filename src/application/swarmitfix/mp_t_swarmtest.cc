@@ -35,6 +35,15 @@ void swarmitfix::main_test_algorithm(void)
 		if(pkmCmd.pkmToWrist().present()) {
 			hm = lib::Homog_matrix(pkmCmd.pkmToWrist().get());
 		} else if (pkmCmd.Xyz_Euler_Zyz().present()) {
+
+			std::cout << "Xyz_Euler_Zyz: " <<
+					pkmCmd.Xyz_Euler_Zyz()->x() << " " <<
+					pkmCmd.Xyz_Euler_Zyz()->y() << " " <<
+					pkmCmd.Xyz_Euler_Zyz()->z() << " " <<
+					pkmCmd.Xyz_Euler_Zyz()->alpha() << " " <<
+					pkmCmd.Xyz_Euler_Zyz()->beta() << " " <<
+					pkmCmd.Xyz_Euler_Zyz()->gamma() << std::endl;
+
 			hm = lib::Xyz_Euler_Zyz_vector(
 					pkmCmd.Xyz_Euler_Zyz()->x(),
 					pkmCmd.Xyz_Euler_Zyz()->y(),
@@ -49,8 +58,17 @@ void swarmitfix::main_test_algorithm(void)
 		lib::spkm::next_state_t cmd(lib::spkm::POSE_LIST);
 
 		cmd.segments.push_back(hm);
+//		cmd.segments.push_back(hm);
 
-		std::cerr << "HM is\n" << hm << std::endl;
+		std::cerr << "MP # of segments = " << cmd.segments.size() << std::endl;
+		for(lib::spkm::next_state_t::segment_sequence_t::const_iterator it = cmd.segments.begin();
+				it != cmd.segments.end();
+				++it) {
+			std::cerr << "pose\n" << it->goal_pose << std::endl;
+			std::cerr << "motion type " << it->motion_type << std::endl;
+			std::cerr << "duration " << it->duration << std::endl;
+			std::cerr << "guarded_motion " << it->guarded_motion << std::endl;
+		}
 
 		// Send command with the output buffer
 		IO.transmitters.spkm2.outputs.command->Send(cmd);
@@ -65,6 +83,8 @@ void swarmitfix::main_test_algorithm(void)
 		if(IO.transmitters.spkm2.inputs.notification->Get() == lib::NACK) {
 			BOOST_THROW_EXCEPTION(exception::nfe());
 		}
+
+		//sleep(1);
 	}
 
 	return;
