@@ -503,54 +503,41 @@ void effector::parse_motor_command()
 
 void effector::execute_motor_motion()
 {
-	// TODO: remove this line!
-	ecp_edp_cbuffer.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+	// NOTE: for this robot only NON_SYNC_TRAPEZOIDAL motion variant makes sense
 
-	// Perform motion depending on its type.
-	// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
-	switch (ecp_edp_cbuffer.motion_variant)
-	{
-		case lib::epos::NON_SYNC_TRAPEZOIDAL:
-			// Execute command.
-			for (size_t i = 0; i < axes.size(); ++i) {
-				if (is_synchronised()) {
-					cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
-					if (!robot_test_mode) {
-						// Set velocity and acceleration values.
-						axes[i]->setProfileVelocity(Vdefault[i]);
-						axes[i]->setProfileAcceleration(Adefault[i]);
-						axes[i]->setProfileDeceleration(Ddefault[i]);
-						// In case of legs rotation node...
-						if (i == 0)
-							// ... perform the relative move.
-							axes[i]->moveAbsolute(desired_motor_pos_new[i] + legs_relative_zero_position);
-						else
-							axes[i]->moveAbsolute(desired_motor_pos_new[i]);
-					} else {
-						// Virtually "move" to desired absolute position.
-						current_motor_pos[i] = desired_motor_pos_new[i];
-					}
-				} else {
-					cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
-					if (!robot_test_mode) {
-						// Set velocity and acceleration values.
-						axes[i]->setProfileVelocity(Vdefault[i]);
-						axes[i]->setProfileAcceleration(Adefault[i]);
-						axes[i]->setProfileDeceleration(Ddefault[i]);
-						axes[i]->moveRelative(desired_motor_pos_new[i]);
-					} else {
-						// Virtually "move" to desired relative position.
-						current_motor_pos[i] += desired_motor_pos_new[i];
-					}
-				}
+	// Execute command.
+	for (size_t i = 0; i < axes.size(); ++i) {
+		if (is_synchronised()) {
+			cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
+			if (!robot_test_mode) {
+				// Set velocity and acceleration values.
+				axes[i]->setProfileVelocity(Vdefault[i]);
+				axes[i]->setProfileAcceleration(Adefault[i]);
+				axes[i]->setProfileDeceleration(Ddefault[i]);
+				// In case of legs rotation node...
+				if (i == 0)
+					// ... perform the relative move.
+					axes[i]->moveAbsolute(desired_motor_pos_new[i] + legs_relative_zero_position);
+				else
+					axes[i]->moveAbsolute(desired_motor_pos_new[i]);
+			} else {
+				// Virtually "move" to desired absolute position.
+				current_motor_pos[i] = desired_motor_pos_new[i];
 			}
-			break;
-		default:
-			// Throw non-fatal error - motion type not supported.
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_motion_type());
-			break;
-	} //: switch (ecp_edp_cbuffer.motion_variant)
-
+		} else {
+			cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
+			if (!robot_test_mode) {
+				// Set velocity and acceleration values.
+				axes[i]->setProfileVelocity(Vdefault[i]);
+				axes[i]->setProfileAcceleration(Adefault[i]);
+				axes[i]->setProfileDeceleration(Ddefault[i]);
+				axes[i]->moveRelative(desired_motor_pos_new[i]);
+			} else {
+				// Virtually "move" to desired relative position.
+				current_motor_pos[i] += desired_motor_pos_new[i];
+			}
+		}
+	}
 }
 
 /*--------------------------------------------------------------------------*/

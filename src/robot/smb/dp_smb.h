@@ -134,12 +134,6 @@ struct cbuffer
 	//! Pose specification type
 	POSE_SPECIFICATION get_pose_specification;
 
-	//! Motion interpolation variant
-	lib::epos::EPOS_MOTION_VARIANT motion_variant;
-
-	//! Motion time - used in the Interpolated Position Mode.
-	double estimated_time;
-
 	int32_t motor_pos[NUM_OF_SERVOS];
 
 	double joint_pos[NUM_OF_SERVOS];
@@ -153,12 +147,6 @@ struct cbuffer
 	//! If > 0 and greater than a limit imposed by the motors, then the motion will be slowed down.
 	//! In another case, the NACK will be replied.
 	double duration;
-
-	//! True if the contact is expected during the motion.
-	//! The NACK will be replied if:
-	//! - the contact was expected and did not happened
-	//! - OR the contact was NOT expected and did happened.
-	bool guarded_motion;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -187,8 +175,6 @@ struct cbuffer
 						ar & motor_pos;
 						break;
 				}
-				ar & motion_variant;
-				ar & estimated_time;
 				break;
 			default:
 				break;
