@@ -22,6 +22,8 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/version.hpp>
 
+#include <cstring>
+
 #include <rpc/types.h>
 #include <rpc/xdr.h>
 #include <stdint.h>
@@ -60,8 +62,7 @@ public:
     xdr_oarchive &save_a_type(bool const &t, boost::mpl::true_)
     {
         bool_t b = (t) ? true : false;
-        if (!xdr_bool(&xdrs, &b))
-            THROW_SAVE_EXCEPTION;
+        if (!xdr_bool(&xdrs, &b)) THROW_SAVE_EXCEPTION;
         return *this;
     }
 
@@ -86,8 +87,7 @@ public:
     typename boost::enable_if <boost::is_enum <T>, xdr_oarchive &>::type
     save_a_type(T const &t, boost::mpl::true_)
     {
-        if (!xdr_enum(&xdrs, (enum_t *) &t))
-            THROW_SAVE_EXCEPTION;
+        if (!xdr_enum(&xdrs, (enum_t *) &t)) THROW_SAVE_EXCEPTION;
         return *this;
     }
 
@@ -95,16 +95,14 @@ public:
     xdr_oarchive &save_a_type(std::string const &t, boost::mpl::true_)
     {
         char * p = (char *) t.c_str();
-        if (!xdr_wrapstring(&xdrs, &p))
-            THROW_SAVE_EXCEPTION;
+        if (!xdr_wrapstring(&xdrs, &p)) THROW_SAVE_EXCEPTION;
         return *this;
     }
 
     //! conversion for 'const char *' string
     xdr_oarchive &save_a_type(const char *t, boost::mpl::false_)
     {
-        if (!xdr_wrapstring(&xdrs, (char **)&t))
-            THROW_SAVE_EXCEPTION;
+        if (!xdr_wrapstring(&xdrs, (char **)&t)) THROW_SAVE_EXCEPTION;
         return *this;
     }
 
@@ -123,15 +121,13 @@ public:
     xdr_oarchive &save_a_type(long const &t, boost::mpl::true_)
     {
         int64_t b = (int64_t) t;
-        if (!xdr_longlong_t(&xdrs, &b))
-            THROW_SAVE_EXCEPTION;
+        if (!xdr_longlong_t(&xdrs, &b)) THROW_SAVE_EXCEPTION;
         return *this;
     }
     xdr_oarchive &save_a_type(unsigned long const &t, boost::mpl::true_)
     {
     	uint64_t b = (uint64_t) t;
-        if (!xdr_u_longlong_t(&xdrs, &b))
-            THROW_SAVE_EXCEPTION;
+        if (!xdr_u_longlong_t(&xdrs, &b)) THROW_SAVE_EXCEPTION;
         return *this;
     }
 
@@ -139,15 +135,13 @@ public:
     xdr_oarchive &save_a_type(long long const &t, boost::mpl::true_)
     {
         int64_t b = (int64_t) t;
-        if (!xdr_longlong_t(&xdrs, &b))
-            THROW_SAVE_EXCEPTION;
+        if (!xdr_longlong_t(&xdrs, &b)) THROW_SAVE_EXCEPTION;
         return *this;
     }
     xdr_oarchive &save_a_type(unsigned long long const &t, boost::mpl::true_)
     {
     	uint64_t b = (uint64_t) t;
-        if (!xdr_u_longlong_t(&xdrs, &b))
-            THROW_SAVE_EXCEPTION;
+        if (!xdr_u_longlong_t(&xdrs, &b)) THROW_SAVE_EXCEPTION;
         return *this;
     }
 
@@ -182,10 +176,11 @@ public:
     /**
      * Saving Archive Concept::get_library_version()
      * @return This library's version.
+     * @note this has to be >= 4 due to bug in boost>1.41 for vector handling
      */
     unsigned int get_library_version()
     {
-        return 0;
+        return 4;
     }
 
     /**

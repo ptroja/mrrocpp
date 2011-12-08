@@ -76,7 +76,7 @@ public:
 
 #if BOOST_VERSION >=104400
     //! conversion for std::size_t, special since it depends on the 32/64 architecture
-    xdr_oarchive &load_a_type(boost::serialization::item_version_type &t, boost::mpl::true_) {
+    xdr_iarchive &load_a_type(boost::serialization::item_version_type &t, boost::mpl::true_) {
         unsigned int b;
         if(!xdr_u_int(&xdrs, &b)) THROW_LOAD_EXCEPTION;
         t = (boost::serialization::item_version_type) b;
@@ -104,8 +104,7 @@ public:
     //! conversion for 'char *' string
     xdr_iarchive &load_a_type(char *t, boost::mpl::false_)
     {
-        if (!xdr_wrapstring(&xdrs, (char **)&t))
-            THROW_LOAD_EXCEPTION;
+        if (!xdr_wrapstring(&xdrs, (char **)&t)) THROW_LOAD_EXCEPTION;
         return *this;
     }
 
@@ -178,16 +177,22 @@ public:
 
     /**
      * Destructor
+     * Destroy XDR data structure
      */
-    ~xdr_iarchive() {
+    ~xdr_iarchive()
+    {
         xdr_destroy(&xdrs);
     }
 
     /**
      * Loading Archive Concept::get_library_version()
      * @return This library's version.
+     * @note this has to be >= 4 due to bug in boost>1.41 for vector handling
      */
-    unsigned int get_library_version() { return 0; }
+    unsigned int get_library_version()
+    {
+        return 4;
+    }
 
     /**
      * Loading Archive Concept::reset_object_address(v,u)
@@ -226,7 +231,8 @@ public:
      */
     template<class T>
     typename boost::disable_if<boost::is_array<T>, xdr_iarchive &>::type
-    load_a_type(T &t,boost::mpl::false_){
+    load_a_type(T &t,boost::mpl::false_)
+    {
 #if BOOST_VERSION >=104100
         boost::archive::detail::load_non_pointer_type<xdr_iarchive<> >::load_only::invoke(*this,t);
 #else
@@ -241,8 +247,9 @@ public:
      * @return *this
      */
     template<class T, int N>
-    xdr_iarchive &load_a_type(T (&t)[N],boost::mpl::false_){
-        for(int i = 0; i < N; ++i) {
+    xdr_iarchive &load_a_type(T (&t)[N],boost::mpl::false_)
+    {
+        for (int i = 0; i < N; ++i) {
             *this >> t[i];
         }
         return *this;
