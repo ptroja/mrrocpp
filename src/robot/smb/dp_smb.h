@@ -144,7 +144,9 @@ struct cbuffer
 
 	double joint_pos[NUM_OF_SERVOS];
 
-	double goal_pos[6];
+	// external
+	int base_vs_bench_rotation;
+	double pkm_vs_base_rotation;
 
 	//! Allowed time for the motion in seconds.
 	//! If 0, then the motion time will be limited by the motor parameters.
@@ -174,8 +176,9 @@ struct cbuffer
 				ar & set_pose_specification;
 				switch (set_pose_specification)
 				{
-					case FRAME:
-						ar & goal_pos;
+					case EXTERNAL:
+						ar & base_vs_bench_rotation;
+						ar & pkm_vs_base_rotation;
 						break;
 					case JOINT:
 						ar & joint_pos;

@@ -41,7 +41,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 void effector::check_controller_state()
 {
-	if (robot_test_mode){
+	if (robot_test_mode) {
 		return;
 	}
 
@@ -433,9 +433,9 @@ void effector::parse_motor_command()
 				&& (current_joints[0] != ecp_edp_cbuffer.joint_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check externals.
-		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::FRAME)
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::EXTERNAL)
 				&& (current_joints[0]
-						!= ecp_edp_cbuffer.goal_pos[0] * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
+						!= ecp_edp_cbuffer.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
@@ -473,12 +473,13 @@ void effector::parse_motor_command()
 			}
 		}
 			break;
-		case lib::smb::FRAME: {
-			msg->message("FRAME");
+		case lib::smb::EXTERNAL: {
+			msg->message("EXTERNAL");
 			// Leg rotational joint: Copy data directly from buffer and recalculate joint value.
-			desired_joints[0] = ecp_edp_cbuffer.goal_pos[0] * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio;
+			desired_joints[0] = ecp_edp_cbuffer.base_vs_bench_rotation
+					* mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio;
 			// SPKM rotational joint: Copy data joint value directly from buffer.
-			desired_joints[1] = ecp_edp_cbuffer.goal_pos[1];
+			desired_joints[1] = ecp_edp_cbuffer.pkm_vs_base_rotation;
 			cout << "JOINT[0]: " << desired_joints[0] << endl;
 			cout << "JOINT[1]: " << desired_joints[1] << endl;
 
@@ -616,7 +617,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						edp_ecp_rbuffer.epos_controller[i].position = current_joints[i];
 					}
 					break;
-				case lib::smb::FRAME:
+				case lib::smb::EXTERNAL:
 					msg->message("EDP get_arm_position FRAME");
 					// For every axis.
 					for (size_t i = 0; i < axes.size(); ++i) {
