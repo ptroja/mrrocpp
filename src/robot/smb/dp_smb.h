@@ -140,9 +140,15 @@ private:
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & BOOST_SERIALIZATION_NVP(rotationPin);
-		ar & BOOST_SERIALIZATION_NVP(dTheta);
+		// Check if rotating around the pin
+		if(rotationPin) {
+			ar & BOOST_SERIALIZATION_NVP(dTheta);
+		}
 		ar & BOOST_SERIALIZATION_NVP(dPkmTheta);
-		ar & BOOST_SERIALIZATION_NVP(duration);
+		// Check if executing motion at all
+		if((rotationPin && dTheta) || dPkmTheta) {
+			ar & BOOST_SERIALIZATION_NVP(duration);
+		}
 	}
 };
 
