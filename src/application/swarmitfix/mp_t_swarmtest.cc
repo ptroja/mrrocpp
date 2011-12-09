@@ -110,21 +110,21 @@ bool executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, OutputBuffer<l
 	lib::smb::next_state_t cmd(lib::smb::ACTION_LIST);
 
 	std::cerr << "MP: smb" << smbCmd.agent() << " # of SMB segments = " << smbCmd.actions().item().size() << std::endl;
+
 	// Iterate over action sequence
-	for(Plan::MbaseType::ItemType::ActionsType::ItemConstIterator it = smbCmd.actions().item().begin();
-			it != smbCmd.actions().item().end();
-			++it) {
-		std::cerr << "pin " << it->pin() << std::endl;
-		std::cerr << "dPkmTheta " << it->dPkmTheta() << std::endl;
+	BOOST_FOREACH(const Plan::MbaseType::ItemType::ActionsType::ItemType & it, smbCmd.actions().item())
+	{
+		std::cerr << "pin " << it.pin() << std::endl;
+		std::cerr << "dPkmTheta " << it.dPkmTheta() << std::endl;
 
 		// Setup single action
 		lib::smb::action act;
 
-		if(it->pin()) {
-			act.setRotationPin(it->pin());
-			act.setdThetaInd(it->dThetaInd()); // FIXME
+		if(it.pin()) {
+			act.setRotationPin(it.pin());
+			act.setdThetaInd(it.dThetaInd()); // FIXME
 		}
-		act.setdPkmTheta(it->dPkmTheta());
+		act.setdPkmTheta(it.dPkmTheta());
 
 		// Append action to the command sequence
 		cmd.actions.push_back(act);
@@ -204,7 +204,6 @@ void swarmitfix::main_test_algorithm(void)
 		// Execute command for spkm1
 		if(indexMatches(spkm1_it, ind, *p)) {
 			currentActionState = (State *) &(*spkm1_it);
-			//currentActionState->execution_time().set(10.0);
 
 			if(executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get()))
 				current_workers_status.insert(lib::spkm1::ROBOT_NAME);
@@ -221,7 +220,7 @@ void swarmitfix::main_test_algorithm(void)
 				current_workers_status.insert(lib::spkm2::ROBOT_NAME);
 
 			// Fast-forward upto next command
-			fastForward(spkm1_it, 2, *p);
+			fastForward(spkm2_it, 2, *p);
 		}
 
 		// Execute command for smb1
