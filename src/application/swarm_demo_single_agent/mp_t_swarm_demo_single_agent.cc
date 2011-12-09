@@ -144,7 +144,7 @@ void swarmitfix::main_task_algorithm(void)
 	sr_ecp_msg->message("New experimental series");
 
 	// Move to the *neutral* PKM pose.
-	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
 
 	sr_ecp_msg->message("1");
 
@@ -153,54 +153,66 @@ void swarmitfix::main_task_algorithm(void)
 
 	// Move SMB and SPKM to pose 0.
 	move_smb_external(0, 1.583);
-	move_spkm_external(0, 0, 0.439, 0, -0.72, 0.03);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.41, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0, 0, 0.439, 0, -0.72, 0.03);
 	wait_ms(1000);
 
 	// Move back to the *neutral* PKM pose.
-	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.38, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
 
 	// Move SMB and SPKM to pose 2.
 	move_smb_external(0, 0.500);
-	move_spkm_external(-0.1, 0, 0.438, 0, -0.81, 0.11);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.38, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.438, 0, -0.81, 0.11);
 	wait_ms(1000);
 
 	// Move back to the *neutral* PKM pose.
-	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.38, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
 
 	// Move SMB and SPKM to pose 1.
 	move_smb_external(0, -2.500);
-	move_spkm_external(-0.09, 0, 0.44, 0, -0.843, -0.03);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.38, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.09, 0, 0.44, 0, -0.843, -0.03);
 	wait_ms(1000);
 
 	// Move back to the *neutral* PKM pose.
-	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.38, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
 
 	// Move to SMB position 2 - rotate around leg 3 by 60 degrees.
 	rotate_smb(3, 1);
 
 	// Move SMB and SPKM to pose 4.
 	move_smb_external(0, 2.0);
-	move_spkm_external(-0.05, 0, 0.445, 0, -0.81, -0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.38, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.05, 0, 0.445, 0, -0.81, -0.1);
 	wait_ms(1000);
 
 	// Move back to the *neutral* PKM pose.
-	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.38, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
 
 	// Move SMB and SPKM to pose 3.
 	move_smb_external(0, -1.500);
-	move_spkm_external(-0.1, 0, 0.429, 0, -0.868, 0.09);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.38, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.429, 0, -0.868, 0.09);
 	wait_ms(1000);
 
 	// Move back to the *neutral* PKM pose.
-	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.38, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
 
 	// Move SMB and SPKM to pose 5.
 	move_smb_external(0, -3.0);
-	move_spkm_external(-0.1, 0, 0.424, 0, -0.83, -0.02);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.38, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.424, 0, -0.83, -0.02);
 	wait_ms(1000);
 
 	// Move back to the *neutral* PKM pose.
-	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.38, 0, -0.868, 0.1);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
 
 	// Move to SMB position 1 - rotate around leg 3 by -60 degrees.
 	rotate_smb(3, -1);
@@ -276,11 +288,12 @@ void swarmitfix::move_spkm_joints(double x1, double x2, double x3, double x4, do
 
 }
 
-void swarmitfix::move_spkm_external(double x1, double x2, double x3, double x4, double x5, double x6)
+void swarmitfix::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double x1, double x2, double x3, double x4, double x5, double x6)
 {
 	lib::epos::epos_simple_command mp_ecp_spkm_epos_simple_command;
 	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
-	mp_ecp_spkm_epos_simple_command.motion_variant = lib::epos::SYNC_TRAPEZOIDAL;
+	mp_ecp_spkm_epos_simple_command.motion_variant = motion_variant_;
+	mp_ecp_spkm_epos_simple_command.estimated_time = 1.2;
 
 	mp_ecp_spkm_epos_simple_command.desired_position[0] = x1;
 	mp_ecp_spkm_epos_simple_command.desired_position[1] = x2;

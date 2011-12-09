@@ -707,7 +707,7 @@ void effector::interpolated_motion_in_operational_space()
 	Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, 1> t;
 	compute_pvt_triplets_for_epos <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS>(p, v, t, time_invervals, motor_3w, motor_2w, motor_1w, motor_0w);
 
-#if 0
+#if 1
 	cout<<"p = [ \n"<<p << "\n ]; \n";
 	cout<<"v = [ \n"<<v << "\n ]; \n";
 	cout<<"t = [ \n"<<t << "\n ]; \n";
