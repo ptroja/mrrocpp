@@ -12,7 +12,6 @@
 #include "mp_t_swarm_demo_single_agent.h"
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "robot/maxon/dp_epos.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_spkm.h"
 #include "ecp_mp_g_smb.h"
@@ -247,12 +246,12 @@ void swarmitfix::move_smb_legs(lib::smb::FESTO_LEG l1, lib::smb::FESTO_LEG l2, l
 
 void swarmitfix::move_smb_external(double x1, double x2)
 {
-	lib::epos::epos_simple_command mp_ecp_smb_epos_simple_command;
+	lib::smb::smb_epos_simple_command mp_ecp_smb_epos_simple_command;
 	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
 	mp_ecp_smb_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
-	mp_ecp_smb_epos_simple_command.desired_position[0] = x1;
-	mp_ecp_smb_epos_simple_command.desired_position[1] = x2;
+	mp_ecp_smb_epos_simple_command.base_vs_bench_rotation = x1;
+	mp_ecp_smb_epos_simple_command.pkm_vs_base_rotation = x2;
 
 	memcpy(mp_ecp_string, &mp_ecp_smb_epos_simple_command, sizeof(mp_ecp_smb_epos_simple_command));
 
@@ -283,9 +282,10 @@ void swarmitfix::move_spkm_joints(double x1, double x2, double x3, double x4, do
 
 void swarmitfix::move_spkm_external(double x1, double x2, double x3, double x4, double x5, double x6)
 {
-	lib::epos::epos_simple_command mp_ecp_spkm_epos_simple_command;
+	lib::spkm::spkm_epos_simple_command mp_ecp_spkm_epos_simple_command;
 	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
 	mp_ecp_spkm_epos_simple_command.motion_variant = lib::epos::SYNC_TRAPEZOIDAL;
+	mp_ecp_spkm_epos_simple_command.pose_specification = lib::spkm::XYZ_EULER_ZYZ;
 
 	mp_ecp_spkm_epos_simple_command.desired_position[0] = x1;
 	mp_ecp_spkm_epos_simple_command.desired_position[1] = x2;

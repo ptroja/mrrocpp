@@ -126,7 +126,7 @@ enum CBUFFER_VARIANT
  */
 typedef enum _POSE_SPECIFICATION
 {
-	XYZ_EULER_ZYZ, JOINT, MOTOR
+	XYZ_EULER_ZYZ, TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL, WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL, JOINT, MOTOR
 } POSE_SPECIFICATION;
 
 /*!
@@ -136,7 +136,9 @@ typedef enum _POSE_SPECIFICATION
 struct spkm_epos_simple_command
 {
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
+	POSE_SPECIFICATION pose_specification;
 	double desired_position[lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER];
+
 	double estimated_time;
 
 	//! Give access to boost::serialization framework
@@ -146,6 +148,7 @@ struct spkm_epos_simple_command
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		ar & pose_specification;
 		ar & motion_variant;
 		ar & desired_position;
 		ar & estimated_time;

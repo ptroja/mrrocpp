@@ -124,7 +124,11 @@ struct multi_leg_reply_td
 struct smb_epos_simple_command
 {
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
-	double desired_position[lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER];
+
+	// external
+	int base_vs_bench_rotation;
+	double pkm_vs_base_rotation;
+
 	double estimated_time;
 
 	//! Give access to boost::serialization framework
@@ -135,7 +139,8 @@ struct smb_epos_simple_command
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & motion_variant;
-		ar & desired_position;
+		ar & base_vs_bench_rotation;
+		ar & pkm_vs_base_rotation;
 		ar & estimated_time;
 	}
 }__attribute__((__packed__));

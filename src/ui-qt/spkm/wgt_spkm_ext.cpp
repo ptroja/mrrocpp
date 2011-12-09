@@ -27,14 +27,6 @@ wgt_spkm_ext::wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface
 	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p4);
 	doubleSpinBox_des_Vector.append(ui.doubleSpinBox_des_p5);
 
-	/*
-	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_0);
-	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_1);
-	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_2);
-	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_3);
-	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_4);
-	 doubleSpinBox_mcur_Vector.append(ui.doubleSpinBox_mcur_5);
-	 */
 	radioButton_mip_Vector.append(ui.radioButton_mip_0);
 	radioButton_mip_Vector.append(ui.radioButton_mip_1);
 	radioButton_mip_Vector.append(ui.radioButton_mip_2);
@@ -326,26 +318,29 @@ int wgt_spkm_ext::move_it()
 		if (robot->state.edp.pid != -1) {
 
 			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+			lib::spkm::POSE_SPECIFICATION tool_variant = lib::spkm::XYZ_EULER_ZYZ;
 
 			double estimated_time = ui.doubleSpinBox_estimated_time->value();
 
 			if (ui.radioButton_non_sync_trapezoidal->isChecked()) {
 				motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
-			}
-
-			else if (ui.radioButton_sync_trapezoidal->isChecked()) {
+			} else if (ui.radioButton_sync_trapezoidal->isChecked()) {
 				motion_variant = lib::epos::SYNC_TRAPEZOIDAL;
-			}
-
-			else if (ui.radioButton_sync_polynomal->isChecked()) {
+			} else if (ui.radioButton_sync_polynomal->isChecked()) {
 				motion_variant = lib::epos::SYNC_POLYNOMIAL;
-			}
-
-			else if (ui.radioButton_operational->isChecked()) {
+			} else if (ui.radioButton_operational->isChecked()) {
 				motion_variant = lib::epos::OPERATIONAL;
 			}
 
-			robot->ui_ecp_robot->move_external(robot->desired_pos, motion_variant, estimated_time);
+			if (ui.radioButton_no_tool->isChecked()) {
+				tool_variant = lib::spkm::XYZ_EULER_ZYZ;
+			} else if (ui.radioButton_tool_oriented->isChecked()) {
+				tool_variant = lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
+			} else if (ui.radioButton_wrist_oriented->isChecked()) {
+				tool_variant = lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
+			}
+
+			robot->ui_ecp_robot->move_external(robot->desired_pos, motion_variant, tool_variant, estimated_time);
 
 			if ((robot->state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
 				for (int i = 0; i < 6; i++) {
