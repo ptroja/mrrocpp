@@ -52,7 +52,7 @@ public:
 	//! Constructor with reasonable defaults
 	action() :
 		rotationPin(0),
-		dTheta(0),
+		dThetaInd(0),
 		dPkmTheta(0),
 		duration(0)
 	{
@@ -77,9 +77,9 @@ public:
     }
 
     //! Get mobile base transrotation
-    int getdTheta() const
+    int getdThetaInd() const
     {
-    	return dTheta;
+    	return dThetaInd;
     }
 
     //! Set motion duration parameter
@@ -113,21 +113,21 @@ public:
     }
 
     //! Set mobile base relative rotation
-    void setdTheta(int dTheta)
+    void setdThetaInd(int dThetaInd)
     {
-    	if (dTheta < 2 || dTheta > 2) {
+    	if (dThetaInd < -5 || dThetaInd > +5) {
     		BOOST_THROW_EXCEPTION(action_parameter_error());
     	}
 
-    	this->dTheta = dTheta;
+    	this->dThetaInd = dThetaInd;
     }
 
 private:
 	//! Pin around which to rotate {0,1,2,3}
 	unsigned int rotationPin;
 
-	//! Rotation around pin {-2,-1,0,-2,-1}
-	int dTheta;
+	//! Rotation around pin {-5..+5}
+	int dThetaInd;
 
 	//! Rotation of PKM around mobile base
 	double dPkmTheta;
@@ -148,11 +148,11 @@ private:
 		ar & BOOST_SERIALIZATION_NVP(rotationPin);
 		// Check if rotating around the pin
 		if(rotationPin) {
-			ar & BOOST_SERIALIZATION_NVP(dTheta);
+			ar & BOOST_SERIALIZATION_NVP(dThetaInd);
 		}
 		ar & BOOST_SERIALIZATION_NVP(dPkmTheta);
 		// Check if executing motion at all
-		if((rotationPin && dTheta) || dPkmTheta) {
+		if((rotationPin && dThetaInd) || dPkmTheta) {
 			ar & BOOST_SERIALIZATION_NVP(duration);
 		}
 	}

@@ -33,6 +33,9 @@ private:
 	generator::pin_lower* g_pin_lower;
 	*/
 
+	boost::shared_ptr<generator::action_executor> g_action;
+	boost::shared_ptr<generator::quickstop_executor> g_quickstop;
+
 	/**
 	 * Input buffer for MP commands
 	 */

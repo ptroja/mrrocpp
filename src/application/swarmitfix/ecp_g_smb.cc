@@ -15,20 +15,20 @@ namespace generator {
 //
 //
 //
-// smb_action
+// action_executor
 //
 //
 //
 
 //constructor with parameters: task and time to sleep [s]
-smb_action::smb_action(task_t & _ecp_task, const lib::smb::next_state_t::action_sequence_t & _actions) :
+action_executor::action_executor(task_t & _ecp_task, const lib::smb::next_state_t::action_sequence_t & _actions) :
 		generator_t(_ecp_task),
 		actions(_actions)
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 }
 
-void smb_action::request_action_execution(robot_t & robot, const lib::smb::action & action)
+void action_executor::request_action_execution(robot_t & robot, const lib::smb::action & action)
 {
 	// Copy the motion duration
 	robot.epos_external_command_data_port.data.estimated_time = action.getDuration();
@@ -37,7 +37,7 @@ void smb_action::request_action_execution(robot_t & robot, const lib::smb::actio
 	// TODO: this have to be UP-rotate-DOWN sequence
 	if(action.getRotationPin() != 0) {
 		// Copy rotation command
-		robot.epos_external_command_data_port.data.desired_position[0] = action.getdTheta();
+		robot.epos_external_command_data_port.data.desired_position[0] = action.getdThetaInd();
 
 		// Trigger command execution
 		robot.epos_external_command_data_port.set();
@@ -45,14 +45,14 @@ void smb_action::request_action_execution(robot_t & robot, const lib::smb::actio
 
 	if(action.getdPkmTheta()) {
 		// Copy rotation command
-		robot.epos_external_command_data_port.data.desired_position[1] = action.getdTheta();
+		robot.epos_external_command_data_port.data.desired_position[1] = action.getdPkmTheta();
 
 		// Trigger command execution
 		robot.epos_external_command_data_port.set();
 	}
 }
 
-bool smb_action::first_step()
+bool action_executor::first_step()
 {
 	sr_ecp_msg.message("smb_action: first_step");
 
@@ -60,9 +60,9 @@ bool smb_action::first_step()
 	for(lib::smb::next_state_t::action_sequence_t::const_iterator it = actions.begin();
 			it != actions.end();
 			++it) {
-		std::cerr << "rotation pin\n" << it->getRotationPin() << std::endl;
-		if(it->getRotationPin()) std::cerr << "dTheta " << it->getdTheta() << std::endl;
-		std::cerr << "dPkmTheta" << it->getdPkmTheta() << std::endl;
+		std::cerr << "\trotation pin " << it->getRotationPin() << std::endl;
+		if(it->getRotationPin()) std::cerr << "\tdTheta " << it->getdThetaInd() << std::endl;
+		std::cerr << "\tdPkmTheta " << it->getdPkmTheta() << std::endl;
 	}
 
 	// skip the empty command sequence
@@ -81,7 +81,7 @@ bool smb_action::first_step()
 	return true;
 }
 
-bool smb_action::next_step()
+bool action_executor::next_step()
 {
 	sr_ecp_msg.message("smb_action: next_step");
 
@@ -128,18 +128,18 @@ bool smb_action::next_step()
 //
 //
 //
-// smb_quickstop
+// quickstop_executor
 //
 //
 //
 
-smb_quickstop::smb_quickstop(task_t & _ecp_task) :
+quickstop_executor::quickstop_executor(task_t & _ecp_task) :
 		generator_t(_ecp_task)
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 }
 
-bool smb_quickstop::first_step()
+bool quickstop_executor::first_step()
 {
 	//the_robot->epos_brake_command_data_port.data = true;
 	the_robot->epos_brake_command_data_port.set();
@@ -147,7 +147,7 @@ bool smb_quickstop::first_step()
 	return true;
 }
 
-bool smb_quickstop::next_step()
+bool quickstop_executor::next_step()
 {
 	return true;
 }

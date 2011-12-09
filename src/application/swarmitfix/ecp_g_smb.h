@@ -17,11 +17,11 @@ namespace ecp {
 namespace smb {
 namespace generator {
 
-class smb_action : public common::generator::_generator<ecp::smb::robot>
+class action_executor : public common::generator::_generator<ecp::smb::robot>
 {
 public:
 	//! Constructor
-	smb_action(task_t & _ecp_task, const lib::smb::next_state_t::action_sequence_t & _actions);
+	action_executor(task_t & _ecp_task, const lib::smb::next_state_t::action_sequence_t & _actions);
 
 	//! first step generation
 	bool first_step();
@@ -40,11 +40,11 @@ private:
 	const lib::smb::next_state_t::action_sequence_t & actions;
 };
 
-class smb_quickstop : public common::generator::_generator<ecp::smb::robot>
+class quickstop_executor : public common::generator::_generator<ecp::smb::robot>
 {
 public:
 	//! Constructor
-	smb_quickstop(task_t & _ecp_task);
+	quickstop_executor(task_t & _ecp_task);
 
 	//! first step generation
 	bool first_step();

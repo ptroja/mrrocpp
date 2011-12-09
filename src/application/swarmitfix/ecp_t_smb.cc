@@ -30,7 +30,9 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	notifyBuffer = (boost::shared_ptr<OutputBuffer<lib::notification_t> >)
 			new OutputBuffer<lib::notification_t>(MP, ecp_m_robot->robot_name+lib::notifyBufferId);
 
-	// TODO: Create the generators
+	// Create the generators
+	g_action = (boost::shared_ptr <generator::action_executor>) new generator::action_executor(*this, nextstateBuffer.access.actions);
+	g_quickstop = (boost::shared_ptr <generator::quickstop_executor>) new generator::quickstop_executor(*this);
 
 	sr_ecp_msg->message("ecp smb loaded");
 }
@@ -56,7 +58,7 @@ void swarmitfix::main_task_algorithm(void)
 					//g_action->Move();
 					break;
 				default:
-					//g_quickstop->Move();
+					g_quickstop->Move();
 					break;
 			}
 

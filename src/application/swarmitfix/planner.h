@@ -37,7 +37,7 @@ public:
 	void resume();
 
 	//! Access to the plan data
-	const Plan * getPlan(void) const;
+	Plan * getPlan(void) const;
 
 private:
 	//! Reference to the plan

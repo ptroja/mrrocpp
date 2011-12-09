@@ -3,7 +3,7 @@ include(FindXerces)
 
 if(XSD_FOUND AND XERCES_FOUND)
 
-XSD_SCHEMA( PLAN_SRCS plan/plan.xsd --type-naming ucc --root-element plan )
+XSD_SCHEMA( PLAN_SRCS plan/plan.xsd --type-naming ucc --root-element plan --generate-serialization )
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -33,24 +33,13 @@ add_executable(ecp_spkm
 target_link_libraries(ecp_spkm ecp_r_spkm ecp 
 )
 
-#add_executable(ecp_smb
-#	ecp_g_spkm.cc
-#	ecp_g_smb.cc
-#	ecp_t_smb.cc
-#)
+add_executable(ecp_smb
+	ecp_g_smb.cc
+	ecp_t_smb.cc
+)
 
-#target_link_libraries(ecp_smb
-#	ecp_generators
-#)
-
-#add_executable(ecp_shead
-#	ecp_g_shead.cc
-#	ecp_t_shead.cc
-#)
-
-#target_link_libraries(ecp_shead
-#	ecp_generators
-#)
+target_link_libraries(ecp_smb ecp_r_smb ecp 
+)
 
 #install(TARGETS ecp_spkm ecp_smb ecp_shead mp_swarmitfix DESTINATION bin)
-install(TARGETS ecp_spkm DESTINATION bin)
+install(TARGETS ecp_spkm ecp_smb DESTINATION bin)

@@ -31,7 +31,7 @@ planner::~planner()
 	worker.join();
 }
 
-const Plan * planner::getPlan(void) const
+Plan * planner::getPlan(void) const
 {
 	return p.get();
 }

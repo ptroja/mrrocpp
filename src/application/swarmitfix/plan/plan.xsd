@@ -6,7 +6,7 @@
         <xs:element name="head">
           <xs:complexType>
             <xs:sequence>
-              <xs:element maxOccurs="unbounded" name="item">
+              <xs:element maxOccurs="unbounded" name="item" minOccurs="0">
                 <xs:complexType>
                   <xs:complexContent>
                     <xs:extension base="State">
@@ -272,6 +272,12 @@
       <xs:element name="TEnd" type="xs:float">
         <xs:annotation>
           <xs:documentation>time after the next transition should start
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="execution_time" type="xs:float"  minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>measured duration of the action
           </xs:documentation>
         </xs:annotation>
       </xs:element>

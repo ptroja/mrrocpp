@@ -1,4 +1,7 @@
+#include <fstream>
+
 #include <boost/foreach.hpp>
+#include <boost/thread/thread_time.hpp>
 
 #include "mp_t_swarmitfix.h"
 
@@ -119,7 +122,7 @@ bool executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, OutputBuffer<l
 
 		if(it->pin()) {
 			act.setRotationPin(it->pin());
-			act.setdTheta(0); // FIXME
+			act.setdThetaInd(it->dThetaInd()); // FIXME
 		}
 		act.setdPkmTheta(it->dPkmTheta());
 
@@ -152,7 +155,7 @@ void swarmitfix::main_test_algorithm(void)
 
 	sr_ecp_msg->message("plan OK");
 
-	const Plan * p = pp.getPlan();
+	Plan * p = pp.getPlan();
 
 	// Plan iterators
 	Plan::PkmType::ItemConstIterator spkm1_it = p->pkm().item().begin();
@@ -184,7 +187,12 @@ void swarmitfix::main_test_algorithm(void)
 		if(ind > it.ind()) ind = it.ind();
 	}
 
-	do {
+	for (;; ++ind) {
+		// Diagnostic timestamp
+		boost::system_time start_timestamp = boost::get_system_time();
+
+		State * currentActionState;
+
 		std::cerr << "plan index = " << ind << "\t" <<
 			isFinished(spkm1_it, *p) <<
 			isFinished(spkm2_it, *p) <<
@@ -195,6 +203,8 @@ void swarmitfix::main_test_algorithm(void)
 
 		// Execute command for spkm1
 		if(indexMatches(spkm1_it, ind, *p)) {
+			currentActionState = (State *) &(*spkm1_it);
+			//currentActionState->execution_time().set(10.0);
 
 			if(executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get()))
 				current_workers_status.insert(lib::spkm1::ROBOT_NAME);
@@ -205,6 +215,7 @@ void swarmitfix::main_test_algorithm(void)
 
 		// Execute command for spkm2
 		if(indexMatches(spkm2_it, ind, *p)) {
+			currentActionState = (State *) &(*spkm2_it);
 
 			if (executeCommandItem(*spkm2_it++, IO.transmitters.spkm2.outputs.command.get()))
 				current_workers_status.insert(lib::spkm2::ROBOT_NAME);
@@ -213,8 +224,9 @@ void swarmitfix::main_test_algorithm(void)
 			fastForward(spkm1_it, 2, *p);
 		}
 
-		// Execute command for spkm1
+		// Execute command for smb1
 		if(indexMatches(smb1_it, ind, *p)) {
+			currentActionState = (State *) &(*smb1_it);
 
 			if(executeCommandItem(*smb1_it++, IO.transmitters.smb1.outputs.command.get()))
 				current_workers_status.insert(lib::smb1::ROBOT_NAME);
@@ -223,8 +235,9 @@ void swarmitfix::main_test_algorithm(void)
 			fastForward(smb1_it, 1, *p);
 		}
 
-		// Execute command for spkm2
+		// Execute command for smb2
 		if(indexMatches(smb2_it, ind, *p)) {
+			currentActionState = (State *) &(*smb2_it);
 
 			if(executeCommandItem(*smb2_it++, IO.transmitters.smb2.outputs.command.get()))
 				current_workers_status.insert(lib::smb2::ROBOT_NAME);
@@ -235,6 +248,7 @@ void swarmitfix::main_test_algorithm(void)
 
 		// Execute command for shead1
 		if(indexMatches(shead1_it, ind, *p)) {
+			currentActionState = (State *) &(*shead1_it);
 
 			// TODO
 			if(executeCommandItem(*shead1_it++))
@@ -246,6 +260,7 @@ void swarmitfix::main_test_algorithm(void)
 
 		// Execute command for shead2
 		if(indexMatches(shead2_it, ind, *p)) {
+			currentActionState = (State *) &(*shead2_it);
 
 			// TODO
 			if(executeCommandItem(*shead2_it++))
@@ -254,6 +269,8 @@ void swarmitfix::main_test_algorithm(void)
 			// Fast-forward upto next command
 			fastForward(shead2_it, 2, *p);
 		}
+
+		const bool record_timestamp = !current_workers_status.empty();
 
 		while(!current_workers_status.empty()) {
 			std::cout << "MP blocking for message" << std::endl;
@@ -280,6 +297,18 @@ void swarmitfix::main_test_algorithm(void)
 			}
 		}
 
+		// Diagnostic timestamp
+		if (record_timestamp) {
+			// Get the stop timestamp
+			boost::system_time stop_timestamp = boost::get_system_time();
+
+			// Calculate command duration
+			boost::posix_time::time_duration td = stop_timestamp - start_timestamp;
+
+			std::cout << "Command duration in [ms] is " << td.total_milliseconds() << std::endl;
+			currentActionState->execution_time().set(td.total_milliseconds()/1000.0);
+		}
+
 		// If all iterators are at the end
 		if(
 				isFinished(spkm1_it, *p) &&
@@ -293,8 +322,20 @@ void swarmitfix::main_test_algorithm(void)
 			// Then finish
 			break;
 		}
+	}
 
-	} while(++ind < 220);
+//	xml_schema::namespace_infomap map;
+//	map[""].schema = "people.xsd";
+
+	// Serialize to a file.
+	//
+	{
+		std::cout << "Serialize to a file." << std::endl;
+		std::ofstream ofs ("result.xml");
+		plan(ofs, *p);
+	}
+
+
 #if 0
 	for(Plan::PkmType::ItemConstIterator it = p->pkm().item().begin();
 			it != p->pkm().item().end();
