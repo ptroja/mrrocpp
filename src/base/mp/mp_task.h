@@ -75,6 +75,9 @@ public:
 
 	//! Reuse access operator from the underlying 'optional' concept type
 	using ptrType::operator->;
+
+	//! Reuse getter from the underlying 'optional' concept type
+	using ptrType::get;
 };
 
 //! Type for optionally inactive output data buffer
