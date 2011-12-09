@@ -11,6 +11,7 @@
 
 #include "base/mp/mp_robot.h"
 #include "robot/smb/const_smb.h"
+#include "dp_smb.h"
 
 namespace mrrocpp {
 namespace mp {

@@ -48,14 +48,11 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 
 void robot::create_command()
 {
-	//	int new_data_counter;
-	bool is_new_data;
-	bool is_new_request;
+	// checks if any data_port is set
+	bool is_new_data = false;
 
-	//sr_ecp_msg.message("create_command");
-
-	is_new_data = false;
-	is_new_request = false;
+	// cheks if any data_request_posrt is set
+	bool is_new_request = false;
 
 	// Set default variant to error in order to help tracking errors in communication
 	// TODO: the following should be if-then-elseif-elseif-elseif...-else branch tree
@@ -103,7 +100,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
-		ecp_edp_cbuffer.set_pose_specification = lib::spkm::XYZ_EULER_ZYZ;
+		ecp_edp_cbuffer.set_pose_specification = epos_external_command_data_port.data.pose_specification;
 
 		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;
