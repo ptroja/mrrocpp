@@ -147,7 +147,7 @@
                               <xs:element name="item" maxOccurs="unbounded">
                                 <xs:complexType>
                                   <xs:sequence>
-                                    <xs:element name="pin" type="xs:integer">
+                                    <xs:element name="pin" type="xs:int">
                                       <xs:annotation>
                                         <xs:documentation>
                                     by which pin to rotate: 1 - left, 2 - right, 3 -
@@ -249,13 +249,13 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ind" type="xs:integer">
+  <xs:element name="ind" type="xs:int">
     <xs:annotation>
       <xs:documentation>execution index along time axis
       </xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="numActions" type="xs:integer"/>
+  <xs:element name="numActions" type="xs:int"/>
   <xs:complexType name="State">
     <xs:sequence>
       <xs:element name="agent" type="xs:int">
