@@ -123,7 +123,7 @@ public:
 			T val = (T) (answer[3] | (answer[4] << 16));
 			return val;
 		} else {
-			throw canopen::se_canopen_error() << canopen::reason("Unsupported ReadObjectValue conversion");
+			throw canopen::fe_canopen_error() << canopen::reason("Unsupported ReadObjectValue conversion");
 		}
 	}
 
