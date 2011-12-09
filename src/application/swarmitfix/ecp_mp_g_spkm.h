@@ -5,6 +5,8 @@
 #if !defined(_ECP_MP_G_SPKM_H)
 #define _ECP_MP_G_SPKM_H
 
+#include <string>
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace spkm {
