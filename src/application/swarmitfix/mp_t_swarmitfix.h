@@ -2,7 +2,8 @@
 #define __MP_T_SWARMITFIX_H
 
 #include <boost/shared_ptr.hpp>
-#include <boost/unordered_map.hpp>
+#include <string>
+#include <set>
 
 #include "base/mp/mp_task.h"
 #include "base/lib/impconst.h"
@@ -190,11 +191,8 @@ private:
 //! Type for plan realization status
 typedef enum _PLAN_STATUS { ONGOING, FAILURE } PlanStatus;
 
-//! Type for worker (ECP) agent status
-typedef enum _WORKER_STATUS { IDLE, BUSY } WorkerStatus;
-
 //! Associative container type for worker status
-typedef boost::unordered_map<const lib::robot_name_t, WorkerStatus> WorkersStatus;
+typedef std::set<lib::robot_name_t> WorkersStatus;
 
 //! Planner object
 planner pp;

@@ -1,10 +1,4 @@
 // Start of user code user defined headers
-#include <boost/foreach.hpp>
-
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
 #include "ecp_mp_g_spkm.h"
 
 #include "robot/shead/mp_r_shead1.h"

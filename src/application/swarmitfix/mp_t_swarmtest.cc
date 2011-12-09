@@ -1,8 +1,17 @@
+#include <boost/foreach.hpp>
+
 #include "mp_t_swarmitfix.h"
 
 #include "planner.h"
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/mp/mp_exceptions.h"
+
+#include "robot/spkm/const_spkm1.h"
+#include "robot/spkm/const_spkm2.h"
+#include "robot/smb/const_smb1.h"
+#include "robot/smb/const_smb2.h"
+#include "robot/shead/const_shead1.h"
+#include "robot/shead/const_shead2.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -35,12 +44,12 @@ void fastForward(T & it, int id, const Plan & p)
 
 //! Check if pointed s-agent's command matches time index
 template<typename T>
-bool indexMatches(const T & it, unsigned int ind, const Plan & p)
+bool indexMatches(const T & it, int ind, const Plan & p)
 {
 	return (!isFinished(it, p) && it->ind() == ind);
 }
 
-void executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, OutputBuffer<lib::spkm::next_state_t> * outBuf)
+bool executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, OutputBuffer<lib::spkm::next_state_t> * outBuf)
 {
 	// Goal pose
 	lib::Homog_matrix hm;
@@ -73,7 +82,7 @@ void executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, OutputBuffer<lib
 	cmd.segments.push_back(hm);
 //		cmd.segments.push_back(hm);
 
-	std::cerr << "MP # of segments = " << cmd.segments.size() << std::endl;
+	std::cerr << "MP: spkm" << pkmCmd.agent() << " # of segments = " << cmd.segments.size() << std::endl;
 	for(lib::spkm::next_state_t::segment_sequence_t::const_iterator it = cmd.segments.begin();
 			it != cmd.segments.end();
 			++it) {
@@ -84,7 +93,54 @@ void executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, OutputBuffer<lib
 	}
 
 	// Send command if the output buffer is active
-	if(outBuf) outBuf->Send(cmd);
+	if(outBuf) {
+		outBuf->Send(cmd);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, OutputBuffer<lib::smb::next_state_t> * outBuf)
+{
+	// Setup command for the mobile base
+	lib::smb::next_state_t cmd(lib::smb::ACTION_LIST);
+
+	std::cerr << "MP: smb" << smbCmd.agent() << " # of SMB segments = " << smbCmd.actions().item().size() << std::endl;
+	// Iterate over action sequence
+	for(Plan::MbaseType::ItemType::ActionsType::ItemConstIterator it = smbCmd.actions().item().begin();
+			it != smbCmd.actions().item().end();
+			++it) {
+		std::cerr << "pin " << it->pin() << std::endl;
+		std::cerr << "dPkmTheta " << it->dPkmTheta() << std::endl;
+
+		// Setup single action
+		lib::smb::action act;
+
+		if(it->pin()) {
+			act.setRotationPin(it->pin());
+			act.setdTheta(0); // FIXME
+		}
+		act.setdPkmTheta(it->dPkmTheta());
+
+		// Append action to the command sequence
+		cmd.actions.push_back(act);
+	}
+
+	// Send command if the output buffer is active
+	if(outBuf) {
+		outBuf->Send(cmd);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool executeCommandItem(const Plan::HeadType::ItemType & headCmd)
+{
+	std::cerr << "MP: shead" << headCmd.agent() << " # of actions = " << headCmd.numActions() << std::endl;
+
+	return false;
 }
 
 void swarmitfix::main_test_algorithm(void)
@@ -117,16 +173,31 @@ void swarmitfix::main_test_algorithm(void)
 	// Time index counter
 	int ind = 0;
 
-	// Execute startup commands
-	if(spkm1_it != p->pkm().item().end() && spkm1_it->ind() < 0) {
-
+	// Setup index counter at the beginning of the plan
+	BOOST_FOREACH(const Plan::PkmType::ItemType & it, p->pkm().item()) {
+		if(ind > it.ind()) ind = it.ind();
+	}
+	BOOST_FOREACH(const Plan::HeadType::ItemType & it, p->head().item()) {
+		if(ind > it.ind()) ind = it.ind();
+	}
+	BOOST_FOREACH(const Plan::MbaseType::ItemType & it, p->mbase().item()) {
+		if(ind > it.ind()) ind = it.ind();
 	}
 
 	do {
+		std::cerr << "plan index = " << ind << "\t" <<
+			isFinished(spkm1_it, *p) <<
+			isFinished(spkm2_it, *p) <<
+			isFinished(smb1_it, *p) <<
+			isFinished(smb2_it, *p) <<
+			isFinished(shead1_it, *p) <<
+			isFinished(shead2_it, *p) << std::endl;
+
 		// Execute command for spkm1
 		if(indexMatches(spkm1_it, ind, *p)) {
 
-			executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get());
+			if(executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get()))
+				current_workers_status.insert(lib::spkm1::ROBOT_NAME);
 
 			// Fast-forward upto next command
 			fastForward(spkm1_it, 1, *p);
@@ -135,27 +206,95 @@ void swarmitfix::main_test_algorithm(void)
 		// Execute command for spkm2
 		if(indexMatches(spkm2_it, ind, *p)) {
 
-			executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get());
+			if (executeCommandItem(*spkm2_it++, IO.transmitters.spkm2.outputs.command.get()))
+				current_workers_status.insert(lib::spkm2::ROBOT_NAME);
 
 			// Fast-forward upto next command
 			fastForward(spkm1_it, 2, *p);
 		}
 
+		// Execute command for spkm1
+		if(indexMatches(smb1_it, ind, *p)) {
+
+			if(executeCommandItem(*smb1_it++, IO.transmitters.smb1.outputs.command.get()))
+				current_workers_status.insert(lib::smb1::ROBOT_NAME);
+
+			// Fast-forward upto next command
+			fastForward(smb1_it, 1, *p);
+		}
+
+		// Execute command for spkm2
+		if(indexMatches(smb2_it, ind, *p)) {
+
+			if(executeCommandItem(*smb2_it++, IO.transmitters.smb2.outputs.command.get()))
+				current_workers_status.insert(lib::smb2::ROBOT_NAME);
+
+			// Fast-forward upto next command
+			fastForward(smb2_it, 2, *p);
+		}
+
+		// Execute command for shead1
+		if(indexMatches(shead1_it, ind, *p)) {
+
+			// TODO
+			if(executeCommandItem(*shead1_it++))
+				current_workers_status.insert(lib::shead1::ROBOT_NAME);
+
+			// Fast-forward upto next command
+			fastForward(shead1_it, 1, *p);
+		}
+
+		// Execute command for shead2
+		if(indexMatches(shead2_it, ind, *p)) {
+
+			// TODO
+			if(executeCommandItem(*shead2_it++))
+				current_workers_status.insert(lib::shead2::ROBOT_NAME);
+
+			// Fast-forward upto next command
+			fastForward(shead2_it, 2, *p);
+		}
+
+		while(!current_workers_status.empty()) {
+			std::cout << "MP blocking for message" << std::endl;
+			ReceiveSingleMessage(true);
+
+			if(IO.transmitters.smb1.inputs.notification.get() && IO.transmitters.smb1.inputs.notification->isFresh()) {
+				IO.transmitters.smb1.inputs.notification->markAsUsed();
+				current_workers_status.erase(lib::smb1::ROBOT_NAME);
+			}
+
+			if(IO.transmitters.smb2.inputs.notification.get() && IO.transmitters.smb2.inputs.notification->isFresh()) {
+				IO.transmitters.smb2.inputs.notification->markAsUsed();
+				current_workers_status.erase(lib::smb2::ROBOT_NAME);
+			}
+
+			if(IO.transmitters.spkm1.inputs.notification.get() && IO.transmitters.spkm1.inputs.notification->isFresh()) {
+				IO.transmitters.spkm1.inputs.notification->markAsUsed();
+				current_workers_status.erase(lib::spkm1::ROBOT_NAME);
+			}
+
+			if(IO.transmitters.spkm2.inputs.notification.get() && IO.transmitters.spkm2.inputs.notification->isFresh()) {
+				IO.transmitters.spkm2.inputs.notification->markAsUsed();
+				current_workers_status.erase(lib::spkm2::ROBOT_NAME);
+			}
+		}
+
 		// If all iterators are at the end
 		if(
-				spkm1_it == p->pkm().item().end() &&
-				spkm2_it == p->pkm().item().end() &&
-				smb1_it == p->mbase().item().end() &&
-				smb2_it == p->mbase().item().end() &&
-				shead1_it == p->head().item().end() &&
-				shead2_it == p->head().item().end()
+				isFinished(spkm1_it, *p) &&
+				isFinished(spkm2_it, *p) &&
+				isFinished(smb1_it, *p) &&
+				isFinished(smb2_it, *p) &&
+				isFinished(shead1_it, *p) &&
+				isFinished(shead2_it, *p)
 				)
 		{
 			// Then finish
 			break;
 		}
 
-	} while(++ind);
+	} while(++ind < 220);
 #if 0
 	for(Plan::PkmType::ItemConstIterator it = p->pkm().item().begin();
 			it != p->pkm().item().end();
