@@ -142,75 +142,70 @@ void swarmitfix::main_task_algorithm(void)
 {
 
 	sr_ecp_msg->message("New experimental series");
-	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
-//	move_spkm_joints(0.28, 0.292, 0.28, 0, 0, 0);
-// znajdujemy sie w pozycji bazy jezdnej A
-// smb - najpierw idziemy robotem w gore (wszystkie nogi w dol)
+
+	// Move to the *neutral* PKM pose.
+	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
+
 	sr_ecp_msg->message("1");
 
+	// Pull out all SMB legs.
 	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 
-	// Pose 0
-
+	// Move SMB and SPKM to pose 0.
 	move_smb_external(0, 1.583);
-
 	move_spkm_external(0, 0, 0.439, 0, -0.72, 0.03);
 	wait_ms(1000);
 
-	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
+	// Move back to the *neutral* PKM pose.
+	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
 
-	// Pose 2
-
+	// Move SMB and SPKM to pose 2.
 	move_smb_external(0, 0.500);
-
 	move_spkm_external(-0.1, 0, 0.438, 0, -0.81, 0.11);
 	wait_ms(1000);
 
-	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
+	// Move back to the *neutral* PKM pose.
+	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
 
-	// Pose 1
-
+	// Move SMB and SPKM to pose 1.
 	move_smb_external(0, -2.500);
-
 	move_spkm_external(-0.09, 0, 0.44, 0, -0.843, -0.03);
 	wait_ms(1000);
 
-	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
+	// Move back to the *neutral* PKM pose.
+	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
 
-	// move to smb position 2
-
+	// Move to SMB position 2 - rotate around leg 3 by 60 degrees.
 	rotate_smb(3, 1);
 
-	// Pose 4
-
+	// Move SMB and SPKM to pose 4.
 	move_smb_external(0, 2.0);
-
 	move_spkm_external(-0.05, 0, 0.445, 0, -0.81, -0.1);
 	wait_ms(1000);
 
-	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
+	// Move back to the *neutral* PKM pose.
+	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
 
-	// Pose 3
-
+	// Move SMB and SPKM to pose 3.
 	move_smb_external(0, -1.500);
-
 	move_spkm_external(-0.1, 0, 0.429, 0, -0.868, 0.09);
 	wait_ms(1000);
 
-	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
+	// Move back to the *neutral* PKM pose.
+	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
 
-	// Pose 5
-
+	// Move SMB and SPKM to pose 5.
 	move_smb_external(0, -3.0);
-
 	move_spkm_external(-0.1, 0, 0.424, 0, -0.83, -0.02);
 	wait_ms(1000);
 
-	move_spkm_external(-0.1, 0, 0.38, 0, -0.868, 0.1);
+	// Move back to the *neutral* PKM pose.
+	move_spkm_external(0.15, 0, 0.405, 0, -1.045, 0);
 
+	// Move to SMB position 1 - rotate around leg 3 by -60 degrees.
 	rotate_smb(3, -1);
+	// Move to start position.
 	move_smb_external(0, 0);
-	// smb - wsuwamy wszystkie nogi
 
 	sr_ecp_msg->message("14");
 
