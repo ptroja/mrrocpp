@@ -100,7 +100,7 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
-		ecp_edp_cbuffer.set_pose_specification = lib::spkm::XYZ_EULER_ZYZ;
+		ecp_edp_cbuffer.set_pose_specification = epos_external_command_data_port.data.pose_specification;
 
 		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;

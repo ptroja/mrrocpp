@@ -185,7 +185,7 @@ struct epos_trapezoidal_command
 }__attribute__((__packed__));
 
 /*!
- * @brief SwarmItFix Epos motor and joint and external command, called from UI
+ * @brief SwarmItFix Epos motor and joint command, called from UI
  * @ingroup epos
  */
 struct epos_simple_command
