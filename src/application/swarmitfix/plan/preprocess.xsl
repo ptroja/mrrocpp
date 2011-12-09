@@ -34,7 +34,8 @@
     <xsl:template match="/plan/pkm/item/psi2"/>
     <xsl:template match="/plan/pkm/item/psi3"/>
     <xsl:template match="/plan/pkm/item/beta7"/>
-    
+    <!-- Remove mobile base duplicate coordinates -->
+	<xsl:template match="/plan/mbase/item/actions/item/dTheta"/>
     
     <!-- Rename ox,oy,oz to alpha,beta,gamma -->
     <xsl:template match="/plan/pkm/item/Xyz_Euler_Zyz/ox">

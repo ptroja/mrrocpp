@@ -126,7 +126,7 @@
       <actions>
         <item>
           <pin>0</pin>
-          <dTheta>0</dTheta>
+          <dThetaInd>0</dThetaInd>
           <dPkmTheta>-0.936972252711202</dPkmTheta>
         </item>
       </actions>
@@ -147,7 +147,7 @@
       <actions>
         <item>
           <pin>0</pin>
-          <dTheta>0</dTheta>
+          <dThetaInd>0</dThetaInd>
           <dPkmTheta>2.36404498857794</dPkmTheta>
         </item>
       </actions>
@@ -168,8 +168,8 @@
       <actions>
         <item>
           <pin>3</pin>
-          <dTheta>5.23598775598299</dTheta>
-          <dPkmTheta>1.51321287684232</dPkmTheta>
+          <dThetaInd>5</dThetaInd>
+          <dPkmTheta>1.51321287684233</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
@@ -183,7 +183,7 @@
       <ind>-25</ind>
       <Xyz_Euler_Zyz>
         <x>0.0333242292772146</x>
-        <y>2.54060106286147e-016</y>
+        <y>0</y>
         <z>0.45403</z>
         <alpha>3.14159265358979</alpha>
         <beta>0.785398163397448</beta>
@@ -211,7 +211,7 @@
       <ind>175</ind>
       <Xyz_Euler_Zyz>
         <x>0.0333242292772146</x>
-        <y>2.54060106286147e-016</y>
+        <y>0</y>
         <z>0.41403</z>
         <alpha>3.14159265358979</alpha>
         <beta>0.785398163397448</beta>
@@ -225,7 +225,7 @@
       <ind>176</ind>
       <Xyz_Euler_Zyz>
         <x>0.07163</x>
-        <y>2.54060106286147e-016</y>
+        <y>0</y>
         <z>0.41403</z>
         <alpha>3.14159265358979</alpha>
         <beta>0.785398163397448</beta>
@@ -239,7 +239,7 @@
       <ind>177</ind>
       <Xyz_Euler_Zyz>
         <x>0.0716299999999997</x>
-        <y>-3.14374082321933e-016</y>
+        <y>0</y>
         <z>0.41403</z>
         <alpha>3.14159265358979</alpha>
         <beta>0.785398163397448</beta>
@@ -253,9 +253,9 @@
       <ind>178</ind>
       <Xyz_Euler_Zyz>
         <x>-0.0354923767689968</x>
-        <y>2.26177410134198e-016</y>
+        <y>0</y>
         <z>0.41403</z>
-        <alpha>-3.14159265358979</alpha>
+        <alpha>3.14159265358979</alpha>
         <beta>0.785398163397448</beta>
         <gamma>3.14159265358979</gamma>
       </Xyz_Euler_Zyz>
@@ -267,9 +267,9 @@
       <ind>179</ind>
       <Xyz_Euler_Zyz>
         <x>-0.0354923767689968</x>
-        <y>2.26177410134198e-016</y>
+        <y>0</y>
         <z>0.45403</z>
-        <alpha>-3.14159265358979</alpha>
+        <alpha>3.14159265358979</alpha>
         <beta>0.785398163397448</beta>
         <gamma>3.14159265358979</gamma>
       </Xyz_Euler_Zyz>
