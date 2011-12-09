@@ -8,19 +8,36 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-void fastForward(Plan::PkmType::ItemConstIterator & it, Plan::PkmType::ItemType::AgentType id, const Plan & p)
+//! Check if PKM agent has completed all planned actions
+bool isFinished(const Plan::PkmType::ItemConstIterator & it, const Plan & p)
 {
-	while(it != p.pkm().item().end() && it->agent() != id) ++it;
+	return (it == p.pkm().item().end());
 }
 
-void fastForward(Plan::MbaseType::ItemConstIterator & it, Plan::MbaseType::ItemType::AgentType id, const Plan & p)
+//! Check if mobile base has completed all planned actions
+bool isFinished(const Plan::MbaseType::ItemConstIterator & it, const Plan & p)
 {
-	while(it != p.mbase().item().end() && it->agent() != id) ++it;
+	return (it == p.mbase().item().end());
 }
 
-void fastForward(Plan::HeadType::ItemConstIterator & it, Plan::HeadType::ItemType::AgentType id, const Plan & p)
+//! Check if head has completed all planned actions
+bool isFinished(const Plan::HeadType::ItemConstIterator & it, const Plan & p)
 {
-	while(it != p.head().item().end() && it->agent() != id) ++it;
+	return (it == p.head().item().end());
+}
+
+//! Fast-forward s-agent's plan item iterator until pointing next command
+template<typename T>
+void fastForward(T & it, int id, const Plan & p)
+{
+	while(!isFinished(it, p) && it->agent() != id) ++it;
+}
+
+//! Check if pointed s-agent's command matches time index
+template<typename T>
+bool indexMatches(const T & it, unsigned int ind, const Plan & p)
+{
+	return (!isFinished(it, p) && it->ind() == ind);
 }
 
 void executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, OutputBuffer<lib::spkm::next_state_t> * outBuf)
@@ -107,7 +124,7 @@ void swarmitfix::main_test_algorithm(void)
 
 	do {
 		// Execute command for spkm1
-		if(spkm1_it != p->pkm().item().end() && spkm1_it->ind() == ind) {
+		if(indexMatches(spkm1_it, ind, *p)) {
 
 			executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get());
 
@@ -116,7 +133,7 @@ void swarmitfix::main_test_algorithm(void)
 		}
 
 		// Execute command for spkm2
-		if(spkm2_it != p->pkm().item().end() && spkm2_it->ind() == ind) {
+		if(indexMatches(spkm2_it, ind, *p)) {
 
 			executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get());
 
