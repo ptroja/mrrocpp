@@ -13,6 +13,9 @@
 
 #include <boost/throw_exception.hpp>
 
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/vector.hpp>
+
 #include "robot/maxon/dp_epos.h"
 #include "const_smb.h"
 #include "base/lib/exception.h"
@@ -92,7 +95,7 @@ public:
     //! Set PKM relative rotation
     void setdPkmTheta(double dPkmTheta)
     {
-    	if (dPkmTheta < -M_PI || dPkmTheta > M_PI) {
+    	if (dPkmTheta < -2*M_PI || dPkmTheta > 2*M_PI) {
     		BOOST_THROW_EXCEPTION(action_parameter_error());
     	}
 
@@ -134,6 +137,9 @@ private:
 	//! If > 0 and greater than a limit imposed by the motors, then the motion will be slowed down.
 	//! In another case, the NACK will be replied.
 	double duration;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
 
 	//! Serialization of the data structure
 	template <class Archive>
