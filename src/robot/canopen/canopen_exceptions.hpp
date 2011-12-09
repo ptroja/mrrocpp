@@ -21,7 +21,7 @@ namespace canopen {
  * \brief All high-level methods throws this exception in case of error.
  * \author ptrojane/tkornuta
  */
-REGISTER_SYSTEM_ERROR(se_canopen_error, "CANopen Error")
+REGISTER_FATAL_ERROR(fe_canopen_error, "CANopen Error")
 
 
 //! reason of an exception

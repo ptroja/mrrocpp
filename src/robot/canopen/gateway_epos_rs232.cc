@@ -45,7 +45,7 @@ void gateway_epos_rs232::open()
 	 */
 
 	if (ep >= 0)
-		throw se_canopen_error() << reason("serial port already opened");
+		throw fe_canopen_error() << reason("serial port already opened");
 
 	for (int i = 0; i < 5; i++) {
 		if ((ep = ::open(device.c_str(), O_RDWR | O_NOCTTY | O_NDELAY)) >= 0)
@@ -55,7 +55,7 @@ void gateway_epos_rs232::open()
 
 	if (ep == -1) {
 		perror("open()");
-		throw se_canopen_error() << reason("open serial port");
+		throw fe_canopen_error() << reason("open serial port");
 	}
 
 	if (tcgetattr(ep, &options) < 0) {
@@ -87,7 +87,7 @@ void gateway_epos_rs232::close()
 	if(ep >= 0) {
 		if (::close(ep) != 0) {
 			perror("close()");
-			throw se_canopen_error() << reason("serial port already opened");
+			throw fe_canopen_error() << reason("serial port already opened");
 		}
 	}
 
@@ -109,7 +109,7 @@ unsigned int gateway_epos_rs232::readAnswer(WORD *ans, unsigned int ans_len)
 	//printf("first answer: %#04x; first: %#06x\n", c, first);
 
 	if (c != E_ANS) {
-		throw se_canopen_error() << reason("EPOS says: this is no answer frame!"); // TODO: , c);
+		throw fe_canopen_error() << reason("EPOS says: this is no answer frame!"); // TODO: , c);
 	}
 	c = E_OK;
 	writeBYTE(c);
@@ -123,7 +123,7 @@ unsigned int gateway_epos_rs232::readAnswer(WORD *ans, unsigned int ans_len)
 	WORD framelen = c + 3;
 
 	if (ans_len < framelen) {
-		throw se_canopen_error() << reason("output buffer to short for a message");
+		throw fe_canopen_error() << reason("output buffer to short for a message");
 	}
 
 	ans[0] = first;
@@ -161,7 +161,7 @@ unsigned int gateway_epos_rs232::readAnswer(WORD *ans, unsigned int ans_len)
 #endif
 	} else {
 		writeBYTE(E_FAIL);
-		throw se_canopen_error() << reason("CRC test FAILED");
+		throw fe_canopen_error() << reason("CRC test FAILED");
 	}
 
 	/* check for error code */
@@ -212,7 +212,7 @@ void gateway_epos_rs232::sendCommand(WORD *frame)
 		c = readBYTE();
 
 		if (c != E_OK) {
-			throw se_canopen_error() << reason("EPOS not ready"); //TODO: reply was: %#04x, c;
+			throw fe_canopen_error() << reason("EPOS not ready"); //TODO: reply was: %#04x, c;
 		}
 
 		c = (frame[0] & 0x00FF); //MSB
@@ -226,7 +226,7 @@ void gateway_epos_rs232::sendCommand(WORD *frame)
 		// wait for "End Ack 'O'"
 		c = readBYTE();
 		if (c != E_OK) {
-			throw se_canopen_error() << reason("EPOS says: CRCerror!");
+			throw fe_canopen_error() << reason("EPOS says: CRCerror!");
 		}
 	}
 }
@@ -245,7 +245,7 @@ void gateway_epos_rs232::writeBYTE(BYTE c)
 #endif
 
 	if (write(ep, &c, 1) < 0) {
-		throw se_canopen_error() << errno_call("write") << errno_code(errno);
+		throw fe_canopen_error() << errno_call("write") << errno_code(errno);
 	}
 }
 
@@ -257,7 +257,7 @@ void gateway_epos_rs232::writeWORD(WORD w)
 #endif
 
 	if (write(ep, &w, 2) < 0) {
-		throw se_canopen_error() << errno_call("write") << errno_code(errno);
+		throw fe_canopen_error() << errno_call("write") << errno_code(errno);
 	}
 }
 
@@ -282,20 +282,20 @@ BYTE gateway_epos_rs232::readBYTE()
 
 		int s = select(ep+1, &rfds, NULL, NULL, &tv);
 		if(s < 0) {
-			throw se_canopen_error() << errno_call("select") << errno_code(errno);
+			throw fe_canopen_error() << errno_call("select") << errno_code(errno);
 		} else if (s == 0) {
 			continue;
 		}
 
 		if(!FD_ISSET(ep, &rfds)) {
-			throw se_canopen_error() << reason("EPOS filedescriptor not in read-ready set");
+			throw fe_canopen_error() << reason("EPOS filedescriptor not in read-ready set");
 		}
 
 		BYTE c;
 		int n = read(ep, &c, 1);
 		int errsv = errno;
 		if (n < 0 && errsv != EAGAIN) {
-			throw se_canopen_error() << errno_call("read") << errno_code(errsv);
+			throw fe_canopen_error() << errno_call("read") << errno_code(errsv);
 		}
 		if (n > 0) {
 #ifdef DDEBUG
@@ -316,7 +316,7 @@ BYTE gateway_epos_rs232::readBYTE()
 	}
 
 	// timeout
-	throw se_canopen_error() << reason("read timeout");
+	throw fe_canopen_error() << reason("read timeout");
 }
 
 /*  read a single WORD from EPOS, timeout implemented */
@@ -340,20 +340,20 @@ WORD gateway_epos_rs232::readWORD()
 
 		int s = select(ep+1, &rfds, NULL, NULL, &tv);
 		if(s < 0) {
-			throw se_canopen_error() << errno_call("select") << errno_code(errno);
+			throw fe_canopen_error() << errno_call("select") << errno_code(errno);
 		} else if (s == 0) {
 			continue;
 		}
 
 		if(!FD_ISSET(ep, &rfds)) {
-			throw se_canopen_error() << reason("EPOS filedescriptor not in read-ready set");
+			throw fe_canopen_error() << reason("EPOS filedescriptor not in read-ready set");
 		}
 
 		WORD w;
 		int n = read(ep, &w, sizeof(WORD));
 		int errsv = errno;
 		if (n < 0 && errsv != EAGAIN) {
-			throw se_canopen_error() << errno_call("read") << errno_code(errsv);
+			throw fe_canopen_error() << errno_call("read") << errno_code(errsv);
 		}
 		if (n > 0) {
 #ifdef DDEBUG
@@ -374,7 +374,7 @@ WORD gateway_epos_rs232::readWORD()
 	}
 
 	// timeout
-	throw se_canopen_error() << reason("read timeout");
+	throw fe_canopen_error() << reason("read timeout");
 }
 
 unsigned int gateway_epos_rs232::ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex)
@@ -461,7 +461,7 @@ void gateway_epos_rs232::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, 
 
 		checkEPOSerror(E_error);
 	}
-	catch (se_canopen_error & e) {
+	catch (fe_canopen_error & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -492,7 +492,7 @@ void gateway_epos_rs232::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE 
 
 		toggle = true;
 	}
-	catch (se_canopen_error & e) {
+	catch (fe_canopen_error & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -503,7 +503,7 @@ void gateway_epos_rs232::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE 
 void gateway_epos_rs232::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t len)
 {
 	if (len > 63) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Segmented write of > 63 bytes not allowed"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Segmented write of > 63 bytes not allowed"));
 	}
 	try {
 		WORD frame[32+2];
@@ -524,7 +524,7 @@ void gateway_epos_rs232::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t 
 		// change the toggle flag value
 		toggle = (toggle) ? false : true;
 	}
-	catch (se_canopen_error & e) {
+	catch (fe_canopen_error & e) {
 		e << canId(nodeId);
 		throw;
 	}

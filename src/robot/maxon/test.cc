@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 		printf("%.9f\n", t);
 
 		gateway.close();
-	} catch (se_canopen_error & error) {
+	} catch (fe_canopen_error & error) {
 		std::cerr << "EPOS Error." << std::endl;
 
 		if ( std::string const * r = boost::get_error_info<reason>(error) )
