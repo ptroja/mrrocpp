@@ -248,7 +248,6 @@ void swarmitfix::move_smb_external(double x1, double x2)
 {
 	lib::smb::smb_epos_simple_command mp_ecp_smb_epos_simple_command;
 	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
-	mp_ecp_smb_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
 	mp_ecp_smb_epos_simple_command.base_vs_bench_rotation = x1;
 	mp_ecp_smb_epos_simple_command.pkm_vs_base_rotation = x2;

@@ -107,9 +107,6 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.set_pose_specification = lib::smb::EXTERNAL;
 
-		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
-		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;
-
 		ecp_edp_cbuffer.base_vs_bench_rotation = epos_external_command_data_port.data.base_vs_bench_rotation;
 		ecp_edp_cbuffer.pkm_vs_base_rotation = epos_external_command_data_port.data.pkm_vs_base_rotation;
 

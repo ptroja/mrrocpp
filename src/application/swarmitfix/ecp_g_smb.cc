@@ -37,7 +37,7 @@ void action_executor::request_action_execution(robot_t & robot, const lib::smb::
 	// TODO: this have to be UP-rotate-DOWN sequence
 	if(action.getRotationPin() != 0) {
 		// Copy rotation command
-		robot.epos_external_command_data_port.data.desired_position[0] = action.getdThetaInd();
+		robot.epos_external_command_data_port.data.base_vs_bench_rotation = action.getdThetaInd();
 
 		// Trigger command execution
 		robot.epos_external_command_data_port.set();
@@ -45,7 +45,7 @@ void action_executor::request_action_execution(robot_t & robot, const lib::smb::
 
 	if(action.getdPkmTheta()) {
 		// Copy rotation command
-		robot.epos_external_command_data_port.data.desired_position[1] = action.getdPkmTheta();
+		robot.epos_external_command_data_port.data.pkm_vs_base_rotation = action.getdPkmTheta();
 
 		// Trigger command execution
 		robot.epos_external_command_data_port.set();

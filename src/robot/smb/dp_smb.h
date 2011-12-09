@@ -239,8 +239,6 @@ struct festo_command_td
  */
 struct smb_epos_simple_command
 {
-	lib::epos::EPOS_MOTION_VARIANT motion_variant;
-
 	// external
 	int base_vs_bench_rotation;
 	double pkm_vs_base_rotation;
@@ -254,7 +252,6 @@ struct smb_epos_simple_command
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & motion_variant;
 		ar & base_vs_bench_rotation;
 		ar & pkm_vs_base_rotation;
 		ar & estimated_time;
