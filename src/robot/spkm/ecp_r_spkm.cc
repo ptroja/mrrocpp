@@ -48,14 +48,11 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 
 void robot::create_command()
 {
-	//	int new_data_counter;
-	bool is_new_data;
-	bool is_new_request;
+	// checks if any data_port is set
+	bool is_new_data = false;
 
-	//sr_ecp_msg.message("create_command");
-
-	is_new_data = false;
-	is_new_request = false;
+	// cheks if any data_request_posrt is set
+	bool is_new_request = false;
 
 	// Set default variant to error in order to help tracking errors in communication
 	// TODO: the following should be if-then-elseif-elseif-elseif...-else branch tree
