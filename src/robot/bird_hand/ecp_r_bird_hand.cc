@@ -13,14 +13,22 @@ namespace ecp {
 namespace bird_hand {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-		ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, _config, _sr_ecp), bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager), bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager), bird_hand_status_reply_data_request_port(lib::bird_hand::STATUS_DATA_REQUEST_PORT, port_manager), bird_hand_configuration_reply_data_request_port(lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT, port_manager)
+		ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, _config, _sr_ecp),
+		bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager),
+		bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager),
+		bird_hand_status_reply_data_request_port(lib::bird_hand::STATUS_DATA_REQUEST_PORT, port_manager),
+		bird_hand_configuration_reply_data_request_port(lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
-		ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, _ecp_object), bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager), bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager), bird_hand_status_reply_data_request_port(lib::bird_hand::STATUS_DATA_REQUEST_PORT, port_manager), bird_hand_configuration_reply_data_request_port(lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT, port_manager)
+		ecp::common::robot::ecp_robot(lib::bird_hand::ROBOT_NAME, lib::bird_hand::NUM_OF_SERVOS, _ecp_object),
+		bird_hand_command_data_port(lib::bird_hand::COMMAND_DATA_PORT, port_manager),
+		bird_hand_configuration_command_data_port(lib::bird_hand::CONFIGURATION_DATA_PORT, port_manager),
+		bird_hand_status_reply_data_request_port(lib::bird_hand::STATUS_DATA_REQUEST_PORT, port_manager),
+		bird_hand_configuration_reply_data_request_port(lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -29,8 +37,11 @@ robot::robot(common::task::task_base& _ecp_object) :
 void robot::create_command()
 {
 
-	bool is_new_data;
-	bool is_new_request;
+	// checks if any data_port is set
+	bool is_new_data = false;
+
+	// cheks if any data_request_posrt is set
+	bool is_new_request = false;
 
 	// NOWE PORTY
 	ecp_command.get_type = NOTHING_DEFINITION;

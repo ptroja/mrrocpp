@@ -63,13 +63,13 @@ void robot::create_kinematic_models_for_given_robot(void)
 void robot::create_command()
 {
 
-	//	int new_data_counter;
-	bool is_new_data;
-	bool is_new_request;
+	// checks if any data_port is set
+	bool is_new_data = false;
+
+	// cheks if any data_request_posrt is set
+	bool is_new_request = false;
 
 	sr_ecp_msg.message("create_command");
-
-	is_new_data = false;
 
 	if (epos_motor_command_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
