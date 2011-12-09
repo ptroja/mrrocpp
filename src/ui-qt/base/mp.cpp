@@ -35,35 +35,41 @@ int Mp::MPup_int()
 {
 	interface->set_ui_state_notification(UI_N_PROCESS_CREATION);
 
-	if (mp_state.pid == -1) {
+	try {
 
-		mp_state.node_nr = interface->config->return_node_number(mp_state.node_name.c_str());
+		if (mp_state.pid == -1) {
 
-		std::string mp_network_pulse_attach_point("/dev/name/global/");
-		mp_network_pulse_attach_point += mp_state.network_pulse_attach_point;
+			mp_state.node_nr = interface->config->return_node_number(mp_state.node_name.c_str());
 
-		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
-		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
-			interface->ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
-		} else if (interface->check_node_existence(mp_state.node_name, "mp")) {
-			mp_state.pid = interface->config->process_spawn(lib::MP_SECTION);
+			std::string mp_network_pulse_attach_point("/dev/name/global/");
+			mp_network_pulse_attach_point += mp_state.network_pulse_attach_point;
 
-			if (mp_state.pid > 0) {
+			// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
+			if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
+				interface->ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
+			} else if (interface->check_node_existence(mp_state.node_name, "mp")) {
+				mp_state.pid = interface->config->process_spawn(lib::MP_SECTION);
 
-				mp_state.MP = new RemoteAgent(lib::MP_SECTION);
-				mp_state.pulse = new OutputBuffer <char>(*mp_state.MP, "MP_PULSE");
+				if (mp_state.pid > 0) {
 
-				interface->teachingstate = ui::common::MP_RUNNING;
+					mp_state.MP = new RemoteAgent(lib::MP_SECTION);
+					mp_state.pulse = new OutputBuffer <char>(*mp_state.MP, "MP_PULSE");
 
-				mp_state.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
+					interface->teachingstate = ui::common::MP_RUNNING;
 
-				interface->raise_process_control_window();
-			} else {
-				fprintf(stderr, "mp spawn failed\n");
+					mp_state.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
+
+					interface->raise_process_control_window();
+				} else {
+					fprintf(stderr, "mp spawn failed\n");
+				}
+				interface->manage_interface();
+
 			}
-			interface->manage_interface();
-
 		}
+
+	} catch (std::logic_error &error) {
+		interface->ui_state = 2;
 	}
 
 	return 1;

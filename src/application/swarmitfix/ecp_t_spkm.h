@@ -10,8 +10,6 @@
 #include "base/lib/agent/OutputBuffer.h"
 #include "base/lib/swarmtypes.h"
 
-#include <iostream>
-
 namespace mrrocpp {
 namespace ecp {
 namespace spkm {

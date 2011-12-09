@@ -1,94 +1,56 @@
 /*
- * generator/ecp_g_smb.h
+ * ecp_g_smb.h
  *
- *Author: yoyek
+ * Author: ptroja
  */
 
 #ifndef ECP_G_SMB_H_
 #define ECP_G_SMB_H_
 
-#include "base/ecp/ecp_generator.h"
+#include "robot/smb/ecp_r_smb.h"
 #include "robot/smb/dp_smb.h"
+
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace smb {
 namespace generator {
 
-class pin_lock : public common::generator::generator
+class smb_action : public common::generator::_generator<ecp::smb::robot>
 {
-private:
-	lib::smb::multi_pin_locking_td mp_ecp_smb_multi_pin_locking_structure;
-
-	lib::single_thread_port <lib::smb::multi_pin_locking_td> * smb_multi_pin_locking_data_port;
-
-	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-
 public:
-	pin_lock(common::task::task& _ecp_task); //constructor
-	bool first_step(); //first step generation
-	bool next_step(); //next step generation
+	//! Constructor
+	smb_action(task_t & _ecp_task, const lib::smb::next_state_t::action_sequence_t & _actions);
 
-	void create_ecp_mp_reply();
-	void get_mp_ecp_command();
+	//! first step generation
+	bool first_step();
 
+	//! next step generation
+	bool next_step();
+
+private:
+	//! Motion action iterator
+	lib::smb::next_state_t::action_sequence_t::const_iterator action_iterator;
+
+	//! Request execution of a single motion action
+	void request_action_execution(robot_t & robot, const lib::smb::action & action);
+
+	//! Motion actions
+	const lib::smb::next_state_t::action_sequence_t & actions;
 };
 
-class pin_unlock : public common::generator::generator
+class smb_quickstop : public common::generator::_generator<ecp::smb::robot>
 {
-private:
-	lib::smb::multi_pin_locking_td mp_ecp_smb_multi_pin_locking_structure;
-
-	lib::single_thread_port <lib::smb::multi_pin_locking_td> * smb_multi_pin_locking_data_port;
-
-	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-
 public:
-	pin_unlock(common::task::task& _ecp_task); //constructor
-	bool first_step(); //first step generation
-	bool next_step(); //next step generation
+	//! Constructor
+	smb_quickstop(task_t & _ecp_task);
 
-	void create_ecp_mp_reply();
-	void get_mp_ecp_command();
+	//! first step generation
+	bool first_step();
 
-};
-
-class pin_rise : public common::generator::generator
-{
-private:
-	lib::smb::multi_pin_insertion_td mp_ecp_smb_multi_pin_insertion_structure;
-
-	lib::single_thread_port <lib::smb::multi_pin_insertion_td> * smb_festo_command_data_port;
-
-	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-
-public:
-	pin_rise(common::task::task& _ecp_task); //constructor
-	bool first_step(); //first step generation
-	bool next_step(); //next step generation
-
-	void create_ecp_mp_reply();
-	void get_mp_ecp_command();
-
-};
-
-class pin_lower : public common::generator::generator
-{
-private:
-	lib::smb::multi_pin_insertion_td mp_ecp_smb_multi_pin_insertion_structure;
-
-	lib::single_thread_port <lib::smb::multi_pin_insertion_td> * smb_festo_command_data_port;
-
-	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-
-public:
-	pin_lower(common::task::task& _ecp_task); //constructor
-	bool first_step(); //first step generation
-	bool next_step(); //next step generation
-
-	void create_ecp_mp_reply();
-	void get_mp_ecp_command();
-
+	//! next step generation
+	bool next_step();
 };
 
 } // namespace generator

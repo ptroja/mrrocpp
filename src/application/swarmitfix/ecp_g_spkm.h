@@ -1,7 +1,7 @@
 /*
- * generator/ecp_g_epos.h
+ * ecp_g_spkm.h
  *
- *Author: yoyek
+ * Author: ptroja
  */
 
 #ifndef ECP_G_SPKM_H_

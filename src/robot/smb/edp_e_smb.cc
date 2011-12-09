@@ -41,7 +41,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 void effector::check_controller_state()
 {
-	if (robot_test_mode){
+	if (robot_test_mode) {
 		return;
 	}
 
@@ -433,9 +433,9 @@ void effector::parse_motor_command()
 				&& (current_joints[0] != ecp_edp_cbuffer.joint_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check externals.
-		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::FRAME)
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::EXTERNAL)
 				&& (current_joints[0]
-						!= ecp_edp_cbuffer.goal_pos[0] * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
+						!= ecp_edp_cbuffer.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
@@ -473,12 +473,13 @@ void effector::parse_motor_command()
 			}
 		}
 			break;
-		case lib::smb::FRAME: {
-			msg->message("FRAME");
+		case lib::smb::EXTERNAL: {
+			msg->message("EXTERNAL");
 			// Leg rotational joint: Copy data directly from buffer and recalculate joint value.
-			desired_joints[0] = ecp_edp_cbuffer.goal_pos[0] * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio;
+			desired_joints[0] = ecp_edp_cbuffer.base_vs_bench_rotation
+					* mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio;
 			// SPKM rotational joint: Copy data joint value directly from buffer.
-			desired_joints[1] = ecp_edp_cbuffer.goal_pos[1];
+			desired_joints[1] = ecp_edp_cbuffer.pkm_vs_base_rotation;
 			cout << "JOINT[0]: " << desired_joints[0] << endl;
 			cout << "JOINT[1]: " << desired_joints[1] << endl;
 
@@ -502,54 +503,41 @@ void effector::parse_motor_command()
 
 void effector::execute_motor_motion()
 {
-	// TODO: remove this line!
-	ecp_edp_cbuffer.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+	// NOTE: for this robot only NON_SYNC_TRAPEZOIDAL motion variant makes sense
 
-	// Perform motion depending on its type.
-	// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
-	switch (ecp_edp_cbuffer.motion_variant)
-	{
-		case lib::epos::NON_SYNC_TRAPEZOIDAL:
-			// Execute command.
-			for (size_t i = 0; i < axes.size(); ++i) {
-				if (is_synchronised()) {
-					cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
-					if (!robot_test_mode) {
-						// Set velocity and acceleration values.
-						axes[i]->setProfileVelocity(Vdefault[i]);
-						axes[i]->setProfileAcceleration(Adefault[i]);
-						axes[i]->setProfileDeceleration(Ddefault[i]);
-						// In case of legs rotation node...
-						if (i == 0)
-							// ... perform the relative move.
-							axes[i]->moveAbsolute(desired_motor_pos_new[i] + legs_relative_zero_position);
-						else
-							axes[i]->moveAbsolute(desired_motor_pos_new[i]);
-					} else {
-						// Virtually "move" to desired absolute position.
-						current_motor_pos[i] = desired_motor_pos_new[i];
-					}
-				} else {
-					cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
-					if (!robot_test_mode) {
-						// Set velocity and acceleration values.
-						axes[i]->setProfileVelocity(Vdefault[i]);
-						axes[i]->setProfileAcceleration(Adefault[i]);
-						axes[i]->setProfileDeceleration(Ddefault[i]);
-						axes[i]->moveRelative(desired_motor_pos_new[i]);
-					} else {
-						// Virtually "move" to desired relative position.
-						current_motor_pos[i] += desired_motor_pos_new[i];
-					}
-				}
+	// Execute command.
+	for (size_t i = 0; i < axes.size(); ++i) {
+		if (is_synchronised()) {
+			cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
+			if (!robot_test_mode) {
+				// Set velocity and acceleration values.
+				axes[i]->setProfileVelocity(Vdefault[i]);
+				axes[i]->setProfileAcceleration(Adefault[i]);
+				axes[i]->setProfileDeceleration(Ddefault[i]);
+				// In case of legs rotation node...
+				if (i == 0)
+					// ... perform the relative move.
+					axes[i]->moveAbsolute(desired_motor_pos_new[i] + legs_relative_zero_position);
+				else
+					axes[i]->moveAbsolute(desired_motor_pos_new[i]);
+			} else {
+				// Virtually "move" to desired absolute position.
+				current_motor_pos[i] = desired_motor_pos_new[i];
 			}
-			break;
-		default:
-			// Throw non-fatal error - motion type not supported.
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_motion_type());
-			break;
-	} //: switch (ecp_edp_cbuffer.motion_variant)
-
+		} else {
+			cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
+			if (!robot_test_mode) {
+				// Set velocity and acceleration values.
+				axes[i]->setProfileVelocity(Vdefault[i]);
+				axes[i]->setProfileAcceleration(Adefault[i]);
+				axes[i]->setProfileDeceleration(Ddefault[i]);
+				axes[i]->moveRelative(desired_motor_pos_new[i]);
+			} else {
+				// Virtually "move" to desired relative position.
+				current_motor_pos[i] += desired_motor_pos_new[i];
+			}
+		}
+	}
 }
 
 /*--------------------------------------------------------------------------*/
@@ -616,7 +604,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						edp_ecp_rbuffer.epos_controller[i].position = current_joints[i];
 					}
 					break;
-				case lib::smb::FRAME:
+				case lib::smb::EXTERNAL:
 					msg->message("EDP get_arm_position FRAME");
 					// For every axis.
 					for (size_t i = 0; i < axes.size(); ++i) {

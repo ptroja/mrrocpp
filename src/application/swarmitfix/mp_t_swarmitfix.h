@@ -9,6 +9,7 @@
 
 #include "base/lib/swarmtypes.h"
 #include "robot/spkm/dp_spkm.h"
+#include "robot/smb/dp_smb.h"
 #include "planner.h"
 
 
@@ -42,11 +43,11 @@ typedef struct _IO {
 			
 			//! Output buffers
 			struct _outputs {
-			//! Data type of output buffer
-			typedef OutputPtr<lib::spkm::next_state_t> command_t;
+				//! Data type of output buffer
+				typedef OutputPtr<lib::spkm::next_state_t> command_t;
 
-			//! OutputBuffer: Command to execute
-			command_t command;
+				//! OutputBuffer: Command to execute
+				command_t command;
 			
 			} outputs;
 			
@@ -71,6 +72,12 @@ typedef struct _IO {
 			
 			//! Output buffers
 			struct _outputs {
+				//! Data type of output buffer
+				typedef OutputPtr<lib::smb::next_state_t> command_t;
+
+				//! OutputBuffer: Command to execute
+				command_t command;
+
 			} outputs;
 			
 		} smb2_t;
@@ -94,11 +101,11 @@ typedef struct _IO {
 			
 			//! Output buffers
 			struct _outputs {
-			//! Data type of output buffer
-			typedef OutputPtr<lib::spkm::next_state_t> command_t;
+				//! Data type of output buffer
+				typedef OutputPtr<lib::spkm::next_state_t> command_t;
 
-			//! OutputBuffer: Command to execute
-			command_t command;
+				//! OutputBuffer: Command to execute
+				command_t command;
 			
 			} outputs;
 			
@@ -123,6 +130,12 @@ typedef struct _IO {
 			
 			//! Output buffers
 			struct _outputs {
+				//! Data type of output buffer
+				typedef OutputPtr<lib::smb::next_state_t> command_t;
+
+				//! OutputBuffer: Command to execute
+				command_t command;
+
 			} outputs;
 			
 		} smb1_t;
