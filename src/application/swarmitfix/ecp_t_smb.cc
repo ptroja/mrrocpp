@@ -55,7 +55,7 @@ void swarmitfix::main_task_algorithm(void)
 			// Dispatch to selected generator
 			switch(nextstateBuffer.Get().variant) {
 				case lib::smb::ACTION_LIST:
-					//g_action->Move();
+					g_action->Move();
 					break;
 				default:
 					g_quickstop->Move();
