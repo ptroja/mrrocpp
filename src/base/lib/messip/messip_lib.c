@@ -180,7 +180,7 @@ messip_writev( int sockfd,
 			if ( errno == EPIPE )
 				return dcount;
 
-			// End point is closed
+			// Endpoint is closed
 			if (errno == ECONNRESET)
 				return -1;
 
@@ -210,7 +210,7 @@ messip_readv( int sockfd,
 			if(errno == EINTR)
 				continue;
 
-			// End point is closed
+			// Endpoint is closed
 			if (errno == ECONNRESET)
 				return -1;
 
