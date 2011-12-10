@@ -46,6 +46,10 @@ int Mp::MPup_int()
 			}
 
 			mp_state.MP = (boost::shared_ptr<RemoteAgent>) new RemoteAgent(lib::MP_SECTION);
+
+			// Check if connection is up&ready
+			mp_state.MP->Ping();
+
 			mp_state.pulse = (boost::shared_ptr<OutputBuffer<char> >) new OutputBuffer <char>(*mp_state.MP, "MP_PULSE");
 
 			interface.teachingstate = ui::common::MP_RUNNING;
