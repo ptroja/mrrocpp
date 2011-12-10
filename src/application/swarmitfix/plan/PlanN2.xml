@@ -4,7 +4,7 @@
     <item>
       <agent>1</agent>
       <TBeg>0</TBeg>
-      <TEnd>12.1234028939257</TEnd>
+      <TEnd>12.123</TEnd>
       <ind>0</ind>
       <cx>173.035496184243</cx>
       <cy>100.33479031355</cy>
@@ -40,7 +40,7 @@
     <item>
       <agent>2</agent>
       <TBeg>11.25</TBeg>
-      <TEnd>21.8728401265945</TEnd>
+      <TEnd>21.873</TEnd>
       <ind>100</ind>
       <cx>173.601603160302</cx>
       <cy>108.444456405732</cy>
@@ -75,8 +75,8 @@
     </item>
     <item>
       <agent>1</agent>
-      <TBeg>19.777871054956</TBeg>
-      <TEnd>32.4978401265945</TEnd>
+      <TBeg>19.778</TBeg>
+      <TEnd>32.498</TEnd>
       <ind>200</ind>
       <cx>172.280079603081</cx>
       <cy>118.936624133529</cy>
@@ -114,20 +114,20 @@
     <item>
       <agent>1</agent>
       <TBeg>0</TBeg>
-      <TEnd>12.5739153769262</TEnd>
+      <TEnd>12.574</TEnd>
       <ind>-50</ind>
       <bCind>69</bCind>
       <cx>153</cx>
-      <cy>127.594409490907</cy>
+      <cy>127.5944</cy>
       <theta>0</theta>
       <pinX>[136 170 153]</pinX>
       <pinY>[117.779454914684 117.779454914684 147.224318643355]</pinY>
-      <pkmTheta>5.34621305446838</pkmTheta>
+      <pkmTheta>5.346</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
           <dThetaInd>0</dThetaInd>
-          <dPkmTheta>-0.936972252711202</dPkmTheta>
+          <dPkmTheta>-0.937</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
@@ -135,41 +135,41 @@
     <item>
       <agent>2</agent>
       <TBeg>11.25</TBeg>
-      <TEnd>21.8728401265945</TEnd>
+      <TEnd>21.873</TEnd>
       <ind>50</ind>
       <bCind>91</bCind>
       <cx>204</cx>
-      <cy>78.5196366097891</cy>
-      <theta>3.14159265358979</theta>
+      <cy>78.5196</cy>
+      <theta>3.142</theta>
       <pinX>[221 187 204]</pinX>
       <pinY>[88.3345911860127 88.3345911860127 58.8897274573418]</pinY>
-      <pkmTheta>2.36404498857794</pkmTheta>
+      <pkmTheta>2.364</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
           <dThetaInd>0</dThetaInd>
-          <dPkmTheta>2.36404498857794</dPkmTheta>
+          <dPkmTheta>2.364</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
     </item>
     <item>
       <agent>1</agent>
-      <TBeg>15.0751834132238</TBeg>
-      <TEnd>32.4978401265945</TEnd>
+      <TBeg>15.075</TBeg>
+      <TEnd>32.498</TEnd>
       <ind>150</ind>
       <bCind>61</bCind>
       <cx>136</cx>
-      <cy>137.409364067131</cy>
-      <theta>5.23598775598299</theta>
+      <cy>137.4094</cy>
+      <theta>5.236</theta>
       <pinX>[119 136 153]</pinX>
       <pinY>[147.224318643355 117.779454914684 147.224318643355]</pinY>
-      <pkmTheta>6.85942593131071</pkmTheta>
+      <pkmTheta>6.859</pkmTheta>
       <actions>
         <item>
           <pin>3</pin>
           <dThetaInd>5</dThetaInd>
-          <dPkmTheta>1.51321287684233</dPkmTheta>
+          <dPkmTheta>1.513</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
@@ -179,99 +179,99 @@
     <item>
       <agent>1</agent>
       <TBeg>0</TBeg>
-      <TEnd>12.1234028939257</TEnd>
+      <TEnd>12.123</TEnd>
       <ind>-25</ind>
       <Xyz_Euler_Zyz>
-        <x>0.0333242292772146</x>
+        <x>0.0333</x>
         <y>0</y>
-        <z>0.45403</z>
-        <alpha>3.14159265358979</alpha>
-        <beta>0.785398163397448</beta>
-        <gamma>3.14159265358979</gamma>
+        <z>0.454</z>
+        <alpha>3.1416</alpha>
+        <beta>0.7854</beta>
+        <gamma>3.1416</gamma>
       </Xyz_Euler_Zyz>
     </item>
     <item>
       <agent>2</agent>
       <TBeg>11.25</TBeg>
-      <TEnd>21.8728401265945</TEnd>
+      <TEnd>21.873</TEnd>
       <ind>75</ind>
       <Xyz_Euler_Zyz>
-        <x>-0.054932699991856</x>
+        <x>-0.0549</x>
         <y>0</y>
-        <z>0.45403</z>
-        <alpha>3.14159265358979</alpha>
-        <beta>0.785398163397448</beta>
-        <gamma>3.14159265358979</gamma>
+        <z>0.454</z>
+        <alpha>3.1416</alpha>
+        <beta>0.7854</beta>
+        <gamma>3.1416</gamma>
       </Xyz_Euler_Zyz>
     </item>
     <item>
       <agent>1</agent>
-      <TBeg>12.2686235114377</TBeg>
-      <TEnd>12.2686235114377</TEnd>
+      <TBeg>12.269</TBeg>
+      <TEnd>12.269</TEnd>
       <ind>175</ind>
       <Xyz_Euler_Zyz>
-        <x>0.0333242292772146</x>
+        <x>0.0333</x>
         <y>0</y>
-        <z>0.41403</z>
-        <alpha>3.14159265358979</alpha>
-        <beta>0.785398163397448</beta>
-        <gamma>3.14159265358979</gamma>
+        <z>0.414</z>
+        <alpha>3.1416</alpha>
+        <beta>0.7854</beta>
+        <gamma>3.1416</gamma>
       </Xyz_Euler_Zyz>
     </item>
     <item>
       <agent>1</agent>
-      <TBeg>12.5739153769262</TBeg>
-      <TEnd>12.5739153769262</TEnd>
+      <TBeg>12.574</TBeg>
+      <TEnd>12.574</TEnd>
       <ind>176</ind>
       <Xyz_Euler_Zyz>
-        <x>0.07163</x>
+        <x>0.0716</x>
         <y>0</y>
-        <z>0.41403</z>
-        <alpha>3.14159265358979</alpha>
-        <beta>0.785398163397448</beta>
-        <gamma>3.14159265358979</gamma>
+        <z>0.414</z>
+        <alpha>3.1416</alpha>
+        <beta>0.7854</beta>
+        <gamma>3.1416</gamma>
       </Xyz_Euler_Zyz>
     </item>
     <item>
       <agent>1</agent>
-      <TBeg>15.0751834132238</TBeg>
-      <TEnd>15.0751834132238</TEnd>
+      <TBeg>15.075</TBeg>
+      <TEnd>15.075</TEnd>
       <ind>177</ind>
       <Xyz_Euler_Zyz>
-        <x>0.0716299999999997</x>
+        <x>0.0716</x>
         <y>0</y>
-        <z>0.41403</z>
-        <alpha>3.14159265358979</alpha>
-        <beta>0.785398163397448</beta>
-        <gamma>3.14159265358979</gamma>
+        <z>0.414</z>
+        <alpha>3.1416</alpha>
+        <beta>0.7854</beta>
+        <gamma>3.1416</gamma>
       </Xyz_Euler_Zyz>
     </item>
     <item>
       <agent>1</agent>
-      <TBeg>15.5953378994215</TBeg>
-      <TEnd>15.5953378994215</TEnd>
+      <TBeg>15.595</TBeg>
+      <TEnd>15.595</TEnd>
       <ind>178</ind>
       <Xyz_Euler_Zyz>
-        <x>-0.0354923767689968</x>
+        <x>-0.0355</x>
         <y>0</y>
-        <z>0.41403</z>
-        <alpha>3.14159265358979</alpha>
-        <beta>0.785398163397448</beta>
-        <gamma>3.14159265358979</gamma>
+        <z>0.414</z>
+        <alpha>3.1416</alpha>
+        <beta>0.7854</beta>
+        <gamma>3.1416</gamma>
       </Xyz_Euler_Zyz>
     </item>
     <item>
       <agent>1</agent>
-      <TBeg>15.6595138147982</TBeg>
-      <TEnd>15.6595138147982</TEnd>
+      <TBeg>15.66</TBeg>
+      <TEnd>15.66</TEnd>
       <ind>179</ind>
       <Xyz_Euler_Zyz>
-        <x>-0.0354923767689968</x>
+        <x>-0.0355</x>
         <y>0</y>
-        <z>0.45403</z>
-        <alpha>3.14159265358979</alpha>
-        <beta>0.785398163397448</beta>
-        <gamma>3.14159265358979</gamma>
+        <z>0.454</z>
+        <alpha>3.1416</alpha>
+        <beta>0.7854</beta>
+        <gamma>3.1416</gamma>
       </Xyz_Euler_Zyz>
     </item>
   </pkm>
