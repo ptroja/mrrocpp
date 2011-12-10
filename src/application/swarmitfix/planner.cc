@@ -20,21 +20,34 @@
 planner::planner(const std::string & path) :
 	state(STOPPED)
 {
-	// XML validation settings
-	xml_schema::Properties props;
+	//throw std::runtime_error("test");
 
 	// Assume, that the XSD file is installed in the binary folder
 	boost::filesystem::path xsdpath = boost::filesystem::current_path();
 	xsdpath /= "plan.xsd";
 
+	// XML validation settings
+	xml_schema::Properties props;
+
 	// Add XSD validation to parser's properties
 	props.no_namespace_schema_location (xsdpath.file_string());
 
 	// Read plan from XML file
-	//p = plan(path, xml_schema::Flags::dont_validate);
-	p = plan(path, 0, props);
+	try {
+		// If we had no XML schema, then only limited validation is possible:
+		// p = plan(path, xml_schema::Flags::dont_validate);
 
-	// Start operation
+		// Parse file with all the schema checks
+		p = plan(path, 0, props);
+	} catch (const xml_schema::Exception & e) {
+		// Display detailed diagnostics
+		std::cerr << e << std::endl;
+
+		// And leave the rest to the high-level handler
+		throw;
+	}
+
+	// Start triggering operation
 	worker = boost::thread(boost::bind(&planner::operator(), this));
 }
 
