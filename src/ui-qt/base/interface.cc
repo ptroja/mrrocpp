@@ -827,7 +827,7 @@ void Interface::init()
 
 	// Ignore SIGPIPE, which comes from communication errors and should be handled approriately
 	if(signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
-		BOOST_THROW_EXCEPTION(lib::exception::mrrocpp_system_error());
+		BOOST_THROW_EXCEPTION(lib::exception::system_error());
 	}
 	/* TR
 	 lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);

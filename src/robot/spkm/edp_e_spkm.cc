@@ -205,13 +205,13 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 			}
 		}
 
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -290,13 +290,13 @@ void effector::synchronise(void)
 		// Now the robot is synchronised
 		controller_state_edp_buf.is_synchronised = true;
 
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -380,13 +380,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		if (is_previous_cartesian_pose_known)
 			current_end_effector_frame = desired_end_effector_frame;
 
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -966,13 +966,13 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		}
 
 		reply.servo_step = step_counter;
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {

@@ -57,7 +57,7 @@ int Mp::MPup_int()
 
 					interface->raise_process_control_window();
 				} else {
-					BOOST_THROW_EXCEPTION(lib::exception::mrrocpp_system_error());
+					BOOST_THROW_EXCEPTION(lib::exception::system_error());
 				}
 				interface->manage_interface();
 
