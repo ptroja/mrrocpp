@@ -33,7 +33,7 @@ public:
 
 	mp_state_def mp_state;
 private:
-	Interface *interface;
+	Interface & interface;
 };
 
 }
