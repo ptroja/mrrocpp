@@ -12,14 +12,27 @@
 #include <boost/thread/locks.hpp>
 #include <boost/bind.hpp>
 
+#include <boost/filesystem.hpp>
+
 #include "planner.h"
 #include "plan.hxx"
 
 planner::planner(const std::string & path) :
 	state(STOPPED)
 {
+	// XML validation settings
+	xml_schema::Properties props;
+
+	// Assume, that the XSD file is installed in the binary folder
+	boost::filesystem::path xsdpath = boost::filesystem::current_path();
+	xsdpath /= "plan.xsd";
+
+	// Add XSD validation to parser's properties
+	props.no_namespace_schema_location (xsdpath.file_string());
+
 	// Read plan from XML file
-	p = plan(path, xml_schema::Flags::dont_validate);
+	//p = plan(path, xml_schema::Flags::dont_validate);
+	p = plan(path, 0, props);
 
 	// Start operation
 	worker = boost::thread(boost::bind(&planner::operator(), this));
