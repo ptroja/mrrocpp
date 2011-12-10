@@ -15,6 +15,9 @@ public:
 	//! Connect to remote agent
 	RemoteAgent(const std::string & _name);
 
+	//! Check connection with ping message
+	void Ping();
+
 	//! Disconnect from remote agent
 	virtual ~RemoteAgent();
 
