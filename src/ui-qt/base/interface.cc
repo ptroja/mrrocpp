@@ -71,7 +71,7 @@ Interface::Interface() :
 
 	mw = (boost::shared_ptr <MainWindow>) new MainWindow(*this);
 
-	main_eb = new function_execution_buffer(*this);
+	main_eb = (boost::shared_ptr<function_execution_buffer>) new function_execution_buffer(*this);
 
 	timer = (boost::shared_ptr <QTimer>) new QTimer(this);
 

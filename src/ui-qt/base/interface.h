@@ -108,7 +108,7 @@ public:
 	boost::shared_ptr <ecp_buffer> ui_ecp_obj;
 	boost::shared_ptr <feb_thread> meb_tid;
 
-	function_execution_buffer *main_eb;
+	boost::shared_ptr<function_execution_buffer> main_eb;
 
 	typedef std::string list_t;
 
