@@ -193,13 +193,13 @@ void swarmitfix::main_test_algorithm(void)
 
 		State * currentActionState;
 
-		std::cerr << "plan index = " << ind << "\t" <<
-			isFinished(spkm1_it, *p) <<
-			isFinished(spkm2_it, *p) <<
-			isFinished(smb1_it, *p) <<
-			isFinished(smb2_it, *p) <<
-			isFinished(shead1_it, *p) <<
-			isFinished(shead2_it, *p) << std::endl;
+//		std::cerr << "plan index = " << ind << "\t" <<
+//			isFinished(spkm1_it, *p) <<
+//			isFinished(spkm2_it, *p) <<
+//			isFinished(smb1_it, *p) <<
+//			isFinished(smb2_it, *p) <<
+//			isFinished(shead1_it, *p) <<
+//			isFinished(shead2_it, *p) << std::endl;
 
 		// Execute command for spkm1
 		if(indexMatches(spkm1_it, ind, *p)) {
