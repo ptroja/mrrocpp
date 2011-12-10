@@ -20,14 +20,10 @@ Mp::Mp(Interface *iface) :
 	mp_state.pid = -1;
 }
 
-int Mp::MPup()
-
+void Mp::MPup()
 {
 
-	//eb.command(boost::bind(&ui::spkm::UiRobot::execute_motor_motion, &(*this)));
-	interface->main_eb->command(boost::bind(&ui::common::Mp::MPup_int, &(*this)));
-
-	return 1;
+	interface->main_eb->command(boost::bind(&ui::common::Mp::MPup_int, this));
 
 }
 
@@ -52,8 +48,8 @@ int Mp::MPup_int()
 
 				if (mp_state.pid > 0) {
 
-					mp_state.MP = new RemoteAgent(lib::MP_SECTION);
-					mp_state.pulse = new OutputBuffer <char>(*mp_state.MP, "MP_PULSE");
+					mp_state.MP = (boost::shared_ptr<RemoteAgent>) new RemoteAgent(lib::MP_SECTION);
+					mp_state.pulse = (boost::shared_ptr<OutputBuffer<char> >) new OutputBuffer <char>(*mp_state.MP, "MP_PULSE");
 
 					interface->teachingstate = ui::common::MP_RUNNING;
 
@@ -61,7 +57,7 @@ int Mp::MPup_int()
 
 					interface->raise_process_control_window();
 				} else {
-					fprintf(stderr, "mp spawn failed\n");
+					BOOST_THROW_EXCEPTION(lib::exception::mrrocpp_system_error());
 				}
 				interface->manage_interface();
 
@@ -100,13 +96,13 @@ int Mp::MPslay()
 			}
 
 			if (mp_state.pulse) {
-				delete mp_state.pulse;
+				mp_state.pulse.reset();
 			} else {
 				std::cerr << "MP pulse not connected?" << std::endl;
 			}
 
 			if (mp_state.MP) {
-				delete mp_state.MP;
+				mp_state.MP.reset();
 			} else {
 				std::cerr << "MP not connected?" << std::endl;
 			}
@@ -134,9 +130,6 @@ int Mp::MPslay()
 		// 	kill(mp_pid,SIGTERM);
 		// 	printf("mp pupa po kill\n");
 		mp_state.pid = -1;
-
-		mp_state.pulse = NULL;
-		mp_state.MP = NULL;
 
 		BOOST_FOREACH(const robot_pair_t & robot_node, interface->robot_m)
 				{
