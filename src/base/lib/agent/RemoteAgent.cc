@@ -47,10 +47,10 @@ RemoteAgent::RemoteAgent(const std::string & _name) :
 		}
 	}
 
-	// Verify if channel is ready to transmit data
-	if (messip::port_ping(channel)) {
-		throw std::logic_error("Ping to remote agent failed");
-	}
+//	// Verify if channel is ready to transmit data
+//	if (messip::port_ping(channel)) {
+//		throw std::logic_error("Ping to remote agent failed");
+//	}
 }
 
 RemoteAgent::~RemoteAgent()
