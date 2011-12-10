@@ -63,7 +63,7 @@ public:
 
 private:
 	boost::shared_ptr<MainWindow> mw;
-	Interface *interface;
+	Interface & interface;
 
 };
 
