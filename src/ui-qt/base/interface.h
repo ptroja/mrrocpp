@@ -124,7 +124,7 @@ public:
 	TEACHING_STATE_ENUM file_window_mode;
 	UI_NOTIFICATION_STATE_ENUM notification_state, next_notification;
 
-	std::ofstream *log_file_outfile;
+	boost::shared_ptr<std::ofstream> log_file_outfile;
 
 	boost::mutex process_creation_mtx;
 	boost::mutex ui_notification_state_mutex;
@@ -201,8 +201,8 @@ public:
 	int unload_all();
 	int slay_all();
 
-	Mp *mp;
-	AllRobots *all_robots;
+	boost::shared_ptr<Mp> mp;
+	boost::shared_ptr<AllRobots> all_robots;
 
 	void open_process_control_windows();
 
