@@ -1466,7 +1466,10 @@ messip_channel_ping( messip_channel_t * ch,
 	dcount = messip_writev( ch->send_sockfd, iovec, 1 );
 	LIBTRACE( ( "@messip_channel_ping: sendmsg dcount=%d local_fd=%d [errno=%d] \n",
 		  dcount, ch->send_sockfd, errno ) );
-	assert( dcount == sizeof( messip_datasend_t ) );
+	//assert( dcount == sizeof( messip_datasend_t ) );
+	if(dcount != sizeof( messip_datasend_t )) {
+		return -1;
+	}
 
 	/*--- Timeout to read ? ---*/
 	if ( msec_timeout != MESSIP_NOTIMEOUT )
