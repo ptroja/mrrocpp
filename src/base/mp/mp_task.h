@@ -280,8 +280,6 @@ public:
 	}
 
 private:
-	friend class robot::robot;
-
 	/**
 	 * @brief pulse from UI
 	 */
