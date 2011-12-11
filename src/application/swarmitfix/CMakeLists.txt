@@ -10,7 +10,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_executable(plantest
 	${PLAN_SRCS}
 	ParsePlan.cc planner.cc
-	#plan_utils.cc
 )
 
 target_link_libraries(plantest ${Boost_THREAD_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${XERCES_LIBRARIES} mrrocpp)
