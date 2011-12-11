@@ -279,7 +279,7 @@ public:
 		return ((robot_m.find(name) != robot_m.end()) ? true : false);
 	}
 
-private:
+protected:
 	/**
 	 * @brief pulse from UI
 	 */
