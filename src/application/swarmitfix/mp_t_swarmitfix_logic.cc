@@ -31,7 +31,7 @@ bool swarmitfix::b1_terminal_condition(void) const
 void swarmitfix::b1_handle_spkm1_notification()
 {
 	if (IO.transmitters.spkm1.inputs.notification->access == lib::ACK) {
-		current_workers_status.erase(lib::spkm1::ROBOT_NAME);
+		current_workers_status[lib::spkm1::ROBOT_NAME] = WorkersStatus::IDLE;
 	} else {
 		current_plan_status = FAILURE;
 	}
@@ -41,7 +41,7 @@ void swarmitfix::b1_handle_spkm1_notification()
 void swarmitfix::b1_handle_spkm2_notification()
 {
 	if (IO.transmitters.spkm2.inputs.notification->access == lib::ACK) {
-		current_workers_status.erase(lib::spkm2::ROBOT_NAME);
+		current_workers_status[lib::spkm2::ROBOT_NAME] = WorkersStatus::IDLE;
 	} else {
 		current_plan_status = FAILURE;
 	}
@@ -50,7 +50,7 @@ void swarmitfix::b1_handle_spkm2_notification()
 void swarmitfix::b1_handle_smb1_notification()
 {
 	if (IO.transmitters.smb1.inputs.notification->access == lib::ACK) {
-		current_workers_status.erase(lib::smb1::ROBOT_NAME);
+		current_workers_status[lib::smb1::ROBOT_NAME] = WorkersStatus::IDLE;
 	} else {
 		current_plan_status = FAILURE;
 	}
@@ -59,7 +59,7 @@ void swarmitfix::b1_handle_smb1_notification()
 void swarmitfix::b1_handle_smb2_notification()
 {
 	if (IO.transmitters.smb2.inputs.notification->access == lib::ACK) {
-		current_workers_status.erase(lib::smb2::ROBOT_NAME);
+		current_workers_status[lib::smb2::ROBOT_NAME] = WorkersStatus::IDLE;
 	} else {
 		current_plan_status = FAILURE;
 	}
@@ -86,16 +86,16 @@ void swarmitfix::b2_stop_all()
 
 	spkm_stop_command.variant = lib::spkm::STOP;
 
-	if(current_workers_status.count(lib::spkm1::ROBOT_NAME)) {
+	if(current_workers_status[lib::spkm1::ROBOT_NAME] == WorkersStatus::BUSY) {
 		IO.transmitters.spkm1.outputs.command->Send(spkm_stop_command);
 	}
-	if(current_workers_status.count(lib::spkm2::ROBOT_NAME)) {
+	if(current_workers_status[lib::spkm2::ROBOT_NAME] == WorkersStatus::BUSY) {
 		IO.transmitters.spkm2.outputs.command->Send(spkm_stop_command);
 	}
-	if(current_workers_status.count(lib::smb1::ROBOT_NAME)) {
+	if(current_workers_status[lib::smb1::ROBOT_NAME] == WorkersStatus::BUSY) {
 		// TODO
 	}
-	if(current_workers_status.count(lib::smb2::ROBOT_NAME)) {
+	if(current_workers_status[lib::smb2::ROBOT_NAME] == WorkersStatus::BUSY) {
 		// TODO
 	}
 }

@@ -223,7 +223,7 @@ void swarmitfix::main_test_algorithm(void)
 			currentActionState = (State *) &(*spkm1_it);
 
 			if(executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get()))
-				current_workers_status.insert(lib::spkm1::ROBOT_NAME);
+				current_workers_status[lib::spkm1::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(spkm1_it, 1, *p);
@@ -234,7 +234,7 @@ void swarmitfix::main_test_algorithm(void)
 			currentActionState = (State *) &(*spkm2_it);
 
 			if (executeCommandItem(*spkm2_it++, IO.transmitters.spkm2.outputs.command.get()))
-				current_workers_status.insert(lib::spkm2::ROBOT_NAME);
+				current_workers_status[lib::spkm2::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(spkm2_it, 2, *p);
@@ -245,7 +245,7 @@ void swarmitfix::main_test_algorithm(void)
 			currentActionState = (State *) &(*smb1_it);
 
 			if(executeCommandItem(*smb1_it++, IO.transmitters.smb1.outputs.command.get()))
-				current_workers_status.insert(lib::smb1::ROBOT_NAME);
+				current_workers_status[lib::smb1::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(smb1_it, 1, *p);
@@ -256,7 +256,7 @@ void swarmitfix::main_test_algorithm(void)
 			currentActionState = (State *) &(*smb2_it);
 
 			if(executeCommandItem(*smb2_it++, IO.transmitters.smb2.outputs.command.get()))
-				current_workers_status.insert(lib::smb2::ROBOT_NAME);
+				current_workers_status[lib::smb2::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(smb2_it, 2, *p);
@@ -268,7 +268,7 @@ void swarmitfix::main_test_algorithm(void)
 
 			// TODO
 			if(executeCommandItem(*shead1_it++))
-				current_workers_status.insert(lib::shead1::ROBOT_NAME);
+				current_workers_status[lib::shead1::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(shead1_it, 1, *p);
@@ -280,36 +280,36 @@ void swarmitfix::main_test_algorithm(void)
 
 			// TODO
 			if(executeCommandItem(*shead2_it++))
-				current_workers_status.insert(lib::shead2::ROBOT_NAME);
+				current_workers_status[lib::shead2::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(shead2_it, 2, *p);
 		}
 
-		const bool record_timestamp = !current_workers_status.empty();
+		const bool record_timestamp = !current_workers_status.allIdle();
 
-		while(!current_workers_status.empty()) {
+		while(!current_workers_status.allIdle()) {
 			std::cout << "MP blocking for message" << std::endl;
 			ReceiveSingleMessage(true);
 
 			if(IO.transmitters.smb1.inputs.notification.get() && IO.transmitters.smb1.inputs.notification->isFresh()) {
 				IO.transmitters.smb1.inputs.notification->markAsUsed();
-				current_workers_status.erase(lib::smb1::ROBOT_NAME);
+				current_workers_status[lib::smb1::ROBOT_NAME] = WorkersStatus::IDLE;
 			}
 
 			if(IO.transmitters.smb2.inputs.notification.get() && IO.transmitters.smb2.inputs.notification->isFresh()) {
 				IO.transmitters.smb2.inputs.notification->markAsUsed();
-				current_workers_status.erase(lib::smb2::ROBOT_NAME);
+				current_workers_status[lib::smb2::ROBOT_NAME] = WorkersStatus::IDLE;
 			}
 
 			if(IO.transmitters.spkm1.inputs.notification.get() && IO.transmitters.spkm1.inputs.notification->isFresh()) {
 				IO.transmitters.spkm1.inputs.notification->markAsUsed();
-				current_workers_status.erase(lib::spkm1::ROBOT_NAME);
+				current_workers_status[lib::spkm1::ROBOT_NAME] = WorkersStatus::IDLE;
 			}
 
 			if(IO.transmitters.spkm2.inputs.notification.get() && IO.transmitters.spkm2.inputs.notification->isFresh()) {
 				IO.transmitters.spkm2.inputs.notification->markAsUsed();
-				current_workers_status.erase(lib::spkm2::ROBOT_NAME);
+				current_workers_status[lib::spkm2::ROBOT_NAME] = WorkersStatus::IDLE;
 			}
 		}
 
