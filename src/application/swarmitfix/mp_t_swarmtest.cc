@@ -146,6 +146,23 @@ bool executeCommandItem(const Plan::HeadType::ItemType & headCmd)
 	return false;
 }
 
+#if 0
+//! Dummy generator for handling UI commands
+class dummy : public mp::generator::generator {
+public:
+	//! Dummy implementation of required abstract method
+	bool first_step() {
+		throw std::logic_error("Generator not intended for execution");
+	}
+
+	//! Dummy implementation of required abstract method
+	bool next_step() {
+		throw std::logic_error("Generator not intended for execution");
+	}
+
+};
+#endif
+
 void swarmitfix::main_test_algorithm(void)
 {
 	sr_ecp_msg->message("swarm test started");
@@ -306,6 +323,14 @@ void swarmitfix::main_test_algorithm(void)
 
 			std::cout << "Command duration in [ms] is " << td.total_milliseconds() << std::endl;
 			currentActionState->execution_time().set(td.total_milliseconds()/1000.0);
+
+			// Wait for trigger
+			while(!(ui_pulse.isFresh() && ui_pulse.Get() == MP_TRIGGER)) {
+				if(ui_pulse.isFresh()) ui_pulse.markAsUsed();
+				ReceiveSingleMessage(true);
+			}
+
+			ui_pulse.markAsUsed();
 		}
 
 		// If all iterators are at the end
