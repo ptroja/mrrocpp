@@ -1,3 +1,5 @@
+#include <boost/foreach.hpp>
+
 #include "base/lib/sr/srlib.h"
 
 #include "robot/smb/ecp_r_smb1.h"
@@ -6,6 +8,7 @@
 #include "ecp_t_smb.h"
 #include "ecp_g_smb.h"
 #include "ecp_mp_g_smb.h"
+#include "robot/smb/dp_smb.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -30,16 +33,18 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	notifyBuffer = (boost::shared_ptr<OutputBuffer<lib::notification_t> >)
 			new OutputBuffer<lib::notification_t>(MP, ecp_m_robot->robot_name+lib::notifyBufferId);
 
-	// Create the generators
-	g_action = (boost::shared_ptr <generator::action_executor>) new generator::action_executor(*this, nextstateBuffer.access.actions);
-	g_quickstop = (boost::shared_ptr <generator::quickstop_executor>) new generator::quickstop_executor(*this);
-
 	sr_ecp_msg->message("ecp smb loaded");
 }
 
 void swarmitfix::main_task_algorithm(void)
 {
 	std::cerr << "> swarmitfix::main_task_algorithm" << std::endl;
+
+	{
+		// Execute motion generator (defaults to OUT)
+		generator::stand_up gen(*this);
+		gen.Move();
+	}
 
 	// Loop execution coordinator's commands
 	while(true) {
@@ -57,10 +62,13 @@ void swarmitfix::main_task_algorithm(void)
 			// Dispatch to selected generator
 			switch(nextstateBuffer.Get().variant) {
 				case lib::smb::ACTION_LIST:
-					g_action->Move();
+					execute_actions(nextstateBuffer.Get().actions);
 					break;
 				default:
-					g_quickstop->Move();
+				{
+					generator::quickstop gen(*this);
+					gen.Move();
+				}
 					break;
 			}
 
@@ -74,6 +82,49 @@ void swarmitfix::main_task_algorithm(void)
 
 		// Reply with acknowledgment
 		notifyBuffer->Send(lib::ACK);
+	}
+}
+
+void swarmitfix::execute_actions(const lib::smb::next_state_t::action_sequence_t & actions)
+{
+	BOOST_FOREACH(const lib::smb::action & act, actions)
+	{
+		// Legs up
+		if(act.getRotationPin())
+		{
+			// Setup EDP command
+			lib::smb::festo_command_td cmd;
+
+			// Defaults to OUT...and only one IN.
+			cmd.leg[act.getRotationPin()-1] = lib::smb::OUT;
+
+			// Execute motion generator
+			generator::stand_up gen(*this, cmd);
+			gen.Move();
+		}
+
+		// Rotate
+		{
+			// Setup EDP command
+			lib::smb::smb_epos_simple_command cmd;
+
+			// Copy parameters
+			cmd.base_vs_bench_rotation = act.getdThetaInd();
+			cmd.pkm_vs_base_rotation = act.getdPkmTheta();
+			cmd.estimated_time = act.getDuration();
+
+			// Execute motion generator
+			generator::rotate gen(*this, cmd);
+			gen.Move();
+		}
+
+		// Legs down
+		if(act.getRotationPin())
+		{
+			// Execute motion generator (defaults to OUT)
+			generator::stand_up gen(*this);
+			gen.Move();
+		}
 	}
 }
 

@@ -25,17 +25,6 @@ public:
 	void main_task_algorithm(void);
 
 private:
-	//! Generators
-	/*
-	generator::pin_lock* g_pin_lock;
-	generator::pin_unlock* g_pin_unlock;
-	generator::pin_rise* g_pin_rise;
-	generator::pin_lower* g_pin_lower;
-	*/
-
-	boost::shared_ptr<generator::action_executor> g_action;
-	boost::shared_ptr<generator::quickstop_executor> g_quickstop;
-
 	/**
 	 * Input buffer for MP commands
 	 */
@@ -45,6 +34,9 @@ private:
 	 * Output buffer for MP notifications
 	 */
 	boost::shared_ptr<OutputBuffer<lib::notification_t> > notifyBuffer;
+
+	//! Execute translocate command action
+	void execute_actions(const lib::smb::next_state_t::action_sequence_t & actions);
 };
 
 }
