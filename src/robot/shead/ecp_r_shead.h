@@ -82,11 +82,6 @@ public:
 	lib::single_thread_request_port <lib::epos::epos_reply> epos_joint_reply_data_request_port;
 
 	/**
-	 * @brief epos motion status with external reply data request port
-	 */
-	lib::single_thread_request_port <lib::epos::epos_reply> epos_external_reply_data_request_port;
-
-	/**
 	 * @brief Head state reply data request port
 	 */
 	lib::single_thread_request_port <lib::shead::reply> shead_reply_data_request_port;

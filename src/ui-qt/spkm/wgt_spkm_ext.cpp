@@ -81,9 +81,10 @@ int wgt_spkm_ext::init()
 					radioButton_mip_Vector[i]);
 				}
 
-				lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
+				lib::spkm::spkm_ext_epos_reply &ser =
+						robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
 
-				lib::Homog_matrix tmp_frame(er.current_frame);
+				lib::Homog_matrix tmp_frame(ser.current_frame);
 				lib::Xyz_Angle_Axis_vector tmp_vector;
 				double current_position[6];
 				tmp_frame.get_xyz_angle_axis(tmp_vector);
@@ -110,10 +111,10 @@ int wgt_spkm_ext::set_single_axis(int axis,
 // QDoubleSpinBox* qdsb_mcur,
 QAbstractButton* qab_mip)
 {
-	lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
+	lib::spkm::spkm_ext_epos_reply &ser = robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
 //	qdsb_mcur->setValue(er.epos_controller[axis].current);
 
-	if (er.epos_controller[axis].motion_in_progress) {
+	if (ser.epos_controller[axis].motion_in_progress) {
 		qab_mip->setChecked(true);
 	} else {
 		qab_mip->setChecked(false);

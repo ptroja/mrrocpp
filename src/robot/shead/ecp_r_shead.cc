@@ -28,7 +28,6 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 
 		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
 		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
-		epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager),
 
 		shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
 {
@@ -48,7 +47,6 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 
 		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
 		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
-		epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager),
 
 		shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
 {
@@ -175,13 +173,6 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_request);
 	}
 
-	if (epos_external_reply_data_request_port.is_new_request()) {
-		ecp_edp_cbuffer.get_pose_specification = lib::shead::FRAME;
-		//ecp_command.get_arm_type = lib::FRAME;
-		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
-		check_then_set_command_flag(is_new_request);
-	}
-
 	is_new_request = is_new_request || shead_reply_data_request_port.is_new_request();
 
 	communicate_with_edp = true;
@@ -243,24 +234,6 @@ void robot::get_reply()
 		//	epos_joint_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
 
 		epos_joint_reply_data_request_port.set();
-	}
-
-	if (epos_external_reply_data_request_port.is_new_request()) {
-		sr_ecp_msg.message("ECP get_reply epos_external_reply_data_request_port");
-		// generator reply generation
-		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
-			epos_external_reply_data_request_port.data.epos_controller[i].position =
-					edp_ecp_rbuffer.epos_controller[i].position;
-			epos_external_reply_data_request_port.data.epos_controller[i].current =
-					edp_ecp_rbuffer.epos_controller[i].current;
-			epos_external_reply_data_request_port.data.epos_controller[i].motion_in_progress =
-					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
-		}
-		//	epos_external_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
-
-		//	epos_external_reply_data_request_port.data.current_frame = edp_ecp_rbuffer.current_pose;
-
-		epos_external_reply_data_request_port.set();
 	}
 
 	if (shead_reply_data_request_port.is_new_request()) {

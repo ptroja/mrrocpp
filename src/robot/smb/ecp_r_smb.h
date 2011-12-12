@@ -84,7 +84,7 @@ public:
 	/**
 	 * @brief epos motion status with external reply data request port
 	 */
-	lib::single_thread_request_port <lib::epos::epos_reply> epos_external_reply_data_request_port;
+	lib::single_thread_request_port <lib::smb::smb_ext_epos_reply> epos_external_reply_data_request_port;
 
 	/**
 	 * @brief leg status reply data request port

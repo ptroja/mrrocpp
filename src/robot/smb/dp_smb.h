@@ -118,6 +118,29 @@ struct multi_leg_reply_td
 }__attribute__((__packed__));
 
 /*!
+ * @brief SwarmItFix Epos all controllers status
+ * @ingroup epos
+ */
+struct smb_ext_epos_reply
+{
+	lib::Homog_matrix current_frame;
+	lib::epos::single_controller_epos_reply epos_controller[lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER];
+	bool contact;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & current_frame;
+		ar & epos_controller;
+		ar & contact;
+	}
+};
+
+/*!
  * @brief SwarmItFix Epos motor and joint and external command, called from UI
  * @ingroup smb
  */
