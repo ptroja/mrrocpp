@@ -52,12 +52,12 @@ private:
 	/*!
 	 * \brief shared pointer to epos controller interface needed to read the input data of current legs state
 	 */
-	maxon::epos & epos_di_node;
+	boost::shared_ptr <maxon::epos> epos_di_node;
 
 	/*!
 	 * \brief shared pointer to festo interface to control pneumatic outputs
 	 */
-	festo::cpv & cpv10;
+	boost::shared_ptr <festo::cpv> cpv10;
 
 	/*!
 	 * \brief state of the legs i.e. number of legs in upper and lower position

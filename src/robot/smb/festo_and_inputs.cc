@@ -22,23 +22,26 @@ namespace edp {
 namespace smb {
 
 festo_and_inputs::festo_and_inputs(effector &_master) :
-		master(_master), epos_di_node(*master.legs_rotation_node), cpv10(*master.cpv10), robot_test_mode(master.robot_test_mode)
+		master(_master),
+		epos_di_node(master.legs_rotation_node),
+		cpv10(master.cpv10),
+		robot_test_mode(master.robot_test_mode)
 {
 	if (!robot_test_mode) {
 		// prepares hardware
-		festo::U32 DeviceType = cpv10.getDeviceType();
+		festo::U32 DeviceType = cpv10->getDeviceType();
 		printf("Device type = 0x%08X\n", DeviceType);
 
-		festo::U8 ErrorRegister = cpv10.getErrorRegister();
+		festo::U8 ErrorRegister = cpv10->getErrorRegister();
 		printf("Error register = 0x%02X\n", ErrorRegister);
 
-		festo::U32 ManufacturerStatusRegister = cpv10.getManufacturerStatusRegister();
+		festo::U32 ManufacturerStatusRegister = cpv10->getManufacturerStatusRegister();
 		printf("Manufacturer status register = 0x%08X\n", ManufacturerStatusRegister);
 
-		uint8_t NumberOfOutputGroups = cpv10.getNumberOf8OutputGroups();
+		uint8_t NumberOfOutputGroups = cpv10->getNumberOf8OutputGroups();
 		printf("Number of 8-output groups = %d\n", NumberOfOutputGroups);
 
-		uint8_t Outputs07 = cpv10.getOutputs(1);
+		uint8_t Outputs07 = cpv10->getOutputs(1);
 		printf("Status of outputs 0..7 = 0x%02x\n", Outputs07);
 
 		master.gateway->SendNMTService(10, canopen::gateway::Start_Remote_Node);
@@ -690,10 +693,10 @@ bool festo_and_inputs::test_mode_set_reply()
 void festo_and_inputs::read_state()
 {
 	if (!robot_test_mode) {
-		epos_inputs = epos_di_node.getDInput();
+		epos_inputs = epos_di_node->getDInput();
 
-		current_output[1] = cpv10.getOutputs(1);
-		current_output[2] = cpv10.getOutputs(2);
+		current_output[1] = cpv10->getOutputs(1);
+		current_output[2] = cpv10->getOutputs(2);
 	}
 }
 
@@ -715,8 +718,8 @@ void festo_and_inputs::create_reply()
 void festo_and_inputs::execute_command()
 {
 	if (!robot_test_mode) {
-		cpv10.setOutputs(1, (uint8_t) desired_output[1].to_ulong());
-		cpv10.setOutputs(2, (uint8_t) desired_output[2].to_ulong());
+		cpv10->setOutputs(1, (uint8_t) desired_output[1].to_ulong());
+		cpv10->setOutputs(2, (uint8_t) desired_output[2].to_ulong());
 		//	std::cout << "desired_output = " << desired_output[2] << std::endl;
 		read_state();
 		desired_output[1] = current_output[1];
