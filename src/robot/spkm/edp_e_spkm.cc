@@ -552,6 +552,7 @@ void effector::parse_motor_command()
 			default:
 				// Throw non-fatal error - invalid pose specification.
 				BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
+				break;
 		} //: switch (ecp_edp_cbuffer.set_pose_specification)
 	} catch (boost::exception &e_) {
 		// TODO add other context informations that are available.
