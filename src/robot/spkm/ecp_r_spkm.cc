@@ -152,7 +152,7 @@ void robot::create_command()
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
 
-		ecp_edp_cbuffer.get_pose_specification = lib::spkm::XYZ_EULER_ZYZ;
+		ecp_edp_cbuffer.get_pose_specification = epos_external_reply_data_request_port.set_data;
 		//ecp_command.get_arm_type = lib::FRAME;
 		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);

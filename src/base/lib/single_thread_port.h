@@ -176,6 +176,10 @@ protected:
 	bool new_request;
 
 public:
+	/**
+	 * @brief data with request details set by generator basing on template
+	 */
+	B set_data;
 
 	/**
 	 * @brief Constructor

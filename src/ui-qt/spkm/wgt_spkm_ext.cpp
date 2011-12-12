@@ -70,7 +70,8 @@ int wgt_spkm_ext::init()
 			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				//ui.pushButton_execute->setDisabled(false);
-
+				robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_data =
+						lib::spkm::XYZ_EULER_ZYZ;
 				robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_request();
 				robot->ui_ecp_robot->execute_motion();
 				robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
