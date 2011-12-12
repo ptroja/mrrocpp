@@ -258,6 +258,15 @@ struct smb_epos_simple_command
 
 	double estimated_time;
 
+	//! Initialize "safe" command
+	smb_epos_simple_command() :
+		base_vs_bench_rotation(0),
+		pkm_vs_base_rotation(0.0),
+		estimated_time(0.0)
+	{
+	}
+
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
