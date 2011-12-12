@@ -43,7 +43,7 @@ protected:
 	/*!
 	 * \brief current pins state
 	 *
-	 * it is cipied from desired in test_mode or read in hardware_mode
+	 * it is copied from desired in test_mode or read in hardware_mode
 	 */
 	lib::sbench::pins_state_td current_pins_state;
 
