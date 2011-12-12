@@ -71,6 +71,7 @@ bool spkm_pose::first_step()
 	request_segment_execution(*the_robot, *segment_iterator);
 
 	// Request status report
+	the_robot->epos_external_reply_data_request_port.set_data = lib::spkm::XYZ_EULER_ZYZ;
 	the_robot->epos_external_reply_data_request_port.set_request();
 
 	return true;
