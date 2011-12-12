@@ -24,6 +24,18 @@ namespace lib {
 namespace spkm {
 
 /*!
+ * @brief SwarmItFix Epos simple external command data port
+ * @ingroup spkm
+ */
+const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix Epos status data request port
+ * @ingroup spkm
+ */
+const std::string EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT = "EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT";
+
+/*!
  * @brief SwarmItFix Parallel Kinematic Machine mp to ecp variant
  * @ingroup spkm
  */

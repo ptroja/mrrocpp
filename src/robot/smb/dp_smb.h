@@ -29,6 +29,20 @@ const std::string FESTO_COMMAND_DATA_PORT = "FESTO_COMMAND_DATA_PORT";
 const std::string MULTI_LEG_REPLY_DATA_REQUEST_PORT = "MULTI_LEG_REPLY_DATA_REQUEST_PORT";
 
 /*!
+ * @brief SwarmItFix Epos simple external command data port
+ * @ingroup smb
+ */
+const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix Epos status data request port
+ * @ingroup smb
+ */
+const std::string EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT = "EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT";
+
+
+
+/*!
  * @brief SwarmItFix Mobile Base mp to ecp command
  * @ingroup smb
  */
