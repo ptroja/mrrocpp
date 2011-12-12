@@ -36,11 +36,9 @@ class effector;
 
 class festo_and_inputs
 {
-
 	friend class effector;
 
 private:
-
 	/*!
 	 * \brief reference to master object of effector class
 	 */
@@ -88,16 +86,10 @@ private:
 	lib::smb::festo_command_td festo_command;
 
 public:
-
 	/*!
 	 * \brief festo_and_inputs constructor
 	 */
 	festo_and_inputs(effector &_master);
-
-	/*!
-	 * \brief festo_and_inputs destructor
-	 */
-	~festo_and_inputs();
 
 	/*!
 	 * \brief checks the current legs state
@@ -213,13 +205,13 @@ public:
 	void read_state();
 
 	/*!
-	 * \brief prepers the reply buffer for effector class
+	 * \brief prepares the reply buffer for effector class
 	 */
 	void create_reply();
 
 	/*!
 	 * \brief executes the desired command
-	 * it communicates with hardware
+	 * \note communicates with hardware
 	 */
 	void execute_command();
 };
