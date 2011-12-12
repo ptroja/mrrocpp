@@ -520,7 +520,7 @@ const char * epos::stateDescription(int state)
 /* pretty-print EPOS state */
 int epos::printState()
 {
-	int state = getState();
+	actual_state_t state = getState();
 
 	printf("\nEPOS is in state: ");
 
@@ -617,6 +617,7 @@ void epos::reset()
 			}
 		}
 
+		// We are not supposed to clear faults here
 		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Device is in the fault state"));
 	}
 
@@ -636,7 +637,7 @@ void epos::reset()
 		} else if (state == FAULT) {
 			throw fe_canopen_error() << reason("Device is in the fault state");
 		} else {
-			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state)
+			std::cerr << "Node " << (int) nodeId << ": transited to state '" << stateDescription(state)
 					<< "' during shutdown" << std::endl;
 			// Continue;
 		}
@@ -665,23 +666,34 @@ void epos::reset()
 	// Setup the wakeup time
 	wakeup = boost::get_system_time();
 
+	// Setup retry counter
 	retry = 5;
 	do {
 		state = getState();
 
-		//std::cerr << "state " << state << " timeout " << timeout << std::endl;
+		// Condition to monitor for
+		bool in_operation_enable = false;
 
-		if (state == MEASURE_INIT) { // Measure in progress...
-			// Continue
-		} else if (state == OPERATION_ENABLE) { // Operation enable
-			break;
-		} else if (state == FAULT) {
-			throw fe_canopen_error() << reason("Device is in the fault state");
-		} else {
-			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state)
-					<< "' during initialization" << std::endl;
-			// Continue;
+		switch (state) {
+			// These are expected transition states
+			case SWITCHED_ON:
+			case MEASURE_INIT:
+			case REFRESH:
+				break;
+			case OPERATION_ENABLE:
+				in_operation_enable = true;
+				break;
+			case FAULT:
+				throw fe_canopen_error() << reason("Device is in the fault state");
+			default:
+				std::cerr << "Node " << (int) nodeId << ": transited to unexpected state '" << stateDescription(state)
+									<< "' during initialization" << std::endl;
+				break;
 		}
+
+		// Exit loop if condition holds
+		if(in_operation_enable)
+			break;
 
 		// Increment the wakeup time
 		wakeup += boost::posix_time::milliseconds(5);
@@ -702,7 +714,7 @@ void epos::reset()
 
 	// Operation Enabled expected
 	if (state != OPERATION_ENABLE) {
-		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Ready-to-switch-On expected"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Operation Enable expected"));
 	}
 }
 
