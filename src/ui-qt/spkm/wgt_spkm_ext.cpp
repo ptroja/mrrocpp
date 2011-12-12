@@ -8,7 +8,7 @@
 #include "../base/ui_robot.h"
 
 wgt_spkm_ext::wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
-		wgt_base(_widget_label, _interface, parent)
+		wgt_base(_widget_label, _interface, parent), current_pose_specification(lib::spkm::XYZ_EULER_ZYZ)
 {
 	ui.setupUi(this);
 	robot = dynamic_cast <mrrocpp::ui::spkm::UiRobot *>(_robot);
@@ -71,7 +71,7 @@ int wgt_spkm_ext::init()
 			{
 				//ui.pushButton_execute->setDisabled(false);
 				robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_data =
-						lib::spkm::XYZ_EULER_ZYZ;
+						current_pose_specification;
 				robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_request();
 				robot->ui_ecp_robot->execute_motion();
 				robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
@@ -320,7 +320,7 @@ int wgt_spkm_ext::move_it()
 		if (robot->state.edp.pid != -1) {
 
 			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
-			lib::spkm::POSE_SPECIFICATION tool_variant = lib::spkm::XYZ_EULER_ZYZ;
+			lib::spkm::POSE_SPECIFICATION tool_variant = current_pose_specification;
 
 			double estimated_time = ui.doubleSpinBox_estimated_time->value();
 
@@ -333,15 +333,15 @@ int wgt_spkm_ext::move_it()
 			} else if (ui.radioButton_operational->isChecked()) {
 				motion_variant = lib::epos::OPERATIONAL;
 			}
-
-			if (ui.radioButton_no_tool->isChecked()) {
-				tool_variant = lib::spkm::XYZ_EULER_ZYZ;
-			} else if (ui.radioButton_tool_oriented->isChecked()) {
-				tool_variant = lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
-			} else if (ui.radioButton_wrist_oriented->isChecked()) {
-				tool_variant = lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
-			}
-
+			/*
+			 if (ui.radioButton_no_tool->isChecked()) {
+			 tool_variant = lib::spkm::XYZ_EULER_ZYZ;
+			 } else if (ui.radioButton_tool_oriented->isChecked()) {
+			 tool_variant = lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
+			 } else if (ui.radioButton_wrist_oriented->isChecked()) {
+			 tool_variant = lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
+			 }
+			 */
 			robot->ui_ecp_robot->move_external(robot->desired_pos, motion_variant, tool_variant, estimated_time);
 
 			if ((robot->state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
@@ -357,5 +357,26 @@ int wgt_spkm_ext::move_it()
 	CATCH_SECTION_UI_PTR
 
 	return 1;
+}
+
+void wgt_spkm_ext::on_radioButton_no_tool_toggled()
+{
+	if (ui.radioButton_no_tool->isChecked()) {
+		current_pose_specification = lib::spkm::XYZ_EULER_ZYZ;
+	}
+}
+
+void wgt_spkm_ext::on_radioButton_tool_oriented_toggled()
+{
+	if (ui.radioButton_tool_oriented->isChecked()) {
+		current_pose_specification = lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
+	}
+}
+
+void wgt_spkm_ext::on_radioButton_wrist_oriented_toggled()
+{
+	if (ui.radioButton_wrist_oriented->isChecked()) {
+		current_pose_specification = lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
+	}
 }
 

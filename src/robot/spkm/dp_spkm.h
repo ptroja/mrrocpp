@@ -142,12 +142,12 @@ typedef enum _POSE_SPECIFICATION
 } POSE_SPECIFICATION;
 
 /*!
- * @brief SwarmItFix Epos all controllers status
- * @ingroup epos
+ * @brief SwarmItFix Epos external mode controllers status
+ * @ingroup spkm
  */
 struct spkm_ext_epos_reply
 {
-	POSE_SPECIFICATION pose_specification;
+//	POSE_SPECIFICATION pose_specification;
 	lib::Homog_matrix current_frame;
 	lib::epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 	bool contact;
@@ -159,7 +159,7 @@ struct spkm_ext_epos_reply
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & pose_specification;
+		//ar & pose_specification;
 		ar & current_frame;
 		ar & epos_controller;
 		ar & contact;
@@ -167,7 +167,7 @@ struct spkm_ext_epos_reply
 };
 
 /*!
- * @brief SwarmItFix Epos motor and joint and external command, called from UI
+ * @brief SwarmItFix Epos external command
  * @ingroup spkm
  */
 struct spkm_epos_simple_command
