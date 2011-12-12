@@ -1062,6 +1062,9 @@
    </item>
    <item row="6" column="7">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_step_p5">
+     <property name="locale">
+      <locale language="Polish" country="Poland"/>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>

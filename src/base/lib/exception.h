@@ -30,21 +30,16 @@ typedef enum _ERROR_CLASS_T
 	NEW_MESSAGE, SYSTEM_ERROR, FATAL_ERROR, NON_FATAL_ERROR
 } error_class_t;
 
-}
-}
-
-namespace mrrocpp {
-namespace lib {
 namespace exception {
 
 //! A single line description of error.
-typedef boost::error_info <struct mrrocpp_error_description_, char const *> mrrocpp_error_description;
+typedef boost::error_info <struct error_description_, char const *> error_description;
 
 //! Time when error was detected.
-typedef boost::error_info <struct timestamp, boost::system_time> mrrocpp_error_time;
+typedef boost::error_info <struct timestamp, boost::system_time> error_time;
 
 //! Convert exception's timestamp to human-readable string
-inline std::string to_string(mrrocpp_error_time const & e)
+inline std::string to_string(error_time const & e)
 {
 	return boost::posix_time::to_simple_string(e.value());
 }
@@ -61,7 +56,7 @@ typedef boost::error_info <struct error1_, uint64_t> mrrocpp_error1;
  * \date 12.05.2011
  */
 template <error_class_t ercl>
-class mrrocpp_error : virtual public std::exception, virtual public boost::exception
+class error : virtual public std::exception, virtual public boost::exception
 {
 public:
 	/*!
@@ -72,17 +67,17 @@ public:
 	/*!
 	 * Constructor.
 	 */
-	mrrocpp_error() :
+	error() :
 			error_class(ercl)
 	{
 		// Add it to diagnostic information.
-		*this << mrrocpp_error_time(boost::get_system_time());
+		*this << error_time(boost::get_system_time());
 	}
 
 	/*!
 	 * Destructor.
 	 */
-	~mrrocpp_error() throw ()
+	~error() throw ()
 	{
 	}
 
@@ -100,34 +95,34 @@ public:
  * \author tkornuta
  * \date 12.05.2011
  */
-typedef mrrocpp_error <SYSTEM_ERROR> mrrocpp_system_error;
+typedef error <SYSTEM_ERROR> system_error;
 /*!
  * \brief Base class for all fatal errors.
  * \author tkornuta
  * \date 12.05.2011
  */
-typedef mrrocpp_error <FATAL_ERROR> mrrocpp_fatal_error;
+typedef error <FATAL_ERROR> fatal_error;
 
 /*!
  * \brief Base class for all non fatal errors.
  * \author tkornuta
  * \date 12.05.2011
  */
-typedef mrrocpp_error <NON_FATAL_ERROR> mrrocpp_non_fatal_error;
+typedef error <NON_FATAL_ERROR> non_fatal_error;
 
 /*!
  * Macro for registration of MRROC++ system errors.
  *
  * \param CLASS_NAME Name of the error (class name).
- * \param DESCRIPTION Description added to the mrrocpp_error_description error info field.
+ * \param DESCRIPTION Description added to the error_description error info field.
  *
  * \author tkornuta
  * \date 12.05.2011
  */
 #define REGISTER_SYSTEM_ERROR(CLASS_NAME, DESCRIPTION) \
-struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_system_error \
+struct CLASS_NAME : virtual mrrocpp::lib::exception::system_error \
 { \
-	CLASS_NAME() { *this << mrrocpp::lib::exception::mrrocpp_error_description(DESCRIPTION); } \
+	CLASS_NAME() { *this << mrrocpp::lib::exception::error_description(DESCRIPTION); } \
 	~CLASS_NAME() throw () { } \
 };
 
@@ -135,15 +130,15 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_system_error \
  * Macro for registration of MRROC++ fatal errors.
  *
  * \param CLASS_NAME Name of the error (class name).
- * \param DESCRIPTION Description added to the mrrocpp_error_description error info field.
+ * \param DESCRIPTION Description added to the error_description error info field.
  *
  * \author tkornuta
  * \date 12.05.2011
  */
 #define REGISTER_FATAL_ERROR(CLASS_NAME, DESCRIPTION) \
-struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_fatal_error \
+struct CLASS_NAME : virtual mrrocpp::lib::exception::fatal_error \
 { \
-	CLASS_NAME() { *this << mrrocpp::lib::exception::mrrocpp_error_description(DESCRIPTION); } \
+	CLASS_NAME() { *this << mrrocpp::lib::exception::error_description(DESCRIPTION); } \
 	~CLASS_NAME() throw () { } \
 };
 
@@ -151,15 +146,15 @@ struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_fatal_error \
  * Macro for registration of MRROC++ non fatal errors.
  *
  * \param CLASS_NAME Name of the error (class name).
- * \param DESCRIPTION Description added to the mrrocpp_error_description error info field.
+ * \param DESCRIPTION Description added to the error_description error info field.
  *
  * \author tkornuta
  * \date 12.05.2011
  */
 #define REGISTER_NON_FATAL_ERROR(CLASS_NAME, DESCRIPTION) \
-struct CLASS_NAME : virtual mrrocpp::lib::exception::mrrocpp_non_fatal_error \
+struct CLASS_NAME : virtual mrrocpp::lib::exception::non_fatal_error \
 { \
-	CLASS_NAME() { *this << mrrocpp::lib::exception::mrrocpp_error_description(DESCRIPTION); } \
+	CLASS_NAME() { *this << mrrocpp::lib::exception::error_description(DESCRIPTION); } \
 	~CLASS_NAME() throw () { } \
 };
 
