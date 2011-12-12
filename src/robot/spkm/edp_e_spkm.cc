@@ -606,7 +606,7 @@ void effector::execute_motor_motion()
 						/ kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[i];
 				cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - " << desired_motor_pos_old[i]
 						<< " = " << Delta[i] << endl;
-				Vmax[i] = Vdefault[i] / maxon::epos::SECONDS_PER_MINUTE;
+				Vmax[i] = ((double) Vdefault[i]) / ((double) maxon::epos::SECONDS_PER_MINUTE);
 				Amax[i] = Adefault[i];
 			}
 
@@ -677,6 +677,7 @@ void effector::execute_motor_motion()
 		default:
 			// Throw non-fatal error - motion type not supported.
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_motion_type());
+			break;
 	} //: switch (ecp_edp_cbuffer.motion_variant)
 }
 
