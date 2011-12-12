@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <ctime>
 #include <unistd.h>
 #include <strings.h>
 #include <sys/stat.h>
@@ -50,6 +51,8 @@
 #include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
 #include "../irp6_m/wgt_irp6_m_tool_euler.h"
 
+#include "base/lib/exception.h"
+
 #include "wgt_robot_process_control.h"
 #include "mp.h"
 #include "allrobots.h"
@@ -69,7 +72,7 @@ Interface::Interface() :
 
 	mw = (boost::shared_ptr <MainWindow>) new MainWindow(*this);
 
-	main_eb = new function_execution_buffer(*this);
+	main_eb = (boost::shared_ptr<function_execution_buffer>) new function_execution_buffer(*this);
 
 	timer = (boost::shared_ptr <QTimer>) new QTimer(this);
 
@@ -81,8 +84,8 @@ Interface::Interface() :
 	ui_state = 1; // ui working
 	file_window_mode = ui::common::FSTRAJECTORY; // uczenie
 
-	all_robots = new AllRobots(this);
-	mp = new Mp(this);
+	all_robots = (boost::shared_ptr<AllRobots>) new AllRobots(this);
+	mp = (boost::shared_ptr<Mp>) new Mp(this);
 }
 
 Interface::~Interface()
@@ -313,7 +316,7 @@ void Interface::timer_slot()
 			ui_state = 6;
 	} else if (ui_state == 6) { // zakonczenie aplikacji
 		(*log_file_outfile).close();
-		delete log_file_outfile;
+		log_file_outfile.reset();
 		printf("UI CLOSED\n");
 		abort_threads();
 		get_main_window()->close();
@@ -778,7 +781,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-if(	uname(&sysinfo) == -1) {
+	if(	uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -821,8 +824,12 @@ if(	uname(&sysinfo) == -1) {
 	signal(SIGINT, &catch_signal); // by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
 	signal(SIGALRM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
-
 	signal(SIGCHLD, &catch_signal);
+
+	// Ignore SIGPIPE, which comes from communication errors and should be handled approriately
+	if(signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
+		BOOST_THROW_EXCEPTION(lib::exception::system_error());
+	}
 	/* TR
 	 lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 	 */
@@ -883,7 +890,7 @@ if(	uname(&sysinfo) == -1) {
 	strcat(log_file_with_dir, file_name);
 
 	// C++ new does not return 0 on failure, so there is no need to check
-	log_file_outfile = new std::ofstream(log_file_with_dir, std::ios::out);
+	log_file_outfile = (boost::shared_ptr<std::ofstream>) new std::ofstream(log_file_with_dir, std::ios::out);
 
 	//ui_msg->message("closing");
 

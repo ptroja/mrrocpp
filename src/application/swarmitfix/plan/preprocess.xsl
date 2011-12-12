@@ -37,21 +37,34 @@
     <!-- Remove mobile base duplicate coordinates -->
 	<xsl:template match="/plan/mbase/item/actions/item/dTheta"/>
     
-    <!-- Rename ox,oy,oz to alpha,beta,gamma -->
-    <xsl:template match="/plan/pkm/item/Xyz_Euler_Zyz/ox">
-        <alpha>
-            <xsl:apply-templates select="node()"/>
-        </alpha>
+    <!-- Format time values -->
+    <xsl:template match="/plan/*/item/TBeg">
+        <TBeg><xsl:value-of select='format-number(node(), "#.###")' /></TBeg>        
     </xsl:template>
-    <xsl:template match="/plan/pkm/item/Xyz_Euler_Zyz/oy">
-        <beta>
-            <xsl:apply-templates select="node()"/>
-        </beta>
+    <xsl:template match="/plan/*/item/TEnd">
+        <TEnd><xsl:value-of select='format-number(node(), "#.###")' /></TEnd>        
     </xsl:template>
-    <xsl:template match="/plan/pkm/item/Xyz_Euler_Zyz/oz">
-        <gamma>
-            <xsl:apply-templates select="node()"/>
-        </gamma>
+    
+    <!-- Format PKM pose values -->
+    <xsl:template match="/plan/pkm/item/Xyz_Euler_Zyz/*">
+        <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.####")' /></xsl:element>
+    </xsl:template>
+    
+    <!-- Format mobile base pose values -->
+    <xsl:template match="/plan/mbase/item/actions/item/dPkmTheta">
+        <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.###")' /></xsl:element>
+    </xsl:template>
+    <xsl:template match="/plan/mbase/item/cx">
+        <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.####")' /></xsl:element>
+    </xsl:template>      
+    <xsl:template match="/plan/mbase/item/cy">
+        <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.####")' /></xsl:element>
+    </xsl:template>
+    <xsl:template match="/plan/mbase/item/theta">
+        <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.###")' /></xsl:element>
+    </xsl:template>
+    <xsl:template match="/plan/mbase/item/pkmTheta">
+        <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.###")' /></xsl:element>
     </xsl:template>
     
     <!-- Choose between Homog_matrix and XYZ_Euler_Zyz representation -->

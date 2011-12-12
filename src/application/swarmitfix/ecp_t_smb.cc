@@ -46,6 +46,8 @@ void swarmitfix::main_task_algorithm(void)
 		// Wait for new coordinator's command
 		while(!nextstateBuffer.isFresh()) {
 			ReceiveSingleMessage(true);
+
+			// TODO: handle commands at control channel
 		}
 
 		try {
@@ -55,17 +57,19 @@ void swarmitfix::main_task_algorithm(void)
 			// Dispatch to selected generator
 			switch(nextstateBuffer.Get().variant) {
 				case lib::smb::ACTION_LIST:
-					//g_action->Move();
+					g_action->Move();
 					break;
 				default:
 					g_quickstop->Move();
 					break;
 			}
 
-		} catch (std::exception & e) {
-			// Report problem and re-throw exception to the process shell
+		} catch (const std::exception & e) {
+			// Report problem...
 			notifyBuffer->Send(lib::NACK);
-			throw;
+
+			// And DO NOT re-throw exception to the process shell
+			// throw;
 		}
 
 		// Reply with acknowledgment

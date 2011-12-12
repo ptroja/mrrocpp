@@ -16,6 +16,9 @@
 #include "robot/shead/const_shead1.h"
 #include "robot/shead/const_shead2.h"
 
+#include "base/lib/swarmtypes.h"
+#include "base/mp/mp_robot.h"
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -110,21 +113,21 @@ bool executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, OutputBuffer<l
 	lib::smb::next_state_t cmd(lib::smb::ACTION_LIST);
 
 	std::cerr << "MP: smb" << smbCmd.agent() << " # of SMB segments = " << smbCmd.actions().item().size() << std::endl;
+
 	// Iterate over action sequence
-	for(Plan::MbaseType::ItemType::ActionsType::ItemConstIterator it = smbCmd.actions().item().begin();
-			it != smbCmd.actions().item().end();
-			++it) {
-		std::cerr << "pin " << it->pin() << std::endl;
-		std::cerr << "dPkmTheta " << it->dPkmTheta() << std::endl;
+	BOOST_FOREACH(const Plan::MbaseType::ItemType::ActionsType::ItemType & it, smbCmd.actions().item())
+	{
+		std::cerr << "pin " << it.pin() << std::endl;
+		std::cerr << "dPkmTheta " << it.dPkmTheta() << std::endl;
 
 		// Setup single action
 		lib::smb::action act;
 
-		if(it->pin()) {
-			act.setRotationPin(it->pin());
-			act.setdThetaInd(it->dThetaInd()); // FIXME
+		if(it.pin()) {
+			act.setRotationPin(it.pin());
+			act.setdThetaInd(it.dThetaInd()); // FIXME
 		}
-		act.setdPkmTheta(it->dPkmTheta());
+		act.setdPkmTheta(it.dPkmTheta());
 
 		// Append action to the command sequence
 		cmd.actions.push_back(act);
@@ -145,6 +148,23 @@ bool executeCommandItem(const Plan::HeadType::ItemType & headCmd)
 
 	return false;
 }
+
+#if 0
+//! Dummy generator for handling UI commands
+class dummy : public mp::generator::generator {
+public:
+	//! Dummy implementation of required abstract method
+	bool first_step() {
+		throw std::logic_error("Generator not intended for execution");
+	}
+
+	//! Dummy implementation of required abstract method
+	bool next_step() {
+		throw std::logic_error("Generator not intended for execution");
+	}
+
+};
+#endif
 
 void swarmitfix::main_test_algorithm(void)
 {
@@ -187,27 +207,28 @@ void swarmitfix::main_test_algorithm(void)
 		if(ind > it.ind()) ind = it.ind();
 	}
 
-	for (;; ++ind) {
+	current_plan_status = ONGOING;
+
+	for (; current_plan_status == ONGOING; ++ind) {
 		// Diagnostic timestamp
 		boost::system_time start_timestamp = boost::get_system_time();
 
 		State * currentActionState;
 
-		std::cerr << "plan index = " << ind << "\t" <<
-			isFinished(spkm1_it, *p) <<
-			isFinished(spkm2_it, *p) <<
-			isFinished(smb1_it, *p) <<
-			isFinished(smb2_it, *p) <<
-			isFinished(shead1_it, *p) <<
-			isFinished(shead2_it, *p) << std::endl;
+//		std::cerr << "plan index = " << ind << "\t" <<
+//			isFinished(spkm1_it, *p) <<
+//			isFinished(spkm2_it, *p) <<
+//			isFinished(smb1_it, *p) <<
+//			isFinished(smb2_it, *p) <<
+//			isFinished(shead1_it, *p) <<
+//			isFinished(shead2_it, *p) << std::endl;
 
 		// Execute command for spkm1
 		if(indexMatches(spkm1_it, ind, *p)) {
 			currentActionState = (State *) &(*spkm1_it);
-			//currentActionState->execution_time().set(10.0);
 
 			if(executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get()))
-				current_workers_status.insert(lib::spkm1::ROBOT_NAME);
+				current_workers_status[lib::spkm1::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(spkm1_it, 1, *p);
@@ -218,10 +239,10 @@ void swarmitfix::main_test_algorithm(void)
 			currentActionState = (State *) &(*spkm2_it);
 
 			if (executeCommandItem(*spkm2_it++, IO.transmitters.spkm2.outputs.command.get()))
-				current_workers_status.insert(lib::spkm2::ROBOT_NAME);
+				current_workers_status[lib::spkm2::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
-			fastForward(spkm1_it, 2, *p);
+			fastForward(spkm2_it, 2, *p);
 		}
 
 		// Execute command for smb1
@@ -229,7 +250,7 @@ void swarmitfix::main_test_algorithm(void)
 			currentActionState = (State *) &(*smb1_it);
 
 			if(executeCommandItem(*smb1_it++, IO.transmitters.smb1.outputs.command.get()))
-				current_workers_status.insert(lib::smb1::ROBOT_NAME);
+				current_workers_status[lib::smb1::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(smb1_it, 1, *p);
@@ -240,7 +261,7 @@ void swarmitfix::main_test_algorithm(void)
 			currentActionState = (State *) &(*smb2_it);
 
 			if(executeCommandItem(*smb2_it++, IO.transmitters.smb2.outputs.command.get()))
-				current_workers_status.insert(lib::smb2::ROBOT_NAME);
+				current_workers_status[lib::smb2::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(smb2_it, 2, *p);
@@ -252,7 +273,7 @@ void swarmitfix::main_test_algorithm(void)
 
 			// TODO
 			if(executeCommandItem(*shead1_it++))
-				current_workers_status.insert(lib::shead1::ROBOT_NAME);
+				current_workers_status[lib::shead1::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(shead1_it, 1, *p);
@@ -264,36 +285,63 @@ void swarmitfix::main_test_algorithm(void)
 
 			// TODO
 			if(executeCommandItem(*shead2_it++))
-				current_workers_status.insert(lib::shead2::ROBOT_NAME);
+				current_workers_status[lib::shead2::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(shead2_it, 2, *p);
 		}
 
-		const bool record_timestamp = !current_workers_status.empty();
+		const bool record_timestamp = !current_workers_status.allIdle();
 
-		while(!current_workers_status.empty()) {
+		while(!current_workers_status.allIdle()) {
 			std::cout << "MP blocking for message" << std::endl;
 			ReceiveSingleMessage(true);
 
+			// Discard communication on control data channel
+			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+			{
+				if (robot_node.second->reply.isFresh()) {
+
+					robot_node.second->reply.markAsUsed();
+
+					sr_ecp_msg->message("Unexpected communication on control data channel");
+				}
+			}
+
 			if(IO.transmitters.smb1.inputs.notification.get() && IO.transmitters.smb1.inputs.notification->isFresh()) {
 				IO.transmitters.smb1.inputs.notification->markAsUsed();
-				current_workers_status.erase(lib::smb1::ROBOT_NAME);
+				current_workers_status[lib::smb1::ROBOT_NAME] = WorkersStatus::IDLE;
+
+				if(IO.transmitters.smb1.inputs.notification->Get() == lib::NACK) {
+					current_plan_status = FAILURE;
+				}
 			}
 
 			if(IO.transmitters.smb2.inputs.notification.get() && IO.transmitters.smb2.inputs.notification->isFresh()) {
 				IO.transmitters.smb2.inputs.notification->markAsUsed();
-				current_workers_status.erase(lib::smb2::ROBOT_NAME);
+				current_workers_status[lib::smb2::ROBOT_NAME] = WorkersStatus::IDLE;
+
+				if(IO.transmitters.smb2.inputs.notification->Get() == lib::NACK) {
+					current_plan_status = FAILURE;
+				}
 			}
 
 			if(IO.transmitters.spkm1.inputs.notification.get() && IO.transmitters.spkm1.inputs.notification->isFresh()) {
 				IO.transmitters.spkm1.inputs.notification->markAsUsed();
-				current_workers_status.erase(lib::spkm1::ROBOT_NAME);
+				current_workers_status[lib::spkm1::ROBOT_NAME] = WorkersStatus::IDLE;
+
+				if(IO.transmitters.spkm1.inputs.notification->Get() == lib::NACK) {
+					current_plan_status = FAILURE;
+				}
 			}
 
 			if(IO.transmitters.spkm2.inputs.notification.get() && IO.transmitters.spkm2.inputs.notification->isFresh()) {
 				IO.transmitters.spkm2.inputs.notification->markAsUsed();
-				current_workers_status.erase(lib::spkm2::ROBOT_NAME);
+				current_workers_status[lib::spkm2::ROBOT_NAME] = WorkersStatus::IDLE;
+
+				if(IO.transmitters.spkm2.inputs.notification->Get() == lib::NACK) {
+					current_plan_status = FAILURE;
+				}
 			}
 		}
 
@@ -307,6 +355,15 @@ void swarmitfix::main_test_algorithm(void)
 
 			std::cout << "Command duration in [ms] is " << td.total_milliseconds() << std::endl;
 			currentActionState->execution_time().set(td.total_milliseconds()/1000.0);
+
+			// Wait for trigger
+			while(!(ui_pulse.isFresh() && ui_pulse.Get() == MP_TRIGGER)) {
+				// TODO: handle PAUSE/RESUME/STOP commands as well
+				if(ui_pulse.isFresh()) ui_pulse.markAsUsed();
+				ReceiveSingleMessage(true);
+			}
+
+			ui_pulse.markAsUsed();
 		}
 
 		// If all iterators are at the end

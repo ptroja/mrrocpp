@@ -132,8 +132,10 @@ void effector::check_controller_state()
 	// Check axes.
 	for (size_t i = 0; i < axes.size(); ++i) {
 		try {
+			// Get current status.
+			canopen::WORD statusWord = axes[i]->getStatusWord();
 			// Get current epos state.
-			maxon::epos::actual_state_t state = axes[i]->getState();
+			maxon::epos::actual_state_t state = maxon::epos::status2state(statusWord);
 			if (state != maxon::epos::OPERATION_ENABLE) {
 				cout << string("Axis ") << axesNames[i] << endl;
 				// Print state.
@@ -158,7 +160,7 @@ void effector::check_controller_state()
 				// EPOS in enabled state.
 				enabled++;
 			}
-			if (axes[i]->isReferenced()) {
+			if (maxon::epos::isReferenced(statusWord)) {
 				// Do not break from this loop so this is a also a preliminary axis error check
 				referenced++;
 			}
@@ -169,7 +171,7 @@ void effector::check_controller_state()
 	}
 	// Robot is synchronized if all axes are referenced
 	controller_state_edp_buf.is_synchronised = (referenced == axes.size());
-	// Check whether all axes are powered.
+	// Check whether all axes are powered on.
 	controller_state_edp_buf.is_power_on = (powerOn == axes.size());
 	// Check fault state.
 	controller_state_edp_buf.robot_in_fault_state = (enabled != axes.size());
@@ -205,13 +207,13 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 			}
 		}
 
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -290,13 +292,13 @@ void effector::synchronise(void)
 		// Now the robot is synchronised
 		controller_state_edp_buf.is_synchronised = true;
 
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -380,13 +382,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		if (is_previous_cartesian_pose_known)
 			current_end_effector_frame = desired_end_effector_frame;
 
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -707,7 +709,7 @@ void effector::interpolated_motion_in_operational_space()
 	Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, 1> t;
 	compute_pvt_triplets_for_epos <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS>(p, v, t, time_invervals, motor_3w, motor_2w, motor_1w, motor_0w);
 
-#if 0
+#if 1
 	cout<<"p = [ \n"<<p << "\n ]; \n";
 	cout<<"v = [ \n"<<v << "\n ]; \n";
 	cout<<"t = [ \n"<<t << "\n ]; \n";
@@ -966,13 +968,13 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		}
 
 		reply.servo_step = step_counter;
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {

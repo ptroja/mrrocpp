@@ -279,9 +279,7 @@ public:
 		return ((robot_m.find(name) != robot_m.end()) ? true : false);
 	}
 
-private:
-	friend class robot::robot;
-
+protected:
 	/**
 	 * @brief pulse from UI
 	 */

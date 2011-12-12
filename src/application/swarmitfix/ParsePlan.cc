@@ -9,8 +9,6 @@
 #include <memory>
 #include <exception>
 
-#include <boost/thread/thread.hpp>
-
 #include "planner.h"
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/lib/mrmath/mrmath.h"
@@ -26,45 +24,18 @@ int main(int argc, char *argv[])
 	}
 
 	try {
-		const Plan p = *plan(argv[1], xml_schema::Flags::dont_validate);
+		// XML validation settings
+		xml_schema::Properties props;
 
-		// cerr << p.hNum() << endl;
+		// Add XSD validation to parser's properties
+		props.no_namespace_schema_location ("plan.xsd");
 
-		for(Plan::PkmType::ItemConstIterator it = p.pkm().item().begin();
-				it != p.pkm().item().end();
-				++it) {
+		//const Plan p = *plan(argv[1], xml_schema::Flags::dont_validate);
+		const Plan p = *plan(argv[1], 0, props);
 
-			const Plan::PkmType::ItemType & pkmCmd = *it;
-
-			// Test only 1st agent
-			if(pkmCmd.agent() != 1)
-				continue;
-
-			using namespace mrrocpp;
-
-			// Goal pose
-			lib::Homog_matrix hm;
-
-			if(pkmCmd.pkmToWrist().present()) {
-				hm = lib::Homog_matrix(pkmCmd.pkmToWrist().get());
-			} else if (pkmCmd.Xyz_Euler_Zyz().present()) {
-				hm = lib::Xyz_Euler_Zyz_vector(
-						pkmCmd.Xyz_Euler_Zyz()->x(),
-						pkmCmd.Xyz_Euler_Zyz()->y(),
-						pkmCmd.Xyz_Euler_Zyz()->z(),
-						pkmCmd.Xyz_Euler_Zyz()->alpha(),
-						pkmCmd.Xyz_Euler_Zyz()->beta(),
-						pkmCmd.Xyz_Euler_Zyz()->gamma()
-						);
-			} else {
-				// This should be already checked by XML validation
-				throw std::runtime_error("Goal pose not defined");
-			}
-
-			std::cerr << pkmCmd.pkmToWrist() << std::endl;
-			std::cerr << hm << std::endl << std::endl;
-			//std::cerr << "[" << pkmCmd.l1() << "," << pkmCmd.l2() << "," << pkmCmd.l3() << "]" << std::endl;
-		}
+		cerr << "head item # " << p.head().item().size() << endl;
+		cerr << "mbase item # " << p.mbase().item().size() << endl;
+		cerr << "pkm item # " << p.pkm().item().size() << endl;
 
 		// Create planner object
 		//planner pp(argv[1]);
@@ -72,8 +43,8 @@ int main(int argc, char *argv[])
 		// Start execution
 		//pp.start();
 
-	} catch (const xml_schema::Exception& e) {
-		cerr << e << endl;
+	} catch (const xml_schema::Exception & e) {
+		cerr << "Exception::what(): " << e << endl;
 		return 1;
 	}
 

@@ -3,7 +3,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <string>
-#include <set>
+#include "WorkersStatus.h"
 
 #include "base/mp/mp_task.h"
 #include "base/lib/impconst.h"
@@ -190,9 +190,6 @@ private:
 	// Start of user code Internal memory variables
 //! Type for plan realization status
 typedef enum _PLAN_STATUS { ONGOING, FAILURE } PlanStatus;
-
-//! Associative container type for worker status
-typedef std::set<lib::robot_name_t> WorkersStatus;
 
 //! Planner object
 planner pp;

@@ -1,4 +1,4 @@
-add_library(agent BufferBase.cc InputBufferBase.cc AgentBase.cc Agent.cc)
+add_library(agent BufferBase.cc InputBufferBase.cc AgentBase.cc Agent.cc RemoteAgent.cc)
 
 # Serialization is essential for this library
 target_link_libraries(agent ${Boost_SERIALIZATION_LIBRARY})

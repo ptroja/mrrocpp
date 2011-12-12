@@ -29,7 +29,6 @@ void catch_signal(int sig)
 			signal(SIGSEGV, SIG_DFL);
 			break;
 		case SIGCHLD:
-
 			if ((interface) && (interface->check_sigchld_handling())) {
 				interface->wait_for_child_termination(-1, false);
 			}
