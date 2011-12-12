@@ -37,7 +37,7 @@ wgt_spkm_ext::wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface
 	timer = (boost::shared_ptr <QTimer>) new QTimer(this);
 	connect(timer.get(), SIGNAL(timeout()), this, SLOT(timer_slot()));
 	timer->start(interface.position_refresh_interval);
-	ui.radioButton_non_sync_trapezoidal->setChecked(true);
+	ui.radioButton_sync_trapezoidal->setChecked(true);
 	ui.radioButton_no_tool->setChecked(true);
 }
 
