@@ -220,6 +220,19 @@ struct festo_command_td
 	FESTO_LEG leg[LEG_CLAMP_NUMBER];
 	bool undetachable[LEG_CLAMP_NUMBER];
 
+	//! Initialize "safe" command
+	festo_command_td()
+	{
+		for(int i = 0; i < LEG_CLAMP_NUMBER; ++i) {
+			// Defaults to out...
+			leg[i] = OUT;
+
+			// Do not ask...
+			undetachable[i] = false;
+		}
+	}
+
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
