@@ -90,8 +90,8 @@ external_epos_command::external_epos_command(common::task::task& _ecp_task) :
 
 	epos_external_command_data_port =
 			the_robot->port_manager.get_port <lib::spkm::spkm_epos_simple_command>(lib::spkm::EPOS_EXTERNAL_COMMAND_DATA_PORT);
-	epos_external_reply_data_request_port =
-			the_robot->port_manager.get_request_port <lib::spkm::spkm_ext_epos_reply, lib::empty_t>(lib::spkm::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT);
+	epos_external_reply_data_request_port = the_robot->port_manager.get_request_port <lib::spkm::spkm_ext_epos_reply,
+			lib::spkm::POSE_SPECIFICATION>(lib::spkm::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT);
 
 }
 
