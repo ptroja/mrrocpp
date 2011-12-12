@@ -1832,18 +1832,35 @@ void epos::Restore()
 	WriteObjectValue(0x1011, 0x01, load);
 }
 
+
 bool epos::isReferenced()
 {
-	UNSIGNED16 status = getStatusWord();
+	return isReferenced(getStatusWord());
+}
 
+bool epos::isReferenced(UNSIGNED16 status)
+{
 	return (E_BIT15 & status);
 }
 
 bool epos::isTargetReached()
 {
-	UNSIGNED16 status = getStatusWord();
+	return isTargetReached(getStatusWord());
+}
 
+bool epos::isTargetReached(UNSIGNED16 status)
+{
 	return (E_BIT10 & status);
+}
+
+bool epos::isFaultState()
+{
+	return isFaultState(getStatusWord());
+}
+
+bool epos::isFaultState(UNSIGNED16 status)
+{
+	return (E_BIT03 & status);
 }
 
 void epos::startHoming()

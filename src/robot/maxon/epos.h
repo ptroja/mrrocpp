@@ -682,16 +682,28 @@ public:
 		HM_INDEX_NEGATIVE_SPEED = 33
 	} homing_method_t;
 
-	//! \brief rIs the actual position referenced to home position?
+	//! \brief Is the actual position referenced to home position?
 	bool isReferenced();
 
-	//! \brief rIs the movement target reached?
+	//! \brief Is the actual position referenced to home position?
+	static bool isReferenced(UNSIGNED16 status);
+
+	//! \brief Is the movement target reached?
 	bool isTargetReached();
 
-	//! \brief rStart homing according to preset parameters
+	//! \brief Is the movement target reached?
+	static bool isTargetReached(UNSIGNED16 status);
+
+	//! \brief Is the device in fault state?
+	bool isFaultState();
+
+	//! \brief Is the device in fault state?
+	static bool isFaultState(UNSIGNED16 status);
+
+	//! \brief Start homing according to preset parameters
 	void startHoming();
 
-	//! \brief rCheck if both homing target is reached and homing is attained
+	//! \brief Check if both homing target is reached and homing is attained
 	bool isHomingFinished();
 
 	/*! \brief read Homing Method */

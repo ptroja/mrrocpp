@@ -132,8 +132,10 @@ void effector::check_controller_state()
 	// Check axes.
 	for (size_t i = 0; i < axes.size(); ++i) {
 		try {
+			// Get current status.
+			canopen::WORD statusWord = axes[i]->getStatusWord();
 			// Get current epos state.
-			maxon::epos::actual_state_t state = axes[i]->getState();
+			maxon::epos::actual_state_t state = maxon::epos::status2state(statusWord);
 			if (state != maxon::epos::OPERATION_ENABLE) {
 				cout << string("Axis ") << axesNames[i] << endl;
 				// Print state.
@@ -158,7 +160,7 @@ void effector::check_controller_state()
 				// EPOS in enabled state.
 				enabled++;
 			}
-			if (axes[i]->isReferenced()) {
+			if (maxon::epos::isReferenced(statusWord)) {
 				// Do not break from this loop so this is a also a preliminary axis error check
 				referenced++;
 			}
@@ -169,7 +171,7 @@ void effector::check_controller_state()
 	}
 	// Robot is synchronized if all axes are referenced
 	controller_state_edp_buf.is_synchronised = (referenced == axes.size());
-	// Check whether all axes are powered.
+	// Check whether all axes are powered on.
 	controller_state_edp_buf.is_power_on = (powerOn == axes.size());
 	// Check fault state.
 	controller_state_edp_buf.robot_in_fault_state = (enabled != axes.size());
