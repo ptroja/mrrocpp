@@ -31,6 +31,6 @@ add_library(ecp_r_smb ecp_r_smb.cc ecp_r_smb1.cc ecp_r_smb2.cc)
 target_link_libraries(ecp_r_smb kinematicssmb)
 
 install(TARGETS edp_smb1 edp_smb2 DESTINATION bin)
-install(TARGETS kinematicssmb ecp_r_smb DESTINATION lib)
+install(TARGETS edpsmb kinematicssmb ecp_r_smb DESTINATION lib)
 
 endif(ROBOT_SMB)
