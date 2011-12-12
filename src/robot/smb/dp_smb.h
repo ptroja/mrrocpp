@@ -250,7 +250,7 @@ private:
  * @brief SwarmItFix Epos motor and joint and external command, called from UI
  * @ingroup smb
  */
-struct smb_epos_simple_command
+struct motor_command
 {
 	// external
 	int base_vs_bench_rotation;
@@ -259,7 +259,7 @@ struct smb_epos_simple_command
 	double estimated_time;
 
 	//! Initialize "safe" command
-	smb_epos_simple_command() :
+	motor_command() :
 		base_vs_bench_rotation(0),
 		pkm_vs_base_rotation(0.0),
 		estimated_time(0.0)

@@ -253,7 +253,7 @@ void swarmitfix::move_smb_legs(lib::smb::FESTO_LEG l1, lib::smb::FESTO_LEG l2, l
 
 void swarmitfix::move_smb_external(double x1, double x2)
 {
-	lib::smb::smb_epos_simple_command mp_ecp_smb_epos_simple_command;
+	lib::smb::motor_command mp_ecp_smb_epos_simple_command;
 	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
 
 	mp_ecp_smb_epos_simple_command.base_vs_bench_rotation = x1;

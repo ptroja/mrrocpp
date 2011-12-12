@@ -67,14 +67,14 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	rotate(task_t & _ecp_task, const lib::smb::smb_epos_simple_command & cmd);
+	rotate(task_t & _ecp_task, const lib::smb::motor_command & cmd);
 
 	bool first_step();
 
 	bool next_step();
 
 private:
-	lib::smb::smb_epos_simple_command simple_command;
+	lib::smb::motor_command simple_command;
 
 	//! Periodic query timer
 	lib::periodic_timer wakeup;

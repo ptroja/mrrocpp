@@ -79,7 +79,7 @@ bool stand_up::next_step()
 ////////////////////////////////////////////////////////
 
 rotate::rotate(task_t & _ecp_task,
-		const lib::smb::smb_epos_simple_command & cmd) :
+		const lib::smb::motor_command & cmd) :
 		generator_t(_ecp_task),
 		wakeup(20)
 {
