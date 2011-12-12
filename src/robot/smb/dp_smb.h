@@ -39,6 +39,18 @@ const std::string MULTI_LEG_REPLY_DATA_REQUEST_PORT = "MULTI_LEG_REPLY_DATA_REQU
 REGISTER_NON_FATAL_ERROR(action_parameter_error, "SMB action parameters error")
 
 /*!
+ * @brief SwarmItFix Epos simple external command data port
+ * @ingroup smb
+ */
+const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix Epos status data request port
+ * @ingroup smb
+ */
+const std::string EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT = "EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT";
+
+/*!
  * @brief SwarmItFix Mobile Base mp to ecp command
  * @ingroup smb
  */
@@ -245,6 +257,27 @@ private:
 	}
 
 }__attribute__((__packed__));
+
+/*!
+ * @brief SwarmItFix Epos all controllers status
+ * @ingroup epos
+ */
+struct smb_ext_epos_reply
+{
+	lib::Homog_matrix current_frame;
+	lib::epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & current_frame;
+		ar & epos_controller;
+	}
+};
 
 /*!
  * @brief SwarmItFix Epos motor and joint and external command, called from UI

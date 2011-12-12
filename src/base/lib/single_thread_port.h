@@ -105,7 +105,7 @@ public:
 	 * @param _port_manager port manager reference.
 	 */
 	single_thread_port(std::string _name, single_thread_port_manager & _port_manager) :
-		single_thread_port_interface(_name, _port_manager), no_data(true)
+			single_thread_port_interface(_name, _port_manager), no_data(true)
 
 	{
 	}
@@ -166,7 +166,7 @@ public:
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup lib
  */
-template <class T>
+template <class T, class B>
 class single_thread_request_port : public single_thread_port <T>
 {
 protected:
@@ -176,6 +176,10 @@ protected:
 	bool new_request;
 
 public:
+	/**
+	 * @brief data with request details set by generator basing on template
+	 */
+	B set_data;
 
 	/**
 	 * @brief Constructor
@@ -183,7 +187,7 @@ public:
 	 * @param _port_manager port manager reference.
 	 */
 	single_thread_request_port(std::string _name, single_thread_port_manager & _port_manager) :
-		single_thread_port <T> (_name, _port_manager), new_request(false)
+			single_thread_port <T>(_name, _port_manager), new_request(false)
 
 	{
 	}
@@ -291,10 +295,10 @@ public:
 	 * @brief returns single_thread_request_port of given name
 	 * @param name port name
 	 */
-	template <class T>
-	single_thread_request_port <T>* get_request_port(const std::string & name)
+	template <class T, class B>
+	single_thread_request_port <T, B>* get_request_port(const std::string & name)
 	{
-		return boost::polymorphic_cast <single_thread_request_port <T> *>(single_thread_port_map[name]);
+		return boost::polymorphic_cast <single_thread_request_port <T, B> *>(single_thread_port_map[name]);
 	}
 };
 

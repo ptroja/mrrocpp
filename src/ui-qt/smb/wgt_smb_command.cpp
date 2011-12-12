@@ -113,6 +113,7 @@ int wgt_smb_command::init()
 				robot->ui_ecp_robot->execute_motion();
 				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.get();
 				lib::epos::epos_reply *er;
+				lib::smb::smb_ext_epos_reply *ser;
 
 				if (ui.radioButton_m_motor->isChecked()) {
 
@@ -123,7 +124,7 @@ int wgt_smb_command::init()
 					er = &robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.data;
 				} else if (ui.radioButton_m_ext->isChecked()) {
 					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
-					er = &robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
+					ser = &robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
 				}
 
 				// sets leg state
@@ -137,9 +138,21 @@ int wgt_smb_command::init()
 					checkBox_fl_attached_Vector[i]->setChecked(mlr.leg[i].is_attached);
 				}
 
-				for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
-					checkBox_m_mip_Vector[i]->setChecked(er->epos_controller[i].motion_in_progress);
-					doubleSpinBox_m_current_position_Vector[i]->setValue(er->epos_controller[i].position);
+				if (ui.radioButton_m_motor->isChecked()) {
+					for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
+						checkBox_m_mip_Vector[i]->setChecked(er->epos_controller[i].motion_in_progress);
+						doubleSpinBox_m_current_position_Vector[i]->setValue(er->epos_controller[i].position);
+					}
+				} else if (ui.radioButton_m_joint->isChecked()) {
+					for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
+						checkBox_m_mip_Vector[i]->setChecked(er->epos_controller[i].motion_in_progress);
+						doubleSpinBox_m_current_position_Vector[i]->setValue(er->epos_controller[i].position);
+					}
+				} else if (ui.radioButton_m_ext->isChecked()) {
+					for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
+						checkBox_m_mip_Vector[i]->setChecked(ser->epos_controller[i].motion_in_progress);
+						doubleSpinBox_m_current_position_Vector[i]->setValue(ser->epos_controller[i].position);
+					}
 				}
 
 			} else {

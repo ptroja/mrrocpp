@@ -20,12 +20,12 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 		ecp::common::robot::ecp_robot(_robot_name, lib::spkm::NUM_OF_SERVOS, _config, _sr_ecp),
 		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
-		epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
+		epos_external_command_data_port(lib::spkm::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
 		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
 		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
-		epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
+		epos_external_reply_data_request_port(lib::spkm::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	// Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -35,12 +35,12 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 		ecp::common::robot::ecp_robot(_robot_name, lib::spkm::NUM_OF_SERVOS, _ecp_object),
 		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
-		epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
+		epos_external_command_data_port(lib::spkm::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
 		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
 		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
-		epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
+		epos_external_reply_data_request_port(lib::spkm::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	// Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -151,7 +151,8 @@ void robot::create_command()
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
-		ecp_edp_cbuffer.get_pose_specification = lib::spkm::XYZ_EULER_ZYZ;
+
+		ecp_edp_cbuffer.get_pose_specification = epos_external_reply_data_request_port.set_data;
 		//ecp_command.get_arm_type = lib::FRAME;
 		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
