@@ -147,8 +147,9 @@ typedef enum _POSE_SPECIFICATION
  */
 struct spkm_ext_epos_reply
 {
+	POSE_SPECIFICATION pose_specification;
 	lib::Homog_matrix current_frame;
-	lib::epos::single_controller_epos_reply epos_controller[lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER];
+	lib::epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 	bool contact;
 
 	//! Give access to boost::serialization framework
@@ -158,6 +159,7 @@ struct spkm_ext_epos_reply
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		ar & pose_specification;
 		ar & current_frame;
 		ar & epos_controller;
 		ar & contact;
@@ -172,7 +174,7 @@ struct spkm_epos_simple_command
 {
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
 	POSE_SPECIFICATION pose_specification;
-	double desired_position[lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER];
+	double desired_position[NUM_OF_SERVOS];
 
 	double estimated_time;
 

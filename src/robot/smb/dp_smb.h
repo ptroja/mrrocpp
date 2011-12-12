@@ -40,8 +40,6 @@ const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_
  */
 const std::string EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT = "EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT";
 
-
-
 /*!
  * @brief SwarmItFix Mobile Base mp to ecp command
  * @ingroup smb
@@ -138,8 +136,7 @@ struct multi_leg_reply_td
 struct smb_ext_epos_reply
 {
 	lib::Homog_matrix current_frame;
-	lib::epos::single_controller_epos_reply epos_controller[lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER];
-	bool contact;
+	lib::epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -150,7 +147,6 @@ struct smb_ext_epos_reply
 	{
 		ar & current_frame;
 		ar & epos_controller;
-		ar & contact;
 	}
 };
 
