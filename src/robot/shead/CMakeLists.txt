@@ -1,18 +1,21 @@
 if(ROBOT_SHEAD)
-add_executable(edp_shead1
+
+add_library(edpshead
 	edp_e_shead.cc
+)
+
+add_executable(edp_shead1
 	edp_e_shead1.cc
 )
 
-target_link_libraries(edp_shead1 kinematicsshead edp
+target_link_libraries(edp_shead1 edpshead kinematicsshead edp
 	${COMMON_LIBRARIES})
 
-	add_executable(edp_shead2
-	edp_e_shead.cc
+add_executable(edp_shead2
 	edp_e_shead2.cc
 )
 
-target_link_libraries(edp_shead2 kinematicsshead edp
+target_link_libraries(edp_shead2 edpshead kinematicsshead edp
 	${COMMON_LIBRARIES})
 		
 add_library(kinematicsshead
