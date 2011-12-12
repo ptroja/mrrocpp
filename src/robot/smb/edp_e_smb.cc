@@ -676,6 +676,7 @@ void effector::create_threads()
 
 void effector::instruction_deserialization()
 {
+	BOOST_STATIC_ASSERT(sizeof(ecp_edp_cbuffer) <= sizeof(instruction.serialized_command));
 	memcpy(&ecp_edp_cbuffer, instruction.serialized_command, sizeof(ecp_edp_cbuffer));
 }
 
