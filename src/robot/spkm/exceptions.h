@@ -30,6 +30,10 @@ inline std::string to_string(pose_specification const & e)
 	{
 		case lib::spkm::XYZ_EULER_ZYZ:
 			return "XYZ_EULER_ZYZ";
+		case lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL:
+			return "TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL";
+		case lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL:
+			return "WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL";
 		case lib::spkm::JOINT:
 			return "JOINT";
 		case lib::spkm::MOTOR:

@@ -20,22 +20,7 @@ const double Homog_matrix::ALPHA_SENSITIVITY = 0.000001;
 
 Homog_matrix::Homog_matrix()
 {
-	// Tworzy macierz jednostkowa
-	// 			| 1 0 0 0 |
-	// 			| 0 1 0 0 |
-	// 			| 0 0 1 0 |
-
-	// i - i-ta kolumna
-	// j - j-ty wiersz
-
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 3; j++) {
-			if (i == j)
-				matrix_m[j][i] = 1;
-			else
-				matrix_m[j][i] = 0;
-		}
-	}
+	setIdentity();
 }
 
 Homog_matrix::Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles)
@@ -141,6 +126,41 @@ Homog_matrix::Homog_matrix(double r11, double r12, double r13, double t1, double
 
 Homog_matrix::Homog_matrix(const std::string & str)
 {
+	set(str);
+}
+
+Homog_matrix::Homog_matrix(const Eigen::Matrix <double, 3, 4>& eigen_matrix)
+{
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			matrix_m[i][j] = eigen_matrix(i, j);
+		}
+	}
+}
+
+
+void Homog_matrix::setIdentity()
+{
+	// Tworzy macierz jednostkowa
+	// 			| 1 0 0 0 |
+	// 			| 0 1 0 0 |
+	// 			| 0 0 1 0 |
+
+	// i - i-ta kolumna
+	// j - j-ty wiersz
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (i == j)
+				matrix_m[j][i] = 1;
+			else
+				matrix_m[j][i] = 0;
+		}
+	}
+}
+
+void Homog_matrix::set(const std::string & str)
+{
 	// Prepare char-separated tokenizer
 	typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
 
@@ -178,15 +198,6 @@ Homog_matrix::Homog_matrix(const std::string & str)
 
 	// Check if all tokens has been parsed
 	if(tok_iter != tokens.end()) throw std::runtime_error("End-of-string expected");
-}
-
-Homog_matrix::Homog_matrix(const Eigen::Matrix <double, 3, 4>& eigen_matrix)
-{
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 4; ++j) {
-			matrix_m[i][j] = eigen_matrix(i, j);
-		}
-	}
 }
 
 // Przeksztalcenie do formy XYZ_EULER_ZYZ i zwrocenie w tablicy.
@@ -254,6 +265,7 @@ Homog_matrix::Homog_matrix(const Eigen::Matrix <double, 3, 4>& eigen_matrix)
  t[5] = gamma;
  }
  */
+
 
 void Homog_matrix::get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const
 {
