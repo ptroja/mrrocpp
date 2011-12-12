@@ -326,7 +326,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		switch (ecp_edp_cbuffer.variant)
 		{
-			case lib::smb::POSE: {
+			case lib::smb::POSE:
 				msg->message("POSE");
 				// Control the two SMB rotational motors.
 				// Parse command.
@@ -334,8 +334,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				// Execute motion.
 				execute_motor_motion();
 				break;
-			}
-			case lib::smb::QUICKSTOP: {
+			case lib::smb::QUICKSTOP:
 				if (!robot_test_mode) {
 					// Execute command
 					BOOST_FOREACH(maxon::epos * node, axes)
@@ -352,8 +351,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 				} //: !test_mode
 				break;
-			}
-			case lib::smb::CLEAR_FAULT: {
+			case lib::smb::CLEAR_FAULT:
 				//				msg->message("CLEAR_FAULT");
 				if (!robot_test_mode) {
 					BOOST_FOREACH(maxon::epos * node, axes)
@@ -381,8 +379,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							}
 				} //: !test_mode
 				break;
-			}
-			case lib::smb::FESTO: {
+			case lib::smb::FESTO:
 				if (is_base_positioned_to_move_legs) {
 					fai->command();
 				}
@@ -398,10 +395,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					}
 				}
 				break;
-			}
 			default:
 				break;
-
 		}
 	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
@@ -674,9 +669,8 @@ void effector::create_threads()
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 
-	// do poprawy
+	// TODO: do poprawy
 	is_base_positioned_to_move_legs = true;
-
 }
 
 void effector::instruction_deserialization()
