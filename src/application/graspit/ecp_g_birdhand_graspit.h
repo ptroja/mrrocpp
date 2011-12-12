@@ -33,10 +33,10 @@ private:
 	lib::single_thread_port <lib::bird_hand::configuration> *bird_hand_configuration_command_data_port;
 
 	//! odbieranie statusu robota
-	lib::single_thread_request_port <lib::bird_hand::status> *bird_hand_status_reply_data_request_port;
+	lib::single_thread_request_port <lib::bird_hand::status, lib::empty_t> *bird_hand_status_reply_data_request_port;
 
 	//! odczytanie parametrow konfiguracji
-	lib::single_thread_request_port <lib::bird_hand::configuration> *bird_hand_configuration_reply_data_request_port;
+	lib::single_thread_request_port <lib::bird_hand::configuration, lib::empty_t> *bird_hand_configuration_reply_data_request_port;
 
 	//! docelowe pozycje palcow
 	double des_thumb_f[2];

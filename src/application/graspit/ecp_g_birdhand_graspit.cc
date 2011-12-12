@@ -26,10 +26,10 @@ bird_hand::bird_hand(common::task::task& _ecp_task) :
 			= the_robot->port_manager.get_port <lib::bird_hand::configuration> (lib::bird_hand::CONFIGURATION_DATA_PORT);
 
 	bird_hand_status_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::bird_hand::status> (lib::bird_hand::STATUS_DATA_REQUEST_PORT);
+			= the_robot->port_manager.get_request_port <lib::bird_hand::status, lib::empty_t> (lib::bird_hand::STATUS_DATA_REQUEST_PORT);
 
 	bird_hand_configuration_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::bird_hand::configuration> (lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT);
+			= the_robot->port_manager.get_request_port <lib::bird_hand::configuration, lib::empty_t> (lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT);
 }
 
 void bird_hand::create_ecp_mp_reply()

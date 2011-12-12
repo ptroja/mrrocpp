@@ -35,7 +35,7 @@ private:
 	/**
 	 * @brief leg status reply data request port
 	 */
-	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> *smb_multi_leg_reply_data_request_port;
+	lib::single_thread_request_port <lib::smb::multi_leg_reply_td, lib::empty_t> *smb_multi_leg_reply_data_request_port;
 
 public:
 
@@ -73,7 +73,7 @@ private:
 	/**
 	 * @brief epos motion status with external reply data request port
 	 */
-	lib::single_thread_request_port <lib::smb::smb_ext_epos_reply> *epos_external_reply_data_request_port;
+	lib::single_thread_request_port <lib::smb::smb_ext_epos_reply, lib::empty_t> *epos_external_reply_data_request_port;
 
 public:
 

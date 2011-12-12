@@ -74,17 +74,17 @@ public:
 	/**
 	 * @brief epos motion status reply data request port
 	 */
-	lib::single_thread_request_port <lib::epos::epos_reply> epos_motor_reply_data_request_port;
+	lib::single_thread_request_port <lib::epos::epos_reply, lib::empty_t> epos_motor_reply_data_request_port;
 
 	/**
 	 * @brief epos motion status with joint reply data request port
 	 */
-	lib::single_thread_request_port <lib::epos::epos_reply> epos_joint_reply_data_request_port;
+	lib::single_thread_request_port <lib::epos::epos_reply, lib::empty_t> epos_joint_reply_data_request_port;
 
 	/**
 	 * @brief Head state reply data request port
 	 */
-	lib::single_thread_request_port <lib::shead::reply> shead_reply_data_request_port;
+	lib::single_thread_request_port <lib::shead::reply, lib::empty_t> shead_reply_data_request_port;
 
 	/**
 	 * @brief constructor called from UI
