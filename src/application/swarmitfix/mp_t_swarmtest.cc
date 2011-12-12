@@ -16,6 +16,9 @@
 #include "robot/shead/const_shead1.h"
 #include "robot/shead/const_shead2.h"
 
+#include "base/lib/swarmtypes.h"
+#include "base/mp/mp_robot.h"
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -204,7 +207,9 @@ void swarmitfix::main_test_algorithm(void)
 		if(ind > it.ind()) ind = it.ind();
 	}
 
-	for (;; ++ind) {
+	current_plan_status = ONGOING;
+
+	for (; current_plan_status == ONGOING; ++ind) {
 		// Diagnostic timestamp
 		boost::system_time start_timestamp = boost::get_system_time();
 
@@ -292,24 +297,51 @@ void swarmitfix::main_test_algorithm(void)
 			std::cout << "MP blocking for message" << std::endl;
 			ReceiveSingleMessage(true);
 
+			// Discard communication on control data channel
+			BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
+			{
+				if (robot_node.second->reply.isFresh()) {
+
+					robot_node.second->reply.markAsUsed();
+
+					sr_ecp_msg->message("Unexpected communication on control data channel");
+				}
+			}
+
 			if(IO.transmitters.smb1.inputs.notification.get() && IO.transmitters.smb1.inputs.notification->isFresh()) {
 				IO.transmitters.smb1.inputs.notification->markAsUsed();
 				current_workers_status[lib::smb1::ROBOT_NAME] = WorkersStatus::IDLE;
+
+				if(IO.transmitters.smb1.inputs.notification->Get() == lib::NACK) {
+					current_plan_status = FAILURE;
+				}
 			}
 
 			if(IO.transmitters.smb2.inputs.notification.get() && IO.transmitters.smb2.inputs.notification->isFresh()) {
 				IO.transmitters.smb2.inputs.notification->markAsUsed();
 				current_workers_status[lib::smb2::ROBOT_NAME] = WorkersStatus::IDLE;
+
+				if(IO.transmitters.smb2.inputs.notification->Get() == lib::NACK) {
+					current_plan_status = FAILURE;
+				}
 			}
 
 			if(IO.transmitters.spkm1.inputs.notification.get() && IO.transmitters.spkm1.inputs.notification->isFresh()) {
 				IO.transmitters.spkm1.inputs.notification->markAsUsed();
 				current_workers_status[lib::spkm1::ROBOT_NAME] = WorkersStatus::IDLE;
+
+				if(IO.transmitters.spkm1.inputs.notification->Get() == lib::NACK) {
+					current_plan_status = FAILURE;
+				}
 			}
 
 			if(IO.transmitters.spkm2.inputs.notification.get() && IO.transmitters.spkm2.inputs.notification->isFresh()) {
 				IO.transmitters.spkm2.inputs.notification->markAsUsed();
 				current_workers_status[lib::spkm2::ROBOT_NAME] = WorkersStatus::IDLE;
+
+				if(IO.transmitters.spkm2.inputs.notification->Get() == lib::NACK) {
+					current_plan_status = FAILURE;
+				}
 			}
 		}
 
@@ -326,6 +358,7 @@ void swarmitfix::main_test_algorithm(void)
 
 			// Wait for trigger
 			while(!(ui_pulse.isFresh() && ui_pulse.Get() == MP_TRIGGER)) {
+				// TODO: handle PAUSE/RESUME/STOP commands as well
 				if(ui_pulse.isFresh()) ui_pulse.markAsUsed();
 				ReceiveSingleMessage(true);
 			}
