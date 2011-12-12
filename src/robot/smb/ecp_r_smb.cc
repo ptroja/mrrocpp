@@ -63,13 +63,13 @@ void robot::create_kinematic_models_for_given_robot(void)
 void robot::create_command()
 {
 
-	//	int new_data_counter;
-	bool is_new_data;
-	bool is_new_request;
+	// checks if any data_port is set
+	bool is_new_data = false;
+
+	// cheks if any data_request_posrt is set
+	bool is_new_request = false;
 
 	sr_ecp_msg.message("create_command");
-
-	is_new_data = false;
 
 	if (epos_motor_command_data_port.get() == mrrocpp::lib::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
@@ -113,14 +113,13 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.variant = lib::smb::POSE;
 
-		ecp_edp_cbuffer.set_pose_specification = lib::smb::FRAME;
+		ecp_edp_cbuffer.set_pose_specification = lib::smb::EXTERNAL;
 
 		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;
 
-		for (int i = 0; i < 6; ++i) {
-			ecp_edp_cbuffer.goal_pos[i] = epos_external_command_data_port.data.desired_position[i];
-		}
+		ecp_edp_cbuffer.base_vs_bench_rotation = epos_external_command_data_port.data.base_vs_bench_rotation;
+		ecp_edp_cbuffer.pkm_vs_base_rotation = epos_external_command_data_port.data.pkm_vs_base_rotation;
 
 		check_then_set_command_flag(is_new_data);
 	}
@@ -180,7 +179,7 @@ void robot::create_command()
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
-		ecp_edp_cbuffer.get_pose_specification = lib::smb::FRAME;
+		ecp_edp_cbuffer.get_pose_specification = lib::smb::EXTERNAL;
 		//ecp_command.get_arm_type = lib::FRAME;
 		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);

@@ -467,7 +467,7 @@ void epos::setRemoteOperation(bool enable)
 		remote = isRemoteOperationEnabled(getStatusWord());
 
 		if (remote != enable) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Failed to change REMOTE state of the device"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Failed to change REMOTE state of the device"));
 		}
 	}
 }
@@ -617,7 +617,7 @@ void epos::reset()
 			}
 		}
 
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Device is in the fault state"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Device is in the fault state"));
 	}
 
 	// Shutdown
@@ -634,7 +634,7 @@ void epos::reset()
 		if (state == READY_TO_SWITCH_ON) { // Operation enable
 			break;
 		} else if (state == FAULT) {
-			throw se_canopen_error() << reason("Device is in the fault state");
+			throw fe_canopen_error() << reason("Device is in the fault state");
 		} else {
 			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state)
 					<< "' during shutdown" << std::endl;
@@ -650,13 +650,13 @@ void epos::reset()
 	} while (retry--);
 
 	if (retry == 0) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Timeout shutting device down"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Timeout shutting device down"));
 	}
 
 	// Ready-to-switch-On expected
 	if (state != READY_TO_SWITCH_ON) {
 		std::cout << "XXX state = " << state << std::endl;
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Ready-to-switch-On expected"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Ready-to-switch-On expected"));
 	}
 
 	// Enable
@@ -676,7 +676,7 @@ void epos::reset()
 		} else if (state == OPERATION_ENABLE) { // Operation enable
 			break;
 		} else if (state == FAULT) {
-			throw se_canopen_error() << reason("Device is in the fault state");
+			throw fe_canopen_error() << reason("Device is in the fault state");
 		} else {
 			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state)
 					<< "' during initialization" << std::endl;
@@ -692,7 +692,7 @@ void epos::reset()
 	} while (retry--);
 
 	if (retry == 0) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Timeout enabling device"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Timeout enabling device"));
 	}
 
 	// Enable+Halt
@@ -702,7 +702,7 @@ void epos::reset()
 
 	// Operation Enabled expected
 	if (state != OPERATION_ENABLE) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Ready-to-switch-On expected"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Ready-to-switch-On expected"));
 	}
 }
 
@@ -771,7 +771,7 @@ void epos::setState(desired_state_t state)
 			setControlword(cw);
 			break;
 		default:
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("ERROR: demanded state is UNKNOWN!"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("ERROR: demanded state is UNKNOWN!"));
 			// TODO: state
 			break;
 	}
@@ -805,7 +805,7 @@ UNSIGNED16 epos::getDInput()
 void epos::setHomePolarity(int pol)
 {
 	if (pol != 0 && pol != 1) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("polarity must be 0 (height active) or 1 (low active)"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("polarity must be 0 (height active) or 1 (low active)"));
 	}
 
 	// read present functionalities polarity mask
@@ -1481,7 +1481,7 @@ void epos::setInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UN
 {
 	// only 24 bits allowed for velocity
 	if (velocity > (int) 0x00ffffff || velocity < (int) 0xff000000) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Only 24 bits allowed for velocity"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Only 24 bits allowed for velocity"));
 	}
 
 	// This array holds a manufacturer-specific 64 bit data record
@@ -1621,7 +1621,7 @@ UNSIGNED8 epos::getNumberOfErrors()
 UNSIGNED32 epos::getErrorHistory(unsigned int num)
 {
 	if (num < 1 || num > 5) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Error History index out of range <1..5>"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Error History index out of range <1..5>"));
 	}
 	return ReadObjectValue <UNSIGNED32>(0x1003, num);
 }
@@ -1702,7 +1702,7 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	if ((w & E_BIT12) == E_BIT12) {
 		// Just to be sure (this should be OK according to specification)
 		if ((w & E_BIT15) != E_BIT15) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Not referenced after homing(!?)") << canId(nodeId));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Not referenced after homing(!?)") << canId(nodeId));
 		}
 		printf("homing finished!\n");
 		return (0);
@@ -1856,7 +1856,7 @@ bool epos::isHomingFinished()
 	UNSIGNED16 status = getStatusWord();
 
 	if ((status & E_BIT13) == E_BIT13) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("HOMING ERROR!") << canId(nodeId));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("HOMING ERROR!") << canId(nodeId));
 	}
 
 	// bit 10 says: target reached!, bit 12: homing attained
@@ -1884,7 +1884,7 @@ void epos::monitorHomingStatus()
 		fflush(stdout);
 
 		if ((status & E_BIT13) == E_BIT13) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("HOMING ERROR!"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("HOMING ERROR!"));
 		}
 
 	} while (((status & E_BIT10) != E_BIT10) && ((status & E_BIT12) != E_BIT12));

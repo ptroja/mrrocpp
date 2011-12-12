@@ -34,7 +34,7 @@ public:
 	void move_smb_external(double x1, double x2);
 
 	void move_spkm_joints(double x1, double x2, double x3, double x4, double x5, double x6);
-	void move_spkm_external(double x1, double x2, double x3, double x4, double x5, double x6);
+	void move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double x1, double x2, double x3, double x4, double x5, double x6);
 
 };
 

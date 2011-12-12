@@ -142,6 +142,10 @@ int
 port_disconnect( messip_channel_t * ch,
    int32_t msec_timeout = MESSIP_NOTIMEOUT);
 
+int
+port_ping( messip_channel_t * ch,
+   int32_t msec_timeout = MESSIP_NOTIMEOUT);
+
 } /* namespace messip */
 
 #endif /* MESSIP_PORT_H_ */

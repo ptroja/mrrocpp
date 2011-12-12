@@ -50,6 +50,8 @@
 #include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
 #include "../irp6_m/wgt_irp6_m_tool_euler.h"
 
+#include "base/lib/exception.h"
+
 #include "wgt_robot_process_control.h"
 #include "mp.h"
 #include "allrobots.h"
@@ -778,7 +780,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-if(	uname(&sysinfo) == -1) {
+	if(	uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -821,8 +823,12 @@ if(	uname(&sysinfo) == -1) {
 	signal(SIGINT, &catch_signal); // by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
 	signal(SIGALRM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
-
 	signal(SIGCHLD, &catch_signal);
+
+	// Ignore SIGPIPE, which comes from communication errors and should be handled approriately
+	if(signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
+		BOOST_THROW_EXCEPTION(lib::exception::system_error());
+	}
 	/* TR
 	 lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 	 */

@@ -118,6 +118,34 @@ struct multi_leg_reply_td
 }__attribute__((__packed__));
 
 /*!
+ * @brief SwarmItFix Epos motor and joint and external command, called from UI
+ * @ingroup smb
+ */
+struct smb_epos_simple_command
+{
+	lib::epos::EPOS_MOTION_VARIANT motion_variant;
+
+	// external
+	int base_vs_bench_rotation;
+	double pkm_vs_base_rotation;
+
+	double estimated_time;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & motion_variant;
+		ar & base_vs_bench_rotation;
+		ar & pkm_vs_base_rotation;
+		ar & estimated_time;
+	}
+}__attribute__((__packed__));
+
+/*!
  * @brief SwarmItFix Mobile Base EDP command buffer
  * @ingroup smb
  */
@@ -144,7 +172,9 @@ struct cbuffer
 
 	double joint_pos[NUM_OF_SERVOS];
 
-	double goal_pos[6];
+	// external
+	int base_vs_bench_rotation;
+	double pkm_vs_base_rotation;
 
 	//! Allowed time for the motion in seconds.
 	//! If 0, then the motion time will be limited by the motor parameters.
@@ -174,8 +204,9 @@ struct cbuffer
 				ar & set_pose_specification;
 				switch (set_pose_specification)
 				{
-					case FRAME:
-						ar & goal_pos;
+					case EXTERNAL:
+						ar & base_vs_bench_rotation;
+						ar & pkm_vs_base_rotation;
 						break;
 					case JOINT:
 						ar & joint_pos;

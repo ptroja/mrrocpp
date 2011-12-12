@@ -130,8 +130,8 @@ typedef struct
 	std::string node_name;
 	std::string network_pulse_attach_point;
 	int node_nr;
-	RemoteAgent * MP;
-	OutputBuffer <char> * pulse;
+	boost::shared_ptr<RemoteAgent> MP;
+	boost::shared_ptr<OutputBuffer<char> > pulse;
 	UI_MP_STATE state;
 	UI_MP_STATE last_process_control_state;
 	UI_MP_STATE last_manage_interface_state;
