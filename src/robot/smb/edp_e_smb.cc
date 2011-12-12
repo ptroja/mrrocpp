@@ -6,6 +6,7 @@
 #include <boost/thread/thread.hpp>
 #include <boost/thread/thread_time.hpp>
 #include <boost/foreach.hpp>
+#include <boost/static_assert.hpp>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
@@ -680,8 +681,8 @@ void effector::instruction_deserialization()
 
 void effector::reply_serialization(void)
 {
+	BOOST_STATIC_ASSERT(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
-	assert(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
 } // namespace smb

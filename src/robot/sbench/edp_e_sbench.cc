@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <boost/static_assert.hpp>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
@@ -184,7 +185,7 @@ void effector::instruction_deserialization()
 
 void effector::reply_serialization(void)
 {
-	assert(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
+	BOOST_STATIC_ASSERT(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
 }
 

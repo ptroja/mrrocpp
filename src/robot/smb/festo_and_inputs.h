@@ -52,12 +52,12 @@ private:
 	/*!
 	 * \brief shared pointer to epos controller interface needed to read the input data of current legs state
 	 */
-	boost::shared_ptr <maxon::epos> epos_di_node;
+	maxon::epos & epos_di_node;
 
 	/*!
 	 * \brief shared pointer to festo interface to control pneumatic outputs
 	 */
-	boost::shared_ptr <festo::cpv> cpv10;
+	festo::cpv & cpv10;
 
 	/*!
 	 * \brief state of the legs i.e. number of legs in upper and lower position
@@ -78,7 +78,7 @@ private:
 	 * \brief robot_test_mode taken from effector class
 	 * it does not change during task executon
 	 */
-	bool robot_test_mode;
+	const bool robot_test_mode;
 
 	/*!
 	 * \brief current festo command
