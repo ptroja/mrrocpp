@@ -38,7 +38,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 void swarmitfix::main_task_algorithm(void)
 {
-	std::cerr << "> swarmitfix::main_task_algorithm" << std::endl;
+	std::cerr << "smb> swarmitfix::main_task_algorithm" << std::endl;
 
 	{
 		// Execute motion generator (defaults to OUT)
@@ -95,7 +95,12 @@ void swarmitfix::execute_actions(const lib::smb::next_state_t::action_sequence_t
 			// Setup EDP command
 			lib::smb::festo_command_td cmd;
 
-			// Defaults to OUT...and only one IN.
+			// All IN...
+			cmd.leg[0] = lib::smb::IN;
+			cmd.leg[1] = lib::smb::IN;
+			cmd.leg[2] = lib::smb::IN;
+
+			// and only one OUT.
 			cmd.leg[act.getRotationPin()-1] = lib::smb::OUT;
 
 			// Execute motion generator
@@ -109,7 +114,7 @@ void swarmitfix::execute_actions(const lib::smb::next_state_t::action_sequence_t
 			lib::smb::motor_command cmd;
 
 			// Copy parameters
-			cmd.base_vs_bench_rotation = act.getdThetaInd();
+			//cmd.base_vs_bench_rotation = act.getdThetaInd();
 			cmd.pkm_vs_base_rotation = act.getdPkmTheta();
 			cmd.estimated_time = act.getDuration();
 

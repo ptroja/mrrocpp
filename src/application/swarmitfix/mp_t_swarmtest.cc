@@ -82,7 +82,7 @@ bool executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, OutputBuffer<lib
 				);
 	}
 
-	// Setup variant for the PKM
+	// Setup command for the PKM
 	lib::spkm::next_state_t cmd(lib::spkm::POSE_LIST);
 
 	cmd.segments.push_back(hm);
@@ -227,8 +227,8 @@ void swarmitfix::main_test_algorithm(void)
 		if(indexMatches(spkm1_it, ind, *p)) {
 			currentActionState = (State *) &(*spkm1_it);
 
-			if(executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get()))
-				current_workers_status[lib::spkm1::ROBOT_NAME] = WorkersStatus::BUSY;
+			if(executeCommandItem(*spkm1_it++, IO.transmitters.spkm2.outputs.command.get()))
+				current_workers_status[lib::spkm2::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(spkm1_it, 1, *p);
@@ -238,8 +238,8 @@ void swarmitfix::main_test_algorithm(void)
 		if(indexMatches(spkm2_it, ind, *p)) {
 			currentActionState = (State *) &(*spkm2_it);
 
-			if (executeCommandItem(*spkm2_it++, IO.transmitters.spkm2.outputs.command.get()))
-				current_workers_status[lib::spkm2::ROBOT_NAME] = WorkersStatus::BUSY;
+			if (executeCommandItem(*spkm2_it++, IO.transmitters.spkm1.outputs.command.get()))
+				current_workers_status[lib::spkm1::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(spkm2_it, 2, *p);
@@ -249,8 +249,8 @@ void swarmitfix::main_test_algorithm(void)
 		if(indexMatches(smb1_it, ind, *p)) {
 			currentActionState = (State *) &(*smb1_it);
 
-			if(executeCommandItem(*smb1_it++, IO.transmitters.smb1.outputs.command.get()))
-				current_workers_status[lib::smb1::ROBOT_NAME] = WorkersStatus::BUSY;
+			if(executeCommandItem(*smb1_it++, IO.transmitters.smb2.outputs.command.get()))
+				current_workers_status[lib::smb2::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(smb1_it, 1, *p);
@@ -260,8 +260,8 @@ void swarmitfix::main_test_algorithm(void)
 		if(indexMatches(smb2_it, ind, *p)) {
 			currentActionState = (State *) &(*smb2_it);
 
-			if(executeCommandItem(*smb2_it++, IO.transmitters.smb2.outputs.command.get()))
-				current_workers_status[lib::smb2::ROBOT_NAME] = WorkersStatus::BUSY;
+			if(executeCommandItem(*smb2_it++, IO.transmitters.smb1.outputs.command.get()))
+				current_workers_status[lib::smb1::ROBOT_NAME] = WorkersStatus::BUSY;
 
 			// Fast-forward upto next command
 			fastForward(smb2_it, 2, *p);
