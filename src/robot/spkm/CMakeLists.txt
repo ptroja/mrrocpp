@@ -30,9 +30,6 @@ add_library(kinematicsspkm
 	kinematic_parameters_spkm.cc
 )
 
-add_executable(xmltest xmltest.cc)
-target_link_libraries(xmltest mrrocpp ${COMMON_LIBRARIES}) 
-
 target_link_libraries(kinematicsspkm kinematics)
 	
 add_library(ecp_r_spkm ecp_r_spkm.cc ecp_r_spkm1.cc ecp_r_spkm2.cc)	
