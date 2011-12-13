@@ -41,6 +41,17 @@ protected:
 	bool new_data;
 
 public:
+
+	/*!
+	 * @brief Data flow status
+	 *
+	 * @ingroup lib
+	 */
+	enum FlowStatus
+	{
+		NoData, OldData, NewData
+	};
+
 	/**
 	 * @brief Constructor
 	 * @param _name Unique port name.
