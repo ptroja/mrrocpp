@@ -25,6 +25,10 @@
     <xsl:template match="/plan/pkm/item/baseToPkmAlfa"/>
     <xsl:template match="/plan/pkm/item/baseToPkmDx"/>
     <xsl:template match="/plan/pkm/item/baseToPkmDz"/>
+    <xsl:template match="/plan/pkm/item/PkmNeutralBtoH"/>
+    <xsl:template match="/plan/pkm/item/PkmNeutralZ"/>
+    <xsl:template match="/plan/pkm/item/PY"/>
+    <xsl:template match="/plan/pkm/item/hTw"/>
     <!-- Remove PKM joint coordinates -->
     <xsl:template match="/plan/pkm/item/alpha0"/>    
     <xsl:template match="/plan/pkm/item/l1"/>       
@@ -36,6 +40,18 @@
     <xsl:template match="/plan/pkm/item/beta7"/>
     <!-- Remove mobile base duplicate coordinates -->
 	<xsl:template match="/plan/mbase/item/actions/item/dTheta"/>
+    
+    <!-- Parse matlab matrices with pin coordinates -->
+    <xsl:template match="/plan/mbase/item/pinY|pinX">
+        <xsl:element name="{name()}">
+            <!--
+            <matrix><xsl:value-of select="node()"/></matrix>
+            -->
+            <pin1><xsl:value-of select="format-number(substring-before(substring-after(node(),'['), ' ') div 100, '#.####')"/></pin1>
+            <pin2><xsl:value-of select="format-number(substring-before(substring-after(node(),' '), ' ') div 100, '#.####')"/></pin2>
+            <pin3><xsl:value-of select="format-number(substring-after(substring-after(substring-before(node(),']'), ' '), ' ') div 100, '#.####')"/></pin3>
+        </xsl:element>
+    </xsl:template>
     
     <!-- Format time values -->
     <xsl:template match="/plan/*/item/TBeg">
