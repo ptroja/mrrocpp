@@ -20,16 +20,6 @@ namespace lib {
 class single_thread_port_manager;
 
 /*!
- * @brief Data flow status
- *
- * @ingroup lib
- */
-enum FlowStatus
-{
-	NoData, OldData, NewData
-};
-
-/*!
  * @brief single_thread_port interface class
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
@@ -56,6 +46,7 @@ public:
 	 * @param _port_manager port manager reference.
 	 */
 	single_thread_port_interface(const std::string & _name, single_thread_port_manager & _port_manager);
+
 	/**
 	 * @brief Destructor
 	 * This is a base class, so virtual destructor is recommended
@@ -64,6 +55,16 @@ public:
 	virtual ~single_thread_port_interface()
 	{
 	}
+
+	/*!
+	 * @brief Data flow status
+	 *
+	 * @ingroup lib
+	 */
+	enum FlowStatus
+	{
+		NoData, OldData, NewData
+	};
 
 	/**
 	 * @brief returns port name
@@ -247,7 +248,7 @@ private:
 	 *
 	 * @ingroup lib
 	 */
-	typedef std::map <std::string, single_thread_port_interface *> single_thread_port_interface_t;
+	typedef std::map <const std::string, single_thread_port_interface *> single_thread_port_interface_t;
 
 	/*!
 	 * @brief single_thread_port_interface stl map value_type typedef

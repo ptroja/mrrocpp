@@ -82,7 +82,7 @@ bool spkm_pose::next_step()
 	sr_ecp_msg.message("spkm_pose: next_step");
 
 	// A co to jest??? (ptroja)
-	//if (the_robot->epos_motor_reply_data_request_port.get() == mrrocpp::lib::NewData) {
+	//if (the_robot->epos_motor_reply_data_request_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 	//}
 
 	// waits 20ms to check epos state

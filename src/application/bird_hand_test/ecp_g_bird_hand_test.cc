@@ -71,7 +71,7 @@ bool bird_hand::first_step()
 bool bird_hand::next_step()
 {
 
-	if (bird_hand_status_reply_data_request_port->get() == mrrocpp::lib::NewData) {
+	if (bird_hand_status_reply_data_request_port->get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
 		ss << "licznik: " << bird_hand_status_reply_data_request_port->data.thumb_f[0].meassured_torque
