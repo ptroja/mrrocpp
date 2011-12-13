@@ -1,5 +1,7 @@
 # Recurse into subdirectories.
 
+# Disable non-swarm applications
+if(NOT UBUNTU32BIT)
 #add_subdirectory (bclikeregions)
 add_subdirectory (ball)
 add_subdirectory (bird_hand_test)
@@ -23,8 +25,6 @@ add_subdirectory (playerjoy)
 add_subdirectory (pnml)
 add_subdirectory (rcsc)
 add_subdirectory (swarm_demo_irp6)
-add_subdirectory (swarm_demo_single_agent)
-add_subdirectory (swarmitfix)
 add_subdirectory (tcim_bug)
 add_subdirectory (teach)
 add_subdirectory (teach-dll)
@@ -33,3 +33,8 @@ add_subdirectory (visual_servoing)
 add_subdirectory (visual_servoing_demo)
 add_subdirectory (wii_teach)
 add_subdirectory (trajectory_stats)
+endif(NOT UBUNTU32BIT)
+
+# Swarm applications are always build
+add_subdirectory (swarm_demo_single_agent)
+add_subdirectory (swarmitfix)
