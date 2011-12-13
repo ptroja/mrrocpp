@@ -74,7 +74,7 @@ private:
 	/**
 	 * @brief epos motion status with external reply data request port
 	 */
-	lib::single_thread_request_port <lib::epos::epos_reply> *epos_external_reply_data_request_port;
+	lib::single_thread_request_port <lib::spkm::spkm_ext_epos_reply, lib::spkm::POSE_SPECIFICATION> *epos_external_reply_data_request_port;
 
 public:
 

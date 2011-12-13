@@ -24,6 +24,18 @@ namespace lib {
 namespace spkm {
 
 /*!
+ * @brief SwarmItFix Epos simple external command data port
+ * @ingroup spkm
+ */
+const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix Epos status data request port
+ * @ingroup spkm
+ */
+const std::string EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT = "EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT";
+
+/*!
  * @brief SwarmItFix Parallel Kinematic Machine mp to ecp variant
  * @ingroup spkm
  */
@@ -130,14 +142,39 @@ typedef enum _POSE_SPECIFICATION
 } POSE_SPECIFICATION;
 
 /*!
- * @brief SwarmItFix Epos motor and joint and external command, called from UI
+ * @brief SwarmItFix Epos external mode controllers status
+ * @ingroup spkm
+ */
+struct spkm_ext_epos_reply
+{
+//	POSE_SPECIFICATION pose_specification;
+	lib::Homog_matrix current_frame;
+	lib::epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
+	bool contact;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		//ar & pose_specification;
+		ar & current_frame;
+		ar & epos_controller;
+		ar & contact;
+	}
+};
+
+/*!
+ * @brief SwarmItFix Epos external command
  * @ingroup spkm
  */
 struct spkm_epos_simple_command
 {
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
 	POSE_SPECIFICATION pose_specification;
-	double desired_position[lib::epos::EPOS_DATA_PORT_SERVOS_NUMBER];
+	double desired_position[NUM_OF_SERVOS];
 
 	double estimated_time;
 
