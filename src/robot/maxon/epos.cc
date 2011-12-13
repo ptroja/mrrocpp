@@ -916,7 +916,7 @@ void epos::printControlWord(WORD s)
 
 void epos::startAbsoluteMotion()
 {
-	setControlword(0x3f);
+	setControlword(0x003f);
 }
 
 void epos::startRelativeMotion()
