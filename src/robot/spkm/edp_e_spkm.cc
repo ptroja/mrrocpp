@@ -366,7 +366,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 								node->printState();
 
 								// Check if in a FAULT state
-								if (node->getState() == 11) {
+								if (node->getState() == maxon::epos::FAULT) {
 									maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
 									cerr << "readNumberOfErrors() = " << (int) errNum << endl;
 									for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
