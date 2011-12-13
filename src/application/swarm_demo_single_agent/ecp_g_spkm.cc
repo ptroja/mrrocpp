@@ -26,7 +26,7 @@ joint_epos_command::joint_epos_command(common::task::task& _ecp_task) :
 	epos_joint_command_data_port =
 			the_robot->port_manager.get_port <lib::epos::epos_simple_command>(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT);
 	epos_joint_reply_data_request_port =
-			the_robot->port_manager.get_request_port <lib::epos::epos_reply, lib::empty_t>(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT);
+			the_robot->port_manager.get_request_port <lib::epos::epos_reply>(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT);
 
 }
 

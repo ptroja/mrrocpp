@@ -288,6 +288,16 @@ public:
 	 * @brief returns single_thread_request_port of given name
 	 * @param name port name
 	 */
+	template <class T>
+	single_thread_request_port <T>* get_request_port(const std::string & name)
+	{
+		return boost::polymorphic_cast <single_thread_request_port <T> *>(single_thread_port_map[name]);
+	}
+
+	/**
+	 * @brief returns single_thread_request_port of given name
+	 * @param name port name
+	 */
 	template <class T, class B>
 	single_thread_request_port <T, B>* get_request_port(const std::string & name)
 	{
