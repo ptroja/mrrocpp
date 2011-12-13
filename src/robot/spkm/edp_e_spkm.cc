@@ -44,6 +44,9 @@ using namespace std;
 //! Prints reference frames.
 #define display_frames 1
 
+//! Prints retrieved commands.
+#define debug_pvt 1
+
 const uint32_t effector::Vdefault[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
 const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
 const uint32_t effector::Ddefault[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
@@ -603,7 +606,7 @@ void effector::execute_motor_motion()
 						/ kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[i];
 				cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - " << desired_motor_pos_old[i]
 						<< " = " << Delta[i] << endl;
-				Vmax[i] = Vdefault[i] / maxon::epos::SECONDS_PER_MINUTE;
+				Vmax[i] = ((double) Vdefault[i]) / ((double) maxon::epos::SECONDS_PER_MINUTE);
 				Amax[i] = Adefault[i];
 			}
 
@@ -749,7 +752,7 @@ void effector::interpolated_motion_in_operational_space()
 	Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> motor_0w;
 	compute_motor_0w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_0w, motor_interpolations);
 
-#if 0
+#if debug_pvt
 	cout << "time_deltas = [ \n" << time_invervals << "\n ]; \n";
 	cout << "m0w = [\n" << motor_0w << "\n ]; \n";
 	cout << "m1w = [\n" << motor_1w << "\n ]; \n";
@@ -787,13 +790,13 @@ void effector::interpolated_motion_in_operational_space()
 	Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, 1> t;
 	compute_pvt_triplets_for_epos <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> (p, v, t, time_invervals, motor_3w, motor_2w, motor_1w, motor_0w);
 
-#if 1
+#if debug_pvt
 	cout << "p = [ \n" << p << "\n ]; \n";
 	cout << "v = [ \n" << v << "\n ]; \n";
 	cout << "t = [ \n" << t << "\n ]; \n";
 #endif
 
-	// Recalculate units: p[qc], v[rpm (revolutions per minute) per second], t[miliseconds].
+	// Recalculate units: p[qc], v[rpm (revolutions per minute) per second], t[miliseconds].0x4101
 	for (int mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
 		for (int pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
 			v(pnt, mtr) *= 60.0 / kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
@@ -805,14 +808,14 @@ void effector::interpolated_motion_in_operational_space()
 	// Recalculate time to [ms].
 	t *= 1000;
 
-#if 1
+#if debug_pvt
 	cout << " !Values after units recalculations!\n";
 	cout << "p = [ \n" << p << "\n ]; \n";
 	cout << "v = [ \n" << v << "\n ]; \n";
 	cout << "t = [ \n" << t << "\n ]; \n";
 #endif
 
-#if 0
+#if debug_pvt
 	struct timeval tv;
 	std::string dir;
 	// Get time of day.
@@ -949,7 +952,7 @@ void effector::interpolated_motion_in_operational_space()
 			}
 		}
 	} else {
-#if 1
+#if debug_pvt
 		// Display axes movement.
 		for (size_t i = 0; i < axes.size(); ++i) {
 			cout << "Axis " << i << ": qc;rpm;ms;\r\n";
