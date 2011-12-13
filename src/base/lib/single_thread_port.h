@@ -13,6 +13,7 @@
 #include <map>
 
 #include <boost/cast.hpp>
+#include "com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -150,14 +151,6 @@ public:
 		clear_new_data_flag();
 	}
 
-	/**
-	 * @brief test method for test purposes
-	 */
-	void test()
-	{
-
-	}
-
 };
 
 /*!
@@ -166,7 +159,7 @@ public:
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup lib
  */
-template <class T, class B>
+template <class T, class B = empty_t>
 class single_thread_request_port : public single_thread_port <T>
 {
 protected:
