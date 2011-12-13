@@ -118,7 +118,7 @@ bool bird_hand::first_step()
 bool bird_hand::next_step()
 {
 
-	if (bird_hand_status_reply_data_request_port->get() == mrrocpp::lib::NewData) {
+	if (bird_hand_status_reply_data_request_port->get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 
 		std::cout << "\n node_counter: " << node_counter;
 

@@ -58,7 +58,7 @@ void robot::create_command()
 
 	ecp_command.set_type = NOTHING_DEFINITION;
 
-	if (bird_hand_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (bird_hand_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type |= ARM_DEFINITION;
 
 		ecp_edp_cbuffer.command_structure.motion_steps = bird_hand_command_data_port.data.motion_steps;
@@ -76,7 +76,7 @@ void robot::create_command()
 		is_new_data = true;
 	}
 
-	if (bird_hand_configuration_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (bird_hand_configuration_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type |= ROBOT_MODEL_DEFINITION;
 
 		for (int i = 0; i < lib::bird_hand::THUMB_F_NUM_OF_SERVOS; i++) {
