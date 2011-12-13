@@ -178,11 +178,17 @@
                                   </xs:documentation>
                                       </xs:annotation>
                                     </xs:element>
-                                    <xs:element name="dThetaInd" type="xs:int">
+                                    <xs:element name="dThetaInd">
                                       <xs:annotation>
                                         <xs:documentation>delta (rotation) angle in multiply of 60deg
                                   </xs:documentation>
                                       </xs:annotation>
+                                      <xs:simpleType>
+                                        <xs:restriction base="xs:int">
+                                          <xs:minInclusive value="-5"/>
+                                          <xs:maxInclusive value="5"/>
+                                        </xs:restriction>
+                                      </xs:simpleType>
                                     </xs:element>
                                     <xs:element name="dPkmTheta" type="xs:float"/>
                                   </xs:sequence>
