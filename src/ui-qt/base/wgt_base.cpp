@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include "ui_robot.h"
 #include <QMainWindow>
+#include <QLocale>
 
 wgt_base::wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 		QWidget(parent), widget_label(_widget_label), interface(_interface)

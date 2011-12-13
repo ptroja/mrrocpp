@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>778</width>
-    <height>323</height>
+    <width>782</width>
+    <height>313</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>wgt_spkm_ext</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
@@ -87,6 +87,74 @@
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignHCenter</set>
      </property>
+    </widget>
+   </item>
+   <item row="0" column="9" rowspan="4" colspan="2">
+    <widget class="QFrame" name="frame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>190</width>
+       <height>130</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_22">
+        <property name="text">
+         <string>Motion Variant</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="radioButton_non_sync_trapezoidal">
+        <property name="text">
+         <string>non sync trapezoidal</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="radioButton_sync_trapezoidal">
+        <property name="text">
+         <string>sync trapezoidal</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QRadioButton" name="radioButton_sync_polynomal">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>sync polynomal</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QRadioButton" name="radioButton_operational">
+        <property name="text">
+         <string>operational</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item row="1" column="0">
@@ -255,68 +323,6 @@
        <height>12</height>
       </size>
      </property>
-    </widget>
-   </item>
-   <item row="1" column="9" rowspan="5">
-    <widget class="QFrame" name="frame">
-     <property name="minimumSize">
-      <size>
-       <width>190</width>
-       <height>160</height>
-      </size>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_22">
-        <property name="text">
-         <string>Motion Variant</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QRadioButton" name="radioButton_non_sync_trapezoidal">
-        <property name="text">
-         <string>non sync trapezoidal</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QRadioButton" name="radioButton_sync_trapezoidal">
-        <property name="text">
-         <string>sync trapezoidal</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QRadioButton" name="radioButton_sync_polynomal">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="text">
-         <string>sync polynomal</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QRadioButton" name="radioButton_operational">
-        <property name="text">
-         <string>operational</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
    <item row="2" column="0">
@@ -748,6 +754,58 @@
      </property>
     </widget>
    </item>
+   <item row="4" column="9" rowspan="4" colspan="2">
+    <widget class="QFrame" name="frame_2">
+     <property name="minimumSize">
+      <size>
+       <width>190</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_23">
+        <property name="text">
+         <string>Tool Variant</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QRadioButton" name="radioButton_no_tool">
+        <property name="text">
+         <string>no tool</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QRadioButton" name="radioButton_tool_oriented">
+        <property name="text">
+         <string>tool oriented</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QRadioButton" name="radioButton_wrist_oriented">
+        <property name="text">
+         <string>wrist oriented</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
    <item row="5" column="0">
     <widget class="QLabel" name="label_13">
      <property name="text">
@@ -1004,6 +1062,9 @@
    </item>
    <item row="6" column="7">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_step_p5">
+     <property name="locale">
+      <locale language="Polish" country="Poland"/>
+     </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -1058,16 +1119,6 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="9">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_estimated_time">
-     <property name="decimals">
-      <number>3</number>
-     </property>
-     <property name="value">
-      <double>1.000000000000000</double>
-     </property>
-    </widget>
-   </item>
    <item row="8" column="1" colspan="2">
     <widget class="QPushButton" name="pushButton_exportxml">
      <property name="text">
@@ -1097,7 +1148,23 @@
     </widget>
    </item>
    <item row="8" column="9">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_estimated_time">
+     <property name="decimals">
+      <number>3</number>
+     </property>
+     <property name="value">
+      <double>1.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="10">
     <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <family>Bitstream Charter</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
      <property name="text">
       <string>Estimated time [s]</string>
      </property>

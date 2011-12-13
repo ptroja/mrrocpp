@@ -71,6 +71,24 @@ private:
 	//! Variable denoting whether previous end-effector pose in the cartesian space is known.
 	bool is_previous_cartesian_pose_known;
 
+	/*!
+	 * \brief Tool transformation (SHEAD).
+	 * \author tkornuta
+	 */
+	lib::Homog_matrix shead_frame;
+
+	/*!
+	 * \brief Desired tool frame (pose of the SHEAD tip in the PKM base reference frame).
+	 * \author tkornuta
+	 */
+	lib::Homog_matrix desired_shead_frame;
+
+	/*!
+	 * \brief Current tool frame (pose of the SHEAD tip in the PKM base reference frame).
+	 * \author tkornuta
+	 */
+	lib::Homog_matrix current_shead_frame;
+
 	//! Handler for the asynchronous execution of the interpolated profile motion
 	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
