@@ -37,49 +37,49 @@ void gateway_epos_usb::open()
 
 	if ((ret = ftdi_usb_open(&ftdic, vendor, product)) < 0) {
 		fprintf(stderr, "unable to open ftdi device: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw se_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
 	}
 
 	//! reset FTDI device
 	if ((ret = ftdi_usb_reset(&ftdic)) < 0) {
 		fprintf(stderr, "unable to reset ftdi device: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw se_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
 	}
 
 	if ((ret = ftdi_set_line_property(&ftdic, BITS_8, STOP_BIT_1, NONE)) < 0) {
 		fprintf(stderr, "unable to set ftdi line property: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-        throw se_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+        throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
     }
 
 	//! set flow control
 	if ((ret = ftdi_setflowctrl(&ftdic, SIO_DISABLE_FLOW_CTRL)) < 0) {
 	//if ((ret = ftdi_setflowctrl(&ftdic, SIO_RTS_CTS_HS)) < 0) {
 		fprintf(stderr, "unable to set ftdi flow control: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-        throw se_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+        throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
     }
 
 	//! set latency timer
 	if ((ret = ftdi_set_latency_timer(&ftdic, 1)) < 0) {
 		fprintf(stderr, "unable to set ftdi latency timer: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw se_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
 	}
 
 	//! set baud rate
 	if ((ret = ftdi_set_baudrate(&ftdic, 1000000)) < 0) {
 		fprintf(stderr, "unable to set ftdi baudrate: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw se_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
 	}
 #if 0
 	//! set write data chunk size
 	if ((ret = ftdi_write_data_set_chunksize(&ftdic, 512)) < 0) {
 		fprintf(stderr, "unable to set ftdi write chunksize: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw se_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
 	}
 
 	//! set read data chunk size
 	if ((ret = ftdi_read_data_set_chunksize(&ftdic, 512)) < 0) {
 		fprintf(stderr, "unable to set ftdi read chunksize: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw se_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
 	}
 #endif
 
@@ -89,7 +89,7 @@ void gateway_epos_usb::open()
 void gateway_epos_usb::close()
 {
 	if(ftdi_usb_close(&ftdic)) {
-		throw se_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
 	}
 
 	device_opened = false;
@@ -116,9 +116,9 @@ unsigned int gateway_epos_usb::readAnswer(WORD *ans, unsigned int ans_len)
 
 	if (ret < 0) {
 		fprintf(stderr, "ftdi device read failed (%d): (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw se_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
 	} else if (ret == 0) {
-		throw se_canopen_error() << reason("no data returned");
+		throw fe_canopen_error() << reason("no data returned");
 	}
 
 	if (debug) {
@@ -131,24 +131,24 @@ unsigned int gateway_epos_usb::readAnswer(WORD *ans, unsigned int ans_len)
 
 	// check DLE
 	if (buf[0] != DLE) {
-		throw se_canopen_error() << reason("Datagram error (DLE expected)");
+		throw fe_canopen_error() << reason("Datagram error (DLE expected)");
 	}
 
 	// check STX
 	if (buf[1] != STX) {
-		throw se_canopen_error() << reason("Datagram error (STX expected)");
+		throw fe_canopen_error() << reason("Datagram error (STX expected)");
 	}
 
 	// read OpCode
 	if (buf[2] != 0x00) {
-		throw se_canopen_error() << reason("Datagram error (0x00 Answer OpCode expected)");
+		throw fe_canopen_error() << reason("Datagram error (0x00 Answer OpCode expected)");
 	}
 
 	// frame length
 	WORD framelen = buf[3];
 
 	if (ans_len < framelen) {
-		throw se_canopen_error() << reason("output buffer to short for a message");
+		throw fe_canopen_error() << reason("output buffer to short for a message");
 	}
 
 	ans[0] = (framelen << 8);
@@ -187,7 +187,7 @@ unsigned int gateway_epos_usb::readAnswer(WORD *ans, unsigned int ans_len)
 #endif
 	} else {
 		fprintf(stderr, "CRC: %04x != %04x\n", crc, ans[framelen + 1]);
-		throw se_canopen_error() << reason("CRC test FAILED");
+		throw fe_canopen_error() << reason("CRC test FAILED");
 	}
 
 	/* check for error code */
@@ -264,7 +264,7 @@ void gateway_epos_usb::sendCommand(WORD *frame)
 
 	if (w != (int) idx) {
 		fprintf(stderr, "ftdi device write failed (%d/%d chars written): (%s)\n", w, idx, ftdi_get_error_string(&ftdic));
-		throw se_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
 	}
 }
 
@@ -352,7 +352,7 @@ void gateway_epos_usb::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, ui
 
 		checkEPOSerror(E_error);
 	}
-	catch (se_canopen_error & e) {
+	catch (fe_canopen_error & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -383,7 +383,7 @@ void gateway_epos_usb::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE su
 
 		toggle = true;
 	}
-	catch (se_canopen_error & e) {
+	catch (fe_canopen_error & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -394,7 +394,7 @@ void gateway_epos_usb::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE su
 void gateway_epos_usb::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t len)
 {
 	if (len > 63) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Segmented write of > 63 bytes not allowed"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Segmented write of > 63 bytes not allowed"));
 	}
 	try {
 		WORD frame[32+2];
@@ -415,7 +415,7 @@ void gateway_epos_usb::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t le
 		// change the toggle flag value
 		toggle = (toggle) ? false : true;
 	}
-	catch (se_canopen_error & e) {
+	catch (fe_canopen_error & e) {
 		e << canId(nodeId);
 		throw;
 	}
@@ -466,7 +466,7 @@ void gateway_epos_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Dat
 	unsigned int a = readAnswer(answer, 8);
 
 	if (a != 2) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected answer"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected answer"));
 	}
 
 	checkEPOSerror(E_error);

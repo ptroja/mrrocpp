@@ -73,7 +73,7 @@ bool spkm_pose::next_step()
 	sr_ecp_msg.message("spkm_pose: next_step");
 
 	// A co to jest??? (ptroja)
-	if (the_robot->epos_motor_reply_data_request_port.get() == mrrocpp::lib::NewData) {
+	if (the_robot->epos_motor_reply_data_request_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
 		ss << "licznik: " << the_robot->epos_motor_reply_data_request_port.data.epos_controller[3].position;
@@ -128,7 +128,7 @@ spkm_quickstop::spkm_quickstop(task_t & _ecp_task) :
 
 bool spkm_quickstop::first_step()
 {
-	the_robot->epos_brake_command_data_port.data = true;
+	//the_robot->epos_brake_command_data_port.data = true;
 	the_robot->epos_brake_command_data_port.set();
 
 	return true;

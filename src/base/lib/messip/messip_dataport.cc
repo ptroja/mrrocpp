@@ -68,4 +68,11 @@ port_disconnect( messip_channel_t * ch,
 	return messip_channel_disconnect(ch, msec_timeout);
 }
 
+int
+port_ping( messip_channel_t * ch,
+   int32_t msec_timeout)
+{
+	return messip_channel_ping(ch, msec_timeout);
+}
+
 } /* namespace messip */

@@ -20,14 +20,10 @@ Mp::Mp(Interface *iface) :
 	mp_state.pid = -1;
 }
 
-int Mp::MPup()
-
+void Mp::MPup()
 {
 
-	//eb.command(boost::bind(&ui::spkm::UiRobot::execute_motor_motion, &(*this)));
-	interface->main_eb->command(boost::bind(&ui::common::Mp::MPup_int, &(*this)));
-
-	return 1;
+	interface->main_eb->command(boost::bind(&ui::common::Mp::MPup_int, this));
 
 }
 
@@ -35,35 +31,41 @@ int Mp::MPup_int()
 {
 	interface->set_ui_state_notification(UI_N_PROCESS_CREATION);
 
-	if (mp_state.pid == -1) {
+	try {
 
-		mp_state.node_nr = interface->config->return_node_number(mp_state.node_name.c_str());
+		if (mp_state.pid == -1) {
 
-		std::string mp_network_pulse_attach_point("/dev/name/global/");
-		mp_network_pulse_attach_point += mp_state.network_pulse_attach_point;
+			mp_state.node_nr = interface->config->return_node_number(mp_state.node_name.c_str());
 
-		// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
-		if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
-			interface->ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
-		} else if (interface->check_node_existence(mp_state.node_name, "mp")) {
-			mp_state.pid = interface->config->process_spawn(lib::MP_SECTION);
+			std::string mp_network_pulse_attach_point("/dev/name/global/");
+			mp_network_pulse_attach_point += mp_state.network_pulse_attach_point;
 
-			if (mp_state.pid > 0) {
+			// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
+			if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
+				interface->ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
+			} else if (interface->check_node_existence(mp_state.node_name, "mp")) {
+				mp_state.pid = interface->config->process_spawn(lib::MP_SECTION);
 
-				mp_state.MP = new RemoteAgent(lib::MP_SECTION);
-				mp_state.pulse = new OutputBuffer <char>(*mp_state.MP, "MP_PULSE");
+				if (mp_state.pid > 0) {
 
-				interface->teachingstate = ui::common::MP_RUNNING;
+					mp_state.MP = (boost::shared_ptr<RemoteAgent>) new RemoteAgent(lib::MP_SECTION);
+					mp_state.pulse = (boost::shared_ptr<OutputBuffer<char> >) new OutputBuffer <char>(*mp_state.MP, "MP_PULSE");
 
-				mp_state.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
+					interface->teachingstate = ui::common::MP_RUNNING;
 
-				interface->raise_process_control_window();
-			} else {
-				fprintf(stderr, "mp spawn failed\n");
+					mp_state.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
+
+					interface->raise_process_control_window();
+				} else {
+					BOOST_THROW_EXCEPTION(lib::exception::system_error());
+				}
+				interface->manage_interface();
+
 			}
-			interface->manage_interface();
-
 		}
+
+	} catch (...) {
+		interface->ui_state = 2;
 	}
 
 	return 1;
@@ -84,89 +86,60 @@ void Mp::set_mp_state()
 
 int Mp::MPslay()
 {
-	if (mp_state.pid != -1) {
+	try {
+		if (mp_state.pid != -1) {
 
-		if ((mp_state.state == ui::common::UI_MP_TASK_RUNNING) || (mp_state.state == ui::common::UI_MP_TASK_PAUSED)) {
+			if ((mp_state.state == ui::common::UI_MP_TASK_RUNNING)
+					|| (mp_state.state == ui::common::UI_MP_TASK_PAUSED)) {
 
-			pulse_stop_mp();
-		}
-
-		if (mp_state.pulse) {
-			delete mp_state.pulse;
-		} else {
-			std::cerr << "MP pulse not connected?" << std::endl;
-		}
-
-		if (mp_state.MP) {
-			delete mp_state.MP;
-		} else {
-			std::cerr << "MP not connected?" << std::endl;
-		}
-
-		// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
-		// 	printf("mp slay\n");
-
-		//	SignalKill(mp.node_nr, mp.pid, 0, SIGTERM, 0, 0);
-
-		interface->block_sigchld();
-		if (kill(mp_state.pid, SIGTERM) == -1) {
-			perror("kill()");
-		} else {
-			//    		int status;
-			//    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
-			//    			perror("waitpid()");
-			//    		}
-			interface->wait_for_child_termination(mp_state.pid, true);
-		}
-		interface->unblock_sigchld();
-		mp_state.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
-
-	}
-	// delay(1000);
-	// 	kill(mp_pid,SIGTERM);
-	// 	printf("mp pupa po kill\n");
-	mp_state.pid = -1;
-
-	mp_state.pulse = NULL;
-	mp_state.MP = NULL;
-
-	BOOST_FOREACH(const robot_pair_t & robot_node, interface->robot_m)
-			{
-				robot_node.second->deactivate_ecp_trigger();
+				pulse_stop_mp();
 			}
 
-	// modyfikacja menu
-	interface->manage_interface();
-	interface->wgt_pc->process_control_window_init();
-
-	BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
-			{
-				if ((robot_node.second->state.is_active) && (robot_node.second->is_edp_loaded())) {
-					robot_node.second->get_wgt_robot_pc()->process_control_window_init();
-				}
+			if (mp_state.pulse) {
+				mp_state.pulse.reset();
+			} else {
+				std::cerr << "MP pulse not connected?" << std::endl;
 			}
-	//wgt_pc->dwgt->raise();
-	return 1;
 
-}
+			if (mp_state.MP) {
+				mp_state.MP.reset();
+			} else {
+				std::cerr << "MP not connected?" << std::endl;
+			}
 
-int Mp::pulse_start_mp()
+			// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
+			// 	printf("mp slay\n");
 
-{
+			//	SignalKill(mp.node_nr, mp.pid, 0, SIGTERM, 0, 0);
 
-	if (mp_state.state == ui::common::UI_MP_WAITING_FOR_START_PULSE) {
+			interface->block_sigchld();
+			if (kill(mp_state.pid, SIGTERM) == -1) {
+				perror("kill()");
+			} else {
+				//    		int status;
+				//    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
+				//    			perror("waitpid()");
+				//    		}
+				interface->wait_for_child_termination(mp_state.pid, true);
+			}
+			interface->unblock_sigchld();
+			mp_state.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
 
-		mp_state.state = ui::common::UI_MP_TASK_RUNNING; // czekanie na stop
+		}
+		// delay(1000);
+		// 	kill(mp_pid,SIGTERM);
+		// 	printf("mp pupa po kill\n");
+		mp_state.pid = -1;
 
-		// close_all_windows
-		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface->robot_m)
+		BOOST_FOREACH(const robot_pair_t & robot_node, interface->robot_m)
 				{
-					robot_node.second->close_all_windows();
+					robot_node.second->deactivate_ecp_trigger();
 				}
 
-		execute_mp_pulse(MP_START);
-
+		// modyfikacja menu
+		interface->manage_interface();
 		interface->wgt_pc->process_control_window_init();
+
 		BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
 				{
 					if ((robot_node.second->state.is_active) && (robot_node.second->is_edp_loaded())) {
@@ -174,9 +147,42 @@ int Mp::pulse_start_mp()
 					}
 				}
 		//wgt_pc->dwgt->raise();
-		manage_interface();
+	} catch (...) {
+		interface->ui_state = 2;
 	}
+	return 1;
 
+}
+
+int Mp::pulse_start_mp()
+
+{
+	try {
+		if (mp_state.state == ui::common::UI_MP_WAITING_FOR_START_PULSE) {
+
+			mp_state.state = ui::common::UI_MP_TASK_RUNNING; // czekanie na stop
+
+			// close_all_windows
+			BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface->robot_m)
+					{
+						robot_node.second->close_all_windows();
+					}
+
+			execute_mp_pulse(MP_START);
+
+			interface->wgt_pc->process_control_window_init();
+			BOOST_FOREACH(const common::robot_pair_t & robot_node, interface->robot_m)
+					{
+						if ((robot_node.second->state.is_active) && (robot_node.second->is_edp_loaded())) {
+							robot_node.second->get_wgt_robot_pc()->process_control_window_init();
+						}
+					}
+			//wgt_pc->dwgt->raise();
+			manage_interface();
+		}
+	} catch (...) {
+		interface->ui_state = 2;
+	}
 	return 1;
 
 }
@@ -184,16 +190,18 @@ int Mp::pulse_start_mp()
 int Mp::pulse_stop_mp()
 
 {
+	try {
+		if ((mp_state.state == ui::common::UI_MP_TASK_RUNNING) || (mp_state.state == ui::common::UI_MP_TASK_PAUSED)) {
 
-	if ((mp_state.state == ui::common::UI_MP_TASK_RUNNING) || (mp_state.state == ui::common::UI_MP_TASK_PAUSED)) {
+			mp_state.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // czekanie na stop
 
-		mp_state.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // czekanie na stop
+			execute_mp_pulse(MP_STOP);
 
-		execute_mp_pulse(MP_STOP);
-
-		interface->manage_interface();
+			interface->manage_interface();
+		}
+	} catch (...) {
+		interface->ui_state = 2;
 	}
-
 	return 1;
 
 }
@@ -201,16 +209,18 @@ int Mp::pulse_stop_mp()
 int Mp::pulse_pause_mp()
 
 {
+	try {
+		if (mp_state.state == ui::common::UI_MP_TASK_RUNNING) {
 
-	if (mp_state.state == ui::common::UI_MP_TASK_RUNNING) {
+			mp_state.state = ui::common::UI_MP_TASK_PAUSED; // czekanie na stop
 
-		mp_state.state = ui::common::UI_MP_TASK_PAUSED; // czekanie na stop
+			execute_mp_pulse(MP_PAUSE);
 
-		execute_mp_pulse(MP_PAUSE);
-
-		interface->manage_interface();
+			interface->manage_interface();
+		}
+	} catch (...) {
+		interface->ui_state = 2;
 	}
-
 	return 1;
 
 }
@@ -218,16 +228,18 @@ int Mp::pulse_pause_mp()
 int Mp::pulse_resume_mp()
 
 {
+	try {
+		if (mp_state.state == ui::common::UI_MP_TASK_PAUSED) {
 
-	if (mp_state.state == ui::common::UI_MP_TASK_PAUSED) {
+			mp_state.state = ui::common::UI_MP_TASK_RUNNING; // czekanie na stop
 
-		mp_state.state = ui::common::UI_MP_TASK_RUNNING; // czekanie na stop
+			execute_mp_pulse(MP_RESUME);
 
-		execute_mp_pulse(MP_RESUME);
-
-		interface->manage_interface();
+			interface->manage_interface();
+		}
+	} catch (...) {
+		interface->ui_state = 2;
 	}
-
 	return 1;
 
 }
@@ -235,26 +247,30 @@ int Mp::pulse_resume_mp()
 int Mp::pulse_trigger_mp()
 
 {
+	try {
+		if (mp_state.state == ui::common::UI_MP_TASK_RUNNING) {
 
-	if (mp_state.state == ui::common::UI_MP_TASK_RUNNING) {
+			execute_mp_pulse(MP_TRIGGER);
 
-		execute_mp_pulse(MP_TRIGGER);
-
-		interface->manage_interface();
+			interface->manage_interface();
+		}
+	} catch (...) {
+		interface->ui_state = 2;
 	}
-
 	return 1;
 
 }
 
 int Mp::execute_mp_pulse(char pulse_code)
 {
-
-	// printf("w send pulse\n");
-	if (mp_state.pulse) {
-		mp_state.pulse->Send(pulse_code);
+	try {
+		// printf("w send pulse\n");
+		if (mp_state.pulse) {
+			mp_state.pulse->Send(pulse_code);
+		}
+	} catch (...) {
+		interface->ui_state = 2;
 	}
-
 	return 1;
 }
 

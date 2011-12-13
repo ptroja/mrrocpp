@@ -83,8 +83,6 @@ int wgt_shead_command::init()
 					robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.set_request();
 				} else if (ui.radioButton_m_joint->isChecked()) {
 					robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.set_request();
-				} else if (ui.radioButton_m_ext->isChecked()) {
-					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_request();
 				}
 
 				robot->ui_ecp_robot->the_robot->shead_reply_data_request_port.set_request();
@@ -99,9 +97,6 @@ int wgt_shead_command::init()
 				} else if (ui.radioButton_m_joint->isChecked()) {
 					robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.get();
 					er = &robot->ui_ecp_robot->the_robot->epos_joint_reply_data_request_port.data;
-				} else if (ui.radioButton_m_ext->isChecked()) {
-					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
-					er = &robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
 				}
 
 				lib::shead::reply &rep = robot->ui_ecp_robot->the_robot->shead_reply_data_request_port.data;
@@ -236,8 +231,6 @@ int wgt_shead_command::move_it()
 				robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
 			} else if (ui.radioButton_m_joint->isChecked()) {
 				robot->ui_ecp_robot->move_joints(robot->desired_pos, motion_variant);
-			} else if (ui.radioButton_m_ext->isChecked()) {
-				robot->ui_ecp_robot->move_external(robot->desired_pos, motion_variant, 10);
 			}
 
 			if (robot->state.edp.is_synchronised) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
@@ -383,30 +376,6 @@ void wgt_shead_command::on_radioButton_m_joint_toggled()
 
 		// Set precision of widgets with current positions.
 		ui.doubleSpinBox_ml_current_position->setDecimals(3);
-
-		init();
-
-		on_pushButton_ml_copy_clicked();
-	}
-}
-
-void wgt_shead_command::on_radioButton_m_ext_toggled()
-{
-	if (ui.radioButton_m_ext->isChecked()) {
-		//	interface.ui_msg->message("on_radioButton_m_ext_clicked");
-
-		ui.doubleSpinBox_ml_absolute->setMinimum(-100000);
-		ui.doubleSpinBox_ml_absolute->setMaximum(100000);
-		ui.doubleSpinBox_ml_absolute->setSingleStep(1);
-		ui.doubleSpinBox_ml_absolute->setDecimals(0);
-
-		ui.doubleSpinBox_ml_relative->setMinimum(-100000);
-		ui.doubleSpinBox_ml_relative->setMaximum(100000);
-		ui.doubleSpinBox_ml_relative->setSingleStep(1);
-		ui.doubleSpinBox_ml_relative->setDecimals(0);
-
-		// Set precision of widgets with current positions.
-		ui.doubleSpinBox_ml_current_position->setDecimals(0);
 
 		init();
 

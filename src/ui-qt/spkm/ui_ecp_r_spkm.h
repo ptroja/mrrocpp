@@ -35,7 +35,7 @@ public:
 	void
 	move_joints(const double final_position[lib::spkm::NUM_OF_SERVOS], lib::epos::EPOS_MOTION_VARIANT motion_variant);
 	void
-			move_external(const double final_position[6], lib::epos::EPOS_MOTION_VARIANT motion_variant, const double _estimated_time);
+	move_external(const double final_position[6], lib::epos::EPOS_MOTION_VARIANT motion_variant, lib::spkm::POSE_SPECIFICATION tool_variant, const double _estimated_time);
 	void clear_fault();
 	void stop_motors();
 };

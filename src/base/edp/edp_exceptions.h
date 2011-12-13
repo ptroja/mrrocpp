@@ -129,7 +129,7 @@ REGISTER_SYSTEM_ERROR(se, "System error")
 /*!
  * Macro for handling MRROC++ system errors in EDP.
  *
- * \param ERROR Exception derived from the mrrocpp_system_error classes.
+ * \param ERROR Exception derived from the system_error classes.
  *
  * \author tkornuta
  * \date 27.10.2011
@@ -142,7 +142,7 @@ REGISTER_SYSTEM_ERROR(se, "System error")
 /*!
  * Macro for handling MRROC++ fatal errors in EDP.
  *
- * \param ERROR Exception derived from the mrrocpp_fatal_error classes.
+ * \param ERROR Exception derived from the fatal_error classes.
  *
  * \author tkornuta
  * \date 27.10.2011
@@ -155,7 +155,7 @@ REGISTER_SYSTEM_ERROR(se, "System error")
 /*!
  * Macro for handling MRROC++ non-fatal errors in EDP.
  *
- * \param ERROR Exception derived from the mrrocpp_non_fatal_error classes.
+ * \param ERROR Exception derived from the non_fatal_error classes.
  *
  * \author tkornuta
  * \date 27.10.2011

@@ -184,6 +184,10 @@ int UiRobot::edp_create_int()
 
 						ui_get_controler_state(robot_controller_initial_state_tmp);
 
+						if (robot_controller_initial_state_tmp.robot_in_fault_state) {
+							msg->message(lib::FATAL_ERROR, "Robot in fault state");
+						}
+
 						state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 					}
 				}

@@ -131,6 +131,16 @@ public:
 	Homog_matrix(const std::string & s);
 
 	/*!
+	 * Sets identity matrix.
+	 */
+	void setIdentity();
+
+	/*!
+	 * Sets values basing on passed string.
+	 */
+	void set(const std::string & str);
+
+	/*!
 	 * Get the matrix with removed translation
 	 *
 	 * @return Output matrix
