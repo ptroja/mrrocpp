@@ -71,7 +71,7 @@ void robot::create_command()
 
 	sr_ecp_msg.message("create_command");
 
-	if (epos_motor_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_motor_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		if (!is_synchronised()) {
 			ecp_command.motion_type = lib::RELATIVE;
@@ -92,7 +92,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_joint_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_joint_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
 		ecp_edp_cbuffer.variant = lib::smb::POSE;
@@ -108,7 +108,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_external_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_external_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
 		ecp_edp_cbuffer.variant = lib::smb::POSE;
@@ -124,7 +124,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_brake_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_brake_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
@@ -134,7 +134,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_clear_fault_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_clear_fault_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
@@ -147,7 +147,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (smb_festo_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (smb_festo_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie

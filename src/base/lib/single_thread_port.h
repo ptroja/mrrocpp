@@ -21,16 +21,6 @@ namespace lib {
 class single_thread_port_manager;
 
 /*!
- * @brief Data flow status
- *
- * @ingroup lib
- */
-enum FlowStatus
-{
-	NoData, OldData, NewData
-};
-
-/*!
  * @brief single_thread_port interface class
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
@@ -51,6 +41,17 @@ protected:
 	bool new_data;
 
 public:
+
+	/*!
+	 * @brief Data flow status
+	 *
+	 * @ingroup lib
+	 */
+	enum FlowStatus
+	{
+		NoData, OldData, NewData
+	};
+
 	/**
 	 * @brief Constructor
 	 * @param _name Unique port name.

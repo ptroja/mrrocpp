@@ -34,7 +34,7 @@ void single_thread_port_manager::add_port(single_thread_port_interface* single_t
 
 void single_thread_port_manager::clear_data_ports()
 {
-	single_thread_port_interface_t single_thread_port_map_tmp;
+	single_thread_port_interface_t single_thread_port_map_tmp = single_thread_port_map;
 
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 	BOOST_FOREACH(const single_thread_port_interface_pair_t & port_node, single_thread_port_map_tmp)
