@@ -155,13 +155,16 @@ void effector::check_controller_state()
 	unsigned int referenced = 0;
 	unsigned int powerOn = 0;
 	unsigned int enabled = 0;
+
+	boost::array <canopen::WORD, lib::spkm::NUM_OF_SERVOS> cachedStatusWords;
+
 	// Check axes.
 	for (size_t i = 0; i < axes.size(); ++i) {
 		try {
 			// Get current status.
-			canopen::WORD statusWord = axes[i]->getStatusWord();
+			cachedStatusWords[i] = axes[i]->getStatusWord();
 			// Get current epos state.
-			maxon::epos::actual_state_t state = maxon::epos::status2state(statusWord);
+			maxon::epos::actual_state_t state = maxon::epos::status2state(cachedStatusWords[i]);
 			if (state != maxon::epos::OPERATION_ENABLE) {
 				cout << string("Axis ") << axesNames[i] << endl;
 				// Print state.
@@ -186,7 +189,7 @@ void effector::check_controller_state()
 				// EPOS in enabled state.
 				enabled++;
 			}
-			if (maxon::epos::isReferenced(statusWord)) {
+			if (maxon::epos::isReferenced(cachedStatusWords[i])) {
 				// Do not break from this loop so this is a also a preliminary axis error check
 				referenced++;
 			}
@@ -201,6 +204,19 @@ void effector::check_controller_state()
 	controller_state_edp_buf.is_power_on = (powerOn == axes.size());
 	// Check fault state.
 	controller_state_edp_buf.robot_in_fault_state = (enabled != axes.size());
+
+	if(controller_state_edp_buf.robot_in_fault_state) {
+		// Stop only motors which are moving at the moment
+		for(int i = 0; i < axes.size(); ++i)
+		{
+			if(maxon::epos::isTargetReached(cachedStatusWords[i])) {
+				// Brake with Quickstop command
+				axes[i]->setState(maxon::epos::DISABLE_VOLTAGE);
+			}
+		}
+
+		BOOST_THROW_EXCEPTION(exception::fe_robot_in_fault_state());
+	}
 }
 
 void effector::get_controller_state(lib::c_buffer &instruction)
@@ -336,6 +352,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		switch (ecp_edp_cbuffer.variant)
 		{
 			case lib::spkm::POSE:
+				if(controller_state_edp_buf.robot_in_fault_state) {
+					return;
+				}
+
 				// Special case: operational motion.
 				if (ecp_edp_cbuffer.motion_variant == lib::epos::OPERATIONAL) {
 					interpolated_motion_in_operational_space();
@@ -363,26 +383,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			case lib::spkm::CLEAR_FAULT:
 				BOOST_FOREACH(maxon::epos * node, axes)
 							{
-								node->printState();
-
-								// Check if in a FAULT state
-								if (node->getState() == maxon::epos::FAULT) {
-									maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
-									cerr << "readNumberOfErrors() = " << (int) errNum << endl;
-									for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
-
-										maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
-
-										cerr << node->ErrorCodeMessage(errCode) << endl;
-									}
-									if (errNum > 0) {
-										node->clearNumberOfErrors();
-									}
-									node->setState(maxon::epos::FAULT_RESET);
-								}
-
-								// Reset node.
-								node->reset();
+								node->clearFault();
 							}
 				// Internal position counters need not be updated
 				return;
