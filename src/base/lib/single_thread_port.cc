@@ -35,9 +35,9 @@ void single_thread_port_manager::clear_data_ports()
 
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
 	BOOST_FOREACH(const single_thread_port_interface_pair_t & port_node, single_thread_port_map_tmp)
-	{
-		port_node.second->clear_all_flags();
-	}
+			{
+				port_node.second->clear_all_flags();
+			}
 
 }
 

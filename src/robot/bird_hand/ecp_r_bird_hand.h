@@ -55,12 +55,12 @@ public:
 	/**
 	 * @brief Joints state reply data request port
 	 */
-	lib::single_thread_request_port <lib::bird_hand::status, lib::empty_t> bird_hand_status_reply_data_request_port;
+	lib::single_thread_request_port <lib::bird_hand::status> bird_hand_status_reply_data_request_port;
 
 	/**
 	 * @brief configuration reply data request port
 	 */
-	lib::single_thread_request_port <lib::bird_hand::configuration, lib::empty_t> bird_hand_configuration_reply_data_request_port;
+	lib::single_thread_request_port <lib::bird_hand::configuration> bird_hand_configuration_reply_data_request_port;
 
 	/**
 	 * @brief constructor called from UI
