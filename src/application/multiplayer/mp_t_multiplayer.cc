@@ -62,7 +62,7 @@ void multiplayer::create_robots()
 }
 
 multiplayer::multiplayer(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
 }
 
@@ -196,12 +196,12 @@ void multiplayer::main_task_algorithm(void)
 	//DOJEZDZANIE DO POZYCJI PRZEKAZANIA KOSTKI
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_pass.trj", 0, lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
-	wait_for_task_termination(false, 1,  lib::irp6ot_m::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	//ROZWARCIE SZCZEK
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, 0, "trj/multiplayer/irp6ot_sm_wide.trj", 0, lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie generatorow ECP
-	wait_for_task_termination(false, 1,  lib::irp6ot_m::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// FAZA ODBIERANIA KOSTKI
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE, 0, NULL, 0, lib::irp6ot_m::ROBOT_NAME);

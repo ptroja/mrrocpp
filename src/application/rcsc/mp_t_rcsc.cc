@@ -61,24 +61,24 @@ void rubik_cube_solver::initiate(common::CUBE_COLOR up_is, common::CUBE_COLOR do
 }
 
 rubik_cube_solver::rubik_cube_solver(lib::configurator &_config) :
-	task(_config), cube_state(NULL)
+		task(_config), cube_state(NULL)
 {
 	// Powolanie czujnikow
 
 	//odczyt z configa
-	vis_servoing = config.value <int> ("vis_servoing");
+	vis_servoing = config.value <int>("vis_servoing");
 
 	if (vis_servoing) {
 		BOOST_FOREACH (ecp_mp::sensor_item_t & s, sensor_m)
-					{
-						s.second->configure_sensor();
-					}
+				{
+					s.second->configure_sensor();
+				}
 	}
 
 	if (vis_servoing) {
 		// dodanie transmitter'a
-		transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]
-				= new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
+		transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
+				new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 
 	}
 }
@@ -103,15 +103,14 @@ void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie s
 	for (int k = 0; k < 6; k++) {
 		face_turn_op(common::CL_0);
 
-		set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "oglo~dam kolory na s~ciance", 0, lib::festival::ROBOT_NAME);
+		//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "oglo~dam kolory na s~ciance", 0, lib::festival::ROBOT_NAME);
 
 		// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-		wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
+		// wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
 
 		if (vis_servoing) {
-			ecp_mp::sensor::sensor <mrrocpp::mp::task::cube_face_t>
-					* cube_recognition =
-							dynamic_cast <ecp_mp::sensor::sensor <mrrocpp::mp::task::cube_face_t> *> (sensor_m[mrrocpp::ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
+			ecp_mp::sensor::sensor <mrrocpp::mp::task::cube_face_t> * cube_recognition =
+					dynamic_cast <ecp_mp::sensor::sensor <mrrocpp::mp::task::cube_face_t> *>(sensor_m[mrrocpp::ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
 
 			wait_ms(5000);
 			cube_recognition->initiate_reading();
@@ -251,12 +250,10 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 	// czyszczenie listy
 	manipulation_list.clear();
 
-	ecp_mp::transmitter::transmitter_base * transmitter_ptr =
-			transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS];
+	ecp_mp::transmitter::transmitter_base * transmitter_ptr = transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS];
 	assert(transmitter_ptr);
 
-	ecp_mp::transmitter::rc_windows * rc_solver_ptr =
-			dynamic_cast <ecp_mp::transmitter::rc_windows *> (transmitter_ptr);
+	ecp_mp::transmitter::rc_windows * rc_solver_ptr = dynamic_cast <ecp_mp::transmitter::rc_windows *>(transmitter_ptr);
 	assert(rc_solver_ptr);
 
 	ecp_mp::transmitter::rc_windows & rc_solver = *rc_solver_ptr;
@@ -266,10 +263,10 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 	}
 	rc_solver.to_va.rc_state[54] = '\0';
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "mys~le~", 0, lib::festival::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "mys~le~", 0, lib::festival::ROBOT_NAME);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
+	// wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
 
 	rc_solver.t_write();
 
@@ -288,7 +285,6 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 
 	//sekwencja poczatkowa w kolejnosci: UP, DOWN, FRONT, BACK, LEFT, RIGHT
 	//cube_initial_state=BGROWY
-
 
 	int s = 0;
 	int str_size = 0;
@@ -358,10 +354,10 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 				+ 1])));
 	}
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "juZ ukl/adam", 0, lib::festival::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "juZ ukl/adam", 0, lib::festival::ROBOT_NAME);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
+	// wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
 
 	manipulation_sequence_computed = true;
 
@@ -370,8 +366,8 @@ bool rubik_cube_solver::communicate_with_windows_solver()
 
 void rubik_cube_solver::execute_manipulation_sequence()
 {
-	for (std::list <common::SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin(); manipulation_list_iterator
-			!= manipulation_list.end(); manipulation_list_iterator++) {
+	for (std::list <common::SingleManipulation>::iterator manipulation_list_iterator = manipulation_list.begin();
+			manipulation_list_iterator != manipulation_list.end(); manipulation_list_iterator++) {
 		manipulate(manipulation_list_iterator->face_to_turn, manipulation_list_iterator->turn_angle);
 	}
 }
@@ -490,24 +486,27 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	switch (turn_angle)
 	{
 		case common::CL_90:
-			set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
+			//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
 			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CL_90, "", 0, lib::irp6ot_m::ROBOT_NAME);
 			// uruchomienie generatora empty_gen
-			wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
+			wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+			// wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
 			break;
 		case common::CL_0:
 			break;
 		case common::CCL_90:
-			set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
+			//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
 			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CCL_90, "", 0, lib::irp6ot_m::ROBOT_NAME);
 			// uruchomienie generatora empty_gen
-			wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
+			wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+			//wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
 			break;
 		case common::CL_180:
-			set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
+			//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
 			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CL_180, "", 0, lib::irp6ot_m::ROBOT_NAME);
 			// uruchomienie generatora empty_gen
-			wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
+			wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+			//wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
 			break;
 		default:
 			break;
@@ -535,7 +534,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	//	printf("face_turn_op_CL: %d\n", turn_angle);
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "przekl/adam kostke~", 0, lib::festival::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "przekl/adam kostke~", 0, lib::festival::ROBOT_NAME);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 
@@ -700,9 +699,9 @@ void rubik_cube_solver::configure_edp_force_sensor(bool configure_track, bool co
 	}
 
 	if ((configure_track) && (!configure_postument)) {
-		wait_for_task_termination(false, 1,  lib::irp6ot_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	} else if ((!configure_track) && (configure_postument)) {
-		wait_for_task_termination(false, 1,  lib::irp6p_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 	} else if ((configure_track) && (configure_postument)) {
 		wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 	}
@@ -716,12 +715,12 @@ void rubik_cube_solver::approach_op(int mode)
 	//wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
 	configure_edp_force_sensor(true, true);
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "jestem podatny", 0, lib::festival::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, ecp::festival::generator::generator::POLISH_VOICE, "jestem podatny", 0, lib::festival::ROBOT_NAME);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
+	//wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
 
-	if ((config.exists("irp6p_compliant")) && ((bool) config.value <int> ("irp6p_compliant"))) {
+	if (config.exists_and_true("irp6p_compliant")) {
 		// wlaczenie genrator tff_nose_run_generator w postumencie
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", 0, lib::irp6p_m::ROBOT_NAME);
 
@@ -731,6 +730,7 @@ void rubik_cube_solver::approach_op(int mode)
 		// przerwanie pracy generatora w ECP
 		send_end_motion_to_ecps(1, lib::irp6p_m::ROBOT_NAME.c_str());
 	} else {
+		sr_ecp_msg->message("trak podatny");
 		// wlaczenie genrator tff_nose_run_generator w tracku
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
 
@@ -740,19 +740,19 @@ void rubik_cube_solver::approach_op(int mode)
 		// przerwanie pracy generatora w ECP
 		send_end_motion_to_ecps(1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	}
-
+	sr_ecp_msg->message("ZAAA");
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6ot_sm_ap_1.trj", 0, lib::irp6ot_m::ROBOT_NAME);
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6p_sm_ap_1.trj", 0, lib::irp6p_m::ROBOT_NAME);
 
-	wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+	// wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "jestem robotem usl/ugowym", 0, lib::festival::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "jestem robotem usl/ugowym", 0, lib::festival::ROBOT_NAME);
 
 	//zadanie chwytania kostki
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6ot_sm_ap_2.trj", 0, lib::irp6ot_m::ROBOT_NAME);
-
-	wait_for_task_termination(false, 2, lib::festival::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
-
+	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+	//wait_for_task_termination(false, 2, lib::festival::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
+	sr_ecp_msg->message("ZAAA 2");
 	/*
 	 //generator sledzacy kostke
 	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_IB_EIH, (int) 1, "", 0, lib::irp6ot_m::ROBOT_NAME);
@@ -785,15 +785,15 @@ void rubik_cube_solver::approach_op(int mode)
 // odejscie
 void rubik_cube_solver::departure_op()
 {
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "skon~czyl/em", 0, lib::festival::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "skon~czyl/em", 0, lib::festival::ROBOT_NAME);
 
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6ot_sm_de_1.trj", 0, lib::irp6ot_m::ROBOT_NAME);
 
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_SMOOTH, (int) ecp_mp::task::ABSOLUTE, "src/application/rcsc/trj/irp6p_sm_de_1.trj", 0, lib::irp6p_m::ROBOT_NAME);
 
-	wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
+	//wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "jade~ pracowac~ do anglii", 0, lib::festival::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "jade~ pracowac~ do anglii", 0, lib::festival::ROBOT_NAME);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
@@ -801,7 +801,7 @@ void rubik_cube_solver::departure_op()
 
 void rubik_cube_solver::main_task_algorithm(void)
 {
-	std::string cube_initial_state_string = config.value <std::string> ("cube_initial_state");
+	std::string cube_initial_state_string = config.value <std::string>("cube_initial_state");
 
 	const char * cube_initial_state = cube_initial_state_string.c_str();
 
@@ -820,9 +820,9 @@ void rubik_cube_solver::main_task_algorithm(void)
 			//printf("if vis servoing\n");
 			flushall();
 			BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m)
-						{
-							sensor_item.second->configure_sensor();
-						}
+					{
+						sensor_item.second->configure_sensor();
+					}
 		}
 
 		// przechwycenie kostki
@@ -863,19 +863,13 @@ void rubik_cube_solver::main_task_algorithm(void)
 void rubik_cube_solver::create_robots()
 {
 
-	ACTIVATE_MP_ROBOT(conveyor);
-
-	ACTIVATE_MP_ROBOT(polycrank);
-	ACTIVATE_MP_ROBOT(bird_hand);
-	ACTIVATE_MP_ROBOT(irp6ot_tfg);
+	//ACTIVATE_MP_ROBOT(irp6ot_tfg);
 	ACTIVATE_MP_ROBOT(irp6ot_m);
-	ACTIVATE_MP_ROBOT(irp6p_tfg);
+	//ACTIVATE_MP_ROBOT(irp6p_tfg);
 	ACTIVATE_MP_ROBOT(irp6p_m);
-	ACTIVATE_MP_ROBOT(sarkofag);
 
-	ACTIVATE_MP_DEFAULT_ROBOT(electron);
-	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
-	ACTIVATE_MP_DEFAULT_ROBOT(festival);
+	//ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
+	//ACTIVATE_MP_DEFAULT_ROBOT(festival);
 
 }
 
