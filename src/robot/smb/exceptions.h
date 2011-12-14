@@ -45,7 +45,6 @@ REGISTER_NON_FATAL_ERROR(nfe_invalid_command_in_given_state, "Invalid command in
 REGISTER_NON_FATAL_ERROR(nfe_clamps_rotation_prohibited_in_given_state, "Clamps rotation prohibited in given state")
 
 
-
 } // namespace spkm
 } // namespace edp
 } // namespace mrrocpp

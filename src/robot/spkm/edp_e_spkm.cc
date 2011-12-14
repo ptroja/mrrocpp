@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 //<sys/types.h>
 #include <boost/foreach.hpp>
+#include <boost/static_assert.hpp>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
@@ -157,11 +158,16 @@ void effector::check_controller_state()
 	unsigned int referenced = 0;
 	unsigned int powerOn = 0;
 	unsigned int enabled = 0;
+
+	boost::array <canopen::WORD, lib::spkm::NUM_OF_SERVOS> cachedStatusWords;
+
 	// Check axes.
 	for (size_t i = 0; i < axes.size(); ++i) {
 		try {
+			// Get current status.
+			cachedStatusWords[i] = axes[i]->getStatusWord();
 			// Get current epos state.
-			maxon::epos::actual_state_t state = axes[i]->getState();
+			maxon::epos::actual_state_t state = maxon::epos::status2state(cachedStatusWords[i]);
 			if (state != maxon::epos::OPERATION_ENABLE) {
 				cout << string("Axis ") << axesNames[i] << endl;
 				// Print state.
@@ -186,7 +192,7 @@ void effector::check_controller_state()
 				// EPOS in enabled state.
 				enabled++;
 			}
-			if (axes[i]->isReferenced()) {
+			if (maxon::epos::isReferenced(cachedStatusWords[i])) {
 				// Do not break from this loop so this is a also a preliminary axis error check
 				referenced++;
 			}
@@ -197,10 +203,23 @@ void effector::check_controller_state()
 	}
 	// Robot is synchronized if all axes are referenced
 	controller_state_edp_buf.is_synchronised = (referenced == axes.size());
-	// Check whether all axes are powered.
+	// Check whether all axes are powered on.
 	controller_state_edp_buf.is_power_on = (powerOn == axes.size());
 	// Check fault state.
 	controller_state_edp_buf.robot_in_fault_state = (enabled != axes.size());
+
+	if(controller_state_edp_buf.robot_in_fault_state) {
+		// Stop only motors which are moving at the moment
+		for(int i = 0; i < axes.size(); ++i)
+		{
+			if(maxon::epos::isTargetReached(cachedStatusWords[i])) {
+				// Brake with Quickstop command
+				axes[i]->setState(maxon::epos::DISABLE_VOLTAGE);
+			}
+		}
+
+		BOOST_THROW_EXCEPTION(exception::fe_robot_in_fault_state());
+	}
 }
 
 void effector::get_controller_state(lib::c_buffer &instruction)
@@ -336,6 +355,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		switch (ecp_edp_cbuffer.variant)
 		{
 			case lib::spkm::POSE:
+				if(controller_state_edp_buf.robot_in_fault_state) {
+					return;
+				}
+
 				// Special case: operational motion.
 				if (ecp_edp_cbuffer.motion_variant == lib::epos::OPERATIONAL) {
 #ifdef display_commands
@@ -366,26 +389,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			case lib::spkm::CLEAR_FAULT:
 				BOOST_FOREACH(maxon::epos * node, axes)
 							{
-								node->printState();
-
-								// Check if in a FAULT state
-								if (node->getState() == 11) {
-									maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
-									cerr << "readNumberOfErrors() = " << (int) errNum << endl;
-									for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
-
-										maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
-
-										cerr << node->ErrorCodeMessage(errCode) << endl;
-									}
-									if (errNum > 0) {
-										node->clearNumberOfErrors();
-									}
-									node->setState(maxon::epos::FAULT_RESET);
-								}
-
-								// Reset node.
-								node->reset();
+								node->clearFault();
 							}
 				// Internal position counters need not be updated
 				return;
@@ -565,6 +569,7 @@ void effector::parse_motor_command()
 			default:
 				// Throw non-fatal error - invalid pose specification.
 				BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
+				break;
 		} //: switch (ecp_edp_cbuffer.set_pose_specification)
 	} catch (boost::exception &e_) {
 		// TODO add other context informations that are available.
@@ -696,6 +701,7 @@ void effector::execute_motor_motion()
 		default:
 			// Throw non-fatal error - motion type not supported.
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_motion_type());
+			break;
 	} //: switch (ecp_edp_cbuffer.motion_variant)
 }
 
@@ -1129,13 +1135,14 @@ void effector::create_threads()
 
 void effector::instruction_deserialization()
 {
+	BOOST_STATIC_ASSERT(sizeof(ecp_edp_cbuffer) <= sizeof(instruction.serialized_command));
 	memcpy(&ecp_edp_cbuffer, instruction.serialized_command, sizeof(ecp_edp_cbuffer));
 }
 
 void effector::reply_serialization(void)
 {
+	BOOST_STATIC_ASSERT(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
-	assert(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
 }
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
