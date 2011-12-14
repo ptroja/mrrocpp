@@ -68,8 +68,8 @@ private:
 	 */
 	lib::JointArray desired_joints_old;
 
-	//! Variable denoting whether previous end-effector pose in the cartesian space is known.
-	bool is_previous_cartesian_pose_known;
+	//! Variable denoting whether current end-effector pose in the cartesian space is known.
+	bool is_current_cartesian_pose_known;
 
 	/*!
 	 * \brief Tool transformation (SHEAD).

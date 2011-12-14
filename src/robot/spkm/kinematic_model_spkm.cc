@@ -25,7 +25,7 @@ namespace spkm {
 #define debug_kinematics
 
 //! Eps used in Spherical wrist inverse kinematics.
-#define EPS 1.0e-5
+#define EPS 1.0e-10
 
 
 

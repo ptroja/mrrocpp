@@ -133,7 +133,7 @@ void effector::reset_variables()
 	current_end_effector_frame.setIdentity();
 	desired_end_effector_frame.setIdentity();
 
-	is_previous_cartesian_pose_known = false;
+	is_current_cartesian_pose_known = false;
 
 	// Read tool (SHEAD) transformation from configuration file.
 
@@ -420,19 +420,35 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		// Hold the issued command.
 		desired_motor_pos_old = desired_motor_pos_new;
 
-		is_previous_cartesian_pose_known = false;
+		is_current_cartesian_pose_known = false;
 		// Check whether the motion was performed in the cartesian space - then we know where manipulator will be when the next command arrives:).
 		if ((ecp_edp_cbuffer.set_pose_specification == lib::spkm::XYZ_EULER_ZYZ)
 				|| (ecp_edp_cbuffer.set_pose_specification == lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL)) {
+#ifdef debug_commands
+					cout << "XYZ_EULER_ZYZ: save frames.\n";
+#endif
 			// Command was given in the wrist frame.
 			current_end_effector_frame = desired_end_effector_frame;
 			current_shead_frame = current_end_effector_frame * shead_frame;
-			is_previous_cartesian_pose_known = true;
+			is_current_cartesian_pose_known = true;
+#ifdef debug_frames
+				std::cout.precision(8);
+				cout << "current_shead_frame:\n" <<current_shead_frame << endl;
+				cout << "current_end_effector_frame:\n" <<current_end_effector_frame << endl;
+#endif
 		} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL) {
+#ifdef debug_commands
+					cout << "TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: save frames.\n";
+#endif
 			// Command was given in the tool (SHEAD) frame.
 			current_shead_frame = desired_shead_frame;
 			current_end_effector_frame = desired_shead_frame * !shead_frame;
-			is_previous_cartesian_pose_known = true;
+			is_current_cartesian_pose_known = true;
+#ifdef debug_frames
+				std::cout.precision(8);
+				cout << "current_shead_frame:\n" <<current_shead_frame << endl;
+				cout << "current_end_effector_frame:\n" <<current_end_effector_frame << endl;
+#endif
 		}
 
 	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
@@ -581,6 +597,16 @@ void effector::parse_motor_command()
 				cout << "Wrist frame: " << desired_end_effector_frame << endl;
 #endif
 
+/*****************/
+				desired_shead_frame = desired_end_effector_frame * shead_frame;
+#ifdef debug_frames
+				std::cout.precision(8);
+				cout << "Recomputed Tool frame: " << desired_shead_frame << endl;
+				std::cout.precision(8);
+				cout << "shead_frame * !shead_frame: " << shead_frame * !shead_frame << endl;
+#endif
+/*****************/
+
 				// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
 				get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
 
@@ -698,7 +724,7 @@ void effector::execute_motor_motion()
 					for (size_t i = 0; i < axes.size(); ++i) {
 						// Check delta !=0 - in this case increments are integers, through motions with |deltas| < 1 are ignored.
 						if ((Delta[i] > -1) && (Delta[i]  < 1))
-							break;
+							continue;
 						// Set profile mode.
 						axes[i]->setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
 						axes[i]->setPositionProfileType(0); // Trapezoidal velocity profile
@@ -764,7 +790,7 @@ void effector::interpolated_motion_in_operational_space()
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
 
 	// Check whether current cartesian pose (in fact the one where the previous motion ended) is known.
-	if (!is_previous_cartesian_pose_known)
+	if (!is_current_cartesian_pose_known)
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_current_cartesian_pose_unknown());
 
 	// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
@@ -1115,7 +1141,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					msg->message("EDP get_arm_position (WRIST) XYZ_EULER_ZYZ");
 #endif
 					// Return current end-effector pose if it is known (last motion was performed in the cartesian space).
-					if (is_previous_cartesian_pose_known)
+					if (is_current_cartesian_pose_known)
 						edp_ecp_rbuffer.current_pose = current_end_effector_frame;
 					else
 						// Return identity.
@@ -1134,7 +1160,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					msg->message("EDP get_arm_position TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL");
 #endif
 					// Return current end-effector pose if it is known (last motion was performed in the cartesian space).
-					if (is_previous_cartesian_pose_known)
+					if (is_current_cartesian_pose_known)
 						edp_ecp_rbuffer.current_pose = current_shead_frame;
 					else
 						// Return identity.

@@ -16,7 +16,7 @@ namespace kinematics {
 namespace spkm {
 
 //! Initialization of parameters describing the synchronisation positions (in joints).
-const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS] = {  0.2405, 0.242, 0.2405, 0.0, 0.0, -0.2906};
+const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS] = {  0.242, 0.242, 0.242, 0.0, 0.0, -0.2906};
 
 //! Initialization of parameters related to conversion from motor positions to joints.
 //! Parameters for conversion for linear DOFs are:
