@@ -338,6 +338,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			case lib::spkm::POSE:
 				// Special case: operational motion.
 				if (ecp_edp_cbuffer.motion_variant == lib::epos::OPERATIONAL) {
+#ifdef display_commands
+					cout << "OPERATIONAL\n";
+#endif
 					interpolated_motion_in_operational_space();
 					break;
 				}
@@ -407,7 +410,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			current_end_effector_frame = desired_end_effector_frame;
 			current_shead_frame = current_end_effector_frame * shead_frame;
 			is_previous_cartesian_pose_known = true;
-		} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::XYZ_EULER_ZYZ) {
+		} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL) {
 			// Command was given in the tool (SHEAD) frame.
 			current_shead_frame = desired_shead_frame;
 			current_end_effector_frame = desired_end_effector_frame * !shead_frame;
@@ -501,6 +504,11 @@ void effector::parse_motor_command()
 
 				// Transform joints to motors.
 				get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+#ifdef display_commands
+				for (int i = 0; i < number_of_servos; ++i) {
+					cout << "JOINT[ " << i << "]: " << desired_joints[i] << endl;
+				}
+#endif
 
 				// Postcondition II  - check whether the desired motor position is valid.
 				get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
@@ -535,6 +543,11 @@ void effector::parse_motor_command()
 				// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
 				get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
 
+#ifdef display_commands
+				for (int i = 0; i < number_of_servos; ++i) {
+					cout << "JOINT[ " << i << "]: " << desired_joints[i] << endl;
+				}
+#endif
 				// Postcondition I - check desired Cartesian position, basing on the upper platform pose.
 				get_current_kinematic_model()->check_cartesian_pose(desired_end_effector_frame);
 				//get_current_kinematic_model()->check_joints(desired_joints);
@@ -569,6 +582,9 @@ void effector::execute_motor_motion()
 	switch (ecp_edp_cbuffer.motion_variant)
 	{
 		case lib::epos::NON_SYNC_TRAPEZOIDAL:
+#ifdef display_commands
+			cout<<"NON_SYNC_TRAPEZOIDAL\n";
+#endif
 			// Execute command
 			for (size_t i = 0; i < axes.size(); ++i) {
 				if (is_synchronised()) {
@@ -597,6 +613,9 @@ void effector::execute_motor_motion()
 			}
 			break;
 		case lib::epos::SYNC_TRAPEZOIDAL: {
+#ifdef display_commands
+			cout<<"SYNC_TRAPEZOIDAL\n";
+#endif
 			// Motion calculation is done in dimensionless units, but it assumes they are coherent
 			// Delta[turns], Vmax[turns per second], Amax[turns per seconds per seconds]
 			Matrix <double, 6, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
