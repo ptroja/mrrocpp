@@ -22,7 +22,7 @@ namespace kinematics {
 namespace spkm {
 
 //! Prints reference frames.
-#define debug_kinematics
+#define DEBUG_KINEMATICS 1
 
 //! Eps used in Spherical wrist inverse kinematics.
 #define EPS 1.0e-10
@@ -83,7 +83,7 @@ void kinematic_model_spkm::check_cartesian_pose(const lib::Homog_matrix& H_) con
 	thyk_alpha[0] = atan2 (uA_lA_T(1,3), uA_lA_T(2,3)) * 180.0 / M_PI;
 	thyk_alpha[1] = atan2 (uB_lB_T(1,3), uB_lB_T(2,3)) * 180.0 / M_PI;
 	thyk_alpha[2] = atan2 (uC_lC_T(1,3), uC_lC_T(2,3)) * 180.0 / M_PI;
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 	cout << "alpha: A=" << thyk_alpha[0] << " B=" << thyk_alpha[1] << " C=" << thyk_alpha[2] <<endl;
 #endif
 
@@ -100,7 +100,7 @@ void kinematic_model_spkm::check_cartesian_pose(const lib::Homog_matrix& H_) con
 	thyk_beta[0] = atan2 (uA_lA_T(0,3), uA_lA_T(2,3)) * 180.0 / M_PI;
 	thyk_beta[1] = atan2 (uB_lB_T(0,3), uB_lB_T(2,3)) * 180.0 / M_PI;
 	thyk_beta[2] = atan2 (uC_lC_T(0,3), uC_lC_T(2,3)) * 180.0 / M_PI;
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 	cout << "beta: A=" << thyk_beta[0] << " B=" << thyk_beta[1] << " C=" << thyk_beta[2] <<endl;
 #endif
 
@@ -138,13 +138,13 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 	// Transform Homog_matrix to Matrix4d.
 	Homog4d O_W_T_desired;
 	O_W_T_desired << local_desired_end_effector_frame(0, 0), local_desired_end_effector_frame(0, 1), local_desired_end_effector_frame(0, 2), local_desired_end_effector_frame(0, 3), local_desired_end_effector_frame(1, 0), local_desired_end_effector_frame(1, 1), local_desired_end_effector_frame(1, 2), local_desired_end_effector_frame(1, 3), local_desired_end_effector_frame(2, 0), local_desired_end_effector_frame(2, 1), local_desired_end_effector_frame(2, 2), local_desired_end_effector_frame(2, 3), 0, 0, 0, 1;
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
     std::cout <<"Desired pose of the end-effector:\n" << O_W_T_desired<<std::endl;
 #endif
 
     // Compute the required O_S_T - pose of the spherical wrist middle (S) in global reference frame (O).
 	Homog4d  O_S_T_desired = O_W_T_desired * params.W_S_T;
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 	std::cout <<"Desired pose of the wrist center:\n" << O_S_T_desired<<std::endl;
 #endif
 
@@ -156,21 +156,21 @@ void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_
 
 	// Compute upper platform pose.
 	O_P_T = PM_O_P_T_from_e(e);
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 	std::cout <<"Computed upper platform pose:\n" << O_P_T << std::endl;
 #endif
 
 	// Compute the pose of wrist (S) on the base of upper platform pose.
 	Homog4d O_S_T_computed;
 	O_S_T_computed = O_P_T * params.P_S_T;
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 	std::cout <<"Computed pose of wrist center:\n" << O_S_T_computed << std::endl;
 #endif
 
 	// Compute the desired "twist of the wrist".
 	// Transformation from computed OST to desired OST.
 	Homog4d wrist_twist = O_S_T_computed.inverse()*O_S_T_desired;
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 	std::cout <<"Twist:\n" << wrist_twist << std::endl;
 #endif
 
@@ -193,7 +193,7 @@ Vector5d kinematic_model_spkm::PM_S_to_e(const Homog4d & O_S_T_)
 	double y = O_S_T_(1,3);
 	double z = O_S_T_(2,3);
 
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 	std::cout<<"S= ["<<x<<", "<<y<<", "<<z<<"]\n";
 #endif
 
@@ -218,7 +218,7 @@ Vector5d kinematic_model_spkm::PM_S_to_e(const Homog4d & O_S_T_)
 	Vector5d e;
 	e << s_alpha, c_alpha, s_beta, c_beta, h;
 
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 	std::cout<<"e= ["<<e.transpose()<<"]\n";
 #endif
 
@@ -247,7 +247,7 @@ Vector3d kinematic_model_spkm::PM_inverse_from_e(const Vector5d & e_)
 	Vector3d joints;
 	joints << qA, qB, qC;
 
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 	std::cout<<"PM joints= ["<<joints.transpose()<<"]\n";
 #endif
 
@@ -296,7 +296,7 @@ Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const li
 	double phi2, theta2, psi2, dist2;
 	Vector3d thetas;
 
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 		std::cout.precision(15);
 		std::cout<<"u33 = "<< wrist_twist_(2,2) << endl;
 #endif
@@ -308,7 +308,7 @@ Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const li
 		phi = local_current_joints[3];
 		psi = atan2(wrist_twist_(1,0), wrist_twist_(0,0)) - phi;
 		// atan2(r(2,1), r(1,1)) - phi
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 		std::cout.precision(15);
 		std::cout<<"CASE I: u33=1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
 #endif
@@ -319,7 +319,7 @@ Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const li
 		// Infinite number of solutions: only the phi - psi value can be computed, thus we assume, that phi will equal to the previous one.
 		phi = local_current_joints[3];
 		psi = - atan2(-wrist_twist_(0,1), -wrist_twist_(0,0)) + phi;
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 		std::cout.precision(15);
 		std::cout<<"CASE II: u33=-1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
 #endif
@@ -331,7 +331,7 @@ Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const li
 		theta = atan2(sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)), wrist_twist_(2,2));
 		phi = atan2(wrist_twist_(1,2), wrist_twist_(0,2));
 		psi = atan2(wrist_twist_(2,1), -wrist_twist_(2,0));
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 		std::cout.precision(15);
 		std::cout<<"CASE III: atan(u33, sqrt(1-u33^3)) => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
 #endif
@@ -342,7 +342,7 @@ Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const li
 		theta2 = atan2(-sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)), wrist_twist_(2,2));
 		phi2 = atan2(-wrist_twist_(1,2), -wrist_twist_(0,2));
 		psi2 = atan2(-wrist_twist_(2,1), wrist_twist_(2,0));
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 		std::cout.precision(15);
 		std::cout<<"CASE IV: atan(u33, -sqrt(1-u33^3)) => ["<<phi2<<", "<<theta2<<", "<<psi2<<"]\n";
 #endif
@@ -357,7 +357,7 @@ Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const li
 	}
 
 	// Return vector with thetas.
-#ifdef debug_kinematics
+#if(DEBUG_KINEMATICS)
 	std::cout<<"SW thetas= ["<<thetas.transpose()<<"]\n";
 #endif
 	return thetas;
