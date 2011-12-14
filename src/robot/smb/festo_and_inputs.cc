@@ -62,11 +62,6 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 	next_legs_state = current_legs_state;
 }
 
-festo_and_inputs::~festo_and_inputs()
-{
-
-}
-
 bool festo_and_inputs::is_checked(int leg_number)
 {
 	return checked[leg_number - 1];
@@ -287,7 +282,7 @@ void festo_and_inputs::command()
 
 	master.msg->message("FESTO");
 
-	memcpy(&festo_command, &(master.ecp_edp_cbuffer.festo_command), sizeof(festo_command));
+	festo_command = master.ecp_edp_cbuffer.festo_command;
 
 	if (robot_test_mode) {
 		ss << festo_command.leg[2];
