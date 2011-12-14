@@ -253,7 +253,7 @@ void festo_and_inputs::command()
 
 	master.msg->message("FESTO");
 
-	this->festo_command = master.ecp_edp_cbuffer.festo_command;
+	festo_command = master.ecp_edp_cbuffer.festo_command;
 
 	if (robot_test_mode) {
 		ss << festo_command.leg[2];

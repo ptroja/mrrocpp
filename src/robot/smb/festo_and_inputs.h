@@ -76,7 +76,6 @@ private:
 
 	/*!
 	 * \brief robot_test_mode taken from effector class
-	 * it does not change during task executon
 	 */
 	const bool robot_test_mode;
 
