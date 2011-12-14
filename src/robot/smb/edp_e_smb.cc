@@ -365,7 +365,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (is_base_positioned_to_move_legs) {
 					fai->command();
 				}
-				// If all legs are currently down - reset legs rotation.
+				// If all legs are currently OUT then reset legs rotation.
 				if (current_legs_state() == lib::smb::ALL_OUT) {
 					msg->message("ALL_DOWN");
 					/*// Homing of the motor controlling the legs rotation - set current position as 0.
