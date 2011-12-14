@@ -85,6 +85,12 @@ REGISTER_FATAL_ERROR(fe_synchronization_unsuccessful, "Robot synchronization fai
 REGISTER_NON_FATAL_ERROR(nfe_invalid_pose_specification, "Invalid pose specification")
 
 /*!
+ * \brief Exception thrown when an invalid command is retrieved.
+ * \author tkornuta
+ */
+REGISTER_NON_FATAL_ERROR(nfe_invalid_command, "Invalid command")
+
+/*!
  * \brief Exception thrown in case of invalid motion type.
  * \author tkornuta
  */
