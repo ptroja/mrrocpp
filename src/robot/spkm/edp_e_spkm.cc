@@ -694,32 +694,34 @@ void effector::execute_motor_motion()
 				cout << "Vnew:\n" << Vnew.transpose() << endl << "Anew:\n" << Anew.transpose() << endl << "Dnew:\n" << Dnew.transpose() << endl << endl;
 #endif
 				if (!robot_test_mode) {
-					// Setup motion parameters
+					// Motion motion parameters for every controller.
 					for (size_t i = 0; i < axes.size(); ++i) {
-						if (Delta[i] != 0) {
-							axes[i]->setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
-							axes[i]->setPositionProfileType(0); // Trapezoidal velocity profile
+						// Check delta !=0 - in this case increments are integers, through motions with |deltas| < 1 are ignored.
+						if ((Delta[i] > -1) && (Delta[i]  < 1))
+							break;
+						// Set profile mode.
+						axes[i]->setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
+						axes[i]->setPositionProfileType(0); // Trapezoidal velocity profile
 
-							// Adjust velocity settings results in than 1 (minimal value accepted by the EPOS2)
-							if (Vnew[i] > 0 && Vnew[i] * maxon::epos::SECONDS_PER_MINUTE < 1.0) {
-								Vnew[i] = 1.1 / maxon::epos::SECONDS_PER_MINUTE;
-							}
-
-							// Adjust acceleration settings which are less than 1 (minimal value accepted by the EPOS2)
-							if (Anew[i] > 0 && Anew[i] < 1) {
-								Anew[i] = 1;
-							}
-
-							// Adjust deceleration settings which are less than 1 (minimal value accepted by the EPOS2)
-							if (Dnew[i] > 0 && Dnew[i] < 1) {
-								Dnew[i] = 1;
-							}
-
-							axes[i]->setProfileVelocity(Vnew[i] * maxon::epos::SECONDS_PER_MINUTE);
-							axes[i]->setProfileAcceleration(Anew[i]);
-							axes[i]->setProfileDeceleration(Dnew[i]);
-							axes[i]->setTargetPosition(desired_motor_pos_new[i]);
+						// Adjust velocity settings results in than 1 (minimal value accepted by the EPOS2)
+						if (Vnew[i] > 0 && Vnew[i] * maxon::epos::SECONDS_PER_MINUTE < 1.0) {
+							Vnew[i] = 1.1 / maxon::epos::SECONDS_PER_MINUTE;
 						}
+
+						// Adjust acceleration settings which are less than 1 (minimal value accepted by the EPOS2)
+						if (Anew[i] > 0 && Anew[i] < 1) {
+							Anew[i] = 1;
+						}
+
+						// Adjust deceleration settings which are less than 1 (minimal value accepted by the EPOS2)
+						if (Dnew[i] > 0 && Dnew[i] < 1) {
+							Dnew[i] = 1;
+						}
+
+						axes[i]->setProfileVelocity(Vnew[i] * maxon::epos::SECONDS_PER_MINUTE);
+						axes[i]->setProfileAcceleration(Anew[i]);
+						axes[i]->setProfileDeceleration(Dnew[i]);
+						axes[i]->setTargetPosition(desired_motor_pos_new[i]);
 					}
 				}
 
