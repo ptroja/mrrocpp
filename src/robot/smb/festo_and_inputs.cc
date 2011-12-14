@@ -357,7 +357,7 @@ void festo_and_inputs::move_one_or_two_out()
 
 	set_all_legs_unchecked();
 
-	for (int iteration = 0; number_of_legs_down < 3; iteration++) {
+	for (unsigned int iteration = 0; number_of_legs_down < 3; iteration++) {
 
 		//	master.msg->message("wait iteration");
 		delay(FAI_SINGLE_DELAY);
@@ -429,7 +429,7 @@ void festo_and_inputs::command_all_out()
 
 				set_all_legs_unchecked();
 
-				for (int iteration = 0; number_of_legs_down < 3; iteration++) {
+				for (unsigned int iteration = 0; number_of_legs_down < 3; iteration++) {
 
 					delay(FAI_SINGLE_DELAY);
 
@@ -502,7 +502,7 @@ void festo_and_inputs::command_two_in_one_out()
 
 				set_all_legs_unchecked();
 
-				for (int iteration = 0; number_of_legs_in < 2; iteration++) {
+				for (unsigned int iteration = 0; number_of_legs_in < 2; iteration++) {
 					delay(FAI_SINGLE_DELAY);
 
 					// if it take too long to wait break
@@ -581,7 +581,7 @@ void festo_and_inputs::command_two_in_one_out()
 
 					set_all_legs_unchecked();
 
-					for (int iteration = 0; number_of_legs_in < number_of_legs_moved + 1; iteration++) {
+					for (unsigned int iteration = 0; number_of_legs_in < number_of_legs_moved + 1; iteration++) {
 						delay(FAI_SINGLE_DELAY);
 
 						// if it takes too long to wait then break.
@@ -641,7 +641,7 @@ void festo_and_inputs::command_all_in()
 
 				set_all_legs_unchecked();
 
-				for (int iteration = 0; number_of_legs_in < 3; iteration++) {
+				for (unsigned int iteration = 0; number_of_legs_in < 3; iteration++) {
 
 					delay(FAI_SINGLE_DELAY);
 
