@@ -520,7 +520,7 @@ const char * epos::stateDescription(int state)
 /* pretty-print EPOS state */
 int epos::printState()
 {
-	int state = getState();
+	actual_state_t state = getState();
 
 	std::cout << "EPOS node " << (unsigned int) nodeId << ": is in state: ";
 
@@ -676,7 +676,7 @@ void epos::reset()
 		}
 
 		// We are not supposed to clear faults here
-		BOOST_THROW_EXCEPTION(fe() << reason("Device is in the FAULT state"));
+		BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
 	}
 
 	// Shutdown
@@ -969,7 +969,7 @@ void epos::printControlWord(WORD s)
 
 void epos::startAbsoluteMotion()
 {
-	setControlword(0x3f);
+	setControlword(0x003f);
 }
 
 void epos::startRelativeMotion()
@@ -1897,18 +1897,35 @@ void epos::Restore()
 	WriteObjectValue(0x1011, 0x01, load);
 }
 
+
 bool epos::isReferenced()
 {
-	UNSIGNED16 status = getStatusWord();
+	return isReferenced(getStatusWord());
+}
 
+bool epos::isReferenced(UNSIGNED16 status)
+{
 	return (E_BIT15 & status);
 }
 
 bool epos::isTargetReached()
 {
-	UNSIGNED16 status = getStatusWord();
+	return isTargetReached(getStatusWord());
+}
 
+bool epos::isTargetReached(UNSIGNED16 status)
+{
 	return (E_BIT10 & status);
+}
+
+bool epos::isFaultState()
+{
+	return isFaultState(getStatusWord());
+}
+
+bool epos::isFaultState(UNSIGNED16 status)
+{
+	return (E_BIT03 & status);
 }
 
 void epos::startHoming()
