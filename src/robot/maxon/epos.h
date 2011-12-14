@@ -39,11 +39,10 @@
 #include <stdint.h>  /* int types with given size */
 
 #include <string>
-#include <exception>
-#include <vector>
 
 // Include for BYTE/WORD/DWORD typedefs
 #include "robot/canopen/gateway.h"
+#include "base/lib/exception.h"
 
 /* added oct06 for openTCPEPOS() */
 /*
@@ -139,6 +138,12 @@ private:
 	bool remote;
 
 public:
+	/*!
+	 * \brief All high-level methods throws this exception in case of error.
+	 * \author ptrojane/tkornuta
+	 */
+	REGISTER_FATAL_ERROR(fe, "EPOS error");
+
 	/*! \brief create new EPOS object
 	 *
 	 * @param _device object to access the device
@@ -207,6 +212,9 @@ public:
 
 	//! \brief Reset the device by issuing a shutdown command followed by power-on and halt
 	void reset();
+
+	//! \brief High-level command to clear fault
+	void clearFault();
 
 	/*! \brief change EPOS state */
 	void setState(desired_state_t state);

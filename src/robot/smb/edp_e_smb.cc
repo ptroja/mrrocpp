@@ -358,26 +358,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (!robot_test_mode) {
 					BOOST_FOREACH(maxon::epos * node, axes)
 							{
-								// Print state.
-								node->printState();
-								// Check if node is in a FAULT state.
-								if (node->getState() == maxon::epos::FAULT) {
-									maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
-									cerr << "readNumberOfErrors() = " << (int) errNum << endl;
-									// Print list of errors.
-									for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
-										maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
-										cerr << node->ErrorCodeMessage(errCode) << endl;
-									}
-									// Clear errors.
-									if (errNum > 0) {
-										node->clearNumberOfErrors();
-									}
-									// Reset errors.
-									node->setState(maxon::epos::FAULT_RESET);
-								}
-								// Reset node.
-								node->reset();
+								node->clearFault();
 							}
 				} //: !test_mode
 				break;
