@@ -42,6 +42,10 @@ add_library(mrrocpp
 	ping.cc
 )
 
+add_executable(ppm_test
+	ppm_test.cc
+)
+
 add_executable(pvat_test
 	pvat_test.cc
 )

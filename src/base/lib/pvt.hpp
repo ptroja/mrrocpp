@@ -73,27 +73,30 @@ double pvt(
  * @param Dnew corrected deceleration limit vector
  * @return time to execute the motion
  */
-template <unsigned int N>
+template <unsigned int N, typename T = long double>
 double ppm(
-		const Matrix<double,N,1> & Delta,
-		const Matrix<double,N,1> & Vmax,
-		const Matrix<double,N,1> & Amax,
-		Matrix<double,N,1> & Vnew,
-		Matrix<double,N,1> & Anew,
-		Matrix<double,N,1> & Dnew
+		const Matrix<T,N,1> & Delta,
+		const Matrix<T,N,1> & Vmax,
+		const Matrix<T,N,1> & Amax,
+		Matrix<T,N,1> & Vnew,
+		Matrix<T,N,1> & Anew,
+		Matrix<T,N,1> & Dnew
 		)
 {
-	Matrix<double,N,3> Time;
+	Matrix<T,N,3> Time;
 
 	// Iterate over axes
 	for(unsigned int l = 0; l < N; ++l) {
-		const double delta = Delta(l,0),	// motor position delta
+		const T delta = Delta(l,0),	// motor position delta
 			vmax = Vmax(l,0),				// maximal velocity
 			amax = Amax(l,0),				// maximal acceleration
 			dmax = -Amax(l,0);				// maximal deceleration
 
 		// Velocity value, when the velocity profile is triangular (eq. 3.32)
-		const double VTriangle = amax*std::sqrt(2*delta*dmax/(amax*(dmax-amax)));
+		//const T VTriangle = amax*std::sqrt(2*delta*dmax/(amax*(dmax-amax)));
+		const T VTriangle = std::sqrt(2*delta*amax*dmax/(dmax-amax));
+
+		std::cout << "VTriangle(" << l << ") = " << VTriangle << std::endl;
 
 		const bool TriangularProfile = (VTriangle <= vmax);
 
@@ -103,6 +106,11 @@ double ppm(
 			// acceleration and deceleration phase treated as a half of the total motion time
 			Time(l,0) = Time(l,1) = Time(l,2)/2;
 		} else {
+			std::cout << "vmax := " << vmax << std::endl <<
+					"amax := " << amax << std::endl <<
+					"dmax := " << dmax << std::endl <<
+					"delta := " << delta << std::endl;
+
 			// ta: time to stop accelerate (eq. 3.35)
 			Time(l,0) = vmax/amax;
 
@@ -113,23 +121,23 @@ double ppm(
 			Time(l,2) = delta/vmax + vmax/(2*amax) - vmax/(2*dmax);
 		}
 
-//		std::cerr << "VLimit[" << l << "]: " << VTriangle <<
-//				" => " << (TriangularProfile ? "triangular" : "trapezoidal") << std::endl <<
-//				"Time[" << l << "]: " << Time(l,0) << " " << Time(l,1) << " " << Time(l,2) <<
-//				std::endl;
+		std::cerr << "VLimit[" << l << "]: " << VTriangle <<
+				" => " << (TriangularProfile ? "triangular" : "trapezoidal") << std::endl <<
+				"Time[" << l << "]: " << Time(l,0) << " " << Time(l,1) << " " << Time(l,2) <<
+				std::endl;
 	}
 
-	Matrix<double,1,3> maxTime = Time.colwise().maxCoeff();
+	Matrix<T,1,3> maxTime = Time.colwise().maxCoeff();
 
 //	std::cerr << "maxTime: " << maxTime << std::endl;
 //	std::cerr << "(maxTime.col(2)-maxTime.col(1): " << (maxTime.col(2)-maxTime.col(1)) << std::endl;
 
 	// total time
-	double tt = maxTime.col(2).maxCoeff();
+	T tt = maxTime.col(2).maxCoeff();
 	// acceleration interval
-	const double ta = maxTime.col(0).maxCoeff();
+	const T ta = maxTime.col(0).maxCoeff();
 	// deceleration interval
-	const double td = tt - (maxTime.col(2)-maxTime.col(1)).maxCoeff();
+	const T td = tt - (maxTime.col(2)-maxTime.col(1)).maxCoeff();
 
 	if (ta > td) {
 		tt += (ta - td);
@@ -145,7 +153,7 @@ double ppm(
 	if(tt > 0) {
 		// I guess this can be implemented as a single matrix calculation
 		for(unsigned int l = 0; l < N; ++l) {
-			const double delta = Delta(l,0);
+			const T delta = Delta(l,0);
 
 			// Calculate new parameters if there is motion along an axis
 			if(delta) {
