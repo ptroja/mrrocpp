@@ -973,13 +973,16 @@ void effector::interpolated_motion_in_operational_space()
 	for (size_t mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
 		for (size_t pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
 			v(pnt, mtr) *= 60.0 / kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
-		}
-		// Apply Maxon-specific value limits (zero is not allowed).
-		if (v(pnt, mtr) < 1) {
-			v(pnt, mtr) = 1;
-		}
-		if (v(pnt, mtr) > Vdefault[mtr]) {
-			v(pnt, mtr) = Vdefault[mtr];
+			// Apply Maxon-specific value limits (zero is not allowed).
+			if ((0 < v(pnt, mtr)) && (v(pnt, mtr) < 1)) {
+				v(pnt, mtr) = 1;
+			}
+			if ((-1 < v(pnt, mtr)) && (v(pnt, mtr) < 0)) {
+				v(pnt, mtr) = -1;
+			}
+/*			if (v(pnt, mtr) > Vdefault[mtr]) {
+				v(pnt, mtr) = Vdefault[mtr];
+			}*/
 		}
 		//p.transpose().row(mtr) /= kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
 		/*							v.transpose().row(mtr) = v.transpose().row(mtr) * epos::epos::SECONDS_PER_MINUTE /
@@ -1109,13 +1112,13 @@ void effector::interpolated_motion_in_operational_space()
 	cout << "Axis " << i << " position change: setting parameters. \n";
 #endif
 
-			axes[i]->clearPvtBuffer();
 			// Set motion parameters.
 			axes[i]->setOperationMode(maxon::epos::OMD_INTERPOLATED_POSITION_MODE);
 			axes[i]->setProfileVelocity(MotorVmax[i]);
 			axes[i]->setProfileAcceleration(MotorAmax[i]);
 			axes[i]->setProfileDeceleration(MotorAmax[i]);
 			// TODO: setup acceleration and velocity limit values
+			axes[i]->clearPvtBuffer();
 			for (size_t pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
 				axes[i]->setInterpolationDataRecord((int32_t) p(pnt, i), (int32_t) v(pnt, i), (uint8_t) t(pnt));
 				printf("\rsend: %zd/%zd, free: %2d", pnt, i, axes[i]->getActualBufferSize());
