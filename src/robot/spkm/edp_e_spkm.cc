@@ -733,9 +733,14 @@ void effector::execute_motor_motion()
 			for (size_t i = 0; i < 6; ++i) {
 				Delta[i] = fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i])
 						/ kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[i];
-				Vmax[i] = ((double) Vdefault[i]) / ((double) maxon::epos::SECONDS_PER_MINUTE);
+				Vmax[i] = Vdefault[i];
 				Amax[i] = Adefault[i];
 			}
+
+			// Convert to 'rotations' and 'seconds' units.
+			Vmax /= maxon::epos::SECONDS_PER_MINUTE;
+			Amax /= maxon::epos::SECONDS_PER_MINUTE;
+
 #if(DEBUG_MOTORS)
 			for (size_t i = 0; i < number_of_servos; ++i) {
 				std::cout.precision(15);
@@ -744,8 +749,14 @@ void effector::execute_motor_motion()
 			}
 #endif
 
-			// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
+			// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits.
 			double t = ppm <6> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
+
+			// Convert back to Maxon-specific units.
+			Vnew *= maxon::epos::SECONDS_PER_MINUTE;
+			Anew *= maxon::epos::SECONDS_PER_MINUTE;
+			Dnew *= maxon::epos::SECONDS_PER_MINUTE;
+
 #if(DEBUG_MOTORS)
 			std::cout.precision(5);
 			cout << "Delta:\n" << Delta.transpose() << endl << "Vmax:\n" << Vmax.transpose() << endl << "Amax:\n"
@@ -762,30 +773,42 @@ void effector::execute_motor_motion()
 					// Motion motion parameters for every controller.
 					for (size_t i = 0; i < axes.size(); ++i) {
 						// Check delta !=0 - in this case increments are integers, through motions with |deltas| < 1 are ignored.
-						if ((Delta[i] > -1) && (Delta[i] < 1))
+						if (Delta[i] == 0)
 							continue;
 						// Set profile mode.
 						axes[i]->setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
 						axes[i]->setPositionProfileType(0); // Trapezoidal velocity profile
 
-						// Adjust velocity settings results in than 1 (minimal value accepted by the EPOS2)
-						if (Vnew[i] > 0 && Vnew[i] * maxon::epos::SECONDS_PER_MINUTE < 1.0) {
-							Vnew[i] = 1.1 / maxon::epos::SECONDS_PER_MINUTE;
+						// Apply Maxon-specific value limits (zero is not allowed).
+						if (Vnew[i] < 1) {
+							Vnew[i] = 1;
+						}
+						if (Vnew[i] > Vdefault[i]) {
+							Vnew[i] = Vdefault[i];
 						}
 
-						// Adjust acceleration settings which are less than 1 (minimal value accepted by the EPOS2)
-						if (Anew[i] > 0 && Anew[i] < 1) {
+						// Apply Maxon-specific value limits (zero is not allowed).
+						if (Anew[i] < 1) {
 							Anew[i] = 1;
 						}
-
-						// Adjust deceleration settings which are less than 1 (minimal value accepted by the EPOS2)
-						if (Dnew[i] > 0 && Dnew[i] < 1) {
-							Dnew[i] = 1;
+						if (Anew[i] > Ddefault[i]) {
+							Anew[i] = Ddefault[i];
 						}
 
-						axes[i]->setProfileVelocity(Vnew[i] * maxon::epos::SECONDS_PER_MINUTE);
+						// Apply Maxon-specific value limits (zero is not allowed).
+						if (Dnew[i] < 1) {
+							Dnew[i] = 1;
+						}
+						if (Dnew[i] > Ddefault[i]) {
+							Dnew[i] = Ddefault[i];
+						}
+
+						// Apply trapezoidal profile settings.
+						axes[i]->setProfileVelocity(Vnew[i]);
 						axes[i]->setProfileAcceleration(Anew[i]);
 						axes[i]->setProfileDeceleration(Dnew[i]);
+
+						// Set new motion target
 						axes[i]->setTargetPosition(desired_motor_pos_new[i]);
 					}
 				}
@@ -950,6 +973,16 @@ void effector::interpolated_motion_in_operational_space()
 	for (size_t mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
 		for (size_t pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
 			v(pnt, mtr) *= 60.0 / kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
+			// Apply Maxon-specific value limits (zero is not allowed).
+			if ((0 < v(pnt, mtr)) && (v(pnt, mtr) < 1)) {
+				v(pnt, mtr) = 1;
+			}
+			if ((-1 < v(pnt, mtr)) && (v(pnt, mtr) < 0)) {
+				v(pnt, mtr) = -1;
+			}
+/*			if (v(pnt, mtr) > Vdefault[mtr]) {
+				v(pnt, mtr) = Vdefault[mtr];
+			}*/
 		}
 		//p.transpose().row(mtr) /= kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
 		/*							v.transpose().row(mtr) = v.transpose().row(mtr) * epos::epos::SECONDS_PER_MINUTE /
@@ -1079,13 +1112,13 @@ void effector::interpolated_motion_in_operational_space()
 	cout << "Axis " << i << " position change: setting parameters. \n";
 #endif
 
-			axes[i]->clearPvtBuffer();
 			// Set motion parameters.
 			axes[i]->setOperationMode(maxon::epos::OMD_INTERPOLATED_POSITION_MODE);
 			axes[i]->setProfileVelocity(MotorVmax[i]);
 			axes[i]->setProfileAcceleration(MotorAmax[i]);
 			axes[i]->setProfileDeceleration(MotorAmax[i]);
 			// TODO: setup acceleration and velocity limit values
+			axes[i]->clearPvtBuffer();
 			for (size_t pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
 				axes[i]->setInterpolationDataRecord((int32_t) p(pnt, i), (int32_t) v(pnt, i), (uint8_t) t(pnt));
 				printf("\rsend: %zd/%zd, free: %2d", pnt, i, axes[i]->getActualBufferSize());
