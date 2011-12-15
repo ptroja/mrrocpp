@@ -10,7 +10,6 @@
 #include <boost/utility.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
-#include <boost/circular_buffer.hpp>
 
 #include <ctime>
 
