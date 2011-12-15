@@ -378,6 +378,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				}
 				break;
 			default:
+				// Throw non-fatal error - invalid command.
+				BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
 				break;
 		}
 	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {

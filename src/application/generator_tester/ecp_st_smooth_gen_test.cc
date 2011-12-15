@@ -110,7 +110,7 @@ void sub_task_smooth_gen_test::conditional_execution()
         //sgenjoint->load_coordinates_from_file(network_path.c_str());
         //sgenjoint->Move();
 
-	// JOINT ABSOLUTE
+        // JOINT ABSOLUTE
         sr_ecp_msg.message("Joint absolute");
 	sgenjoint->reset();
 	sgenjoint->set_absolute();

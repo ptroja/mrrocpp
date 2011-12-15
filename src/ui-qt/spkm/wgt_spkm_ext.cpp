@@ -85,14 +85,19 @@ int wgt_spkm_ext::init()
 				lib::spkm::spkm_ext_epos_reply &ser =
 						robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
 
-				lib::Homog_matrix tmp_frame(ser.current_frame);
-				lib::Xyz_Angle_Axis_vector tmp_vector;
-				double current_position[6];
-				tmp_frame.get_xyz_angle_axis(tmp_vector);
-				tmp_vector.to_table(current_position);
+				/*lib::Homog_matrix tmp_frame(ser.current_frame);
+				 lib::Xyz_Angle_Axis_vector tmp_vector;
+				 double current_position[6];
+				 tmp_frame.get_xyz_angle_axis(tmp_vector);
+				 tmp_vector.to_table(current_position);
+
+				 for (int i = 0; i < 6; i++) {
+				 doubleSpinBox_cur_Vector[i]->setValue(current_position[i]);
+				 robot->desired_pos[i] = robot->current_pos[i];
+				 }*/
 
 				for (int i = 0; i < 6; i++) {
-					doubleSpinBox_cur_Vector[i]->setValue(current_position[i]);
+					doubleSpinBox_cur_Vector[i]->setValue(ser.current_pose[i]);
 					robot->desired_pos[i] = robot->current_pos[i];
 				}
 
@@ -381,5 +386,12 @@ void wgt_spkm_ext::on_radioButton_wrist_oriented_toggled()
 		current_pose_specification = lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
 		init();
 	}
+}
+
+void wgt_spkm_ext::showEvent(QShowEvent * event)
+{
+//	emit gotFocus();
+
+	init();
 }
 

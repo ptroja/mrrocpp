@@ -54,7 +54,7 @@ static void va_to_robot_map(int num, va_list arguments, const common::robots_t &
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
-	ecp_mp::task::task(_config), ui_pulse(*this, "MP_PULSE")
+		ecp_mp::task::task(_config), ui_pulse(*this, "MP_PULSE")
 {
 	// initialize communication with other processes
 	initialize_communication();

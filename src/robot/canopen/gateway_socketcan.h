@@ -38,6 +38,9 @@ private:
 	//! handle the CanOpen protocol management messages
 	void handleCanOpenMgmt(const struct can_frame & frame);
 
+	//! Number of bytes to transfer in segmented write
+	std::size_t bytesToWrite;
+
 public:
 	/*! \brief Read Object from the CANopen device, firmware definition 6.3.1.1
 	 *

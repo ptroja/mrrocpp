@@ -396,7 +396,7 @@ void festo_and_inputs::command_all_out()
 	switch (current_legs_state)
 	{
 		case lib::smb::ALL_OUT:
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_OUT));
+			// BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_OUT));
 			break;
 		case lib::smb::ONE_IN_TWO_OUT:
 			master.msg->message("ONE_UP_TWO_DOWN");
@@ -665,8 +665,9 @@ void festo_and_inputs::command_all_in()
 			break;
 		case lib::smb::ONE_IN_TWO_OUT:
 		case lib::smb::TWO_IN_ONE_OUT:
-		case lib::smb::ALL_IN:
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_IN));
+			break;
+		case lib::smb::ALL_IN:
 			break;
 		default:
 			break;
