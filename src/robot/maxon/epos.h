@@ -634,6 +634,9 @@ public:
 	//! \brief read Interpolation buffer status
 	UNSIGNED16 getInterpolationBufferStatus();
 
+	//! \brief read Interpolation buffer position (numer of records used)
+	UNSIGNED16 getInterpolationBufferPosition();
+
 	//! \brief check Interpolation Buffer warning
 	static bool checkInterpolationBufferWarning(UNSIGNED16 status);
 
