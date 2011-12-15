@@ -48,10 +48,9 @@ inline std::string to_string(pose_specification const & e)
 	return std::string("UNKNOWN");
 }
 
-//! Convert exception's to human-readable string
-inline std::string to_string(current_state const & e)
+inline std::string to_string(lib::smb::ALL_LEGS_VARIANT v)
 {
-	switch(e.value()) {
+	switch(v) {
 		case lib::smb::ALL_OUT:
 			return std::string("ALL_OUT");
 		case lib::smb::ALL_IN:
@@ -68,22 +67,15 @@ inline std::string to_string(current_state const & e)
 }
 
 //! Convert exception's to human-readable string
+inline std::string to_string(current_state const & e)
+{
+	return to_string(e.value());
+}
+
+//! Convert exception's to human-readable string
 inline std::string to_string(retrieved_festo_command const & e)
 {
-	switch(e.value()) {
-		case lib::smb::ALL_OUT:
-			return std::string("ALL_OUT");
-		case lib::smb::ALL_IN:
-			return std::string("ALL_IN");
-		case lib::smb::ONE_IN_TWO_OUT:
-			return std::string("ONE_IN_TWO_OUT");
-		case lib::smb::TWO_IN_ONE_OUT:
-			return std::string("TWO_IN_ONE_OUT");
-		default:
-			break;
-	}
-
-	return std::string("UNKNOWN");
+	return to_string(e.value());
 }
 
 /*!
