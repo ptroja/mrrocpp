@@ -473,7 +473,8 @@ void gateway_socketcan::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t l
 			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected SCS (server command specifier) received"));
 		}
 
-		if ((frame.data[0] & 0x10) != toggle) {
+		const bool received_toggle = (frame.data[0] & 0x10);
+		if (received_toggle != toggle) {
 			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("toggle bit do not match"));
 		}
 
