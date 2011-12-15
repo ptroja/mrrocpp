@@ -737,6 +737,7 @@ void effector::execute_motor_motion()
 				Amax[i] = Adefault[i];
 			}
 
+			// Convert to 'rotations' and 'seconds' units.
 			Vmax /= maxon::epos::SECONDS_PER_MINUTE;
 			Amax /= maxon::epos::SECONDS_PER_MINUTE;
 
@@ -748,9 +749,10 @@ void effector::execute_motor_motion()
 			}
 #endif
 
-			// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
+			// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits.
 			double t = ppm <6> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
 
+			// Convert back to Maxon-specific units.
 			Vnew *= maxon::epos::SECONDS_PER_MINUTE;
 			Anew *= maxon::epos::SECONDS_PER_MINUTE;
 			Dnew *= maxon::epos::SECONDS_PER_MINUTE;
@@ -777,7 +779,7 @@ void effector::execute_motor_motion()
 						axes[i]->setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
 						axes[i]->setPositionProfileType(0); // Trapezoidal velocity profile
 
-						// Adjust velocity settings results in than 1 (minimal value accepted by the EPOS2)
+						// Apply Maxon-specific value limits (zero is not allowed).
 						if (Vnew[i] < 1) {
 							Vnew[i] = 1;
 						}
@@ -785,6 +787,7 @@ void effector::execute_motor_motion()
 							Vnew[i] = Vdefault[i];
 						}
 
+						// Apply Maxon-specific value limits (zero is not allowed).
 						if (Anew[i] < 1) {
 							Anew[i] = 1;
 						}
@@ -792,6 +795,7 @@ void effector::execute_motor_motion()
 							Anew[i] = Ddefault[i];
 						}
 
+						// Apply Maxon-specific value limits (zero is not allowed).
 						if (Dnew[i] < 1) {
 							Dnew[i] = 1;
 						}
@@ -799,14 +803,12 @@ void effector::execute_motor_motion()
 							Dnew[i] = Ddefault[i];
 						}
 
+						// Apply trapezoidal profile settings.
 						axes[i]->setProfileVelocity(Vnew[i]);
 						axes[i]->setProfileAcceleration(Anew[i]);
 						axes[i]->setProfileDeceleration(Dnew[i]);
 
-//						axes[i]->setProfileVelocity(Vdefault[i]);
-//						axes[i]->setProfileAcceleration(Adefault[i]);
-//						axes[i]->setProfileDeceleration(Ddefault[i]);
-
+						// Set new motion target
 						axes[i]->setTargetPosition(desired_motor_pos_new[i]);
 					}
 				}
