@@ -604,16 +604,25 @@ void effector::execute_motor_motion()
 			Matrix <double, 6, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
 
 			for (int i = 0; i < 6; ++i) {
-				Delta[i] = fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i])
+				Delta[i] = trunc(fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i]))
 						/ kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[i];
 				cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - " << desired_motor_pos_old[i]
 						<< " = " << Delta[i] << endl;
-				Vmax[i] = ((double) Vdefault[i]) / ((double) maxon::epos::SECONDS_PER_MINUTE);
+				Vmax[i] = Vdefault[i];
 				Amax[i] = Adefault[i];
 			}
 
+			// Adjust units for calculations in [s]
+			Vmax /= maxon::epos::SECONDS_PER_MINUTE; // [rpm] -> [rps]
+			Amax /= maxon::epos::SECONDS_PER_MINUTE; // [rpm/s] -> [rps/s]
+
 			// Calculate time of trapezoidal profile motion according to commanded acceleration and velocity limits
 			double t = ppm <6> (Delta, Vmax, Amax, Vnew, Anew, Dnew);
+
+			// Adjust units for sending to the motors
+			Vnew *= maxon::epos::SECONDS_PER_MINUTE; // [rps] -> [rpm]
+			Anew *= maxon::epos::SECONDS_PER_MINUTE; // [rps/s] -> [rpm/s]
+			Dnew *= maxon::epos::SECONDS_PER_MINUTE; // [rps/s] -> [rpm/s]
 
 			cerr << "Delta:\n" << Delta << endl << "Vmax:\n" << Vmax << endl << "Amax:\n" << Amax << endl << endl;
 
@@ -628,22 +637,34 @@ void effector::execute_motor_motion()
 							axes[i]->setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
 							axes[i]->setPositionProfileType(0); // Trapezoidal velocity profile
 
-							// Adjust velocity settings results in than 1 (minimal value accepted by the EPOS2)
-							if (Vnew[i] > 0 && Vnew[i] * maxon::epos::SECONDS_PER_MINUTE < 1.0) {
-								Vnew[i] = 1.1 / maxon::epos::SECONDS_PER_MINUTE;
+							// The minimal velocity value is 1
+							if (Vnew[i] < 1) {
+								Vnew[i] = 1;
+							}
+							// Handle numerical errors
+							if(Vnew[i] > Vdefault[i]) {
+								Vnew[i] = Vdefault[i];
 							}
 
-							// Adjust acceleration settings which are less than 1 (minimal value accepted by the EPOS2)
-							if (Anew[i] > 0 && Anew[i] < 1) {
+							// The minimal acceleration value is 1
+							if (Anew[i] < 1) {
 								Anew[i] = 1;
 							}
-
-							// Adjust deceleration settings which are less than 1 (minimal value accepted by the EPOS2)
-							if (Dnew[i] > 0 && Dnew[i] < 1) {
-								Dnew[i] = 1;
+							// Handle numerical errors
+							if(Anew[i] > Adefault[i]) {
+								Anew[i] = Adefault[i];
 							}
 
-							axes[i]->setProfileVelocity(Vnew[i] * maxon::epos::SECONDS_PER_MINUTE);
+							// The minimal deceleration value is 1
+							if (Dnew[i] < 1) {
+								Dnew[i] = 1;
+							}
+							// Handle numerical errors
+							if(Dnew[i] > Ddefault[i]) {
+								Dnew[i] = Ddefault[i];
+							}
+
+							axes[i]->setProfileVelocity(Vnew[i]);
 							axes[i]->setProfileAcceleration(Anew[i]);
 							axes[i]->setProfileDeceleration(Dnew[i]);
 							axes[i]->setTargetPosition(desired_motor_pos_new[i]);
