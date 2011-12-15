@@ -433,7 +433,7 @@ void effector::parse_motor_command()
 			// Transform desired motors to joints.
 			get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
 			break;
-		case lib::smb::JOINT: {
+		case lib::smb::JOINT:
 			msg->message("JOINT");
 			// Copy data directly from buffer.
 			for (int i = 0; i < number_of_servos; ++i) {
@@ -450,9 +450,8 @@ void effector::parse_motor_command()
 				// Throw non-fatal error - this mode requires synchronization.
 				BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
 			}
-		}
 			break;
-		case lib::smb::EXTERNAL: {
+		case lib::smb::EXTERNAL:
 			msg->message("EXTERNAL");
 			// Leg rotational joint: Copy data directly from buffer and recalculate joint value.
 			desired_joints[0] = ecp_edp_cbuffer.base_vs_bench_rotation
@@ -471,7 +470,6 @@ void effector::parse_motor_command()
 				// Throw non-fatal error - this mode requires synchronization.
 				BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
 			}
-		}
 			break;
 		default:
 			// Throw non-fatal error - invalid pose specification.
@@ -651,7 +649,7 @@ void effector::create_threads()
 {
 	fai = new festo_and_inputs(*this);
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
+	//vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 
 	// TODO: do poprawy
 	is_base_positioned_to_move_legs = true;

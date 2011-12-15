@@ -76,13 +76,11 @@ void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib:
 	// Compute desired motor positions for both axes.
 	for (int i = 0; i < 2; ++i) {
 		local_current_joints[i] = (local_current_motor_pos[i] - synchro_motor_positions[i]) * mp2i_ratios[i];
-
 	}
 }
 
 void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints)
 {
-
 	// Compute desired motor positions for both axes.
 	for (int i = 0; i < 2; ++i) {
 		local_desired_motor_pos_new[i] = (local_desired_joints[i] / mp2i_ratios[i]) + synchro_motor_positions[i];
@@ -90,7 +88,6 @@ void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const 
 		// Round to integer, which is the default motor encoder precision.
 		local_desired_motor_pos_new[i] = rint(local_desired_motor_pos_new[i]);
 	}
-
 }
 
 } // namespace smb
