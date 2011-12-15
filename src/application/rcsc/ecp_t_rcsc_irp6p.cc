@@ -43,7 +43,8 @@ rcsc::rcsc(lib::configurator &_config) :
 	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
 	tig = new common::generator::teach_in(*this);
 
-	//sg = new common::generator::smooth(*this, true);
+        sg = new common::generator::newsmooth(*this, lib::ECP_JOINT, 6);
+        sg->set_debug(true);
 
 	go_st = new common::sub_task::gripper_opening(*this);
 
@@ -158,17 +159,18 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.variant)
 		{
 			case ecp_mp::task::RELATIVE:
-				//sg->set_relative();
+                                sg->set_relative();
 				break;
 			case ecp_mp::task::ABSOLUTE:
-				//sg->set_absolute();
+                                sg->set_absolute();
 				break;
 			default:
 				break;
 		}
 
-		//sg->load_file_with_path(path.c_str());
-		//sg->Move();
+                sg->load_trajectory_from_file(path.c_str());
+                sg->calculate_interpolate();
+                sg->Move();
 
 	}
 
