@@ -73,7 +73,7 @@ double pvt(
  * @param Dnew corrected deceleration limit vector
  * @return time to execute the motion
  */
-template <unsigned int N, typename T = long double>
+template <unsigned int N, typename T>
 double ppm(
 		const Matrix<T,N,1> & Delta,
 		const Matrix<T,N,1> & Vmax,
@@ -93,8 +93,8 @@ double ppm(
 			dmax = -Amax(l,0);				// maximal deceleration
 
 		// Velocity value, when the velocity profile is triangular (eq. 3.32)
-		//const T VTriangle = amax*std::sqrt(2*delta*dmax/(amax*(dmax-amax)));
-		const T VTriangle = std::sqrt(2*delta*amax*dmax/(dmax-amax));
+		const T VTriangle = amax*std::sqrt(2*delta*dmax/(amax*(dmax-amax)));
+		//const T VTriangle = std::sqrt(2*delta*amax*dmax/(dmax-amax));
 
 		std::cout << "VTriangle(" << l << ") = " << VTriangle << std::endl;
 
@@ -106,25 +106,26 @@ double ppm(
 			// acceleration and deceleration phase treated as a half of the total motion time
 			Time(l,0) = Time(l,1) = Time(l,2)/2;
 		} else {
-			std::cout << "vmax := " << vmax << std::endl <<
-					"amax := " << amax << std::endl <<
-					"dmax := " << dmax << std::endl <<
-					"delta := " << delta << std::endl;
-
 			// ta: time to stop accelerate (eq. 3.35)
 			Time(l,0) = vmax/amax;
 
 			// td: time to start deceleration (eq. 3.42)
 			Time(l,1) = delta/vmax + vmax/(2*amax) + vmax/(2*dmax);
 
+			// Numerically stable version:
+			//Time(l,1) = (2*delta*amax*dmax+vmax*vmax*amax+vmax*vmax*dmax)/(2*vmax*amax*dmax);
+
 			// tt: total motion time (eq. 3.40)
 			Time(l,2) = delta/vmax + vmax/(2*amax) - vmax/(2*dmax);
+
+			// Numerically stable version:
+			//Time(l,2) = (2*delta*amax*dmax+vmax*vmax*dmax-vmax*vmax*amax)/(2*vmax*amax*dmax);
 		}
 
-		std::cerr << "VLimit[" << l << "]: " << VTriangle <<
-				" => " << (TriangularProfile ? "triangular" : "trapezoidal") << std::endl <<
-				"Time[" << l << "]: " << Time(l,0) << " " << Time(l,1) << " " << Time(l,2) <<
-				std::endl;
+//		std::cerr << "VLimit[" << l << "]: " << VTriangle <<
+//				" => " << (TriangularProfile ? "triangular" : "trapezoidal") << std::endl <<
+//				"Time[" << l << "]: " << Time(l,0) << " " << Time(l,1) << " " << Time(l,2) <<
+//				std::endl;
 	}
 
 	Matrix<T,1,3> maxTime = Time.colwise().maxCoeff();
@@ -159,7 +160,9 @@ double ppm(
 			if(delta) {
 				Anew(l,0) = 2*delta/(ta*(tt+td-ta));
 				Dnew(l,0) = - (-2*delta/((tt+td-ta)*(tt-td))); // deceleration value (without sign)
+				//Dnew(l,0) = (2*delta)/(tt*tt-tt*ta+td*ta-td*td); // Numerically stable (?) version
 				Vnew(l,0) = Anew(l,0)*ta;
+				//Vnew(l,0) = (2*delta)/(tt+td-ta); // Numerically stable (?) version
 			} else {
 				Anew(l,0) = Amax(l,0);
 				Dnew(l,0) = Amax(l,0);
@@ -174,7 +177,7 @@ double ppm(
 	// These assertions fail because of floating point inequalities
 	//assert(Dnew(l,0)<=Amax(l,0));
 	//assert(Anew(l,0)<=Amax(l,0));
-	//assert(Vnew(l,0)<=Vmax(l,0));
+	//assert(Vnew(l,0)<=Vmax(l,0));;
 
 
 //	std::cerr <<
