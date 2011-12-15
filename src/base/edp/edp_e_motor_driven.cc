@@ -842,10 +842,12 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 						case lib::QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
 							// okreslenie numeru bledu
 							BOOST_THROW_EXCEPTION(exception::nfe_1() << mrrocpp_error0(QUERY_NOT_EXPECTED));
+							break;
 
 						default: // blad: nieznana instrukcja
 							// okreslenie numeru bledu
 							BOOST_THROW_EXCEPTION(exception::nfe_1() << mrrocpp_error0(INVALID_INSTRUCTION_TYPE));
+							break;
 
 					}
 					next_state = WAIT;

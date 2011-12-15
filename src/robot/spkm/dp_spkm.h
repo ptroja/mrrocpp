@@ -148,8 +148,12 @@ typedef enum _POSE_SPECIFICATION
 struct spkm_ext_epos_reply
 {
 //	POSE_SPECIFICATION pose_specification;
-	lib::Homog_matrix current_frame;
+
+	//! SPKM current pose - in XYZ Euler ZYZ form.
+	double current_pose[6];
+
 	lib::epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
+
 	bool contact;
 
 	//! Give access to boost::serialization framework
@@ -160,7 +164,7 @@ struct spkm_ext_epos_reply
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		//ar & pose_specification;
-		ar & current_frame;
+		ar & current_pose;
 		ar & epos_controller;
 		ar & contact;
 	}
@@ -275,7 +279,8 @@ struct cbuffer
  */
 struct rbuffer
 {
-	lib::Homog_matrix current_pose;
+	//! SPKM current pose - in XYZ Euler ZYZ form.
+	double current_pose[6];
 
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 

@@ -85,7 +85,7 @@ int wgt_spkm_ext::init()
 				lib::spkm::spkm_ext_epos_reply &ser =
 						robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
 
-				lib::Homog_matrix tmp_frame(ser.current_frame);
+				/*lib::Homog_matrix tmp_frame(ser.current_frame);
 				lib::Xyz_Angle_Axis_vector tmp_vector;
 				double current_position[6];
 				tmp_frame.get_xyz_angle_axis(tmp_vector);
@@ -94,7 +94,13 @@ int wgt_spkm_ext::init()
 				for (int i = 0; i < 6; i++) {
 					doubleSpinBox_cur_Vector[i]->setValue(current_position[i]);
 					robot->desired_pos[i] = robot->current_pos[i];
+				}*/
+
+				for (int i = 0; i < 6; i++) {
+					doubleSpinBox_cur_Vector[i]->setValue(ser.current_pose[i]);
+					robot->desired_pos[i] = robot->current_pos[i];
 				}
+
 
 			} else {
 				// Wygaszanie elementow przy niezsynchronizowanym robocie

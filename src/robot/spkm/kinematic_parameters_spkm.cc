@@ -16,7 +16,7 @@ namespace kinematics {
 namespace spkm {
 
 //! Initialization of parameters describing the synchronisation positions (in joints).
-const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS] = {  0.2405, 0.242, 0.2405, 0.0, 0.0, -0.2906};
+const double kinematic_parameters_spkm::synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS] = {  0.242, 0.237, 0.242, 0.0, 0.0, 0.0};
 
 //! Initialization of parameters related to conversion from motor positions to joints.
 //! Parameters for conversion for linear DOFs are:
@@ -39,19 +39,19 @@ const uint32_t kinematic_parameters_spkm::encoder_resolution[mrrocpp::lib::spkm:
 };
 
 //! Initialization of upper motors limits vector.
-const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 8000, 8000, 8000, 320000, 90000, 340000 };
+const int32_t kinematic_parameters_spkm::upper_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 8000, 8000, 8000, 320000, 90000, 310000 };
 
 //! Initialization of lower motors limits vector.
 //! Those are the "unsafe" (in terms that robot can hit its "shell" from inside) values.
-const int32_t kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -350000, -350000, -350000, -320000, -200000, -280000 };
+const int32_t kinematic_parameters_spkm::lower_motor_pos_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { -350000, -350000, -350000, -320000, -200000, -310000 };
 
 //! Initialization of upper joints vector.
 //! Those are the "safe" limits, not related to synchronization sensors positions.
-const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.28, 0.292, 0.28, 2.7489, 0.7, 2.6704 };
+const double kinematic_parameters_spkm::upper_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.28, 0.287, 0.28, 2.7489, 0.7, 2.43 };
 
 //! Initialization of lower joints limits vector.
 //! The lower values are related to positions of synchronization sensors.
-const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.242, 0.242, 0.242, -2.2777, -1.5708, -2.4347 };
+const double kinematic_parameters_spkm::lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS] = { 0.242, 0.237, 0.242, -2.2777, -1.5708, -2.43 };
 
 //! Initialization of upper thyk alpha angle limit.
 //! Those values were determined experimentally.

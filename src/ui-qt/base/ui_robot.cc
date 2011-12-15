@@ -106,18 +106,6 @@ void UiRobot::indicate_process_control_window_creation()
 	process_control_window_created = true;
 }
 
-void UiRobot::block_ecp_trigger()
-{
-	if (wgt_robot_pc)
-		wgt_robot_pc->block_all_ecp_trigger_widgets();
-}
-
-void UiRobot::unblock_ecp_trigger()
-{
-	if (wgt_robot_pc)
-		wgt_robot_pc->unblock_all_ecp_trigger_widgets();
-}
-
 void UiRobot::open_robot_process_control_window()
 {
 	if (wgt_robot_pc)
@@ -496,18 +484,18 @@ int UiRobot::manage_interface()
 					case common::UI_MP_PERMITED_TO_RUN:
 						EDP_Load->setEnabled(false);
 						EDP_Unload->setEnabled(true);
-						block_ecp_trigger();
+
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						EDP_Load->setEnabled(false);
 						EDP_Unload->setEnabled(false);
-						block_ecp_trigger();
+
 						break;
 					case common::UI_MP_TASK_RUNNING:
-						unblock_ecp_trigger();
+
 						break;
 					case common::UI_MP_TASK_PAUSED:
-						block_ecp_trigger();
+
 						break;
 					default:
 						break;

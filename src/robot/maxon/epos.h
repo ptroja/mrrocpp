@@ -39,11 +39,10 @@
 #include <stdint.h>  /* int types with given size */
 
 #include <string>
-#include <exception>
-#include <vector>
 
 // Include for BYTE/WORD/DWORD typedefs
 #include "robot/canopen/gateway.h"
+#include "base/lib/exception.h"
 
 /* added oct06 for openTCPEPOS() */
 /*
@@ -139,6 +138,12 @@ private:
 	bool remote;
 
 public:
+	/*!
+	 * \brief All high-level methods throws this exception in case of error.
+	 * \author ptrojane/tkornuta
+	 */
+	REGISTER_FATAL_ERROR(fe, "EPOS error");
+
 	/*! \brief create new EPOS object
 	 *
 	 * @param _device object to access the device
@@ -207,6 +212,9 @@ public:
 
 	//! \brief Reset the device by issuing a shutdown command followed by power-on and halt
 	void reset();
+
+	//! \brief High-level command to clear fault
+	void clearFault();
 
 	/*! \brief change EPOS state */
 	void setState(desired_state_t state);
@@ -682,16 +690,28 @@ public:
 		HM_INDEX_NEGATIVE_SPEED = 33
 	} homing_method_t;
 
-	//! \brief rIs the actual position referenced to home position?
+	//! \brief Is the actual position referenced to home position?
 	bool isReferenced();
 
-	//! \brief rIs the movement target reached?
+	//! \brief Is the actual position referenced to home position?
+	static bool isReferenced(UNSIGNED16 status);
+
+	//! \brief Is the movement target reached?
 	bool isTargetReached();
 
-	//! \brief rStart homing according to preset parameters
+	//! \brief Is the movement target reached?
+	static bool isTargetReached(UNSIGNED16 status);
+
+	//! \brief Is the device in fault state?
+	bool isFaultState();
+
+	//! \brief Is the device in fault state?
+	static bool isFaultState(UNSIGNED16 status);
+
+	//! \brief Start homing according to preset parameters
 	void startHoming();
 
-	//! \brief rCheck if both homing target is reached and homing is attained
+	//! \brief Check if both homing target is reached and homing is attained
 	bool isHomingFinished();
 
 	/*! \brief read Homing Method */
