@@ -88,6 +88,9 @@ void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const 
 	for (int i = 0; i < 2; ++i) {
 		local_desired_motor_pos_new[i] = (local_desired_joints[i] / mp2i_ratios[i]) + synchro_motor_positions[i];
 		//local_desired_joints[i] / mp2i_ratios[i];
+
+		// Round to integer, which is precision of the motor encoder
+		local_desired_motor_pos_new[i] = rint(local_desired_motor_pos_new[i]);
 	}
 
 }

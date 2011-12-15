@@ -115,6 +115,9 @@ void kinematic_model_spkm::i2mp_transform(lib::MotorArray & local_desired_motor_
 	for (int i = 0; i < 6; ++i) {
 		local_desired_motor_pos_new[i] = (params.synchro_positions[i] - local_desired_joints[i])
 				/ params.mp2i_ratios[i];
+
+		// Round to integer, which is precision of the motor encoder
+		local_desired_motor_pos_new[i] = rint(local_desired_motor_pos_new[i]);
 	}
 
 	// Compute desired motor positions for rotary axes.
