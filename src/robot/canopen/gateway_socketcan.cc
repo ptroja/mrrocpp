@@ -351,22 +351,138 @@ void gateway_socketcan::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, u
 
 void gateway_socketcan::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE subindex, DWORD ObjectLength)
 {
-	struct can_frame frame;
-	frame.can_dlc = 8;
+	if (ObjectLength > 63) {
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Segmented write of > 63 bytes not allowed"));
+	}
+
+	try {
+		struct can_frame frame;
+
+		frame.can_id = 0x600 + nodeId;
+		frame.can_dlc = 8;
+		frame.data[0] = 0x20;	// Initiate Domain Download, normal transfer, client => server, data set size is NOT indicated
+		frame.data[0] = 0x21;	// Initiate Domain Download, normal transfer, client => server, data set size is indicated
+		frame.data[1] = (index & 0xFF); // index high BYTE
+		frame.data[2] = (index >> 8);   // index low BYTE
+		frame.data[3] = subindex;
+
+		*((uint32_t *) &frame.data[4]) = ObjectLength;
+
+		writeToWire(frame);
+
+		// wait for reply
+		while(readFromWire(frame) != (0x580 + nodeId)) {
+			handleCanOpenMgmt(frame);
+		}
+
+		/*
+		 * SCS: server command specifier replies
+		 * 011 <= Initiate Domain Download (WriteObject)
+		 * 001 <= Download Domain Segment
+		 * 010 <= Initiate Domain Upload (ReadObject)
+		 * 000 <= Upload Domain Segment
+		 */
+
+		// check for Abort Transfer message
+		if (SCS(frame.data[0]) == 4) {
+			E_error = *((uint32_t*) &frame.data[4]);
+			// ??? do we also need to check the reply address (index, subindex)?
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("SDO transfer aborted"));
+		} else {
+			E_error = 0;
+		}
+
+		// check the reply SCS
+		if (SCS(frame.data[0]) != 3) {
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected SCS (server command specifier) received"));
+		}
+
+		// address (index, subindex) of the reply object
+		WORD r_index = (frame.data[2] << 8) | (frame.data[1]);
+		BYTE r_subindex = (frame.data[3]);
+
+		if ((r_index != index) || (r_subindex != subindex)) {
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected reply object address (index, subindex)"));
+		}
+
+		// Setup toggle bit
+		toggle = false;
+
+		// Reset data counter
+		bytesToWrite = ObjectLength;
+	} catch (fe_canopen_error & e) {
+		e << dictionary_index(index);
+		e << dictionary_subindex(subindex);
+		e << canId(nodeId);
+		throw;
+	}
 }
 
 void gateway_socketcan::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t len)
 {
-	if (len > 63) {
-		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Segmented write of > 63 bytes not allowed"));
+	if (len > 7) {
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Single segmented write of more than 7 bytes not allowed"));
 	}
 
-	struct can_frame frame;
+	if (len > bytesToWrite) {
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Segmented write of more data than initially announced"));
+	}
 
-	frame.can_id = 0x600 + nodeId;
-	frame.can_dlc = 8;
+	try {
+		struct can_frame frame;
 
-	frame.data[0] = 0x40;	// Initiate Domain Upload, client => server
+		frame.can_id = 0x600 + nodeId;
+		frame.can_dlc = 8;
+		frame.data[0] = 0x00;	// Initiate Domain Download, normal transfer, client => server
+		// Toggle bit
+		frame.data[0] |= (toggle) ? 0x10 : 0x00;
+		// Number of bytes that do NOT contain segment data
+		frame.data[0] |= (7-len) << 1;
+		// More segments coming
+		frame.data[0] |= (bytesToWrite == len) ? 0x01 : 0x00;
+
+		// Copy data
+		memcpy(&frame.data[1], ptr, len);
+
+		writeToWire(frame);
+
+		// wait for reply
+		while(readFromWire(frame) != (0x580 + nodeId)) {
+			handleCanOpenMgmt(frame);
+		}
+
+		/*
+		 * SCS: server command specifier replies
+		 * 011 <= Initiate Domain Download (WriteObject)
+		 * 001 <= Download Domain Segment
+		 * 010 <= Initiate Domain Upload (ReadObject)
+		 * 000 <= Upload Domain Segment
+		 */
+
+		// check for Abort Transfer message
+		if (SCS(frame.data[0]) == 4) {
+			E_error = *((uint32_t*) &frame.data[4]);
+			// ??? do we also need to check the reply address (index, subindex)?
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("SDO transfer aborted"));
+		} else {
+			E_error = 0;
+		}
+
+		// check the reply SCS
+		if (SCS(frame.data[0]) != 1) {
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected SCS (server command specifier) received"));
+		}
+
+		if ((frame.data[0] & 0x10) != toggle) {
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("toggle bit do not match"));
+		}
+
+		// change the toggle flag value
+		toggle = (toggle) ? false : true;
+	} catch (fe_canopen_error & e) {
+		e << canId(nodeId);
+		throw;
+	}
 }
 
 void gateway_socketcan::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier)
