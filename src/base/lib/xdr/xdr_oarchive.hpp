@@ -108,6 +108,13 @@ public:
 
     SAVE_A_TYPE(float, xdr_float)
     SAVE_A_TYPE(double, xdr_double)
+    // Down-cast long double to double, since xdr_quadruple is not avaialable on Linux
+    xdr_oarchive &save_a_type(long double const &t, boost::mpl::true_)
+    {
+        double b = (int64_t) t;
+        if (!xdr_double(&xdrs, &b)) THROW_SAVE_EXCEPTION;
+        return *this;
+    }
 
     SAVE_A_TYPE(char, xdr_char)
     SAVE_A_TYPE(short, xdr_short)

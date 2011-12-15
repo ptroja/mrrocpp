@@ -110,6 +110,13 @@ public:
 
     LOAD_A_TYPE(float, xdr_float)
     LOAD_A_TYPE(double, xdr_double)
+    // Down-cast long double to double, since xdr_quadruple is not avaialable on Linux
+    xdr_iarchive &load_a_type(long double &t, boost::mpl::true_) {
+        double b;
+        if(!xdr_double(&xdrs, &b)) THROW_LOAD_EXCEPTION;
+        t = (long double) b;
+        return *this;
+    }
 
     LOAD_A_TYPE(char, xdr_char)
     LOAD_A_TYPE(short, xdr_short)
