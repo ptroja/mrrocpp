@@ -42,13 +42,14 @@ add_library(mrrocpp
 	ping.cc
 )
 
-add_executable(ppm_test
-	ppm_test.cc
-)
-
-add_executable(pvat_test
-	pvat_test.cc
-)
+# Test utilites for Maxon EPOS trajectory calculation
+#add_executable(ppm_test
+#	ppm_test.cc
+#)
+#
+#add_executable(pvat_test
+#	pvat_test.cc
+#)
 
 target_link_libraries (mrrocpp sr)
 

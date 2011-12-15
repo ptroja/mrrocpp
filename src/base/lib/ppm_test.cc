@@ -30,9 +30,11 @@ const uint32_t encoder_resolution[6] = {
 int
 main(int argc, char *argv[])
 {
-	Matrix <long double, 6, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
+	for(double q = 1;; q *= 10.0) {
+	std::cout << "*** q = " << q << std::endl;
+	Matrix <double, 6, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
 
-	Matrix <long double, 6, 1> Vdefault, Adefault, Ddefault;
+	Matrix <double, 6, 1> Vdefault, Adefault, Ddefault;
 
 	// Move in [qc]
 	Delta(0) = 0;
@@ -40,7 +42,7 @@ main(int argc, char *argv[])
 	Delta(2) = 0;
 	Delta(3) = 0;
 	Delta(4) = 0;
-	Delta(5) = 10000000;
+	Delta(5) = q;
 
 	for(int i = 0; i < 6; ++i) {
 		Vdefault(i) = _Vdefault[i];
@@ -53,10 +55,14 @@ main(int argc, char *argv[])
 
 	const double t2 = ppm<6>(Delta, Vmax, Amax, Vnew, Anew, Dnew);
 
-	for(int i = 0; i < 6; ++i) {
-		Vnew(i) *= 60;
-		Anew(i) *= 60;
-		Dnew(i) *= 60;
+	Vnew *= 60;
+	Anew *= 60;
+	Dnew *= 60;
+
+	for(unsigned int i = 0; i < 6; ++i) {
+		Vnew(i) = trunc(Vnew(i));
+		Anew(i) = trunc(Anew(i));
+		Dnew(i) = trunc(Dnew(i));
 	}
 
 	std::cerr <<
@@ -72,6 +78,7 @@ main(int argc, char *argv[])
 	}
 
 	std::cerr << std::fixed << "ppm: " << t2 << std::endl;
+	}
 
 	return 0;
 }
