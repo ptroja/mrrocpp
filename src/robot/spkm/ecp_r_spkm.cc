@@ -222,6 +222,7 @@ void robot::get_reply()
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
 		sr_ecp_msg.message("ECP get_reply epos_external_reply_data_request_port");
+#if 1
 		// generator reply generation
 		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
 			epos_external_reply_data_request_port.data.epos_controller[i].position =
@@ -231,9 +232,18 @@ void robot::get_reply()
 			epos_external_reply_data_request_port.data.epos_controller[i].motion_in_progress =
 					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
 		}
+
+
+
 		epos_external_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
 
-		epos_external_reply_data_request_port.data.current_frame = edp_ecp_rbuffer.current_pose;
+		for (int i = 0; i < 6; ++i) {
+			epos_external_reply_data_request_port.data.current_pose[i] = edp_ecp_rbuffer.current_pose[i];
+		}
+
+#else
+		epos_external_reply_data_request_port.data = edp_ecp_rbuffer;
+#endif
 
 		epos_external_reply_data_request_port.set();
 	}

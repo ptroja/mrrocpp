@@ -22,7 +22,7 @@ namespace kinematics {
 namespace spkm {
 
 //! Prints reference frames.
-#define DEBUG_KINEMATICS 1
+#define DEBUG_KINEMATICS 0
 
 //! Eps used in Spherical wrist inverse kinematics.
 #define EPS 1.0e-10
@@ -301,7 +301,7 @@ Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const li
 		std::cout<<"u33 = "<< wrist_twist_(2,2) << endl;
 #endif
 
-		if ((wrist_twist_(2,2) < (1 + EPS)) && (wrist_twist_(2,2) > (1 - EPS))) {
+	if ((wrist_twist_(2,2) < (1 + EPS)) && (wrist_twist_(2,2) > (1 - EPS))) {
 		// If u33 = 1 then theta is 0.
 		theta = 0;
 		// Infinite number of solutions: only the phi + psi value can be computed, thus we assume, that phi will equal to the previous one.
@@ -326,9 +326,12 @@ Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const li
 		thetas << phi, theta, psi;
 	} else {
 		// Two possible solutions.
+//		double sb = hypot(wrist_twist_(2,0), wrist_twist_(2,1));
 
 		// First solution.
 		theta = atan2(sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)), wrist_twist_(2,2));
+//		theta = atan2(sb, wrist_twist_(2,2));
+
 		phi = atan2(wrist_twist_(1,2), wrist_twist_(0,2));
 		psi = atan2(wrist_twist_(2,1), -wrist_twist_(2,0));
 #if(DEBUG_KINEMATICS)
@@ -340,6 +343,8 @@ Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const li
 
 		// Second solution.
 		theta2 = atan2(-sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)), wrist_twist_(2,2));
+//		theta = atan2(-sb, wrist_twist_(2,2));
+
 		phi2 = atan2(-wrist_twist_(1,2), -wrist_twist_(0,2));
 		psi2 = atan2(-wrist_twist_(2,1), wrist_twist_(2,0));
 #if(DEBUG_KINEMATICS)
