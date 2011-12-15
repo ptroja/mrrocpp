@@ -974,6 +974,13 @@ void effector::interpolated_motion_in_operational_space()
 		for (size_t pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
 			v(pnt, mtr) *= 60.0 / kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
 		}
+		// Apply Maxon-specific value limits (zero is not allowed).
+		if (v(pnt, mtr) < 1) {
+			v(pnt, mtr) = 1;
+		}
+		if (v(pnt, mtr) > Vdefault[mtr]) {
+			v(pnt, mtr) = Vdefault[mtr];
+		}
 		//p.transpose().row(mtr) /= kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
 		/*							v.transpose().row(mtr) = v.transpose().row(mtr) * epos::epos::SECONDS_PER_MINUTE /
 		 kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];*/
