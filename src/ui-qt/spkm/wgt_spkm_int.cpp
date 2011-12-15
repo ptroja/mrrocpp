@@ -330,3 +330,10 @@ int wgt_spkm_int::move_it()
 	return 1;
 }
 
+void wgt_spkm_int::showEvent(QShowEvent * event)
+{
+//	emit gotFocus();
+
+	init();
+}
+
