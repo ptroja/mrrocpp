@@ -20,8 +20,8 @@ namespace kinematics {
 namespace smb {
 
 //! Parameter for conversion of external legs rotation to degrees (in radians).
-//! * One step is equal to 60 degrees (PI/6).
-const double leg_rotational_ext2i_ratio = M_PI/6;
+//! * One step is equal to 60 degrees (PI/3).
+const double leg_rotational_ext2i_ratio = M_PI/3;
 
 
 /*!
