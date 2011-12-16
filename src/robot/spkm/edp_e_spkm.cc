@@ -866,17 +866,25 @@ void effector::interpolated_motion_in_operational_space()
 #if(DEBUG_FRAMES)
 	cout << "Wrist frame: " << desired_end_effector_frame << endl;
 #endif
-		// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
-		get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
+	// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
+	get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
 
-		// Postcondition I - check desired Cartesian position, basing on the upper platform pose.
-		get_current_kinematic_model()->check_cartesian_pose(desired_end_effector_frame);
+	// Postcondition I - check desired Cartesian position, basing on the upper platform pose.
+	get_current_kinematic_model()->check_cartesian_pose(desired_end_effector_frame);
 
-		// Transform joints to motors.
-		get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
+	// Transform joints to motors.
+	get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
 
-		// Postcondition II  - check whether the desired motor position is valid.
-		get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
+	// Postcondition II  - check whether the desired motor position is valid.
+	get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
+
+	if (!robot_test_mode) {
+		// Check whether robot is standing still.
+		for (size_t i = 0; i < axes.size(); ++i) {
+			if(!axes[i]->isTargetReached())
+				BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_motion_in_progress());
+		}
+	}
 
 
 	// Calculate time - currently the motion time is set to 5s.
