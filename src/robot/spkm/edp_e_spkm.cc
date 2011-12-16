@@ -478,19 +478,15 @@ void effector::move_arm(const lib::c_buffer &instruction)
 //			current_shead_frame.setIdentity();
 		}
 	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
-		is_current_cartesian_pose_known = false;
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
 	} catch (mrrocpp::lib::exception::fatal_error & e_) {
-		is_current_cartesian_pose_known = false;
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
 	} catch (mrrocpp::lib::exception::system_error & e_) {
-		is_current_cartesian_pose_known = false;
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
-		is_current_cartesian_pose_known = false;
 		HANDLE_EDP_UNKNOWN_ERROR()
 	}
 }
