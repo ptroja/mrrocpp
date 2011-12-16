@@ -209,9 +209,9 @@ void block_move::main_task_algorithm(void)
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-		sr_ecp_msg->message("PI/2 Rotation");
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/theta_rotation.trj", 0, lib::irp6p_m::ROBOT_NAME);
-		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+		//sr_ecp_msg->message("PI/2 Rotation");
+		//set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/theta_rotation.trj", 0, lib::irp6p_m::ROBOT_NAME);
+		//wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		//Zerowanie czujników
 		sr_ecp_msg->message("Postument Bias");
@@ -223,6 +223,8 @@ void block_move::main_task_algorithm(void)
 		sr_ecp_msg->message("Servovision");
 		set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, present_color, "", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+		wait_ms(4000);
 
 		sr_ecp_msg->message("Force approach");
 		set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, BLOCK_REACHING, "", 0, lib::irp6p_m::ROBOT_NAME);

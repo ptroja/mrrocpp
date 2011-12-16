@@ -25,7 +25,7 @@
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 //#include "robot/irp6p_tfg/const_irp6p_tfg.h"
 
-#define BLOCK_WIDTH 0.031
+#define BLOCK_WIDTH 0.032
 #define BLOCK_HEIGHT 0.0193
 
 #define BLOCK_REACHING 0
@@ -77,7 +77,7 @@ block_move::block_move(lib::configurator &_config) :
 	ds = shared_ptr <discode_sensor> (new discode_sensor(config, vs_config_section_name));
 	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, ds, vs_config_section_name, config));
 	object_reached_term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(config, vs_config_section_name));
-	//timeout_term_cond = shared_ptr <termination_condition> (new timeout_termination_condition(10));
+	timeout_term_cond = shared_ptr <termination_condition> (new timeout_termination_condition(40));
 
 	//utworzenie generatora ruchu
 	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, vs_config_section_name.c_str(), vs));
@@ -97,7 +97,7 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 			case BLOCK_REACHING:
 				sr_ecp_msg->message("reaching the block...");
-				gtga->configure(0.02, 1000, 2);
+				gtga->configure(0.03, 800, 3);
 				gtga->Move();
 				break;
 
@@ -118,22 +118,25 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 		sr_ecp_msg->message("configurate sensor...");
 
-		//ds_rpc->terminate();
 		uint32_t param = (int) mp_command.ecp_next_state.variant;
 
 		Types::Mrrocpp_Proxy::BReading br;
-		br = ds_rpc->call_remote_procedure<Types::Mrrocpp_Proxy::BReading>((int) param);
 
-		sr_ecp_msg->message("configurate servovision...");
+		//while(1) {
 
-		sm->add_termination_condition(object_reached_term_cond);
-		//sm->add_termination_condition(timeout_term_cond);
+			br = ds_rpc->call_remote_procedure<Types::Mrrocpp_Proxy::BReading>((int) param);
 
-		sr_ecp_msg->message("servovision...");
+			sr_ecp_msg->message("configurate servovision...");
 
-		sm->Move();
+			sm->add_termination_condition(object_reached_term_cond);
+			sm->add_termination_condition(timeout_term_cond);
 
-		sr_ecp_msg->message("tff_gripper_approach end");
+			sr_ecp_msg->message("servovision...");
+
+			sm->Move();
+		//}
+
+		sr_ecp_msg->message("servovision end");
 	}
 	else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 

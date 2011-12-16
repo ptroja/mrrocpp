@@ -63,7 +63,7 @@ protected:
 	shared_ptr<discode_sensor> ds;
 
 	shared_ptr<termination_condition> object_reached_term_cond;
-	//shared_ptr<termination_condition> timeout_term_cond;
+	shared_ptr<termination_condition> timeout_term_cond;
 
 	std::string ds_config_section_name;
 	std::string vs_config_section_name;
