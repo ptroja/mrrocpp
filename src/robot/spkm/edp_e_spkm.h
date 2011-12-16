@@ -92,10 +92,7 @@ private:
 	//! Handler for the asynchronous execution of the interpolated profile motion
 	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
-	/*!
-	 * \brief Method initializes all SPKM variables (including motors, joints and frames), depending on working mode (robot_test_mode) and robot state.
-	 * Called only once after process creation.
-	 */
+	//! Method checks the state of EPOS controllers.
 	void check_controller_state();
 
 protected:
@@ -158,7 +155,10 @@ public:
 	 */
 	void interpolated_motion_in_operational_space();
 
-
+	/*!
+	 * \brief Method initializes all SPKM variables (including motors, joints and frames), depending on working mode (robot_test_mode) and robot state.
+	 * Called only once after process creation.
+	 */
 	void get_controller_state(lib::c_buffer &instruction);
 
 	/*!
