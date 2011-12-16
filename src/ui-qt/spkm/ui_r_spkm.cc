@@ -52,7 +52,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 int UiRobot::edp_create_int_extra_operations()
 {
-	wgts[WGT_SPKM_INC]->synchro_depended_init();
+	//wgts[WGT_SPKM_INC]->synchro_depended_init();
 	return 1;
 }
 

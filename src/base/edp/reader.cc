@@ -400,8 +400,8 @@ void reader_buffer::write_header_csv(std::ofstream& outfile)
 			outfile << "current_inc[" << j << "];";
 		if (reader_cnf.measured_current[j])
 			outfile << "measured_current[" << j << "];";
-		if (reader_cnf.pwm[j])
-			outfile << "pwm[" << j << "];";
+//		if (reader_cnf.pwm[j])
+//			outfile << "pwm[" << j << "];";
 		if (reader_cnf.uchyb[j])
 			outfile << "uchyb[" << j << "];";
 		if (reader_cnf.abs_pos[j])
@@ -416,6 +416,11 @@ void reader_buffer::write_header_csv(std::ofstream& outfile)
         for (int j = 0; j < master.number_of_servos; j++) {
                 if (reader_cnf.desired_joints[j])
                         outfile << "desired_joints[" << j << "];";
+        }
+
+        for (int j = 0; j < master.number_of_servos; j++) {
+                if (reader_cnf.pwm[j])
+                        outfile << "pwm[" << j << "];";
         }
 
 	for (int j = 0; j < 6; j++) {
@@ -464,8 +469,8 @@ void reader_buffer::write_data_csv(std::ofstream& outfile, const reader_data & d
 			outfile << data.current_inc[j] << ";";
 		if (reader_cnf.measured_current[j])
 			outfile << data.measured_current[j] << ";";
-		if (reader_cnf.pwm[j])
-			outfile << data.pwm[j] << ";";
+                //if (reader_cnf.pwm[j])
+                //	outfile << data.pwm[j] << ";";
 		if (reader_cnf.uchyb[j])
 			outfile << data.uchyb[j] << ";";
 		if (reader_cnf.abs_pos[j])
@@ -480,6 +485,11 @@ void reader_buffer::write_data_csv(std::ofstream& outfile, const reader_data & d
         for (int j = 0; j < master.number_of_servos; j++) {
                 if (reader_cnf.desired_joints[j])
                         outfile << data.desired_joints[j] << ";";
+        }
+
+        for (int j = 0; j < master.number_of_servos; j++) {
+            if (reader_cnf.pwm[j])
+                    outfile << data.pwm[j] << ";";
         }
 
 	for (int j = 0; j < 6; j++) {

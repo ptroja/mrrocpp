@@ -52,6 +52,7 @@ private:
 	int get_desired_position();
 	int move_it();
 	boost::shared_ptr <QTimer> timer;
+	void showEvent(QShowEvent * event);
 
 private slots:
 	void timer_slot();

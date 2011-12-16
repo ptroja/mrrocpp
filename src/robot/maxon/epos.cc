@@ -1586,6 +1586,11 @@ UNSIGNED16 epos::getInterpolationBufferStatus()
 	return ReadObjectValue <UNSIGNED16>(0x20C4, 0x01);
 }
 
+UNSIGNED16 epos::getInterpolationBufferPosition()
+{
+	return ReadObjectValue <UNSIGNED16>(0x60C4, 0x04);
+}
+
 bool epos::checkInterpolationBufferWarning(UNSIGNED16 status)
 {
 	return (status & PVT_STATUS_WARNING);

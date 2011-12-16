@@ -1121,11 +1121,12 @@ void effector::interpolated_motion_in_operational_space()
 	cout << "Axis " << i << " position change: setting parameters. \n";
 #endif
 
-			// Set motion parameters.
+			// Setup motion parameters.
 			axes[i]->setOperationMode(maxon::epos::OMD_INTERPOLATED_POSITION_MODE);
 			axes[i]->setProfileVelocity(MotorVmax[i]);
 			axes[i]->setProfileAcceleration(MotorAmax[i]);
 			axes[i]->setProfileDeceleration(MotorAmax[i]);
+			axes[i]->clearPvtBuffer();
 			// TODO: setup acceleration and velocity limit values
 			axes[i]->clearPvtBuffer();
 			for (size_t pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
@@ -1134,6 +1135,12 @@ void effector::interpolated_motion_in_operational_space()
 				fflush(stdout);
 			}
 			printf("\n");
+
+			const maxon::UNSIGNED16 uploaded = axes[i]->getInterpolationBufferPosition();
+			if(uploaded != lib::spkm::NUM_OF_MOTION_SEGMENTS + 1) {
+				printf("InterpolationBufferPosition for axis %zu: %u\n", i, uploaded);
+				BOOST_THROW_EXCEPTION(mrrocpp::edp::epos::nfe_epos_interpolation_buffer()<<motor_number(i));
+			}
 
 			const maxon::UNSIGNED16 status = axes[i]->getInterpolationBufferStatus();
 
