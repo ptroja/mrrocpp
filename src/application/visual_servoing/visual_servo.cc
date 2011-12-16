@@ -159,7 +159,9 @@ boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> visual_serv
 
 void visual_servo::notify_object_considered_not_visible()
 {
-	regulator->reset();
+	if(regulator.get() != NULL){
+		regulator->reset();
+	}
 }
 
 } // namespace servovision
