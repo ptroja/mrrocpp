@@ -33,6 +33,27 @@ struct log_message_header
 #define log_message_text_buf_size 1024
 #define log_message_time_buf_size 10
 
+struct config_message
+{
+	config_message();
+	char header[log_message_text_buf_size];
+	char filename_prefix[log_message_text_buf_size];
+
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		if(strlen(header) >= log_message_text_buf_size){
+			throw std::runtime_error("config_message::serialize(): strlen(header) >= log_message_text_buf_size");
+		}
+		if(strlen(filename_prefix) >= log_message_text_buf_size){
+			throw std::runtime_error("config_message::serialize(): strlen(filename_prefix) >= log_message_text_buf_size");
+		}
+
+		ar & header;
+		ar & filename_prefix;
+	}
+};
+
 struct log_message
 {
 	log_message();

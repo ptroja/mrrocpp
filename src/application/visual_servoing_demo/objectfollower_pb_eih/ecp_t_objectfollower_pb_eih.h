@@ -41,7 +41,6 @@ protected:
 	shared_ptr<visual_servo_regulator> reg;
 	shared_ptr<single_visual_servo_manager> sm;
 	shared_ptr<visual_servo> vs;
-	shared_ptr<termination_condition> term_cond;
 };
 
 /** @} */
