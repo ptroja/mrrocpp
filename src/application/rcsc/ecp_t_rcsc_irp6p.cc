@@ -167,7 +167,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 			default:
 				break;
 		}
-
+				sg->reset();
                 sg->load_trajectory_from_file(path.c_str());
                 sg->calculate_interpolate();
                 sg->Move();
