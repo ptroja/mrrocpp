@@ -946,9 +946,6 @@ void check_pvt_translocation(
 		}
 	}
 
-#if 1
-	cout<<"change "<<change_;
-#endif
 }
 
 

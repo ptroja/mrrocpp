@@ -22,7 +22,7 @@ namespace kinematics {
 namespace spkm {
 
 //! Prints reference frames.
-#define DEBUG_KINEMATICS 1
+#define DEBUG_KINEMATICS 0
 
 //! Eps used in Spherical wrist inverse kinematics.
 #define EPS 1.0e-10

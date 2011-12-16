@@ -48,13 +48,13 @@ using namespace std;
 #define DEBUG_FRAMES 1
 
 // Debug joints.
-#define DEBUG_JOINTS 1
+#define DEBUG_JOINTS 0
 
 // Debug motors.
-#define DEBUG_MOTORS 1
+#define DEBUG_MOTORS 0
 
 // Debug PVT triples.
-#define DEBUG_PVT 1
+#define DEBUG_PVT 0
 
 const uint32_t effector::Vdefault[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
 const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
@@ -847,18 +847,37 @@ void effector::interpolated_motion_in_operational_space()
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_current_cartesian_pose_unknown());
 
 	// Check pose specification.
-	if ((ecp_edp_cbuffer.set_pose_specification == lib::spkm::XYZ_EULER_ZYZ) ||
-			(ecp_edp_cbuffer.set_pose_specification == lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL)) {
+	if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::XYZ_EULER_ZYZ) {
+#if(DEBUG_COMMANDS)
+	cout << "XYZ_EULER_ZYZ\n";
+	cout.flush();
+#endif
 		// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
 		desired_end_effector_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
-//	desired_end_effector_frame.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(ecp_edp_cbuffer.goal_pos));
-
-	} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL){
+	} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL) {
+#if(DEBUG_COMMANDS)
+	cout << "TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL\n";
+	cout.flush();
+#endif
 		// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
 		desired_shead_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
 		// Transform to the wrist frame.
 		desired_end_effector_frame = desired_shead_frame * !shead_frame;
-
+#if(DEBUG_FRAMES)
+	cout << "desired_shead_frame: " << desired_shead_frame << endl;
+#endif
+	} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL) {
+#if(DEBUG_COMMANDS)
+	cout << "WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL\n";
+	cout.flush();
+#endif
+		// Pose is given in wrist, but motion will be performed in tool frame.
+		desired_end_effector_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
+		desired_shead_frame = desired_end_effector_frame * shead_frame;
+#if(DEBUG_FRAMES)
+		cout << "desired_end_effector_frame: " << desired_end_effector_frame << endl;
+		cout << "desired_shead_frame: " << desired_shead_frame << endl;
+#endif
 	} else
 		// Other pose specifications aren't valid in this type of movement.
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
@@ -905,11 +924,13 @@ void effector::interpolated_motion_in_operational_space()
 	Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> motor_interpolations;
 
 	// Check pose specification.
-	if ((ecp_edp_cbuffer.set_pose_specification == lib::spkm::XYZ_EULER_ZYZ) ||
-			(ecp_edp_cbuffer.set_pose_specification == lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL)) {
+	if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::XYZ_EULER_ZYZ){
+		// Perform motion in wrist frame.
 		cubic_polynomial_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
-	} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL){
-		cubic_polynomial_interpolate_motor_poses_in_tool_frame <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame*shead_frame, desired_shead_frame, shead_frame);
+	} else if ((ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL) ||
+			(ecp_edp_cbuffer.set_pose_specification == lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL)) {
+		// Perform motion in tool frame.
+		cubic_polynomial_interpolate_motor_poses_in_tool_frame <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_shead_frame, desired_shead_frame, shead_frame);
 	} else
 		// Other pose specifications aren't valid in this type of movement.
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
@@ -1139,10 +1160,14 @@ void effector::interpolated_motion_in_operational_space()
 			axes[i]->clearPvtBuffer();
 			for (size_t pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
 				axes[i]->setInterpolationDataRecord((int32_t) p(pnt, i), (int32_t) v(pnt, i), (uint8_t) t(pnt));
+#if(DEBUG_PVT)
 				printf("\rsend: %zd/%zd, free: %2d", pnt, i, axes[i]->getActualBufferSize());
 				fflush(stdout);
-			}
+#endif
+				}
+#if(DEBUG_PVT)
 			printf("\n");
+#endif
 
 			const maxon::UNSIGNED16 uploaded = axes[i]->getInterpolationBufferPosition();
 			if(uploaded != lib::spkm::NUM_OF_MOTION_SEGMENTS + 1) {
