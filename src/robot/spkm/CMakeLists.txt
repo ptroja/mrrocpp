@@ -2,21 +2,24 @@ if(ROBOT_SPKM)
 
 if(LibFTDI_FOUND)
 
-add_executable(edp_spkm1
-	edp_e_spkm1.cc
-	edp_e_spkm.cc
+
+add_library(edpspkm
+edp_e_spkm.cc
 )
 
-target_link_libraries(edp_spkm1 kinematicsspkm epos edp
+add_executable(edp_spkm1
+	edp_e_spkm1.cc
+)
+
+target_link_libraries(edp_spkm1 edpspkm kinematicsspkm epos edp
 	${COMMON_LIBRARIES})
 	
 	
 add_executable(edp_spkm2
 	edp_e_spkm2.cc
-	edp_e_spkm.cc
 )
 
-target_link_libraries(edp_spkm2 kinematicsspkm epos edp
+target_link_libraries(edp_spkm2 edpspkm kinematicsspkm epos edp
 	${COMMON_LIBRARIES})	
 
 install(TARGETS edp_spkm1 edp_spkm2 DESTINATION bin)
@@ -35,6 +38,6 @@ target_link_libraries(kinematicsspkm kinematics)
 add_library(ecp_r_spkm ecp_r_spkm.cc ecp_r_spkm1.cc ecp_r_spkm2.cc)	
 target_link_libraries(ecp_r_spkm kinematicsspkm)
 	
-install(TARGETS kinematicsspkm ecp_r_spkm DESTINATION lib)
+install(TARGETS edpspkm kinematicsspkm ecp_r_spkm DESTINATION lib)
 
 endif(ROBOT_SPKM)

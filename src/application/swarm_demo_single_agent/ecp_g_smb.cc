@@ -24,10 +24,10 @@ legs_command::legs_command(common::task::task& _ecp_task) :
 		common::generator::generator(_ecp_task)
 {
 
-	smb_festo_command_data_port = the_robot->port_manager.get_port < lib::smb::festo_command_td
-			> (lib::smb::FESTO_COMMAND_DATA_PORT);
-	smb_multi_leg_reply_data_request_port = the_robot->port_manager.get_request_port < lib::smb::multi_leg_reply_td
-			> (lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT);
+	smb_festo_command_data_port =
+			the_robot->port_manager.get_port <lib::smb::festo_command_td>(lib::smb::FESTO_COMMAND_DATA_PORT);
+	smb_multi_leg_reply_data_request_port =
+			the_robot->port_manager.get_request_port <lib::smb::multi_leg_reply_td>(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT);
 
 }
 
@@ -72,10 +72,10 @@ external_epos_command::external_epos_command(common::task::task& _ecp_task) :
 		common::generator::generator(_ecp_task)
 {
 
-	epos_external_command_data_port = the_robot->port_manager.get_port < lib::smb::smb_epos_simple_command
-			> (lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT);
-	epos_external_reply_data_request_port = the_robot->port_manager.get_request_port < lib::epos::epos_reply
-			> (lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT);
+	epos_external_command_data_port =
+			the_robot->port_manager.get_port <lib::smb::smb_epos_simple_command>(lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT);
+	epos_external_reply_data_request_port =
+			the_robot->port_manager.get_request_port <lib::smb::smb_ext_epos_reply>(lib::smb::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT);
 
 }
 

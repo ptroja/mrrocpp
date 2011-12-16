@@ -9,7 +9,9 @@
 #include "mp.h"
 
 wgt_robot_process_control::wgt_robot_process_control(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent) :
-		wgt_base(QString::fromStdString(robo->getName()), _interface, parent), ui(new Ui::wgt_robot_process_controlClass), robot(robo)
+		wgt_base(QString::fromStdString(robo->getName()), _interface, parent),
+		ui(new Ui::wgt_robot_process_controlClass),
+		robot(robo)
 {
 	ui->setupUi(this);
 	ui->robot_label->setText(QString::fromStdString((robo->getName())));
@@ -68,7 +70,7 @@ void wgt_robot_process_control::on_reader_trigger_pushButton_clicked()
 int wgt_robot_process_control::init()
 
 {
-
+//	interface.ui_msg->message("wgt_robot_process_control::init()");
 	bool wlacz_PtButton_wnd_processes_control_all_reader_start = false;
 	bool wlacz_PtButton_wnd_processes_control_all_reader_stop = false;
 	bool wlacz_PtButton_wnd_processes_control_all_reader_trigger = false;
@@ -107,38 +109,32 @@ int wgt_robot_process_control::init()
 
 	}
 
-	// Dla mp i ecp
-	if (interface.mp->mp_state.state != interface.mp->mp_state.last_process_control_state) {
-		switch (interface.mp->mp_state.state)
-		{
-			case ui::common::UI_MP_NOT_PERMITED_TO_RUN:
-			case ui::common::UI_MP_PERMITED_TO_RUN:
-				block_all_ecp_trigger_widgets();
-				break;
-			case ui::common::UI_MP_WAITING_FOR_START_PULSE:
-				block_all_ecp_trigger_widgets();
-				break;
-			case ui::common::UI_MP_TASK_RUNNING:
-				unblock_all_ecp_trigger_widgets();
-				break;
-			case ui::common::UI_MP_TASK_PAUSED:
+	switch (interface.mp->mp_state.state)
+	{
+		case ui::common::UI_MP_NOT_PERMITED_TO_RUN:
+		case ui::common::UI_MP_PERMITED_TO_RUN:
+			block_ecp_trigger_widgets();
+			break;
+		case ui::common::UI_MP_WAITING_FOR_START_PULSE:
+			block_ecp_trigger_widgets();
+			break;
+		case ui::common::UI_MP_TASK_RUNNING:
+			unblock_ecp_trigger_widgets();
+			break;
+		case ui::common::UI_MP_TASK_PAUSED:
 
-				block_all_ecp_trigger_widgets();
-				break;
-			default:
+			block_ecp_trigger_widgets();
+			break;
+		default:
 
-				break;
-		}
-
-		interface.mp->mp_state.last_process_control_state = interface.mp->mp_state.state;
-
+			break;
 	}
 
 	return 1;
 
 }
 
-int wgt_robot_process_control::block_all_ecp_trigger_widgets()
+int wgt_robot_process_control::block_ecp_trigger_widgets()
 
 {
 
@@ -147,7 +143,7 @@ int wgt_robot_process_control::block_all_ecp_trigger_widgets()
 	return 1;
 }
 
-int wgt_robot_process_control::unblock_all_ecp_trigger_widgets()
+int wgt_robot_process_control::unblock_ecp_trigger_widgets()
 
 {
 

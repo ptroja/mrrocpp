@@ -41,7 +41,9 @@ void catch_signal(int sig)
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
+	QLocale::setDefault(QLocale::English);
 	interface = new mrrocpp::ui::common::Interface();
+
 	interface->init();
 	int r = a.exec();
 

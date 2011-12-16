@@ -68,13 +68,34 @@ private:
 	 */
 	lib::JointArray desired_joints_old;
 
-	//! Variable denoting whether previous end-effector pose in the cartesian space is known.
-	bool is_previous_cartesian_pose_known;
+	//! Variable denoting whether current end-effector pose in the cartesian space is known.
+	bool is_current_cartesian_pose_known;
+
+	/*!
+	 * \brief Tool transformation (SHEAD).
+	 * \author tkornuta
+	 */
+	lib::Homog_matrix shead_frame;
+
+	/*!
+	 * \brief Desired tool frame (pose of the SHEAD tip in the PKM base reference frame).
+	 * \author tkornuta
+	 */
+	lib::Homog_matrix desired_shead_frame;
+
+	/*!
+	 * \brief Current tool frame (pose of the SHEAD tip in the PKM base reference frame).
+	 * \author tkornuta
+	 */
+	lib::Homog_matrix current_shead_frame;
 
 	//! Handler for the asynchronous execution of the interpolated profile motion
 	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
-	//! Method checks the state of EPOS controllers.
+	/*!
+	 * \brief Method initializes all SPKM variables (including motors, joints and frames), depending on working mode (robot_test_mode) and robot state.
+	 * Called only once after process creation.
+	 */
 	void check_controller_state();
 
 protected:
@@ -97,12 +118,6 @@ public:
 	 * The attributes are initialized here.
 	 */
 	effector(common::shell &_shell, lib::robot_name_t l_robot_name);
-
-	/*!
-	 * @brief Method sets initial values of motor and joint positions.
-	 * @note The number_of_servos should be previously set.
-	 */
-	void reset_variables();
 
 	/*!
 	 * @brief motors synchronization

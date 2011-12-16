@@ -62,11 +62,6 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 	next_legs_state = current_legs_state;
 }
 
-festo_and_inputs::~festo_and_inputs()
-{
-
-}
-
 bool festo_and_inputs::is_checked(int leg_number)
 {
 	return checked[leg_number - 1];
@@ -287,7 +282,7 @@ void festo_and_inputs::command()
 
 	master.msg->message("FESTO");
 
-	memcpy(&festo_command, &(master.ecp_edp_cbuffer.festo_command), sizeof(festo_command));
+	festo_command = master.ecp_edp_cbuffer.festo_command;
 
 	if (robot_test_mode) {
 		ss << festo_command.leg[2];
@@ -435,7 +430,7 @@ void festo_and_inputs::command_all_out()
 	switch (current_legs_state)
 	{
 		case lib::smb::ALL_OUT: {
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_OUT));
+			//	BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_OUT));
 		}
 			break;
 		case lib::smb::ONE_IN_TWO_OUT: {
@@ -655,8 +650,11 @@ void festo_and_inputs::command_two_in_one_out()
 
 			break;
 		case lib::smb::ONE_IN_TWO_OUT:
-		case lib::smb::TWO_IN_ONE_OUT:
 		case lib::smb::ALL_IN: {
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
+		}
+			break;
+		case lib::smb::TWO_IN_ONE_OUT: {
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
 		}
 			break;
@@ -717,9 +715,12 @@ void festo_and_inputs::command_all_in()
 
 			break;
 		case lib::smb::ONE_IN_TWO_OUT:
-		case lib::smb::TWO_IN_ONE_OUT:
-		case lib::smb::ALL_IN:
+		case lib::smb::TWO_IN_ONE_OUT: {
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_IN));
+		}
+			break;
+		case lib::smb::ALL_IN: {
+		}
 			break;
 		default:
 			break;

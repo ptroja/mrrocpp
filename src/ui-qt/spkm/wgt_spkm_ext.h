@@ -7,7 +7,7 @@
 #include "ui_wgt_spkm_ext.h"
 #include "../base/wgt_base.h"
 #include <QTimer>
-
+#include "robot/spkm/dp_spkm.h"
 #include <boost/shared_ptr.hpp>
 
 namespace mrrocpp {
@@ -37,6 +37,8 @@ public:
 	QVector <QDoubleSpinBox*> doubleSpinBox_des_Vector;
 	QVector <QRadioButton*> radioButton_mip_Vector;
 
+	mrrocpp::lib::spkm::POSE_SPECIFICATION current_pose_specification;
+
 private:
 	Ui::wgt_spkm_extClass ui;
 	mrrocpp::ui::spkm::UiRobot* robot;
@@ -50,6 +52,7 @@ private:
 	int get_desired_position();
 	int move_it();
 	boost::shared_ptr <QTimer> timer;
+	void showEvent(QShowEvent * event);
 
 private slots:
 	void timer_slot();
@@ -74,6 +77,10 @@ private slots:
 	void on_pushButton_3r_clicked();
 	void on_pushButton_4r_clicked();
 	void on_pushButton_5r_clicked();
+
+	void on_radioButton_no_tool_toggled();
+	void on_radioButton_tool_oriented_toggled();
+	void on_radioButton_wrist_oriented_toggled();
 
 };
 
