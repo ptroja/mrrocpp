@@ -229,6 +229,10 @@ int effector::relativeSynchroPosition(maxon::epos & node)
 void effector::synchronise(void)
 {
 	try {
+		// TEMPORARY
+		controller_state_edp_buf.is_synchronised = true;
+		return;
+		// END OF TEMPORARY
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
 			return;
