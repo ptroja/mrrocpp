@@ -20,13 +20,13 @@ enum RCSC_GRIPPER_OP
 	RCSC_GO_VAR_1, RCSC_GO_VAR_2
 };
 
-/**
- * Type of the motion in which the smooth generator works (relative or absolute).
- */
-enum SMOOTH_MOTION_TYPE
-{
-	RELATIVE, ABSOLUTE
-};
+///**
+// * Type of the motion in which the smooth generator works (relative or absolute).
+// */
+//enum GENERATOR_MOTION_TYPE
+//{
+//	RELATIVE, ABSOLUTE
+//};
 
 /**
  *

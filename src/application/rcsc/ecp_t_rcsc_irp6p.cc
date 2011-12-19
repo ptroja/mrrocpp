@@ -156,12 +156,12 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		std::string path(mrrocpp_network_path);
 		path +=(char*) mp_command.ecp_next_state.data;
 
-		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.variant)
+                switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
 		{
-			case ecp_mp::task::RELATIVE:
+                        case lib::RELATIVE:
                                 sg->set_relative();
 				break;
-			case ecp_mp::task::ABSOLUTE:
+                        case lib::ABSOLUTE:
                                 sg->set_absolute();
 				break;
 			default:
@@ -171,7 +171,6 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
                 sg->load_trajectory_from_file(path.c_str());
                 sg->calculate_interpolate();
                 sg->Move();
-
 	}
 
 }
