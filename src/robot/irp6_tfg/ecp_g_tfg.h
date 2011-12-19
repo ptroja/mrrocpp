@@ -32,6 +32,7 @@ protected:
 	const int step_no;
 	lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
 
+
 public:
 	void create_ecp_mp_reply();
 	void get_mp_ecp_command();
