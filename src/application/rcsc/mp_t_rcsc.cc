@@ -767,8 +767,8 @@ void rubik_cube_solver::approach_op(int mode)
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	//podnoszenie o 2 milimetry nad kostk
-        //set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) lib::RELATIVE, "../src/application/rcsc/trj/irp6ot_sm_raising_up.trj", 0, lib::irp6ot_m::ROBOT_NAME);
-        //wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+        set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.002", 0, lib::irp6ot_tfg::ROBOT_NAME);
+        wait_for_task_termination(false, 1, lib::irp6ot_tfg::ROBOT_NAME.c_str());
 	//zaciskanie na kostce
         set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "-0.017", 0, lib::irp6ot_tfg::ROBOT_NAME);
         wait_for_task_termination(false, 1, lib::irp6ot_tfg::ROBOT_NAME.c_str());
