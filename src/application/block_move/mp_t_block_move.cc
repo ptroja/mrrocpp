@@ -31,10 +31,13 @@
 #include "../visual_servoing/visual_servoing.h"
 #include "../visual_servoing_demo/ecp_mp_g_visual_servo_tester.h"
 
+#define BOARD_COLOR 5
 #define BLOCK_SIZE 4
 #define COORD_N 3
 #define BLOCK_REACHING 0
 #define BUILDING 1
+#define COUNT_SERVO_TRY_1 2
+#define COUNT_SERVO_TRY_2 2
 
 typedef list<BlockPosition> block_position_list;
 
@@ -194,6 +197,27 @@ void block_move::main_task_algorithm(void)
 	block_position_list list_from_file = get_list_from_file("../../src/application/block_move/con/structure.con");
 	planned_list = create_plan(list_from_file);
 
+	sr_ecp_msg->message("Reaching building place...");
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+	wait_ms(4000);
+
+	sr_ecp_msg->message("Board localization - servovision");
+
+	for(int h = 0; h < COUNT_SERVO_TRY_1; ++h) {
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, BOARD_COLOR, "", 0, lib::irp6p_m::ROBOT_NAME);
+		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+		if(robot_m[lib::irp6p_m::ROBOT_NAME]->ecp_reply_package.recognized_command[0] == 'Y') {
+			sr_ecp_msg->message("Board localized");
+			break;
+		}
+
+		sr_ecp_msg->message("Board not localized!!!");
+	}
+
+
 	for(block_position_list::iterator i = planned_list.begin(); i != planned_list.end(); ++i) {
 
 		sr_ecp_msg->message("Inside main loop");
@@ -203,26 +227,30 @@ void block_move::main_task_algorithm(void)
 
 		(*i).print();
 
-		//TODO: servo - platform localization + saving position
-
-		sr_ecp_msg->message("Start position");
+/*		sr_ecp_msg->message("Start position");
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-
-		//sr_ecp_msg->message("PI/2 Rotation");
-		//set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/theta_rotation.trj", 0, lib::irp6p_m::ROBOT_NAME);
-		//wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-
+*/
 		//Zerowanie czujników
 		sr_ecp_msg->message("Postument Bias");
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		wait_ms(4000);
+/*
+		sr_ecp_msg->message("Block localization - servovision");
 
-		sr_ecp_msg->message("Servovision");
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, present_color, "", 0, lib::irp6p_m::ROBOT_NAME);
-		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+		for(int h = 0; h < COUNT_SERVO_TRY_2; ++h) {
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, present_color, "", 0, lib::irp6p_m::ROBOT_NAME);
+			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+			if(robot_m[lib::irp6p_m::ROBOT_NAME]->ecp_reply_package.recognized_command[0] == 'Y') {
+				sr_ecp_msg->message("Block localized");
+				break;
+			}
+
+			sr_ecp_msg->message("Block not localized!!!");
+		}
 
 		wait_ms(4000);
 
@@ -237,7 +265,7 @@ void block_move::main_task_algorithm(void)
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		wait_ms(4000);
-
+*/
 		sr_ecp_msg->message("Reaching building place...");
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
@@ -246,8 +274,8 @@ void block_move::main_task_algorithm(void)
 
 		int param = 100*present_position[0] + 10*present_position[1] + present_position[2];
 
-		sr_ecp_msg->message("Reaching position...");		//zakladam, ze pozycja jest niezmienna
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, param, "../../src/application/block_move/con/pos_build_start.coo", 0, lib::irp6p_m::ROBOT_NAME);
+		sr_ecp_msg->message("Reaching position...");
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, param, "", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		wait_ms(4000);
