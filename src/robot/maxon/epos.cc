@@ -108,6 +108,7 @@ epos::epos(gateway & _device, uint8_t _nodeId) :
 	ProfileVelocity = getProfileVelocity();
 	ProfileAcceleration = getProfileAcceleration();
 	ProfileDeceleration = getProfileDeceleration();
+	TargetVelocity = getTargetVelocity();
 	remote = isRemoteOperationEnabled(getStatusWord());
 
 #if 0
@@ -1016,6 +1017,19 @@ UNSIGNED32 epos::getPositionWindow()
 void epos::setPositionWindow(UNSIGNED32 val)
 {
 	WriteObjectValue(0x6067, 0x00, val);
+}
+
+INTEGER32 epos::getTargetVelocity()
+{
+	return ReadObjectValue <INTEGER32>(0x60FF, 0x00);
+}
+
+void epos::setTargetVelocity(INTEGER32 val)
+{
+	if(val != TargetVelocity) {
+		WriteObjectValue(0x60FF, 0x00, val);
+		TargetVelocity = val;
+	}
 }
 
 void epos::setProfileVelocity(UNSIGNED32 val)

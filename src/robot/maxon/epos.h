@@ -305,6 +305,12 @@ public:
 
 	//		int writePositionSoftwareLimits(long val, long val2);
 
+	//! read velocity for velocity profile mode
+	INTEGER32 getTargetVelocity();
+
+	//! write velocity for velocity profile mode
+	void setTargetVelocity(INTEGER32 val);
+
 	//! write velocity normally attained at the end of the acceleration ramp during a profiled move
 	void setProfileVelocity(UNSIGNED32 vel);
 
@@ -743,7 +749,7 @@ public:
 	 seconds. give timeout==0 to disable timeout */
 	int waitForTarget(unsigned int t);
 
-	//! \brief Read analog input 1.
+	//! \brief Read analog input 1 [mV].
 	INTEGER16 getAnalogInput1();
 
 	//! @}
@@ -756,6 +762,7 @@ private:
 	UNSIGNED32 ProfileVelocity;
 	UNSIGNED32 ProfileAcceleration;
 	UNSIGNED32 ProfileDeceleration;
+	INTEGER32 TargetVelocity;
 };
 
 } /* namespace maxon */
