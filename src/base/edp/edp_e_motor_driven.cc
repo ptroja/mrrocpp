@@ -737,10 +737,9 @@ void motor_driven_effector::compute_joints(const lib::c_buffer &instruction)
 	// kinematyka nie stwierdzila bledow, przepisanie wartosci
 	for (int i = 0; i < number_of_servos; i++) {
 		desired_joints[i] = desired_joints_tmp[i];
-                rb_obj->step_data.desired_joints[i] = desired_joints[i];//zapis struktury readera
+		rb_obj->step_data.desired_joints[i] = desired_joints[i]; //zapis struktury readera
 		desired_motor_pos_new[i] = desired_motor_pos_new_tmp[i];
 	}
-
 
 }
 
@@ -1092,13 +1091,19 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
 			}
-
-			lib::REPLY_TYPE rep_type = reply.reply_type;
+			/* OLD VERSION
+			 lib::REPLY_TYPE rep_type = reply.reply_type;
+			 establish_error(reply, error0, OK);
+			 reply_to_instruction(reply);
+			 msg->message(lib::NON_FATAL_ERROR, error0);
+			 // przywrocenie poprzedniej odpowiedzi
+			 reply.reply_type = rep_type; // powrot do stanu: WAIT_Q
+			 */
+			// NEW VERSION
 			establish_error(reply, error0, OK);
-			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, error0);
-			// przywrocenie poprzedniej odpowiedzi
-			reply.reply_type = rep_type; // powrot do stanu: WAIT_Q
+			// END
+
 			next_state = WAIT_Q;
 		} // end: catch(transformer::NonFatal_error nfe2)
 
