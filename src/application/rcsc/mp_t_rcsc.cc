@@ -516,7 +516,7 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	// rozwarcie chwytaka tracka
 
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-        set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.02", 0, lib::irp6ot_m::ROBOT_NAME);
+        set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.02", 0, lib::irp6ot_tfg::ROBOT_NAME);
 
 	// uruchomienie generatora empty_gen
         wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
@@ -620,7 +620,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	// wstepne rozwarcie chwytaka postumenta
 	//set_next_ecp_state ((int) ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, (int) ecp_mp::task::RCSC_GO_VAR_1, "",  0, lib::irp6p_m::ROBOT_NAME);
-        set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.002", 0, lib::irp6p_m::ROBOT_NAME);
+        set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.002", 0, lib::irp6p_tfg::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
         wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
@@ -631,7 +631,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
         //wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// dalsze rozwarcie chwytaka postumenta
-        set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.02", 0, lib::irp6p_m::ROBOT_NAME);
+        set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.02", 0, lib::irp6p_tfg::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
         wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
@@ -764,7 +764,7 @@ void rubik_cube_solver::approach_op(int mode)
         //set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) lib::RELATIVE, "../src/application/rcsc/trj/irp6ot_sm_raising_up.trj", 0, lib::irp6ot_m::ROBOT_NAME);
         //wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	//zaciskanie na kostce
-        set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "-0.017", 0, lib::irp6ot_m::ROBOT_NAME);
+        set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "-0.017", 0, lib::irp6ot_tfg::ROBOT_NAME);
         wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	//zadanie chwytania kostki (koniec)
         set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) lib::ABSOLUTE, "../src/application/rcsc/trj/irp6ot_sm_ap_3.trj", 0, lib::irp6ot_m::ROBOT_NAME);
