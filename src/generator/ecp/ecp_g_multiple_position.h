@@ -178,6 +178,7 @@ protected:
 	{
 		pose_vector_iterator = pose_vector.begin();
 		if (motion_type == lib::ABSOLUTE) {
+                        flushall();
 			get_position * get_pos = new get_position(ecp_t, pose_spec, axes_num); //generator used to get the actual position of the robot
 			get_pos->Move();
 
@@ -330,6 +331,34 @@ public:
 	{
 		this->debug = debug;
 	}
+        /**
+          * Sets up the standard velocity vector for joint representation.
+          */
+        void set_joint_velocity_vector(const std::vector <double> & joint_velocity)
+        {
+            this->joint_velocity = joint_velocity;
+        }
+        /**
+          * Sets up the standard velocity vector for motor representation.
+          */
+        void set_motor_velocity_vector(const std::vector <double> & motor_velocity)
+        {
+            this->motor_velocity = motor_velocity;
+        }
+        /**
+          * Sets up the standard velocity vector for angle axis representation.
+          */
+        void set_angle_axis_velocity_vector(const std::vector <double> & angle_axis_velocity)
+        {
+            this->angle_axis_velocity = angle_axis_velocity;
+        }
+        /**
+          * Sets up the standard velocity vector for euler zyz representation.
+          */
+        void set_euler_zyz_velocity_vector(const std::vector <double> & euler_zyz_velocity)
+        {
+            this->euler_zyz_velocity = euler_zyz_velocity;
+        }
 	/**
 	 * Implementation of the first_step method.
 	 */

@@ -36,6 +36,7 @@ tfg::tfg(lib::configurator &_config) :
 	tfgg = new generator::tfg(*this, 10);
 
         cvg = new common::generator::constant_velocity(*this, lib::ECP_JOINT, 1);
+        cvg->set_debug(true);
 
 	sr_ecp_msg->message("ecp TFG loaded");
 }
@@ -50,8 +51,10 @@ void tfg::mp_2_ecp_next_state_string_handler(void)
         } else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY) {
 
                 cvg->reset();
-                std::vector <double> pos(1);
-                pos[0] = atof((char*) mp_command.ecp_next_state.data);
+                std::vector <double> pos(1, atof((char*) mp_command.ecp_next_state.data));
+                std::vector <double> joint_velocity(1, 0.006);
+
+                cvg->set_joint_velocity_vector(joint_velocity);
 
                 switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
                 {
