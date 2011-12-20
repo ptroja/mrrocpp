@@ -148,6 +148,15 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		cout << "current_joints: " << current_joints.transpose() << "\n";
 #endif
 
+		// Reset zero position.
+		if ((current_legs_state() == lib::smb::ALL_OUT) && (!robot_test_mode)) {
+			/*// Homing of the motor controlling the legs rotation - set current position as 0.
+			 legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
+			 legs_rotation_node->monitorHomingStatus();*/
+			legs_relative_zero_position = legs_rotation_node->getActualPosition();
+		} else
+			legs_relative_zero_position = 0;
+
 		// Lock data structure during update
 		{
 			boost::mutex::scoped_lock lock(effector_mutex);
@@ -202,9 +211,6 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		axesNames[0] = "legs";
 		axes[1] = &(*pkm_rotation_node);
 		axesNames[1] = "pkm";
-
-		// Reset zero position.
-		legs_relative_zero_position = legs_rotation_node->getActualPosition();
 
 		// Create festo node.
 		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, 10);
