@@ -2027,10 +2027,75 @@ INTEGER16 epos::getAnalogInput1() {
 	return ReadObjectValue <INTEGER16>(0x207C, 0x01);
 }
 
-/*INTEGER32 epos::writeTMP(INTEGER32 value) {
-	WriteObjectValue(canopen::WORD index, canopen::BYTE subindex, T data) <>(0x2303, 0x04);
-}*/
+void epos::configureAnalogInput(int input, analog_input_mode_t mode)
+{
+	if(input < 0 || input > 2) {
+		BOOST_THROW_EXCEPTION(fe() << reason("Analog input line number out of range"));
+	}
+	WriteObjectValue(0x207B, input, mode);
+}
 
+void epos::setAnalogInputFunctionalitiesExecutionMask(bool PositionSetpoint, bool VelocitySetpoint, bool CurrentSetpoint)
+{
+	UNSIGNED16 mask = 0x0000;
+
+	if(PositionSetpoint) {
+		mask |= 0x04;
+	}
+	if(VelocitySetpoint) {
+		mask |= 0x02;
+	}
+	if(CurrentSetpoint) {
+		mask |= 0x01;
+	}
+
+	WriteObjectValue(0x207D, 0x00, mask);
+}
+
+void epos::setPositionModeSettingValue(INTEGER32 val)
+{
+	WriteObjectValue(0x2062, 0x00, val);
+}
+
+INTEGER32 epos::getPositionModeSettingValue()
+{
+	return ReadObjectValue <INTEGER32>(0x2062, 0x00);
+}
+
+void epos::setAnalogVelocitySetpointScaling(INTEGER16 val)
+{
+	WriteObjectValue(0x2302, 0x01, val);
+}
+
+INTEGER16 epos::getAnalogVelocitySetpointScaling(INTEGER16 val)
+{
+	return ReadObjectValue <INTEGER16>(0x2302, 0x01);
+}
+
+void epos::setAnalogVelocitySetpointOffset(INTEGER32 val)
+{
+	WriteObjectValue(0x2302, 0x02, val);
+}
+
+INTEGER32 epos::getAnalogVelocitySetpointOffset()
+{
+	return ReadObjectValue <INTEGER32>(0x2302, 0x02);
+}
+
+void epos::setAnalogVelocitySetpointNotationIndex(INTEGER8 val)
+{
+	WriteObjectValue(0x2302, 0x03, val);
+}
+
+INTEGER8 epos::getAnalogVelocitySetpointNotationIndex()
+{
+	return ReadObjectValue <INTEGER8>(0x2302, 0x03);
+}
+
+INTEGER32 epos::getAnalogVelocitySetpoint()
+{
+	return ReadObjectValue <INTEGER32>(0x2302, 0x04);
+}
 
 void epos::InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
 {

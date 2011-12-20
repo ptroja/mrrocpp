@@ -752,6 +752,44 @@ public:
 	//! \brief Read analog input 1 [mV].
 	INTEGER16 getAnalogInput1();
 
+	//! Analog input mode
+	typedef enum _analog_input_mode_t {
+		CURRENT_SETPOINT = 0,
+		VELOCITY_SETPOINT = 1,
+		POSITION_SETPOINT = 2,
+		GENERAL_PURPOSE_A = 8,
+		GENERAL_PURPOSE_B = 9,
+		GENERAL_PURPOSE_C = 10,
+		GENERAL_PURPOSE_D = 11,
+		GENERAL_PURPOSE_E = 12,
+		GENERAL_PURPOSE_F = 13,
+		GENERAL_PURPOSE_G = 14,
+		GENERAL_PURPOSE_H = 15
+	} analog_input_mode_t;
+
+	void configureAnalogInput(int input, analog_input_mode_t mode);
+
+	//!\ brief Analog velocity setpoint configuration
+	void setAnalogVelocitySetpointScaling(INTEGER16 val);
+
+	INTEGER16 getAnalogVelocitySetpointScaling(INTEGER16 val);
+
+	void setAnalogVelocitySetpointOffset(INTEGER32 val);
+
+	INTEGER32 getAnalogVelocitySetpointOffset();
+
+	void setAnalogVelocitySetpointNotationIndex(INTEGER8 val);
+
+	INTEGER8 getAnalogVelocitySetpointNotationIndex();
+
+	INTEGER32 getAnalogVelocitySetpoint();
+
+	void setAnalogInputFunctionalitiesExecutionMask(bool PositionSetpoint, bool VelocitySetpoint, bool CurrentSetpoint);
+
+	void setPositionModeSettingValue(INTEGER32 val);
+
+	INTEGER32 getPositionModeSettingValue();
+
 	//! @}
 
 private:
