@@ -35,35 +35,42 @@ void effector::synchronise(void)
 		controller_state_edp_buf.is_synchronised = false;
 
 		// Step 1: Setup velocity control with analog setpoint.
-		pkm_rotation_node->setOperationMode(maxon::epos::OMD_POSITION_MODE);
+		pkm_rotation_node->setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
 
 		// Velocity and acceleration limits.
 		pkm_rotation_node->setMaxProfileVelocity(50);
-		pkm_rotation_node->setMaxAcceleration(3000);
-
-		// Velocity setpoint configuration.
-		pkm_rotation_node->configureAnalogInput(1, maxon::epos::VELOCITY_SETPOINT);
+		pkm_rotation_node->setMaxAcceleration(1000);
 
 		// NOTE: We assume, that scaling and offset are already set in the EPOS2
 
 		// Get the target offset.
-		const maxon::INTEGER32 offset = pkm_rotation_node->getAnalogVelocitySetpointOffset();
+		const maxon::INTEGER16 offset = 2300;
 
 		// Start motion.
 		pkm_rotation_node->setControlword(0x000F);
+
+		// Enable analog velocity setpoint.
+		pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, true, false);
 
 		// Setup timer for monitoring.
 		boost::system_time wakeup = boost::get_system_time();
 
 		// Loop until reaching zero offset.
 		while(pkm_rotation_node->getAnalogInput1() != offset) {
-			std::cout << "AnalogInput(1) = " << (unsigned int) pkm_rotation_node->getAnalogInput1() <<
-					" offset " << (unsigned int) offset << std::endl;
+			std::cout <<
+					"AnalogVelocitySetpoint = " << (int) pkm_rotation_node->getAnalogVelocitySetpoint() <<
+					" AnalogInput = " << (int) pkm_rotation_node->getAnalogInput1() <<
+					" offset " << ((int) offset) << std::endl;
+
 			// Sleep for a constant period of time
 			wakeup += boost::posix_time::milliseconds(5);
 
 			boost::thread::sleep(wakeup);
 		};
+
+		// Disable analog velocity setpoint.
+		pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, true, false);
+
 
 		// Step 2: Homing.
 		// Activate homing mode.

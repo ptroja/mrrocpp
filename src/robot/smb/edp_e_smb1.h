@@ -34,6 +34,9 @@ public:
 	 */
 	effector(common::shell &_shell);
 
+	//! Overloaded synchronization method
+	void synchronise();
+
 };
 
 } // namespace smb1
