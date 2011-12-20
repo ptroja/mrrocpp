@@ -45,7 +45,7 @@ void HI_rydz::init()
 		// domyslnie robot jest zsynchronizowany
 		irq_data.md.is_synchronised = true;
 
-		ptimer = (boost::shared_ptr<lib::periodic_timer>) new lib::periodic_timer(1000 * lib::EDP_STEP);
+		ptimer = (boost::shared_ptr <lib::periodic_timer>) new lib::periodic_timer(1000 * lib::EDP_STEP);
 	} else {
 		// domyslnie robot nie jest zsynchronizowany
 		irq_data.md.is_synchronised = false;
@@ -66,15 +66,15 @@ void HI_rydz::init()
 
 		// konieczne dla skasowania przyczyny przerwania
 		out8((hi_rydz::ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_intr_generator_servo_ptr);
-		in16((hi_rydz::SERVO_REPLY_STATUS_ADR + hi_isa_card_offset)); // Odczyt stanu wylacznikow
+		in16((hi_rydz::SERVO_REPLY_STATUS_ADR + hi_isa_card_offset));
+		// Odczyt stanu wylacznikow
 		in16((hi_rydz::SERVO_REPLY_INT_ADR + hi_isa_card_offset));
-
 
 	}
 
 	// oczekiwanie na przerwanie
 	if (hi_int_wait(common::INT_EMPTY, 0) == -1) // jesli nie przyjdzie na czas
-	{
+			{
 		// inicjacja wystawiania przerwan
 		if (!master.robot_test_mode) {
 			// Ustawienie czestotliwosci przerwan
@@ -123,9 +123,13 @@ void HI_rydz::init()
 
 // Konstruktor
 HI_rydz::HI_rydz(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]) :
-	HardwareInterface(_master), hi_irq_real(_hi_irq_real), hi_intr_freq_divider(_hi_intr_freq_divider),
-			hi_intr_timeout_high(_hi_intr_timeout_high), hi_first_servo_ptr(_hi_first_servo_ptr),
-			hi_isa_card_offset(_hi_isa_card_offset), hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
+		HardwareInterface(_master),
+		hi_irq_real(_hi_irq_real),
+		hi_intr_freq_divider(_hi_intr_freq_divider),
+		hi_intr_timeout_high(_hi_intr_timeout_high),
+		hi_first_servo_ptr(_hi_first_servo_ptr),
+		hi_isa_card_offset(_hi_isa_card_offset),
+		hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
 {
 	for (int i = 0; i < master.number_of_servos; i++) {
 		max_current[i] = _max_current[i];
@@ -219,7 +223,6 @@ uint64_t HI_rydz::read_write_hardware(void)
 } // end: hardware_interface::read_write_hardware()
 // ------------------------------------------------------------------------
 
-
 // ------------------------------------------------------------------------
 // Zerowanie licznikow polozenia wszystkich osi
 void HI_rydz::reset_counters(void)
@@ -289,7 +292,6 @@ bool HI_rydz::is_hardware_error(void)
 } // end: hardware_interface::is_hardware_error ()
 // ------------------------------------------------------------------------
 
-
 int HI_rydz::hi_int_wait(common::interrupt_mode_t _interrupt_mode, int lag)
 {
 	if (!master.robot_test_mode) {
@@ -327,7 +329,6 @@ void HI_rydz::finish_synchro(int drive_number)
 	irq_data.md.value = hi_rydz::MICROCONTROLLER_MODE;
 	hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 } // end: finish_synchro()
-
 
 bool HI_rydz::in_synchro_area(int drive_number)
 {
