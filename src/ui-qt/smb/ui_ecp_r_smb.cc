@@ -46,9 +46,8 @@ void EcpRobot::move_external(const double final_position[6], lib::epos::EPOS_MOT
 	the_robot->epos_external_command_data_port.data.motion_variant = motion_variant;
 	the_robot->epos_external_command_data_port.data.estimated_time = _estimated_time;
 
-	for (int i = 0; i < 6; ++i) {
-		the_robot->epos_external_command_data_port.data.desired_position[i] = final_position[i];
-	}
+	the_robot->epos_external_command_data_port.data.base_vs_bench_rotation = final_position[0];
+	the_robot->epos_external_command_data_port.data.pkm_vs_base_rotation = final_position[1];
 
 	the_robot->epos_external_command_data_port.set();
 
@@ -57,7 +56,7 @@ void EcpRobot::move_external(const double final_position[6], lib::epos::EPOS_MOT
 
 void EcpRobot::clear_fault()
 {
-	the_robot->epos_clear_fault_data_port.data = true;
+	//the_robot->epos_clear_fault_data_port.data = true;
 
 	the_robot->epos_clear_fault_data_port.set();
 
@@ -66,7 +65,7 @@ void EcpRobot::clear_fault()
 
 void EcpRobot::stop_motors()
 {
-	the_robot->epos_brake_command_data_port.data = true;
+	//the_robot->epos_brake_command_data_port.data = true;
 
 	the_robot->epos_brake_command_data_port.set();
 

@@ -34,7 +34,7 @@ visual_servo::visual_servo(boost::shared_ptr <visual_servo_regulator> regulator,
 		std::string server_addr = configurator.value <std::string> ("vs_log_server_addr", section_name);
 		int server_port = configurator.value <int> ("vs_log_server_port", section_name);
 
-		log_client = boost::shared_ptr <logger_client>(new logger_client(capacity, server_addr, server_port));
+		log_client = boost::shared_ptr <logger_client>(new logger_client(capacity, server_addr, server_port, "requestSentTime;sendTime;receiveTime;processingStart;processingEnd;object_visible;np_0_0;np_0_1;np_0_2;np_0_3;np_1_0;np_1_1;np_1_2;np_1_3;np_2_0;np_2_1;np_2_2;np_2_3;error_x;error_y;error_z;error_alpha;error_betha;error_gamma;"));
 	}
 
 	log_dbg("visual_servo::visual_servo() end\n");
@@ -125,6 +125,10 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 
 	msg.append_Homog_matrix(new_position);
 
+	if (object_visible) {
+		msg.append_matrix(error);
+	}
+
 	// write log message
 	if (log_client.get() != NULL) {
 		log_client->log(msg);
@@ -136,6 +140,11 @@ lib::Homog_matrix visual_servo::get_position_change(const lib::Homog_matrix& cur
 bool visual_servo::is_object_visible()
 {
 	return object_visible;
+}
+
+void visual_servo::reset()
+{
+	object_visible = false;
 }
 
 const Eigen::Matrix <double, 6, 1> & visual_servo::get_error()
@@ -150,7 +159,9 @@ boost::shared_ptr <mrrocpp::ecp_mp::sensor::discode::discode_sensor> visual_serv
 
 void visual_servo::notify_object_considered_not_visible()
 {
-	regulator->reset();
+	if(regulator.get() != NULL){
+		regulator->reset();
+	}
 }
 
 } // namespace servovision

@@ -24,6 +24,18 @@ namespace lib {
 namespace spkm {
 
 /*!
+ * @brief SwarmItFix Epos simple external command data port
+ * @ingroup spkm
+ */
+const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix Epos status data request port
+ * @ingroup spkm
+ */
+const std::string EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT = "EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT";
+
+/*!
  * @brief SwarmItFix Parallel Kinematic Machine mp to ecp variant
  * @ingroup spkm
  */
@@ -49,10 +61,7 @@ typedef struct _segment
 
 	//! Constructor with reasonable defaults
 	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix()) :
-		goal_pose(_goal),
-		motion_type(lib::epos::SYNC_TRAPEZOIDAL),
-		duration(0),
-		guarded_motion(false)
+			goal_pose(_goal), motion_type(lib::epos::SYNC_TRAPEZOIDAL), duration(0), guarded_motion(false)
 	{
 	}
 
@@ -70,7 +79,10 @@ typedef struct _segment
 /**
  * ECP variant variant
  */
-typedef enum _command_variant { POSE_LIST, STOP } command_variant;
+typedef enum _command_variant
+{
+	POSE_LIST, STOP
+} command_variant;
 
 /*!
  *  Command for ECP agent
@@ -80,14 +92,14 @@ typedef struct _next_state_t
 	command_variant variant;
 
 	//! Type for sequence of motions of SPKM robot
-	typedef std::vector<spkm::segment_t> segment_sequence_t;
+	typedef std::vector <spkm::segment_t> segment_sequence_t;
 
 	//! Sequence of motion segments for SPKM robot
 	segment_sequence_t segments;
 
 	//! Constructor with safe defaults
 	_next_state_t(command_variant _variant = STOP) :
-		variant(_variant)
+			variant(_variant)
 	{
 	}
 
@@ -100,7 +112,8 @@ private:
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & variant;
-		switch (variant) {
+		switch (variant)
+		{
 			case POSE_LIST:
 				ar & segments;
 				break;
@@ -125,8 +138,63 @@ enum CBUFFER_VARIANT
  */
 typedef enum _POSE_SPECIFICATION
 {
-	XYZ_EULER_ZYZ, JOINT, MOTOR
+	XYZ_EULER_ZYZ, TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL, WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL, JOINT, MOTOR
 } POSE_SPECIFICATION;
+
+/*!
+ * @brief SwarmItFix Epos external mode controllers status
+ * @ingroup spkm
+ */
+struct spkm_ext_epos_reply
+{
+//	POSE_SPECIFICATION pose_specification;
+
+	//! SPKM current pose - in XYZ Euler ZYZ form.
+	double current_pose[6];
+
+	lib::epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
+
+	bool contact;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		//ar & pose_specification;
+		ar & current_pose;
+		ar & epos_controller;
+		ar & contact;
+	}
+};
+
+/*!
+ * @brief SwarmItFix Epos external command
+ * @ingroup spkm
+ */
+struct spkm_epos_simple_command
+{
+	lib::epos::EPOS_MOTION_VARIANT motion_variant;
+	POSE_SPECIFICATION pose_specification;
+	double desired_position[NUM_OF_SERVOS];
+
+	double estimated_time;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & pose_specification;
+		ar & motion_variant;
+		ar & desired_position;
+		ar & estimated_time;
+	}
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP variant buffer
@@ -211,7 +279,8 @@ struct cbuffer
  */
 struct rbuffer
 {
-	lib::Homog_matrix current_pose;
+	//! SPKM current pose - in XYZ Euler ZYZ form.
+	double current_pose[6];
 
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 

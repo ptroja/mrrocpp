@@ -12,6 +12,8 @@
 
 #include "robot/irp6_tfg/ecp_t_tfg.h"
 #include "generator/ecp/ecp_mp_g_tfg.h"
+#include "generator/ecp/ecp_mp_g_constant_velocity.h"
+#include "vector"
 
 namespace mrrocpp {
 namespace ecp {
@@ -33,6 +35,8 @@ tfg::tfg(lib::configurator &_config) :
 
 	tfgg = new generator::tfg(*this, 10);
 
+        cvg = new common::generator::constant_velocity(*this, lib::ECP_JOINT, 1);
+
 	sr_ecp_msg->message("ecp TFG loaded");
 }
 
@@ -41,8 +45,31 @@ void tfg::mp_2_ecp_next_state_string_handler(void)
 
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFG) {
 
-		tfgg->Move();
-	}
+            tfgg->Move();
+
+        } else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY) {
+
+                cvg->reset();
+                std::vector <double> pos(1);
+                pos[0] = atof((char*) mp_command.ecp_next_state.data);
+
+                switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
+                {
+                        case lib::RELATIVE:
+                                cvg->set_relative();
+                                cvg->load_relative_joint_trajectory_pose(pos);
+                                break;
+                        case lib::ABSOLUTE:
+                                cvg->set_absolute();
+                                cvg->load_absolute_joint_trajectory_pose(pos);
+                                break;
+                        default:
+                                break;
+                }
+
+                cvg->calculate_interpolate();
+                cvg->Move();
+        }
 
 }
 

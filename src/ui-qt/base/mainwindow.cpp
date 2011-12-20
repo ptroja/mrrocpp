@@ -224,23 +224,28 @@ void MainWindow::ui_notification()
 void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 {
 
-// TODO dodac obsluge wyjatku
-	std::string text((ui->lineEdit_position->text()).toStdString());
+	try {
 
-	boost::char_separator <char> sep(" ");
-	boost::tokenizer <boost::char_separator <char> > tokens(text, sep);
+		std::string text((ui->lineEdit_position->text()).toStdString());
 
-	int j = 0;
-	BOOST_FOREACH(std::string t, tokens)
-			{
+		boost::char_separator <char> sep(", ");
 
-				val[j] = boost::lexical_cast <double>(t);
+		boost::tokenizer <boost::char_separator <char> > tokens(text, sep);
 
-				if (j == number_of_servos) {
-					break;
+		int j = 0;
+		BOOST_FOREACH(std::string t, tokens)
+				{
+
+					val[j] = boost::lexical_cast <double>(t);
+
+					if (j == number_of_servos) {
+						break;
+					}
+					j++;
 				}
-				j++;
-			}
+	} catch (...) {
+		interface.ui_msg->message(lib::NON_FATAL_ERROR, "position import failed");
+	}
 
 }
 

@@ -45,13 +45,13 @@ void effector::synchronise(void)
 			return;
 		}
 
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -92,13 +92,13 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 				desired_joints[i] = current_joints[i];
 			}
 		}
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -156,13 +156,13 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				break;
 
 		}
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -191,13 +191,13 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		edp_ecp_rbuffer.shead_reply.vacuum_state = lib::shead::VACUUM_STATE_OFF;
 		edp_ecp_rbuffer.shead_reply.contacts[1] = true;
 
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {

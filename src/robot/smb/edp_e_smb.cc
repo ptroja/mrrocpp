@@ -41,7 +41,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 void effector::check_controller_state()
 {
-	if (robot_test_mode){
+	if (robot_test_mode) {
 		return;
 	}
 
@@ -120,13 +120,13 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 				desired_joints[i] = current_joints[i];
 			}
 		}
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -229,6 +229,10 @@ int effector::relativeSynchroPosition(maxon::epos & node)
 void effector::synchronise(void)
 {
 	try {
+		// TEMPORARY
+		controller_state_edp_buf.is_synchronised = true;
+		return;
+		// END OF TEMPORARY
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
 			return;
@@ -294,13 +298,13 @@ void effector::synchronise(void)
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_synchronization_unsuccessful());
 		}
 
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -358,26 +362,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (!robot_test_mode) {
 					BOOST_FOREACH(maxon::epos * node, axes)
 							{
-								// Print state.
-								node->printState();
-								// Check if node is in a FAULT state.
-								if (node->getState() == maxon::epos::FAULT) {
-									maxon::UNSIGNED8 errNum = node->getNumberOfErrors();
-									cerr << "readNumberOfErrors() = " << (int) errNum << endl;
-									// Print list of errors.
-									for (maxon::UNSIGNED8 i = 1; i <= errNum; ++i) {
-										maxon::UNSIGNED32 errCode = node->getErrorHistory(i);
-										cerr << node->ErrorCodeMessage(errCode) << endl;
-									}
-									// Clear errors.
-									if (errNum > 0) {
-										node->clearNumberOfErrors();
-									}
-									// Reset errors.
-									node->setState(maxon::epos::FAULT_RESET);
-								}
-								// Reset node.
-								node->reset();
+								node->clearFault();
 							}
 				} //: !test_mode
 				break;
@@ -386,7 +371,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (is_base_positioned_to_move_legs) {
 					fai->command();
 				}
-				// If all legs are currently down - reset legs rotation.
+				// If all legs are currently OUT then reset legs rotation.
 				if (current_legs_state() == lib::smb::ALL_OUT) {
 					msg->message("ALL_DOWN");
 					/*// Homing of the motor controlling the legs rotation - set current position as 0.
@@ -400,16 +385,18 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				break;
 			}
 			default:
+				// Throw non-fatal error - invalid command.
+				BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
 				break;
 
 		}
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {
@@ -433,9 +420,9 @@ void effector::parse_motor_command()
 				&& (current_joints[0] != ecp_edp_cbuffer.joint_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check externals.
-		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::FRAME)
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::EXTERNAL)
 				&& (current_joints[0]
-						!= ecp_edp_cbuffer.goal_pos[0] * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
+						!= ecp_edp_cbuffer.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
@@ -473,12 +460,13 @@ void effector::parse_motor_command()
 			}
 		}
 			break;
-		case lib::smb::FRAME: {
-			msg->message("FRAME");
+		case lib::smb::EXTERNAL: {
+			msg->message("EXTERNAL");
 			// Leg rotational joint: Copy data directly from buffer and recalculate joint value.
-			desired_joints[0] = ecp_edp_cbuffer.goal_pos[0] * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio;
+			desired_joints[0] = ecp_edp_cbuffer.base_vs_bench_rotation
+					* mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio;
 			// SPKM rotational joint: Copy data joint value directly from buffer.
-			desired_joints[1] = ecp_edp_cbuffer.goal_pos[1];
+			desired_joints[1] = ecp_edp_cbuffer.pkm_vs_base_rotation;
 			cout << "JOINT[0]: " << desired_joints[0] << endl;
 			cout << "JOINT[1]: " << desired_joints[1] << endl;
 
@@ -616,7 +604,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						edp_ecp_rbuffer.epos_controller[i].position = current_joints[i];
 					}
 					break;
-				case lib::smb::FRAME:
+				case lib::smb::EXTERNAL:
 					msg->message("EDP get_arm_position FRAME");
 					// For every axis.
 					for (size_t i = 0; i < axes.size(); ++i) {
@@ -657,13 +645,13 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		fai->create_reply();
 		reply.servo_step = step_counter;
 
-	} catch (mrrocpp::lib::exception::mrrocpp_non_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_fatal_error & e_) {
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::mrrocpp_system_error & e_) {
+	} catch (mrrocpp::lib::exception::system_error & e_) {
 		// Standard error handling.
 		HANDLE_EDP_SYSTEM_ERROR(e_)
 	} catch (...) {

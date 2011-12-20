@@ -61,7 +61,7 @@ void gateway::checkEPOSerror(DWORD E_error)
 			break;
 	}
 
-	BOOST_THROW_EXCEPTION(se_canopen_error() << reason(msg));
+	BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(msg));
 }
 
 /* copied from EPOS Communication Guide, p.8 */

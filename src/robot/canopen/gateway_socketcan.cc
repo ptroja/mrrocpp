@@ -25,7 +25,7 @@ gateway_socketcan::gateway_socketcan(const std::string & _iface) :
 	iface(_iface), sock(-1)
 {
 	if(iface.length() >= IFNAMSIZ) {
-		throw se_canopen_error() << reason("name of CAN device too long");
+		throw fe_canopen_error() << reason("name of CAN device too long");
 	}
 }
 
@@ -41,7 +41,7 @@ void gateway_socketcan::open()
 
 	if (sock == -1) {
 		perror("socket()");
-		throw se_canopen_error() << reason("failed to create a CAN socket");
+		throw fe_canopen_error() << reason("failed to create a CAN socket");
 	}
 
 	/* Locate the interface you wish to use */
@@ -58,7 +58,7 @@ void gateway_socketcan::open()
 
 	if(::bind(sock, (struct sockaddr*) &addr, sizeof(addr)) == -1) {
 		perror("bind()");
-		throw se_canopen_error() << reason("failed to bind to a CAN interface");
+		throw fe_canopen_error() << reason("failed to bind to a CAN interface");
 	}
 
 	device_opened = true;
@@ -67,7 +67,7 @@ void gateway_socketcan::open()
 void gateway_socketcan::close()
 {
 	if(::close(sock) == -1) {
-		throw se_canopen_error() << reason("failed to close CAN socket");;
+		throw fe_canopen_error() << reason("failed to close CAN socket");;
 	}
 
 	device_opened = false;
@@ -90,20 +90,20 @@ canid_t gateway_socketcan::readFromWire(struct can_frame & frame)
 
 	// Check the result
 	if (ret == -1) {
-		 throw se_canopen_error() << errno_call("select") << errno_code(errno);
+		 throw fe_canopen_error() << errno_call("select") << errno_code(errno);
 	} else if (ret == 0) {
-		 throw se_canopen_error() << reason("timeout reading from CAN interface");
+		 throw fe_canopen_error() << reason("timeout reading from CAN interface");
 	}
 
 	// Assert, that data comes from the CAN interface
 	if (!FD_ISSET(sock, &rfds)) {
-		throw se_canopen_error() << reason("CAN interface not ready to read");
+		throw fe_canopen_error() << reason("CAN interface not ready to read");
 	}
 
     /* read frame */
     if (::read(sock, &frame, sizeof(frame)) != sizeof(frame)) {
         perror("read()");
-        BOOST_THROW_EXCEPTION(se_canopen_error() << reason("read from CAN socket failed"));
+        BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("read from CAN socket failed"));
     }
 
     return (frame.can_id);
@@ -126,20 +126,20 @@ void gateway_socketcan::writeToWire(const struct can_frame & frame)
 
 	// Check the result
 	if (ret == -1) {
-		 throw se_canopen_error() << errno_call("select") << errno_code(errno);
+		 throw fe_canopen_error() << errno_call("select") << errno_code(errno);
 	} else if (ret == 0) {
-		 throw se_canopen_error() << reason("timeout writing to CAN interface");
+		 throw fe_canopen_error() << reason("timeout writing to CAN interface");
 	}
 
 	// Assert, that data comes from the CAN interface
 	if (!FD_ISSET(sock, &wfds)) {
-		throw se_canopen_error() << reason("CAN interface not ready to write");
+		throw fe_canopen_error() << reason("CAN interface not ready to write");
 	}
 
     /* send frame */
     if (::write(sock, &frame, sizeof(frame)) != sizeof(frame)) {
         perror("write()");
-        BOOST_THROW_EXCEPTION(se_canopen_error() << reason("write to CAN socket failed"));
+        BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("write to CAN socket failed"));
     }
 }
 
@@ -198,24 +198,24 @@ unsigned int gateway_socketcan::ReadObject(WORD *ans, unsigned int ans_len, uint
 		if (SCS(frame.data[0]) == 4) {
 			E_error = *((uint32_t*) &frame.data[4]);
 			// ??? do we also need to check the reply address (index, subindex)?
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("SDO transfer aborted"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("SDO transfer aborted"));
 		} else {
 			E_error = 0;
 		}
 
 		// check the reply SCS
 		if (SCS(frame.data[0]) != 2) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected SCS (server command specifier) received"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected SCS (server command specifier) received"));
 		}
 
 		// check the reply "expedited" field
 		if (TRANSFER_TYPE(frame.data[0]) != TRANSFER_EXPEDITED) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("expedited reply message expected"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("expedited reply message expected"));
 		}
 
 		// check the size indicator
 		if (SIZE_INDICATOR(frame.data[0]) != SIZE_INDICATED) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("object data size not indicated in reply"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("object data size not indicated in reply"));
 		}
 
 		// adress (index, subindex) of the reply object
@@ -223,7 +223,7 @@ unsigned int gateway_socketcan::ReadObject(WORD *ans, unsigned int ans_len, uint
 		BYTE r_subindex = (frame.data[3]);
 
 		if ((r_index != index) || (r_subindex != subindex)) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected reply object address (index, subindex)"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected reply object address (index, subindex)"));
 		}
 
 		switch (BYTES_WITHOUT_DATA(frame.data[0])) {
@@ -240,12 +240,12 @@ unsigned int gateway_socketcan::ReadObject(WORD *ans, unsigned int ans_len, uint
 				ans[3] = frame.data[4];
 				break;
 			default:
-				BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unsupported reply data size"));
+				BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unsupported reply data size"));
 				break;
 		}
 
 		return (4 - BYTES_WITHOUT_DATA(frame.data[0]));
-	} catch (se_canopen_error & e) {
+	} catch (fe_canopen_error & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -324,14 +324,14 @@ void gateway_socketcan::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, u
 		if (SCS(frame.data[0]) == 4) {
 			E_error = *((uint32_t*) &frame.data[4]);
 			// ??? do we also need to check the reply address (index, subindex)?
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("SDO transfer aborted"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("SDO transfer aborted"));
 		} else {
 			E_error = 0;
 		}
 
 		// check the reply SCS
 		if (SCS(frame.data[0]) != 3) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected SCS (server command specifier) received"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected SCS (server command specifier) received"));
 		}
 
 		// adress (index, subindex) of the reply object
@@ -339,9 +339,9 @@ void gateway_socketcan::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, u
 		BYTE r_subindex = (frame.data[3]);
 
 		if ((r_index != index) || (r_subindex != subindex)) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("unexpected reply object address (index, subindex)"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected reply object address (index, subindex)"));
 		}
-	} catch (se_canopen_error & e) {
+	} catch (fe_canopen_error & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -351,22 +351,139 @@ void gateway_socketcan::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, u
 
 void gateway_socketcan::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE subindex, DWORD ObjectLength)
 {
-	struct can_frame frame;
-	frame.can_dlc = 8;
+	if (ObjectLength > 63) {
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Segmented write of > 63 bytes not allowed"));
+	}
+
+	try {
+		struct can_frame frame;
+
+		frame.can_id = 0x600 + nodeId;
+		frame.can_dlc = 8;
+		frame.data[0] = 0x20;	// Initiate Domain Download, normal transfer, client => server, data set size is NOT indicated
+		frame.data[0] = 0x21;	// Initiate Domain Download, normal transfer, client => server, data set size is indicated
+		frame.data[1] = (index & 0xFF); // index high BYTE
+		frame.data[2] = (index >> 8);   // index low BYTE
+		frame.data[3] = subindex;
+
+		*((uint32_t *) &frame.data[4]) = ObjectLength;
+
+		writeToWire(frame);
+
+		// wait for reply
+		while(readFromWire(frame) != (0x580 + nodeId)) {
+			handleCanOpenMgmt(frame);
+		}
+
+		/*
+		 * SCS: server command specifier replies
+		 * 011 <= Initiate Domain Download (WriteObject)
+		 * 001 <= Download Domain Segment
+		 * 010 <= Initiate Domain Upload (ReadObject)
+		 * 000 <= Upload Domain Segment
+		 */
+
+		// check for Abort Transfer message
+		if (SCS(frame.data[0]) == 4) {
+			E_error = *((uint32_t*) &frame.data[4]);
+			// ??? do we also need to check the reply address (index, subindex)?
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("SDO transfer aborted"));
+		} else {
+			E_error = 0;
+		}
+
+		// check the reply SCS
+		if (SCS(frame.data[0]) != 3) {
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected SCS (server command specifier) received"));
+		}
+
+		// address (index, subindex) of the reply object
+		WORD r_index = (frame.data[2] << 8) | (frame.data[1]);
+		BYTE r_subindex = (frame.data[3]);
+
+		if ((r_index != index) || (r_subindex != subindex)) {
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected reply object address (index, subindex)"));
+		}
+
+		// Setup toggle bit
+		toggle = false;
+
+		// Reset data counter
+		bytesToWrite = ObjectLength;
+	} catch (fe_canopen_error & e) {
+		e << dictionary_index(index);
+		e << dictionary_subindex(subindex);
+		e << canId(nodeId);
+		throw;
+	}
 }
 
 void gateway_socketcan::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t len)
 {
-	if (len > 63) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Segmented write of > 63 bytes not allowed"));
+	if (len > 7) {
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Single segmented write of more than 7 bytes not allowed"));
 	}
 
-	struct can_frame frame;
+	if (len > bytesToWrite) {
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Segmented write of more data than initially announced"));
+	}
 
-	frame.can_id = 0x600 + nodeId;
-	frame.can_dlc = 8;
+	try {
+		struct can_frame frame;
 
-	frame.data[0] = 0x40;	// Initiate Domain Upload, client => server
+		frame.can_id = 0x600 + nodeId;
+		frame.can_dlc = 8;
+		frame.data[0] = 0x00;	// Initiate Domain Download, normal transfer, client => server
+		// Toggle bit
+		frame.data[0] |= (toggle) ? 0x10 : 0x00;
+		// Number of bytes that do NOT contain segment data
+		frame.data[0] |= (7-len) << 1;
+		// More segments coming
+		frame.data[0] |= (bytesToWrite == len) ? 0x01 : 0x00;
+
+		// Copy data
+		memcpy(&frame.data[1], ptr, len);
+
+		writeToWire(frame);
+
+		// wait for reply
+		while(readFromWire(frame) != (0x580 + nodeId)) {
+			handleCanOpenMgmt(frame);
+		}
+
+		/*
+		 * SCS: server command specifier replies
+		 * 011 <= Initiate Domain Download (WriteObject)
+		 * 001 <= Download Domain Segment
+		 * 010 <= Initiate Domain Upload (ReadObject)
+		 * 000 <= Upload Domain Segment
+		 */
+
+		// check for Abort Transfer message
+		if (SCS(frame.data[0]) == 4) {
+			E_error = *((uint32_t*) &frame.data[4]);
+			// ??? do we also need to check the reply address (index, subindex)?
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("SDO transfer aborted"));
+		} else {
+			E_error = 0;
+		}
+
+		// check the reply SCS
+		if (SCS(frame.data[0]) != 1) {
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected SCS (server command specifier) received"));
+		}
+
+		const bool received_toggle = (frame.data[0] & 0x10);
+		if (received_toggle != toggle) {
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("toggle bit do not match"));
+		}
+
+		// change the toggle flag value
+		toggle = (toggle) ? false : true;
+	} catch (fe_canopen_error & e) {
+		e << canId(nodeId);
+		throw;
+	}
 }
 
 void gateway_socketcan::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier)
@@ -380,7 +497,7 @@ void gateway_socketcan::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifie
 	frame.data[1] = nodeId;
 
 	writeToWire(frame);
-	} catch (se_canopen_error & e) {
+	} catch (fe_canopen_error & e) {
 		e << canId(nodeId);
 		throw;
 	}
@@ -389,7 +506,7 @@ void gateway_socketcan::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifie
 void gateway_socketcan::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8])
 {
 	if (Length > 8) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Segmented write of > 63 bytes not allowed"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Segmented write of > 63 bytes not allowed"));
 	}
 
 	struct can_frame frame;

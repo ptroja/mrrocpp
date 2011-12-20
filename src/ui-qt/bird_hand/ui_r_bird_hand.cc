@@ -101,7 +101,6 @@ int UiRobot::manage_interface()
 						actionbirdhand_Command->setEnabled(true);
 						break;
 					case common::UI_MP_TASK_RUNNING:
-						unblock_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_PAUSED:
 						actionbirdhand_Command->setEnabled(false);

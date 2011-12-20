@@ -20,14 +20,14 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 		ecp::common::robot::ecp_robot(_robot_name, lib::smb::NUM_OF_SERVOS, _config, _sr_ecp),
 		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
-		epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
+		epos_external_command_data_port(lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
 		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 
 		smb_festo_command_data_port(lib::smb::FESTO_COMMAND_DATA_PORT, port_manager),
 		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
 		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
-		epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager),
+		epos_external_reply_data_request_port(lib::smb::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager),
 		smb_multi_leg_reply_data_request_port(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 
@@ -38,13 +38,13 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 		ecp::common::robot::ecp_robot(_robot_name, lib::smb::NUM_OF_SERVOS, _ecp_object),
 		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
-		epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
+		epos_external_command_data_port(lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
 		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 		smb_festo_command_data_port(lib::smb::FESTO_COMMAND_DATA_PORT, port_manager),
 		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
 		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
-		epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager),
+		epos_external_reply_data_request_port(lib::smb::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager),
 		smb_multi_leg_reply_data_request_port(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 
@@ -63,15 +63,15 @@ void robot::create_kinematic_models_for_given_robot(void)
 void robot::create_command()
 {
 
-	//	int new_data_counter;
-	bool is_new_data;
-	bool is_new_request;
+	// checks if any data_port is set
+	bool is_new_data = false;
+
+	// cheks if any data_request_posrt is set
+	bool is_new_request = false;
 
 	sr_ecp_msg.message("create_command");
 
-	is_new_data = false;
-
-	if (epos_motor_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_motor_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		if (!is_synchronised()) {
 			ecp_command.motion_type = lib::RELATIVE;
@@ -92,7 +92,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_joint_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_joint_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
 		ecp_edp_cbuffer.variant = lib::smb::POSE;
@@ -108,24 +108,23 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_external_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_external_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
 		ecp_edp_cbuffer.variant = lib::smb::POSE;
 
-		ecp_edp_cbuffer.set_pose_specification = lib::smb::FRAME;
+		ecp_edp_cbuffer.set_pose_specification = lib::smb::EXTERNAL;
 
 		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;
 
-		for (int i = 0; i < 6; ++i) {
-			ecp_edp_cbuffer.goal_pos[i] = epos_external_command_data_port.data.desired_position[i];
-		}
+		ecp_edp_cbuffer.base_vs_bench_rotation = epos_external_command_data_port.data.base_vs_bench_rotation;
+		ecp_edp_cbuffer.pkm_vs_base_rotation = epos_external_command_data_port.data.pkm_vs_base_rotation;
 
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_brake_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_brake_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
@@ -135,7 +134,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_clear_fault_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_clear_fault_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
@@ -148,7 +147,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (smb_festo_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (smb_festo_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
@@ -180,7 +179,7 @@ void robot::create_command()
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
-		ecp_edp_cbuffer.get_pose_specification = lib::smb::FRAME;
+		ecp_edp_cbuffer.get_pose_specification = lib::smb::EXTERNAL;
 		//ecp_command.get_arm_type = lib::FRAME;
 		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);

@@ -145,8 +145,6 @@ struct cbuffer
 
 	double joint_pos[NUM_OF_SERVOS];
 
-	double goal_pos[6];
-
 	//! Allowed time for the motion in seconds.
 	//! If 0, then the motion time will be limited by the motor parameters.
 	//! If > 0 and greater than a limit imposed by the motors, then the motion will be slowed down.
@@ -176,9 +174,6 @@ struct cbuffer
 				ar & set_pose_specification;
 				switch (set_pose_specification)
 				{
-					case FRAME:
-						ar & goal_pos;
-						break;
 					case JOINT:
 						ar & joint_pos;
 						break;

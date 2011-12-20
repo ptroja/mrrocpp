@@ -78,9 +78,8 @@ private:
 
 	/*!
 	 * \brief robot_test_mode taken from effector class
-	 * it does not change during task executon
 	 */
-	bool robot_test_mode;
+	const bool robot_test_mode;
 
 	/*!
 	 * \brief current festo command
@@ -93,11 +92,6 @@ public:
 	 * \brief festo_and_inputs constructor
 	 */
 	festo_and_inputs(effector &_master);
-
-	/*!
-	 * \brief festo_and_inputs destructor
-	 */
-	~festo_and_inputs();
 
 	/*!
 	 * \brief checks the current legs state

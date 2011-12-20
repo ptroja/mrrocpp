@@ -52,7 +52,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 int UiRobot::edp_create_int_extra_operations()
 {
-	wgts[WGT_SPKM_INC]->synchro_depended_init();
+	//wgts[WGT_SPKM_INC]->synchro_depended_init();
 	return 1;
 }
 
@@ -253,7 +253,7 @@ int UiRobot::execute_motor_motion()
 {
 	try {
 
-		ui_ecp_robot->move_motors(desired_pos, lib::epos::NON_SYNC_TRAPEZOIDAL);
+		ui_ecp_robot->move_motors(desired_pos, lib::epos::SYNC_TRAPEZOIDAL);
 
 	} // end try
 	CATCH_SECTION_IN_ROBOT
@@ -265,7 +265,7 @@ int UiRobot::execute_joint_motion()
 {
 	try {
 
-		ui_ecp_robot->move_joints(desired_pos, lib::epos::NON_SYNC_TRAPEZOIDAL);
+		ui_ecp_robot->move_joints(desired_pos, lib::epos::SYNC_TRAPEZOIDAL);
 
 	} // end try
 	CATCH_SECTION_IN_ROBOT

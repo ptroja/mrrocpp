@@ -17,7 +17,7 @@ class Mp
 public:
 	Mp(Interface *iface);
 
-	int MPup();
+	void MPup();
 	int MPup_int();
 	int MPslay();
 	// MP pulse

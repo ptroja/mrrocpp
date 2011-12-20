@@ -30,6 +30,10 @@ inline std::string to_string(pose_specification const & e)
 	{
 		case lib::spkm::XYZ_EULER_ZYZ:
 			return "XYZ_EULER_ZYZ";
+		case lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL:
+			return "TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL";
+		case lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL:
+			return "WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL";
 		case lib::spkm::JOINT:
 			return "JOINT";
 		case lib::spkm::MOTOR:
@@ -47,6 +51,12 @@ typedef boost::error_info <struct angle_number_, int> angle_number;
  * \author Tomasz Kornuta
  */
 REGISTER_NON_FATAL_ERROR(nfe_current_cartesian_pose_unknown, "Required current cartesian pose is unknown")
+
+/*!
+ * \brief Exception thrown when new motion command while robot motion was in progress.
+ * \author Tomasz Kornuta
+ */
+REGISTER_NON_FATAL_ERROR(nfe_motion_in_progress, "Command cannot be performed because robot motion still is in progress")
 
 /*!
  * \brief Exception thrown when thyk alpha limit is exceeded.

@@ -502,6 +502,7 @@ bool newsmooth::load_trajectory_from_file(const char* file_name)
 		return false;
 	}
 
+        flushall();
 	if (!(from_file >> motion_type_desc)) {
 		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
 		return false;

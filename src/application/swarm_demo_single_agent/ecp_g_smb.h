@@ -63,17 +63,17 @@ class external_epos_command : public common::generator::generator
 {
 private:
 
-	lib::epos::epos_simple_command mp_ecp_epos_simple_command;
+	lib::smb::smb_epos_simple_command mp_ecp_epos_simple_command;
 
 	/**
 	 * @brief epos external motion command data port
 	 */
-	lib::single_thread_port <lib::epos::epos_simple_command> *epos_external_command_data_port;
+	lib::single_thread_port <lib::smb::smb_epos_simple_command> *epos_external_command_data_port;
 
 	/**
 	 * @brief epos motion status with external reply data request port
 	 */
-	lib::single_thread_request_port <lib::epos::epos_reply> *epos_external_reply_data_request_port;
+	lib::single_thread_request_port <lib::smb::smb_ext_epos_reply> *epos_external_reply_data_request_port;
 
 public:
 

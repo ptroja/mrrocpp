@@ -12,6 +12,8 @@
 
 #include "base/ecp/ecp_generator.h"
 
+#include "base/lib/logger_client/logger_client.h"
+
 namespace mrrocpp {
 
 namespace ecp {
@@ -35,6 +37,8 @@ public:
 
 	bool first_step();
 	bool next_step();
+
+	boost::shared_ptr<logger::logger_client> log_client;
 private:
 
 	int motion_steps;
@@ -46,6 +50,8 @@ private:
 
 	bool initial_position_saved;
 	double current_position;
+
+	logger::log_message msg;
 };
 
 /** @} */

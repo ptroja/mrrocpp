@@ -85,6 +85,12 @@ REGISTER_FATAL_ERROR(fe_synchronization_unsuccessful, "Robot synchronization fai
 REGISTER_NON_FATAL_ERROR(nfe_invalid_pose_specification, "Invalid pose specification")
 
 /*!
+ * \brief Exception thrown when an invalid command is retrieved.
+ * \author tkornuta
+ */
+REGISTER_NON_FATAL_ERROR(nfe_invalid_command, "Invalid command")
+
+/*!
  * \brief Exception thrown in case of invalid motion type.
  * \author tkornuta
  */
@@ -129,7 +135,7 @@ REGISTER_SYSTEM_ERROR(se, "System error")
 /*!
  * Macro for handling MRROC++ system errors in EDP.
  *
- * \param ERROR Exception derived from the mrrocpp_system_error classes.
+ * \param ERROR Exception derived from the system_error classes.
  *
  * \author tkornuta
  * \date 27.10.2011
@@ -142,7 +148,7 @@ REGISTER_SYSTEM_ERROR(se, "System error")
 /*!
  * Macro for handling MRROC++ fatal errors in EDP.
  *
- * \param ERROR Exception derived from the mrrocpp_fatal_error classes.
+ * \param ERROR Exception derived from the fatal_error classes.
  *
  * \author tkornuta
  * \date 27.10.2011
@@ -150,12 +156,12 @@ REGISTER_SYSTEM_ERROR(se, "System error")
 #define HANDLE_EDP_FATAL_ERROR(ERROR) \
 	std::cout<< ERROR.what() << std::endl; \
 	msg->message(ERROR); \
-	BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(EDP_ERROR) << mrrocpp_error1(EDP_UNIDENTIFIED_ERROR)); \
+	BOOST_THROW_EXCEPTION(fe() << mrrocpp_error1(EDP_UNIDENTIFIED_ERROR)); \
 
 /*!
  * Macro for handling MRROC++ non-fatal errors in EDP.
  *
- * \param ERROR Exception derived from the mrrocpp_non_fatal_error classes.
+ * \param ERROR Exception derived from the non_fatal_error classes.
  *
  * \author tkornuta
  * \date 27.10.2011
@@ -163,7 +169,7 @@ REGISTER_SYSTEM_ERROR(se, "System error")
 #define HANDLE_EDP_NON_FATAL_ERROR(ERROR) \
 	std::cout<< ERROR.what() << std::endl; \
 	msg->message(ERROR); \
-	BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(EDP_ERROR) << mrrocpp_error1(EDP_UNIDENTIFIED_ERROR)); \
+	BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error1(EDP_UNIDENTIFIED_ERROR)); \
 
 /*!
  * Macro for handling unknown errors in EDP.
@@ -173,8 +179,13 @@ REGISTER_SYSTEM_ERROR(se, "System error")
  */
 #define HANDLE_EDP_UNKNOWN_ERROR() \
 	msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error"); \
-	BOOST_THROW_EXCEPTION(fe() << mrrocpp_error0(EDP_ERROR) << mrrocpp_error1(EDP_UNIDENTIFIED_ERROR)); \
+	BOOST_THROW_EXCEPTION(fe() << mrrocpp_error1(EDP_UNIDENTIFIED_ERROR)); \
 
+/*!
+ * \brief Exception thrown in case of error fault.
+ * \author tkornuta
+ */
+REGISTER_FATAL_ERROR(fe_robot_in_fault_state, "Robot in fault state")
 
 } // namespace exception
 } // namespace edp

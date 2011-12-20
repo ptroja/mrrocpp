@@ -20,12 +20,12 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 		ecp::common::robot::ecp_robot(_robot_name, lib::spkm::NUM_OF_SERVOS, _config, _sr_ecp),
 		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
-		epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
+		epos_external_command_data_port(lib::spkm::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
 		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
 		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
-		epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
+		epos_external_reply_data_request_port(lib::spkm::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	// Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -35,12 +35,12 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 		ecp::common::robot::ecp_robot(_robot_name, lib::spkm::NUM_OF_SERVOS, _ecp_object),
 		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
 		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
-		epos_external_command_data_port(lib::epos::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
+		epos_external_command_data_port(lib::spkm::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
 		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
 		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
-		epos_external_reply_data_request_port(lib::epos::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
+		epos_external_reply_data_request_port(lib::spkm::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	// Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -48,20 +48,17 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 
 void robot::create_command()
 {
-	//	int new_data_counter;
-	bool is_new_data;
-	bool is_new_request;
+	// checks if any data_port is set
+	bool is_new_data = false;
 
-	//sr_ecp_msg.message("create_command");
-
-	is_new_data = false;
-	is_new_request = false;
+	// cheks if any data_request_posrt is set
+	bool is_new_request = false;
 
 	// Set default variant to error in order to help tracking errors in communication
 	// TODO: the following should be if-then-elseif-elseif-elseif...-else branch tree
 	ecp_edp_cbuffer.variant = (lib::spkm::CBUFFER_VARIANT) -1;
 
-	if (epos_motor_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_motor_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		if (!is_synchronised()) {
 			ecp_command.motion_type = lib::RELATIVE;
@@ -82,7 +79,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_joint_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_joint_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
 		ecp_edp_cbuffer.variant = lib::spkm::POSE;
@@ -98,12 +95,12 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_external_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_external_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
 		ecp_edp_cbuffer.variant = lib::spkm::POSE;
 
-		ecp_edp_cbuffer.set_pose_specification = lib::spkm::XYZ_EULER_ZYZ;
+		ecp_edp_cbuffer.set_pose_specification = epos_external_command_data_port.data.pose_specification;
 
 		ecp_edp_cbuffer.motion_variant = epos_external_command_data_port.data.motion_variant;
 		ecp_edp_cbuffer.estimated_time = epos_external_command_data_port.data.estimated_time;
@@ -115,7 +112,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_brake_command_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_brake_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
@@ -125,7 +122,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (epos_clear_fault_data_port.get() == mrrocpp::lib::NewData) {
+	if (epos_clear_fault_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 		// narazie proste przepisanie
@@ -154,7 +151,8 @@ void robot::create_command()
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
-		ecp_edp_cbuffer.get_pose_specification = lib::spkm::XYZ_EULER_ZYZ;
+
+		ecp_edp_cbuffer.get_pose_specification = epos_external_reply_data_request_port.set_data;
 		//ecp_command.get_arm_type = lib::FRAME;
 		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
@@ -224,6 +222,7 @@ void robot::get_reply()
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
 		sr_ecp_msg.message("ECP get_reply epos_external_reply_data_request_port");
+#if 1
 		// generator reply generation
 		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
 			epos_external_reply_data_request_port.data.epos_controller[i].position =
@@ -233,9 +232,18 @@ void robot::get_reply()
 			epos_external_reply_data_request_port.data.epos_controller[i].motion_in_progress =
 					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
 		}
+
+
+
 		epos_external_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
 
-		epos_external_reply_data_request_port.data.current_frame = edp_ecp_rbuffer.current_pose;
+		for (int i = 0; i < 6; ++i) {
+			epos_external_reply_data_request_port.data.current_pose[i] = edp_ecp_rbuffer.current_pose[i];
+		}
+
+#else
+		epos_external_reply_data_request_port.data = edp_ecp_rbuffer;
+#endif
 
 		epos_external_reply_data_request_port.set();
 	}
