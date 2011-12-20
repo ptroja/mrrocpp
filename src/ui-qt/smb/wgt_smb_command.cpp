@@ -59,6 +59,34 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	// podpiecie pozostalych sygnalow do slotow
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 
+	// Set decimal properties for the motor-based control.
+	ui.doubleSpinBox_ml_absolute->setMinimum(-1200000);
+	ui.doubleSpinBox_ml_absolute->setMaximum(1200000);
+	ui.doubleSpinBox_ml_absolute->setSingleStep(10000);
+	ui.doubleSpinBox_ml_absolute->setDecimals(0);
+
+	ui.doubleSpinBox_ml_relative->setMinimum(-1200000);
+	ui.doubleSpinBox_ml_relative->setMaximum(1200000);
+	ui.doubleSpinBox_ml_relative->setSingleStep(10000);
+	ui.doubleSpinBox_ml_relative->setDecimals(0);
+
+	ui.doubleSpinBox_ms_absolute->setMinimum(-120000);
+	ui.doubleSpinBox_ms_absolute->setMaximum(120000);
+	ui.doubleSpinBox_ms_absolute->setSingleStep(1000);
+	ui.doubleSpinBox_ms_absolute->setDecimals(0);
+
+	ui.doubleSpinBox_ms_relative->setMinimum(-120000);
+	ui.doubleSpinBox_ms_relative->setMaximum(120000);
+	ui.doubleSpinBox_ms_relative->setSingleStep(1000);
+	ui.doubleSpinBox_ms_relative->setDecimals(0);
+
+	// Set precision of widgets with current positions.
+	ui.doubleSpinBox_ml_current_position->setDecimals(0);
+	ui.doubleSpinBox_ms_current_position->setDecimals(0);
+	ui.doubleSpinBox_ml_current_position->setMinimum(-1200000);
+	ui.doubleSpinBox_ml_current_position->setMaximum(1200000);
+	ui.doubleSpinBox_ms_current_position->setMinimum(-120000);
+	ui.doubleSpinBox_ms_current_position->setMaximum(120000);
 }
 
 wgt_smb_command::~wgt_smb_command()
@@ -365,14 +393,15 @@ void wgt_smb_command::on_radioButton_m_motor_toggled()
 	if (ui.radioButton_m_motor->isChecked()) {
 		//	interface.ui_msg->message("on_radioButton_m_motor_clicked");
 
-		ui.doubleSpinBox_ml_absolute->setMinimum(-100000);
-		ui.doubleSpinBox_ml_absolute->setMaximum(100000);
-		ui.doubleSpinBox_ml_absolute->setSingleStep(1000);
+		// Set decimal properties for the motor-based control.
+		ui.doubleSpinBox_ml_absolute->setMinimum(-1200000);
+		ui.doubleSpinBox_ml_absolute->setMaximum(1200000);
+		ui.doubleSpinBox_ml_absolute->setSingleStep(10000);
 		ui.doubleSpinBox_ml_absolute->setDecimals(0);
 
-		ui.doubleSpinBox_ml_relative->setMinimum(-100000);
-		ui.doubleSpinBox_ml_relative->setMaximum(100000);
-		ui.doubleSpinBox_ml_relative->setSingleStep(1000);
+		ui.doubleSpinBox_ml_relative->setMinimum(-1200000);
+		ui.doubleSpinBox_ml_relative->setMaximum(1200000);
+		ui.doubleSpinBox_ml_relative->setSingleStep(10000);
 		ui.doubleSpinBox_ml_relative->setDecimals(0);
 
 		ui.doubleSpinBox_ms_absolute->setMinimum(-120000);
@@ -401,29 +430,30 @@ void wgt_smb_command::on_radioButton_m_joint_toggled()
 	if (ui.radioButton_m_joint->isChecked()) {
 		//	interface.ui_msg->message("on_radioButton_m_joint_clicked");
 
-		ui.doubleSpinBox_ml_absolute->setMinimum(-3.1415);
-		ui.doubleSpinBox_ml_absolute->setMaximum(3.1415);
+		// Set decimal properties for the joint-based control.
+		ui.doubleSpinBox_ml_absolute->setMinimum(-6.2831);
+		ui.doubleSpinBox_ml_absolute->setMaximum(6.2831);
 		ui.doubleSpinBox_ml_absolute->setSingleStep(0.1);
-		ui.doubleSpinBox_ml_absolute->setDecimals(3);
+		ui.doubleSpinBox_ml_absolute->setDecimals(4);
 
-		ui.doubleSpinBox_ml_relative->setMinimum(-3.1415);
-		ui.doubleSpinBox_ml_relative->setMaximum(3.1415);
+		ui.doubleSpinBox_ml_relative->setMinimum(-6.2831);
+		ui.doubleSpinBox_ml_relative->setMaximum(6.2831);
 		ui.doubleSpinBox_ml_relative->setSingleStep(0.1);
-		ui.doubleSpinBox_ml_relative->setDecimals(3);
+		ui.doubleSpinBox_ml_relative->setDecimals(4);
 
 		ui.doubleSpinBox_ms_absolute->setMinimum(-3.1415);
 		ui.doubleSpinBox_ms_absolute->setMaximum(3.1415);
 		ui.doubleSpinBox_ms_absolute->setSingleStep(0.1);
-		ui.doubleSpinBox_ms_absolute->setDecimals(3);
+		ui.doubleSpinBox_ms_absolute->setDecimals(4);
 
 		ui.doubleSpinBox_ms_relative->setMinimum(-3.1415);
 		ui.doubleSpinBox_ms_relative->setMaximum(3.1415);
 		ui.doubleSpinBox_ms_relative->setSingleStep(0.1);
-		ui.doubleSpinBox_ms_relative->setDecimals(3);
+		ui.doubleSpinBox_ms_relative->setDecimals(4);
 
 		// Set precision of widgets with current positions.
-		ui.doubleSpinBox_ml_current_position->setDecimals(3);
-		ui.doubleSpinBox_ms_current_position->setDecimals(3);
+		ui.doubleSpinBox_ml_current_position->setDecimals(4);
+		ui.doubleSpinBox_ms_current_position->setDecimals(4);
 
 		init();
 
@@ -437,29 +467,30 @@ void wgt_smb_command::on_radioButton_m_ext_toggled()
 	if (ui.radioButton_m_ext->isChecked()) {
 		//	interface.ui_msg->message("on_radioButton_m_ext_clicked");
 
-		ui.doubleSpinBox_ml_absolute->setMinimum(-100000);
-		ui.doubleSpinBox_ml_absolute->setMaximum(100000);
+		// Set decimal properties for the external-based control.
+		ui.doubleSpinBox_ml_absolute->setMinimum(-12);
+		ui.doubleSpinBox_ml_absolute->setMaximum(12);
 		ui.doubleSpinBox_ml_absolute->setSingleStep(1);
 		ui.doubleSpinBox_ml_absolute->setDecimals(0);
 
-		ui.doubleSpinBox_ml_relative->setMinimum(-100000);
-		ui.doubleSpinBox_ml_relative->setMaximum(100000);
+		ui.doubleSpinBox_ml_relative->setMinimum(-12);
+		ui.doubleSpinBox_ml_relative->setMaximum(12);
 		ui.doubleSpinBox_ml_relative->setSingleStep(1);
 		ui.doubleSpinBox_ml_relative->setDecimals(0);
 
 		ui.doubleSpinBox_ms_absolute->setMinimum(-3.1415);
 		ui.doubleSpinBox_ms_absolute->setMaximum(3.1415);
 		ui.doubleSpinBox_ms_absolute->setSingleStep(0.1);
-		ui.doubleSpinBox_ms_absolute->setDecimals(3);
+		ui.doubleSpinBox_ms_absolute->setDecimals(4);
 
 		ui.doubleSpinBox_ms_relative->setMinimum(-3.1415);
 		ui.doubleSpinBox_ms_relative->setMaximum(3.1415);
 		ui.doubleSpinBox_ms_relative->setSingleStep(0.1);
-		ui.doubleSpinBox_ms_relative->setDecimals(3);
+		ui.doubleSpinBox_ms_relative->setDecimals(4);
 
 		// Set precision of widgets with current positions.
 		ui.doubleSpinBox_ml_current_position->setDecimals(0);
-		ui.doubleSpinBox_ms_current_position->setDecimals(3);
+		ui.doubleSpinBox_ms_current_position->setDecimals(4);
 
 		init();
 

@@ -22,7 +22,9 @@ add_executable(ecp_vsdemo_conveyor_uniform_acceleration
 )
 
 target_link_libraries(ecp_vsdemo_conveyor_uniform_acceleration
-	ecp_robot ${COMMON_LIBRARIES}
+    logger_client
+	ecp_robot 
+	${COMMON_LIBRARIES}
 )
 
 

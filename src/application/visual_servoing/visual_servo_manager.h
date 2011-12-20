@@ -102,6 +102,8 @@ public:
 	const std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> >& get_servos() const;
 
 	const lib::Homog_matrix& get_current_position() const;
+
+	boost::shared_ptr<logger::logger_client> log_client;
 protected:
 	visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name);
 	/**
@@ -196,7 +198,6 @@ private:
 	/** Set to true, if position was constrained by constrain_position() */
 	bool is_position_constrained;
 
-	boost::shared_ptr<logger::logger_client> log_client;
 	logger::log_message msg;
 
 	void constrain_position(lib::Homog_matrix & new_position);

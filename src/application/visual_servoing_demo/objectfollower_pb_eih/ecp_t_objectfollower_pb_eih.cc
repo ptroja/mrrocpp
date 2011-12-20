@@ -59,12 +59,10 @@ ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configura
 		boost::shared_ptr <discode_sensor> ds = boost::shared_ptr <discode_sensor>(new discode_sensor(config, config_section_name));
 		vs = shared_ptr <visual_servo> (new pb_eih_visual_servo(reg, ds, config_section_name, config));
 
-		term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(config, config_section_name));
 		log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 3\n");
 		sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
 		log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 4\n");
 		sm->add_position_constraint(cube);
-		//sm->add_termination_condition(term_cond);
 		log_dbg("ecp_t_objectfollower_pb: configuring visual_servo_manager\n");
 		sm->configure();
 	}catch(std::exception& ex){
@@ -79,6 +77,14 @@ void ecp_t_objectfollower_pb_eih::main_task_algorithm(void)
 	while (1) {
 		get_next_state();
 		if (mp_2_ecp_next_state_string == mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST) {
+			if(sm->log_client.get() != NULL){
+				sm->log_client->set_filename_prefix("pb-eih_vs_manager");
+				sm->log_client->set_connect();
+			}
+			if(vs->log_client.get() != NULL){
+				vs->log_client->set_filename_prefix("pb-eih_vs");
+				vs->log_client->set_connect();
+			}
 			sm->Move();
 		} else {
 			log("ecp_t_objectfollower_pb::main_task_algorithm(void) mp_2_ecp_next_state_string: \"%s\"\n", mp_2_ecp_next_state_string.c_str());

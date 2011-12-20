@@ -61,10 +61,18 @@ public:
 	bool is_object_visible();
 
 	/**
+	 * Reset visual servo state.
+	 * This method should be called when visual servo motion generator is starting.
+	 */
+	virtual void reset();
+
+	/**
 	 *
 	 * @return Error
 	 */
 	const Eigen::Matrix <double, 6, 1> & get_error();
+
+	boost::shared_ptr<logger_client> log_client;
 protected:
 			visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <
 					mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator);
@@ -113,7 +121,6 @@ protected:
 
 	Eigen::Matrix <double, 6, 1> error;
 private:
-	boost::shared_ptr<logger_client> log_client;
 	log_message msg;
 
 	bool object_visible;

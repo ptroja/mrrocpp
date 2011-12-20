@@ -34,6 +34,8 @@ public:
 	virtual ~pb_visual_servo();
 
 	virtual Types::Mrrocpp_Proxy::PBReading* get_reading();
+
+	virtual void reset();
 protected:
 	virtual void retrieve_reading();
 	virtual void predict_reading();

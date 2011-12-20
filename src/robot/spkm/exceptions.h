@@ -53,6 +53,12 @@ typedef boost::error_info <struct angle_number_, int> angle_number;
 REGISTER_NON_FATAL_ERROR(nfe_current_cartesian_pose_unknown, "Required current cartesian pose is unknown")
 
 /*!
+ * \brief Exception thrown when new motion command while robot motion was in progress.
+ * \author Tomasz Kornuta
+ */
+REGISTER_NON_FATAL_ERROR(nfe_motion_in_progress, "Command cannot be performed because robot motion still is in progress")
+
+/*!
  * \brief Exception thrown when thyk alpha limit is exceeded.
  * \author Tomasz Kornuta
  */

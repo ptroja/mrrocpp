@@ -56,10 +56,7 @@ private:
 	//! festo shared ptr
 	boost::shared_ptr <festo::cpv> cpv10;
 
-	// state of the legs rotation
-	bool is_base_positioned_to_move_legs;
-
-	/*
+	/*!
 	 * \brief Variable storing the relative zero position of the motor rotating legs.
 	 * Set when all legs are out.
 	 */
@@ -109,12 +106,6 @@ protected:
 public:
 
 	/*!
-	 * @brief Method sets initial values of motor and joint positions.
-	 * @note The number_of_servos should be previously set.
-	 */
-	void reset_variables();
-
-	/*!
 	 * \brief class constructor
 	 *
 	 * The attributes are initialized here.
@@ -154,6 +145,10 @@ public:
 	 */
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction);
 
+	/*!
+	 * \brief Method initializes SMB variables (including motors, joints and frames), depending on working mode (robot_test_mode) and robot state.
+	 * Called only once after process creation.
+	 */
 	void get_controller_state(lib::c_buffer &instruction);
 
 	/*!

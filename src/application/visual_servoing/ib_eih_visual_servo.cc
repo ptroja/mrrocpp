@@ -110,6 +110,12 @@ Types::Mrrocpp_Proxy::IBReading* ib_eih_visual_servo::get_reading()
 	return &reading;
 }
 
+void ib_eih_visual_servo::reset()
+{
+	visual_servo::reset();
+	reading.objectVisible = false;
+}
+
 }//namespace generator
 
 }
