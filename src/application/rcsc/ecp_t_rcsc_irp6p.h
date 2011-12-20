@@ -26,6 +26,7 @@ protected:
 	common::generator::tff_rubik_face_rotate* rfrg;
 	common::generator::teach_in* tig;
         common::generator::newsmooth* sg;
+        common::generator::newsmooth* sgaa;
 
 	common::generator::weight_measure* wmg;
 	//podzadania
