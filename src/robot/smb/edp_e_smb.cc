@@ -59,7 +59,7 @@ void effector::check_controller_state()
 #endif
 	if (robot_test_mode) {
 		// In test mode robot is always synchronized.
-		controller_state_edp_buf.is_synchronised = true;
+		//controller_state_edp_buf.is_synchronised = true;
 		return;
 	}
 
@@ -129,13 +129,13 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 		// Initiate motor positions.
 		for (size_t i = 0; i < axes.size(); ++i) {
-			// If this is a test mode or robot isn't synchronized.
-			if (robot_test_mode || !is_synchronised())
-				// Zero all motor positions.
-				current_motor_pos[i] = 0;
-			else
+			// If this is not a test mode and robot is synchronized.
+			if (!robot_test_mode && is_synchronised())
 				// Get actual motor positions.
 				current_motor_pos[i] = axes[i]->getActualPosition();
+			else
+				// Zero all motor positions.
+				current_motor_pos[i] = 0;
 		}
 #if(DEBUG_MOTORS)
 		cout << "current_motor_pos: " << current_motor_pos.transpose() << "\n";
@@ -149,7 +149,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 #endif
 
 		// Reset zero position.
-		if ((current_legs_state() == lib::smb::ALL_OUT) && (!robot_test_mode)) {
+		if ((!robot_test_mode) && (current_legs_state() == lib::smb::ALL_OUT)) {
 			/*// Homing of the motor controlling the legs rotation - set current position as 0.
 			 legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
 			 legs_rotation_node->monitorHomingStatus();*/
