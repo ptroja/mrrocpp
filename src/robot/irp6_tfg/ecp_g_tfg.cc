@@ -50,6 +50,7 @@ namespace generator {
 tfg::tfg(common::task::task& _ecp_task, int step) :
 	common::generator::generator(_ecp_task), step_no(step)
 {
+
 }
 
 bool tfg::first_step()

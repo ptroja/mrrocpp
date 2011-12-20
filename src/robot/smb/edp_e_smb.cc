@@ -261,6 +261,10 @@ void effector::synchronise(void)
 	cout.flush();
 #endif
 	try {
+		// TEMPORARY
+		controller_state_edp_buf.is_synchronised = true;
+		return;
+		// END OF TEMPORARY
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
 			return;
