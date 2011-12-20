@@ -34,9 +34,8 @@ bool get_position::first_step()
 {
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction_type = lib::GET;
-	the_robot->ecp_command.motion_type = lib::ABSOLUTE; //aqui siempre ABSOLUTE, RELATIVE makes no sense here
+        the_robot->ecp_command.motion_type = lib::ABSOLUTE; //aqui siempre ABSOLUTE, RELATIVE makes no sense here (q no tiene sentido)
 	the_robot->ecp_command.interpolation_type = lib::MIM;
-
 	switch (pose_spec)
 	{
 		case lib::ECP_XYZ_ANGLE_AXIS:
@@ -60,7 +59,6 @@ bool get_position::first_step()
 bool get_position::next_step()
 {
 	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS || pose_spec == lib::ECP_XYZ_EULER_ZYZ) {
-
 		lib::Homog_matrix actual_position_matrix;
 		actual_position_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
 
