@@ -127,22 +127,6 @@ int wgt_smb_command::init()
 	try {
 
 		if (robot->state.edp.pid != -1) {
-			// sets leg state
-			robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.set_request();
-			robot->ui_ecp_robot->execute_motion();
-			robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.get();
-
-			lib::smb::multi_leg_reply_td &mlr =
-					robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.data;
-
-			for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-				checkBox_fl_in_Vector[i]->setChecked(mlr.leg[i].is_in);
-				checkBox_fl_out_Vector[i]->setChecked(mlr.leg[i].is_out);
-				checkBox_fl_attached_Vector[i]->setChecked(mlr.leg[i].is_attached);
-			}
-
-			// sets motor state if robot is synchronised
-
 			if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
 			{
 				synchro_depended_widgets_disable(false);
@@ -153,7 +137,9 @@ int wgt_smb_command::init()
 				} else if (ui.radioButton_m_ext->isChecked()) {
 					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.set_request();
 				}
+				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.set_request();
 				robot->ui_ecp_robot->execute_motion();
+				robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.get();
 				lib::epos::epos_reply *er;
 				lib::smb::smb_ext_epos_reply *ser;
 
@@ -167,6 +153,17 @@ int wgt_smb_command::init()
 				} else if (ui.radioButton_m_ext->isChecked()) {
 					robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.get();
 					ser = &robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
+				}
+
+				// sets leg state
+
+				lib::smb::multi_leg_reply_td &mlr =
+						robot->ui_ecp_robot->the_robot->smb_multi_leg_reply_data_request_port.data;
+
+				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+					checkBox_fl_in_Vector[i]->setChecked(mlr.leg[i].is_in);
+					checkBox_fl_out_Vector[i]->setChecked(mlr.leg[i].is_out);
+					checkBox_fl_attached_Vector[i]->setChecked(mlr.leg[i].is_attached);
 				}
 
 				if (ui.radioButton_m_motor->isChecked()) {
