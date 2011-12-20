@@ -114,6 +114,10 @@ void robot::create_command()
 
 	if (epos_brake_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
+		if (!is_synchronised()) {
+			ecp_command.motion_type = lib::RELATIVE;
+			ecp_command.set_arm_type = lib::MOTOR;
+		}
 		// generator command interpretation
 		// narazie proste przepisanie
 
@@ -232,8 +236,6 @@ void robot::get_reply()
 			epos_external_reply_data_request_port.data.epos_controller[i].motion_in_progress =
 					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
 		}
-
-
 
 		epos_external_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
 
