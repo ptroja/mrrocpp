@@ -129,13 +129,13 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 		// Initiate motor positions.
 		for (size_t i = 0; i < axes.size(); ++i) {
-			// If this is a test mode or robot isn't synchronized.
-			if (robot_test_mode || !is_synchronised())
-				// Zero all motor positions.
-				current_motor_pos[i] = 0;
-			else
+			// If this is not a test mode and robot is synchronized.
+			if (!robot_test_mode && is_synchronised())
 				// Get actual motor positions.
 				current_motor_pos[i] = axes[i]->getActualPosition();
+			else
+				// Zero all motor positions.
+				current_motor_pos[i] = 0;
 		}
 #if(DEBUG_MOTORS)
 		cout << "current_motor_pos: " << current_motor_pos.transpose() << "\n";
@@ -149,7 +149,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 #endif
 
 		// Reset zero position.
-		if ((current_legs_state() == lib::smb::ALL_OUT) && (!robot_test_mode)) {
+		if ((!robot_test_mode) && (current_legs_state() == lib::smb::ALL_OUT)) {
 			/*// Homing of the motor controlling the legs rotation - set current position as 0.
 			 legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
 			 legs_rotation_node->monitorHomingStatus();*/
@@ -183,7 +183,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 }
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-		motor_driven_effector(_shell, l_robot_name)
+	motor_driven_effector(_shell, l_robot_name)
 {
 	number_of_servos = lib::smb::NUM_OF_SERVOS;
 
@@ -193,8 +193,8 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	if (!robot_test_mode) {
 		// Create gateway object.
 		if (this->config.exists("can_iface")) {
-			gateway =
-					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
+			gateway
+					= (boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string> ("can_iface"));
 		} else {
 			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
 		}
@@ -218,42 +218,6 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 }
 
-int effector::relativeSynchroPosition(maxon::epos & node)
-{
-	// Wakeup time.
-	boost::system_time wakeup;
-
-	// Setup the wakeup time.
-	wakeup = boost::get_system_time();
-
-	// Set voltage-to-position interpolation coefficients.
-	const double p1 = -0.0078258336;
-	const double p2 = 174.7796278191;
-	const double p3 = -507883.404901415;
-
-	// Number of readings.
-	const unsigned int filter = 7;
-	std::vector <int> potTable(filter);
-
-	// Get current potentiometer readings.
-	for (int i = 0; i < filter; ++i) {
-		potTable[i] = node.getAnalogInput1();
-		// Increment the wakeup time
-		wakeup += boost::posix_time::milliseconds(5);
-		// Wait for device state to change
-		boost::thread::sleep(wakeup);
-	}
-	// Sort readings table.
-	std::sort(potTable.begin(), potTable.end());
-	// Compute mean value.
-	double pot = (potTable[2] + potTable[3] + potTable[4]) / 3.0;
-
-	// Compute desired position.
-	int position = -(pot * pot * p1 + pot * p2 + p3) - 120000;
-	// Return computed position
-	return position;
-}
-
 void effector::synchronise(void)
 {
 #if(DEBUG_METHODS)
@@ -268,39 +232,14 @@ void effector::synchronise(void)
 
 		controller_state_edp_buf.is_synchronised = false;
 		// Two-step synchronization of the motor rotating the whole PKM.
-		// Step1: Potentiometer.
-		int position;
-		// Compute desired position.
-		position = relativeSynchroPosition(*pkm_rotation_node);
-		cout << "Computed pose: " << position << endl;
+		// Step 1: Potentiometer-based Velocity motion.
+		// TODO: PT.
 
 		// Set "safe" velocity and acceleration values.
-		pkm_rotation_node->setProfileVelocity(500);
+		/*pkm_rotation_node->setProfileVelocity(500);
 		pkm_rotation_node->setProfileAcceleration(100);
-		pkm_rotation_node->setProfileDeceleration(100);
+		pkm_rotation_node->setProfileDeceleration(100);*/
 
-		// Loop.
-		do {
-			// Move to the relative position.
-			pkm_rotation_node->moveRelative(position);
-
-			// Wakeup time.
-			boost::system_time wakeup;
-
-			// Setup the wakeup time.
-			wakeup = boost::get_system_time();
-
-			// Wait until end of the motion.
-			while (!pkm_rotation_node->isTargetReached()) {
-				// Sleep for a constant period of time
-				wakeup += boost::posix_time::milliseconds(5);
-
-				boost::thread::sleep(wakeup);
-			}
-
-			// Get current position.
-			position = relativeSynchroPosition(*pkm_rotation_node);
-		} while (abs(position) > 100);
 
 		// Step2: Homing.
 		// Activate homing mode.
@@ -378,16 +317,16 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (!robot_test_mode) {
 					// Execute command
 					BOOST_FOREACH(maxon::epos * node, axes)
-							{
-								// Brake with Quickstop command
-								node->setState(maxon::epos::QUICKSTOP);
-							}
+								{
+									// Brake with Quickstop command
+									node->setState(maxon::epos::QUICKSTOP);
+								}
 					// Reset node right after.
 					BOOST_FOREACH(maxon::epos * node, axes)
-							{
-								// Reset node.
-								node->reset();
-							}
+								{
+									// Reset node.
+									node->reset();
+								}
 
 				} //: !test_mode
 				break;
@@ -398,9 +337,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 #endif
 				if (!robot_test_mode) {
 					BOOST_FOREACH(maxon::epos * node, axes)
-							{
-								node->clearFault();
-							}
+								{
+									node->clearFault();
+								}
 				} //: !test_mode
 				break;
 			}
@@ -453,17 +392,16 @@ void effector::parse_motor_command()
 	if (current_legs_state() != lib::smb::TWO_IN_ONE_OUT) {
 		// Check the difference between current and desired values.
 		// Check motors.
-		if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::MOTOR)
-				&& (current_motor_pos[0] != ecp_edp_cbuffer.motor_pos[0]))
+		if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::MOTOR) && (current_motor_pos[0]
+				!= ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
-		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT)
-				&& (current_joints[0] != ecp_edp_cbuffer.joint_pos[0]))
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT) && (current_joints[0]
+				!= ecp_edp_cbuffer.joint_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check externals.
-		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::EXTERNAL)
-				&& (current_joints[0]
-						!= ecp_edp_cbuffer.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::EXTERNAL) && (current_joints[0]
+				!= ecp_edp_cbuffer.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
@@ -580,7 +518,7 @@ void effector::execute_motor_motion()
 						// Virtually "move" to desired absolute position.
 						current_motor_pos[i] = desired_motor_pos_new[i];
 					}
-				} //: for
+				}//: for
 			} else {
 #if(DEBUG_MOTORS)
 				cout << "MOTOR moveRelative:" << desired_motor_pos_new.transpose() << endl;
@@ -597,8 +535,8 @@ void effector::execute_motor_motion()
 						// Virtually "move" to desired relative position.
 						current_motor_pos[i] += desired_motor_pos_new[i];
 					}
-				} //: for
-			} //: is_synchronised
+				}//: for
+			}//: is_synchronised
 			break;
 		default:
 			// Throw non-fatal error - motion type not supported.
