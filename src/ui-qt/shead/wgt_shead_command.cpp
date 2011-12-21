@@ -17,10 +17,6 @@ wgt_shead_command::wgt_shead_command(QString _widget_label, mrrocpp::ui::common:
 
 	checkBox_m_mip_Vector.append(ui.checkBox_ml_mip);
 
-	checkBox_contacts_Vector.append(ui.checkBox_con_p1);
-	checkBox_contacts_Vector.append(ui.checkBox_con_p2);
-	checkBox_contacts_Vector.append(ui.checkBox_con_p3);
-
 	doubleSpinBox_m_current_position_Vector.append(ui.doubleSpinBox_ml_current_position);
 
 	doubleSpinBox_m_absolute_Vector.append(ui.doubleSpinBox_ml_absolute);
@@ -151,11 +147,6 @@ int wgt_shead_command::init()
 					default: {
 					}
 						break;
-				}
-
-				// sets head contact state
-				for (int i = 0; i < 3; i++) {
-					checkBox_contacts_Vector[i]->setChecked(rep.contacts[i]);
 				}
 
 				for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {

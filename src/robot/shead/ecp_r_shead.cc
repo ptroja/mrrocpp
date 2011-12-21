@@ -82,9 +82,6 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.set_pose_specification = lib::shead::MOTOR;
 
-		ecp_edp_cbuffer.motion_variant = epos_motor_command_data_port.data.motion_variant;
-		ecp_edp_cbuffer.estimated_time = epos_motor_command_data_port.data.estimated_time;
-
 		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; ++i) {
 			ecp_edp_cbuffer.motor_pos[i] = epos_motor_command_data_port.data.desired_position[i];
 		}
@@ -99,8 +96,6 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.set_pose_specification = lib::shead::JOINT;
 
-		ecp_edp_cbuffer.motion_variant = epos_joint_command_data_port.data.motion_variant;
-		ecp_edp_cbuffer.estimated_time = epos_joint_command_data_port.data.estimated_time;
 		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; ++i) {
 			ecp_edp_cbuffer.joint_pos[i] = epos_joint_command_data_port.data.desired_position[i];
 		}

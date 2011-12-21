@@ -190,7 +190,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		reply.servo_step = step_counter;
 		edp_ecp_rbuffer.shead_reply.soldification_state = lib::shead::SOLDIFICATION_STATE_INTERMEDIATE;
 		edp_ecp_rbuffer.shead_reply.vacuum_state = lib::shead::VACUUM_STATE_OFF;
-		edp_ecp_rbuffer.shead_reply.contacts[1] = true;
 
 	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.

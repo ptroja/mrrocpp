@@ -24,7 +24,7 @@ namespace shead {
  */
 typedef enum _POSE_SPECIFICATION
 {
-	FRAME, JOINT, MOTOR
+	MOTOR, JOINT
 } POSE_SPECIFICATION;
 
 /*!
@@ -91,7 +91,6 @@ struct reply
 {
 	STATE_OF_THE_SOLDIFICATION soldification_state;
 	STATE_OF_THE_VACUUM vacuum_state;
-	bool contacts[3];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -102,7 +101,6 @@ struct reply
 	{
 		ar & soldification_state;
 		ar & vacuum_state;
-		ar & contacts;
 	}
 
 }__attribute__((__packed__));
@@ -122,11 +120,11 @@ enum CBUFFER_VARIANT
  */
 struct cbuffer
 {
-
 	//! Variant of the command
 	CBUFFER_VARIANT variant;
 
 	lib::shead::SOLIDIFICATION_ACTIVATION head_solidification;
+
 	lib::shead::VACUUM_ACTIVATION vacuum_activation;
 
 	//! Pose specification type
@@ -134,12 +132,6 @@ struct cbuffer
 
 	//! Pose specification type
 	POSE_SPECIFICATION get_pose_specification;
-
-	//! Motion interpolation variant
-	lib::epos::EPOS_MOTION_VARIANT motion_variant;
-
-	//! Motion time - used in the Interpolated Position Mode.
-	double estimated_time;
 
 	int32_t motor_pos[NUM_OF_SERVOS];
 
@@ -150,12 +142,6 @@ struct cbuffer
 	//! If > 0 and greater than a limit imposed by the motors, then the motion will be slowed down.
 	//! In another case, the NACK will be replied.
 	double duration;
-
-	//! True if the contact is expected during the motion.
-	//! The NACK will be replied if:
-	//! - the contact was expected and did not happened
-	//! - OR the contact was NOT expected and did happened.
-	bool guarded_motion;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -181,8 +167,6 @@ struct cbuffer
 						ar & motor_pos;
 						break;
 				}
-				ar & motion_variant;
-				ar & estimated_time;
 				break;
 			default:
 				break;
