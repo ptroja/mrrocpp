@@ -39,6 +39,7 @@
 #include <stdint.h>  /* int types with given size */
 
 #include <string>
+#include <bitset>
 
 // Include for BYTE/WORD/DWORD typedefs
 #include "robot/canopen/gateway.h"
@@ -790,6 +791,14 @@ public:
 
 	INTEGER32 getPositionModeSettingValue();
 
+	typedef std::bitset<8> digital_outputs_t;
+
+	void setDigitalOutputs(digital_outputs_t cmd);
+
+	UNSIGNED16 getDigitalOutputs();
+
+	const digital_outputs_t & getCommandedDigitalOutputs();
+
 	//! @}
 
 private:
@@ -801,6 +810,7 @@ private:
 	UNSIGNED32 ProfileAcceleration;
 	UNSIGNED32 ProfileDeceleration;
 	INTEGER32 TargetVelocity;
+	digital_outputs_t DigitalOutputs;
 };
 
 } /* namespace maxon */

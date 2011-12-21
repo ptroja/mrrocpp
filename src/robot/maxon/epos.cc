@@ -111,6 +111,19 @@ epos::epos(gateway & _device, uint8_t _nodeId) :
 	TargetVelocity = getTargetVelocity();
 	remote = isRemoteOperationEnabled(getStatusWord());
 
+	{
+		UNSIGNED16 outputs = getDigitalOutputs();
+
+		DigitalOutputs[0] = (outputs & (1 << 15)) ? true : false;
+		DigitalOutputs[1] = (outputs & (1 << 14)) ? true : false;
+		DigitalOutputs[2] = (outputs & (1 << 13)) ? true : false;
+		DigitalOutputs[3] = (outputs & (1 << 12)) ? true : false;
+		DigitalOutputs[4] = (outputs & (1 << 11)) ? true : false;
+		DigitalOutputs[5] = (outputs & (1 << 10)) ? true : false;
+		DigitalOutputs[6] = (outputs & (1 << 9)) ? true : false;
+		DigitalOutputs[7] = (outputs & (1 << 8)) ? true : false;
+	}
+
 #if 0
 	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
 	ProfileVelocity << ", " <<
@@ -2095,6 +2108,35 @@ INTEGER8 epos::getAnalogVelocitySetpointNotationIndex()
 INTEGER32 epos::getAnalogVelocitySetpoint()
 {
 	return ReadObjectValue <INTEGER32>(0x2302, 0x04);
+}
+
+void epos::setDigitalOutputs(digital_outputs_t cmd)
+{
+	UNSIGNED16 val = 0x0000;
+
+	// Map consecutive bits into general outputs
+	if(cmd[0]) val |= (1 << 15);
+	if(cmd[1]) val |= (1 << 14);
+	if(cmd[2]) val |= (1 << 13);
+	if(cmd[3]) val |= (1 << 12);
+	if(cmd[4]) val |= (1 << 11);
+	if(cmd[5]) val |= (1 << 10);
+	if(cmd[6]) val |= (1 << 9);
+	if(cmd[7]) val |= (1 << 8);
+
+	WriteObjectValue(0x2078, 0x01, val);
+
+	DigitalOutputs = val;
+}
+
+UNSIGNED16 epos::getDigitalOutputs()
+{
+	return ReadObjectValue <UNSIGNED16>(0x2078, 0x01);
+}
+
+const epos::digital_outputs_t & epos::getCommandedDigitalOutputs()
+{
+	return DigitalOutputs;
 }
 
 void epos::InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
