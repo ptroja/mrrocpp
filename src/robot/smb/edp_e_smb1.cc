@@ -26,6 +26,10 @@ effector::effector(common::shell &_shell) :
 
 void effector::synchronise(void)
 {
+#if(DEBUG_METHODS)
+	cout << "smb1::effector::synchronise\n";
+	cout.flush();
+#endif
 	try {
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
