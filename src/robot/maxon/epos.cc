@@ -108,7 +108,21 @@ epos::epos(gateway & _device, uint8_t _nodeId) :
 	ProfileVelocity = getProfileVelocity();
 	ProfileAcceleration = getProfileAcceleration();
 	ProfileDeceleration = getProfileDeceleration();
+	TargetVelocity = getTargetVelocity();
 	remote = isRemoteOperationEnabled(getStatusWord());
+
+	{
+		UNSIGNED16 outputs = getDigitalOutputs();
+
+		DigitalOutputs[0] = (outputs & (1 << 15)) ? true : false;
+		DigitalOutputs[1] = (outputs & (1 << 14)) ? true : false;
+		DigitalOutputs[2] = (outputs & (1 << 13)) ? true : false;
+		DigitalOutputs[3] = (outputs & (1 << 12)) ? true : false;
+		DigitalOutputs[4] = (outputs & (1 << 11)) ? true : false;
+		DigitalOutputs[5] = (outputs & (1 << 10)) ? true : false;
+		DigitalOutputs[6] = (outputs & (1 << 9)) ? true : false;
+		DigitalOutputs[7] = (outputs & (1 << 8)) ? true : false;
+	}
 
 #if 0
 	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
@@ -1016,6 +1030,19 @@ UNSIGNED32 epos::getPositionWindow()
 void epos::setPositionWindow(UNSIGNED32 val)
 {
 	WriteObjectValue(0x6067, 0x00, val);
+}
+
+INTEGER32 epos::getTargetVelocity()
+{
+	return ReadObjectValue <INTEGER32>(0x60FF, 0x00);
+}
+
+void epos::setTargetVelocity(INTEGER32 val)
+{
+	if(val != TargetVelocity) {
+		WriteObjectValue(0x60FF, 0x00, val);
+		TargetVelocity = val;
+	}
 }
 
 void epos::setProfileVelocity(UNSIGNED32 val)
@@ -2013,10 +2040,104 @@ INTEGER16 epos::getAnalogInput1() {
 	return ReadObjectValue <INTEGER16>(0x207C, 0x01);
 }
 
-/*INTEGER32 epos::writeTMP(INTEGER32 value) {
-	WriteObjectValue(canopen::WORD index, canopen::BYTE subindex, T data) <>(0x2303, 0x04);
-}*/
+void epos::configureAnalogInput(int input, analog_input_mode_t mode)
+{
+	if(input < 0 || input > 2) {
+		BOOST_THROW_EXCEPTION(fe() << reason("Analog input line number out of range"));
+	}
+	WriteObjectValue(0x207B, input, mode);
+}
 
+void epos::setAnalogInputFunctionalitiesExecutionMask(bool PositionSetpoint, bool VelocitySetpoint, bool CurrentSetpoint)
+{
+	UNSIGNED16 mask = 0x0000;
+
+	if(PositionSetpoint) {
+		mask |= 0x04;
+	}
+	if(VelocitySetpoint) {
+		mask |= 0x02;
+	}
+	if(CurrentSetpoint) {
+		mask |= 0x01;
+	}
+
+	WriteObjectValue(0x207D, 0x00, mask);
+}
+
+void epos::setPositionModeSettingValue(INTEGER32 val)
+{
+	WriteObjectValue(0x2062, 0x00, val);
+}
+
+INTEGER32 epos::getPositionModeSettingValue()
+{
+	return ReadObjectValue <INTEGER32>(0x2062, 0x00);
+}
+
+void epos::setAnalogVelocitySetpointScaling(INTEGER16 val)
+{
+	WriteObjectValue(0x2302, 0x01, val);
+}
+
+INTEGER16 epos::getAnalogVelocitySetpointScaling(INTEGER16 val)
+{
+	return ReadObjectValue <INTEGER16>(0x2302, 0x01);
+}
+
+void epos::setAnalogVelocitySetpointOffset(INTEGER32 val)
+{
+	WriteObjectValue(0x2302, 0x02, val);
+}
+
+INTEGER32 epos::getAnalogVelocitySetpointOffset()
+{
+	return ReadObjectValue <INTEGER32>(0x2302, 0x02);
+}
+
+void epos::setAnalogVelocitySetpointNotationIndex(INTEGER8 val)
+{
+	WriteObjectValue(0x2302, 0x03, val);
+}
+
+INTEGER8 epos::getAnalogVelocitySetpointNotationIndex()
+{
+	return ReadObjectValue <INTEGER8>(0x2302, 0x03);
+}
+
+INTEGER32 epos::getAnalogVelocitySetpoint()
+{
+	return ReadObjectValue <INTEGER32>(0x2302, 0x04);
+}
+
+void epos::setDigitalOutputs(digital_outputs_t cmd)
+{
+	UNSIGNED16 val = 0x0000;
+
+	// Map consecutive bits into general outputs
+	if(cmd[0]) val |= (1 << 15);
+	if(cmd[1]) val |= (1 << 14);
+	if(cmd[2]) val |= (1 << 13);
+	if(cmd[3]) val |= (1 << 12);
+	if(cmd[4]) val |= (1 << 11);
+	if(cmd[5]) val |= (1 << 10);
+	if(cmd[6]) val |= (1 << 9);
+	if(cmd[7]) val |= (1 << 8);
+
+	WriteObjectValue(0x2078, 0x01, val);
+
+	DigitalOutputs = val;
+}
+
+UNSIGNED16 epos::getDigitalOutputs()
+{
+	return ReadObjectValue <UNSIGNED16>(0x2078, 0x01);
+}
+
+const epos::digital_outputs_t & epos::getCommandedDigitalOutputs()
+{
+	return DigitalOutputs;
+}
 
 void epos::InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
 {
