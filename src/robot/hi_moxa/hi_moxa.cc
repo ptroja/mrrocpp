@@ -24,8 +24,11 @@ namespace edp {
 namespace hi_moxa {
 
 HI_moxa::HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector <std::string> ports, const double* max_increments) :
-	common::HardwareInterface(_master), last_drive_number(last_drive_n), port_names(ports),
-			ridiculous_increment(max_increments), ptimer(COMMCYCLE_TIME_NS / 1000000)
+		common::HardwareInterface(_master),
+		last_drive_number(last_drive_n),
+		port_names(ports),
+		ridiculous_increment(max_increments),
+		ptimer(COMMCYCLE_TIME_NS / 1000000)
 {
 #ifdef T_INFO_FUNC
 	std::cout << "[func] Hi, Moxa!" << std::endl;
@@ -211,18 +214,36 @@ uint64_t HI_moxa::read_write_hardware(void)
 	} // end test mode
 
 	if (hardware_panic) {
-		for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
-			set_parameter(drive_number, PARAM_DRIVER_MODE, PARAM_DRIVER_MODE_ERROR);
+
+		if (error_msg_hardware_panic < 10) {
+			for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
+				set_parameter(drive_number, PARAM_DRIVER_MODE, PARAM_DRIVER_MODE_ERROR);
+		}
 
 		if (error_msg_hardware_panic == 0) {
 			master.msg->message(lib::FATAL_ERROR, "Hardware panic");
 			std::cout << "[error] hardware panic" << std::endl;
-			error_msg_hardware_panic++;
+
 		}
+		error_msg_hardware_panic++;
 		ptimer.sleep();
 		return ret;
 	}
 
+	/* OLD
+	 if (hardware_panic) {
+	 for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
+	 set_parameter(drive_number, PARAM_DRIVER_MODE, PARAM_DRIVER_MODE_ERROR);
+
+	 if (error_msg_hardware_panic == 0) {
+	 master.msg->message(lib::FATAL_ERROR, "Hardware panic");
+	 std::cout << "[error] hardware panic" << std::endl;
+	 error_msg_hardware_panic++;
+	 }
+	 ptimer.sleep();
+	 return ret;
+	 }
+	 */
 	for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
 		//	write(fd[drive_number], "  ", 2);
 		write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
@@ -269,8 +290,8 @@ uint64_t HI_moxa::read_write_hardware(void)
 			for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
 
 				if (FD_ISSET(fd[drive_number], &rfds)) {
-					bytes_received[drive_number]
-							+= read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status))
+					bytes_received[drive_number] +=
+							read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status))
 									+ bytes_received[drive_number], READ_BYTES - bytes_received[drive_number]);
 					//					std::cout << "[comm] drive " << (int)drive_number << ", received " << bytes_received[drive_number] << std::endl;
 				}
@@ -329,11 +350,10 @@ uint64_t HI_moxa::read_write_hardware(void)
 					|| (servo_data[drive_number].current_position_inc < -ridiculous_increment[drive_number])) {
 				hardware_panic = true;
 				std::stringstream temp_message;
-				temp_message << "[error] ridiculous increment on drive " << (int) drive_number
-						<< ", " << port_names[drive_number].c_str()
-						<< ", c.cycle " << (int) receive_attempts
-						<< ": read = " << servo_data[drive_number].current_position_inc
-						<< ", max = " << ridiculous_increment[drive_number] << std::endl;
+				temp_message << "[error] ridiculous increment on drive " << (int) drive_number << ", "
+						<< port_names[drive_number].c_str() << ", c.cycle " << (int) receive_attempts << ": read = "
+						<< servo_data[drive_number].current_position_inc << ", max = "
+						<< ridiculous_increment[drive_number] << std::endl;
 				master.msg->message(lib::FATAL_ERROR, temp_message.str());
 				std::cout << temp_message.str();
 			}
@@ -343,9 +363,9 @@ uint64_t HI_moxa::read_write_hardware(void)
 		if (servo_data[drive_number].drive_status.overcurrent == 1) {
 			if (error_msg_overcurrent == 0) {
 				master.msg->message(lib::NON_FATAL_ERROR, "Overcurrent");
-				std::cout << "[error] overcurrent on drive " << (int) drive_number
-						<< ", " << port_names[drive_number].c_str()
-						<< ": read = " << servo_data[drive_number].drive_status.current << "mA" << std::endl;
+				std::cout << "[error] overcurrent on drive " << (int) drive_number << ", "
+						<< port_names[drive_number].c_str() << ": read = "
+						<< servo_data[drive_number].drive_status.current << "mA" << std::endl;
 				error_msg_overcurrent++;
 			}
 		}
@@ -354,9 +374,8 @@ uint64_t HI_moxa::read_write_hardware(void)
 		if (comm_timeouts[drive_number] >= MAX_COMM_TIMEOUTS) {
 			hardware_panic = true;
 			std::stringstream temp_message;
-			temp_message << "[error] multiple communication timeouts on drive " << (int) drive_number
-									<< "(" << port_names[drive_number].c_str()
-									<< "): limit = "	<< MAX_COMM_TIMEOUTS << std::endl;
+			temp_message << "[error] multiple communication timeouts on drive " << (int) drive_number << "("
+					<< port_names[drive_number].c_str() << "): limit = " << MAX_COMM_TIMEOUTS << std::endl;
 			master.msg->message(lib::FATAL_ERROR, temp_message.str());
 			std::cout << temp_message.str();
 		}
