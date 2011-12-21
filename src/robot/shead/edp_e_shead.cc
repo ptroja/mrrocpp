@@ -12,9 +12,13 @@
 // Kinematyki.
 #include "robot/shead/kinematic_model_shead.h"
 #include "base/edp/manip_trans_t.h"
-#include "base/edp/vis_server.h"
 
 #include "base/lib/exception.h"
+
+#include "robot/canopen/gateway_epos_usb.h"
+#include "robot/canopen/gateway_socketcan.h"
+#include "robot/maxon/epos.h"
+
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
@@ -30,21 +34,48 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	motor_driven_effector(_shell, l_robot_name)
 {
-
 	number_of_servos = lib::shead::NUM_OF_SERVOS;
+
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
+
+	if (!robot_test_mode) {
+		// Create gateway object.
+		if (this->config.exists("can_iface")) {
+			gateway
+					= (boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string> ("can_iface"));
+		} else {
+			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
+		}
+
+		// Connect to the gateway.
+		gateway->open();
+
+		// Create epos objects according to CAN ID-mapping.
+		epos_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 7);
+	}
 }
 
 void effector::synchronise(void)
 {
+	if (robot_test_mode) {
+		controller_state_edp_buf.is_synchronised = true;
+		return;
+	}
+
+	// Initialize variable to false in case of exception
+	controller_state_edp_buf.is_synchronised = false;
+
 	try {
-		if (robot_test_mode) {
-			controller_state_edp_buf.is_synchronised = true;
-			return;
-		}
+		// Common synchronization sequence
+		epos_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		epos_node->reset();
+		epos_node->startHoming();
+		epos_node->monitorHomingStatus();
+
+		controller_state_edp_buf.is_synchronised = true;
 
 	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
@@ -62,7 +93,6 @@ void effector::synchronise(void)
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
-
 	if (robot_test_mode) {
 		return;
 	}
@@ -105,7 +135,6 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 	} catch (...) {
 		HANDLE_EDP_UNKNOWN_ERROR()
 	}
-
 }
 
 /*--------------------------------------------------------------------------*/
@@ -114,48 +143,97 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	try {
 		msg->message("move_arm");
 
-		std::stringstream ss(std::stringstream::in | std::stringstream::out);
-
 		switch (ecp_edp_cbuffer.variant)
 		{
-			case lib::shead::POSE: {
+			case lib::shead::POSE:
 				msg->message("POSE");
-			}
 				break;
+			case lib::shead::QUICKSTOP:
+				if (!robot_test_mode) {
+					// Brake with Quickstop command
+					epos_node->setState(maxon::epos::QUICKSTOP);
 
-			case lib::shead::QUICKSTOP: {
-				msg->message("QUICKSTOP");
-			}
+					// Reset node.
+					epos_node->reset();
+				}
 				break;
-
-			case lib::shead::CLEAR_FAULT: {
-				msg->message("CLEAR_FAULT");
-			}
+			case lib::shead::CLEAR_FAULT:
+				if (!robot_test_mode) {
+					epos_node->clearFault();
+				}
 				break;
-			case lib::shead::SOLIDIFICATION: {
-				lib::shead::SOLIDIFICATION_ACTIVATION head_solidification;
+			case lib::shead::SOLIDIFICATION:
+				switch(ecp_edp_cbuffer.head_solidification) {
+					case lib::shead::SOLDIFICATION_STATE_ON:
+						if(!robot_test_mode) {
+							// Get current output state
+							maxon::epos::digital_outputs_t outputs = epos_node->getCommandedDigitalOutputs();
 
-				memcpy(&head_solidification, &(ecp_edp_cbuffer.head_solidification), sizeof(head_solidification));
-				ss << "SOLIDIFICATION: " << head_solidification;
-				msg->message(ss.str().c_str());
+							// Enable General purpose OutB and OutC
+							outputs[1] = true;
+							outputs[2] = true;
 
-				// previously computed parameters send to epos2 controllers
+							// Set new state
+							epos_node->setDigitalOutputs(outputs);
+						} else {
+							// TODO
+						}
+						break;
+					case lib::shead::SOLDIFICATION_STATE_OFF:
+						if(!robot_test_mode) {
+							// Get current output state
+							maxon::epos::digital_outputs_t outputs = epos_node->getCommandedDigitalOutputs();
 
-				// start the trajectory execution
+							// Disable General purpose OutB and OutC
+							outputs[1] = false;
+							outputs[2] = false;
 
-			}
+							// Set new state
+							epos_node->setDigitalOutputs(outputs);
+						} else {
+							// TODO
+						}
+						break;
+					default:
+						// TODO: throw
+						break;
+				}
 				break;
-			case lib::shead::VACUUM: {
-				lib::shead::VACUUM_ACTIVATION vacuum_activation;
+			case lib::shead::VACUUM:
+				switch(ecp_edp_cbuffer.vacuum_activation) {
+					case lib::shead::VACUUM_ON:
+						if(!robot_test_mode) {
+							// Get current output state
+							maxon::epos::digital_outputs_t outputs = epos_node->getCommandedDigitalOutputs();
 
-				memcpy(&vacuum_activation, &(ecp_edp_cbuffer.vacuum_activation), sizeof(vacuum_activation));
-				ss << "VACUUM: " << vacuum_activation;
-				msg->message(ss.str().c_str());
-			}
+							// Enable General purpose OutD
+							outputs[3] = true;
+
+							// Set new state
+							epos_node->setDigitalOutputs(outputs);
+						} else {
+							// TODO
+						}
+						break;
+					case lib::shead::VACUUM_OFF:
+						if(!robot_test_mode) {
+							// Get current output state
+							maxon::epos::digital_outputs_t outputs = epos_node->getCommandedDigitalOutputs();
+
+							// Disable General purpose OutD
+							outputs[3] = false;
+
+							// Set new state
+							epos_node->setDigitalOutputs(outputs);
+						}
+						break;
+					default:
+						// TODO: throw
+						break;
+				}
 				break;
 			default:
 				break;
-
 		}
 	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
@@ -219,7 +297,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 void effector::create_threads()
 {
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
+	//vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
 void effector::instruction_deserialization()

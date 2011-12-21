@@ -8,12 +8,15 @@
  * @ingroup KINEMATICS SIF_KINEMATICS shead
  */
 
-#include "base/lib/com_buf.h"
+#include "base/lib/mrmath/MotorArray.h"
+#include "base/lib/mrmath/JointArray.h"
 #include "robot/shead/kinematic_model_shead.h"
 
 namespace mrrocpp {
 namespace kinematics {
 namespace shead {
+
+const double model::i2m_ratio = 0.0;
 
 model::model(void)
 {
@@ -47,4 +50,3 @@ void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const 
 } // namespace smb
 } // namespace kinematic
 } // namespace mrrocpp
-

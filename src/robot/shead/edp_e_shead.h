@@ -13,6 +13,9 @@
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_shead.h"
 
+#include "robot/canopen/gateway.h"
+#include "robot/maxon/epos.h"
+
 namespace mrrocpp {
 namespace edp {
 namespace shead {
@@ -27,6 +30,11 @@ namespace shead {
 class effector : public common::motor_driven_effector
 {
 protected:
+	//! Access to the CAN gateway unit
+	boost::shared_ptr <canopen::gateway> gateway;
+
+	//! Digitial_input axis
+	boost::shared_ptr <maxon::epos> epos_node;
 
 	lib::shead::cbuffer ecp_edp_cbuffer;
 	lib::shead::rbuffer edp_ecp_rbuffer;

@@ -62,6 +62,9 @@ public:
 	 */
 	void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
 
+private:
+	//! Parameter for conversion between joint and motor coordinates [rad]->[qc].
+	static const double i2m_ratio;
 };
 
 } // namespace smb
