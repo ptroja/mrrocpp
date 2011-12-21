@@ -5,14 +5,23 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm2 {
 
+// Debug executed methods.
+#define DEBUG_METHODS 1
+#include "debug.hpp"
+
 
 effector::effector(common::shell &_shell) :
 	spkm::effector(_shell, lib::spkm2::ROBOT_NAME)
 {
-#if(DEBUG_METHODS)
-	cout << "spkm2::effector::effector\n";
-	cout.flush();
-#endif
+	DEBUG_METHOD;
+
+	// Set default motor velocities, accelerations and decelerations.
+	Vdefault = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
+	Adefault = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
+	Ddefault = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
+
+	MotorVmax = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
+	MotorAmax = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
 
 	if (!robot_test_mode) {
 		// Create epos objects according to CAN ID-mapping.

@@ -30,6 +30,12 @@
 
 #include "robot/maxon/ipm_executor.h"
 
+#include "debug.hpp"
+// Debug PVT triples.
+#define DEBUG_PVT 1
+
+
+
 namespace mrrocpp {
 namespace edp {
 namespace spkm {
@@ -38,39 +44,11 @@ using namespace mrrocpp::lib;
 using namespace mrrocpp::lib::pvat;
 using namespace std;
 
-// Debug executed methods.
-#define DEBUG_METHODS 1
-
-// Debug retrieved commands.
-#define DEBUG_COMMANDS 1
-
-// Debug reference frames.
-#define DEBUG_FRAMES 1
-
-// Debug joints.
-#define DEBUG_JOINTS 0
-
-// Debug motors.
-#define DEBUG_MOTORS 0
-
-// Debug PVT triples.
-#define DEBUG_PVT 0
-
-const uint32_t effector::Vdefault[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
-const uint32_t effector::Adefault[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
-const uint32_t effector::Ddefault[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
-
-const uint32_t effector::MotorVmax[lib::spkm::NUM_OF_SERVOS] = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
-const uint32_t effector::MotorAmax[lib::spkm::NUM_OF_SERVOS] = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
-
-
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	manip_effector(_shell, l_robot_name)
 {
-#if(DEBUG_METHODS)
-	cout << "effector::effector\n";
-	cout.flush();
-#endif
+	DEBUG_METHOD;
+
 	// Set number of servos.
 	number_of_servos = lib::spkm::NUM_OF_SERVOS;
 
@@ -96,10 +74,8 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 void effector::check_controller_state()
 {
-#if(DEBUG_METHODS)
-	cout << "effector::check_controller_state\n";
-	cout.flush();
-#endif
+	DEBUG_METHOD;
+
 	if (robot_test_mode){
 		// In test mode robot is always synchronized.
 		controller_state_edp_buf.is_synchronised = true;
@@ -175,10 +151,8 @@ void effector::check_controller_state()
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
-#if(DEBUG_METHODS)
-	cout << "effector::get_controller_state\n";
-	cout.flush();
-#endif
+	DEBUG_METHOD;
+
 	try {
 		// False is the initial value.
 		controller_state_edp_buf.is_synchronised = false;
@@ -267,10 +241,8 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 void effector::synchronise(void)
 {
-#if(DEBUG_METHODS)
-	cout << "effector::synchronise\n";
-	cout.flush();
-#endif
+	DEBUG_METHOD;
+
 	try {
 
 		if (robot_test_mode) {
@@ -351,34 +323,26 @@ void effector::synchronise(void)
 
 void effector::move_arm(const lib::c_buffer &instruction)
 {
-#if(DEBUG_METHODS)
-	cout << "effector::move_arm\n";
-	cout.flush();
-#endif
+	DEBUG_METHOD;
+
 	try {
 		// Check command type.
 		switch (ecp_edp_cbuffer.variant)
 		{
 			case lib::spkm::POSE:
-#if(DEBUG_COMMANDS)
-				cout << "POSE\n";
-#endif
+				DEBUG_COMMAND("POSE");
 				if (controller_state_edp_buf.robot_in_fault_state) {
 					return;
 				}
 
 				// Special case: operational motion.
 				if (ecp_edp_cbuffer.motion_variant == lib::epos::OPERATIONAL) {
-#if(DEBUG_COMMANDS)
-					cout << "OPERATIONAL\n";
-#endif
+					DEBUG_COMMAND("OPERATIONAL");
+
 					interpolated_motion_in_operational_space();
 					// Continue - update the robot state.
 					break;
 				}
-#if(DEBUG_COMMANDS)
-				cout << "NOT OPERATIONAL\n";
-#endif
 				// Parse command.
 				parse_motor_command();
 				// Execute motion.
@@ -386,9 +350,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				// Continue - update the robot state.
 				break;
 			case lib::spkm::QUICKSTOP:
-#if(DEBUG_COMMANDS)
-				cout << "QUICKSTOP\n";
-#endif
+				DEBUG_COMMAND("QUICKSTOP");
+
 				if (!robot_test_mode) {
 					// Execute command
 					BOOST_FOREACH(maxon::epos * node, axes)
@@ -400,9 +363,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				// Internal position counters need not be updated.
 				return;
 			case lib::spkm::CLEAR_FAULT:
-#if(DEBUG_COMMANDS)
-				cout << "CLEAR_FAULT\n";
-#endif
+				DEBUG_COMMAND("CLEAR_FAULT");
+
 				BOOST_FOREACH(maxon::epos * node, axes)
 							{
 								node->clearFault();
@@ -421,9 +383,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		// Check whether the motion was performed in the cartesian space - then we know where manipulator will be when the next command arrives:).
 		if ((ecp_edp_cbuffer.set_pose_specification == lib::spkm::XYZ_EULER_ZYZ)
 				|| (ecp_edp_cbuffer.set_pose_specification == lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL)) {
-#if(DEBUG_COMMANDS)
-			cout << "XYZ_EULER_ZYZ: save frames.\n";
-#endif
 			// Command was given in the wrist frame.
 			current_end_effector_frame = desired_end_effector_frame;
 			current_shead_frame = current_end_effector_frame * shead_frame;
@@ -434,9 +393,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			cout << "current_end_effector_frame:\n" << current_end_effector_frame << endl;
 #endif
 		} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL) {
-#if(DEBUG_COMMANDS)
-			cout << "TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: save frames.\n";
-#endif
 			// Command was given in the tool (SHEAD) frame.
 			current_shead_frame = desired_shead_frame;
 			current_end_effector_frame = desired_shead_frame * !shead_frame;
@@ -468,17 +424,14 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 void effector::parse_motor_command()
 {
-#if(DEBUG_METHODS)
-	cout << "effector::parse_motor_command\n";
-	cout.flush();
-#endif
+	DEBUG_METHOD;
+
 	try {
 		switch (ecp_edp_cbuffer.set_pose_specification)
 		{
 			case lib::spkm::MOTOR: {
-#if(DEBUG_COMMANDS)
-				cout << "MOTOR\n";
-#endif
+				DEBUG_COMMAND("MOTOR");
+
 				// Copy data directly from buffer
 				for (size_t i = 0; i < number_of_servos; ++i) {
 					desired_motor_pos_new[i] = ecp_edp_cbuffer.motor_pos[i];
@@ -523,14 +476,12 @@ void effector::parse_motor_command()
 				break;
 			}
 			case lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL:
-#if(DEBUG_COMMANDS)
-				cout << "WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL\n";
-#endif
+				DEBUG_COMMAND("WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL");
+
 				// In case of SYNC_TRAPEZOIDAL and NON_SYNC_TRAPEZOIDAL those two types of commands are executed in exactly the same way.
 			case lib::spkm::XYZ_EULER_ZYZ: {
-#if(DEBUG_COMMANDS)
-				cout << "XYZ_EULER_ZYZ\n";
-#endif
+				DEBUG_COMMAND("XYZ_EULER_ZYZ");
+
 #if(DEBUG_FRAMES)
 				cout << "XYZ_EULER_ZYZ: [";
 				for (unsigned int i = 0; i < 6; ++i) {
@@ -576,9 +527,7 @@ void effector::parse_motor_command()
 				break;
 			}
 			case lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: {
-#if(DEBUG_COMMANDS)
-				cout << "TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL\n";
-#endif
+				DEBUG_COMMAND("TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL");
 #if(DEBUG_FRAMES)
 				cout << "TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: [";
 				for (unsigned int i = 0; i < 6; ++i) {
@@ -642,17 +591,14 @@ void effector::parse_motor_command()
 
 void effector::execute_motor_motion()
 {
-#if(DEBUG_METHODS)
-	cout << "effector::execute_motor_motion\n";
-	cout.flush();
-#endif
+	DEBUG_METHOD;
+
 	// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
 	switch (ecp_edp_cbuffer.motion_variant)
 	{
 		case lib::epos::NON_SYNC_TRAPEZOIDAL:
-#if(DEBUG_COMMANDS)
-			cout << "NON_SYNC_TRAPEZOIDAL\n";
-#endif
+			DEBUG_COMMAND("NON_SYNC_TRAPEZOIDAL");
+
 			// Execute command
 			for (size_t i = 0; i < axes.size(); ++i) {
 				if (is_synchronised()) {
@@ -685,9 +631,8 @@ void effector::execute_motor_motion()
 			}
 			break;
 		case lib::epos::SYNC_TRAPEZOIDAL: {
-#if(DEBUG_COMMANDS)
-			cout << "SYNC_TRAPEZOIDAL\n";
-#endif
+			DEBUG_COMMAND("SYNC_TRAPEZOIDAL");
+
 			// Motion calculation is done in dimensionless units, but it assumes they are coherent
 			// Delta[turns], Vmax[turns per second], Amax[turns per seconds per seconds]
 			Matrix <double, 6, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
@@ -809,10 +754,8 @@ void effector::execute_motor_motion()
 
 void effector::interpolated_motion_in_operational_space()
 {
-#if(DEBUG_METHODS)
-	cout << "effector::interpolated_motion_in_operational_space\n";
-	cout.flush();
-#endif
+	DEBUG_METHOD;
+
 	if (!is_synchronised())
 		// Throw non-fatal error - this mode requires synchronization.
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
@@ -823,17 +766,11 @@ void effector::interpolated_motion_in_operational_space()
 
 	// Check pose specification.
 	if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::XYZ_EULER_ZYZ) {
-#if(DEBUG_COMMANDS)
-	cout << "XYZ_EULER_ZYZ\n";
-	cout.flush();
-#endif
+		DEBUG_COMMAND("XYZ_EULER_ZYZ");
 		// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
 		desired_end_effector_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
 	} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL) {
-#if(DEBUG_COMMANDS)
-	cout << "TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL\n";
-	cout.flush();
-#endif
+		DEBUG_COMMAND("TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL");
 		// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
 		desired_shead_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
 		// Transform to the wrist frame.
@@ -842,10 +779,7 @@ void effector::interpolated_motion_in_operational_space()
 	cout << "desired_shead_frame: " << desired_shead_frame << endl;
 #endif
 	} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL) {
-#if(DEBUG_COMMANDS)
-	cout << "WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL\n";
-	cout.flush();
-#endif
+		DEBUG_COMMAND("WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL");
 		// Pose is given in wrist, but motion will be performed in tool frame.
 		desired_end_effector_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
 		desired_shead_frame = desired_end_effector_frame * shead_frame;
@@ -1193,10 +1127,8 @@ void effector::interpolated_motion_in_operational_space()
 
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-#if(DEBUG_METHODS)
-	cout << "effector::get_arm_position\n";
-	cout.flush();
-#endif
+	DEBUG_METHOD;
+
 	try {
 		// Check controller state.
 		check_controller_state();
@@ -1206,9 +1138,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 			switch (ecp_edp_cbuffer.get_pose_specification)
 			{
 				case lib::spkm::MOTOR: {
-#if(DEBUG_COMMANDS)
-					cout << "EDP get_arm_position MOTOR\n";
-#endif
+					DEBUG_COMMAND("MOTOR");
 					for (size_t i = 0; i < axes.size(); ++i) {
 						if (robot_test_mode) {
 							edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
@@ -1224,9 +1154,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				}
 					break;
 				case lib::spkm::JOINT: {
-#if(DEBUG_COMMANDS)
-					cout << "EDP get_arm_position JOINT\n";
-#endif
+					DEBUG_COMMAND("JOINT");
 					// Read actual values from the hardware.
 					if (!robot_test_mode) {
 						for (size_t i = 0; i < axes.size(); ++i) {
@@ -1246,11 +1174,10 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				}
 					break;
 				case lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL:
+					DEBUG_COMMAND("WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL");
 					// In case of SYNC_TRAPEZOIDAL and NON_SYNC_TRAPEZOIDAL those two types of commands are executed in exactly the same way.
 				case lib::spkm::XYZ_EULER_ZYZ: {
-#if(DEBUG_COMMANDS)
-					cout << "EDP get_arm_position (WRIST) XYZ_EULER_ZYZ\n";
-#endif
+					DEBUG_COMMAND("XYZ_EULER_ZYZ");
 					// Return current end-effector pose if it is known (last motion was performed in the cartesian space).
 					if (!is_current_cartesian_pose_known)
 						current_end_effector_frame.setIdentity();
@@ -1279,9 +1206,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				}
 					break;
 				case lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: {
-#if(DEBUG_COMMANDS)
-					cout << "EDP get_arm_position TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL\n";
-#endif
+					DEBUG_COMMAND("TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL");
 					// Return current end-effector pose if it is known (last motion was performed in the cartesian space).
 					if (!is_current_cartesian_pose_known)
 						current_shead_frame.setIdentity();
