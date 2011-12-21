@@ -219,67 +219,6 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 }
 
-void effector::synchronise(void)
-{
-#if(DEBUG_METHODS)
-	cout << "effector::synchronise\n";
-	cout.flush();
-#endif
-	if (robot_test_mode) {
-		controller_state_edp_buf.is_synchronised = true;
-		return;
-	}
-
-	try {
-		controller_state_edp_buf.is_synchronised = false;
-		// Two-step synchronization of the motor rotating the whole PKM.
-		// Step 1: Potentiometer-based Velocity motion.
-		// TODO: PT.
-
-		// Set "safe" velocity and acceleration values.
-		/*pkm_rotation_node->setProfileVelocity(500);
-		pkm_rotation_node->setProfileAcceleration(100);
-		pkm_rotation_node->setProfileDeceleration(100);*/
-
-
-		// Step2: Homing.
-		// Activate homing mode.
-		//pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, -1970);
-		// Step-by-step homing in order to omit the offset setting (the value will be stored in the EPOS for every agent separatelly).
-		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-		pkm_rotation_node->reset();
-		pkm_rotation_node->startHoming();
-		pkm_rotation_node->monitorHomingStatus();
-
-		// Compute joints positions in the home position
-		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
-		// Homing of the motor controlling the legs rotation - set current position as 0.
-		//legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
-		legs_relative_zero_position = legs_rotation_node->getActualPosition();
-
-		// Check whether the synchronization was successful.
-		check_controller_state();
-
-		// Throw non-fatal error - if synchronization wasn't successful.
-		if (!controller_state_edp_buf.is_synchronised) {
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_synchronization_unsuccessful());
-		}
-
-	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
-		// Standard error handling.
-		HANDLE_EDP_NON_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::fatal_error & e_) {
-		// Standard error handling.
-		HANDLE_EDP_FATAL_ERROR(e_)
-	} catch (mrrocpp::lib::exception::system_error & e_) {
-		// Standard error handling.
-		HANDLE_EDP_SYSTEM_ERROR(e_)
-	} catch (...) {
-		HANDLE_EDP_UNKNOWN_ERROR()
-	}
-}
-
 lib::smb::ALL_LEGS_VARIANT effector::current_legs_state(void)
 {
 	return fai->current_legs_state;

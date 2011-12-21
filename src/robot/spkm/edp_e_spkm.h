@@ -21,6 +21,7 @@
 #include "robot/maxon/epos.h"
 #include "robot/maxon/ipm_executor.h"
 
+
 namespace mrrocpp {
 namespace edp {
 namespace spkm {
@@ -33,32 +34,6 @@ namespace spkm {
 class effector : public common::manip_effector
 {
 private:
-	//! Access to the CAN gateway unit
-	boost::shared_ptr <canopen::gateway> gateway;
-
-	//! PKM axes.
-	boost::shared_ptr <maxon::epos> axisA, axisB, axisC, axis1, axis2, axis3;
-
-	//! Names of PKM axes.
-	boost::array <std::string, mrrocpp::lib::spkm::NUM_OF_SERVOS> axesNames;
-
-	//! Axes container.
-	boost::array <maxon::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
-
-	//! Default axis velocity [rpm]
-	static const uint32_t Vdefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
-
-	//! Default axis acceleration [rpm/s]
-	static const uint32_t Adefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
-
-	//! Default axis deceleration [rpm/s]
-	static const uint32_t Ddefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
-
-	//! Maximal motor velocity [rpm].
-	static const uint32_t MotorVmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
-
-	//! Max motor acceleration [rpm/s].
-	static const uint32_t MotorAmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	/*!
 	 * \brief "Desired" joint values that were required by previously received SET command.
@@ -89,14 +64,45 @@ private:
 	 */
 	lib::Homog_matrix current_shead_frame;
 
-	//! Handler for the asynchronous execution of the interpolated profile motion
-	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
-
 	//! Method checks the state of EPOS controllers.
 	void check_controller_state();
 
 protected:
+
+	//! Default axis velocity [rpm]
+	uint32_t Vdefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Default axis acceleration [rpm/s]
+	uint32_t Adefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Default axis deceleration [rpm/s]
+	uint32_t Ddefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Maximal motor velocity [rpm].
+	uint32_t MotorVmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Max motor acceleration [rpm/s].
+	uint32_t MotorAmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Access to the CAN gateway unit
+	boost::shared_ptr <canopen::gateway> gateway;
+
+	//! PKM axes.
+	boost::shared_ptr <maxon::epos> axisA, axisB, axisC, axis1, axis2, axis3;
+
+	//! Names of PKM axes.
+	boost::array <std::string, mrrocpp::lib::spkm::NUM_OF_SERVOS> axesNames;
+
+	//! Axes container.
+	boost::array <maxon::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
+
+	//! Handler for the asynchronous execution of the interpolated profile motion
+	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
+
+	//! Buffer containing received command.
 	lib::spkm::cbuffer ecp_edp_cbuffer;
+
+	//! Buffer storing EDP response.
 	lib::spkm::rbuffer edp_ecp_rbuffer;
 
 	/*!

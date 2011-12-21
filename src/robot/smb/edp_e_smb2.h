@@ -34,6 +34,17 @@ public:
 	 */
 	effector(common::shell &_shell);
 
+	/*!
+	 * @brief Motors synchronization - utilizes motion to the position approximated by the reading received from the potentiometer.
+	 *
+	 * This method synchronizes motor rotating the SMB.
+	 */
+	void synchronise();
+
+	/*!
+	* @brief Method responsible for computation of relative PKM axis position on the base of potentiometer reading.
+	*/
+	int relativeSynchroPosition(maxon::epos & node);
 };
 
 } // namespace smb2
