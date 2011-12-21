@@ -225,12 +225,12 @@ void effector::synchronise(void)
 	cout << "effector::synchronise\n";
 	cout.flush();
 #endif
-	try {
-		if (robot_test_mode) {
-			controller_state_edp_buf.is_synchronised = true;
-			return;
-		}
+	if (robot_test_mode) {
+		controller_state_edp_buf.is_synchronised = true;
+		return;
+	}
 
+	try {
 		controller_state_edp_buf.is_synchronised = false;
 		// Two-step synchronization of the motor rotating the whole PKM.
 		// Step 1: Potentiometer-based Velocity motion.
