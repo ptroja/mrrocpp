@@ -81,6 +81,7 @@ private:
 	void check_controller_state();
 
 protected:
+
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
 

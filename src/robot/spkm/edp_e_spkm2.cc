@@ -5,6 +5,7 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm2 {
 
+
 effector::effector(common::shell &_shell) :
 	spkm::effector(_shell, lib::spkm2::ROBOT_NAME)
 {
