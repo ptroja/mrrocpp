@@ -213,6 +213,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 		return ret;
 	} // end test mode
 
+	/* YOYKA
 	if (hardware_panic) {
 
 		if (error_msg_hardware_panic < 10) {
@@ -229,7 +230,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 		ptimer.sleep();
 		return ret;
 	}
-
+	*/
 	/* OLD
 	 if (hardware_panic) {
 	 for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
@@ -244,13 +245,29 @@ uint64_t HI_moxa::read_write_hardware(void)
 	 return ret;
 	 }
 	 */
-	for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
-		//	write(fd[drive_number], "  ", 2);
-		write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
-		write(fd[drive_number], "  ", 2);
-		bytes_received[drive_number] = 0;
-	}
 
+	if (hardware_panic) {
+		for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
+			// set_parameter for hardware panic only sends parameter, does not wait for answer 
+			set_parameter(drive_number, PARAM_DRIVER_MODE, PARAM_DRIVER_MODE_ERROR);
+		}
+		if (error_msg_hardware_panic == 0) {
+			master.msg->message(lib::FATAL_ERROR, "Hardware panic");
+			std::cout << "[error] hardware panic" << std::endl;
+			error_msg_hardware_panic++;
+		}
+	//	ptimer.sleep();
+	//	return ret;
+	}
+	else {
+		for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
+			//	write(fd[drive_number], "  ", 2);
+			write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
+			write(fd[drive_number], "  ", 2);
+			bytes_received[drive_number] = 0;
+		}
+	}
+	
 	receive_attempts++;
 
 	struct timespec delay;
@@ -500,7 +517,7 @@ int HI_moxa::set_parameter(int drive_number, const int parameter, uint32_t new_v
 			timeout.tv_sec = (time_t) 0;
 			timeout.tv_usec = 500;
 			int select_retval = select(fd[drive_number] + 1, &rfds, NULL, NULL, &timeout);
-			// hardware panic; do not print error information
+			// hardware panic; do not print error information; do not wait for answer message
 			if (parameter == PARAM_DRIVER_MODE && new_value == PARAM_DRIVER_MODE_ERROR)
 				return 0;
 			if (select_retval == 0) {
