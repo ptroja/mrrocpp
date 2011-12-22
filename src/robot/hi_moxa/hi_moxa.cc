@@ -246,6 +246,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 	 }
 	 */
 
+	// If Hardware Panic, send PARAM_DRIVER_MODE_ERROR to motor drivers
 	if (hardware_panic) {
 		for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
 			// set_parameter for hardware panic only sends parameter, does not wait for answer 
@@ -275,55 +276,39 @@ uint64_t HI_moxa::read_write_hardware(void)
 	delay.tv_sec = 0;
 
 	nanosleep(&delay, NULL);
+	
+	// Tu kiedys byl SELECT
 
-	//	std::cout << std::endl;
-
-	while (1) {
-		FD_ZERO(&rfds);
+	// If Hardware Panic, read answers received from motors drivers, wait till the end of comm cycle and return.
+	if(hardware_panic) {
 		for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
-			if (bytes_received[drive_number] < READ_BYTES) {
-				FD_SET(fd[drive_number], &rfds);
-			}
+				bytes_received[drive_number] = read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status)), READ_BYTES);
 		}
-
-		struct timeval timeout;
-		timeout.tv_sec = (time_t) 0;
-		timeout.tv_usec = 00;
-		int select_retval = select(fd_max + 1, &rfds, NULL, NULL, &timeout);
-		if (select_retval == 0) {
-			receive_timeouts++;
-			std::cout << "[error] timeout in " << (int) receive_attempts << " communication cycle on drives";
-			for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
-				if (bytes_received[drive_number] < READ_BYTES) {
-					std::cout << " " << (int) drive_number << "(" << port_names[drive_number].c_str() << ")";
-					comm_timeouts[drive_number]++;
-				}
-			}
-			std::cout << std::endl;
-			hardware_read_ok = false;
-			break;
-		} else {
-			all_hardware_read = true;
-			for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
-
-				if (FD_ISSET(fd[drive_number], &rfds)) {
-					bytes_received[drive_number] +=
-							read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status))
-									+ bytes_received[drive_number], READ_BYTES - bytes_received[drive_number]);
-					//					std::cout << "[comm] drive " << (int)drive_number << ", received " << bytes_received[drive_number] << std::endl;
-				}
-				if (bytes_received[drive_number] < READ_BYTES) {
-					all_hardware_read = false;
-				}
-			}
+		ptimer.sleep();
+		return ret;
+	}
+	
+	all_hardware_read = true;
+	for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
+		bytes_received[drive_number] = read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status)), READ_BYTES);
+		if (bytes_received[drive_number] < READ_BYTES) {
+			comm_timeouts[drive_number] ++;			
 			if (all_hardware_read) {
-				for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
-					comm_timeouts[drive_number] = 0;
-				break;
+				all_hardware_read = false;
+				std::cout << "[error] timeout in " << (int) receive_attempts << " communication cycle on drives";
 			}
+			std::cout << " " << (int) drive_number << "(" << port_names[drive_number].c_str() << ")";
 		}
 	}
-
+	if (all_hardware_read) {
+		for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
+			comm_timeouts[drive_number] = 0;
+	}
+	else {
+		std::cout << std::endl;
+		hardware_read_ok = false;
+	}
+		
 	// Inicjalizacja flag
 	robot_synchronized = true;
 	power_fault = false;
