@@ -1759,7 +1759,7 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 
 	// Set homing parameters
 	setHomeOffset(offset);
-	setSpeedForZeroSearch(100);
+	setSpeedForZeroSearch(10);
 	setCurrentThresholdForHomingMode(1500);
 
 	// Display current homing parameters
