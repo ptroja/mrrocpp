@@ -53,5 +53,17 @@
 	#define DEBUG_COMMAND(format, args...)
 #endif
 
+// Macro for displaying joints.
+#if(DEBUG_JOINTS)
+	#define DEBUG_JOINT(format, args...) \
+	fprintf(stderr, "%s [%d] : \033[0;31m", __FILE__, __LINE__); \
+	fprintf (stderr, format , ## args); \
+	fprintf(stderr, "\033[0;37m\n"); \
+	fflush(stderr);
+#else
+	#define DEBUG_JOINT(format, args...)
+#endif
+
+
 
 #endif /* DEBUG_HPP_ */
