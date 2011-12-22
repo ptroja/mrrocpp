@@ -28,7 +28,7 @@ typedef enum _POSE_SPECIFICATION
 } POSE_SPECIFICATION;
 
 /*!
- * @brief SwarmItFix Head head soldification command data port
+ * @brief SwarmItFix Head head solidification command data port
  * @ingroup shead
  */
 const std::string SOLIDIFICATION_ACTIVATION_DATA_PORT = "SHEAD_SOLIDIFICATION_ACTIVATION_DATA_PORT";
@@ -64,7 +64,7 @@ enum STATE_OF_THE_VACUUM
 };
 
 /*!
- * @brief SwarmItFix Head EDP head soldification command enum
+ * @brief SwarmItFix Head EDP head solidification command enum
  * @ingroup shead
  */
 enum SOLIDIFICATION_ACTIVATION
@@ -90,8 +90,10 @@ enum VACUUM_ACTIVATION
 struct reply
 {
 	STATE_OF_THE_SOLDIFICATION soldification_state;
+
 	STATE_OF_THE_VACUUM vacuum_state;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -143,6 +145,7 @@ struct cbuffer
 	//! In another case, the NACK will be replied.
 	double duration;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -182,8 +185,10 @@ struct cbuffer
 struct rbuffer
 {
 	reply shead_reply;
+
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
