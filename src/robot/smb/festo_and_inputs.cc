@@ -21,6 +21,8 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
+using namespace std;
+
 festo_and_inputs::festo_and_inputs(effector &_master) :
 		master(_master),
 		epos_di_node(master.legs_rotation_node),
@@ -749,6 +751,7 @@ void festo_and_inputs::read_state()
 {
 	if (!(robot_test_mode)) {
 		epos_inputs = epos_di_node->getDInput();
+cout << "epos_inputs: " << hex << epos_inputs <<endl;
 
 		current_output[1] = cpv10->getOutputs(1);
 		current_output[2] = cpv10->getOutputs(2);

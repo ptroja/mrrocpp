@@ -32,19 +32,23 @@ void generator::Move()
 		return;
 
 	do { // realizacja ruchu
-
+                flushall();
 		// zadanie przygotowania danych od czujnikow
 		mp_t.all_sensors_initiate_reading(sensor_m);
 
+                flushall();
 		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate_with_ecp')
 		execute_all();
 
+                flushall();
 		// odczytanie danych z wszystkich czujnikow
 		mp_t.all_sensors_get_reading(sensor_m);
 
+                flushall();
 		// oczekiwanie na puls z ECP lub UI
 		mp_t.receive_ui_or_ecp_message(*this);
 
+                flushall();
 		node_counter++;
 	} while (next_step());
 

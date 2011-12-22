@@ -34,7 +34,7 @@ class effector : public common::motor_driven_effector
 
 	friend class festo_and_inputs;
 
-private:
+protected:
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
 
@@ -56,10 +56,7 @@ private:
 	//! festo shared ptr
 	boost::shared_ptr <festo::cpv> cpv10;
 
-	// state of the legs rotation
-	bool is_base_positioned_to_move_legs;
-
-	/*
+	/*!
 	 * \brief Variable storing the relative zero position of the motor rotating legs.
 	 * Set when all legs are out.
 	 */
@@ -94,8 +91,6 @@ private:
 	//! Method checks the state of EPOS controllers.
 	void check_controller_state();
 
-protected:
-
 	lib::smb::cbuffer ecp_edp_cbuffer;
 	lib::smb::rbuffer edp_ecp_rbuffer;
 
@@ -107,12 +102,6 @@ protected:
 	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
-
-	/*!
-	 * @brief Method sets initial values of motor and joint positions.
-	 * @note The number_of_servos should be previously set.
-	 */
-	void reset_variables();
 
 	/*!
 	 * \brief class constructor
@@ -154,19 +143,11 @@ public:
 	 */
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction);
 
+	/*!
+	 * \brief Method initializes SMB variables (including motors, joints and frames), depending on working mode (robot_test_mode) and robot state.
+	 * Called only once after process creation.
+	 */
 	void get_controller_state(lib::c_buffer &instruction);
-
-	/*!
-	 * @brief motors synchronization
-	 *
-	 * This method synchronizes motors of the robots.
-	 */
-	void synchronise();
-
-	/*!
-	 * @brief Method responsible for computation of relative PKM axis position on the base of potentiometer reading.
-	 */
-	int relativeSynchroPosition(maxon::epos & node);
 
 	/*!
 	 * \brief method to choose master_order variant
