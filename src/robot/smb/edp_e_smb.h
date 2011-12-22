@@ -34,7 +34,7 @@ class effector : public common::motor_driven_effector
 
 	friend class festo_and_inputs;
 
-private:
+protected:
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
 
@@ -90,8 +90,6 @@ private:
 
 	//! Method checks the state of EPOS controllers.
 	void check_controller_state();
-
-protected:
 
 	lib::smb::cbuffer ecp_edp_cbuffer;
 	lib::smb::rbuffer edp_ecp_rbuffer;
@@ -150,13 +148,6 @@ public:
 	 * Called only once after process creation.
 	 */
 	void get_controller_state(lib::c_buffer &instruction);
-
-	/*!
-	 * @brief motors synchronization
-	 *
-	 * This method synchronizes motors of the robots.
-	 */
-	void synchronise();
 
 	/*!
 	 * \brief method to choose master_order variant
