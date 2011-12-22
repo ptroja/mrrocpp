@@ -13,12 +13,12 @@ effector::effector(common::shell &_shell) :
 	DEBUG_METHOD;
 
 	// Set default motor velocities, accelerations and decelerations.
-	Vdefault = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
-	Adefault = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
-	Ddefault = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
+	Vdefault = { 5000UL, 5000UL, 5000UL, 500UL, 500UL, 500UL };
+	Adefault = { 30000UL, 30000UL, 30000UL, 3000UL, 1500UL, 3000UL };
+	Ddefault = { 30000UL, 30000UL, 30000UL, 3000UL, 1500UL, 3000UL };
 
-	MotorVmax = { 5000UL, 5000UL, 5000UL, 5000UL, 5000UL, 5000UL };
-	MotorAmax = { 30000UL, 30000UL, 30000UL, 30000UL, 15000UL, 30000UL };
+	MotorVmax = { 5000UL, 5000UL, 5000UL, 500UL, 500UL, 500UL };
+	MotorAmax = { 30000UL, 30000UL, 30000UL, 3000UL, 1500UL, 3000UL };
 
 	if (!robot_test_mode) {
 		// Create epos objects according to CAN ID-mapping.
