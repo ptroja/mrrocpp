@@ -97,7 +97,7 @@ void effector::check_controller_state()
 			// Get current epos state.
 			maxon::epos::actual_state_t state = maxon::epos::status2state(cachedStatusWords[i]);
 			if (state != maxon::epos::OPERATION_ENABLE) {
-				cout << string("Axis ") << axesNames[i] << endl;
+				std::cerr << string("Axis ") << axesNames[i] << endl;
 				// Print state.
 				axes[i]->printState();
 				// Check if in the FAULT state
@@ -176,14 +176,13 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 				current_motor_pos[i] = axes[i]->getActualPosition();
 		}
 #if(DEBUG_MOTORS)
-		cout << "current_motor_pos: " << current_motor_pos.transpose() << "\n";
+		std::cerr << "current_motor_pos: " << current_motor_pos.transpose() << "\n";
 #endif
 
 		// Compute current motor positions on the base of current motors.
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
 #if(DEBUG_JOINTS)
-		cout << "current_joints: " << current_joints.transpose() << "\n";
+		std::cerr << "current_joints: " << current_joints.transpose() << "\n";
 #endif
 
 		// Reset cartesian-related variables.
@@ -198,7 +197,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 				shead_frame.set(config.value <std::string> ("shead_frame"));
 			} catch (std::exception& e_) {
 				// Print failure reason.
-				cout << e_.what() << endl;
+				std::cerr << e_.what() << endl;
 				// Set identity.
 				shead_frame.setIdentity();
 			}
@@ -207,10 +206,10 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 			shead_frame.setIdentity();
 
 #if(DEBUG_FRAMES)
-		std::cout.precision(8);
-		cout << "shead_frame: " << shead_frame << endl;
-		std::cout.precision(8);
-		cout << "shead_frame * !shead_frame: " << shead_frame * !shead_frame << endl;
+		std::cerr.precision(8);
+		std::cerr << "shead_frame: " << shead_frame << endl;
+		std::cerr.precision(8);
+		std::cerr << "shead_frame * !shead_frame: " << shead_frame * !shead_frame << endl;
 #endif
 
 		// Lock data structure during update.
@@ -388,9 +387,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			current_shead_frame = current_end_effector_frame * shead_frame;
 			is_current_cartesian_pose_known = true;
 #if(DEBUG_FRAMES)
-			std::cout.precision(8);
-			cout << "current_shead_frame:\n" << current_shead_frame << endl;
-			cout << "current_end_effector_frame:\n" << current_end_effector_frame << endl;
+			std::cerr.precision(8);
+			std::cerr << "current_shead_frame:\n" << current_shead_frame << endl;
+			std::cerr << "current_end_effector_frame:\n" << current_end_effector_frame << endl;
 #endif
 		} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL) {
 			// Command was given in the tool (SHEAD) frame.
@@ -398,9 +397,9 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			current_end_effector_frame = desired_shead_frame * !shead_frame;
 			is_current_cartesian_pose_known = true;
 #if(DEBUG_FRAMES)
-			std::cout.precision(8);
-			cout << "current_shead_frame:\n" << current_shead_frame << endl;
-			cout << "current_end_effector_frame:\n" << current_end_effector_frame << endl;
+			std::cerr.precision(8);
+			std::cerr << "current_shead_frame:\n" << current_shead_frame << endl;
+			std::cerr << "current_end_effector_frame:\n" << current_end_effector_frame << endl;
 #endif
 		} else {
 			is_current_cartesian_pose_known = false;
@@ -435,11 +434,11 @@ void effector::parse_motor_command()
 				// Copy data directly from buffer
 				for (size_t i = 0; i < number_of_servos; ++i) {
 					desired_motor_pos_new[i] = ecp_edp_cbuffer.motor_pos[i];
-#if(DEBUG_MOTORS)
-					std::cout.precision(15);
-					cout << "MOTOR[ " << i << "]: " << desired_motor_pos_new[i] << endl;
-#endif
 				}
+#if(DEBUG_MOTORS)
+					std::cerr.precision(15);
+					std::cerr << "MOTORS " << desired_motor_pos_new.transpose() << endl;
+#endif
 
 				if (is_synchronised()) {
 					// Check the desired motor (only motors!) values if they are absolute.
@@ -449,17 +448,16 @@ void effector::parse_motor_command()
 				break;
 			}
 			case lib::spkm::JOINT: {
-#if(DEBUG_COMMANDS)
-				cout << "JOINT\n";
-#endif
+				DEBUG_COMMAND("JOINT");
+
 				// Copy data directly from buffer
 				for (size_t i = 0; i < number_of_servos; ++i) {
 					desired_joints[i] = ecp_edp_cbuffer.joint_pos[i];
-#if(DEBUG_JOINTS)
-					std::cout.precision(15);
-					cout << "JOINT[ " << i << "]: " << desired_joints[i] << endl;
-#endif
 				}
+#if(DEBUG_JOINTS)
+					std::cerr.precision(15);
+					std::cerr << "JOINTS " << desired_joints.transpose() << endl;
+#endif
 
 				if (!is_synchronised()) {
 					// Throw non-fatal error - this mode requires synchronization.
@@ -483,12 +481,12 @@ void effector::parse_motor_command()
 				DEBUG_COMMAND("XYZ_EULER_ZYZ");
 
 #if(DEBUG_FRAMES)
-				cout << "XYZ_EULER_ZYZ: [";
+				std::cerr << "XYZ_EULER_ZYZ: [";
 				for (unsigned int i = 0; i < 6; ++i) {
-					std::cout.precision(8);
-					cout << ecp_edp_cbuffer.goal_pos[i] << ", ";
+					std::cerr.precision(8);
+					std::cerr << ecp_edp_cbuffer.goal_pos[i] << ", ";
 				}
-				cout << "]\n";
+				std::cerr << "]\n";
 #endif
 
 				if (!is_synchronised())
@@ -500,8 +498,8 @@ void effector::parse_motor_command()
 //				desired_end_effector_frame.set_from_xyz_angle_axis(lib::Xyz_Angle_Axis_vector(ecp_edp_cbuffer.goal_pos));
 
 #if(DEBUG_FRAMES)
-				std::cout.precision(8);
-				cout << desired_end_effector_frame << endl;
+				std::cerr.precision(8);
+				std::cerr << desired_end_effector_frame << endl;
 #endif
 				// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
 				get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
@@ -513,10 +511,8 @@ void effector::parse_motor_command()
 				// Transform joints to motors.
 				get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new, desired_joints);
 #if(DEBUG_JOINTS)
-				for (size_t i = 0; i < number_of_servos; ++i) {
-					std::cout.precision(15);
-					cout << "JOINT[ " << i << "]: " << desired_joints[i] << endl;
-				}
+					std::cerr.precision(15);
+					std::cerr << "JOINTS " << desired_joints.transpose() << endl;
 #endif
 
 				// Postcondition II  - check whether the desired motor position is valid.
@@ -529,12 +525,12 @@ void effector::parse_motor_command()
 			case lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: {
 				DEBUG_COMMAND("TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL");
 #if(DEBUG_FRAMES)
-				cout << "TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: [";
+				std::cerr << "TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: [";
 				for (unsigned int i = 0; i < 6; ++i) {
-					std::cout.precision(8);
-					cout << ecp_edp_cbuffer.goal_pos[i] << ", ";
+					std::cerr.precision(8);
+					std::cerr << ecp_edp_cbuffer.goal_pos[i] << ", ";
 				}
-				cout << "]\n";
+				std::cerr << "]\n";
 #endif
 				if (!is_synchronised())
 					// Throw non-fatal error - this mode requires synchronization.
@@ -547,18 +543,16 @@ void effector::parse_motor_command()
 				// Transform to the wrist frame.
 				desired_end_effector_frame = desired_shead_frame * !shead_frame;
 #if(DEBUG_FRAMES)
-				std::cout.precision(8);
-				cout << "Wrist frame: " << desired_end_effector_frame << endl;
+				std::cerr.precision(8);
+				std::cerr << "Wrist frame: " << desired_end_effector_frame << endl;
 #endif
 
 				// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
 				get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
 
 #if(DEBUG_JOINTS)
-				for (size_t i = 0; i < number_of_servos; ++i) {
-					std::cout.precision(15);
-					cout << "JOINT[ " << i << "]: " << desired_joints[i] << endl;
-				}
+					std::cerr.precision(15);
+					std::cerr << "JOINTS " << desired_joints.transpose() << endl;
 #endif
 				// Postcondition I - check desired Cartesian position, basing on the upper platform pose.
 				get_current_kinematic_model()->check_cartesian_pose(desired_end_effector_frame);
@@ -603,7 +597,7 @@ void effector::execute_motor_motion()
 			for (size_t i = 0; i < axes.size(); ++i) {
 				if (is_synchronised()) {
 #if(DEBUG_MOTORS)
-					cout << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
+					std::cerr << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
 #endif
 					if (!robot_test_mode) {
 						axes[i]->setProfileVelocity(Vdefault[i]);
@@ -616,7 +610,7 @@ void effector::execute_motor_motion()
 					}
 				} else {
 #if(DEBUG_MOTORS)
-					cout << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
+					std::cerr << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
 #endif
 					if (!robot_test_mode) {
 						axes[i]->setProfileVelocity(Vdefault[i]);
@@ -650,8 +644,8 @@ void effector::execute_motor_motion()
 
 #if(DEBUG_MOTORS)
 			for (size_t i = 0; i < number_of_servos; ++i) {
-				std::cout.precision(15);
-				cout << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - " << desired_motor_pos_old[i]
+				std::cerr.precision(15);
+				std::cerr << "new - old[" << i << "]: " << desired_motor_pos_new[i] << " - " << desired_motor_pos_old[i]
 						<< " = " << Delta[i] << endl;
 			}
 #endif
@@ -665,15 +659,15 @@ void effector::execute_motor_motion()
 			Dnew *= maxon::epos::SECONDS_PER_MINUTE;
 
 #if(DEBUG_MOTORS)
-			std::cout.precision(5);
-			cout << "Delta:\n" << Delta.transpose() << endl << "Vmax:\n" << Vmax.transpose() << endl << "Amax:\n"
+			std::cerr.precision(5);
+			std::cerr << "Delta:\n" << Delta.transpose() << endl << "Vmax:\n" << Vmax.transpose() << endl << "Amax:\n"
 					<< Amax.transpose() << endl << endl;
 #endif
 
 			if (t > 0) {
 #if(DEBUG_MOTORS)
-				std::cout.precision(5);
-				cout << "Vnew:\n" << Vnew.transpose() << endl << "Anew:\n" << Anew.transpose() << endl << "Dnew:\n"
+				std::cerr.precision(5);
+				std::cerr << "Vnew:\n" << Vnew.transpose() << endl << "Anew:\n" << Anew.transpose() << endl << "Dnew:\n"
 						<< Dnew.transpose() << endl << endl;
 #endif
 				if (!robot_test_mode) {
@@ -776,7 +770,7 @@ void effector::interpolated_motion_in_operational_space()
 		// Transform to the wrist frame.
 		desired_end_effector_frame = desired_shead_frame * !shead_frame;
 #if(DEBUG_FRAMES)
-	cout << "desired_shead_frame: " << desired_shead_frame << endl;
+	std::cerr << "desired_shead_frame: " << desired_shead_frame << endl;
 #endif
 	} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL) {
 		DEBUG_COMMAND("WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL");
@@ -784,15 +778,15 @@ void effector::interpolated_motion_in_operational_space()
 		desired_end_effector_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
 		desired_shead_frame = desired_end_effector_frame * shead_frame;
 #if(DEBUG_FRAMES)
-		cout << "desired_end_effector_frame: " << desired_end_effector_frame << endl;
-		cout << "desired_shead_frame: " << desired_shead_frame << endl;
+		std::cerr << "desired_end_effector_frame: " << desired_end_effector_frame << endl;
+		std::cerr << "desired_shead_frame: " << desired_shead_frame << endl;
 #endif
 	} else
 		// Other pose specifications aren't valid in this type of movement.
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
 
 #if(DEBUG_FRAMES)
-	cout << "Wrist frame: " << desired_end_effector_frame << endl;
+	std::cerr << "Wrist frame: " << desired_end_effector_frame << endl;
 #endif
 	// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
 	get_current_kinematic_model()->inverse_kinematics_transform(desired_joints, desired_joints_old, desired_end_effector_frame);
@@ -873,11 +867,11 @@ void effector::interpolated_motion_in_operational_space()
 	compute_motor_0w_polynomial_coefficients <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (motor_0w, motor_interpolations);
 
 #if(DEBUG_PVT)
-	cout << "time_deltas = [ \n" << time_invervals << "\n ]; \n";
-	cout << "m0w = [\n" << motor_0w << "\n ]; \n";
-	cout << "m1w = [\n" << motor_1w << "\n ]; \n";
-	cout << "m2w = [\n" << motor_2w << "\n ]; \n";
-	cout << "m3w = [\n" << motor_3w << "\n ]; \n";
+	std::cerr << "time_deltas = [ \n" << time_invervals << "\n ]; \n";
+	std::cerr << "m0w = [\n" << motor_0w << "\n ]; \n";
+	std::cerr << "m1w = [\n" << motor_1w << "\n ]; \n";
+	std::cerr << "m2w = [\n" << motor_2w << "\n ]; \n";
+	std::cerr << "m3w = [\n" << motor_3w << "\n ]; \n";
 #endif
 
 	// Recalculate extreme velocities taking into consideration required units
@@ -911,9 +905,9 @@ void effector::interpolated_motion_in_operational_space()
 	compute_pvt_triplets_for_epos <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> (p, v, t, time_invervals, motor_3w, motor_2w, motor_1w, motor_0w);
 
 #if(DEBUG_PVT)
-	cout << "p = [ \n" << p << "\n ]; \n";
-	cout << "v = [ \n" << v << "\n ]; \n";
-	cout << "t = [ \n" << t << "\n ]; \n";
+	std::cerr << "p = [ \n" << p << "\n ]; \n";
+	std::cerr << "v = [ \n" << v << "\n ]; \n";
+	std::cerr << "t = [ \n" << t << "\n ]; \n";
 #endif
 
 	// Recalculate units: p[qc], v[rpm (revolutions per minute) per second], t[miliseconds].0x4101
@@ -939,10 +933,10 @@ void effector::interpolated_motion_in_operational_space()
 	t *= 1000;
 
 #if(DEBUG_PVT)
-	cout << " !Values after units recalculations!\n";
-	cout << "p = [ \n" << p << "\n ]; \n";
-	cout << "v = [ \n" << v << "\n ]; \n";
-	cout << "t = [ \n" << t << "\n ]; \n";
+	std::cerr << " !Values after units recalculations!\n";
+	std::cerr << "p = [ \n" << p << "\n ]; \n";
+	std::cerr << "v = [ \n" << v << "\n ]; \n";
+	std::cerr << "t = [ \n" << t << "\n ]; \n";
 #endif
 
 #if(DEBUG_PVT)
@@ -988,7 +982,7 @@ void effector::interpolated_motion_in_operational_space()
 		}
 
 		descfile.close();
-		cout << "Motion description was written to file: " << filename << endl;
+		std::cerr << "Motion description was written to file: " << filename << endl;
 
 		// Write motion description to files.
 		// For every axis six files are created:
@@ -1020,7 +1014,7 @@ void effector::interpolated_motion_in_operational_space()
 			} //: for points
 			// Close file for given axis.
 			axis_pvt.close();
-			cout << "PVT for axis " << i << " were written to file: " << filename << endl;
+			std::cerr << "PVT for axis " << i << " were written to file: " << filename << endl;
 
 			// List of trajectory parameters for every segment.
 			// Generate unique name.
@@ -1036,7 +1030,7 @@ void effector::interpolated_motion_in_operational_space()
 			} //: for segments
 			// Close file for given axis.
 			axis_m0123.close();
-			cout << "Trajectory parameters for axis " << i << " were written to file: " << filename << endl;
+			std::cerr << "Trajectory parameters for axis " << i << " were written to file: " << filename << endl;
 
 			// Write
 		} //: for axes
@@ -1056,7 +1050,7 @@ void effector::interpolated_motion_in_operational_space()
 			if (!change(i))
 				continue;
 #if(DEBUG_PVT)
-	cout << "Axis " << i << " position change: setting parameters. \n";
+	std::cerr << "Axis " << i << " position change: setting parameters. \n";
 #endif
 
 			// Setup motion parameters.
@@ -1099,9 +1093,9 @@ void effector::interpolated_motion_in_operational_space()
 #if(DEBUG_PVT)
 		// Display axes movement.
 		for (size_t i = 0; i < axes.size(); ++i) {
-			cout << "Axis " << i << ": qc;rpm;ms;\r\n";
+			std::cerr << "Axis " << i << ": qc;rpm;ms;\r\n";
 			for (size_t pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
-				cout << (int) p(pnt, i) << ";" << (int) v(pnt, i) << ";" << (int) t(pnt) << ";\r\n";
+				std::cerr << (int) p(pnt, i) << ";" << (int) v(pnt, i) << ";" << (int) t(pnt) << ";\r\n";
 			} //: for segments
 		} //: for axes
 #endif
@@ -1189,11 +1183,11 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 #if(DEBUG_FRAMES)
 /*					Xyz_Angle_Axis_vector aa;
 					edp_ecp_rbuffer.current_pose.get_xyz_angle_axis(aa);
-					cout << "Returned (WRIST) XYZ_AA: " << aa.transpose() << endl;
+					std::cerr << "Returned (WRIST) XYZ_AA: " << aa.transpose() << endl;
 */
 /*					Xyz_Euler_Zyz_vector zyz;
 					edp_ecp_rbuffer.current_pose.get_xyz_euler_zyz(zyz);*/
-					cout << "Returned (WRIST) XYZ_EULER_ZYZ: " << zyz.transpose() << endl;
+					std::cerr << "Returned (WRIST) XYZ_EULER_ZYZ: " << zyz.transpose() << endl;
 #endif
 
 					// Return additional informations regarding current and motion.
@@ -1225,10 +1219,10 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 #if(DEBUG_FRAMES)
 /*					Xyz_Angle_Axis_vector aa;
 					edp_ecp_rbuffer.current_pose.get_xyz_angle_axis(aa);
-					cout << "Returned TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: " << aa.transpose() << endl;*/
+					std::cerr << "Returned TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: " << aa.transpose() << endl;*/
 /*					Xyz_Euler_Zyz_vector zyz;
 					edp_ecp_rbuffer.current_pose.get_xyz_euler_zyz(zyz);*/
-					cout << "Returned TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: " << zyz.transpose() << endl;
+					std::cerr << "Returned TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: " << zyz.transpose() << endl;
 #endif
 
 					// Return additional informations regarding current and motion.
@@ -1264,8 +1258,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 void effector::create_kinematic_models_for_given_robot(void)
 {
 #if(DEBUG_METHODS)
-	cout << "effector::create_kinematic_models_for_given_robot\n";
-	cout.flush();
+	std::cerr << "effector::create_kinematic_models_for_given_robot\n";
+	std::cerr.flush();
 #endif
 	// Add main SPKM kinematics.
 	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm());

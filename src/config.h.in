@@ -9,3 +9,5 @@
 #cmakedefine HAVE_KQUEUE
 
 #cmakedefine HAVE_MLOCKALL
+
+#define Test_FLAG @Test_FLAG@
