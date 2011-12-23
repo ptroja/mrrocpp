@@ -61,7 +61,7 @@ void effector::synchronise(void)
 
 		// Loop until reaching zero offset.
 		while(pkm_rotation_node->getAnalogInput1() != offset) {
-			std::cout <<
+			std::cout << std::dec <<
 					"AnalogVelocitySetpoint = " << (int) pkm_rotation_node->getAnalogVelocitySetpoint() <<
 					" AnalogInput = " << (int) pkm_rotation_node->getAnalogInput1() <<
 					" offset " << ((int) offset) << std::endl;
@@ -73,21 +73,20 @@ void effector::synchronise(void)
 		};
 
 		// Disable analog velocity setpoint.
-		pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, true, false);
-
-
-		// Step 2: Homing.
-		// Activate homing mode.
-		//pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, -1970);
-		// Step-by-step homing in order to omit the offset setting (the value will be stored in the EPOS for every agent separatelly).
-		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-		pkm_rotation_node->reset();
-		pkm_rotation_node->startHoming();
-		pkm_rotation_node->monitorHomingStatus();
+		pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, false, false);
 
 		// Restore velocity and acceleration limits.
 		pkm_rotation_node->setMaxProfileVelocity(Vdefault[1]);
 		pkm_rotation_node->setMaxAcceleration(Adefault[1]);
+
+		// Step 2: Homing.
+		// Activate homing mode.
+		pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, 9850);
+		// Step-by-step homing in order to omit the offset setting (the value will be stored in the EPOS for every agent separatelly).
+/*		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		pkm_rotation_node->reset();
+		pkm_rotation_node->startHoming();
+		pkm_rotation_node->monitorHomingStatus();*/
 
 		// Compute joints positions in the home position
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);

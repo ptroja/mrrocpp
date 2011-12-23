@@ -1,3 +1,8 @@
+
+set (Test_FLAG 0)
+
+option(TEST_TEST "TEST_OPTION" ON)
+
 # TODO: remove these utility macros to separate file
 MACRO(TARGET_LINK_LIBRARY_IF CONDITION TARGET LIBRARY)
 	set(CONDITION_VALUE ${${CONDITION}})
@@ -167,6 +172,8 @@ set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
 	${Boost_THREAD_LIBRARY}
 	${COMPATIBILITY_LIBRARIES}
 )
+
+
 
 # Recurse into subdirectories.
 add_subdirectory (base)
