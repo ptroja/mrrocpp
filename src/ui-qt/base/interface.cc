@@ -28,6 +28,7 @@
 
 #include "config.h"
 
+#if (R_SWARMITFIX == 1)
 #include "../spkm/ui_r_spkm1.h"
 #include "../spkm/ui_r_spkm2.h"
 #include "../smb/ui_r_smb1.h"
@@ -35,12 +36,18 @@
 #include "../shead/ui_r_shead1.h"
 #include "../shead/ui_r_shead2.h"
 #include "../sbench/ui_r_sbench.h"
+#endif
+
+#if (R_BIRD_HAND == 1)
+#include "../bird_hand/ui_r_bird_hand.h"
+#endif
+
+#if (R_012 == 1)
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "../irp6ot_tfg/ui_r_irp6ot_tfg.h"
 
-#include "../bird_hand/ui_r_bird_hand.h"
 #include "../sarkofag/ui_r_sarkofag.h"
 #include "../conveyor/ui_r_conveyor.h"
 
@@ -51,6 +58,7 @@
 #include "../irp6_m/wgt_irp6_m_relative_angle_axis.h"
 #include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
 #include "../irp6_m/wgt_irp6_m_tool_euler.h"
+#endif
 
 #include "base/lib/exception.h"
 
@@ -205,8 +213,8 @@ void Interface::timer_slot()
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
-			char process_name_buffer[NAME_LENGTH + 1];snprintf
-			(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
+			char process_name_buffer[NAME_LENGTH + 1];
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -400,7 +408,7 @@ void Interface::raise_ui_ecp_window_slot()
 			ui->label_message->setText("C_XYZ_ANGLE_AXIS");
 
 			wgt_teaching_obj->my_open();
-
+#if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				/* TR
 				 start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
@@ -410,6 +418,7 @@ void Interface::raise_ui_ecp_window_slot()
 				 start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
 				 */
 			}
+#endif
 
 		}
 			break;
@@ -423,7 +432,7 @@ void Interface::raise_ui_ecp_window_slot()
 			ui->label_message->setText("C_XYZ_EULER_ZYZ");
 
 			wgt_teaching_obj->my_open();
-
+#if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				/* TR
 				 start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
@@ -433,6 +442,7 @@ void Interface::raise_ui_ecp_window_slot()
 				 start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
 				 */
 			}
+#endif
 
 		}
 			break;
@@ -789,7 +799,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-if(	uname(&sysinfo) == -1) {
+	if (uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -1287,8 +1297,7 @@ int Interface::initiate_configuration()
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL
-				)
+				if (direntp == NULL)
 					break;
 
 				// printf( "%s\n", direntp->d_name );
@@ -1377,8 +1386,7 @@ void Interface::fill_node_list()
 	if (dirp != NULL) {
 		for (;;) {
 			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL
-			)
+			if (direntp == NULL)
 				break;
 			all_node_list.push_back(std::string(direntp->d_name));
 		}
