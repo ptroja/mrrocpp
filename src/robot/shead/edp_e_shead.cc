@@ -58,7 +58,7 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		gateway->open();
 
 		// Create epos objects according to CAN ID-mapping.
-		epos_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 7);
+		epos_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 7, "head");
 	}
 }
 

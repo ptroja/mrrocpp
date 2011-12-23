@@ -90,9 +90,6 @@ protected:
 	//! PKM axes.
 	boost::shared_ptr <maxon::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
-	//! Names of PKM axes.
-	boost::array <std::string, mrrocpp::lib::spkm::NUM_OF_SERVOS> axesNames;
-
 	//! Axes container.
 	boost::array <maxon::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
 

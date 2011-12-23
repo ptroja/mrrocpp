@@ -138,6 +138,9 @@ private:
 	//! remote operation enable bit
 	bool remote;
 
+	//! name of the axis for debug informations
+	const std::string deviceName;
+
 public:
 	/*!
 	 * \brief All high-level methods throws this exception in case of error.
@@ -150,7 +153,10 @@ public:
 	 * @param _device object to access the device
 	 * @param _nodeId ID of the EPOS device on the CAN bus
 	 */
-	epos(canopen::gateway & _device, uint8_t _nodeId);
+	epos(canopen::gateway & _device, uint8_t _nodeId, const std::string & _deviceName = std::string());
+
+	//! Get device/axis name
+	const std::string & getDeviceName() const;
 
 	//! Actual state of the device
 	typedef enum _actual_state_t {

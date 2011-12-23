@@ -204,8 +204,8 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		gateway->open();
 
 		// Create epos objects according to CAN ID-mapping.
-		legs_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8);
-		pkm_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 9);
+		legs_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8, "legs rotation");
+		pkm_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 9, "PKM rotation");
 
 		// Collect axes into common array container.
 		axes[0] = &(*legs_rotation_node);

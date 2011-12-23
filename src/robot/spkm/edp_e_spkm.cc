@@ -97,7 +97,7 @@ void effector::check_controller_state()
 			// Get current epos state.
 			maxon::epos::actual_state_t state = maxon::epos::status2state(cachedStatusWords[i]);
 			if (state != maxon::epos::OPERATION_ENABLE) {
-				std::cerr << string("Axis ") << axesNames[i] << endl;
+				std::cerr << string("Axis ") << axes[i]->getDeviceName() << endl;
 				// Print state.
 				axes[i]->printState();
 				// Check if in the FAULT state
@@ -108,12 +108,12 @@ void effector::check_controller_state()
 						// Get the detailed error
 						uint32_t errCode = axes[i]->getErrorHistory(j);
 						// Send message to SR.
-						msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axesNames[i] + ": "
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axes[i]->getDeviceName() + ": "
 								+ axes[i]->ErrorCodeMessage(errCode));
 					}
 				} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
 					// Send message to SR.
-					msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axesNames[i]
+					msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axes[i]->getDeviceName()
 							+ " rotation is disabled");
 				} //: if fault || disabled
 			} else {
