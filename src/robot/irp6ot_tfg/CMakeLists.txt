@@ -19,6 +19,7 @@ add_library(kinematicsirp6ot_tfg
 target_link_libraries(kinematicsirp6ot_tfg kinematic_model_irp6_tfg kinematics)
 	
 add_library(ecp_r_irp6ot_tfg ecp_r_irp6ot_tfg)	
+add_library(mp_r_irp6ot_tfg mp_r_irp6ot_tfg)	
 	
 target_link_libraries(ecp_r_irp6ot_tfg kinematicsirp6ot_tfg)
 

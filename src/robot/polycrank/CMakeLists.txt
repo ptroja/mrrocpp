@@ -18,6 +18,8 @@ add_library(kinematicspolycrank
 target_link_libraries(kinematicspolycrank kinematics)
 	
 add_library(ecp_r_polycrank ecp_r_polycrank.cc)	
+add_library(mp_r_polycrank mp_r_polycrank.cc)		
+	
 	
 target_link_libraries(ecp_r_polycrank kinematicspolycrank)
 

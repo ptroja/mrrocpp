@@ -25,26 +25,23 @@ add_subdirectory (hi_rydz)
 add_subdirectory (hi_moxa)
 
 add_library(mp_robots
-	conveyor/mp_r_conveyor.cc
-	irp6ot_m/mp_r_irp6ot_m.cc
-	irp6p_m/mp_r_irp6p_m.cc
-	polycrank/mp_r_polycrank.cc
-	spkm/mp_r_spkm.cc
-	spkm/mp_r_spkm1.cc
-	spkm/mp_r_spkm2.cc
-	smb/mp_r_smb.cc
-	smb/mp_r_smb1.cc
-	smb/mp_r_smb2.cc
-	shead/mp_r_shead.cc
-	shead/mp_r_shead1.cc
-	shead/mp_r_shead2.cc
-	sbench/mp_r_sbench.cc
-	irp6ot_tfg/mp_r_irp6ot_tfg.cc
-	irp6p_tfg/mp_r_irp6p_tfg.cc
-	sarkofag/mp_r_sarkofag.cc
+	../base/mp/mp_robot.cc
 )
 
+target_link_library_if(ROBOT_IRP6_ON_TRACK mp_robots mp_r_irp6ot_m)
+target_link_library_if(ROBOT_IRP6_ON_TRACK mp_robots mp_r_irp6ot_tfg)
+target_link_library_if(ROBOT_IRP6_POSTUMENT mp_robots mp_r_irp6p_m)
+target_link_library_if(ROBOT_IRP6_POSTUMENT mp_robots mp_r_irp6p_tfg)
+target_link_library_if(ROBOT_POLYCRANK mp_robots mp_r_polycrank)
+target_link_library_if(ROBOT_CONVEYOR mp_robots mp_r_conv)
 target_link_library_if(ROBOT_BIRD_HAND mp_robots mp_r_bird_hand)
+target_link_library_if(ROBOT_SARKOFAG mp_robots mp_r_sarkofag)
+target_link_library_if(ROBOT_SHEAD mp_robots mp_r_shead)
+target_link_library_if(ROBOT_SMB mp_robots mp_r_smb)
+target_link_library_if(ROBOT_SPKM mp_robots mp_r_spkm)
+target_link_library_if(ROBOT_SBENCH mp_robots mp_r_sbench)
+
+
 
 add_library(ecp_robot
 	../base/ecp/ecp_robot.cc
