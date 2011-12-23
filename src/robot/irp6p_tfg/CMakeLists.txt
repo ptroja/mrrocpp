@@ -1,4 +1,3 @@
-if(ROBOT_IRP6_POSTUMENT_TFG)
 
 add_executable(edp_irp6p_tfg
 	edp_irp6p_tfg_effector.cc
@@ -24,5 +23,3 @@ target_link_libraries(ecp_r_irp6p_tfg kinematicsirp6p_tfg)
 
 install(TARGETS edp_irp6p_tfg DESTINATION bin)
 install(TARGETS kinematicsirp6p_tfg ecp_r_irp6p_tfg DESTINATION lib)
-
-endif(ROBOT_IRP6_POSTUMENT_TFG)

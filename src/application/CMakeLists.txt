@@ -1,5 +1,5 @@
 # Recurse into subdirectories.
-
+if(ROBOTS_012)
 #add_subdirectory (bclikeregions)
 add_subdirectory (ball)
 add_subdirectory (block_move)
@@ -29,10 +29,16 @@ add_subdirectory (visual_servoing)
 add_subdirectory (visual_servoing_demo)
 add_subdirectory (wii_teach)
 add_subdirectory (trajectory_stats)
+endif(ROBOTS_012)
 
 if(ROBOT_BIRD_HAND)
 add_subdirectory (bird_hand_test)
+endif(ROBOT_BIRD_HAND)
+
+if(ROBOT_BIRD_HAND)
+if(ROBOTS_012)
 add_subdirectory (graspit)
+endif(ROBOTS_012)
 endif(ROBOT_BIRD_HAND)
 
 if(ROBOTS_SWARMITFIX)

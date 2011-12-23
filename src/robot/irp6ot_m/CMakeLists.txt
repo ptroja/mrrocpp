@@ -1,4 +1,4 @@
-if(ROBOT_IRP6_ON_TRACK_M)
+
 
 add_executable(edp_irp6ot_m
 	edp_irp6ot_m_effector.cc
@@ -37,4 +37,3 @@ target_link_libraries(ecp_r_irp6ot_m kinematicsirp6ot_m)
 install(TARGETS edp_irp6ot_m DESTINATION bin)
 install(TARGETS kinematicsirp6ot_m ecp_r_irp6ot_m DESTINATION lib)
 
-endif(ROBOT_IRP6_ON_TRACK_M)

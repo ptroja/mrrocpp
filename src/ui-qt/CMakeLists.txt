@@ -63,13 +63,11 @@ SET(GUI_CXX_SRCS
     base/ui_ecp_dialogs/wgt_input_double.cpp
     base/ui_ecp_dialogs/wgt_choose_option.cpp
     base/ui_ecp_dialogs/wgt_teaching.cpp
-    base/wgt_single_motor_move.cpp
    	base/menu_bar.cpp
 	base/allrobots.cpp
 	base/menu_bar_action.cpp
 	base/ui_sr.cc
 	base/ui_ecp.cc
-	base/ui_ecp_robot/ui_ecp_r_common.cc
 	base/ui.cc
 	base/ui_robot.cc
 	base/ui_r_single_motor.cc
@@ -135,6 +133,8 @@ ${GUI_CXX_SRCS}
 	irp6ot_tfg/ui_r_irp6ot_tfg.cc
 	sarkofag/ui_r_sarkofag.cc
 	conveyor/ui_r_conveyor.cc
+	base/ui_ecp_robot/ui_ecp_r_common.cc
+	    base/wgt_single_motor_move.cpp
 )
 endif(ROBOTS_012)
 
@@ -155,7 +155,6 @@ SET(GUI_MOC_SRCS
     base/WgtAbsoluteBase.h
     base/WgtRelativeBase.h
     base/WgtToolBase.h
-    base/wgt_single_motor_move.h
 	base/signal_dispatcher.h
 	base/menu_bar.h
 	base/ToolBar.h
@@ -209,6 +208,7 @@ ${GUI_MOC_SRCS}
 	irp6ot_tfg/ui_r_irp6ot_tfg.h
 	irp6p_m/ui_r_irp6p_m.h
 	irp6p_tfg/ui_r_irp6p_tfg.h
+	    base/wgt_single_motor_move.h
 )
 endif(ROBOTS_012)
 
@@ -226,7 +226,6 @@ SET(GUI_UI
     base/ui_ecp_dialogs/wgt_input_double.ui
     base/ui_ecp_dialogs/wgt_choose_option.ui
     base/ui_ecp_dialogs/wgt_teaching.ui
-    base/wgt_single_motor_move.ui
     base/wgt_absolute_template.ui
     base/wgt_relative_template.ui
     base/wgt_tool_template.ui
@@ -259,6 +258,7 @@ ${GUI_UI}
     irp6_m/wgt_irp6_m_relative_angle_axis.ui
     irp6_m/wgt_irp6_m_tool_angle_axis.ui
     irp6_m/wgt_irp6_m_tool_euler.ui
+        base/wgt_single_motor_move.ui
 )
 endif(ROBOTS_012)
 
