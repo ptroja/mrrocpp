@@ -29,7 +29,7 @@ robot::robot(common::task::task_base& _ecp_object) :
 
 void robot::create_kinematic_models_for_given_robot(void)
 {
-	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm(kinematics::spkm1::kinematic_parameters_spkm1()));
+	add_kinematic_model(new mrrocpp::kinematics::spkm::kinematic_model_spkm(mrrocpp::kinematics::spkm1::kinematic_parameters_spkm1()));
 	set_kinematic_model(0);
 }
 

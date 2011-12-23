@@ -36,7 +36,7 @@ target_link_libraries(xmltest mrrocpp ${COMMON_LIBRARIES})
 
 target_link_libraries(kinematicsspkm kinematics)
 	
-add_library(ecp_r_spkm ecp_r_spkm.cc ecp_r_spkm1.cc ecp_r_spkm2.cc)	
+add_library(ecp_r_spkm ecp_r_spkm.cc ecp_r_spkm1.cc ecp_r_spkm2.cc 	kinematic_parameters_spkm1.cpp 	kinematic_parameters_spkm2.cpp)	
 target_link_libraries(ecp_r_spkm kinematicsspkm)
 	
 install(TARGETS edpspkm kinematicsspkm ecp_r_spkm DESTINATION lib)
