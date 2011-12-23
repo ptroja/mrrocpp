@@ -42,10 +42,6 @@ shell::shell(lib::configurator &_config) :
 	my_pid = getpid();
 }
 
-shell::~shell()
-{
-}
-
 /*--------------------------------------------------------------------------*/
 bool shell::detect_hardware_busy()
 {
@@ -145,7 +141,7 @@ bool shell::detect_hardware_busy()
 	return true;
 }
 
-bool shell::close_hardware_busy_file()
+void shell::close_hardware_busy_file()
 {
 
 	if (access(hardware_busy_file_fullpath.c_str(), R_OK) == 0) {
@@ -178,8 +174,6 @@ bool shell::close_hardware_busy_file()
 	} else {
 		std::cerr << "close_hardware_busy_file nie mogle odczytac: " << hardware_busy_file_fullpath << std::endl;
 	}
-
-	return true;
 }
 
 } // namespace common

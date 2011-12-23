@@ -71,15 +71,14 @@ public:
 	boost::shared_ptr <lib::sr_edp> msg;
 
 	shell(lib::configurator &_config);
-	~shell();
+
 	bool detect_hardware_busy(void);
 
 	/*!
 	 * \brief Method to close hardware busy notification file
 	 *
 	 */
-	bool close_hardware_busy_file(void);
-
+	void close_hardware_busy_file(void);
 };
 
 } // namespace common
