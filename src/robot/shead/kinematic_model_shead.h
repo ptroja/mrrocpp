@@ -2,9 +2,6 @@
  * @file
  * @brief File containing the declaration of the kinematic model for the SwarmItFix agent's head class.
  *
- * @author tkornuta
- * @date 2010.02.01
- *
  * @ingroup KINEMATICS SIF_KINEMATICS shead
  */
 
@@ -21,9 +18,6 @@ namespace shead {
  *
  * @brief Kinematic model for the SwarmItFix agent's head class.
  *
- * @author yoyek
- * @date 2010.02.01
- *
  * @ingroup KINEMATICS SIF_KINEMATICS
  */
 class model : public common::kinematic_model
@@ -31,6 +25,12 @@ class model : public common::kinematic_model
 protected:
 	//! Method responsible for kinematic parameters setting.
 	void set_kinematic_parameters(void);
+
+	// Motor limits
+	static lib::MotorArray::value_type lower_motor_limit, upper_motor_limit;
+
+	// Joint limits
+	static lib::JointArray::value_type lower_joint_limit, upper_joint_limit;
 
 public:
 	//! Constructor.

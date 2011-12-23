@@ -46,42 +46,40 @@ const std::string VACUUM_ACTIVATION_DATA_PORT = "SHEAD_VACUUM_ACTIVATION_DATA_PO
 const std::string REPLY_DATA_REQUEST_PORT = "SHEAD_REPLY_DATA_REQUEST_PORT";
 
 /*!
- * @brief SwarmItFix Head EDP state of the head soldification enum
+ * @brief SwarmItFix Head EDP state of the head solidification
  * @ingroup shead
  */
-enum STATE_OF_THE_SOLDIFICATION
+typedef enum _STATE_OF_THE_SOLIDIFICATION
 {
-	SOLDIFICATION_STATE_ON, SOLDIFICATION_STATE_OFF, SOLDIFICATION_STATE_INTERMEDIATE
-};
+	SOLIDIFICATION_STATE_ON, SOLIDIFICATION_STATE_OFF, SOLIDIFICATION_STATE_INTERMEDIATE
+} solidification_state_t;
 
 /*!
- * @brief SwarmItFix Head EDP state of the vacuum enum
+ * @brief SwarmItFix Head EDP state of the vacuum
  * @ingroup shead
  */
-enum STATE_OF_THE_VACUUM
+typedef enum _STATE_OF_THE_VACUUM
 {
 	VACUUM_STATE_ON, VACUUM_STATE_OFF, VACUUM_STATE_INTERMEDIATE
-};
+} vacuum_state_t;
 
 /*!
- * @brief SwarmItFix Head EDP head solidification command enum
+ * @brief SwarmItFix Head EDP head solidification command
  * @ingroup shead
  */
 enum SOLIDIFICATION_ACTIVATION
 {
 	SOLIDIFICATION_ON, SOLIDIFICATION_OFF
 };
-// namespace mrrocpp
 
 /*!
- * @brief SwarmItFix Head EDP vacuum activation command enum
+ * @brief SwarmItFix Head EDP vacuum activation command
  * @ingroup shead
  */
 enum VACUUM_ACTIVATION
 {
 	VACUUM_ON, VACUUM_OFF
 };
-// namespace mrrocpp
 
 /*!
  * @brief SwarmItFix Head reply buffer
@@ -89,9 +87,9 @@ enum VACUUM_ACTIVATION
  */
 struct reply
 {
-	STATE_OF_THE_SOLDIFICATION soldification_state;
+	solidification_state_t solidification_state;
 
-	STATE_OF_THE_VACUUM vacuum_state;
+	vacuum_state_t vacuum_state;
 
 private:
 	//! Give access to boost::serialization framework
@@ -101,14 +99,14 @@ private:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & soldification_state;
+		ar & solidification_state;
 		ar & vacuum_state;
 	}
 
 }__attribute__((__packed__));
 
 /*!
- * @brief SwarmItFix Head EDP command buffer variant enum
+ * @brief SwarmItFix Head EDP command buffer variant
  * @ingroup shead
  */
 enum CBUFFER_VARIANT
@@ -186,7 +184,7 @@ struct rbuffer
 {
 	reply shead_reply;
 
-	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
+	epos::single_controller_epos_reply epos_controller;
 
 private:
 	//! Give access to boost::serialization framework

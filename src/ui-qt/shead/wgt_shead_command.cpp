@@ -98,21 +98,21 @@ int wgt_shead_command::init()
 				lib::shead::reply &rep = robot->ui_ecp_robot->the_robot->shead_reply_data_request_port.data;
 
 				// sets soldification state
-				switch (rep.soldification_state)
+				switch (rep.solidification_state)
 				{
-					case lib::shead::SOLDIFICATION_STATE_ON: {
+					case lib::shead::SOLIDIFICATION_STATE_ON: {
 						ui.checkBox_sol_on->setChecked(true);
 						ui.checkBox_sol_off->setChecked(false);
 						ui.checkBox_sol_int->setChecked(false);
 					}
 						break;
-					case lib::shead::SOLDIFICATION_STATE_OFF: {
+					case lib::shead::SOLIDIFICATION_STATE_OFF: {
 						ui.checkBox_sol_on->setChecked(false);
 						ui.checkBox_sol_off->setChecked(true);
 						ui.checkBox_sol_int->setChecked(false);
 					}
 						break;
-					case lib::shead::SOLDIFICATION_STATE_INTERMEDIATE: {
+					case lib::shead::SOLIDIFICATION_STATE_INTERMEDIATE: {
 						ui.checkBox_sol_on->setChecked(false);
 						ui.checkBox_sol_off->setChecked(false);
 						ui.checkBox_sol_int->setChecked(true);

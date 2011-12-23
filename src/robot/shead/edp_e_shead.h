@@ -36,6 +36,24 @@ protected:
 	//! Digitial_input axis
 	boost::shared_ptr <maxon::epos> epos_node;
 
+	//! Default axis velocity [rpm]
+	static const uint32_t Vdefault;
+
+	//! Default axis acceleration [rpm/s]
+	static const uint32_t Adefault;
+
+	//! Default axis deceleration [rpm/s]
+	static const uint32_t Ddefault;
+
+	//! Parse command for motors.
+	void parse_motor_command();
+
+	//! Execute parsed command.
+	void execute_motor_motion();
+
+	//! Check state of the EPOS controller.
+	void check_controller_state();
+
 	lib::shead::cbuffer ecp_edp_cbuffer;
 	lib::shead::rbuffer edp_ecp_rbuffer;
 
