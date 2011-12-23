@@ -210,18 +210,6 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		std::cerr << "shead_frame * !shead_frame: " << shead_frame * !shead_frame << endl;
 #endif
 
-		// Set *extended* limits.
-		for (size_t i = 0; i < axes.size(); ++i) {
-			axes[i]->setMinimalPositionLimit(PARAMS.lower_motor_pos_limits[i] - 1000);
-			axes[i]->setMaximalPositionLimit(PARAMS.upper_motor_pos_limits[i] + 1000);
-		}
-
-		// Move the longest linear axis to the 'zero' position with a fast motion command
-		/*	axisB->writeProfileVelocity(5000UL);
-		 axisB->writeProfileAcceleration(1000UL);
-		 axisB->writeProfileDeceleration(1000UL);
-		 axisB->moveAbsolute(-57500);*/
-
 		// Lock data structure during update.
 		{
 			boost::mutex::scoped_lock lock(effector_mutex);
@@ -294,6 +282,18 @@ void effector::synchronise(void)
 		for (size_t i = 0; i < number_of_servos; ++i) {
 			current_motor_pos[i] = desired_motor_pos_old[i] = 0;
 		}
+
+		// Set *extended* limits.
+		for (size_t i = 0; i < axes.size(); ++i) {
+			axes[i]->setMinimalPositionLimit(PARAMS.lower_motor_pos_limits[i] - 1000);
+			axes[i]->setMaximalPositionLimit(PARAMS.upper_motor_pos_limits[i] + 1000);
+		}
+
+		// Move the longest linear axis to the 'zero' position with a fast motion command
+		/*	axisB->writeProfileVelocity(5000UL);
+		 axisB->writeProfileAcceleration(1000UL);
+		 axisB->writeProfileDeceleration(1000UL);
+		 axisB->moveAbsolute(-57500);*/
 
 		// Compute joints positions in the home position
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);

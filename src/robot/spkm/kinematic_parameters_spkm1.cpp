@@ -18,7 +18,7 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 {
 	// Initialization of parameters describing the synchronisation positions (in joints).
 	synchro_positions[0] = 0.242;
-	synchro_positions[1] = 0.237;
+	synchro_positions[1] = 0.242;
 	synchro_positions[2] = 0.242;
 	synchro_positions[3] = 0.0;
 	synchro_positions[4] = 0.0;
@@ -87,7 +87,7 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	// Initialization of lower joints limits vector.
 	// The lower values are related to positions of synchronization sensors.
 	lower_joints_limits[0] = 0.242;
-	lower_joints_limits[1] = 0.237;
+	lower_joints_limits[1] = 0.242;
 	lower_joints_limits[2] = 0.242;
 	lower_joints_limits[3] = -2.2777;
 	lower_joints_limits[4] = -1.5708;
@@ -136,16 +136,23 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	uC = 0.05;
 
 	// Initialization of vector representing a translation from P (middle of upper P platform) and S (middle of the spherical wrist).
-	P_S_P << 0, 0, 0.0905;
+	double psp[3] = {0, 0, 0.0905};
+	P_S_P = Vector3d(psp);
+	//std::cout<< "P_S_P: " << P_S_P <<std::endl;
 
 	// Initialization of transformation from P (middle of upper P platform) and S (middle of the spherical wrist).
-	P_S_T << 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1;
+	double pst[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1};
+	P_S_T = Eigen::Matrix<double, 4 , 4>(pst);
+	//std::cout<< "P_S_T" << P_S_T <<std::endl;
 
 	// Initialization of transformation from W (SW end-effector) to S (middle of the spherical wrist).
 	// The W_S_T is the inversion of:
 	// S_W_P = [0.0; 0; 0.0725];
 	// S_W_R = [1, 0, 0; 0 1 0; 0, 0, 1]
-	W_S_T << 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -0.0725, 1;
+	double wst[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -0.0725, 1};
+	W_S_T = Eigen::Matrix<double, 4 , 4>(wst);
+	//std::cout<< "W_S_T: " << W_S_T <<std::endl;
+
 }
 
 }

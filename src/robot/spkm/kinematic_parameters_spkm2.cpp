@@ -129,16 +129,22 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	uC = 0.05;
 
 	// Initialization of vector representing a translation from P (middle of upper P platform) and S (middle of the spherical wrist).
-	P_S_P << 0, 0, 0.0905;
+	double psp[3] = {0, 0, 0.0905};
+	P_S_P = Vector3d(psp);
+	//std::cout<< "P_S_P: " << P_S_P <<std::endl;
 
 	// Initialization of transformation from P (middle of upper P platform) and S (middle of the spherical wrist).
-	P_S_T << 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1;
+	double pst[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1};
+	P_S_T = Eigen::Matrix<double, 4 , 4>(pst);
+	//std::cout<< "P_S_T" << P_S_T <<std::endl;
 
 	// Initialization of transformation from W (SW end-effector) to S (middle of the spherical wrist).
 	// The W_S_T is the inversion of:
 	// S_W_P = [0.0; 0; 0.0725];
 	// S_W_R = [1, 0, 0; 0 1 0; 0, 0, 1]
-	W_S_T << 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -0.0725, 1;
+	double wst[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -0.0725, 1};
+	W_S_T = Eigen::Matrix<double, 4 , 4>(wst);
+	//std::cout<< "W_S_T: " << W_S_T <<std::endl;
 }
 
 }
