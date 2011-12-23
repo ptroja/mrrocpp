@@ -105,14 +105,6 @@ protected:
 	//! Buffer storing EDP response.
 	lib::spkm::rbuffer edp_ecp_rbuffer;
 
-	/*!
-	 * @brief method,  creates a list of available kinematic models for spkm effector.
-	 *
-	 * Here it is parallel manipulator direct and inverse kinematic transform
-	 * and motor to joint transform
-	 */
-	virtual void create_kinematic_models_for_given_robot(void);
-
 public:
 
 	/*!

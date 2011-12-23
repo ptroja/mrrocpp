@@ -15,7 +15,6 @@
 #include "base/edp/reader.h"
 
 #include "kinematic_model_spkm.h"
-#include "kinematic_parameters_spkm.h"
 #include "base/edp/manip_trans_t.h"
 
 #include "robot/canopen/gateway_epos_usb.h"
@@ -52,9 +51,6 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 	// Set number of servos.
 	number_of_servos = lib::spkm::NUM_OF_SERVOS;
-
-	// Create all kinematic models for SPKM.
-	create_kinematic_models_for_given_robot();
 
 	if (!robot_test_mode) {
 		// Create gateway object.
@@ -1253,18 +1249,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	} catch (...) {
 		HANDLE_EDP_UNKNOWN_ERROR()
 	}
-}
-
-void effector::create_kinematic_models_for_given_robot(void)
-{
-#if(DEBUG_METHODS)
-	std::cerr << "effector::create_kinematic_models_for_given_robot\n";
-	std::cerr.flush();
-#endif
-	// Add main SPKM kinematics.
-	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm());
-	// Set active model
-	set_kinematic_model(0);
 }
 
 /*--------------------------------------------------------------------------*/

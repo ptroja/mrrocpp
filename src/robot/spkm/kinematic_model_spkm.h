@@ -32,7 +32,7 @@ class kinematic_model_spkm : public common::kinematic_model
 {
 private:
 	//! Kinematic parameters of both: parallel kinematics machine (PM) and spherical wrist (SW) attached to it.
-	kinematic_parameters_spkm params;
+	const kinematic_parameters_spkm params;
 
 	//! Upper platform pose - computed by the IK and used later for Cartesian limits verification.
 	Homog4d O_P_T;
@@ -44,8 +44,10 @@ protected:
 	}
 
 public:
-	//! Constructor.
-	kinematic_model_spkm(void);
+	/*!
+	 * \brief Constructor.
+	 */
+	kinematic_model_spkm(const kinematic_parameters_spkm & params_);
 
 	/*!
 	 * @brief Checks whether given motor increments are valid.
@@ -143,7 +145,7 @@ public:
 	/*!
 	 * Method returns kinematic parameters of given model.
 	 */
-	kinematic_parameters_spkm get_kinematic_parameters();
+	const kinematic_parameters_spkm & get_kinematic_parameters();
 
 	// You must overload "operator new" so that it generates 16-bytes-aligned pointers
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW

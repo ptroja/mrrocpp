@@ -9,6 +9,7 @@ edp_e_spkm.cc
 
 add_executable(edp_spkm1
 	edp_e_spkm1.cc
+	kinematic_parameters_spkm1.cpp
 )
 
 target_link_libraries(edp_spkm1 edpspkm kinematicsspkm epos edp
@@ -17,6 +18,7 @@ target_link_libraries(edp_spkm1 edpspkm kinematicsspkm epos edp
 	
 add_executable(edp_spkm2
 	edp_e_spkm2.cc
+	kinematic_parameters_spkm2.cpp
 )
 
 target_link_libraries(edp_spkm2 edpspkm kinematicsspkm epos edp
@@ -27,7 +29,6 @@ endif(LibFTDI_FOUND)
 
 add_library(kinematicsspkm
 	kinematic_model_spkm.cc
-	kinematic_parameters_spkm.cc
 )
 
 add_executable(xmltest xmltest.cc)

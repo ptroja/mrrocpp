@@ -29,13 +29,14 @@ namespace spkm {
 
 
 
-kinematic_model_spkm::kinematic_model_spkm(void)
+kinematic_model_spkm::kinematic_model_spkm(const kinematic_parameters_spkm & params_)
+	: params(params_)
 {
 	// Set model name.
 	set_kinematic_model_label("PKM 6DOF (SW+PM) kinematic model. PM inverse kinematics by D.Zlatanow and M.Zoppi");
 }
 
-kinematic_parameters_spkm kinematic_model_spkm::get_kinematic_parameters() {
+const kinematic_parameters_spkm & kinematic_model_spkm::get_kinematic_parameters() {
 	return params;
 }
 

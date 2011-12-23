@@ -1,5 +1,7 @@
 #include "edp_e_spkm2.h"
 #include "const_spkm2.h"
+#include "kinematic_model_spkm.h"
+#include "kinematic_parameters_spkm2.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -14,7 +16,6 @@ effector::effector(common::shell &_shell) :
 	spkm::effector(_shell, lib::spkm2::ROBOT_NAME)
 {
 	DEBUG_METHOD;
-
 
 	// Set default motor velocities, accelerations and decelerations for axis 0 - leg A.
 	Vdefault[0] = 5000UL;
@@ -86,6 +87,19 @@ effector::effector(common::shell &_shell) :
 			ipm_handler.axes = this->axes;
 		}
 	}
+
+	// Create SPKM kinematics.
+	create_kinematic_models_for_given_robot();
+}
+
+void effector::create_kinematic_models_for_given_robot(void)
+{
+DEBUG_METHOD;
+
+	// Add main SPKM kinematics.
+	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm(kinematics::spkm2::kinematic_parameters_spkm2()));
+	// Set active model
+	set_kinematic_model(0);
 }
 
 } // namespace spkm2

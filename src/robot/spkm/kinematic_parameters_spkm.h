@@ -40,9 +40,6 @@ typedef Eigen::Matrix<double, 4 , 4> Homog4d;
  */
 struct kinematic_parameters_spkm {
 public:
-	//! Constructor - sets the values of the SPKM geometric parameters.
-	kinematic_parameters_spkm();
-
 	//! Lower platform: jb coordinate of P1A in O(ib,jb,kb).
 	double lA;
 
@@ -102,7 +99,6 @@ public:
 
 	//! Smallest values of lower thyk beta angle.
 	double lower_beta_thyk_angle_limit[3];
-
 
 	// You must overload "operator new" so that it generates 16-bytes-aligned pointers.
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
