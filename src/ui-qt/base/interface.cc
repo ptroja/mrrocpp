@@ -205,8 +205,8 @@ void Interface::timer_slot()
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
-			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
+			char process_name_buffer[NAME_LENGTH + 1];snprintf
+			(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -706,13 +706,9 @@ void Interface::create_robots()
 	ADD_UI_ROBOT(irp6ot_m);
 	ADD_UI_ROBOT(irp6p_m);
 	ADD_UI_ROBOT(polycrank);
-
-#if (defined(Test_FLAG) && (Test_FLAG >= 1))
-
+#if (R_BIRD_HAND == 1)
 	ADD_UI_ROBOT(bird_hand);
-
 #endif
-
 	ADD_UI_ROBOT(sarkofag);
 	ADD_UI_ROBOT(irp6p_tfg);
 	ADD_UI_ROBOT(conveyor);
@@ -788,7 +784,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-	if (uname(&sysinfo) == -1) {
+if(	uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -1286,7 +1282,8 @@ int Interface::initiate_configuration()
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL)
+				if (direntp == NULL
+				)
 					break;
 
 				// printf( "%s\n", direntp->d_name );
@@ -1375,7 +1372,8 @@ void Interface::fill_node_list()
 	if (dirp != NULL) {
 		for (;;) {
 			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL)
+			if (direntp == NULL
+			)
 				break;
 			all_node_list.push_back(std::string(direntp->d_name));
 		}

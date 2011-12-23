@@ -1,6 +1,10 @@
 # Recurse into subdirectories.
 add_subdirectory (sarkofag)
+
+if(ROBOT_BIRD_HAND)
 add_subdirectory (bird_hand)
+endif(ROBOT_BIRD_HAND)
+
 add_subdirectory (conveyor)
 add_subdirectory (shead)
 add_subdirectory (smb)
@@ -25,7 +29,6 @@ add_library(mp_robots
 	irp6ot_m/mp_r_irp6ot_m.cc
 	irp6p_m/mp_r_irp6p_m.cc
 	polycrank/mp_r_polycrank.cc
-	bird_hand/mp_r_bird_hand.cc
 	spkm/mp_r_spkm.cc
 	spkm/mp_r_spkm1.cc
 	spkm/mp_r_spkm2.cc
@@ -40,6 +43,8 @@ add_library(mp_robots
 	irp6p_tfg/mp_r_irp6p_tfg.cc
 	sarkofag/mp_r_sarkofag.cc
 )
+
+target_link_library_if(ROBOT_BIRD_HAND mp_robots mp_r_bird_hand)
 
 add_library(ecp_robot
 	../base/ecp/ecp_robot.cc

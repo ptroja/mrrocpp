@@ -70,7 +70,6 @@ SET(GUI_CXX_SRCS
     shead/wgt_shead_command.cpp
     polycrank/wgt_polycrank_int.cpp
     base/wgt_single_motor_move.cpp
-    bird_hand/wgt_bird_hand_command.cpp
     irp6_m/wgt_irp6_m_joints.cpp
     irp6_m/wgt_irp6_m_motors.cpp
     irp6_m/wgt_irp6_m_angle_axis.cpp
@@ -90,8 +89,6 @@ SET(GUI_CXX_SRCS
 	irp6_m/ui_r_irp6_m.cc
 	irp6p_tfg/ui_r_irp6p_tfg.cc
 	irp6ot_tfg/ui_r_irp6ot_tfg.cc
-	bird_hand/ui_ecp_r_bird_hand.cc
-	bird_hand/ui_r_bird_hand.cc
 	sarkofag/ui_r_sarkofag.cc
 	conveyor/ui_r_conveyor.cc
 	spkm/ui_ecp_r_spkm.cc
@@ -121,6 +118,17 @@ SET(GUI_CXX_SRCS
 	base/signal_dispatcher.cpp
 )
 
+
+if(ROBOT_BIRD_HAND)
+SET(GUI_CXX_SRCS
+${GUI_CXX_SRCS}
+    bird_hand/wgt_bird_hand_command.cpp
+   	bird_hand/ui_ecp_r_bird_hand.cc
+	bird_hand/ui_r_bird_hand.cc
+)
+endif(ROBOT_BIRD_HAND)
+
+
 # Class headers that have to be MOCed (i.e. classes derived from QObject)
 SET(GUI_MOC_SRCS
 	base/interface.h	
@@ -144,7 +152,6 @@ SET(GUI_MOC_SRCS
     shead/wgt_shead_command.h
     polycrank/wgt_polycrank_int.h
     base/wgt_single_motor_move.h
-    bird_hand/wgt_bird_hand_command.h
     irp6_m/wgt_irp6_m_joints.h
     irp6_m/wgt_irp6_m_motors.h
     irp6_m/wgt_irp6_m_angle_axis.h
@@ -161,7 +168,6 @@ SET(GUI_MOC_SRCS
 	base/menu_bar.h
 	base/ToolBar.h
 	base/menu_bar_action.h
-	bird_hand/ui_r_bird_hand.h
 	spkm/ui_r_spkm.h
 	spkm/ui_r_spkm1.h
 	spkm/ui_r_spkm2.h
@@ -178,7 +184,13 @@ SET(GUI_MOC_SRCS
 	sbench/wgt_sbench_command.h
 )
 
-
+if(ROBOT_BIRD_HAND)
+SET(GUI_MOC_SRCS
+${GUI_MOC_SRCS}
+	bird_hand/ui_r_bird_hand.h
+	bird_hand/wgt_bird_hand_command.h
+)
+endif(ROBOT_BIRD_HAND)
 
 # Generate MOC files
 QT4_WRAP_CPP(GUI_CXX_SRCS ${GUI_MOC_SRCS})
@@ -201,7 +213,6 @@ SET(GUI_UI
     shead/wgt_shead_command.ui
     polycrank/wgt_polycrank_int.ui
     base/wgt_single_motor_move.ui
-    bird_hand/wgt_bird_hand_command.ui
     base/wgt_absolute_template.ui
     base/wgt_relative_template.ui
     base/wgt_tool_template.ui
@@ -212,6 +223,14 @@ SET(GUI_UI
     irp6_m/wgt_irp6_m_tool_euler.ui
     sbench/wgt_sbench_command.ui
 )
+
+if(ROBOT_BIRD_HAND)
+SET(GUI_UI
+${GUI_UI}
+    bird_hand/wgt_bird_hand_command.ui
+)
+endif(ROBOT_BIRD_HAND)
+
 
 # Generate UI include files
 QT4_WRAP_UI(GUI_CXX_SRCS ${GUI_UI})
