@@ -129,10 +129,16 @@ public:
 	void command_all_out();
 
 	/*!
-	 * \brief moves all legs that are in the upper position down and detach them
+	 * \brief moves one or two legs out
 	 */
 
 	void move_one_or_two_out();
+
+	/*!
+	 * \brief moves one or two legs in
+	 */
+
+	void move_one_or_two_in();
 
 	/*!
 	 * \brief festo command one_up_two_down variant in move_arm
