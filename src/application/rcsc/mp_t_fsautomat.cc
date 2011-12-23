@@ -73,15 +73,19 @@ void fsautomat::create_robots()
 {
 	ACTIVATE_MP_ROBOT(conveyor);
 
-#if (R_BIRD_HAND >= 1)
+#if (R_BIRD_HAND == 1)
 	ACTIVATE_MP_ROBOT(bird_hand);
 #endif
+
+#if (R_SWARMITFIX == 1)
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
 	ACTIVATE_MP_ROBOT(smb1);
 	ACTIVATE_MP_ROBOT(smb2);
 	ACTIVATE_MP_ROBOT(shead1);
 	ACTIVATE_MP_ROBOT(shead2);
+#endif
+
 	ACTIVATE_MP_ROBOT(irp6ot_tfg);
 	ACTIVATE_MP_ROBOT(irp6ot_m);
 	ACTIVATE_MP_ROBOT(irp6p_tfg);

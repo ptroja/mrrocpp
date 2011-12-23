@@ -1,4 +1,3 @@
-if(ROBOT_SMB)
 
 add_library(edpsmb
 	festo_and_inputs.cc
@@ -33,5 +32,3 @@ target_link_libraries(ecp_r_smb kinematicssmb)
 
 install(TARGETS edp_smb1 edp_smb2 DESTINATION bin)
 install(TARGETS edpsmb kinematicssmb ecp_r_smb DESTINATION lib)
-
-endif(ROBOT_SMB)

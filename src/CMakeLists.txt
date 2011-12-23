@@ -41,18 +41,8 @@ CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_POSTUMENT_TFG
 
 
 option(ROBOTS_SWARMITFIX "Build support for SwarmItFIX robots" ON)
-CMAKE_DEPENDENT_OPTION(ROBOT_SHEAD
-	"Build support for SwarmItFIX 'head' robot"
-	ON "ROBOTS_SWARMITFIX" OFF)
-CMAKE_DEPENDENT_OPTION(ROBOT_SMB
-	"Build support for SwarmItFIX mobile base robot"
-	ON "ROBOTS_SWARMITFIX" OFF)
-CMAKE_DEPENDENT_OPTION(ROBOT_SPKM
-	"Build support for SwarmItFIX parallel kinematics machine robot"
-	ON "ROBOTS_SWARMITFIX" OFF)
-CMAKE_DEPENDENT_OPTION(ROBOT_SBENCH
-	"Build support for SwarmItFIX 'bench' robot"
-	ON "ROBOTS_SWARMITFIX" OFF)
+
+option(ROBOTS_012 "Build support for 012 room robots" ON)
 	
 option(ROBOT_BIRD_HAND "Build support for three finger robot hand" ON)
 	
@@ -169,10 +159,18 @@ else(ROBOT_BIRD_HAND)
 set (R_BIRD_HAND 0)
 endif(ROBOT_BIRD_HAND)
 
+if(ROBOTS_SWARMITFIX)
+set (R_SWARMITFIX 1)
+else(ROBOTS_SWARMITFIX)
+set (R_SWARMITFIX 0)
+endif(ROBOTS_SWARMITFIX)
 
 
-
-
+if(ROBOTS_012)
+set (R_012 1)
+else(ROBOTS_012)
+set (R_012 0)
+endif(ROBOTS_012)
 
 
 # configure a header file to pass some of the CMake settings

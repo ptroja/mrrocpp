@@ -1,4 +1,3 @@
-if(ROBOT_SPKM)
 
 if(LibFTDI_FOUND)
 
@@ -42,4 +41,3 @@ target_link_libraries(ecp_r_spkm kinematicsspkm)
 	
 install(TARGETS edpspkm kinematicsspkm ecp_r_spkm DESTINATION lib)
 
-endif(ROBOT_SPKM)

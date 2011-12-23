@@ -696,6 +696,7 @@ common::robots_t Interface::getRobots() const
 
 void Interface::create_robots()
 {
+#if (R_SWARMITFIX == 1)
 	ADD_UI_ROBOT(spkm1);
 	ADD_UI_ROBOT(spkm2);
 	ADD_UI_ROBOT(smb1);
@@ -703,16 +704,20 @@ void Interface::create_robots()
 	ADD_UI_ROBOT(shead1);
 	ADD_UI_ROBOT(shead2);
 	ADD_UI_ROBOT(sbench);
-	ADD_UI_ROBOT(irp6ot_m);
-	ADD_UI_ROBOT(irp6p_m);
+#endif
 
 #if (R_BIRD_HAND == 1)
 	ADD_UI_ROBOT(bird_hand);
 #endif
+
+#if (R_012 == 1)
+	ADD_UI_ROBOT(irp6ot_m);
+	ADD_UI_ROBOT(irp6p_m);
 	ADD_UI_ROBOT(sarkofag);
 	ADD_UI_ROBOT(irp6p_tfg);
 	ADD_UI_ROBOT(conveyor);
 	ADD_UI_ROBOT(irp6ot_tfg);
+#endif
 
 	setRobotsMenu();
 }

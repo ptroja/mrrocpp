@@ -1,4 +1,4 @@
-if(ROBOT_SBENCH)
+
 add_executable(edp_sbench
 	edp_e_sbench.cc
 )
@@ -21,5 +21,3 @@ target_link_libraries(ecp_r_sbench kinematicssbench)
 
 install(TARGETS edp_sbench DESTINATION bin)
 install(TARGETS kinematicssbench ecp_r_sbench DESTINATION lib)
-
-endif(ROBOT_SBENCH)

@@ -1,11 +1,11 @@
 # Recurse into subdirectories.
-add_subdirectory (sarkofag)
+
 
 if(ROBOT_BIRD_HAND)
 add_subdirectory (bird_hand)
 endif(ROBOT_BIRD_HAND)
 
-add_subdirectory (conveyor)
+if(ROBOTS_SWARMITFIX)
 add_subdirectory (shead)
 add_subdirectory (smb)
 add_subdirectory (spkm)
@@ -13,6 +13,10 @@ add_subdirectory (sbench)
 add_subdirectory (canopen)
 add_subdirectory (maxon)
 add_subdirectory (festo)
+endif(ROBOTS_SWARMITFIX)
+
+add_subdirectory (sarkofag)
+add_subdirectory (conveyor)
 add_subdirectory (festival)
 add_subdirectory (player)
 add_subdirectory (irp6ot_tfg)
@@ -32,14 +36,12 @@ target_link_library_if(ROBOT_IRP6_ON_TRACK mp_robots mp_r_irp6ot_tfg)
 target_link_library_if(ROBOT_IRP6_POSTUMENT mp_robots mp_r_irp6p_m)
 target_link_library_if(ROBOT_IRP6_POSTUMENT mp_robots mp_r_irp6p_tfg)
 target_link_library_if(ROBOT_CONVEYOR mp_robots mp_r_conv)
-target_link_library_if(ROBOT_BIRD_HAND mp_robots mp_r_bird_hand)
 target_link_library_if(ROBOT_SARKOFAG mp_robots mp_r_sarkofag)
-target_link_library_if(ROBOT_SHEAD mp_robots mp_r_shead)
-target_link_library_if(ROBOT_SMB mp_robots mp_r_smb)
-target_link_library_if(ROBOT_SPKM mp_robots mp_r_spkm)
-target_link_library_if(ROBOT_SBENCH mp_robots mp_r_sbench)
-
-
+target_link_library_if(ROBOT_BIRD_HAND mp_robots mp_r_bird_hand)
+target_link_library_if(ROBOTS_SWARMITFIX mp_robots mp_r_spkm )
+target_link_library_if(ROBOTS_SWARMITFIX mp_robots mp_r_shead)
+target_link_library_if(ROBOTS_SWARMITFIX mp_robots mp_r_smb)
+target_link_library_if(ROBOTS_SWARMITFIX mp_robots mp_r_sbench)
 
 add_library(ecp_robot
 	../base/ecp/ecp_robot.cc
@@ -54,10 +56,10 @@ target_link_library_if(ROBOT_IRP6_POSTUMENT ecp_robot ecp_r_irp6p_tfg)
 target_link_library_if(ROBOT_CONVEYOR ecp_robot ecp_r_conv)
 target_link_library_if(ROBOT_BIRD_HAND ecp_robot ecp_r_bird_hand)
 target_link_library_if(ROBOT_SARKOFAG ecp_robot ecp_r_sarkofag)
-target_link_library_if(ROBOT_SHEAD ecp_robot ecp_r_shead)
-target_link_library_if(ROBOT_SMB ecp_robot ecp_r_smb)
-target_link_library_if(ROBOT_SPKM ecp_robot ecp_r_spkm)
-target_link_library_if(ROBOT_SBENCH ecp_robot ecp_r_sbench)
+target_link_library_if(ROBOTS_SWARMITFIX ecp_robot ecp_r_spkm)
+target_link_library_if(ROBOTS_SWARMITFIX ecp_robot ecp_r_shead )
+target_link_library_if(ROBOTS_SWARMITFIX ecp_robot  ecp_r_smb )
+target_link_library_if(ROBOTS_SWARMITFIX ecp_robot  ecp_r_sbench)
 
 target_link_libraries(ecp_robot ecp)
 
