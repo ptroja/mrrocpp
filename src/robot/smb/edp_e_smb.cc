@@ -27,6 +27,9 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
+// Access to kinematic parameters.
+#define PARAMS ((mrrocpp::kinematics::smb::model*)this->get_current_kinematic_model())
+
 // Debug executed methods.
 #define DEBUG_METHODS 1
 
@@ -156,6 +159,10 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 			legs_relative_zero_position = legs_rotation_node->getActualPosition();
 		} else
 			legs_relative_zero_position = 0;
+
+		// Set *extended* limits for PKM rotation.
+		axes[1]->setMinimalPositionLimit(PARAMS->lower_pkm_motor_pos_limits - 1000);
+		axes[1]->setMaximalPositionLimit(PARAMS->upper_pkm_motor_pos_limits + 1000);
 
 		// Lock data structure during update
 		{

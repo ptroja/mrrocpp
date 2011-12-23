@@ -42,6 +42,7 @@ using namespace mrrocpp::lib;
 using namespace mrrocpp::lib::pvat;
 using namespace std;
 
+// Access to kinematic parameters.
 #define PARAMS ((mrrocpp::kinematics::spkm::kinematic_model_spkm*)this->get_current_kinematic_model())->get_kinematic_parameters()
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
@@ -209,6 +210,18 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		std::cerr << "shead_frame * !shead_frame: " << shead_frame * !shead_frame << endl;
 #endif
 
+		// Set *extended* limits.
+		for (size_t i = 0; i < axes.size(); ++i) {
+			axes[i]->setMinimalPositionLimit(PARAMS.lower_motor_pos_limits[i] - 1000);
+			axes[i]->setMaximalPositionLimit(PARAMS.upper_motor_pos_limits[i] + 1000);
+		}
+
+		// Move the longest linear axis to the 'zero' position with a fast motion command
+		/*	axisB->writeProfileVelocity(5000UL);
+		 axisB->writeProfileAcceleration(1000UL);
+		 axisB->writeProfileDeceleration(1000UL);
+		 axisB->moveAbsolute(-57500);*/
+
 		// Lock data structure during update.
 		{
 			boost::mutex::scoped_lock lock(effector_mutex);
@@ -277,20 +290,6 @@ void effector::synchronise(void)
 						}
 		} while (!finished);
 
-		// Hardcoded safety values.
-		// TODO: move to configuration file?
-		for (size_t i = 0; i < axes.size(); ++i) {
-			axes[i]->setMinimalPositionLimit(PARAMS.lower_motor_pos_limits[i] - 100);
-			axes[i]->setMaximalPositionLimit(PARAMS.upper_motor_pos_limits[i]
-					+ 100);
-		}
-
-		// Move the longest linear axis to the 'zero' position with a fast motion command
-		/*	axisB->writeProfileVelocity(5000UL);
-		 axisB->writeProfileAcceleration(1000UL);
-		 axisB->writeProfileDeceleration(1000UL);
-		 axisB->moveAbsolute(-57500);*/
-
 		// Reset internal state of the motor positions
 		for (size_t i = 0; i < number_of_servos; ++i) {
 			current_motor_pos[i] = desired_motor_pos_old[i] = 0;
@@ -299,7 +298,7 @@ void effector::synchronise(void)
 		// Compute joints positions in the home position
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
-		// Now the robot is synchronised
+		// Now the robot is synchronised.
 		controller_state_edp_buf.is_synchronised = true;
 
 	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
