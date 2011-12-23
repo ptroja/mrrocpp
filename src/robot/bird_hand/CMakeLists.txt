@@ -17,6 +17,7 @@ add_library(kinematicsbird_hand
 target_link_libraries(kinematicsbird_hand kinematics)
 	
 add_library(ecp_r_bird_hand ecp_r_bird_hand.cc)	
+add_library(mp_r_bird_hand mp_r_bird_hand.cc)	
 	
 target_link_libraries(ecp_r_bird_hand kinematicsbird_hand)
 

@@ -14,7 +14,6 @@
 #include "base/lib/sr/srlib.h"
 #include "base/mp/mp_task.h"
 
-
 #include "base/lib/mrmath/mrmath.h"
 #include "robot/irp6_tfg/dp_tfg.h"
 #include "mp_t_tfg_graspit.h"
@@ -30,7 +29,6 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-#include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
@@ -46,10 +44,10 @@ namespace mp {
 namespace task {
 
 graspit::graspit(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
-	trgraspit
-			= new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
+	trgraspit =
+			new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
@@ -74,8 +72,8 @@ void graspit::main_task_algorithm(void)
 	lib::robot_name_t manipulator_name;
 	lib::robot_name_t gripper_name;
 
-	int port = config.value <int> ("graspit_port", "[transmitter_graspit]");
-	std::string node_name = config.value <std::string> ("graspit_node_name", "[transmitter_graspit]");
+	int port = config.value <int>("graspit_port", "[transmitter_graspit]");
+	std::string node_name = config.value <std::string>("graspit_node_name", "[transmitter_graspit]");
 
 	//get the data from GraspIt
 	trgraspit->TRconnect(node_name.c_str(), port);
@@ -111,16 +109,16 @@ void graspit::main_task_algorithm(void)
 	trgraspit->from_va.grasp_joint[12] /= 1000;
 
 	// ROBOT IRP6_ON_TRACK
-	if (config.value <int> ("is_irp6ot_m_active", lib::UI_SECTION)) {
+	if (config.value <int>("is_irp6ot_m_active", lib::UI_SECTION)) {
 		manipulator_name = lib::irp6ot_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6ot_tfg_active", lib::UI_SECTION)) {
+		if (config.value <int>("is_irp6ot_tfg_active", lib::UI_SECTION)) {
 			gripper_name = lib::irp6ot_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
-	} else if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION)) {
+	} else if (config.value <int>("is_irp6p_m_active", lib::UI_SECTION)) {
 		manipulator_name = lib::irp6p_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6p_tfg_active", lib::UI_SECTION)) {
+		if (config.value <int>("is_irp6p_tfg_active", lib::UI_SECTION)) {
 			gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw

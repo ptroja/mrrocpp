@@ -67,6 +67,8 @@
 #define FESTO_CH2_BIT (1<<4)
 #define FESTO_CH2_BIT_TO_SET 4
 
+// activation not important in last version
+
 #define FESTO_A1_GROUP 1
 #define FESTO_A1_BIT (1<<1)
 #define FESTO_A1_BIT_TO_SET 1

@@ -39,7 +39,7 @@
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "../irp6ot_tfg/ui_r_irp6ot_tfg.h"
-#include "../polycrank/ui_r_polycrank.h"
+
 #include "../bird_hand/ui_r_bird_hand.h"
 #include "../sarkofag/ui_r_sarkofag.h"
 #include "../conveyor/ui_r_conveyor.h"
@@ -205,8 +205,8 @@ void Interface::timer_slot()
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
-			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
+			char process_name_buffer[NAME_LENGTH + 1];snprintf
+			(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -446,13 +446,13 @@ void Interface::raise_ui_ecp_window_slot()
 			ui->label_message->setText("C_JOINT");
 
 			wgt_teaching_obj->my_open();
-
+#if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_JOINTS]->my_open();
 			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_JOINTS]->my_open();
 			}
-
+#endif
 		}
 			break;
 		case lib::C_MOTOR: {
@@ -467,12 +467,12 @@ void Interface::raise_ui_ecp_window_slot()
 			ui->label_message->setText("C_MOTOR");
 
 			wgt_teaching_obj->my_open();
-
+#if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME)
-				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
+			robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
 			else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME)
-				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
-
+			robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
+#endif
 		}
 			break;
 		case lib::YES_NO: {
@@ -696,6 +696,7 @@ common::robots_t Interface::getRobots() const
 
 void Interface::create_robots()
 {
+#if (R_SWARMITFIX == 1)
 	ADD_UI_ROBOT(spkm1);
 	ADD_UI_ROBOT(spkm2);
 	ADD_UI_ROBOT(smb1);
@@ -703,20 +704,20 @@ void Interface::create_robots()
 	ADD_UI_ROBOT(shead1);
 	ADD_UI_ROBOT(shead2);
 	ADD_UI_ROBOT(sbench);
-	ADD_UI_ROBOT(irp6ot_m);
-	ADD_UI_ROBOT(irp6p_m);
-	ADD_UI_ROBOT(polycrank);
-
-#if (defined(Test_FLAG) && (Test_FLAG >= 1))
-
-	ADD_UI_ROBOT(bird_hand);
-
 #endif
 
+#if (R_BIRD_HAND == 1)
+	ADD_UI_ROBOT(bird_hand);
+#endif
+
+#if (R_012 == 1)
+	ADD_UI_ROBOT(irp6ot_m);
+	ADD_UI_ROBOT(irp6p_m);
 	ADD_UI_ROBOT(sarkofag);
 	ADD_UI_ROBOT(irp6p_tfg);
 	ADD_UI_ROBOT(conveyor);
 	ADD_UI_ROBOT(irp6ot_tfg);
+#endif
 
 	setRobotsMenu();
 }
@@ -788,7 +789,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-	if (uname(&sysinfo) == -1) {
+if(	uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -1286,7 +1287,8 @@ int Interface::initiate_configuration()
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL)
+				if (direntp == NULL
+				)
 					break;
 
 				// printf( "%s\n", direntp->d_name );
@@ -1375,7 +1377,8 @@ void Interface::fill_node_list()
 	if (dirp != NULL) {
 		for (;;) {
 			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL)
+			if (direntp == NULL
+			)
 				break;
 			all_node_list.push_back(std::string(direntp->d_name));
 		}

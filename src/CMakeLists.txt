@@ -1,7 +1,4 @@
 
-set (Test_FLAG 0)
-
-option(TEST_TEST "TEST_OPTION" ON)
 
 # TODO: remove these utility macros to separate file
 MACRO(TARGET_LINK_LIBRARY_IF CONDITION TARGET LIBRARY)
@@ -25,42 +22,15 @@ SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 #	endif(OPTION_VALUE)
 #ENDMACRO(OPTION_AND_DEFINITION)
 
-option(ROBOT_CONVEYOR "Build support for conveyor robot" ON)
-option(ROBOT_IRP6_ON_TRACK "Build support for IRp6 'on track' robot" ON)
-CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_ON_TRACK_M
-	"Build support for IRp6 'on track' robot without a gripper"
-	ON "ROBOT_IRP6_ON_TRACK" OFF)
-CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_ON_TRACK_TFG
-	"Build support for gripper mounted on IRp6 'on track' robot"
-	ON "ROBOT_IRP6_ON_TRACK" OFF)
-option(ROBOT_IRP6_POSTUMENT "Build support for IRp6 'postument' robot" ON)
-CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_POSTUMENT_M
-	"Build support for IRp6 'postument' robot without a gripper"
-	ON "ROBOT_IRP6_POSTUMENT" OFF)
-CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_POSTUMENT_TFG
-	"Build support for gripper mounted on IRp6 'postument' robot"
-	ON "ROBOT_IRP6_POSTUMENT" OFF)
-option(ROBOT_IRP6_MECHATRONICS "Build support for IRp6 robot located at Mechatronics Deptartment" ON)
-option(ROBOT_POLYCRANK "Build support for Polycrank robot" ON)
+
 
 
 option(ROBOTS_SWARMITFIX "Build support for SwarmItFIX robots" ON)
-CMAKE_DEPENDENT_OPTION(ROBOT_SHEAD
-	"Build support for SwarmItFIX 'head' robot"
-	ON "ROBOTS_SWARMITFIX" OFF)
-CMAKE_DEPENDENT_OPTION(ROBOT_SMB
-	"Build support for SwarmItFIX mobile base robot"
-	ON "ROBOTS_SWARMITFIX" OFF)
-CMAKE_DEPENDENT_OPTION(ROBOT_SPKM
-	"Build support for SwarmItFIX parallel kinematics machine robot"
-	ON "ROBOTS_SWARMITFIX" OFF)
-CMAKE_DEPENDENT_OPTION(ROBOT_SBENCH
-	"Build support for SwarmItFIX 'bench' robot"
-	ON "ROBOTS_SWARMITFIX" OFF)
+
+option(ROBOTS_012 "Build support for 012 room robots" ON)
 	
 option(ROBOT_BIRD_HAND "Build support for three finger robot hand" ON)
 	
-option(ROBOT_SARKOFAG "Build support for sarkofag" ON)
 
 if (UBUNTU32BIT)
 	# 32-bit headers and libraries are kept in 'mrlib' repository
@@ -144,14 +114,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
 endif(CMAKE_COMPILER_IS_GNUCXX)	
 
-# configure a header file to pass some of the CMake settings
-# to the source code
-configure_file (
-  "${PROJECT_SOURCE_DIR}/src/config.h.in"
-  "${PROJECT_BINARY_DIR}/src/config.h"
-)
-# add include path to the generated config file
-include_directories (${MRROCPP_BINARY_DIR}/src) 
 
 # Boost is a common requirements for all the platforms
 find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
@@ -173,6 +135,36 @@ set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
 	${COMPATIBILITY_LIBRARIES}
 )
 
+
+
+if(ROBOT_BIRD_HAND)
+set (R_BIRD_HAND 1)
+else(ROBOT_BIRD_HAND)
+set (R_BIRD_HAND 0)
+endif(ROBOT_BIRD_HAND)
+
+if(ROBOTS_SWARMITFIX)
+set (R_SWARMITFIX 1)
+else(ROBOTS_SWARMITFIX)
+set (R_SWARMITFIX 0)
+endif(ROBOTS_SWARMITFIX)
+
+
+if(ROBOTS_012)
+set (R_012 1)
+else(ROBOTS_012)
+set (R_012 0)
+endif(ROBOTS_012)
+
+
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+  "${PROJECT_SOURCE_DIR}/src/config.h.in"
+  "${PROJECT_BINARY_DIR}/src/config.h"
+)
+# add include path to the generated config file
+include_directories (${MRROCPP_BINARY_DIR}/src) 
 
 
 # Recurse into subdirectories.
