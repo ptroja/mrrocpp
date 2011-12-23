@@ -21,7 +21,7 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-#include "robot/polycrank/mp_r_polycrank.h"
+
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
@@ -54,7 +54,6 @@ void cxx::create_robots()
 {
 	ACTIVATE_MP_ROBOT(conveyor);
 
-	ACTIVATE_MP_ROBOT(polycrank);
 #if (R_BIRD_HAND == 1)
 	ACTIVATE_MP_ROBOT(bird_hand);
 #endif

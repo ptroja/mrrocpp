@@ -37,8 +37,7 @@ CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_POSTUMENT_M
 CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_POSTUMENT_TFG
 	"Build support for gripper mounted on IRp6 'postument' robot"
 	ON "ROBOT_IRP6_POSTUMENT" OFF)
-option(ROBOT_IRP6_MECHATRONICS "Build support for IRp6 robot located at Mechatronics Deptartment" ON)
-option(ROBOT_POLYCRANK "Build support for Polycrank robot" ON)
+
 
 
 option(ROBOTS_SWARMITFIX "Build support for SwarmItFIX robots" ON)

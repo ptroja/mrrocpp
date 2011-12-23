@@ -39,7 +39,7 @@
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "../irp6ot_tfg/ui_r_irp6ot_tfg.h"
-#include "../polycrank/ui_r_polycrank.h"
+
 #include "../bird_hand/ui_r_bird_hand.h"
 #include "../sarkofag/ui_r_sarkofag.h"
 #include "../conveyor/ui_r_conveyor.h"
@@ -705,7 +705,7 @@ void Interface::create_robots()
 	ADD_UI_ROBOT(sbench);
 	ADD_UI_ROBOT(irp6ot_m);
 	ADD_UI_ROBOT(irp6p_m);
-	ADD_UI_ROBOT(polycrank);
+
 #if (R_BIRD_HAND == 1)
 	ADD_UI_ROBOT(bird_hand);
 #endif

@@ -68,7 +68,6 @@ SET(GUI_CXX_SRCS
     spkm/wgt_spkm_ext.cpp
     smb/wgt_smb_command.cpp
     shead/wgt_shead_command.cpp
-    polycrank/wgt_polycrank_int.cpp
     base/wgt_single_motor_move.cpp
     irp6_m/wgt_irp6_m_joints.cpp
     irp6_m/wgt_irp6_m_motors.cpp
@@ -111,7 +110,6 @@ SET(GUI_CXX_SRCS
 	shead/ui_r_shead2.cc
 	sbench/ui_ecp_r_sbench.cc
 	sbench/ui_r_sbench.cc
-	polycrank/ui_r_polycrank.cc
 	base/ui.cc
 	base/ui_robot.cc
 	base/ui_r_single_motor.cc
@@ -150,7 +148,6 @@ SET(GUI_MOC_SRCS
     spkm/wgt_spkm_ext.h
     smb/wgt_smb_command.h
     shead/wgt_shead_command.h
-    polycrank/wgt_polycrank_int.h
     base/wgt_single_motor_move.h
     irp6_m/wgt_irp6_m_joints.h
     irp6_m/wgt_irp6_m_motors.h
@@ -163,7 +160,6 @@ SET(GUI_MOC_SRCS
 	irp6ot_tfg/ui_r_irp6ot_tfg.h
 	irp6p_m/ui_r_irp6p_m.h
 	irp6p_tfg/ui_r_irp6p_tfg.h
-	polycrank/ui_r_polycrank.h
 	base/signal_dispatcher.h
 	base/menu_bar.h
 	base/ToolBar.h
@@ -211,7 +207,6 @@ SET(GUI_UI
     spkm/wgt_spkm_ext.ui
     smb/wgt_smb_command.ui
     shead/wgt_shead_command.ui
-    polycrank/wgt_polycrank_int.ui
     base/wgt_single_motor_move.ui
     base/wgt_absolute_template.ui
     base/wgt_relative_template.ui

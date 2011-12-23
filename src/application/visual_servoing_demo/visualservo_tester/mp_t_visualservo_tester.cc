@@ -19,8 +19,6 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-
-#include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
@@ -45,12 +43,12 @@ task* return_created_mp_task(lib::configurator &_config)
 }
 
 visualservo_tester::visualservo_tester(lib::configurator &config) :
-	task(config), config_section_name("[visualservo_tester]")
+		task(config), config_section_name("[visualservo_tester]")
 {
-	run_vs = config.value <bool> ("run_vs", config_section_name);
-	run_conveyor = config.value <bool> ("run_conveyor", config_section_name);
-	vs_settle_time = config.value <int> ("vs_settle_time", config_section_name);
-	robot_name = config.value <std::string> ("robot_name", config_section_name);
+	run_vs = config.value <bool>("run_vs", config_section_name);
+	run_conveyor = config.value <bool>("run_conveyor", config_section_name);
+	vs_settle_time = config.value <int>("vs_settle_time", config_section_name);
+	robot_name = config.value <std::string>("robot_name", config_section_name);
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
@@ -95,7 +93,7 @@ void visualservo_tester::main_task_algorithm(void)
 	log("visualservo_tester::main_task_algorithm() 4\n");
 }
 
-}//namespace task
+} //namespace task
 
 }
 
