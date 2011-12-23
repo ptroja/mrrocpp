@@ -33,6 +33,8 @@ add_library(kinematicsspkm
 target_link_libraries(kinematicsspkm kinematics)
 	
 add_library(ecp_r_spkm ecp_r_spkm.cc ecp_r_spkm1.cc ecp_r_spkm2.cc)	
+add_library(mp_r_spkm mp_r_spkm.cc mp_r_spkm1.cc mp_r_spkm2.cc)	
+
 target_link_libraries(ecp_r_spkm kinematicsspkm)
 	
 install(TARGETS edpspkm kinematicsspkm ecp_r_spkm DESTINATION lib)

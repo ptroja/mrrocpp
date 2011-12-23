@@ -1,7 +1,4 @@
 
-set (Test_FLAG 0)
-
-option(TEST_TEST "TEST_OPTION" ON)
 
 # TODO: remove these utility macros to separate file
 MACRO(TARGET_LINK_LIBRARY_IF CONDITION TARGET LIBRARY)
@@ -40,8 +37,7 @@ CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_POSTUMENT_M
 CMAKE_DEPENDENT_OPTION(ROBOT_IRP6_POSTUMENT_TFG
 	"Build support for gripper mounted on IRp6 'postument' robot"
 	ON "ROBOT_IRP6_POSTUMENT" OFF)
-option(ROBOT_IRP6_MECHATRONICS "Build support for IRp6 robot located at Mechatronics Deptartment" ON)
-option(ROBOT_POLYCRANK "Build support for Polycrank robot" ON)
+
 
 
 option(ROBOTS_SWARMITFIX "Build support for SwarmItFIX robots" ON)
@@ -144,14 +140,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
 endif(CMAKE_COMPILER_IS_GNUCXX)	
 
-# configure a header file to pass some of the CMake settings
-# to the source code
-configure_file (
-  "${PROJECT_SOURCE_DIR}/src/config.h.in"
-  "${PROJECT_BINARY_DIR}/src/config.h"
-)
-# add include path to the generated config file
-include_directories (${MRROCPP_BINARY_DIR}/src) 
 
 # Boost is a common requirements for all the platforms
 find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
@@ -173,6 +161,28 @@ set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
 	${COMPATIBILITY_LIBRARIES}
 )
 
+
+
+if(ROBOT_BIRD_HAND)
+set (R_BIRD_HAND 1)
+else(ROBOT_BIRD_HAND)
+set (R_BIRD_HAND 0)
+endif(ROBOT_BIRD_HAND)
+
+
+
+
+
+
+
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+  "${PROJECT_SOURCE_DIR}/src/config.h.in"
+  "${PROJECT_BINARY_DIR}/src/config.h"
+)
+# add include path to the generated config file
+include_directories (${MRROCPP_BINARY_DIR}/src) 
 
 
 # Recurse into subdirectories.

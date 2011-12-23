@@ -14,7 +14,6 @@
 #include "base/mp/mp_task.h"
 #include "base/mp/mp_robot.h"
 
-
 #include "mp_t_c.h"
 #include "base/mp/generator/mp_g_wait_for_task_termination.h"
 
@@ -22,7 +21,7 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-#include "robot/polycrank/mp_r_polycrank.h"
+
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
@@ -46,7 +45,7 @@ task* return_created_mp_task(lib::configurator &_config)
 }
 
 cxx::cxx(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
 }
 
@@ -55,8 +54,9 @@ void cxx::create_robots()
 {
 	ACTIVATE_MP_ROBOT(conveyor);
 
-	ACTIVATE_MP_ROBOT(polycrank);
+#if (R_BIRD_HAND == 1)
 	ACTIVATE_MP_ROBOT(bird_hand);
+#endif
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
 	ACTIVATE_MP_ROBOT(smb1);
@@ -74,15 +74,15 @@ void cxx::create_robots()
 void cxx::main_task_algorithm(void)
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					// Drop the 'const' qualifier
-					lib::ECP_REPLY_PACKAGE & ecp_reply_package =
-							const_cast <lib::ECP_REPLY_PACKAGE&> (robot_node.second->ecp_reply_package);
+			{
+				// Drop the 'const' qualifier
+				lib::ECP_REPLY_PACKAGE & ecp_reply_package =
+						const_cast <lib::ECP_REPLY_PACKAGE&>(robot_node.second->ecp_reply_package);
 
-					// NOTE: this does write to the INPUT buffer (?!)
-					// Probably this should be solved with a proper initialization.
-					ecp_reply_package.reply = lib::ECP_ACKNOWLEDGE;
-				}
+				// NOTE: this does write to the INPUT buffer (?!)
+				// Probably this should be solved with a proper initialization.
+				ecp_reply_package.reply = lib::ECP_ACKNOWLEDGE;
+			}
 
 	generator::wait_for_task_termination wtf_gen(*this, false); // "Pusty" generator
 	wtf_gen.robot_m = robot_m;
@@ -95,5 +95,4 @@ void cxx::main_task_algorithm(void)
 } // namespace task
 } // namespace mp
 } // namespace mrrocpp
-
 

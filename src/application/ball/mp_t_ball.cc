@@ -13,7 +13,6 @@
 
 #include "base/lib/sr/srlib.h"
 
-
 #include "base/mp/mp_task.h"
 #include "application/ball/mp_g_ball.h"
 #include "application/ball/mp_t_ball.h"
@@ -28,7 +27,6 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-#include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
@@ -60,7 +58,7 @@ void ball::create_robots()
 }
 
 ball::ball(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
 }
 
