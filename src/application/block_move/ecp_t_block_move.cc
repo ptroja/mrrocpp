@@ -27,7 +27,7 @@
 
 #define BOARD_COLOR 5
 
-#define BLOCK_WIDTH 0.032
+#define BLOCK_WIDTH 0.0325
 #define BLOCK_HEIGHT 0.0193
 
 #define BLOCK_REACHING 0
@@ -72,6 +72,9 @@ block_move::block_move(lib::configurator &_config) :
 	ds_rpc = shared_ptr <discode_sensor> (new discode_sensor(config, ds_config_section_name));
 	ds_rpc->configure_sensor();
 
+	//int tm1 = config.value <int> ("sm1_timeout", "[ecp_block_move]");
+	int tm2 = config.value <int> ("sm2_timeout", "[ecp_block_move]");
+/*
 	//board localization servovision
 	sr_ecp_msg->message("Creating visual servo 1...");
 	vs_config_section_name1 = "[board_localization_servovision]";
@@ -80,13 +83,13 @@ block_move::block_move(lib::configurator &_config) :
 	ds1 = shared_ptr <discode_sensor> (new discode_sensor(config, vs_config_section_name1));
 	vs1 = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg1, ds1, vs_config_section_name1, config));
 	object_reached_term_cond1 = shared_ptr <termination_condition> (new object_reached_termination_condition(config, vs_config_section_name1));
-	timeout_term_cond1 = shared_ptr <termination_condition> (new timeout_termination_condition(40));
+	timeout_term_cond1 = shared_ptr <termination_condition> (new timeout_termination_condition(tm1));
 
 	//utworzenie generatora ruchu
 	sm1 = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, vs_config_section_name1.c_str(), vs1));
 	sm1->add_position_constraint(cube1);
 	sm1->configure();
-/*
+*/
 	//block reaching servovision
 	sr_ecp_msg->message("Creating visual servo 2...");
 	vs_config_section_name2 = "[block_reaching_servovision]";
@@ -95,13 +98,13 @@ block_move::block_move(lib::configurator &_config) :
 	ds2 = shared_ptr <discode_sensor> (new discode_sensor(config, vs_config_section_name2));
 	vs2 = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg2, ds2, vs_config_section_name2, config));
 	object_reached_term_cond2 = shared_ptr <termination_condition> (new object_reached_termination_condition(config, vs_config_section_name2));
-	timeout_term_cond2 = shared_ptr <termination_condition> (new timeout_termination_condition(40));
+	timeout_term_cond2 = shared_ptr <termination_condition> (new timeout_termination_condition(tm2));
 
 	//utworzenie generatora ruchu
 	sm2 = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, vs_config_section_name2.c_str(), vs2));
 	sm2->add_position_constraint(cube2);
 	sm2->configure();
-*/
+
 	sr_ecp_msg->message("ecp BLOCK MOVE loaded");
 }
 
@@ -148,7 +151,7 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 		sr_ecp_msg->message("configurate servovision...");
 
-		if(param == BOARD_COLOR) {
+		/*if(param == BOARD_COLOR) {
 
 			sm1->add_termination_condition(object_reached_term_cond1);
 			sm1->add_termination_condition(timeout_term_cond1);
@@ -167,12 +170,11 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 					sr_ecp_msg->message("get_position_vector is empty");
 				}
 
-				/*std::cout << "POSITION" << endl;
+				std::cout << "POSITION" << endl;
 				for(size_t i = 0; i < position.size(); ++i) {
 					std::cout << position[i] << std::endl;
 				}
 				std::cout << std::endl;
-				*/
 			}
 			else {
 				sr_ecp_msg->message("object_reached_term_cond IS NOT MET");
@@ -187,8 +189,8 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 				sr_ecp_msg->message("timeout_term_cond IS NOT MET");
 			}
 		}
-/*		else {
-
+		else {
+*/
 			sm2->add_termination_condition(object_reached_term_cond2);
 			sm2->add_termination_condition(timeout_term_cond2);
 			sm2->Move();
@@ -196,6 +198,7 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 			//obsługa warunku zakończenia pracy - warunek stopu
 			if(object_reached_term_cond2->is_condition_met()) {
 				sr_ecp_msg->message("object_reached_term_cond is met");
+				ecp_reply.recognized_command[0] = 'Y';
 			}
 			else {
 				sr_ecp_msg->message("object_reached_term_cond IS NOT MET");
@@ -204,17 +207,25 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 			//obsługa warunku zakończenia pracy - timeout
 			if(timeout_term_cond2->is_condition_met()) {
 				sr_ecp_msg->message("timeout_term_cond is met");
+				ecp_reply.recognized_command[0] = 'N';
 			}
 			else {
 				sr_ecp_msg->message("timeout_term_cond IS NOT MET");
 			}
-		}
-*/
+//		}
+
 		sr_ecp_msg->message("servovision end");
 	}
 	else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 
 		sr_ecp_msg->message("configurate Smooth Generator...");
+
+		position[0] = 0.866214;
+		position[1] = 2.34313;
+		position[2] = 0.118003;
+		position[3] = 0.0759266;
+		position[4] = 3.03335;
+		position[5] = -0.0748947;
 
 		int param = (int) mp_command.ecp_next_state.variant;
 
@@ -224,8 +235,8 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 		int change_pos[6];
 
-		change_pos[2] = 0 - param % 10;
-		change_pos[1] = 0 - (param % 100 + change_pos[2])/10;
+		change_pos[2] = param % 10;
+		change_pos[1] = (param % 100 - change_pos[2])/10;
 		change_pos[0] = (param % 1000 - change_pos[1])/100;
 		change_pos[3] = 0;
 		change_pos[4] = 0;
@@ -267,9 +278,22 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 			sr_ecp_msg->message("after reset and set_absoulute");
 
-			coordinates[0] = position[0] + 0.007 + change_pos[0]*BLOCK_WIDTH;
-			coordinates[1] = position[1] + 0.056 + change_pos[1]*BLOCK_WIDTH;
-			coordinates[2] = position[2] + change_pos[2]*BLOCK_HEIGHT;
+			double offset_x = config.value <double> ("offset_x", "[ecp_block_move]");
+			double offset_y = config.value <double> ("offset_y", "[ecp_block_move]");
+			double corr_x = config.value <double> ("corr_x", "[ecp_block_move]");
+			double corr_y = config.value <double> ("corr_y", "[ecp_block_move]");
+
+			std::cout << offset_x << ", " << offset_y << std::endl;
+
+			std::cout << "CHANGE_POSITION" << endl;
+			for(size_t i = 0; i < 6; ++i) {
+				std::cout << change_pos[i] << std::endl;
+			}
+			std::cout << std::endl;
+
+			coordinates[0] = position[0] + offset_x + (4 - change_pos[0])*BLOCK_WIDTH + corr_x*(change_pos[0] - 1);
+			coordinates[1] = position[1] + offset_y + (4 - change_pos[1])*BLOCK_WIDTH + corr_y*(change_pos[0] - 1);
+			coordinates[2] = position[2] + (change_pos[2]-3)*BLOCK_HEIGHT;
 			coordinates[3] = position[3] + change_pos[3]*BLOCK_WIDTH;
 			coordinates[4] = position[4] + change_pos[4]*BLOCK_WIDTH;
 			coordinates[5] = position[5] + change_pos[5]*BLOCK_WIDTH;

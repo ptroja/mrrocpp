@@ -58,18 +58,18 @@ protected:
 
 	//common::sub_task::gripper_opening* stgo;
 
-	shared_ptr<single_visual_servo_manager> sm1/*, sm2*/;
-	shared_ptr<visual_servo> vs1/*, vs2*/;
-	shared_ptr<visual_servo_regulator> reg1/*, reg2*/;
-	shared_ptr<discode_sensor> ds_rpc, ds1/*, ds2*/;
+	shared_ptr<single_visual_servo_manager> /*sm1,*/ sm2;
+	shared_ptr<visual_servo> /*vs1,*/ vs2;
+	shared_ptr<visual_servo_regulator> /*reg1,*/ reg2;
+	shared_ptr<discode_sensor> ds_rpc, /*ds1, */ds2;
 
-	shared_ptr<termination_condition> object_reached_term_cond1/*, object_reached_term_cond2*/;
-	shared_ptr<termination_condition> timeout_term_cond1/*, timeout_term_cond2*/;
+	shared_ptr<termination_condition> /*object_reached_term_cond1, */object_reached_term_cond2;
+	shared_ptr<termination_condition> /*timeout_term_cond1, */timeout_term_cond2;
 
 	std::string ds_config_section_name;
-	std::string vs_config_section_name1/*, vs_config_section_name2*/;
+	std::string /*vs_config_section_name1,*/ vs_config_section_name2;
 
-	std::vector<double> position;
+	double position[6];
 
 public:
 

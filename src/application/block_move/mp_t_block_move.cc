@@ -14,6 +14,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/srlib.h"
+#include "base/lib/configurator.h"
 
 //#include "robot/irp6_tfg/dp_tfg.h"
 //#include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
@@ -36,8 +37,8 @@
 #define COORD_N 3
 #define BLOCK_REACHING 0
 #define BUILDING 1
-#define COUNT_SERVO_TRY_1 2
-#define COUNT_SERVO_TRY_2 2
+#define COUNT_SERVO_TRY_1 5
+#define COUNT_SERVO_TRY_2 5
 
 typedef list<BlockPosition> block_position_list;
 
@@ -153,8 +154,13 @@ block_position_list block_move::create_plan(block_position_list l)
 
 	l.sort();
 
-	sr_ecp_msg->message("After sorting");
+	cout << "Plan:" << endl;
+	for(block_position_list::iterator it = l.begin(); it != l.end(); ++it) {
+		(*it).print();
+	}
 
+	sr_ecp_msg->message("After sorting");
+/*
 	int t_map[4][4];
 	for(int i = 0; i < BLOCK_SIZE; ++i) {
 		for(int j = 0; j < BLOCK_SIZE; ++j) {
@@ -184,28 +190,30 @@ block_position_list block_move::create_plan(block_position_list l)
 	}
 
 	sr_ecp_msg->message("Creating plan end");
-
-	return plan;
+*/
+	return l;
 }
 
 void block_move::main_task_algorithm(void)
 {
 	sr_ecp_msg->message("Block Move MP Start");
 
-	//TODO: block length recognition
-
 	block_position_list list_from_file = get_list_from_file("../../src/application/block_move/con/structure.con");
 	planned_list = create_plan(list_from_file);
 
-	sr_ecp_msg->message("Reaching building place...");
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	int count_servo_try_1 = config.value <int> ("count_servo_try_1", "[mp_block_move]");
+/*
+	for(int h = 0; h < count_servo_try_1; ++h) {
 
-	wait_ms(4000);
+		sr_ecp_msg->message("Reaching building place...");
 
-	sr_ecp_msg->message("Board localization - servovision");
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
+		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-	for(int h = 0; h < COUNT_SERVO_TRY_1; ++h) {
+		wait_ms(4000);
+
+		sr_ecp_msg->message("Board localization - servovision");
+
 		set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, BOARD_COLOR, "", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
@@ -216,8 +224,7 @@ void block_move::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Board not localized!!!");
 	}
-
-
+*/
 	for(block_position_list::iterator i = planned_list.begin(); i != planned_list.end(); ++i) {
 
 		sr_ecp_msg->message("Inside main loop");
@@ -227,20 +234,23 @@ void block_move::main_task_algorithm(void)
 
 		(*i).print();
 
-/*		sr_ecp_msg->message("Start position");
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
-		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-*/
 		//Zerowanie czujników
 		sr_ecp_msg->message("Postument Bias");
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-		wait_ms(4000);
-/*
-		sr_ecp_msg->message("Block localization - servovision");
+		int count_servo_try_2 = config.value <int> ("count_servo_try_2", "[mp_block_move]");
 
-		for(int h = 0; h < COUNT_SERVO_TRY_2; ++h) {
+		for(int h = 0; h < count_servo_try_2; ++h) {
+
+			sr_ecp_msg->message("Start position");
+			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
+			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+			wait_ms(4000);
+
+			sr_ecp_msg->message("Block localization - servovision");
+
 			set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, present_color, "", 0, lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
@@ -265,7 +275,7 @@ void block_move::main_task_algorithm(void)
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		wait_ms(4000);
-*/
+
 		sr_ecp_msg->message("Reaching building place...");
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
