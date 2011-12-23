@@ -30,13 +30,14 @@ namespace spkm {
  */
 class kinematic_model_spkm : public common::kinematic_model
 {
-protected:
+private:
 	//! Kinematic parameters of both: parallel kinematics machine (PM) and spherical wrist (SW) attached to it.
 	kinematic_parameters_spkm params;
 
 	//! Upper platform pose - computed by the IK and used later for Cartesian limits verification.
 	Homog4d O_P_T;
 
+protected:
 	//! Sets parameters used by given kinematics model - empty.
 	void set_kinematic_parameters(void)
 	{
@@ -138,6 +139,11 @@ public:
 	 * @return Joints in the form of vector <q1,q2,q3>.
 	 */
 	Vector3d SW_inverse(const Homog4d & P_W_T_, const lib::JointArray & local_current_joints);
+
+	/*!
+	 * Method returns kinematic parameters of given model.
+	 */
+	kinematic_parameters_spkm get_kinematic_parameters();
 
 	// You must overload "operator new" so that it generates 16-bytes-aligned pointers
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW

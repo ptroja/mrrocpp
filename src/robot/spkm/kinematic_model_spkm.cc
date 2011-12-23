@@ -35,6 +35,10 @@ kinematic_model_spkm::kinematic_model_spkm(void)
 	set_kinematic_model_label("PKM 6DOF (SW+PM) kinematic model. PM inverse kinematics by D.Zlatanow and M.Zoppi");
 }
 
+kinematic_parameters_spkm kinematic_model_spkm::get_kinematic_parameters() {
+	return params;
+}
+
 void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_position) const
 {
 	// Check upper limit for every motor.

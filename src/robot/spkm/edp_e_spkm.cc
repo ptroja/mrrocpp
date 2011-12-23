@@ -30,19 +30,20 @@
 
 #include "robot/maxon/ipm_executor.h"
 
-#include "debug.hpp"
-// Debug PVT triples.
-#define DEBUG_PVT 1
-
-
 
 namespace mrrocpp {
 namespace edp {
 namespace spkm {
 
+#include "debug.hpp"
+// Debug PVT triples.
+#define DEBUG_PVT 1
+
 using namespace mrrocpp::lib;
 using namespace mrrocpp::lib::pvat;
 using namespace std;
+
+#define PARAMS ((mrrocpp::kinematics::spkm::kinematic_model_spkm*)this->get_current_kinematic_model())->get_kinematic_parameters()
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	manip_effector(_shell, l_robot_name)
@@ -283,9 +284,8 @@ void effector::synchronise(void)
 		// Hardcoded safety values.
 		// TODO: move to configuration file?
 		for (size_t i = 0; i < axes.size(); ++i) {
-			axes[i]->setMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i]
-					- 100);
-			axes[i]->setMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i]
+			axes[i]->setMinimalPositionLimit(PARAMS.lower_motor_pos_limits[i] - 100);
+			axes[i]->setMaximalPositionLimit(PARAMS.upper_motor_pos_limits[i]
 					+ 100);
 		}
 
@@ -633,7 +633,7 @@ void effector::execute_motor_motion()
 
 			for (size_t i = 0; i < 6; ++i) {
 				Delta[i] = fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i])
-						/ kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[i];
+						/ PARAMS.encoder_resolution[i];
 				Vmax[i] = Vdefault[i];
 				Amax[i] = Adefault[i];
 			}
@@ -879,9 +879,9 @@ void effector::interpolated_motion_in_operational_space()
 	double vmin[lib::spkm::NUM_OF_SERVOS];
 	double vmax[lib::spkm::NUM_OF_SERVOS];
 	for (size_t mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
-		vmin[mtr] = (-1.0) * MotorVmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]
+		vmin[mtr] = (-1.0) * MotorVmax[mtr] * PARAMS.encoder_resolution[mtr]
 				/ 60.0;
-		vmax[mtr] = MotorVmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr] / 60.0;
+		vmax[mtr] = MotorVmax[mtr] * PARAMS.encoder_resolution[mtr] / 60.0;
 	}
 	// Check extreme velocities for all segments and motors.
 	check_velocities <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (vmin, vmax, motor_3w, motor_2w, motor_1w);
@@ -891,9 +891,9 @@ void effector::interpolated_motion_in_operational_space()
 	double amin[lib::spkm::NUM_OF_SERVOS];
 	double amax[lib::spkm::NUM_OF_SERVOS];
 	for (size_t mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
-		amin[mtr] = (-1.0) * MotorAmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]
+		amin[mtr] = (-1.0) * MotorAmax[mtr] * PARAMS.encoder_resolution[mtr]
 				/ 60.0;
-		amax[mtr] = MotorAmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr] / 60.0;
+		amax[mtr] = MotorAmax[mtr] * PARAMS.encoder_resolution[mtr] / 60.0;
 	}
 	// Check extreme velocities for all segments and motors.
 	check_accelerations <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (amin, amax, motor_3w, motor_2w, time_invervals);
@@ -913,7 +913,7 @@ void effector::interpolated_motion_in_operational_space()
 	// Recalculate units: p[qc], v[rpm (revolutions per minute) per second], t[miliseconds].0x4101
 	for (size_t mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
 		for (size_t pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
-			v(pnt, mtr) *= 60.0 / kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
+			v(pnt, mtr) *= 60.0 / PARAMS.encoder_resolution[mtr];
 			// Apply Maxon-specific value limits (zero is not allowed).
 			if ((0 < v(pnt, mtr)) && (v(pnt, mtr) < 1)) {
 				v(pnt, mtr) = 1;
@@ -925,9 +925,9 @@ void effector::interpolated_motion_in_operational_space()
 				v(pnt, mtr) = Vdefault[mtr];
 			}*/
 		}
-		//p.transpose().row(mtr) /= kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
+		//p.transpose().row(mtr) /= PARAMS.encoder_resolution[mtr];
 		/*							v.transpose().row(mtr) = v.transpose().row(mtr) * epos::epos::SECONDS_PER_MINUTE /
-		 kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];*/
+		 PARAMS.encoder_resolution[mtr];*/
 	}
 	// Recalculate time to [ms].
 	t *= 1000;
