@@ -15,7 +15,6 @@
 #include "base/edp/reader.h"
 
 #include "kinematic_model_spkm.h"
-#include "kinematic_parameters_spkm.h"
 #include "base/edp/manip_trans_t.h"
 
 #include "robot/canopen/gateway_epos_usb.h"
@@ -30,19 +29,21 @@
 
 #include "robot/maxon/ipm_executor.h"
 
-#include "debug.hpp"
-// Debug PVT triples.
-#define DEBUG_PVT 1
-
-
 
 namespace mrrocpp {
 namespace edp {
 namespace spkm {
 
+#include "debug.hpp"
+// Debug PVT triples.
+#define DEBUG_PVT 1
+
 using namespace mrrocpp::lib;
 using namespace mrrocpp::lib::pvat;
 using namespace std;
+
+// Access to kinematic parameters.
+#define PARAMS ((mrrocpp::kinematics::spkm::kinematic_model_spkm*)this->get_current_kinematic_model())->get_kinematic_parameters()
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	manip_effector(_shell, l_robot_name)
@@ -51,9 +52,6 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 	// Set number of servos.
 	number_of_servos = lib::spkm::NUM_OF_SERVOS;
-
-	// Create all kinematic models for SPKM.
-	create_kinematic_models_for_given_robot();
 
 	if (!robot_test_mode) {
 		// Create gateway object.
@@ -280,13 +278,15 @@ void effector::synchronise(void)
 						}
 		} while (!finished);
 
-		// Hardcoded safety values.
-		// TODO: move to configuration file?
+		// Reset internal state of the motor positions
+		for (size_t i = 0; i < number_of_servos; ++i) {
+			current_motor_pos[i] = desired_motor_pos_old[i] = 0;
+		}
+
+		// Set *extended* limits.
 		for (size_t i = 0; i < axes.size(); ++i) {
-			axes[i]->setMinimalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::lower_motor_pos_limits[i]
-					- 100);
-			axes[i]->setMaximalPositionLimit(kinematics::spkm::kinematic_parameters_spkm::upper_motor_pos_limits[i]
-					+ 100);
+			axes[i]->setMinimalPositionLimit(PARAMS.lower_motor_pos_limits[i] - 1000);
+			axes[i]->setMaximalPositionLimit(PARAMS.upper_motor_pos_limits[i] + 1000);
 		}
 
 		// Move the longest linear axis to the 'zero' position with a fast motion command
@@ -295,15 +295,10 @@ void effector::synchronise(void)
 		 axisB->writeProfileDeceleration(1000UL);
 		 axisB->moveAbsolute(-57500);*/
 
-		// Reset internal state of the motor positions
-		for (size_t i = 0; i < number_of_servos; ++i) {
-			current_motor_pos[i] = desired_motor_pos_old[i] = 0;
-		}
-
 		// Compute joints positions in the home position
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
-		// Now the robot is synchronised
+		// Now the robot is synchronised.
 		controller_state_edp_buf.is_synchronised = true;
 
 	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
@@ -633,7 +628,7 @@ void effector::execute_motor_motion()
 
 			for (size_t i = 0; i < 6; ++i) {
 				Delta[i] = fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i])
-						/ kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[i];
+						/ PARAMS.encoder_resolution[i];
 				Vmax[i] = Vdefault[i];
 				Amax[i] = Adefault[i];
 			}
@@ -879,9 +874,9 @@ void effector::interpolated_motion_in_operational_space()
 	double vmin[lib::spkm::NUM_OF_SERVOS];
 	double vmax[lib::spkm::NUM_OF_SERVOS];
 	for (size_t mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
-		vmin[mtr] = (-1.0) * MotorVmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]
+		vmin[mtr] = (-1.0) * MotorVmax[mtr] * PARAMS.encoder_resolution[mtr]
 				/ 60.0;
-		vmax[mtr] = MotorVmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr] / 60.0;
+		vmax[mtr] = MotorVmax[mtr] * PARAMS.encoder_resolution[mtr] / 60.0;
 	}
 	// Check extreme velocities for all segments and motors.
 	check_velocities <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (vmin, vmax, motor_3w, motor_2w, motor_1w);
@@ -891,9 +886,9 @@ void effector::interpolated_motion_in_operational_space()
 	double amin[lib::spkm::NUM_OF_SERVOS];
 	double amax[lib::spkm::NUM_OF_SERVOS];
 	for (size_t mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
-		amin[mtr] = (-1.0) * MotorAmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr]
+		amin[mtr] = (-1.0) * MotorAmax[mtr] * PARAMS.encoder_resolution[mtr]
 				/ 60.0;
-		amax[mtr] = MotorAmax[mtr] * kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr] / 60.0;
+		amax[mtr] = MotorAmax[mtr] * PARAMS.encoder_resolution[mtr] / 60.0;
 	}
 	// Check extreme velocities for all segments and motors.
 	check_accelerations <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> (amin, amax, motor_3w, motor_2w, time_invervals);
@@ -913,7 +908,7 @@ void effector::interpolated_motion_in_operational_space()
 	// Recalculate units: p[qc], v[rpm (revolutions per minute) per second], t[miliseconds].0x4101
 	for (size_t mtr = 0; mtr < lib::spkm::NUM_OF_SERVOS; ++mtr) {
 		for (size_t pnt = 0; pnt < lib::spkm::NUM_OF_MOTION_SEGMENTS + 1; ++pnt) {
-			v(pnt, mtr) *= 60.0 / kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
+			v(pnt, mtr) *= 60.0 / PARAMS.encoder_resolution[mtr];
 			// Apply Maxon-specific value limits (zero is not allowed).
 			if ((0 < v(pnt, mtr)) && (v(pnt, mtr) < 1)) {
 				v(pnt, mtr) = 1;
@@ -925,9 +920,9 @@ void effector::interpolated_motion_in_operational_space()
 				v(pnt, mtr) = Vdefault[mtr];
 			}*/
 		}
-		//p.transpose().row(mtr) /= kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];
+		//p.transpose().row(mtr) /= PARAMS.encoder_resolution[mtr];
 		/*							v.transpose().row(mtr) = v.transpose().row(mtr) * epos::epos::SECONDS_PER_MINUTE /
-		 kinematics::spkm::kinematic_parameters_spkm::encoder_resolution[mtr];*/
+		 PARAMS.encoder_resolution[mtr];*/
 	}
 	// Recalculate time to [ms].
 	t *= 1000;
@@ -1253,18 +1248,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	} catch (...) {
 		HANDLE_EDP_UNKNOWN_ERROR()
 	}
-}
-
-void effector::create_kinematic_models_for_given_robot(void)
-{
-#if(DEBUG_METHODS)
-	std::cerr << "effector::create_kinematic_models_for_given_robot\n";
-	std::cerr.flush();
-#endif
-	// Add main SPKM kinematics.
-	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm());
-	// Set active model
-	set_kinematic_model(0);
 }
 
 /*--------------------------------------------------------------------------*/

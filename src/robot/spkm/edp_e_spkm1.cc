@@ -1,5 +1,7 @@
 #include "edp_e_spkm1.h"
 #include "const_spkm1.h"
+#include "kinematic_model_spkm.h"
+#include "kinematic_parameters_spkm1.h"
 
 #include "debug.hpp"
 
@@ -77,6 +79,19 @@ effector::effector(common::shell &_shell) :
 			ipm_handler.axes = this->axes;
 		}
 	}
+
+	// Create SPKM kinematics.
+	create_kinematic_models_for_given_robot();
+}
+
+void effector::create_kinematic_models_for_given_robot(void)
+{
+DEBUG_METHOD;
+
+	// Add SPKM kinematics.
+	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm(kinematics::spkm1::kinematic_parameters_spkm1()));
+	// Set active model
+	set_kinematic_model(0);
 }
 
 } // namespace spkm1

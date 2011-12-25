@@ -778,7 +778,7 @@ void epos::reset()
 		// Wait for device state to change
 		boost::thread::sleep(wakeup);
 
-	} while (retry--);
+	} while (--retry);
 
 	if (retry == 0) {
 		BOOST_THROW_EXCEPTION(fe() << reason("Timeout enabling device"));

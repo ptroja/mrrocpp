@@ -28,7 +28,7 @@ const double leg_rotational_ext2i_ratio = M_PI/3;
  *
  * @brief Kinematic model for the SwarmItFix agent's mobile base class.
  *
- * @author yoyek
+ * @author yoyek,tkornuta
  * @date 2010.02.01
  *
  * @ingroup KINEMATICS SIF_KINEMATICS
@@ -42,16 +42,16 @@ protected:
 	//! Parameters related to conversion from motor positions to joints.
 	static const double mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS];
 
-	//! Largest values that the motor rotating the PKM can reach.
-	static const int32_t upper_pkm_motor_pos_limits;
-
-	//! Smallest values that the motor rotating the PKM can reach.
-	static const int32_t lower_pkm_motor_pos_limits;
-
 	//! Parameters describing the synchronization positions (in motor increments).
 	static const int32_t synchro_motor_positions[mrrocpp::lib::smb::NUM_OF_SERVOS];
 
 public:
+
+	//! Smallest values that the motor rotating the PKM can reach.
+	static const int32_t lower_pkm_motor_pos_limits;
+
+	//! Largest values that the motor rotating the PKM can reach.
+	static const int32_t upper_pkm_motor_pos_limits;
 
 	//! Constructor.
 	model(void);

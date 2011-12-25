@@ -35,7 +35,6 @@ namespace spkm {
 class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
 {
 private:
-	void create_kinematic_models_for_given_robot(void);
 
 	/**
 	 * @brief EDP command buffer

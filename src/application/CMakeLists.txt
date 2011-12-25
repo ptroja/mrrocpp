@@ -1,13 +1,7 @@
 # Recurse into subdirectories.
-
-# Disable non-swarm applications
-if(NOT UBUNTU32BIT)
+if(ROBOTS_012)
 #add_subdirectory (bclikeregions)
 add_subdirectory (ball)
-if(ROBOT_BIRD_HAND)
-add_subdirectory (bird_hand_test)
-endif(ROBOT_BIRD_HAND)
-
 add_subdirectory (block_move)
 #add_subdirectory (calibration)
 #add_subdirectory (draughts)
@@ -16,9 +10,6 @@ add_subdirectory (ecp_transparent)
 add_subdirectory (edge_follow)
 add_subdirectory (spring_contact)
 add_subdirectory (generator_tester)
-if(ROBOT_BIRD_HAND)
-add_subdirectory (graspit)
-endif(ROBOT_BIRD_HAND)
 #add_subdirectory (haar)
 add_subdirectory (haptic)
 add_subdirectory (haptic_stiffness)
@@ -38,8 +29,17 @@ add_subdirectory (visual_servoing)
 add_subdirectory (visual_servoing_demo)
 add_subdirectory (wii_teach)
 add_subdirectory (trajectory_stats)
-endif(NOT UBUNTU32BIT)
+endif(ROBOTS_012)
 
-# Swarm applications are always build
+if(ROBOT_BIRD_HAND)
+add_subdirectory (bird_hand_test)
+endif(ROBOT_BIRD_HAND)
+
+if(ROBOT_BIRD_HAND and ROBOTS_012)
+add_subdirectory (graspit)
+endif(ROBOTS_012 and ROBOT_BIRD_HAND)
+
+if(ROBOTS_SWARMITFIX and NOT UBUNTU32BIT)
 add_subdirectory (swarm_demo_single_agent)
 add_subdirectory (swarmitfix)
+endif(ROBOTS_SWARMITFIX and NOT UBUNTU32BIT)

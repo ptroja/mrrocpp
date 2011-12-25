@@ -12,4 +12,7 @@
 
 #define Test_FLAG @Test_FLAG@
 #define R_BIRD_HAND @R_BIRD_HAND@
-#define ROBOT_BIRD_HAND @ROBOT_BIRD_HAND@
+#define R_SWARMITFIX @R_SWARMITFIX@
+#define R_012 @R_012@
+
+

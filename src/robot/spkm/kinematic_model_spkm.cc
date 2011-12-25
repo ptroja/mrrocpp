@@ -22,17 +22,22 @@ namespace kinematics {
 namespace spkm {
 
 //! Prints reference frames.
-#define DEBUG_KINEMATICS 0
+#define DEBUG_KINEMATICS 1
 
 //! Eps used in Spherical wrist inverse kinematics.
 #define EPS 1.0e-10
 
 
 
-kinematic_model_spkm::kinematic_model_spkm(void)
+kinematic_model_spkm::kinematic_model_spkm(const kinematic_parameters_spkm & params_)
+	: params(params_)
 {
 	// Set model name.
 	set_kinematic_model_label("PKM 6DOF (SW+PM) kinematic model. PM inverse kinematics by D.Zlatanow and M.Zoppi");
+}
+
+const kinematic_parameters_spkm & kinematic_model_spkm::get_kinematic_parameters() {
+	return params;
 }
 
 void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_position) const

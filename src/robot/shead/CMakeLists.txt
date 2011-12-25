@@ -1,4 +1,3 @@
-if(ROBOT_SHEAD)
 
 add_library(edpshead
 	edp_e_shead.cc
@@ -33,4 +32,3 @@ target_link_libraries(ecp_r_shead kinematicsshead)
 install(TARGETS edp_shead1 edp_shead2 DESTINATION bin)
 install(TARGETS edpshead kinematicsshead ecp_r_shead DESTINATION lib)
 
-endif(ROBOT_SHEAD)
