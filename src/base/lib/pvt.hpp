@@ -15,6 +15,10 @@
 #include <iostream>
 #include <cassert>
 
+#include <exception>
+
+#include <boost/exception/exception.hpp>
+
 // import most common Eigen types
 USING_PART_OF_NAMESPACE_EIGEN
 
@@ -71,6 +75,7 @@ double pvt(
  * @param Vnew corrected velocity limit vector
  * @param Anew corrected acceleration limit vector
  * @param Dnew corrected deceleration limit vector
+ * @param requestedMotionTime allowed/requested time for motion (if positive)
  * @return time to execute the motion
  */
 template <unsigned int N, typename T>
@@ -80,7 +85,8 @@ double ppm(
 		const Matrix<T,N,1> & Amax,
 		Matrix<T,N,1> & Vnew,
 		Matrix<T,N,1> & Anew,
-		Matrix<T,N,1> & Dnew
+		Matrix<T,N,1> & Dnew,
+		T requestedMotionTime = 0
 		)
 {
 	Matrix<T,N,3> Time;
@@ -135,6 +141,15 @@ double ppm(
 
 	// total time
 	T tt = maxTime.col(2).maxCoeff();
+
+	// Make the motion longer
+	if(requestedMotionTime > 0) {
+		if(tt > requestedMotionTime) {
+			throw std::runtime_error("requested motion time too short");
+		}
+		tt = requestedMotionTime;
+	}
+
 	// acceleration interval
 	const T ta = maxTime.col(0).maxCoeff();
 	// deceleration interval
@@ -152,6 +167,7 @@ double ppm(
 
 	// If the total time is zero there will be no motion
 	if(tt > 0) {
+
 		// I guess this can be implemented as a single matrix calculation
 		for(unsigned int l = 0; l < N; ++l) {
 			const T delta = Delta(l,0);
