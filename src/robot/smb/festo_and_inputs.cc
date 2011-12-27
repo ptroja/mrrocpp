@@ -21,7 +21,7 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-// #define CLEANING_ACTIVE 1
+//#define CLEANING_ACTIVE 1
 
 using namespace std;
 
