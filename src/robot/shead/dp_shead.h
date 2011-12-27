@@ -87,6 +87,13 @@ enum VACUUM_ACTIVATION
  */
 struct reply
 {
+	//! Constructor with default values
+	reply() :
+		solidification_state(SOLIDIFICATION_STATE_INTERMEDIATE),
+		vacuum_state(VACUUM_STATE_INTERMEDIATE)
+	{
+	}
+
 	solidification_state_t solidification_state;
 
 	vacuum_state_t vacuum_state;

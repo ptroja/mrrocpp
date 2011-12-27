@@ -36,8 +36,8 @@ void model::set_kinematic_parameters(void)
 }
 
 // Motor limits definitions
-lib::MotorArray::value_type model::lower_motor_limit = -235000;
-lib::MotorArray::value_type model::upper_motor_limit = 5000;
+lib::MotorArray::value_type model::lower_motor_limit = -147500;
+lib::MotorArray::value_type model::upper_motor_limit = +118000;
 
 void model::check_motor_position(const lib::MotorArray & motors) const
 {
@@ -50,8 +50,8 @@ void model::check_motor_position(const lib::MotorArray & motors) const
 }
 
 // Joint limits definitions
-lib::MotorArray::value_type model::lower_joint_limit = 0;
-lib::MotorArray::value_type model::upper_joint_limit = 2*M_PI/3;
+lib::MotorArray::value_type model::lower_joint_limit = lower_motor_limit/i2m_ratio;
+lib::MotorArray::value_type model::upper_joint_limit = upper_motor_limit/i2m_ratio;
 
 void model::check_joints(const lib::JointArray & joints) const
 {
@@ -72,6 +72,27 @@ void model::i2mp_transform(lib::MotorArray & motors, const lib::JointArray & joi
 {
 	motors[0] = joints[0]*i2m_ratio;
 }
+
+lib::JointArray::value_type model::getLowerJointLimit()
+{
+	return lower_joint_limit;
+}
+
+lib::MotorArray::value_type model::getLowerMotorLimit()
+{
+	return lower_motor_limit;
+}
+
+lib::JointArray::value_type model::getUpperJointLimit()
+{
+	return upper_joint_limit;
+}
+
+lib::MotorArray::value_type model::getUpperMotorLimit()
+{
+	return upper_motor_limit;
+}
+
 
 } // namespace smb
 } // namespace kinematic

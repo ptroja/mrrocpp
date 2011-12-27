@@ -1,17 +1,17 @@
 #include <cstdio>
 #include <boost/static_assert.hpp>
 
+#include "../spkm/debug.hpp"
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-// Klasa edp_irp6ot_effector.
 #include "robot/shead/edp_e_shead.h"
 #include "base/edp/reader.h"
 // Kinematyki.
 #include "robot/shead/kinematic_model_shead.h"
-#include "base/edp/manip_trans_t.h"
 
 #include "base/lib/exception.h"
 
@@ -98,8 +98,7 @@ void effector::synchronise(void)
 void effector::check_controller_state()
 {
 #if(DEBUG_METHODS)
-	cout << "effector::check_controller_state\n";
-	cout.flush();
+	std::cout << "effector::check_controller_state" << std::endl;
 #endif
 	if (robot_test_mode) {
 		// In test mode robot is always synchronized.
@@ -111,9 +110,15 @@ void effector::check_controller_state()
 	bool powerOn = false;
 	bool enabled = false;
 
+	maxon::UNSIGNED16 statusWord = 0x0000;
+
 	try {
-		// Get current epos state.
-		maxon::epos::actual_state_t state = epos_node->getState();
+		// Get current epos statusword.
+
+		statusWord = epos_node->getStatusWord();
+
+		maxon::epos::actual_state_t state = epos_node->status2state(statusWord);
+
 		if (state != maxon::epos::OPERATION_ENABLE) {
 			// Print state.
 			epos_node->printState();
@@ -129,7 +134,7 @@ void effector::check_controller_state()
 				}
 			} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
 				// Send message to SR.
-				msg->message(mrrocpp::lib::FATAL_ERROR, "EPOS controler in DISABLED state");
+				msg->message(mrrocpp::lib::FATAL_ERROR, "EPOS controller in DISABLED state");
 			} //: if fault || disabled
 		} else {
 			// EPOS in enabled state.
@@ -141,8 +146,8 @@ void effector::check_controller_state()
 		// Probably the axis is not powered on, do nothing.
 	}
 
-	// Robot is synchronized if only one axis - the one controlling the PKM rotation - is referenced.
-	controller_state_edp_buf.is_synchronised = epos_node->isReferenced();
+	// Robot is synchronized the one axis is referenced.
+	controller_state_edp_buf.is_synchronised = epos_node->isReferenced(statusWord);
 	// Check whether robot is powered.
 	controller_state_edp_buf.is_power_on = powerOn;
 	// Check fault state.
@@ -152,8 +157,7 @@ void effector::check_controller_state()
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
 #if(DEBUG_METHODS)
-	cout << "effector::get_controller_state\n";
-	cout.flush();
+	std::cout << "effector::get_controller_state" << std::endl;
 #endif
 	try {
 		// False is the initial value
@@ -178,14 +182,14 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 			current_motor_pos[0] = 0;
 		}
 #if(DEBUG_MOTORS)
-		cout << "current_motor_pos: " << current_motor_pos.transpose() << "\n";
+		std::cout << "current_motor_pos: " << current_motor_pos.transpose() << std::endl;
 #endif
 
 		// Compute current motor positions on the base of current motors.
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 #if(DEBUG_JOINTS)
-		cout << "current_joints: " << current_joints.transpose() << "\n";
+		std::cout << "current_joints: " << current_joints.transpose() << std::endl;
 #endif
 
 		// Lock data structure during update
@@ -288,7 +292,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		{
 			case lib::shead::POSE:
 #if(DEBUG_COMMANDS)
-				cout << "POSE\n";
+				std::cout << "POSE" << std::endl;
 #endif
 				// Control the two SMB rotational motors.
 				// Parse command.
@@ -402,12 +406,29 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
+	DEBUG_METHOD;
+
 	try {
 		// Check controller state.
 		check_controller_state();
 
-		// Handle only GET and SETGET instructions.
+		// Handle only GET and SET_GET instructions.
 		if (instruction.instruction_type != lib::SET) {
+
+			std::cout << epos_node->getCommandedDigitalOutputs() << std::endl;
+
+			edp_ecp_rbuffer.shead_reply.solidification_state =
+					(epos_node->getCommandedDigitalOutputs()[1] && epos_node->getCommandedDigitalOutputs()[2]) ?
+							lib::shead::SOLIDIFICATION_STATE_ON : lib::shead::SOLIDIFICATION_STATE_OFF;
+
+			std::cout << "edp::solidification = " << edp_ecp_rbuffer.shead_reply.solidification_state << std::endl;
+
+			edp_ecp_rbuffer.shead_reply.vacuum_state =
+					(epos_node->getCommandedDigitalOutputs()[3]) ?
+							lib::shead::VACUUM_STATE_ON : lib::shead::VACUUM_STATE_OFF;
+
+			std::cout << "edp::vacuum = " << edp_ecp_rbuffer.shead_reply.vacuum_state << std::endl;
+
 			switch (ecp_edp_cbuffer.get_pose_specification)
 			{
 				case lib::shead::MOTOR:

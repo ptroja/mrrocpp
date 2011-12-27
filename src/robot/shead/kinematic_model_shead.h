@@ -22,7 +22,6 @@ namespace shead {
  */
 class model : public common::kinematic_model
 {
-protected:
 	//! Method responsible for kinematic parameters setting.
 	void set_kinematic_parameters(void);
 
@@ -61,6 +60,12 @@ public:
 	 * @param[in] local_desired_joints Current joints settings.
 	 */
 	void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
+
+	//! Getters for the UI
+    static lib::JointArray::value_type getLowerJointLimit();
+    static lib::MotorArray::value_type getLowerMotorLimit();
+    static lib::JointArray::value_type getUpperJointLimit();
+    static lib::MotorArray::value_type getUpperMotorLimit();
 
 private:
 	//! Parameter for conversion between joint and motor coordinates [rad]->[qc].
