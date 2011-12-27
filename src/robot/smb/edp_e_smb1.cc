@@ -7,7 +7,6 @@
 #include "edp_e_smb1.h"
 #include "const_smb1.h"
 #include "base/edp/reader.h"
-// Kinematyki.
 #include "robot/smb/kinematic_model_smb.h"
 
 #include "base/lib/exception.h"
