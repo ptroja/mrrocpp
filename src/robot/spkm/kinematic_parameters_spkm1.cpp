@@ -18,7 +18,7 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 {
 	// Initialization of parameters describing the synchronisation positions (in joints).
 	synchro_positions[0] = 0.242;
-	synchro_positions[1] = 0.242;
+	synchro_positions[1] = 0.2435;
 	synchro_positions[2] = 0.242;
 	synchro_positions[3] = 0.0;
 	synchro_positions[4] = 0.0;
