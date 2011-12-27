@@ -28,9 +28,7 @@ class wgt_shead_command : public wgt_base
 Q_OBJECT
 
 public:
-	wgt_shead_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
-			0);
-	~wgt_shead_command();
+	wgt_shead_command(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent = 0);
 
 	QVector <QCheckBox*> checkBox_m_mip_Vector;
 	QVector <QCheckBox*> checkBox_contacts_Vector;
@@ -57,7 +55,7 @@ private:
 	boost::shared_ptr <QTimer> timer;
 
 signals:
-	void synchro_depended_init_signal();
+	int synchro_depended_init_signal();
 
 private slots:
 

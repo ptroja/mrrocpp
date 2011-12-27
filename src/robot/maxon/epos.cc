@@ -93,14 +93,14 @@ using namespace canopen;
 /************************************************************/
 
 // FIXME: this value should be 60, but it has to be tested
-const unsigned epos::SECONDS_PER_MINUTE = 60 * 60;
+const unsigned epos::SECONDS_PER_MINUTE = 60;
 
 /************************************************************/
 /*          high-level read functions */
 /************************************************************/
 
-epos::epos(gateway & _device, uint8_t _nodeId) :
-		device(_device), nodeId(_nodeId)
+epos::epos(gateway & _device, uint8_t _nodeId, const std::string & _deviceName) :
+		device(_device), nodeId(_nodeId), deviceName(_deviceName)
 {
 	// Read the cached parameters
 	OpMode = getActualOperationMode();
@@ -140,6 +140,11 @@ epos::epos(gateway & _device, uint8_t _nodeId) :
 	getGearRatioDenominator() << " maximal speed " <<
 	getGearMaximalSpeed() << std::endl;
 #endif
+}
+
+const std::string & epos::getDeviceName() const
+{
+	return deviceName;
 }
 
 /* read EPOS status word */
@@ -2126,7 +2131,7 @@ void epos::setDigitalOutputs(digital_outputs_t cmd)
 
 	WriteObjectValue(0x2078, 0x01, val);
 
-	DigitalOutputs = val;
+	DigitalOutputs = cmd;
 }
 
 UNSIGNED16 epos::getDigitalOutputs()

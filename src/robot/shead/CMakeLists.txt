@@ -8,14 +8,14 @@ add_executable(edp_shead1
 )
 
 target_link_libraries(edp_shead1 edpshead kinematicsshead edp
-	${COMMON_LIBRARIES})
+	${COMMON_LIBRARIES} epos)
 
 add_executable(edp_shead2
 	edp_e_shead2.cc
 )
 
 target_link_libraries(edp_shead2 edpshead kinematicsshead edp
-	${COMMON_LIBRARIES})
+	${COMMON_LIBRARIES} epos)
 		
 add_library(kinematicsshead
 	kinematic_model_shead.cc

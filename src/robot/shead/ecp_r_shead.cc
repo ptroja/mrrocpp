@@ -82,9 +82,6 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.set_pose_specification = lib::shead::MOTOR;
 
-		ecp_edp_cbuffer.motion_variant = epos_motor_command_data_port.data.motion_variant;
-		ecp_edp_cbuffer.estimated_time = epos_motor_command_data_port.data.estimated_time;
-
 		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; ++i) {
 			ecp_edp_cbuffer.motor_pos[i] = epos_motor_command_data_port.data.desired_position[i];
 		}
@@ -99,8 +96,6 @@ void robot::create_command()
 
 		ecp_edp_cbuffer.set_pose_specification = lib::shead::JOINT;
 
-		ecp_edp_cbuffer.motion_variant = epos_joint_command_data_port.data.motion_variant;
-		ecp_edp_cbuffer.estimated_time = epos_joint_command_data_port.data.estimated_time;
 		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; ++i) {
 			ecp_edp_cbuffer.joint_pos[i] = epos_joint_command_data_port.data.desired_position[i];
 		}
@@ -212,14 +207,12 @@ void robot::get_reply()
 
 	if (epos_motor_reply_data_request_port.is_new_request()) {
 		// generator reply generation
-		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
-			epos_motor_reply_data_request_port.data.epos_controller[i].position =
-					edp_ecp_rbuffer.epos_controller[i].position;
-			epos_motor_reply_data_request_port.data.epos_controller[i].current =
-					edp_ecp_rbuffer.epos_controller[i].current;
-			epos_motor_reply_data_request_port.data.epos_controller[i].motion_in_progress =
-					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
-		}
+		epos_motor_reply_data_request_port.data.epos_controller[0].position =
+				edp_ecp_rbuffer.epos_controller.position;
+		epos_motor_reply_data_request_port.data.epos_controller[0].current =
+				edp_ecp_rbuffer.epos_controller.current;
+		epos_motor_reply_data_request_port.data.epos_controller[0].motion_in_progress =
+				edp_ecp_rbuffer.epos_controller.motion_in_progress;
 		epos_motor_reply_data_request_port.set();
 	}
 
@@ -227,14 +220,12 @@ void robot::get_reply()
 		// generator reply generation
 		sr_ecp_msg.message("ECP get_reply epos_joint_reply_data_request_port");
 
-		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
-			epos_joint_reply_data_request_port.data.epos_controller[i].position =
-					edp_ecp_rbuffer.epos_controller[i].position;
-			epos_joint_reply_data_request_port.data.epos_controller[i].current =
-					edp_ecp_rbuffer.epos_controller[i].current;
-			epos_joint_reply_data_request_port.data.epos_controller[i].motion_in_progress =
-					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
-		}
+			epos_joint_reply_data_request_port.data.epos_controller[0].position =
+					edp_ecp_rbuffer.epos_controller.position;
+			epos_joint_reply_data_request_port.data.epos_controller[0].current =
+					edp_ecp_rbuffer.epos_controller.current;
+			epos_joint_reply_data_request_port.data.epos_controller[0].motion_in_progress =
+					edp_ecp_rbuffer.epos_controller.motion_in_progress;
 		//	epos_joint_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
 
 		epos_joint_reply_data_request_port.set();
