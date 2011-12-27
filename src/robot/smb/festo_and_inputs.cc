@@ -54,6 +54,17 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 		desired_output[1] = current_output[1];
 		desired_output[2] = current_output[2];
 
+		// stan poczatkowy wyspy
+
+		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+
+			set_detach(i + 1, false);
+			set_clean(i + 1, false);
+
+		}
+
+		execute_command();
+
 	} else {
 		current_legs_state = lib::smb::ALL_IN;
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -428,7 +439,7 @@ void festo_and_inputs::move_one_or_two_out()
 				// attach leg
 				set_detach(i + 1, false);
 				// stop cleaning
-				set_clean(i, false);
+				set_clean(i + 1, false);
 				execute_command();
 			}
 
@@ -477,7 +488,7 @@ void festo_and_inputs::command_all_out()
 					set_move_out(i + 1, true);
 					set_move_in(i + 1, false);
 					set_detach(i + 1, false);
-					set_clean(i, false);
+					set_clean(i + 1, false);
 				}
 
 				execute_command();
