@@ -23,4 +23,4 @@ add_library(mp_r_conv mp_r_conveyor.cc)
 target_link_libraries(ecp_r_conv kinematicsconveyor)
 
 install(TARGETS edp_conveyor DESTINATION bin)
-install(TARGETS ecp_r_conv kinematicsconveyor DESTINATION lib)
+install(TARGETS ecp_r_conv mp_r_conv kinematicsconveyor DESTINATION lib)
