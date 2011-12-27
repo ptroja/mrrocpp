@@ -1,3 +1,5 @@
+#include <QTimer>
+
 #include "ui_ecp_r_shead.h"
 #include "ui_r_shead.h"
 #include "robot/shead/const_shead.h"
@@ -7,7 +9,9 @@
 #include "../base/mainwindow.h"
 #include "../base/ui_robot.h"
 
-wgt_shead_command::wgt_shead_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+#include "../../robot/shead/kinematic_model_shead.h"
+
+wgt_shead_command::wgt_shead_command(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
 		wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
@@ -33,11 +37,6 @@ wgt_shead_command::wgt_shead_command(QString _widget_label, mrrocpp::ui::common:
 
 }
 
-wgt_shead_command::~wgt_shead_command()
-{
-
-}
-
 void wgt_shead_command::synchro_depended_init()
 {
 	emit synchro_depended_init_signal();
@@ -45,7 +44,6 @@ void wgt_shead_command::synchro_depended_init()
 
 void wgt_shead_command::synchro_depended_init_slot()
 {
-
 	try {
 
 		if (robot->state.edp.pid != -1) {
@@ -100,52 +98,44 @@ int wgt_shead_command::init()
 				// sets soldification state
 				switch (rep.solidification_state)
 				{
-					case lib::shead::SOLIDIFICATION_STATE_ON: {
+					case lib::shead::SOLIDIFICATION_STATE_ON:
 						ui.checkBox_sol_on->setChecked(true);
 						ui.checkBox_sol_off->setChecked(false);
 						ui.checkBox_sol_int->setChecked(false);
-					}
 						break;
-					case lib::shead::SOLIDIFICATION_STATE_OFF: {
+					case lib::shead::SOLIDIFICATION_STATE_OFF:
 						ui.checkBox_sol_on->setChecked(false);
 						ui.checkBox_sol_off->setChecked(true);
 						ui.checkBox_sol_int->setChecked(false);
-					}
 						break;
-					case lib::shead::SOLIDIFICATION_STATE_INTERMEDIATE: {
+					case lib::shead::SOLIDIFICATION_STATE_INTERMEDIATE:
 						ui.checkBox_sol_on->setChecked(false);
 						ui.checkBox_sol_off->setChecked(false);
 						ui.checkBox_sol_int->setChecked(true);
-					}
 						break;
-					default: {
-					}
+					default:
 						break;
 				}
 
 				// sets vacumization state
 				switch (rep.vacuum_state)
 				{
-					case lib::shead::VACUUM_STATE_ON: {
+					case lib::shead::VACUUM_STATE_ON:
 						ui.checkBox_vac_on->setChecked(true);
 						ui.checkBox_vac_off->setChecked(false);
 						ui.checkBox_vac_int->setChecked(false);
-					}
 						break;
-					case lib::shead::VACUUM_STATE_OFF: {
+					case lib::shead::VACUUM_STATE_OFF:
 						ui.checkBox_vac_on->setChecked(false);
 						ui.checkBox_vac_off->setChecked(true);
 						ui.checkBox_vac_int->setChecked(false);
-					}
 						break;
-					case lib::shead::VACUUM_STATE_INTERMEDIATE: {
+					case lib::shead::VACUUM_STATE_INTERMEDIATE:
 						ui.checkBox_vac_on->setChecked(false);
 						ui.checkBox_vac_off->setChecked(false);
 						ui.checkBox_vac_int->setChecked(true);
-					}
 						break;
-					default: {
-					}
+					default:
 						break;
 				}
 
@@ -166,18 +156,14 @@ int wgt_shead_command::init()
 	return 1;
 }
 
-int wgt_shead_command::synchro_depended_widgets_disable(bool _set_disabled)
+void wgt_shead_command::synchro_depended_widgets_disable(bool _set_disabled)
 {
-
 	ui.pushButton_m_execute->setDisabled(_set_disabled);
 	ui.pushButton_ml_copy->setDisabled(_set_disabled);
 
 	for (int i = 0; i < robot->number_of_servos; i++) {
 		doubleSpinBox_m_absolute_Vector[i]->setDisabled(_set_disabled);
-
 	}
-
-	return 1;
 }
 
 void wgt_shead_command::timer_slot()
@@ -185,10 +171,9 @@ void wgt_shead_command::timer_slot()
 	if ((dwgt->isVisible()) && (ui.checkBox_cyclic_read->isChecked())) {
 		init();
 	}
-
 }
 
-int wgt_shead_command::get_desired_position()
+void wgt_shead_command::get_desired_position()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -205,7 +190,6 @@ int wgt_shead_command::get_desired_position()
 			}
 		}
 	}
-	return 1;
 }
 
 int wgt_shead_command::move_it()
@@ -216,12 +200,10 @@ int wgt_shead_command::move_it()
 
 		if (robot->state.edp.pid != -1) {
 
-			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
-
 			if (ui.radioButton_m_motor->isChecked()) {
-				robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
+				robot->ui_ecp_robot->move_motors(robot->desired_pos);
 			} else if (ui.radioButton_m_joint->isChecked()) {
-				robot->ui_ecp_robot->move_joints(robot->desired_pos, motion_variant);
+				robot->ui_ecp_robot->move_joints(robot->desired_pos);
 			}
 
 			if (robot->state.edp.is_synchronised) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
@@ -331,13 +313,13 @@ void wgt_shead_command::on_radioButton_m_motor_toggled()
 	if (ui.radioButton_m_motor->isChecked()) {
 		//	interface.ui_msg->message("on_radioButton_m_motor_clicked");
 
-		ui.doubleSpinBox_ml_absolute->setMinimum(-100000);
-		ui.doubleSpinBox_ml_absolute->setMaximum(100000);
+		ui.doubleSpinBox_ml_absolute->setMinimum(kinematics::shead::model::getLowerMotorLimit());
+		ui.doubleSpinBox_ml_absolute->setMaximum(kinematics::shead::model::getUpperMotorLimit());
 		ui.doubleSpinBox_ml_absolute->setSingleStep(1000);
 		ui.doubleSpinBox_ml_absolute->setDecimals(0);
 
 		ui.doubleSpinBox_ml_relative->setMinimum(-100000);
-		ui.doubleSpinBox_ml_relative->setMaximum(100000);
+		ui.doubleSpinBox_ml_relative->setMaximum(+100000);
 		ui.doubleSpinBox_ml_relative->setSingleStep(1000);
 		ui.doubleSpinBox_ml_relative->setDecimals(0);
 
@@ -355,15 +337,15 @@ void wgt_shead_command::on_radioButton_m_joint_toggled()
 	if (ui.radioButton_m_joint->isChecked()) {
 		//	interface.ui_msg->message("on_radioButton_m_joint_clicked");
 
-		ui.doubleSpinBox_ml_absolute->setMinimum(-3.1415);
-		ui.doubleSpinBox_ml_absolute->setMaximum(3.1415);
 		ui.doubleSpinBox_ml_absolute->setSingleStep(0.1);
 		ui.doubleSpinBox_ml_absolute->setDecimals(3);
+		ui.doubleSpinBox_ml_absolute->setMinimum(kinematics::shead::model::getLowerJointLimit()+pow(10,-ui.doubleSpinBox_ml_absolute->decimals()));
+		ui.doubleSpinBox_ml_absolute->setMaximum(kinematics::shead::model::getUpperJointLimit()-pow(10,-ui.doubleSpinBox_ml_absolute->decimals()));
 
-		ui.doubleSpinBox_ml_relative->setMinimum(-3.1415);
-		ui.doubleSpinBox_ml_relative->setMaximum(3.1415);
 		ui.doubleSpinBox_ml_relative->setSingleStep(0.1);
 		ui.doubleSpinBox_ml_relative->setDecimals(3);
+		ui.doubleSpinBox_ml_relative->setMinimum(-2*M_PI/3);
+		ui.doubleSpinBox_ml_relative->setMaximum(+2*M_PI/3);
 
 		// Set precision of widgets with current positions.
 		ui.doubleSpinBox_ml_current_position->setDecimals(3);
