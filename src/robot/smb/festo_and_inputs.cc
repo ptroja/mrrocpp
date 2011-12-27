@@ -21,6 +21,8 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
+//#define CLEANING_ACTIVE 1
+
 using namespace std;
 
 festo_and_inputs::festo_and_inputs(effector &_master) :
@@ -86,7 +88,7 @@ void festo_and_inputs::set_all_legs_unchecked()
 	}
 }
 
-bool festo_and_inputs::is_inper_halotron_active(int leg_number)
+bool festo_and_inputs::is_upper_halotron_active(int leg_number)
 {
 
 	switch (leg_number)
@@ -218,26 +220,28 @@ void festo_and_inputs::set_move_out(int leg_number, bool value)
 
 void festo_and_inputs::set_clean(int leg_number, bool value)
 {
+#ifdef CLEANING_ACTIVE
 	switch (leg_number)
 	{
 		case 1: {
 			desired_output[FESTO_CH1_GROUP][FESTO_CH1_BIT_TO_SET] = value;
 		}
-			break;
+		break;
 		case 2: {
 			desired_output[FESTO_CH2_GROUP][FESTO_CH2_BIT_TO_SET] = value;
 		}
-			break;
+		break;
 		case 3: {
 			desired_output[FESTO_CH3_GROUP][FESTO_CH3_BIT_TO_SET] = value;
 		}
-			break;
+		break;
 
 		default:
-			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
-			break;
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
+		break;
 
 	}
+#endif
 }
 
 void festo_and_inputs::determine_legs_state()
@@ -248,7 +252,7 @@ void festo_and_inputs::determine_legs_state()
 
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
-			if (is_inper_halotron_active(i + 1)) {
+			if (is_upper_halotron_active(i + 1)) {
 				number_of_legs_in++;
 			}
 		}
@@ -368,12 +372,22 @@ void festo_and_inputs::move_one_or_two_out()
 		if (is_lower_halotron_active(i + 1)) {
 
 			set_detach(i + 1, false);
+			set_clean(i + 1, false);
 		}
 
 	}
 
 	execute_command();
 	delay(500);
+
+	//active cleaning
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+
+		if (!is_lower_halotron_active(i + 1)) {
+
+			set_clean(i + 1, true);
+		}
+	}
 
 	// move the legs down
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -413,7 +427,9 @@ void festo_and_inputs::move_one_or_two_out()
 				number_of_legs_down++;
 				// attach leg
 				set_detach(i + 1, false);
-
+				// stop cleaning
+				set_clean(i, false);
+				execute_command();
 			}
 
 		}
@@ -461,6 +477,7 @@ void festo_and_inputs::command_all_out()
 					set_move_out(i + 1, true);
 					set_move_in(i + 1, false);
 					set_detach(i + 1, false);
+					set_clean(i, false);
 				}
 
 				execute_command();
@@ -563,11 +580,12 @@ void festo_and_inputs::move_one_or_two_in()
 
 				read_state();
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-					if ((!is_checked(i + 1)) && (is_inper_halotron_active(i + 1))
+					if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))
 							&& (festo_command.leg[i] == lib::smb::IN)) {
 						set_checked(i + 1);
 						number_of_legs_in++;
 						set_detach(i + 1, false);
+						execute_command();
 					}
 				}
 			}
@@ -650,7 +668,7 @@ void festo_and_inputs::command_two_in_one_out()
 
 					read_state();
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-						if ((!is_checked(i + 1)) && (is_inper_halotron_active(i + 1))
+						if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))
 								&& (festo_command.leg[i] == lib::smb::IN)) {
 							set_checked(i + 1);
 							number_of_legs_in++;
@@ -714,6 +732,7 @@ void festo_and_inputs::command_all_in()
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 					set_move_out(i + 1, false);
 					set_move_in(i + 1, true);
+					set_clean(i + 1, false);
 				}
 
 				execute_command();
@@ -738,7 +757,7 @@ void festo_and_inputs::command_all_in()
 					read_state();
 					for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 
-						if ((!is_checked(i + 1)) && (is_inper_halotron_active(i + 1))) {
+						if ((!is_checked(i + 1)) && (is_upper_halotron_active(i + 1))) {
 							set_checked(i + 1);
 							number_of_legs_in++;
 						}
@@ -800,7 +819,7 @@ void festo_and_inputs::create_reply()
 		read_state();
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_out = is_lower_halotron_active(i + 1);
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_in = is_inper_halotron_active(i + 1);
+			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_in = is_upper_halotron_active(i + 1);
 			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_attached = is_attached(i + 1);
 		}
 		//std::cout << "epos digital inputs = " << epos_digits << std::endl;
