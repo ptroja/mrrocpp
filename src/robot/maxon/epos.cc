@@ -2131,7 +2131,7 @@ void epos::setDigitalOutputs(digital_outputs_t cmd)
 
 	WriteObjectValue(0x2078, 0x01, val);
 
-	DigitalOutputs = val;
+	DigitalOutputs = cmd;
 }
 
 UNSIGNED16 epos::getDigitalOutputs()
