@@ -49,8 +49,8 @@ wgt_spkm_inc::wgt_spkm_inc(const QString & _widget_label, mrrocpp::ui::common::I
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 
 	for (int i = 0; i < robot->number_of_servos; i++) {
-		doubleSpinBox_des_Vector[i]->setMaximum(robot->kinematic_params.upper_motor_pos_limits[i]);
-		doubleSpinBox_des_Vector[i]->setMinimum(robot->kinematic_params.lower_motor_pos_limits[i]);
+		doubleSpinBox_des_Vector[i]->setMaximum(robot->kinematic_params->upper_motor_pos_limits[i]);
+		doubleSpinBox_des_Vector[i]->setMinimum(robot->kinematic_params->lower_motor_pos_limits[i]);
 	}
 
 }

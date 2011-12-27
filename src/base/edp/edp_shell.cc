@@ -37,8 +37,8 @@ shell::shell(lib::configurator &_config) :
 	config(_config), hardware_busy_file_fullpath(""), my_pid(getpid())
 {
 	/* Lokalizacja procesu wywietlania komunikatow SR */
-	msg
-			= (boost::shared_ptr <lib::sr_edp>) new lib::sr_edp(lib::EDP, config.robot_name, config.get_sr_attach_point().c_str());
+	msg =
+			(boost::shared_ptr <lib::sr_edp>) new lib::sr_edp(lib::EDP, config.robot_name, config.get_sr_attach_point().c_str());
 }
 
 shell::~shell()
@@ -62,33 +62,7 @@ bool shell::detect_hardware_busy()
 		std::cerr << "initialize_communication nie moglem odczytac: " << hardware_busy_file_fullpath << std::endl;
 
 		// utworz plik i wstaw do niego pid
-
-		int fd = open(hardware_busy_file_fullpath.c_str(), O_CREAT|O_WRONLY|O_EXCL);
-
-		if (fd == -1) {
-			perror("open()");
-			return false;
-		}
-
-		mode_t mode = S_IRGRP | S_IROTH | S_IRUSR | S_IWGRP | S_IWOTH | S_IWUSR;
-
-		if (fchmod(fd, mode) == -1) {
-			perror("fchmod()");
-			return false;
-		}
-
-		close(fd);
-
-		{
-			std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
-			if (!outfile.good()) {
-				std::cerr << hardware_busy_file_fullpath << std::endl;
-				perror("because of");
-				return false;
-			} else {
-				outfile << my_pid;
-			}
-		}
+		return create_hardware_busy_file();
 
 	} else {
 		pid_t file_pid;
@@ -120,33 +94,9 @@ bool shell::detect_hardware_busy()
 				puts("File successfully deleted");
 			}
 
-			// utworz plik
-			int fd = open(hardware_busy_file_fullpath.c_str(), O_CREAT|O_WRONLY|O_EXCL);
+			// utworz plik i wstaw do niego pid
+			return create_hardware_busy_file();
 
-			if (fd == -1) {
-				perror("open()");
-				return false;
-			}
-
-			mode_t mode = S_IRGRP | S_IROTH | S_IRUSR | S_IWGRP | S_IWOTH | S_IWUSR;
-
-			if (fchmod(fd, mode) == -1) {
-				perror("fchmod()");
-				return false;
-			}
-
-			close(fd);
-
-			// wypelnij plik pidem edp
-			std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
-			if (!outfile.good()) {
-				std::cerr << hardware_busy_file_fullpath << std::endl;
-				perror("because of");
-				return false;
-			} else {
-				outfile << my_pid;
-			}
-			outfile.close();
 		} else {
 			// juz jest EDP
 			fprintf(stderr, "edp: hardware busy\n");
@@ -157,7 +107,34 @@ bool shell::detect_hardware_busy()
 	return true;
 }
 
-void shell::close_hardware_busy_file()
+bool shell::create_hardware_busy_file()
+{
+	FILE * fp;
+	fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
+	if (fp) {
+		fclose(fp);
+	} else {
+		return false;
+	}
+
+	if (chmod(hardware_busy_file_fullpath.c_str(), S_IRGRP | S_IROTH | S_IRUSR | S_IWGRP | S_IWOTH | S_IWUSR) != 0) {
+		perror("chmod() error");
+		return false;
+	}
+
+	std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
+	if (!outfile.good()) {
+		std::cerr << hardware_busy_file_fullpath << std::endl;
+		perror("because of");
+		return false;
+	} else {
+		outfile << my_pid;
+	}
+	outfile.close();
+	return true;
+}
+
+bool shell::close_hardware_busy_file()
 {
 	if (access(hardware_busy_file_fullpath.c_str(), R_OK) == 0) {
 

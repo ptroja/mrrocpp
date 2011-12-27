@@ -79,8 +79,15 @@ public:
 
 	//! Destructor
 	~shell();
-
 	bool detect_hardware_busy(void);
+
+	/*!
+	 * \brief Method to create hardware busy notification file
+	 * it writes process pid into the file
+	 *
+	 */
+	bool create_hardware_busy_file();
+
 };
 
 } // namespace common

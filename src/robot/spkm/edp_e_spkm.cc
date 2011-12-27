@@ -34,7 +34,7 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm {
 
-#include "debug.hpp"
+#include "base/lib/debug.hpp"
 // Debug PVT triples.
 #define DEBUG_PVT 1
 

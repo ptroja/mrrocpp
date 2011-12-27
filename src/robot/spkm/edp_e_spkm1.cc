@@ -3,11 +3,11 @@
 #include "kinematic_model_spkm.h"
 #include "kinematic_parameters_spkm1.h"
 
-#include "debug.hpp"
-
 namespace mrrocpp {
 namespace edp {
 namespace spkm1 {
+
+#include "base/lib/debug.hpp"
 
 effector::effector(common::shell &_shell) :
 	spkm::effector(_shell, lib::spkm1::ROBOT_NAME)
@@ -17,23 +17,23 @@ effector::effector(common::shell &_shell) :
 	// Set default motor velocities, accelerations and decelerations for axis 0 - leg A.
 	Vdefault[0] = 5000UL;
 	MotorVmax[0] = 5000UL;
-	Adefault[0] = 30000UL;
-	Ddefault[0] = 30000UL;
-	MotorAmax[0] = 30000UL;
+	Adefault[0] = 50000UL;
+	Ddefault[0] = 50000UL;
+	MotorAmax[0] = 50000UL;
 
 	// Set default motor velocities, accelerations and decelerations for axis 1 - leg B.
 	Vdefault[1] = 5000UL;
 	MotorVmax[1] = 5000UL;
-	Adefault[1] = 30000UL;
-	Ddefault[1] = 30000UL;
-	MotorAmax[1] = 30000UL;
+	Adefault[1] = 50000UL;
+	Ddefault[1] = 50000UL;
+	MotorAmax[1] = 50000UL;
 
 	// Set default motor velocities, accelerations and decelerations for axis 2 - leg C.
 	Vdefault[2] = 5000UL;
 	MotorVmax[2] = 5000UL;
-	Adefault[2] = 30000UL;
-	Ddefault[2] = 30000UL;
-	MotorAmax[2] = 30000UL;
+	Adefault[2] = 50000UL;
+	Ddefault[2] = 50000UL;
+	MotorAmax[2] = 50000UL;
 
 	// Set default motor velocities, accelerations and decelerations for axis 3 - (lower wrist rotation - "axis 1").
 	Vdefault[3] = 5000UL;

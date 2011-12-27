@@ -7,9 +7,7 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm2 {
 
-// Debug executed methods.
-#define DEBUG_METHODS 1
-#include "debug.hpp"
+#include "base/lib/debug.hpp"
 
 
 effector::effector(common::shell &_shell) :
