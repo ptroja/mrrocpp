@@ -48,8 +48,8 @@ wgt_spkm_int::wgt_spkm_int(QString _widget_label, mrrocpp::ui::common::Interface
 	ui.radioButton_non_sync_trapezoidal->setChecked(true);
 
 	for (int i = 0; i < robot->number_of_servos; i++) {
-		doubleSpinBox_des_Vector[i]->setMaximum(robot->kinematic_params.upper_joints_limits[i]);
-		doubleSpinBox_des_Vector[i]->setMinimum(robot->kinematic_params.lower_joints_limits[i]);
+		doubleSpinBox_des_Vector[i]->setMaximum(robot->kinematic_params->upper_joints_limits[i]);
+		doubleSpinBox_des_Vector[i]->setMinimum(robot->kinematic_params->lower_joints_limits[i]);
 	}
 
 }
