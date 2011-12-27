@@ -14,7 +14,7 @@ public:
 	virtual ~WgtRelativeBase();
 
 protected:
-	int synchro_depended_widgets_disable(bool set_disabled);
+	void synchro_depended_widgets_disable(bool set_disabled);
 	void setup_ui(QGridLayout *layout);
 	const static int angle_axis_number;
 

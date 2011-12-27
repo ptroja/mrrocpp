@@ -31,7 +31,7 @@ protected:
 	QPushButton *copy_button;
 
 	void create_buttons_and_spin_boxes();
-	int synchro_depended_widgets_disable(bool set_disabled);
+	void synchro_depended_widgets_disable(bool set_disabled);
 	virtual void setup_ui(QGridLayout *layout, int _rows_number);
 	virtual void add_current_position_spin_box(QDoubleSpinBox *spin_box, int row);
 

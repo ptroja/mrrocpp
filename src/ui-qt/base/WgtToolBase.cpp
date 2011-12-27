@@ -47,7 +47,7 @@ void WgtToolBase::create_buttons()
 	connect(copy_button, SIGNAL(clicked()), this, SLOT(copy_button_clicked()), Qt::QueuedConnection);
 }
 
-int WgtToolBase::synchro_depended_widgets_disable(bool set_disabled)
+void WgtToolBase::synchro_depended_widgets_disable(bool set_disabled)
 {
 	//set_button->setDisabled(set_disabled);
 	copy_button->setDisabled(set_disabled);
@@ -57,8 +57,6 @@ int WgtToolBase::synchro_depended_widgets_disable(bool set_disabled)
 		current_pos_spin_boxes[i]->setDisabled(set_disabled);
 		desired_pos_spin_boxes[i]->setDisabled(set_disabled);
 	}
-
-	return 1;
 }
 
 void WgtToolBase::init_and_copy_slot()

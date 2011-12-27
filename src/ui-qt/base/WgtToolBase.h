@@ -17,7 +17,7 @@ public:
 
 protected:
 	QVector <QDoubleSpinBox*> current_pos_spin_boxes;
-	int synchro_depended_widgets_disable(bool set_disabled);
+	void synchro_depended_widgets_disable(bool set_disabled);
 	void setup_ui(QGridLayout *layout);
 	const static int angle_axis_number;
 	void create_buttons_and_spin_boxes();

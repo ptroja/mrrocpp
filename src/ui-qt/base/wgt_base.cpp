@@ -5,7 +5,7 @@
 #include <QMainWindow>
 #include <QLocale>
 
-wgt_base::wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
+wgt_base::wgt_base(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 		QWidget(parent), widget_label(_widget_label), interface(_interface)
 {
 	dwgt = new QDockWidget((QMainWindow *) interface.get_main_window());
@@ -22,7 +22,7 @@ wgt_base::wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _inter
 	interface.get_main_window()->addDockWidget(Qt::LeftDockWidgetArea, dwgt);
 }
 
-wgt_base::wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent) :
+wgt_base::wgt_base(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent) :
 		QWidget(parent), widget_label(_widget_label), interface(_interface), robot(robo)
 {
 	dwgt = new QDockWidget((QMainWindow *) interface.get_main_window());
@@ -79,7 +79,7 @@ void wgt_base::init_and_copy()
 	emit init_and_copy_signal();
 }
 
-int wgt_base::get_desired_position()
+void wgt_base::get_desired_position()
 {
 	if (robot->state.edp.pid != -1) {
 		if (robot->state.edp.is_synchronised)
@@ -89,7 +89,6 @@ int wgt_base::get_desired_position()
 			for (int i = 0; i < rows_number; i++)
 				robot->desired_pos[i] = 0.0;
 	}
-	return 1;
 }
 
 void wgt_base::setup_ui(QGridLayout *layout, int _rows_number)

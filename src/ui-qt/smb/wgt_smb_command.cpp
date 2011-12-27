@@ -7,7 +7,7 @@
 #include "../base/mainwindow.h"
 #include "../base/ui_robot.h"
 
-wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+wgt_smb_command::wgt_smb_command(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
 		wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
@@ -195,19 +195,15 @@ int wgt_smb_command::init()
 	return 1;
 }
 
-int wgt_smb_command::synchro_depended_widgets_disable(bool _set_disabled)
+void wgt_smb_command::synchro_depended_widgets_disable(bool _set_disabled)
 {
-
 	ui.pushButton_m_execute->setDisabled(_set_disabled);
 	ui.pushButton_ml_copy->setDisabled(_set_disabled);
 	ui.pushButton_ms_copy->setDisabled(_set_disabled);
 
 	for (int i = 0; i < robot->number_of_servos; i++) {
 		doubleSpinBox_m_absolute_Vector[i]->setDisabled(_set_disabled);
-
 	}
-
-	return 1;
 }
 
 void wgt_smb_command::timer_slot()
@@ -218,9 +214,8 @@ void wgt_smb_command::timer_slot()
 
 }
 
-int wgt_smb_command::get_desired_position()
+void wgt_smb_command::get_desired_position()
 {
-
 	if (robot->state.edp.pid != -1) {
 
 		if (robot->state.edp.is_synchronised) {
@@ -235,7 +230,6 @@ int wgt_smb_command::get_desired_position()
 			}
 		}
 	}
-	return 1;
 }
 
 int wgt_smb_command::move_it()

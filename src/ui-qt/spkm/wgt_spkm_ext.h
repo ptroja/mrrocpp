@@ -28,7 +28,7 @@ class wgt_spkm_ext : public wgt_base
 Q_OBJECT
 
 public:
-	wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
+	wgt_spkm_ext(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
 			0);
 	~wgt_spkm_ext();
 
@@ -49,7 +49,7 @@ private:
 	int set_single_axis(int axis,
 	//	QDoubleSpinBox* qdsb_mcur,
 	QAbstractButton* qab_mip);
-	int get_desired_position();
+	void get_desired_position();
 	int move_it();
 	boost::shared_ptr <QTimer> timer;
 	void showEvent(QShowEvent * event);
