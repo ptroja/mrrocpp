@@ -84,7 +84,6 @@ bool shell::detect_hardware_busy()
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
 		ss << "/proc/" << file_pid;
-		ss.str().c_str();
 
 		std::cerr << ss.str() << std::endl;
 		// jesli nie ma procesu
