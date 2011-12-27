@@ -16,30 +16,25 @@ effector::effector(common::shell &_shell) :
 	DEBUG_METHOD;
 
 	// Set default motor velocities, accelerations and decelerations for axis 0 - leg A.
-	Vdefault[0] = 3000UL;
-	MotorVmax[0] = 3000UL;
-	Adefault[0] = 15000UL;
-	Ddefault[0] = 15000UL;
-	MotorAmax[0] = 15000UL;
-/*	Vdefault[0] = 5000UL;
+	Vdefault[0] = 5000UL;
 	MotorVmax[0] = 5000UL;
 	Adefault[0] = 30000UL;
 	Ddefault[0] = 30000UL;
-	MotorAmax[0] = 30000UL;*/
+	MotorAmax[0] = 30000UL;
 
 	// Set default motor velocities, accelerations and decelerations for axis 1 - leg B.
-	Vdefault[1] = 3000UL;
-	MotorVmax[1] = 3000UL;
-	Adefault[1] = 15000UL;
-	Ddefault[1] = 15000UL;
-	MotorAmax[1] = 15000UL;
+	Vdefault[1] = 5000UL;
+	MotorVmax[1] = 5000UL;
+	Adefault[1] = 30000UL;
+	Ddefault[1] = 30000UL;
+	MotorAmax[1] = 30000UL;
 
 	// Set default motor velocities, accelerations and decelerations for axis 2 - leg C.
-	Vdefault[2] = 3000UL;
-	MotorVmax[2] = 3000UL;
-	Adefault[2] = 15000UL;
-	Ddefault[2] = 15000UL;
-	MotorAmax[2] = 15000UL;
+	Vdefault[2] = 5000UL;
+	MotorVmax[2] = 5000UL;
+	Adefault[2] = 30000UL;
+	Ddefault[2] = 30000UL;
+	MotorAmax[2] = 30000UL;
 
 	// Set default motor velocities, accelerations and decelerations for axis 3 - (lower wrist rotation - "axis 1").
 	Vdefault[3] = 5000UL;
