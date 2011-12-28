@@ -677,6 +677,10 @@ void epos::reset()
 	// TODO: handle initial error conditions
 	actual_state_t state = getState();
 
+	std::cout << "EPOS node " << (unsigned int) nodeId
+			<< ": resetting from state '" << stateDescription(state) << "'"
+			<< std::endl;
+
 	// FAULT
 	if (state == FAULT) {
 		UNSIGNED8 errReg = getErrorRegister();
@@ -705,12 +709,13 @@ void epos::reset()
 	// Setup the wakeup time
 	wakeup = boost::get_system_time();
 
-	// TODO: handle error conditions
 	int retry = 5;
 	do {
 		state = getState();
 
-		if (state == READY_TO_SWITCH_ON) { // Operation enable
+		if (state == READY_TO_SWITCH_ON) {
+			break;
+		} else if (state == QUICK_STOP_ACTIVE) {
 			break;
 		} else if (state == FAULT) {
 			BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
@@ -726,15 +731,15 @@ void epos::reset()
 		// Wait for device state to change
 		boost::thread::sleep(wakeup);
 
-	} while (retry--);
+	} while (--retry);
 
 	if (retry == 0) {
 		BOOST_THROW_EXCEPTION(fe() << reason("Timeout shutting device down"));
 	}
 
 	// Ready-to-switch-On expected
-	if (state != READY_TO_SWITCH_ON) {
-		BOOST_THROW_EXCEPTION(fe() << reason("Ready-to-switch-On expected"));
+	if (state != READY_TO_SWITCH_ON && state != QUICK_STOP_ACTIVE) {
+		BOOST_THROW_EXCEPTION(fe() << reason("Ready-to-switch-On or Quick-Stop-Active expected"));
 	}
 
 	// Enable
@@ -870,7 +875,6 @@ void epos::setState(desired_state_t state)
 	}
 }
 
-/* returns software version as HEX  --  14.1.33*/
 UNSIGNED8 epos::getNodeID()
 {
 	return ReadObjectValue <UNSIGNED8>(0x2000, 0x00);

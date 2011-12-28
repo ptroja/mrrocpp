@@ -305,8 +305,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					// Brake with Quickstop command
 					epos_node->setState(maxon::epos::QUICKSTOP);
 
-					// Reset node.
-					epos_node->reset();
+					// Switch back to ENABLE state.
+					epos_node->reset(); //(maxon::epos::ENABLE_OPERATION);
 				}
 				break;
 			case lib::shead::CLEAR_FAULT:
@@ -408,8 +408,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
-	DEBUG_METHOD;
-
 	try {
 		// Check controller state.
 		check_controller_state();
