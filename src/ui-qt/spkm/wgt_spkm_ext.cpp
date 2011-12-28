@@ -141,6 +141,18 @@ void wgt_spkm_ext::on_pushButton_import_clicked()
 
 }
 
+void wgt_spkm_ext::on_pushButton_importxml_clicked()
+{
+	double val[robot->number_of_servos];
+
+	interface.get_main_window()->get_lineEdit_position(val, robot->number_of_servos);
+
+	for (int i = 0; i < 6; i++) {
+		doubleSpinBox_des_Vector[i]->setValue(val[i]);
+	}
+
+}
+
 void wgt_spkm_ext::on_pushButton_export_clicked()
 {
 	std::stringstream buffer(std::stringstream::in | std::stringstream::out);
