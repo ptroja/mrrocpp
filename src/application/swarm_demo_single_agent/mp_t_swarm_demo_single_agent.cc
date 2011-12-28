@@ -144,8 +144,10 @@ void swarmitfix::main_task_algorithm(void)
 
 	sr_ecp_msg->message("New experimental series");
 
+#ifdef WHOLE_TASK_SWARM
 	// Move to the *neutral* PKM pose.
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
+#endif
 
 	sr_ecp_msg->message("1");
 
