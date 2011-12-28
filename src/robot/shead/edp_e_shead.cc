@@ -328,7 +328,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							// Set new state
 							epos_node->setDigitalOutputs(outputs);
 						} else {
-							// TODO
+							virtual_state.solidification_state = lib::shead::SOLIDIFICATION_STATE_ON;
 						}
 						break;
 					case lib::shead::SOLIDIFICATION_STATE_OFF:
@@ -343,7 +343,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							// Set new state
 							epos_node->setDigitalOutputs(outputs);
 						} else {
-							// TODO
+							virtual_state.solidification_state = lib::shead::SOLIDIFICATION_STATE_OFF;
 						}
 						break;
 					default:
@@ -364,7 +364,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							// Set new state
 							epos_node->setDigitalOutputs(outputs);
 						} else {
-							// TODO
+							virtual_state.vacuum_state = lib::shead::VACUUM_STATE_ON;
 						}
 						break;
 					case lib::shead::VACUUM_OFF:
@@ -377,6 +377,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 							// Set new state
 							epos_node->setDigitalOutputs(outputs);
+						} else {
+							virtual_state.vacuum_state = lib::shead::VACUUM_STATE_OFF;
 						}
 						break;
 					default:
@@ -415,19 +417,21 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		// Handle only GET and SET_GET instructions.
 		if (instruction.instruction_type != lib::SET) {
 
-			std::cout << epos_node->getCommandedDigitalOutputs() << std::endl;
+			if(robot_test_mode) {
+				// Copy data from virtual state
+				edp_ecp_rbuffer.shead_reply.solidification_state = virtual_state.solidification_state;
+				edp_ecp_rbuffer.shead_reply.vacuum_state = virtual_state.vacuum_state;
+			} else {
+				// Ask about current solidification control pins state
+				edp_ecp_rbuffer.shead_reply.solidification_state =
+						(epos_node->getCommandedDigitalOutputs()[1] && epos_node->getCommandedDigitalOutputs()[2]) ?
+								lib::shead::SOLIDIFICATION_STATE_ON : lib::shead::SOLIDIFICATION_STATE_OFF;
 
-			edp_ecp_rbuffer.shead_reply.solidification_state =
-					(epos_node->getCommandedDigitalOutputs()[1] && epos_node->getCommandedDigitalOutputs()[2]) ?
-							lib::shead::SOLIDIFICATION_STATE_ON : lib::shead::SOLIDIFICATION_STATE_OFF;
-
-			std::cout << "edp::solidification = " << edp_ecp_rbuffer.shead_reply.solidification_state << std::endl;
-
-			edp_ecp_rbuffer.shead_reply.vacuum_state =
-					(epos_node->getCommandedDigitalOutputs()[3]) ?
-							lib::shead::VACUUM_STATE_ON : lib::shead::VACUUM_STATE_OFF;
-
-			std::cout << "edp::vacuum = " << edp_ecp_rbuffer.shead_reply.vacuum_state << std::endl;
+				// Ask about current vacuum control pins state
+				edp_ecp_rbuffer.shead_reply.vacuum_state =
+						(epos_node->getCommandedDigitalOutputs()[3]) ?
+								lib::shead::VACUUM_STATE_ON : lib::shead::VACUUM_STATE_OFF;
+			}
 
 			switch (ecp_edp_cbuffer.get_pose_specification)
 			{

@@ -35,5 +35,5 @@ add_library(mp_r_irp6ot_m mp_r_irp6ot_m.cc)
 target_link_libraries(ecp_r_irp6ot_m kinematicsirp6ot_m)
 
 install(TARGETS edp_irp6ot_m DESTINATION bin)
-install(TARGETS kinematicsirp6ot_m ecp_r_irp6ot_m DESTINATION lib)
+install(TARGETS kinematicsirp6ot_m ecp_r_irp6ot_m mp_r_irp6ot_m DESTINATION lib)
 

@@ -57,6 +57,21 @@ protected:
 	lib::shead::cbuffer ecp_edp_cbuffer;
 	lib::shead::rbuffer edp_ecp_rbuffer;
 
+	//! Virtual state for test mode
+	struct _virtual_state {
+		//! Solidification state
+		lib::shead::solidification_state_t solidification_state;
+
+		//! Vacuum state
+		lib::shead::vacuum_state_t vacuum_state;
+
+		//! Setup startup values
+		_virtual_state() :
+			solidification_state(lib::shead::SOLIDIFICATION_STATE_OFF),
+			vacuum_state(lib::shead::VACUUM_STATE_OFF)
+		{};
+	} virtual_state;
+
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!
 	 * \brief method,  creates a list of available kinematic models for shead effector.

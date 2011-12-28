@@ -30,5 +30,5 @@ add_library(mp_r_shead mp_r_shead.cc mp_r_shead1.cc mp_r_shead2.cc)
 target_link_libraries(ecp_r_shead kinematicsshead)
 
 install(TARGETS edp_shead1 edp_shead2 DESTINATION bin)
-install(TARGETS edpshead kinematicsshead ecp_r_shead DESTINATION lib)
+install(TARGETS edpshead kinematicsshead ecp_r_shead mp_r_shead DESTINATION lib)
 

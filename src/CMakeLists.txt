@@ -31,6 +31,7 @@ option(ROBOTS_012 "Build support for 012 room robots" ON)
 	
 option(ROBOT_BIRD_HAND "Build support for three finger robot hand" ON)
 	
+option(UI_QT "Build support for UI written in QT" ON)	
 
 if (UBUNTU32BIT)
 	# 32-bit headers and libraries are kept in 'mrlib' repository
@@ -174,4 +175,6 @@ add_subdirectory (generator)
 add_subdirectory (subtask)
 add_subdirectory (robot)
 add_subdirectory (application)
+if(UI_QT)
 add_subdirectory (ui-qt)
+endif(UI_QT)

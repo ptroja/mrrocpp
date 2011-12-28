@@ -23,9 +23,8 @@ target_link_libraries(ecp_r_bird_hand kinematicsbird_hand)
 
 install(TARGETS edp_bird_hand DESTINATION bin)
 
-install(TARGETS kinematicsbird_hand ecp_r_bird_hand DESTINATION lib)
+install(TARGETS kinematicsbird_hand ecp_r_bird_hand mp_r_bird_hand DESTINATION lib)
 
-install(TARGETS kinematicsbird_hand ecp_r_bird_hand DESTINATION lib)
 
 
 endif(ROBOT_BIRD_HAND)

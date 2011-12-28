@@ -1,5 +1,6 @@
 #include "base/lib/sr/srlib.h"
 
+#include "robot/spkm/ecp_r_spkm1.h"
 #include "robot/spkm/ecp_r_spkm2.h"
 
 #include "ecp_t_spkm.h"
@@ -15,8 +16,15 @@ namespace task {
 swarmitfix::swarmitfix(lib::configurator &_config) :
 		task_t(_config)
 {
-	// Create the robot object
-	ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm2::robot(*this);
+
+	// the robot is choose dependendat on the section of configuration file sent as argv[4]
+	if (config.robot_name == lib::spkm1::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm1::robot(*this);
+	} else if (config.robot_name == lib::spkm2::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm2::robot(*this);
+	} else {
+		// TODO: throw
+	}
 
 	// Create the generators
 

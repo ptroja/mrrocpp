@@ -23,4 +23,4 @@ add_library(mp_r_sarkofag mp_r_sarkofag.cc)
 target_link_libraries(ecp_r_sarkofag kinematicssarkofag)
 
 install(TARGETS edp_sarkofag DESTINATION bin)
-install(TARGETS kinematicssarkofag ecp_r_sarkofag DESTINATION lib)
+install(TARGETS kinematicssarkofag ecp_r_sarkofag mp_r_sarkofag DESTINATION lib)
