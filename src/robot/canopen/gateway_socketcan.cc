@@ -522,14 +522,14 @@ void gateway_socketcan::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t l
 void gateway_socketcan::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier)
 {
 	try {
-	struct can_frame frame;
+		struct can_frame frame;
 
-	frame.can_id = 0x0000;
-	frame.can_dlc = 2;
-	frame.data[0] = (uint8_t) CmdSpecifier;
-	frame.data[1] = nodeId;
+		frame.can_id = 0x0000;
+		frame.can_dlc = 2;
+		frame.data[0] = (uint8_t) CmdSpecifier;
+		frame.data[1] = nodeId;
 
-	writeToWire(frame);
+		writeToWire(frame);
 	} catch (fe_canopen_error & e) {
 		e << canId(nodeId);
 		throw;
