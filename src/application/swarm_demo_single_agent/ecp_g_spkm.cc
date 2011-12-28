@@ -1,5 +1,5 @@
 /*
- * Author: Piotr Trojanek
+ * Author: yoyek
  */
 
 #include "base/lib/sr/sr_ecp.h"

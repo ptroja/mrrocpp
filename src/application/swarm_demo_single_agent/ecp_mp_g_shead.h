@@ -11,7 +11,7 @@ namespace shead {
 namespace generator {
 
 const std::string ECP_SOLDIFICATION_COMMAND = "ECP_SOLDIFICATION_COMMAND";
-const std::string ECP_VACUMIZATION_EPOS_COMMAND = "ECP_VACUMIZATION_EPOS_COMMAND";
+const std::string ECP_VACUMIZATION_COMMAND = "ECP_VACUMIZATION_COMMAND";
 const std::string ECP_JOINT_EPOS_COMMAND = "ECP_JOINT_EPOS_COMMAND";
 
 } // namespace generator
