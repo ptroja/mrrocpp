@@ -54,6 +54,8 @@ public:
 
 	void get_lineEdit_position(double* val, int number_of_servos);
 
+	QString get_lineEdit_qstring();
+
 	Ui::MainWindow * get_ui();
 
 	void closeEvent(QCloseEvent * event);
@@ -68,7 +70,6 @@ public:
 	void clear_console();
 
 	void menuall_Preset_Positions_setEnabled(bool value);
-
 
 private:
 	Ui::MainWindow *ui;
