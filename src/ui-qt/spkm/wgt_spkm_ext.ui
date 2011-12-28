@@ -6,87 +6,73 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>782</width>
-    <height>313</height>
+    <width>784</width>
+    <height>331</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>wgt_spkm_ext</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>axis</string>
+   <item row="0" column="1" colspan="3">
+    <widget class="QFrame" name="frame_3">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="margin">
+       <number>3</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="pushButton_export">
+        <property name="text">
+         <string>Export</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_exportxml">
+        <property name="text">
+         <string>Export XML</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+     <zorder>pushButton_exportxml</zorder>
+     <zorder>label_6</zorder>
+     <zorder>pushButton_export</zorder>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>motion in progress</string>
+   <item row="0" column="5" colspan="4">
+    <widget class="QFrame" name="frame_4">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QLabel" name="label_18">
-     <property name="text">
-      <string>axis</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>current position [SI]</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="5">
-    <widget class="QLabel" name="label_8">
-     <property name="text">
-      <string>desired position [SI]</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="7">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Step [SI]</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="margin">
+       <number>3</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="pushButton_import">
+        <property name="text">
+         <string>Import</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_importxml">
+        <property name="text">
+         <string>Import XML</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item row="0" column="9" rowspan="4" colspan="2">
@@ -110,19 +96,6 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_22">
-        <property name="text">
-         <string>Motion Variant</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0">
        <widget class="QRadioButton" name="radioButton_non_sync_trapezoidal">
         <property name="text">
@@ -154,10 +127,98 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_22">
+        <property name="text">
+         <string>Motion Variant</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
    <item row="1" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>axis</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>motion in progress</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="label_18">
+     <property name="text">
+      <string>axis</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>current position [SI]</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>desired position [SI]</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="7">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Step [SI]</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignHCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>0</string>
@@ -170,7 +231,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="2" column="1">
     <widget class="QRadioButton" name="radioButton_mip_0">
      <property name="enabled">
       <bool>false</bool>
@@ -192,7 +253,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
+   <item row="2" column="2">
     <widget class="QLabel" name="label_19">
      <property name="text">
       <string>x</string>
@@ -205,7 +266,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="3">
+   <item row="2" column="3">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p0">
      <property name="enabled">
       <bool>false</bool>
@@ -227,7 +288,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="4" rowspan="6">
+   <item row="2" column="4" rowspan="6">
     <widget class="QPushButton" name="pushButton_copy">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -252,7 +313,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="5">
+   <item row="2" column="5">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p0">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -271,7 +332,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="6">
+   <item row="2" column="6">
     <widget class="QPushButton" name="pushButton_0l">
      <property name="maximumSize">
       <size>
@@ -290,7 +351,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="7">
+   <item row="2" column="7">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_step_p0">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -303,7 +364,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="8">
+   <item row="2" column="8">
     <widget class="QPushButton" name="pushButton_0r">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -328,7 +389,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <widget class="QLabel" name="label_10">
      <property name="text">
       <string>1</string>
@@ -341,7 +402,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="3" column="1">
     <widget class="QRadioButton" name="radioButton_mip_1">
      <property name="enabled">
       <bool>false</bool>
@@ -363,7 +424,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="2">
+   <item row="3" column="2">
     <widget class="QLabel" name="label_15">
      <property name="text">
       <string>y</string>
@@ -376,7 +437,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="3">
+   <item row="3" column="3">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p1">
      <property name="enabled">
       <bool>false</bool>
@@ -398,7 +459,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="5">
+   <item row="3" column="5">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p1">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -417,7 +478,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="6">
+   <item row="3" column="6">
     <widget class="QPushButton" name="pushButton_1l">
      <property name="maximumSize">
       <size>
@@ -436,7 +497,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="7">
+   <item row="3" column="7">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_step_p1">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -449,7 +510,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="8">
+   <item row="3" column="8">
     <widget class="QPushButton" name="pushButton_1r">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -474,7 +535,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="label_11">
      <property name="text">
       <string>2</string>
@@ -487,7 +548,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="4" column="1">
     <widget class="QRadioButton" name="radioButton_mip_2">
      <property name="enabled">
       <bool>false</bool>
@@ -509,7 +570,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="2">
+   <item row="4" column="2">
     <widget class="QLabel" name="label_16">
      <property name="text">
       <string>z</string>
@@ -522,7 +583,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="3">
+   <item row="4" column="3">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p2">
      <property name="enabled">
       <bool>false</bool>
@@ -544,7 +605,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="5">
+   <item row="4" column="5">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p2">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -563,7 +624,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="6">
+   <item row="4" column="6">
     <widget class="QPushButton" name="pushButton_2l">
      <property name="maximumSize">
       <size>
@@ -582,7 +643,7 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="7">
+   <item row="4" column="7">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_step_p2">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -595,154 +656,8 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="8">
-    <widget class="QPushButton" name="pushButton_2r">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&gt;</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>12</width>
-       <height>12</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_12">
-     <property name="text">
-      <string>3</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1">
-    <widget class="QRadioButton" name="radioButton_mip_3">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="autoExclusive">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="QLabel" name="label_20">
-     <property name="text">
-      <string>alpha</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="3">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p3">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buttonSymbols">
-      <enum>QAbstractSpinBox::NoButtons</enum>
-     </property>
-     <property name="decimals">
-      <number>4</number>
-     </property>
-     <property name="minimum">
-      <double>-10000.000000000000000</double>
-     </property>
-     <property name="maximum">
-      <double>10000.000000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="5">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p3">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="decimals">
-      <number>4</number>
-     </property>
-     <property name="minimum">
-      <double>-10000.000000000000000</double>
-     </property>
-     <property name="maximum">
-      <double>10000.000000000000000</double>
-     </property>
-     <property name="singleStep">
-      <double>0.100000000000000</double>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="6">
-    <widget class="QPushButton" name="pushButton_3l">
-     <property name="maximumSize">
-      <size>
-       <width>20</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>&lt;</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>12</width>
-       <height>12</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="7">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_step_p3">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="decimals">
-      <number>4</number>
-     </property>
-     <property name="singleStep">
-      <double>0.100000000000000</double>
-     </property>
-    </widget>
-   </item>
    <item row="4" column="8">
-    <widget class="QPushButton" name="pushButton_3r">
+    <widget class="QPushButton" name="pushButton_2r">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -819,9 +734,9 @@
     </widget>
    </item>
    <item row="5" column="0">
-    <widget class="QLabel" name="label_13">
+    <widget class="QLabel" name="label_12">
      <property name="text">
-      <string>4</string>
+      <string>3</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -832,7 +747,7 @@
     </widget>
    </item>
    <item row="5" column="1">
-    <widget class="QRadioButton" name="radioButton_mip_4">
+    <widget class="QRadioButton" name="radioButton_mip_3">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -854,9 +769,9 @@
     </widget>
    </item>
    <item row="5" column="2">
-    <widget class="QLabel" name="label_21">
+    <widget class="QLabel" name="label_20">
      <property name="text">
-      <string>beta</string>
+      <string>alpha</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -867,7 +782,7 @@
     </widget>
    </item>
    <item row="5" column="3">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p4">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p3">
      <property name="enabled">
       <bool>false</bool>
      </property>
@@ -889,7 +804,7 @@
     </widget>
    </item>
    <item row="5" column="5">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p4">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p3">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -908,7 +823,7 @@
     </widget>
    </item>
    <item row="5" column="6">
-    <widget class="QPushButton" name="pushButton_4l">
+    <widget class="QPushButton" name="pushButton_3l">
      <property name="maximumSize">
       <size>
        <width>20</width>
@@ -927,7 +842,7 @@
     </widget>
    </item>
    <item row="5" column="7">
-    <widget class="QDoubleSpinBox" name="doubleSpinBox_step_p4">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_step_p3">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
@@ -940,7 +855,7 @@
     </widget>
    </item>
    <item row="5" column="8">
-    <widget class="QPushButton" name="pushButton_4r">
+    <widget class="QPushButton" name="pushButton_3r">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -965,6 +880,152 @@
     </widget>
    </item>
    <item row="6" column="0">
+    <widget class="QLabel" name="label_13">
+     <property name="text">
+      <string>4</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QRadioButton" name="radioButton_mip_4">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoExclusive">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="2">
+    <widget class="QLabel" name="label_21">
+     <property name="text">
+      <string>beta</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="3">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p4">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::NoButtons</enum>
+     </property>
+     <property name="decimals">
+      <number>4</number>
+     </property>
+     <property name="minimum">
+      <double>-10000.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>10000.000000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="5">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p4">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="decimals">
+      <number>4</number>
+     </property>
+     <property name="minimum">
+      <double>-10000.000000000000000</double>
+     </property>
+     <property name="maximum">
+      <double>10000.000000000000000</double>
+     </property>
+     <property name="singleStep">
+      <double>0.100000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="6">
+    <widget class="QPushButton" name="pushButton_4l">
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&lt;</string>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>12</width>
+       <height>12</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="7">
+    <widget class="QDoubleSpinBox" name="doubleSpinBox_step_p4">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="decimals">
+      <number>4</number>
+     </property>
+     <property name="singleStep">
+      <double>0.100000000000000</double>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="8">
+    <widget class="QPushButton" name="pushButton_4r">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>&gt;</string>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>12</width>
+       <height>12</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
     <widget class="QLabel" name="label_14">
      <property name="text">
       <string>5</string>
@@ -977,7 +1038,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item row="7" column="1">
     <widget class="QRadioButton" name="radioButton_mip_5">
      <property name="enabled">
       <bool>false</bool>
@@ -1002,7 +1063,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="2">
+   <item row="7" column="2">
     <widget class="QLabel" name="label_17">
      <property name="text">
       <string>gamma</string>
@@ -1015,7 +1076,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="3">
+   <item row="7" column="3">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_cur_p5">
      <property name="enabled">
       <bool>false</bool>
@@ -1037,7 +1098,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="5">
+   <item row="7" column="5">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_des_p5">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1056,7 +1117,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="6">
+   <item row="7" column="6">
     <widget class="QPushButton" name="pushButton_5l">
      <property name="maximumSize">
       <size>
@@ -1075,7 +1136,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="7">
+   <item row="7" column="7">
     <widget class="QDoubleSpinBox" name="doubleSpinBox_step_p5">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -1088,7 +1149,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="8">
+   <item row="7" column="8">
     <widget class="QPushButton" name="pushButton_5r">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1113,49 +1174,28 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="8" column="1" colspan="2">
     <widget class="QPushButton" name="pushButton_stop">
      <property name="text">
       <string>Stop</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="3">
+   <item row="8" column="3">
     <widget class="QPushButton" name="pushButton_read">
      <property name="text">
       <string>Read</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="5">
-    <widget class="QPushButton" name="pushButton_export">
-     <property name="text">
-      <string>Export</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="1" colspan="2">
-    <widget class="QPushButton" name="pushButton_exportxml">
-     <property name="text">
-      <string>Export XML</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="3">
+   <item row="8" column="5">
     <widget class="QCheckBox" name="checkBox_cyclic_read">
      <property name="text">
       <string>Cyclic Read</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="5">
-    <widget class="QPushButton" name="pushButton_import">
-     <property name="text">
-      <string>Import</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="7">
+   <item row="8" column="6" colspan="3">
     <widget class="QPushButton" name="pushButton_execute">
      <property name="text">
       <string>Execute</string>
