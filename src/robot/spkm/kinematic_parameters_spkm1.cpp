@@ -20,9 +20,9 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	synchro_positions[0] = 0.242;
 	synchro_positions[1] = 0.2435;
 	synchro_positions[2] = 0.242;
-	synchro_positions[3] = 0.0;
+	synchro_positions[3] = 0;
 	synchro_positions[4] = 0.0;
-	synchro_positions[5] = 0.0;
+	synchro_positions[5] = 0;
 
 	// Initialization of the encoder resolution. Equals to the Counts Per Turn (CPT) x 4.
 	encoder_resolution[0] = 500*4;
@@ -107,9 +107,9 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 
 	// Initialization of upper thyk beta angle limit.
 	// Those values were determined experimentally.
-	upper_beta_thyk_angle_limit[0] = 30.0;
+	upper_beta_thyk_angle_limit[0] = 40.0;
 	upper_beta_thyk_angle_limit[1] = 50.0;
-	upper_beta_thyk_angle_limit[2] = 30.0;
+	upper_beta_thyk_angle_limit[2] = 40.0;
 
 	// Initialization of lower thyk beta angle limit.
 	// Those values were determined experimentally.
@@ -141,9 +141,11 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	//std::cout<< "P_S_P: " << P_S_P <<std::endl;
 
 	// Initialization of transformation from P (middle of upper P platform) and S (middle of the spherical wrist).
+//	double pst[16] = {-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1};
+//	double pst[16] = {0, -1.0, 0, 0, 1.0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1};
 	double pst[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0.0905, 1};
 	P_S_T = Eigen::Matrix<double, 4 , 4>(pst);
-	//std::cout<< "P_S_T" << P_S_T <<std::endl;
+	std::cout<< "P_S_T:\n" << P_S_T <<std::endl;
 
 	// Initialization of transformation from W (SW end-effector) to S (middle of the spherical wrist).
 	// The W_S_T is the inversion of:
@@ -151,7 +153,7 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	// S_W_R = [1, 0, 0; 0 1 0; 0, 0, 1]
 	double wst[16] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -0.0725, 1};
 	W_S_T = Eigen::Matrix<double, 4 , 4>(wst);
-	//std::cout<< "W_S_T: " << W_S_T <<std::endl;
+	std::cout<< "W_S_T:\n" << W_S_T <<std::endl;
 
 }
 

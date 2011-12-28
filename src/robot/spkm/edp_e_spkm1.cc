@@ -58,9 +58,9 @@ effector::effector(common::shell &_shell) :
 
 	if (!robot_test_mode) {
 		// Create epos objects according to CAN ID-mapping.
-		axisA = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 6);
+		axisA = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 5);
 		axisB = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 4);
-		axisC = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 5);
+		axisC = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 6);
 		axis1 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 3);
 		axis2 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 2);
 		axis3 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 1);
