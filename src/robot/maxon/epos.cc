@@ -629,6 +629,7 @@ void epos::clearFault(void)
 		if (errNum > 0) {
 			clearNumberOfErrors();
 		}
+
 		// Reset errors.
 		setState(maxon::epos::FAULT_RESET);
 
@@ -1987,10 +1988,30 @@ void epos::monitorHomingStatus()
 	INTEGER32 posactual, velactual;
 	INTEGER16 curactual;
 	UNSIGNED16 status;
+#if 0
+	// Recovery retry counter
+	unsigned int retry = 0;
 
+	// Recovery status flag
+	bool recovered = false;
+
+	// It takes some time to recovery from FAULT state
+	while(retry++ < 5) {
+		if(getState() == FAULT) {
+
+
+
+#endif
 	printf("\nEPOS operating figures (note: update here is done AS FAST AS POSSIBLE!):\n");
 	int i = 0;
+
+	// Periodic timer
+	boost::system_time wakeup = boost::get_system_time();
+
 	do {
+		// Wait for device state to change
+		boost::thread::sleep(wakeup);
+
 		i++;
 		posactual = getActualPosition();
 		velactual = getActualVelocity();
@@ -1998,13 +2019,16 @@ void epos::monitorHomingStatus()
 
 		status = getStatusWord();
 
-		printf("\r%d EPOS: pos=%+10d; v =  %+4drpm I=%+4dmA status = %#06x ", i, posactual, velactual, curactual, status);
+		printf("\r%d EPOS: pos=%+10d; v =%+4drpm I=%+5dmA status = %#06x ", i, posactual, velactual, curactual, status);
 
 		fflush(stdout);
 
 		if ((status & E_BIT13) == E_BIT13) {
 			BOOST_THROW_EXCEPTION(fe() << reason("HOMING ERROR!"));
 		}
+
+		// Increment the wakeup time
+		wakeup += boost::posix_time::milliseconds(5);
 
 	} while (((status & E_BIT10) != E_BIT10) && ((status & E_BIT12) != E_BIT12));
 	// bit 10 says: target reached!, bit 12: homing attained
