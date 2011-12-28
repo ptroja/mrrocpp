@@ -32,6 +32,7 @@ void swarmitfix::create_robots()
 {
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(smb1);
+//	ACTIVATE_MP_ROBOT(shead1);
 }
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
