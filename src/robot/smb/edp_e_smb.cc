@@ -246,17 +246,17 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (!robot_test_mode) {
 					// Execute command
 					BOOST_FOREACH(maxon::epos * node, axes)
-								{
-									// Brake with Quickstop command
-									node->setState(maxon::epos::QUICKSTOP);
-								}
+					{
+						// Brake with Quickstop command
+						node->setState(maxon::epos::QUICKSTOP);
+					}
+
 					// Reset node right after.
 					BOOST_FOREACH(maxon::epos * node, axes)
-								{
-									// Reset node.
-									node->reset();
-								}
-
+					{
+						// Reset node.
+						node->reset();
+					}
 				} //: !test_mode
 				break;
 			case lib::smb::CLEAR_FAULT:

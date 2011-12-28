@@ -349,10 +349,17 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				if (!robot_test_mode) {
 					// Execute command
 					BOOST_FOREACH(maxon::epos * node, axes)
-								{
-									// Brake with Quickstop command
-									node->setState(maxon::epos::QUICKSTOP);
-								}
+					{
+						// Brake with Quickstop command
+						node->setState(maxon::epos::QUICKSTOP);
+					}
+
+					// Reset node right after.
+					BOOST_FOREACH(maxon::epos * node, axes)
+					{
+						// Brake with Quickstop command
+						node->reset();
+					}
 				}
 				// Internal position counters need not be updated.
 				return;
