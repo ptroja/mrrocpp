@@ -40,9 +40,9 @@ void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_po
 	// Check upper limit for every motor.
 	for (int i = 0; i < 6; ++i) {
 		if (motor_position[i] > params.upper_motor_pos_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(UPPER_LIMIT) << desired_value(motor_position[i]));
+			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(UPPER_LIMIT) << desired_value(motor_position[i]) << limit_value(params.upper_motor_pos_limits[i]));
 		else if (motor_position[i] < params.lower_motor_pos_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(LOWER_LIMIT) << desired_value(motor_position[i]));
+			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(LOWER_LIMIT) << desired_value(motor_position[i]) << limit_value(params.lower_motor_pos_limits[i]));
 	}
 }
 
@@ -51,9 +51,9 @@ void kinematic_model_spkm::check_joints(const lib::JointArray & q) const
 	// Check joint limit for every axis.
 	for (int i = 0; i < 6; ++i) {
 		if (q[i] > params.upper_joints_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_joint_limit() << joint_number(i) << limit_type(UPPER_LIMIT));
+			BOOST_THROW_EXCEPTION(nfe_joint_limit() << joint_number(i) << limit_type(UPPER_LIMIT) << limit_value(params.upper_joints_limits[i]));
 		else if (q[i] < params.lower_joints_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_joint_limit() << joint_number(i) << limit_type(LOWER_LIMIT));
+			BOOST_THROW_EXCEPTION(nfe_joint_limit() << joint_number(i) << limit_type(LOWER_LIMIT) << limit_value(params.lower_joints_limits[i]));
 	}
 }
 
@@ -90,9 +90,9 @@ void kinematic_model_spkm::check_cartesian_pose(const lib::Homog_matrix& H_) con
 	// Check thyk alpha angle.
 	for (int i = 0; i < 3; ++i) {
 		if (thyk_alpha[i] > params.upper_alpha_thyk_angle_limit[i])
-			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_alpha[i]));
+			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_alpha[i]) << limit_value(params.upper_alpha_thyk_angle_limit[i]));
 		else if (thyk_alpha[i] < params.lower_alpha_thyk_angle_limit[i])
-			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_alpha[i]));
+			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_alpha[i]) << limit_value(params.lower_alpha_thyk_angle_limit[i]));
 	}
 
 	// Thyk beta = rotation around the y axes of legs A, B, and C of the upper platform: alpha = arc tan (|x|/|z|).
@@ -107,9 +107,9 @@ void kinematic_model_spkm::check_cartesian_pose(const lib::Homog_matrix& H_) con
 	// Check thyk beta angle.
 	for (int i = 0; i < 3; ++i) {
 		if (thyk_beta[i] > params.upper_beta_thyk_angle_limit[i])
-			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_beta[i]));
+			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_beta[i]) << desired_value(thyk_alpha[i]) << limit_value(params.upper_beta_thyk_angle_limit[i]));
 		else if (thyk_beta[i] < params.lower_beta_thyk_angle_limit[i])
-			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_beta[i]));
+			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_beta[i]) << desired_value(thyk_alpha[i]) << limit_value(params.lower_beta_thyk_angle_limit[i]));
 	}
 
 }
