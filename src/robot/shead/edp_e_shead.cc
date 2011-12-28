@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <boost/static_assert.hpp>
 
-#include "../spkm/debug.hpp"
+#include "base/lib/debug.hpp"
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"

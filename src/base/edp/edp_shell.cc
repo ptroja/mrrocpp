@@ -134,7 +134,7 @@ bool shell::create_hardware_busy_file()
 	return true;
 }
 
-bool shell::close_hardware_busy_file()
+void shell::close_hardware_busy_file()
 {
 	if (access(hardware_busy_file_fullpath.c_str(), R_OK) == 0) {
 

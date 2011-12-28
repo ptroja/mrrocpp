@@ -397,28 +397,11 @@ void effector::parse_motor_command()
 
 void effector::execute_motor_motion()
 {
-<<<<<<< HEAD
-	// Execute command.
-	if (is_synchronised()) {
-=======
 	DEBUG_METHOD;
 
-	// TODO: remove this line!
-	ecp_edp_cbuffer.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+	// Execute command.
+	if (is_synchronised()) {
 
-	// Perform motion depending on its type.
-	// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
-	switch (ecp_edp_cbuffer.motion_variant)
-	{
-		case lib::epos::NON_SYNC_TRAPEZOIDAL:
-			DEBUG_COMMAND("NON_SYNC_TRAPEZOIDAL");
-
-			// Execute command.
-			if (is_synchronised()) {
->>>>>>> wut-rcprg/master
-#if(DEBUG_MOTORS)
-		cout << "MOTOR moveAbsolute:" << desired_motor_pos_new.transpose() << endl;
-#endif
 		// Robot is synchronized.
 		for (size_t i = 0; i < axes.size(); ++i) {
 			if (!robot_test_mode) {
