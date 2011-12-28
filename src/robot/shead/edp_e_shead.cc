@@ -378,8 +378,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 							// Set new state
 							epos_node->setDigitalOutputs(outputs);
 						} else {
-
-						}virtual_state.vacuum_state = lib::shead::VACUUM_STATE_OFF;
+							virtual_state.vacuum_state = lib::shead::VACUUM_STATE_OFF;
+						}
 						break;
 					default:
 						// TODO: throw
