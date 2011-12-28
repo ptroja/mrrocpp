@@ -15,6 +15,7 @@
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_spkm.h"
 #include "ecp_mp_g_smb.h"
+#include "ecp_mp_g_shead.h"
 
 namespace mrrocpp {
 namespace mp {
