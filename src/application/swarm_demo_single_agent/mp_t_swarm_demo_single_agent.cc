@@ -20,6 +20,8 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
+// #define WHOLE_TASK_SWARM 1
+
 task* return_created_mp_task(lib::configurator &_config)
 {
 	return new swarmitfix(_config);
@@ -28,8 +30,8 @@ task* return_created_mp_task(lib::configurator &_config)
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void swarmitfix::create_robots()
 {
-	ACTIVATE_MP_ROBOT(spkm2);
-	ACTIVATE_MP_ROBOT(smb2);
+	ACTIVATE_MP_ROBOT(spkm1);
+	ACTIVATE_MP_ROBOT(smb1);
 }
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
@@ -150,6 +152,7 @@ void swarmitfix::main_task_algorithm(void)
 	// Pull out all SMB legs.
 	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 
+#ifdef WHOLE_TASK_SWARM
 	// Move SMB and SPKM to pose 0.
 	move_smb_external(0, 1.583);
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0, 0, 0.419, 0, -0.72, 0.03);
@@ -218,6 +221,8 @@ void swarmitfix::main_task_algorithm(void)
 	// Move to start position.
 	move_smb_external(0, 0);
 
+#endif
+
 	sr_ecp_msg->message("14");
 
 	sr_ecp_msg->message("PODNOSZEBIE WSZYSTKICH NOG za 1s");
@@ -246,8 +251,8 @@ void swarmitfix::move_smb_legs(lib::smb::FESTO_LEG l1, lib::smb::FESTO_LEG l2, l
 
 	memcpy(mp_ecp_string, &mp_ecp_festo_command, sizeof(mp_ecp_festo_command));
 
-	set_next_ecp_state(ecp_mp::smb::generator::ECP_LEGS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::smb2::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::smb2::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::smb::generator::ECP_LEGS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::smb1::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::smb1::ROBOT_NAME.c_str());
 
 }
 
@@ -262,8 +267,8 @@ void swarmitfix::move_smb_external(double x1, double x2)
 
 	memcpy(mp_ecp_string, &mp_ecp_smb_epos_simple_command, sizeof(mp_ecp_smb_epos_simple_command));
 
-	set_next_ecp_state(ecp_mp::smb::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::smb2::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::smb2::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::smb::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::smb1::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::smb1::ROBOT_NAME.c_str());
 
 }
 
@@ -282,8 +287,8 @@ void swarmitfix::move_spkm_joints(double x1, double x2, double x3, double x4, do
 
 	memcpy(mp_ecp_string, &mp_ecp_spkm_epos_simple_command, sizeof(mp_ecp_spkm_epos_simple_command));
 
-	set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm2::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::spkm2::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm1::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::spkm1::ROBOT_NAME.c_str());
 
 }
 
@@ -304,8 +309,8 @@ void swarmitfix::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT moti
 
 	memcpy(mp_ecp_string, &mp_ecp_spkm_epos_simple_command, sizeof(mp_ecp_spkm_epos_simple_command));
 
-	set_next_ecp_state(ecp_mp::spkm::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm2::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::spkm2::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::spkm::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm1::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::spkm1::ROBOT_NAME.c_str());
 
 }
 

@@ -1,8 +1,8 @@
 #if !defined(__MP_T_SWARM_DEMO_SIGLE_AGENT_H)
 #define __MP_T_SWARM_DEMO_SIGLE_AGENT_H
 
-#include "robot/spkm/mp_r_spkm2.h"
-#include "robot/smb/mp_r_smb2.h"
+#include "robot/spkm/mp_r_spkm1.h"
+#include "robot/smb/mp_r_smb1.h"
 
 namespace mrrocpp {
 namespace mp {
