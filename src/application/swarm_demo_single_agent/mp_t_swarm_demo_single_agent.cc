@@ -146,6 +146,12 @@ void swarmitfix::main_task_algorithm(void)
 
 	sr_ecp_msg->message("New experimental series");
 
+	move_shead_joints(0.0);
+
+	move_shead_joints(0.2);
+
+	move_shead_joints(0.0);
+
 #ifdef WHOLE_TASK_SWARM
 	// Move to the *neutral* PKM pose.
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
@@ -293,6 +299,21 @@ void swarmitfix::move_spkm_joints(double x1, double x2, double x3, double x4, do
 
 	set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm1::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::spkm1::ROBOT_NAME.c_str());
+
+}
+
+void swarmitfix::move_shead_joints(double x1)
+{
+	lib::epos::epos_simple_command mp_ecp_shead_epos_simple_command;
+	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
+	mp_ecp_shead_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+
+	mp_ecp_shead_epos_simple_command.desired_position[0] = x1;
+
+	memcpy(mp_ecp_string, &mp_ecp_shead_epos_simple_command, sizeof(mp_ecp_shead_epos_simple_command));
+
+	set_next_ecp_state(ecp_mp::shead::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::shead1::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::shead1::ROBOT_NAME.c_str());
 
 }
 
