@@ -52,9 +52,9 @@ public:
 
 	int synchronise();
 
-	int move_to_synchro_position();
-	int move_to_front_position();
-	int move_to_preset_position(int variant);
+	void move_to_synchro_position();
+	void move_to_front_position();
+	void move_to_preset_position(int variant);
 	void create_ui_ecp_robot();
 	int edp_create_int_extra_operations();
 

@@ -173,11 +173,11 @@ public:
 
 	bool check_synchronised_and_loaded();
 	bool deactivate_ecp_trigger();
-	int reload_configuration();
+	void reload_configuration();
 
-	virtual int move_to_synchro_position();
-	virtual int move_to_front_position();
-	virtual int move_to_preset_position(int variant);
+	virtual void move_to_synchro_position();
+	virtual void move_to_front_position();
+	virtual void move_to_preset_position(int variant);
 
 	// default try catch handlers
 	void catch_ecp_robot_fe(ecp::exception::fe_r & error);

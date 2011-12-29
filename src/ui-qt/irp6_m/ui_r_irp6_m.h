@@ -54,7 +54,7 @@ public:
 	void delete_ui_ecp_robot();
 	void null_ui_ecp_robot();
 	int synchronise_int();
-	virtual int move_to_preset_position(int variant);
+	virtual void move_to_preset_position(int variant);
 
 	virtual int synchronise();
 

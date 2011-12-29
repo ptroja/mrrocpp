@@ -62,9 +62,9 @@ public:
 	int synchronise();
 	int synchronise_int();
 
-	int move_to_synchro_position();
-	int move_to_front_position();
-	int move_to_preset_position(int variant);
+	void move_to_synchro_position();
+	void move_to_front_position();
+	void move_to_preset_position(int variant);
 
 	int execute_motor_motion();
 	int execute_joint_motion();

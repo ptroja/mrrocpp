@@ -171,10 +171,9 @@ int UiRobot::manage_interface()
 	return 1;
 }
 
-int UiRobot::move_to_preset_position(int variant)
+void UiRobot::move_to_preset_position(int variant)
 {
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()

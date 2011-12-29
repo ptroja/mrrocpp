@@ -58,7 +58,7 @@ int UiRobot::synchronise()
 
 }
 
-int UiRobot::move_to_preset_position(int variant)
+void UiRobot::move_to_preset_position(int variant)
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -66,10 +66,9 @@ int UiRobot::move_to_preset_position(int variant)
 	}
 	eb.command(boost::bind(&ui::irp6ot_tfg::UiRobot::execute_joint_motion, &(*this)));
 
-	return 1;
 }
 
-int UiRobot::move_to_synchro_position()
+void UiRobot::move_to_synchro_position()
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -77,7 +76,6 @@ int UiRobot::move_to_synchro_position()
 	}
 	eb.command(boost::bind(&ui::irp6ot_tfg::UiRobot::execute_motor_motion, &(*this)));
 
-	return 1;
 }
 
 int UiRobot::execute_motor_motion()

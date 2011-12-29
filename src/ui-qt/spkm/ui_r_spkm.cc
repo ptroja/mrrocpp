@@ -216,7 +216,7 @@ void UiRobot::delete_ui_ecp_robot()
 	delete ui_ecp_robot;
 }
 
-int UiRobot::move_to_synchro_position()
+void UiRobot::move_to_synchro_position()
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -224,10 +224,9 @@ int UiRobot::move_to_synchro_position()
 	}
 	eb.command(boost::bind(&ui::spkm::UiRobot::execute_motor_motion, &(*this)));
 
-	return 1;
 }
 
-int UiRobot::move_to_front_position()
+void UiRobot::move_to_front_position()
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -235,10 +234,9 @@ int UiRobot::move_to_front_position()
 	}
 	eb.command(boost::bind(&ui::spkm::UiRobot::execute_joint_motion, &(*this)));
 
-	return 1;
 }
 
-int UiRobot::move_to_preset_position(int variant)
+void UiRobot::move_to_preset_position(int variant)
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -246,7 +244,6 @@ int UiRobot::move_to_preset_position(int variant)
 	}
 	eb.command(boost::bind(&ui::spkm::UiRobot::execute_joint_motion, &(*this)));
 
-	return 1;
 }
 
 int UiRobot::execute_motor_motion()
