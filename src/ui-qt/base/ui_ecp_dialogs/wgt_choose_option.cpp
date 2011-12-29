@@ -69,6 +69,8 @@ void wgt_choose_option::my_open(bool set_on_top)
 {
 	ui->label_message->setText(interface.ui_ecp_obj->ecp_to_ui_msg.string);
 
+	//ui->alpha_input->setValue(interface.ui_ecp_obj->ecp_to_ui_msg.PkmItem.alpha());
+
 	switch (interface.ui_ecp_obj->ecp_to_ui_msg.nr_of_options)
 	{
 		case 2:
