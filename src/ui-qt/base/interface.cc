@@ -213,8 +213,8 @@ void Interface::timer_slot()
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
-			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
+			char process_name_buffer[NAME_LENGTH + 1];snprintf
+			(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -403,11 +403,7 @@ void Interface::raise_ui_ecp_window_slot()
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_XYZ_ANGLE_AXIS");
-
-			wgt_teaching_obj->my_open();
+			wgt_teaching_obj->my_open("C_XYZ_ANGLE_AXIS");
 #if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				/* TR
@@ -427,11 +423,7 @@ void Interface::raise_ui_ecp_window_slot()
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_XYZ_EULER_ZYZ");
-
-			wgt_teaching_obj->my_open();
+			wgt_teaching_obj->my_open("C_XYZ_EULER_ZYZ");
 #if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				/* TR
@@ -451,11 +443,7 @@ void Interface::raise_ui_ecp_window_slot()
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_JOINT");
-
-			wgt_teaching_obj->my_open();
+			wgt_teaching_obj->my_open("C_JOINT");
 #if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_JOINTS]->my_open();
@@ -472,11 +460,7 @@ void Interface::raise_ui_ecp_window_slot()
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_MOTOR");
-
-			wgt_teaching_obj->my_open();
+			wgt_teaching_obj->my_open("C_MOTOR");
 #if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME)
 			robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
@@ -486,17 +470,12 @@ void Interface::raise_ui_ecp_window_slot()
 		}
 			break;
 		case lib::YES_NO: {
-			Ui::wgt_yes_noClass* ui = wgt_yes_no_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
 
 			wgt_yes_no_obj->my_open();
 
 		}
 			break;
 		case lib::MESSAGE: {
-			Ui::wgt_messageClass* ui = wgt_message_obj->get_ui();
-			ui->label_message->setText(ecp_to_ui_msg.string);
 			wgt_message_obj->my_open();
 
 			ui_rep.reply = lib::ANSWER_YES;
@@ -505,18 +484,10 @@ void Interface::raise_ui_ecp_window_slot()
 			break;
 		case lib::DOUBLE_NUMBER: {
 
-			Ui::wgt_input_doubleClass* ui = wgt_input_double_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
-
 			wgt_input_double_obj->my_open();
 		}
 			break;
 		case lib::INTEGER_NUMBER: {
-
-			Ui::wgt_input_integerClass* ui = wgt_input_integer_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
 
 			wgt_input_integer_obj->my_open();
 
@@ -524,22 +495,6 @@ void Interface::raise_ui_ecp_window_slot()
 			break;
 		case lib::CHOOSE_OPTION: {
 
-			Ui::wgt_choose_optionClass* ui = wgt_choose_option_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
-
-			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
-
-			if (ecp_to_ui_msg.nr_of_options == 2) {
-				ui->pushButton_3->hide();
-				ui->pushButton_4->hide();
-			} else if (ecp_to_ui_msg.nr_of_options == 3) {
-				ui->pushButton_3->show();
-				ui->pushButton_4->hide();
-			} else if (ecp_to_ui_msg.nr_of_options == 4) {
-				ui->pushButton_3->show();
-				ui->pushButton_4->show();
-			}
 
 			wgt_choose_option_obj->my_open();
 		}
@@ -799,7 +754,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-	if (uname(&sysinfo) == -1) {
+if(	uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -1297,7 +1252,8 @@ int Interface::initiate_configuration()
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL)
+				if (direntp == NULL
+				)
 					break;
 
 				// printf( "%s\n", direntp->d_name );
@@ -1386,7 +1342,8 @@ void Interface::fill_node_list()
 	if (dirp != NULL) {
 		for (;;) {
 			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL)
+			if (direntp == NULL
+			)
 				break;
 			all_node_list.push_back(std::string(direntp->d_name));
 		}

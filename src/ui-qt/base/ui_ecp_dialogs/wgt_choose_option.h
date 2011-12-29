@@ -27,6 +27,8 @@ public:
 
 	void hideEvent(QHideEvent * event);
 
+	void my_open(bool set_on_top=false);
+
 private:
 	Ui::wgt_choose_optionClass* ui;
 

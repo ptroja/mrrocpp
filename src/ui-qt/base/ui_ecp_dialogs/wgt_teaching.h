@@ -26,7 +26,7 @@ public:
 	Ui::wgt_teachingClass * get_ui();
 
 	void hideEvent(QHideEvent * event);
-
+	void my_open(QString label, bool set_on_top = false);
 private:
 	Ui::wgt_teachingClass* ui;
 

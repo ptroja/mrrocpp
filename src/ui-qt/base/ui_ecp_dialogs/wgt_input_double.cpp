@@ -4,7 +4,7 @@
 #include <QHideEvent>
 
 wgt_input_double::wgt_input_double(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
-	wgt_base("Input Double Dialog", _interface, parent), ui(new Ui::wgt_input_doubleClass)
+		wgt_base("Input Double Dialog", _interface, parent), ui(new Ui::wgt_input_doubleClass)
 {
 	ui->setupUi(this);
 
@@ -41,6 +41,12 @@ void wgt_input_double::on_pushButton_cancel_clicked()
 
 	interface.ui_ecp_obj->ui_rep.double_number = 0.0;
 	my_close();
+}
+
+void wgt_input_double::my_open(bool set_on_top)
+{
+	ui->label_message->setText(interface.ui_ecp_obj->ecp_to_ui_msg.string);
+	wgt_base::my_open(set_on_top);
 }
 
 Ui::wgt_input_doubleClass * wgt_input_double::get_ui()
