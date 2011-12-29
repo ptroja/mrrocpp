@@ -393,7 +393,7 @@ void Interface::raise_ui_ecp_window_slot()
 {
 	ui_msg->message("raise_ui_ecp_window_slot");
 
-	lib::ECP_message &ecp_to_ui_msg = ui_ecp_obj->ecp_to_ui_msg;
+	const lib::ECP_message &ecp_to_ui_msg = ui_ecp_obj->ecp_to_ui_msg;
 	lib::UI_reply &ui_rep = ui_ecp_obj->ui_rep;
 
 	switch (ecp_to_ui_msg.ecp_message)
@@ -470,9 +470,9 @@ void Interface::raise_ui_ecp_window_slot()
 			wgt_teaching_obj->my_open("C_MOTOR");
 #if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME)
-			robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
+				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
 			else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME)
-			robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
+				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
 #endif
 		}
 			break;
