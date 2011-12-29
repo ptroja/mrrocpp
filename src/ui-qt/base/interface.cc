@@ -398,6 +398,13 @@ void Interface::raise_ui_ecp_window_slot()
 
 	switch (ecp_to_ui_msg.ecp_message)
 	{ // rodzaj polecenia z ECP
+
+		case lib::PLAN_STEP_MODE: {
+
+			wgt_swarm_obj->my_open();
+
+		}
+			break;
 		case lib::C_XYZ_ANGLE_AXIS: {
 			if (teachingstate == ui::common::MP_RUNNING) {
 				teachingstate = ui::common::ECP_TEACHING;
@@ -494,7 +501,6 @@ void Interface::raise_ui_ecp_window_slot()
 		}
 			break;
 		case lib::CHOOSE_OPTION: {
-
 
 			wgt_choose_option_obj->my_open();
 		}
@@ -727,6 +733,7 @@ void Interface::init()
 	// dodanie innych okien w dock widgetach
 	wgt_pc = new wgt_process_control(*this);
 	wgt_yes_no_obj = new wgt_yes_no(*this);
+	wgt_swarm_obj = new wgt_swarm(*this);
 	wgt_message_obj = new wgt_message(*this);
 	wgt_input_integer_obj = new wgt_input_integer(*this);
 	wgt_input_double_obj = new wgt_input_double(*this);
