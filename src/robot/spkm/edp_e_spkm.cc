@@ -1179,7 +1179,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						current_end_effector_frame.setIdentity();
 
 					Xyz_Euler_Zyz_vector zyz;
-					current_end_effector_frame.get_xyz_euler_zyz(zyz);
+					current_end_effector_frame.get_xyz_euler_zyz_without_limits(zyz, current_joints[3], current_joints[4], current_joints[5]);
 					zyz.to_table(edp_ecp_rbuffer.current_pose);
 
 #if(DEBUG_FRAMES)

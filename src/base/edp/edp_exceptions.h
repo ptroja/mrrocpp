@@ -54,6 +54,9 @@ typedef boost::error_info <struct joint_number_, int> joint_number;
 //! Desired value that caused the exception.
 typedef boost::error_info <struct desired_value_, double> desired_value;
 
+//! Value of the limit that couldn't be exceeded and caused the exception.
+typedef boost::error_info <struct limit_value_, double> limit_value;
+
 /*!
  * \brief Exception thrown in case of motor limits violation.
  * \author tkornuta

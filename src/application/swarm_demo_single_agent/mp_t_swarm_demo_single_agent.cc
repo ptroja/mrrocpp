@@ -21,7 +21,8 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-// #define WHOLE_TASK_SWARM 1
+#define SMB_WALK 0
+#define SMB_PULL_LEGS 0
 
 task* return_created_mp_task(lib::configurator &_config)
 {
@@ -141,58 +142,80 @@ void swarmitfix::move_smb_and_spkm(int leg_number, double rotation)
 	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 }
 
+
+void swarmitfix::move_to_pose_and_return(
+		double support_pkm_x_, double support_pkm_y_, double support_pkm_z_, double support_pkm_alpha_, double support_pkm_beta_, double support_pkm_gamma_,
+		double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_,
+		double smb_joint_, double shead_joint_)
+{
+	// Move SMB and SPKM to pose.
+	move_smb_external(0.0, smb_joint_);
+	// Support interpose.
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, inter_pkm_x_, inter_pkm_y_, inter_pkm_z_, inter_pkm_alpha_, inter_pkm_beta_, inter_pkm_gamma_);
+	// Rotate shead.
+	move_shead_joints(shead_joint_);
+	// Support.
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, support_pkm_x_, support_pkm_y_, support_pkm_z_, support_pkm_alpha_, support_pkm_beta_, support_pkm_gamma_);
+	wait_ms(1000);
+
+	// Move back to the *neutral* PKM pose.
+	// Support interpose.
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, inter_pkm_x_, inter_pkm_y_, inter_pkm_z_, inter_pkm_alpha_, inter_pkm_beta_, inter_pkm_gamma_);
+	// Neutral.
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, -0.04, 0.4, 0, -0.92, 0);
+
+}
+
 void swarmitfix::main_task_algorithm(void)
 {
-
-	sr_ecp_msg->message("New experimental series");
-
-	move_shead_joints(0.0);
-
-	move_shead_joints(0.2);
-
-	move_shead_joints(0.0);
-
-#ifdef WHOLE_TASK_SWARM
+	/*
+	    neutral pose OK
+	    tool:  -0.1412 -0.04 0.5718 3.1416 0.137 0
+	    wrist: 0.15 -0.04 0.4 0 -0.92 0
+	*/
 	// Move to the *neutral* PKM pose.
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
-#endif
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, -0.04, 0.4, 0, -0.92, 0);
+	// Move shead to synchro position.
+	move_shead_joints(0.0);
 
-	sr_ecp_msg->message("1");
 
+#if(SMB_PULL_LEGS)
 	// Pull out all SMB legs.
 	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+#endif
+/*
+    Podparcie nr 1: smb rot = 1
+    tool:  -0.33 0.0012 0.625 -0.8193 0.029 -2.3437
+    wrist: -0.0693 0 0.4097 0 -0.763 -0.03
 
-#ifdef WHOLE_TASK_SWARM
-	// Move SMB and SPKM to pose 0.
-	move_smb_external(0, 1.583);
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0, 0, 0.419, 0, -0.72, 0.03);
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0, 0, 0.439, 0, -0.72, 0.03);
-	wait_ms(1000);
+    odejście:
+    tool:  -0.33 0 0.59 3.1416 0.02 0
+    wrist: -0.0609 0 0.3853 0 -0.803 0
+*/
+	move_to_pose_and_return(-0.0693, 0, 0.4097, 0, -0.763, -0.03, -0.0609, 0, 0.3853, 0, -0.803, 0, 1, 0.5);
+	/*
+	    Podparcie 2: smb rot = 0, legs out
+	    tool:   -0.2919 0 0.626 -3.1416 -0.03 0
+	    wrist:  -0.0333 0 0.4081 0 -0.753 0
 
-	// Move back to the *neutral* PKM pose.
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0, 0, 0.419, 0, -0.72, 0.03);
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
+	    odejście z podparcia nr 1:
+	    tool:  -0.2919 0 0.6 -3.1416 0 0
+	    wrist: -0.0269 0 0.39 0 -0.783 0
+	*/
+	move_to_pose_and_return(-0.0333, 0, 0.4081, 0, -0.753, 0, -0.0269, 0, 0.39, 0, -0.783, 0, 0, -0.5);
+	/*
+	    Podparcie nr 3: smb rot = -1
+	    tool: -0.3691 0 0.627 3.1416 -0.05 0
+	    wrist: -0.1149 0 0.404 0 -0.733 0
 
-	// Move SMB and SPKM to pose 2.
-	move_smb_external(0, 0.500);
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.418, 0, -0.81, 0.11);
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.438, 0, -0.81, 0.11);
-	wait_ms(1000);
+	    odejście:
+	    tool:  -0.3691 0 0.5847 3.1416 0.02 0
+	    wrist: -0.1 0 0.38 0 -0.803 0
+	*/
+	move_to_pose_and_return(-0.1149, 0, 0.404, 0, -0.733, 0, -0.1, 0, 0.38, 0, -0.803, 0, -1, 0);
 
-	// Move back to the *neutral* PKM pose.
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.418, 0, -0.81, 0.11);
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
 
-	// Move SMB and SPKM to pose 1.
-	move_smb_external(0, -2.500);
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.09, 0, 0.42, 0, -0.843, -0.03);
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.09, 0, 0.44, 0, -0.843, -0.03);
-	wait_ms(1000);
-
-	// Move back to the *neutral* PKM pose.
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.09, 0, 0.42, 0, -0.843, -0.03);
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
-
+#if(SMB_WALK)
 	// Move to SMB position 2 - rotate around leg 3 by 60 degrees.
 	rotate_smb(3, 1);
 
@@ -230,19 +253,17 @@ void swarmitfix::main_task_algorithm(void)
 	rotate_smb(3, -1);
 	// Move to start position.
 	move_smb_external(0, 0);
-
 #endif
 
-	sr_ecp_msg->message("14");
-
-	sr_ecp_msg->message("PODNOSZEBIE WSZYSTKICH NOG za 1s");
-
+	// Rotate SMB to synchro position.
+	move_smb_external(0.0, 0.0);
 	wait_ms(1000);
 
+#if(SMB_PULL_LEGS)
 	move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::IN);
-
+#endif
 // KONIEC
-	sr_ecp_msg->message("END");
+//	sr_ecp_msg->message("END");
 
 }
 
