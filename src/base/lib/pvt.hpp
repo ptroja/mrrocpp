@@ -15,7 +15,7 @@
 #include <iostream>
 #include <cassert>
 
-#include <exception>
+#include <stdexcept>
 
 #include <boost/exception/exception.hpp>
 
@@ -90,10 +90,11 @@ double ppm(
 		)
 {
 	Matrix<T,N,3> Time;
+	bool TriangularProfile[N];
 
 	// Iterate over axes
 	for(unsigned int l = 0; l < N; ++l) {
-		const T delta = Delta(l,0),	// motor position delta
+		const T delta = Delta(l,0),			// motor position delta
 			vmax = Vmax(l,0),				// maximal velocity
 			amax = Amax(l,0),				// maximal acceleration
 			dmax = -Amax(l,0);				// maximal deceleration
@@ -104,9 +105,11 @@ double ppm(
 
 		std::cout << "VTriangle(" << l << ") = " << VTriangle << std::endl;
 
-		const bool TriangularProfile = (VTriangle <= vmax);
+		TriangularProfile[l] = (VTriangle <= vmax);
 
-		if(TriangularProfile) {
+		std::cout << "TriangularProfile " << TriangularProfile[l] << std::endl;
+
+		if(TriangularProfile[l]) {
 			// tt: total motion time (eq. 3.33)
 			Time(l,2) = std::sqrt(2*delta*(dmax-amax)/(amax*dmax));
 			// acceleration and deceleration phase treated as a half of the total motion time
@@ -128,22 +131,25 @@ double ppm(
 			//Time(l,2) = (2*delta*amax*dmax+vmax*vmax*dmax-vmax*vmax*amax)/(2*vmax*amax*dmax);
 		}
 
-//		std::cerr << "VLimit[" << l << "]: " << VTriangle <<
-//				" => " << (TriangularProfile ? "triangular" : "trapezoidal") << std::endl <<
-//				"Time[" << l << "]: " << Time(l,0) << " " << Time(l,1) << " " << Time(l,2) <<
-//				std::endl;
+		std::cerr << "VLimit[" << l << "]: " << VTriangle <<
+				" => " << (TriangularProfile[l] ? "triangular" : "trapezoidal") << std::endl <<
+				"Time[" << l << "]: " << Time(l,0) << " " << Time(l,1) << " " << Time(l,2) <<
+				std::endl;
 	}
 
-	Matrix<T,1,3> maxTime = Time.colwise().maxCoeff();
+	Matrix<T,1,3> maxTimes = Time.colwise().maxCoeff();
 
 //	std::cerr << "maxTime: " << maxTime << std::endl;
 //	std::cerr << "(maxTime.col(2)-maxTime.col(1): " << (maxTime.col(2)-maxTime.col(1)) << std::endl;
 
 	// total time
-	T tt = maxTime.col(2).maxCoeff();
+	T tt = maxTimes(2);
 
 	// Make the motion longer
 	if(requestedMotionTime > 0) {
+		// TODO
+		throw std::runtime_error("requested motion time not supported");
+
 		if(tt > requestedMotionTime) {
 			throw std::runtime_error("requested motion time too short");
 		}
@@ -151,19 +157,19 @@ double ppm(
 	}
 
 	// acceleration interval
-	const T ta = maxTime.col(0).maxCoeff();
+	const T ta = maxTimes(0);
 	// deceleration interval
-	const T td = tt - (maxTime.col(2)-maxTime.col(1)).maxCoeff();
+	const T td = tt - (maxTimes(2)-maxTimes(1));
 
 	if (ta > td) {
 		tt += (ta - td);
 	}
 
-//	std::cout
-//		<< "ta: " << ta << "\t"
-//		<< "td: " << td << "\t"
-//		<< "tt: " << tt
-//		<< std::endl;
+	std::cout
+		<< "ta: " << ta << "\t"
+		<< "td: " << td << "\t"
+		<< "tt: " << tt
+		<< std::endl;
 
 	// If the total time is zero there will be no motion
 	if(tt > 0) {
@@ -174,11 +180,17 @@ double ppm(
 
 			// Calculate new parameters if there is motion along an axis
 			if(delta) {
-				Anew(l,0) = 2*delta/(ta*(tt+td-ta));
-				Dnew(l,0) = - (-2*delta/((tt+td-ta)*(tt-td))); // deceleration value (without sign)
-				//Dnew(l,0) = (2*delta)/(tt*tt-tt*ta+td*ta-td*td); // Numerically stable (?) version
-				Vnew(l,0) = Anew(l,0)*ta;
-				//Vnew(l,0) = (2*delta)/(tt+td-ta); // Numerically stable (?) version
+				if(TriangularProfile[l]) {
+					Anew(l,0) = 2*delta/(ta*tt); // eq. 3.48
+					Dnew(l,0) = 2*delta/(tt*(tt-ta)); // eq.3.49
+					Vnew(l,0) = Vmax(l,0);
+				} else {
+					Anew(l,0) = 2*delta/(ta*(tt+td-ta));
+					Dnew(l,0) = - (-2*delta/((tt+td-ta)*(tt-td))); // deceleration value (without sign)
+					//Dnew(l,0) = (2*delta)/(tt*tt-tt*ta+td*ta-td*td); // Numerically stable (?) version
+					Vnew(l,0) = Anew(l,0)*ta;
+					//Vnew(l,0) = (2*delta)/(tt+td-ta); // Numerically stable (?) version
+				}
 			} else {
 				Anew(l,0) = Amax(l,0);
 				Dnew(l,0) = Amax(l,0);
