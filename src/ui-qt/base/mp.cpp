@@ -48,8 +48,9 @@ int Mp::MPup_int()
 
 				if (mp_state.pid > 0) {
 
-					mp_state.MP = (boost::shared_ptr<RemoteAgent>) new RemoteAgent(lib::MP_SECTION);
-					mp_state.pulse = (boost::shared_ptr<OutputBuffer<char> >) new OutputBuffer <char>(*mp_state.MP, "MP_PULSE");
+					mp_state.MP = (boost::shared_ptr <RemoteAgent>) new RemoteAgent(lib::MP_SECTION);
+					mp_state.pulse =
+							(boost::shared_ptr <OutputBuffer <char> >) new OutputBuffer <char>(*mp_state.MP, "MP_PULSE");
 
 					interface->teachingstate = ui::common::MP_RUNNING;
 
@@ -67,8 +68,8 @@ int Mp::MPup_int()
 	} catch (...) {
 		interface->ui_state = 2;
 	}
-
 	return 1;
+
 }
 
 void Mp::set_mp_state()
@@ -84,7 +85,7 @@ void Mp::set_mp_state()
 
 }
 
-int Mp::MPslay()
+void Mp::MPslay()
 {
 	try {
 		if (mp_state.pid != -1) {
@@ -150,11 +151,9 @@ int Mp::MPslay()
 	} catch (...) {
 		interface->ui_state = 2;
 	}
-	return 1;
-
 }
 
-int Mp::pulse_start_mp()
+void Mp::pulse_start_mp()
 
 {
 	try {
@@ -183,11 +182,10 @@ int Mp::pulse_start_mp()
 	} catch (...) {
 		interface->ui_state = 2;
 	}
-	return 1;
 
 }
 
-int Mp::pulse_stop_mp()
+void Mp::pulse_stop_mp()
 
 {
 	try {
@@ -202,11 +200,9 @@ int Mp::pulse_stop_mp()
 	} catch (...) {
 		interface->ui_state = 2;
 	}
-	return 1;
-
 }
 
-int Mp::pulse_pause_mp()
+void Mp::pulse_pause_mp()
 
 {
 	try {
@@ -221,11 +217,9 @@ int Mp::pulse_pause_mp()
 	} catch (...) {
 		interface->ui_state = 2;
 	}
-	return 1;
-
 }
 
-int Mp::pulse_resume_mp()
+void Mp::pulse_resume_mp()
 
 {
 	try {
@@ -240,11 +234,9 @@ int Mp::pulse_resume_mp()
 	} catch (...) {
 		interface->ui_state = 2;
 	}
-	return 1;
-
 }
 
-int Mp::pulse_trigger_mp()
+void Mp::pulse_trigger_mp()
 
 {
 	try {
@@ -257,11 +249,9 @@ int Mp::pulse_trigger_mp()
 	} catch (...) {
 		interface->ui_state = 2;
 	}
-	return 1;
-
 }
 
-int Mp::execute_mp_pulse(char pulse_code)
+void Mp::execute_mp_pulse(char pulse_code)
 {
 	try {
 		// printf("w send pulse\n");
@@ -271,7 +261,6 @@ int Mp::execute_mp_pulse(char pulse_code)
 	} catch (...) {
 		interface->ui_state = 2;
 	}
-	return 1;
 }
 
 void Mp::manage_interface()
