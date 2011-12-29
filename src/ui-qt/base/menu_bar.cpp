@@ -234,27 +234,27 @@ void MenuBar::on_actionall_Synchronisation_triggered()
 
 void MenuBar::on_actionall_Synchro_Position_triggered()
 {
-	interface->all_robots->all_robots_move_to_synchro_position();
+	interface->all_robots->move_to_synchro_position();
 }
 
 void MenuBar::on_actionall_Front_Position_triggered()
 {
-	interface->all_robots->all_robots_move_to_front_position();
+	interface->all_robots->move_to_front_position();
 }
 
 void MenuBar::on_actionall_Position_0_triggered()
 {
-	interface->all_robots->all_robots_move_to_preset_position(0);
+	interface->all_robots->move_to_preset_position(0);
 }
 
 void MenuBar::on_actionall_Position_1_triggered()
 {
-	interface->all_robots->all_robots_move_to_preset_position(1);
+	interface->all_robots->move_to_preset_position(1);
 }
 
 void MenuBar::on_actionall_Position_2_triggered()
 {
-	interface->all_robots->all_robots_move_to_preset_position(2);
+	interface->all_robots->move_to_preset_position(2);
 }
 
 // task menu

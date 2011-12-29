@@ -306,7 +306,7 @@ void AllRobots::pulse_trigger_ecp(UiRobot *robot)
 	robot->pulse_ecp();
 }
 
-void AllRobots::all_robots_move_to_synchro_position()
+void AllRobots::move_to_synchro_position()
 {
 	// jesli MP nie pracuje (choc moze byc wlaczone)
 	if ((interface->mp->mp_state.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN)
@@ -322,7 +322,7 @@ void AllRobots::all_robots_move_to_synchro_position()
 	}
 }
 
-void AllRobots::all_robots_move_to_preset_position(int variant)
+void AllRobots::move_to_preset_position(int variant)
 {
 	// jesli MP nie pracuje (choc moze byc wlaczone)
 	if ((interface->mp->mp_state.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN)
@@ -339,7 +339,7 @@ void AllRobots::all_robots_move_to_preset_position(int variant)
 	}
 }
 
-void AllRobots::all_robots_move_to_front_position()
+void AllRobots::move_to_front_position()
 {
 	// jesli MP nie pracuje (choc moze byc wlaczone)
 	if ((interface->mp->mp_state.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN)

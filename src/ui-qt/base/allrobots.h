@@ -41,9 +41,9 @@ public:
 	//ECP pulse
 	void pulse_trigger_ecp(UiRobot *robot);
 
-	void all_robots_move_to_synchro_position();
-	void all_robots_move_to_front_position();
-	void all_robots_move_to_preset_position(int variant);
+	void move_to_synchro_position();
+	void move_to_front_position();
+	void move_to_preset_position(int variant);
 
 	bool is_any_robot_active();
 	bool are_all_active_robots_loaded();
