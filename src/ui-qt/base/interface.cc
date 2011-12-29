@@ -214,8 +214,8 @@ void Interface::timer_slot()
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
-			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
+			char process_name_buffer[NAME_LENGTH + 1];snprintf
+			(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -394,21 +394,24 @@ void Interface::raise_ui_ecp_window_slot()
 {
 	ui_msg->message("raise_ui_ecp_window_slot");
 
-	lib::ECP_message &ecp_to_ui_msg = ui_ecp_obj->ecp_to_ui_msg;
+	const lib::ECP_message &ecp_to_ui_msg = ui_ecp_obj->ecp_to_ui_msg;
 	lib::UI_reply &ui_rep = ui_ecp_obj->ui_rep;
 
 	switch (ecp_to_ui_msg.ecp_message)
 	{ // rodzaj polecenia z ECP
+
+		case lib::PLAN_STEP_MODE: {
+
+			wgt_swarm_obj->my_open();
+
+		}
+			break;
 		case lib::C_XYZ_ANGLE_AXIS: {
 			if (teachingstate == ui::common::MP_RUNNING) {
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_XYZ_ANGLE_AXIS");
-
-			wgt_teaching_obj->my_open();
+			wgt_teaching_obj->my_open("C_XYZ_ANGLE_AXIS");
 #if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				/* TR
@@ -428,11 +431,7 @@ void Interface::raise_ui_ecp_window_slot()
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_XYZ_EULER_ZYZ");
-
-			wgt_teaching_obj->my_open();
+			wgt_teaching_obj->my_open("C_XYZ_EULER_ZYZ");
 #if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 				/* TR
@@ -452,11 +451,7 @@ void Interface::raise_ui_ecp_window_slot()
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_JOINT");
-
-			wgt_teaching_obj->my_open();
+			wgt_teaching_obj->my_open("C_JOINT");
 #if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_JOINTS]->my_open();
@@ -473,31 +468,22 @@ void Interface::raise_ui_ecp_window_slot()
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
-
-			ui->label_message->setText("C_MOTOR");
-
-			wgt_teaching_obj->my_open();
+			wgt_teaching_obj->my_open("C_MOTOR");
 #if (R_012 == 1)
 			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME)
-			robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
+				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
 			else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME)
-			robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
+				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
 #endif
 		}
 			break;
 		case lib::YES_NO: {
-			Ui::wgt_yes_noClass* ui = wgt_yes_no_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
 
 			wgt_yes_no_obj->my_open();
 
 		}
 			break;
 		case lib::MESSAGE: {
-			Ui::wgt_messageClass* ui = wgt_message_obj->get_ui();
-			ui->label_message->setText(ecp_to_ui_msg.string);
 			wgt_message_obj->my_open();
 
 			ui_rep.reply = lib::ANSWER_YES;
@@ -506,41 +492,16 @@ void Interface::raise_ui_ecp_window_slot()
 			break;
 		case lib::DOUBLE_NUMBER: {
 
-			Ui::wgt_input_doubleClass* ui = wgt_input_double_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
-
 			wgt_input_double_obj->my_open();
 		}
 			break;
 		case lib::INTEGER_NUMBER: {
-
-			Ui::wgt_input_integerClass* ui = wgt_input_integer_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
 
 			wgt_input_integer_obj->my_open();
 
 		}
 			break;
 		case lib::CHOOSE_OPTION: {
-
-			Ui::wgt_choose_optionClass* ui = wgt_choose_option_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
-
-			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
-
-			if (ecp_to_ui_msg.nr_of_options == 2) {
-				ui->pushButton_3->hide();
-				ui->pushButton_4->hide();
-			} else if (ecp_to_ui_msg.nr_of_options == 3) {
-				ui->pushButton_3->show();
-				ui->pushButton_4->hide();
-			} else if (ecp_to_ui_msg.nr_of_options == 4) {
-				ui->pushButton_3->show();
-				ui->pushButton_4->show();
-			}
 
 			wgt_choose_option_obj->my_open();
 		}
@@ -773,6 +734,7 @@ void Interface::init()
 	// dodanie innych okien w dock widgetach
 	wgt_pc = new wgt_process_control(*this);
 	wgt_yes_no_obj = new wgt_yes_no(*this);
+	wgt_swarm_obj = new wgt_swarm(*this);
 	wgt_message_obj = new wgt_message(*this);
 	wgt_input_integer_obj = new wgt_input_integer(*this);
 	wgt_input_double_obj = new wgt_input_double(*this);
@@ -800,7 +762,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-	if (uname(&sysinfo) == -1) {
+if(	uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -1298,7 +1260,8 @@ int Interface::initiate_configuration()
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL)
+				if (direntp == NULL
+				)
 					break;
 
 				// printf( "%s\n", direntp->d_name );
@@ -1387,7 +1350,8 @@ void Interface::fill_node_list()
 	if (dirp != NULL) {
 		for (;;) {
 			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL)
+			if (direntp == NULL
+			)
 				break;
 			all_node_list.push_back(std::string(direntp->d_name));
 		}

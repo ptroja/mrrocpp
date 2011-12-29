@@ -38,6 +38,8 @@
 
 #include "base/lib/messip/messip.h"
 
+#define SWARM_STRING_SIZE 1024
+
 namespace mrrocpp {
 namespace lib {
 
@@ -226,7 +228,8 @@ struct ECP_message
 	MAM;
 
 	//! XML string with current plan item
-	std::string plan_item;
+	//std::string plan_item;
+	char plan_item[SWARM_STRING_SIZE];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -237,7 +240,8 @@ struct ECP_message
 	{
 		ar & ecp_message;
 
-		switch(ecp_message) {
+		switch (ecp_message)
+		{
 			case PLAN_STEP_MODE:
 				ar & plan_item;
 				break;
@@ -279,7 +283,7 @@ struct UI_reply
 	friend class boost::serialization::access;
 
 	//! XML string with current plan item
-	std::string plan_item;
+	char plan_item[SWARM_STRING_SIZE];
 
 	//! Serialization of the data structure
 	template <class Archive>
@@ -287,7 +291,8 @@ struct UI_reply
 	{
 		ar & reply;
 
-		switch(reply) {
+		switch (reply)
+		{
 			case PLAN_EXEC:
 				ar & plan_item;
 				break;
@@ -1091,7 +1096,7 @@ struct ecp_next_state_t
 	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
 	/*! Target position for the mobile robot. */
-	playerpos_goal_t playerpos_goal;
+playerpos_goal_t	playerpos_goal;
 
 	const char * get_mp_2_ecp_next_state_string() const;
 

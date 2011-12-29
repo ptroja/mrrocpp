@@ -23,10 +23,9 @@ public:
 	wgt_teaching(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_teaching();
 
-	Ui::wgt_teachingClass * get_ui();
 
 	void hideEvent(QHideEvent * event);
-
+	void my_open(QString label, bool set_on_top = false);
 private:
 	Ui::wgt_teachingClass* ui;
 

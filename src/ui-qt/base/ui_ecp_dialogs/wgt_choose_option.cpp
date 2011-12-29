@@ -4,7 +4,7 @@
 #include <QHideEvent>
 
 wgt_choose_option::wgt_choose_option(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
-	wgt_base("Choose Option Dialog", _interface, parent), ui(new Ui::wgt_choose_optionClass)
+		wgt_base("Choose Option Dialog", _interface, parent), ui(new Ui::wgt_choose_optionClass)
 {
 	ui->setupUi(this);
 
@@ -65,7 +65,29 @@ void wgt_choose_option::on_pushButton_cancel_clicked()
 	my_close();
 }
 
-Ui::wgt_choose_optionClass * wgt_choose_option::get_ui()
+void wgt_choose_option::my_open(bool set_on_top)
 {
-	return ui;
+	ui->label_message->setText(interface.ui_ecp_obj->ecp_to_ui_msg.string);
+
+	//ui->alpha_input->setValue(interface.ui_ecp_obj->ecp_to_ui_msg.PkmItem.alpha());
+
+	switch (interface.ui_ecp_obj->ecp_to_ui_msg.nr_of_options)
+	{
+		case 2:
+			ui->pushButton_3->hide();
+			ui->pushButton_4->hide();
+			break;
+		case 3:
+			ui->pushButton_3->show();
+			ui->pushButton_4->hide();
+			break;
+		case 4:
+			ui->pushButton_3->show();
+			ui->pushButton_4->show();
+			break;
+		default:
+			break;
+	}
+
+	wgt_base::my_open(set_on_top);
 }
