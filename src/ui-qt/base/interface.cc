@@ -213,8 +213,8 @@ void Interface::timer_slot()
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
-			char process_name_buffer[NAME_LENGTH + 1];snprintf
-			(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
+			char process_name_buffer[NAME_LENGTH + 1];
+			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -606,7 +606,7 @@ MainWindow* Interface::get_main_window() const
 	return mw.get();
 }
 
-int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
+void Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
 {
 	{
 		boost::unique_lock <boost::mutex> lock(ui_notification_state_mutex);
@@ -616,7 +616,6 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 
 	mw->ui_notification();
 
-	return 1;
 }
 
 int Interface::wait_for_child_termination(pid_t pid, bool hang)
@@ -761,7 +760,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-if(	uname(&sysinfo) == -1) {
+	if (uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -818,9 +817,7 @@ if(	uname(&sysinfo) == -1) {
 			{
 
 		initiate_configuration();
-		// sprawdza czy sa postawione gns's i ew. stawia je
-		// uwaga serwer musi byc wczesniej postawiony
-		check_gns();
+
 	} else {
 		printf("Blad manage_default_configuration_file\n");
 		/* TR
@@ -848,7 +845,6 @@ if(	uname(&sysinfo) == -1) {
 	}
 
 	// inicjacja pliku z logami sr
-	check_gns();
 
 	time_t time_of_day;
 	char file_date[50];
@@ -914,12 +910,11 @@ void Interface::manage_pc(void)
 
 // funkcja odpowiedzialna za wyglad aplikacji na podstawie jej stanu
 
-int Interface::manage_interface(void)
+void Interface::manage_interface(void)
 {
 	emit
 	manage_interface_signal();
 
-	return 1;
 }
 
 void Interface::manage_interface_slot()
@@ -1100,24 +1095,14 @@ bool Interface::check_node_existence(const std::string & _node, const std::strin
 
 }
 
-// sprawdza czy sa postawione gns's i ew. stawia je
-// uwaga serwer powinien byc wczesniej postawiony (dokladnie jeden w sieci)
-// jesli dziala messip (np. pod linux) nieaktywne
-
-int Interface::check_gns()
-{
-	return 1;
-}
-
 // ustala stan wszytkich EDP
-int Interface::check_edps_state_and_modify_mp_state()
+void Interface::check_edps_state_and_modify_mp_state()
 {
 	all_robots->set_edp_state();
 	// modyfikacja stanu MP przez stan wszystkich EDP
 
 	mp->set_mp_state();
 
-	return 1;
 }
 
 // odczytuje nazwe domyslengo pliku konfiguracyjnego, w razie braku ustawia common.ini
@@ -1161,7 +1146,7 @@ int Interface::get_default_configuration_file_name()
 }
 
 // zapisuje nazwe domyslengo pliku konfiguracyjnego
-int Interface::set_default_configuration_file_name()
+void Interface::set_default_configuration_file_name()
 {
 
 	config_file_relativepath = mrrocpp_bin_to_root_path;
@@ -1174,11 +1159,10 @@ int Interface::set_default_configuration_file_name()
 	} else
 		outfile << config_file;
 
-	return 1;
 }
 
 // fills program_node list
-int Interface::fill_program_node_list()
+void Interface::fill_program_node_list()
 {
 	//	printf("fill_program_node_list\n");
 
@@ -1216,10 +1200,9 @@ int Interface::fill_program_node_list()
 		}
 	}
 
-	return 1;
 }
 
-int Interface::clear_all_configuration_lists()
+void Interface::clear_all_configuration_lists()
 {
 	// clearing of lists
 	section_list.clear();
@@ -1227,10 +1210,9 @@ int Interface::clear_all_configuration_lists()
 	all_node_list.clear();
 	program_node_user_list.clear();
 
-	return 1;
 }
 
-int Interface::initiate_configuration()
+void Interface::initiate_configuration()
 {
 
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
@@ -1259,8 +1241,7 @@ int Interface::initiate_configuration()
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL
-				)
+				if (direntp == NULL)
 					break;
 
 				// printf( "%s\n", direntp->d_name );
@@ -1286,11 +1267,10 @@ int Interface::initiate_configuration()
 	fill_node_list();
 	fill_program_node_list();
 
-	return 1;
 }
 
 // fills section list of configuration files
-int Interface::fill_section_list(const char* file_name_and_path)
+void Interface::fill_section_list(const char* file_name_and_path)
 {
 	static char line[256];
 
@@ -1336,8 +1316,6 @@ int Interface::fill_section_list(const char* file_name_and_path)
 
 	// zamknij plik
 	fclose(file);
-
-	return 1;
 }
 
 // fills node list
@@ -1349,8 +1327,7 @@ void Interface::fill_node_list()
 	if (dirp != NULL) {
 		for (;;) {
 			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL
-			)
+			if (direntp == NULL)
 				break;
 			all_node_list.push_back(std::string(direntp->d_name));
 		}
@@ -1394,7 +1371,7 @@ void Interface::create_threads()
 }
 
 // zatrzymuje zadanie, zabija procesy
-int Interface::unload_all()
+void Interface::unload_all()
 {
 	mp->MPslay();
 
@@ -1404,13 +1381,12 @@ int Interface::unload_all()
 	/* TR
 	 close_process_control_window(widget, apinfo, cbinfo);
 	 */
-	return 1;
 
 }
 
 // najpierw unload_all zabija wszystkie procesy wzmiankowane w pliku konfiguracyjnym
 
-int Interface::slay_all()
+void Interface::slay_all()
 {
 
 	// program unload
@@ -1449,9 +1425,6 @@ int Interface::slay_all()
 	}
 	printf("slay_all end\n");
 	manage_interface();
-
-	return 1;
-
 }
 
 }
