@@ -34,6 +34,23 @@ void serialize(Archive & ar, Pkm::ItemType & item, const boost::serialization::v
     ar & boost::serialization::make_nvp("gamma", item.Xyz_Euler_Zyz()->gamma());
 }
 
+template<class Archive>
+void serialize(Archive & ar, Mbase::ItemType & item, const boost::serialization::version_type &)
+{
+    ar & boost::serialization::make_nvp("agent", item.agent());
+    ar & boost::serialization::make_nvp("TBeg", item.TBeg());
+    ar & boost::serialization::make_nvp("TEnd", item.TEnd());
+    ar & boost::serialization::make_nvp("numActions", item.numActions());
+
+    Plan::MbaseType::ItemType::ActionsType::ItemIterator it = item.actions().item().begin();
+
+    for(int i = 0; i < item.numActions(); ++i) {
+    	ar & boost::serialization::make_nvp("pin", it->pin());
+    	ar & boost::serialization::make_nvp("dThetaInd", it->dThetaInd());
+    	ar & boost::serialization::make_nvp("dPkmTheta", it->dPkmTheta());
+    }
+}
+
 int main(int argc, char *argv[])
 {
 	// Check for input arguments
