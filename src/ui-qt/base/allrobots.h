@@ -1,5 +1,3 @@
-
-
 #ifndef ALLROBOTS_H_
 #define ALLROBOTS_H_
 
@@ -15,40 +13,39 @@ class UiRobot;
 class Interface;
 class Mp;
 
-
 class AllRobots
 {
 public:
 	AllRobots(Interface *iface);
 
-	int EDP_all_robots_create();
-	int EDP_all_robots_slay();
-	int EDP_all_robots_synchronise();
+	void EDP_all_robots_create();
+	void EDP_all_robots_slay();
+	void EDP_all_robots_synchronise();
 
 	//Reader pulse
-	int pulse_start_all_reader();
-	int pulse_stop_all_reader();
-	int pulse_trigger_all_reader();
+	void pulse_start_all_reader();
+	void pulse_stop_all_reader();
+	void pulse_trigger_all_reader();
 
 	//Reader pulse
-	int pulse_start_reader(UiRobot *robot);
-	int pulse_stop_reader(UiRobot *robot);
-	int pulse_trigger_reader(UiRobot *robot);
+	void pulse_start_reader(UiRobot *robot);
+	void pulse_stop_reader(UiRobot *robot);
+	void pulse_trigger_reader(UiRobot *robot);
 
 	void set_edp_state();
 
 	void manage_interface();
 	//ECP pulse
-	int pulse_trigger_ecp();
+	void pulse_trigger_ecp();
 
 	//ECP pulse
-	int pulse_trigger_ecp(UiRobot *robot);
+	void pulse_trigger_ecp(UiRobot *robot);
 
-	int all_robots_move_to_synchro_position();
-	int all_robots_move_to_front_position();
-	int all_robots_move_to_preset_position_0();
-	int all_robots_move_to_preset_position_1();
-	int all_robots_move_to_preset_position_2();
+	void all_robots_move_to_synchro_position();
+	void all_robots_move_to_front_position();
+	void all_robots_move_to_preset_position_0();
+	void all_robots_move_to_preset_position_1();
+	void all_robots_move_to_preset_position_2();
 
 	bool is_any_robot_active();
 	bool are_all_active_robots_loaded();
@@ -62,7 +59,7 @@ public:
 	UI_ALL_EDPS_SYNCHRO_STATE all_edps_synchro_last_manage_interface_state;
 
 private:
-	boost::shared_ptr<MainWindow> mw;
+	boost::shared_ptr <MainWindow> mw;
 	Interface *interface;
 
 };
