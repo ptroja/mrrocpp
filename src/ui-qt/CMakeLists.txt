@@ -37,6 +37,8 @@ MESSAGE(STATUS "\tIncludes in ${QT_INCLUDE_DIR}")
 # QT_USE_QTXMLPATTERNS
 # QT_USE_PHONON
 
+SET(QT_USE_QTXML TRUE)
+
 INCLUDE(${QT_USE_FILE})
 
 # Include current directory, necessary for proper UI headers to work
