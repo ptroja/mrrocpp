@@ -150,7 +150,7 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 		to_file << coordinate_type << '\n';
 		to_file << number_of_poses << '\n';
 		for (i = 0; i < number_of_poses; i++) {
-			get_pose(tip);
+			tip = get_pose();
 			to_file << tip.motion_time << ' ';
 			for (j = 0; j < lib::MAX_SERVOS_NR; j++)
 				to_file << tip.coordinates[j] << ' ';
@@ -303,9 +303,9 @@ void teach_in::next_pose_list_ptr(void)
 		pose_list_iterator++;
 }
 // -------------------------------------------------------
-void teach_in::get_pose(ecp_taught_in_pose& tip)
+const ecp_taught_in_pose & teach_in::get_pose(void) const
 { // by Y
-	tip = *pose_list_iterator;
+	return *pose_list_iterator;
 }
 // -------------------------------------------------------
 // Pobierz nastepna pozycje z listy
@@ -322,13 +322,10 @@ void teach_in::set_pose(lib::ECP_POSE_SPECIFICATION ps, double motion_time, doub
 	memcpy(pose_list_iterator->coordinates, coordinates, lib::MAX_SERVOS_NR * sizeof(double));
 }
 // -------------------------------------------------------
-bool teach_in::is_pose_list_element(void)
+bool teach_in::is_pose_list_element(void) const
 {
 	// sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
-	if (pose_list_iterator != pose_list.end())
-		return true;
-	else
-		return false;
+	return (pose_list_iterator != pose_list.end());
 }
 // -------------------------------------------------------
 bool teach_in::is_last_list_element(void)
@@ -407,7 +404,7 @@ bool teach_in::next_step()
 		return false;
 	}
 
-	get_pose(tip);
+	tip = get_pose(tip);
 	// Przepisanie pozycji z listy
 	switch (tip.arm_type)
 	{

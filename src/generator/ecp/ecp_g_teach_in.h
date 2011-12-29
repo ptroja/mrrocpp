@@ -99,7 +99,7 @@ public:
 	 * @brief returns pose pointed by the current pose list iterator
 	 * @param tip ecp_taught_in_pose reference to return value
 	 */
-	void get_pose(ecp_taught_in_pose& tip);
+	const ecp_taught_in_pose & get_pose(void) const ;
 
 	/**
 	 * @brief returns pose coordinates pointed by the current pose list iterator
@@ -122,7 +122,7 @@ public:
 	 * @brief checks if pose_list_iterator reached the pose list end
 	 * @return check status
 	 */
-	bool is_pose_list_element(void);
+	bool is_pose_list_element(void) const;
 
 	/**
 	 * @brief checks if pose_list_iterator points last element of the pose list
