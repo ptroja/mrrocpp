@@ -43,9 +43,7 @@ public:
 
 	void all_robots_move_to_synchro_position();
 	void all_robots_move_to_front_position();
-	void all_robots_move_to_preset_position_0();
-	void all_robots_move_to_preset_position_1();
-	void all_robots_move_to_preset_position_2();
+	void all_robots_move_to_preset_position(int variant);
 
 	bool is_any_robot_active();
 	bool are_all_active_robots_loaded();

@@ -322,7 +322,7 @@ void AllRobots::all_robots_move_to_synchro_position()
 	}
 }
 
-void AllRobots::all_robots_move_to_preset_position_1()
+void AllRobots::all_robots_move_to_preset_position(int variant)
 {
 	// jesli MP nie pracuje (choc moze byc wlaczone)
 	if ((interface->mp->mp_state.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN)
@@ -332,42 +332,10 @@ void AllRobots::all_robots_move_to_preset_position_1()
 		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface->robot_m)
 				{
 					if (robot_node.second->check_synchronised_and_loaded()) {
-						robot_node.second->move_to_preset_position(1);
+						robot_node.second->move_to_preset_position(variant);
 					}
 				}
 
-	}
-}
-
-void AllRobots::all_robots_move_to_preset_position_2()
-{
-	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((interface->mp->mp_state.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN)
-			|| (interface->mp->mp_state.state == ui::common::UI_MP_PERMITED_TO_RUN)
-			|| (interface->mp->mp_state.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
-
-		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface->robot_m)
-				{
-					if (robot_node.second->check_synchronised_and_loaded()) {
-						robot_node.second->move_to_preset_position(2);
-					}
-				}
-	}
-}
-
-void AllRobots::all_robots_move_to_preset_position_0()
-{
-	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((interface->mp->mp_state.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN)
-			|| (interface->mp->mp_state.state == ui::common::UI_MP_PERMITED_TO_RUN)
-			|| (interface->mp->mp_state.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
-
-		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface->robot_m)
-				{
-					if (robot_node.second->check_synchronised_and_loaded()) {
-						robot_node.second->move_to_preset_position(0);
-					}
-				}
 	}
 }
 
