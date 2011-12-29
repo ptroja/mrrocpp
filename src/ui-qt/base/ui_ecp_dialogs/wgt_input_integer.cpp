@@ -50,7 +50,3 @@ void wgt_input_integer::my_open(bool set_on_top)
 	wgt_base::my_open(set_on_top);
 }
 
-Ui::wgt_input_integerClass * wgt_input_integer::get_ui()
-{
-	return ui;
-}

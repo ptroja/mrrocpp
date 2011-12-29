@@ -48,7 +48,3 @@ void wgt_swarm::my_open(bool set_on_top)
 	wgt_base::my_open(set_on_top);
 }
 
-Ui::wgt_swarmClass * wgt_swarm::get_ui()
-{
-	return ui;
-}

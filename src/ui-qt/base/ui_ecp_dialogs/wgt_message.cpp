@@ -19,8 +19,3 @@ void wgt_message::my_open(bool set_on_top)
 	ui->label_message->setText(interface.ui_ecp_obj->ecp_to_ui_msg.string);
 	wgt_base::my_open(set_on_top);
 }
-
-Ui::wgt_messageClass * wgt_message::get_ui()
-{
-	return ui;
-}

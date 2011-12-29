@@ -47,8 +47,3 @@ void wgt_yes_no::my_open(bool set_on_top)
 	ui->label_message->setText(interface.ui_ecp_obj->ecp_to_ui_msg.string);
 	wgt_base::my_open(set_on_top);
 }
-
-Ui::wgt_yes_noClass * wgt_yes_no::get_ui()
-{
-	return ui;
-}

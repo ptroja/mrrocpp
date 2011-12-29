@@ -60,8 +60,3 @@ void wgt_teaching::my_open(QString label, bool set_on_top)
 	ui->label_message->setText(label);
 	wgt_base::my_open(set_on_top);
 }
-
-Ui::wgt_teachingClass * wgt_teaching::get_ui()
-{
-	return ui;
-}

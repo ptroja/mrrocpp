@@ -91,8 +91,3 @@ void wgt_choose_option::my_open(bool set_on_top)
 
 	wgt_base::my_open(set_on_top);
 }
-
-Ui::wgt_choose_optionClass * wgt_choose_option::get_ui()
-{
-	return ui;
-}
