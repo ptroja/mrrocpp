@@ -119,7 +119,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	add_wgt <wgt_single_motor_move>(WGT_SARKOFAG_MOVE, "Sarkofag moves");
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	single_motor::UiRobot::manage_interface();
@@ -165,7 +165,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()

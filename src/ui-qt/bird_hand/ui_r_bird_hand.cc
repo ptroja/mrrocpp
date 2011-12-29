@@ -72,7 +72,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 //	wndbase_m[WGT_BIRD_HAND_COMMAND] = wgts[WGT_COMMAND_AND_STATUS]->dwgt;
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	common::UiRobot::manage_interface();
@@ -119,7 +119,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()

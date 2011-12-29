@@ -106,7 +106,7 @@ void UiRobot::null_ui_ecp_robot()
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	common::UiRobot::manage_interface();
@@ -168,7 +168,6 @@ int UiRobot::manage_interface()
 
 	}
 
-	return 1;
 }
 
 void UiRobot::move_to_preset_position(int variant)

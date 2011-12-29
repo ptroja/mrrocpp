@@ -104,7 +104,7 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 	common::UiRobot::manage_interface();
 
@@ -153,7 +153,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()

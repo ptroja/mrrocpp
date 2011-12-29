@@ -45,7 +45,7 @@ public:
 
 	UiRobot(common::Interface& _interface);
 	void create_ui_ecp_robot();
-	int manage_interface();
+	void manage_interface();
 	void delete_ui_ecp_robot();
 	void null_ui_ecp_robot();
 	int synchronise();

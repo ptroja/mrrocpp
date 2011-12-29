@@ -94,7 +94,7 @@ int UiRobot::synchronise_int()
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
 	common::UiRobot::manage_interface();
@@ -153,7 +153,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()

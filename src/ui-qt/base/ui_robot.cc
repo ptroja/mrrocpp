@@ -451,7 +451,7 @@ bool UiRobot::is_edp_loaded()
 	return ((state.edp.state == UI_EDP_WAITING_TO_START_READER) || (state.edp.state == UI_EDP_WAITING_TO_STOP_READER));
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
 	Ui::MenuBar *menuBar = mw->getMenuBar();
@@ -508,7 +508,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::reload_configuration()

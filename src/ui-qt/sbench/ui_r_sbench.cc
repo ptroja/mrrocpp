@@ -51,7 +51,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	add_wgt <wgt_sbench_command>(sbench::WGT_SBENCH_COMMAND, "Sbench command");
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 //	MainWindow *mw = interface.get_main_window();
 	common::UiRobot::manage_interface();
@@ -93,7 +93,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()

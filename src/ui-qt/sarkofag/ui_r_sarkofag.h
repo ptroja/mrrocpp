@@ -50,7 +50,7 @@ public:
 
 	UiRobot(common::Interface& _interface);
 
-	int manage_interface();
+	void manage_interface();
 
 	int synchronise();
 	int synchronise_int();

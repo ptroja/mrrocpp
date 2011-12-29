@@ -50,7 +50,7 @@ public:
 
 	UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name);
 
-	int manage_interface();
+	void manage_interface();
 	void delete_ui_ecp_robot();
 	void null_ui_ecp_robot();
 	int synchronise();

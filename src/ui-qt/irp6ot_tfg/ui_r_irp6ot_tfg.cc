@@ -137,7 +137,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	single_motor::UiRobot::manage_interface();
@@ -181,7 +181,6 @@ int UiRobot::manage_interface()
 		default:
 			break;
 	}
-	return 1;
 }
 
 void UiRobot::setup_menubar()
