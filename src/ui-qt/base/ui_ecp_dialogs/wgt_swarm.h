@@ -6,6 +6,7 @@
 #include <QDockWidget>
 #include "ui_wgt_swarm.h"
 #include "../wgt_base.h"
+#include "../../../base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -28,10 +29,15 @@ public:
 private:
 	Ui::wgt_swarmClass* ui;
 
+	char stored_plan_item[SWARM_STRING_SIZE];
+
 private slots:
 
-	void on_pushButton_yes_clicked();
-	void on_pushButton_no_clicked();
+	void on_pushButton_prev_clicked();
+	void on_pushButton_next_clicked();
+	void on_pushButton_exec_clicked();
+	void on_pushButton_save_clicked();
+	void on_pushButton_reload_clicked();
 
 };
 
