@@ -104,6 +104,9 @@ public:
 
 	//! Close device
 	void close();
+
+	//! Get CAN-ID of the gateway itself (returns 0)
+	BYTE getCanID();
 };
 
 } /* namespace canopen */

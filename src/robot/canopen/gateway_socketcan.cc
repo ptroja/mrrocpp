@@ -551,6 +551,10 @@ void gateway_socketcan::SendCANFrame(WORD Identifier, WORD Length, const BYTE Da
 	writeToWire(frame);
 }
 
+BYTE gateway_socketcan::getCanID()
+{
+	return 0;
+}
 
 } /* namespace canopen */
 } /* namespace edp */

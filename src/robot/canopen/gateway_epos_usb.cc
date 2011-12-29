@@ -472,6 +472,11 @@ void gateway_epos_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Dat
 	checkEPOSerror(E_error);
 }
 
+BYTE gateway_epos_usb::getCanID()
+{
+	return ReadObjectValue <WORD>(0, 0x2000, 0x00);
+}
+
 } /* namespace canopen */
 } /* namespace edp */
 } /* namespace mrrocpp */
