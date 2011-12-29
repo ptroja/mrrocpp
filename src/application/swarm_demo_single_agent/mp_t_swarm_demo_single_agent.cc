@@ -22,7 +22,7 @@ namespace mp {
 namespace task {
 
 #define SMB_WALK 0
-#define SMB_PULL_LEGS 0
+#define SMB_PULL_LEGS 1
 
 task* return_created_mp_task(lib::configurator &_config)
 {
@@ -287,14 +287,14 @@ void swarmitfix::move_smb_legs(lib::smb::FESTO_LEG l1, lib::smb::FESTO_LEG l2, l
 
 }
 
-void swarmitfix::move_smb_external(double x1, double x2)
+void swarmitfix::move_smb_external(double legs_rotation_, double pkm_rotation_)
 {
 	lib::smb::smb_epos_simple_command mp_ecp_smb_epos_simple_command;
 	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
 	mp_ecp_smb_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
-	mp_ecp_smb_epos_simple_command.base_vs_bench_rotation = x1;
-	mp_ecp_smb_epos_simple_command.pkm_vs_base_rotation = x2;
+	mp_ecp_smb_epos_simple_command.base_vs_bench_rotation = legs_rotation_;
+	mp_ecp_smb_epos_simple_command.pkm_vs_base_rotation = pkm_rotation_;
 
 	memcpy(mp_ecp_string, &mp_ecp_smb_epos_simple_command, sizeof(mp_ecp_smb_epos_simple_command));
 
