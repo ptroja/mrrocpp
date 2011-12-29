@@ -56,7 +56,7 @@ public:
 	void move_to_front_position();
 	void move_to_preset_position(int variant);
 	void create_ui_ecp_robot();
-	int edp_create_int_extra_operations();
+	void edp_create_int_extra_operations();
 
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);

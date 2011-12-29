@@ -45,10 +45,9 @@ void UiRobot::create_ui_ecp_robot()
 
 }
 
-int UiRobot::edp_create_int_extra_operations()
+void UiRobot::edp_create_int_extra_operations()
 {
 	wgts[WGT_IRP6P_TFG_MOVE]->synchro_depended_init();
-	return 1;
 }
 
 void UiRobot::synchronise()

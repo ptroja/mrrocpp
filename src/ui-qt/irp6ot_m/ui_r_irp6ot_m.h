@@ -15,7 +15,7 @@
 #include "../irp6_m/ui_r_irp6_m.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 
-namespace Ui{
+namespace Ui {
 class MenuBar;
 class MenuBarAction;
 }
@@ -39,18 +39,15 @@ namespace irp6ot_m {
 //
 //
 
-
 class UiRobot : public irp6_m::UiRobot
 {
-	Q_OBJECT
+Q_OBJECT
 
 private:
 
 public:
 
 	UiRobot(common::Interface& _interface);
-
-
 
 	virtual void synchronise();
 
@@ -59,14 +56,12 @@ public:
 	void move_to_preset_position(int variant);
 
 	void create_ui_ecp_robot();
-	int edp_create_int_extra_operations();
+	void edp_create_int_extra_operations();
 
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 
-
 	void setup_menubar();
-
 
 };
 

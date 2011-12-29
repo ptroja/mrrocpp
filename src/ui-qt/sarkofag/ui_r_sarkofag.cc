@@ -45,10 +45,9 @@ void UiRobot::create_ui_ecp_robot()
 	//return 1;
 }
 
-int UiRobot::edp_create_int_extra_operations()
+void UiRobot::edp_create_int_extra_operations()
 {
 	wgts[WGT_SARKOFAG_MOVE]->synchro_depended_init();
-	return 1;
 }
 
 int UiRobot::execute_motor_motion()

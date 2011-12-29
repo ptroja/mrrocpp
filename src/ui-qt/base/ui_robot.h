@@ -169,7 +169,7 @@ public:
 	void block_ecp_trigger();
 	void unblock_ecp_trigger();
 
-	virtual int edp_create_int_extra_operations();
+	virtual void edp_create_int_extra_operations();
 
 	bool check_synchronised_and_loaded();
 	bool deactivate_ecp_trigger();

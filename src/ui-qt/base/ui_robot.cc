@@ -343,9 +343,8 @@ void UiRobot::edp_create()
 	}
 }
 
-int UiRobot::edp_create_int_extra_operations()
+void UiRobot::edp_create_int_extra_operations()
 {
-	return 1;
 }
 
 void UiRobot::pulse_ecp()
