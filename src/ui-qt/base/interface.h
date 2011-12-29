@@ -15,6 +15,7 @@
 #include "wgt_process_control.h"
 #include "wgt_robot_process_control.h"
 #include "ui_ecp_dialogs/wgt_yes_no.h"
+#include "ui_ecp_dialogs/wgt_swarm.h"
 #include "ui_ecp_dialogs/wgt_message.h"
 #include "ui_ecp_dialogs/wgt_input_integer.h"
 #include "ui_ecp_dialogs/wgt_input_double.h"
@@ -215,6 +216,7 @@ public:
 
 	wgt_process_control* wgt_pc;
 	wgt_yes_no* wgt_yes_no_obj;
+	wgt_swarm* wgt_swarm_obj;
 	wgt_message* wgt_message_obj;
 	wgt_input_integer* wgt_input_integer_obj;
 	wgt_input_double* wgt_input_double_obj;

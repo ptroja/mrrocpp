@@ -1,10 +1,10 @@
-#ifndef WGT_YES_NO_H
-#define WGT_YES_NO_H
+#ifndef WGT_SWARM_H
+#define WGT_SWARM_H
 
 #include <QtGui/QWidget>
 #include <QVBoxLayout>
 #include <QDockWidget>
-#include "ui_wgt_yes_no.h"
+#include "ui_wgt_swarm.h"
 #include "../wgt_base.h"
 
 namespace mrrocpp {
@@ -15,18 +15,18 @@ class Interface;
 }
 }
 
-class wgt_yes_no : public wgt_base
+class wgt_swarm : public wgt_base
 {
 Q_OBJECT
 
 public:
-	wgt_yes_no(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
-	~wgt_yes_no();
+	wgt_swarm(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
+	~wgt_swarm();
 
 	void hideEvent(QHideEvent * event);
 	void my_open(bool set_on_top = false);
 private:
-	Ui::wgt_yes_noClass* ui;
+	Ui::wgt_swarmClass* ui;
 
 private slots:
 
@@ -35,4 +35,4 @@ private slots:
 
 };
 
-#endif // WGT_YES_NO_H
+#endif // WGT_SWARM_H

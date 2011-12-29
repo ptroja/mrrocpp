@@ -23,9 +23,9 @@ public:
 	wgt_choose_option(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_choose_option();
 
-	Ui::wgt_choose_optionClass * get_ui();
-
 	void hideEvent(QHideEvent * event);
+
+	void my_open(bool set_on_top=false);
 
 private:
 	Ui::wgt_choose_optionClass* ui;

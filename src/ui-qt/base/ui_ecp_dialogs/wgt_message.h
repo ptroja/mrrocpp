@@ -23,8 +23,7 @@ public:
 	wgt_message(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_message();
 
-	Ui::wgt_messageClass * get_ui();
-
+	void my_open(bool set_on_top = false);
 private:
 	Ui::wgt_messageClass* ui;
 

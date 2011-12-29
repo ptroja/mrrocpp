@@ -2,6 +2,7 @@
 #include "interface.h"
 #include "mainwindow.h"
 #include "ui_robot.h"
+
 #include <QMainWindow>
 #include <QLocale>
 
