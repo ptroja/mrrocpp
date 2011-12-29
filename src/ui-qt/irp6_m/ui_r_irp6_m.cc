@@ -32,9 +32,8 @@ const std::string UiRobot::WGT_TOOL_EULER = "WGT_TOOL_EULER";
 // KLASA UiRobot
 //
 //
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 {
-	return 1;
 }
 
 int UiRobot::execute_motor_motion()

@@ -50,7 +50,7 @@ public:
 
 
 
-	int synchronise();
+	void synchronise();
 
 	void move_to_synchro_position();
 	void move_to_front_position();

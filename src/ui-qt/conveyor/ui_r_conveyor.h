@@ -49,7 +49,7 @@ public:
 
 	void manage_interface();
 
-	int synchronise();
+	void synchronise();
 	int synchronise_int();
 
 	void create_ui_ecp_robot();

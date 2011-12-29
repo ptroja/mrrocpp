@@ -87,14 +87,9 @@ void UiRobot::move_to_preset_position(int variant)
 
 }
 
-int UiRobot::synchronise()
-
+void UiRobot::synchronise()
 {
-
 	eb.command(boost::bind(&ui::irp6p_m::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
-
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :

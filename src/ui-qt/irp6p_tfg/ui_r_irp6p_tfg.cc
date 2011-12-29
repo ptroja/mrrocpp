@@ -51,14 +51,9 @@ int UiRobot::edp_create_int_extra_operations()
 	return 1;
 }
 
-int UiRobot::synchronise()
-
+void UiRobot::synchronise()
 {
-
 	eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
-
 }
 
 void UiRobot::move_to_preset_position(int variant)

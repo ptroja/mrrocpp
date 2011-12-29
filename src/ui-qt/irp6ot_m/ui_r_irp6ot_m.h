@@ -52,7 +52,7 @@ public:
 
 
 
-	virtual int synchronise();
+	virtual void synchronise();
 
 	void move_to_synchro_position();
 	void move_to_front_position();

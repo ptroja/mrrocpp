@@ -115,13 +115,11 @@ void UiRobot::setup_menubar()
 
 }
 
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 
 {
 
 	eb.command(boost::bind(&ui::smb::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
 
 }
 

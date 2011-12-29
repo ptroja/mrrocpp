@@ -56,13 +56,11 @@ int UiRobot::edp_create_int_extra_operations()
 	return 1;
 }
 
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 
 {
 
 	eb.command(boost::bind(&ui::spkm::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
 
 }
 

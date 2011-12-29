@@ -52,7 +52,7 @@ public:
 
 	void manage_interface();
 
-	int synchronise();
+	void synchronise();
 	int synchronise_int();
 
 	int execute_motor_motion();

@@ -58,9 +58,8 @@ void UiRobot::create_ui_ecp_robot()
 //	return 1;
 }
 
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 {
-	return 1;
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :

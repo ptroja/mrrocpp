@@ -75,14 +75,9 @@ int UiRobot::execute_joint_motion()
 	return 1;
 }
 
-int UiRobot::synchronise()
-
+void UiRobot::synchronise()
 {
-
 	eb.command(boost::bind(&ui::sarkofag::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
-
 }
 
 int UiRobot::synchronise_int()

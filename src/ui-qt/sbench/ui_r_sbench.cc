@@ -34,15 +34,10 @@ int UiRobot::ui_get_edp_pid()
 void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
 {
 	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
-
 }
 
-int UiRobot::synchronise()
-
+void UiRobot::synchronise()
 {
-
-	return 1;
-
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :

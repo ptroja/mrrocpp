@@ -37,13 +37,11 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 
 {
 
 	eb.command(boost::bind(&ui::shead::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
 
 }
 

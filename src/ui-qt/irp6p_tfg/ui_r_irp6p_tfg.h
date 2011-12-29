@@ -55,7 +55,7 @@ public:
 
 	void manage_interface();
 
-	int synchronise();
+	void synchronise();
 	int synchronise_int();
 
 	void move_to_synchro_position();

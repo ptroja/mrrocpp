@@ -56,7 +56,7 @@ public:
 	int synchronise_int();
 	virtual void move_to_preset_position(int variant);
 
-	virtual int synchronise();
+	virtual void synchronise();
 
 	int execute_motor_motion();
 	int execute_joint_motion();
