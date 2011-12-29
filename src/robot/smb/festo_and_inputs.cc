@@ -155,18 +155,17 @@ void festo_and_inputs::set_detach(int leg_number, bool value)
 
 	switch (leg_number)
 	{
-		case 1: {
+		case 1:
 			desired_output[FESTO_C1_GROUP][FESTO_C1_BIT_TO_SET] = value;
-		}
-			break;
-		case 2: {
-			desired_output[FESTO_C2_GROUP][FESTO_C2_BIT_TO_SET] = value;
-		}
 
 			break;
-		case 3: {
+		case 2:
+			desired_output[FESTO_C2_GROUP][FESTO_C2_BIT_TO_SET] = value;
+
+			break;
+		case 3:
 			desired_output[FESTO_C3_GROUP][FESTO_C3_BIT_TO_SET] = value;
-		}
+
 			break;
 
 		default:
@@ -179,19 +178,16 @@ void festo_and_inputs::set_move_in(int leg_number, bool value)
 {
 	switch (leg_number)
 	{
-		case 1: {
+		case 1:
 			desired_output[FESTO_CY11_GROUP][FESTO_CY11_BIT_TO_SET] = value;
-		}
 
 			break;
-		case 2: {
+		case 2:
 			desired_output[FESTO_CY21_GROUP][FESTO_CY21_BIT_TO_SET] = value;
-		}
 
 			break;
-		case 3: {
+		case 3:
 			desired_output[FESTO_CY31_GROUP][FESTO_CY31_BIT_TO_SET] = value;
-		}
 
 			break;
 
@@ -206,19 +202,16 @@ void festo_and_inputs::set_move_out(int leg_number, bool value)
 {
 	switch (leg_number)
 	{
-		case 1: {
+		case 1:
 			desired_output[FESTO_CY12_GROUP][FESTO_CY12_BIT_TO_SET] = value;
-		}
 
 			break;
-		case 2: {
+		case 2:
 			desired_output[FESTO_CY22_GROUP][FESTO_CY22_BIT_TO_SET] = value;
-		}
 
 			break;
-		case 3: {
+		case 3:
 			desired_output[FESTO_CY32_GROUP][FESTO_CY32_BIT_TO_SET] = value;
-		}
 
 			break;
 
@@ -234,17 +227,17 @@ void festo_and_inputs::set_clean(int leg_number, bool value)
 #ifdef CLEANING_ACTIVE
 	switch (leg_number)
 	{
-		case 1: {
-			desired_output[FESTO_CH1_GROUP][FESTO_CH1_BIT_TO_SET] = value;
-		}
+		case 1:
+		desired_output[FESTO_CH1_GROUP][FESTO_CH1_BIT_TO_SET] = value;
+
 		break;
-		case 2: {
-			desired_output[FESTO_CH2_GROUP][FESTO_CH2_BIT_TO_SET] = value;
-		}
+		case 2:
+		desired_output[FESTO_CH2_GROUP][FESTO_CH2_BIT_TO_SET] = value;
+
 		break;
-		case 3: {
-			desired_output[FESTO_CH3_GROUP][FESTO_CH3_BIT_TO_SET] = value;
-		}
+		case 3:
+		desired_output[FESTO_CH3_GROUP][FESTO_CH3_BIT_TO_SET] = value;
+
 		break;
 
 		default:
@@ -271,7 +264,6 @@ void festo_and_inputs::determine_legs_state()
 		switch (number_of_legs_in)
 		{
 			case 0:
-
 				current_legs_state = lib::smb::ALL_OUT;
 				break;
 			case 1:
@@ -458,25 +450,23 @@ void festo_and_inputs::command_all_out()
 	master.msg->message("command_all_out");
 	switch (current_legs_state)
 	{
-		case lib::smb::ALL_OUT: {
+		case lib::smb::ALL_OUT:
 			//	BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state() << current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_OUT));
-		}
+
 			break;
-		case lib::smb::ONE_IN_TWO_OUT: {
+		case lib::smb::ONE_IN_TWO_OUT:
 			master.msg->message("ONE_UP_TWO_DOWN");
 			if (!test_mode_set_reply()) {
 				move_one_or_two_out();
 			}
 
-		}
 			break;
-		case lib::smb::TWO_IN_ONE_OUT: {
+		case lib::smb::TWO_IN_ONE_OUT:
 			master.msg->message("TWO_UP_ONE_DOWN");
 			if (!test_mode_set_reply()) {
 				move_one_or_two_out();
 			}
 
-		}
 			break;
 		case lib::smb::ALL_IN: {
 			master.msg->message("ALL_UP");
@@ -611,16 +601,15 @@ void festo_and_inputs::command_one_in_two_out()
 
 	switch (current_legs_state)
 	{
-		case lib::smb::ALL_OUT: {
+		case lib::smb::ALL_OUT:
 			move_one_or_two_in();
-		}
 
 			break;
 		case lib::smb::ONE_IN_TWO_OUT:
 		case lib::smb::ALL_IN:
-		case lib::smb::TWO_IN_ONE_OUT: {
+		case lib::smb::TWO_IN_ONE_OUT:
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ONE_IN_TWO_OUT));
-		}
+
 			break;
 		default:
 			break;
@@ -695,9 +684,9 @@ void festo_and_inputs::command_two_in_one_out()
 		break;
 		case lib::smb::ONE_IN_TWO_OUT:
 		case lib::smb::TWO_IN_ONE_OUT:
-		case lib::smb::ALL_IN: {
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
-		}
+		case lib::smb::ALL_IN:
+		BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
+
 		break;
 		default:
 		break;
@@ -708,19 +697,16 @@ void festo_and_inputs::command_two_in_one_out()
 	// LOW PRESSURE VERSION WITH SERIAL LEG MOTION
 	switch (current_legs_state)
 	{
-		case lib::smb::ALL_OUT: {
+		case lib::smb::ALL_OUT:
 			move_one_or_two_in();
-		}
 
 			break;
 		case lib::smb::ONE_IN_TWO_OUT:
-		case lib::smb::ALL_IN: {
+		case lib::smb::ALL_IN:
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
-		}
 			break;
-		case lib::smb::TWO_IN_ONE_OUT: {
+		case lib::smb::TWO_IN_ONE_OUT:
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
-		}
 			break;
 		default:
 			break;
@@ -780,12 +766,12 @@ void festo_and_inputs::command_all_in()
 
 			break;
 		case lib::smb::ONE_IN_TWO_OUT:
-		case lib::smb::TWO_IN_ONE_OUT: {
+		case lib::smb::TWO_IN_ONE_OUT:
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_IN));
-		}
+
 			break;
-		case lib::smb::ALL_IN: {
-		}
+		case lib::smb::ALL_IN:
+
 			break;
 		default:
 			break;

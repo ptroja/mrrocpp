@@ -399,13 +399,12 @@ void Interface::raise_ui_ecp_window_slot()
 	switch (ecp_to_ui_msg.ecp_message)
 	{ // rodzaj polecenia z ECP
 
-		case lib::PLAN_STEP_MODE: {
+		case lib::PLAN_STEP_MODE:
 
 			wgt_swarm_obj->my_open();
 
-		}
 			break;
-		case lib::C_XYZ_ANGLE_AXIS: {
+		case lib::C_XYZ_ANGLE_AXIS:
 			if (teachingstate == ui::common::MP_RUNNING) {
 				teachingstate = ui::common::ECP_TEACHING;
 			}
@@ -423,9 +422,8 @@ void Interface::raise_ui_ecp_window_slot()
 			}
 #endif
 
-		}
 			break;
-		case lib::C_XYZ_EULER_ZYZ: {
+		case lib::C_XYZ_EULER_ZYZ:
 			if (teachingstate == ui::common::MP_RUNNING) {
 				teachingstate = ui::common::ECP_TEACHING;
 			}
@@ -443,9 +441,8 @@ void Interface::raise_ui_ecp_window_slot()
 			}
 #endif
 
-		}
 			break;
-		case lib::C_JOINT: {
+		case lib::C_JOINT:
 			if (teachingstate == ui::common::MP_RUNNING) {
 				teachingstate = ui::common::ECP_TEACHING;
 			}
@@ -458,9 +455,9 @@ void Interface::raise_ui_ecp_window_slot()
 				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_JOINTS]->my_open();
 			}
 #endif
-		}
+
 			break;
-		case lib::C_MOTOR: {
+		case lib::C_MOTOR:
 			//  printf("C_MOTOR\n");
 
 			if (teachingstate == ui::common::MP_RUNNING) {
@@ -474,38 +471,36 @@ void Interface::raise_ui_ecp_window_slot()
 			else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME)
 				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
 #endif
-		}
+
 			break;
-		case lib::YES_NO: {
+		case lib::YES_NO:
 
 			wgt_yes_no_obj->my_open();
 
-		}
 			break;
-		case lib::MESSAGE: {
+		case lib::MESSAGE:
 			wgt_message_obj->my_open();
 
 			ui_rep.reply = lib::ANSWER_YES;
 			ui_ecp_obj->synchroniser.command();
-		}
+
 			break;
-		case lib::DOUBLE_NUMBER: {
+		case lib::DOUBLE_NUMBER:
 
 			wgt_input_double_obj->my_open();
-		}
+
 			break;
-		case lib::INTEGER_NUMBER: {
+		case lib::INTEGER_NUMBER:
 
 			wgt_input_integer_obj->my_open();
 
-		}
 			break;
-		case lib::CHOOSE_OPTION: {
+		case lib::CHOOSE_OPTION:
 
 			wgt_choose_option_obj->my_open();
-		}
+
 			break;
-		case lib::LOAD_FILE: {
+		case lib::LOAD_FILE:
 			// Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 
 			//    printf("lib::LOAD_FILE\n");
@@ -542,9 +537,8 @@ void Interface::raise_ui_ecp_window_slot()
 
 			ui_ecp_obj->synchroniser.command();
 
-		}
 			break;
-		case lib::SAVE_FILE: {
+		case lib::SAVE_FILE:
 
 			// Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 			//    printf("lib::SAVE_FILE\n");
@@ -581,13 +575,12 @@ void Interface::raise_ui_ecp_window_slot()
 
 			ui_ecp_obj->synchroniser.command();
 
-		}
 			break;
 
-		default: {
+		default:
 			perror("Strange ECP message");
 			ui_ecp_obj->synchroniser.command();
-		}
+
 			break;
 	}
 

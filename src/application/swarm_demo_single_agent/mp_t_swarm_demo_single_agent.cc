@@ -53,18 +53,17 @@ void swarmitfix::rotate_smb(int leg_number, double rotation)
 
 	switch (leg_number)
 	{
-		case 1: {
+		case 1:
 			move_smb_legs(lib::smb::OUT, lib::smb::IN, lib::smb::IN);
-		}
+
 			break;
-		case 2: {
+		case 2:
 			move_smb_legs(lib::smb::IN, lib::smb::OUT, lib::smb::IN);
 
-		}
 			break;
-		case 3: {
+		case 3:
 			move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::OUT);
-		}
+
 			break;
 		default:
 			break;
@@ -110,18 +109,17 @@ void swarmitfix::move_smb_and_spkm(int leg_number, double rotation)
 
 	switch (leg_number)
 	{
-		case 1: {
+		case 1:
 			move_smb_legs(lib::smb::OUT, lib::smb::IN, lib::smb::IN);
-		}
+
 			break;
-		case 2: {
+		case 2:
 			move_smb_legs(lib::smb::IN, lib::smb::OUT, lib::smb::IN);
 
-		}
 			break;
-		case 3: {
+		case 3:
 			move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::OUT);
-		}
+
 			break;
 		default:
 			break;
@@ -142,11 +140,7 @@ void swarmitfix::move_smb_and_spkm(int leg_number, double rotation)
 	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 }
 
-
-void swarmitfix::move_to_pose_and_return(
-		double support_pkm_x_, double support_pkm_y_, double support_pkm_z_, double support_pkm_alpha_, double support_pkm_beta_, double support_pkm_gamma_,
-		double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_,
-		double smb_joint_, double shead_joint_)
+void swarmitfix::move_to_pose_and_return(double support_pkm_x_, double support_pkm_y_, double support_pkm_z_, double support_pkm_alpha_, double support_pkm_beta_, double support_pkm_gamma_, double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_, double smb_joint_, double shead_joint_)
 {
 	// Move SMB and SPKM to pose.
 	move_smb_external(0.0, smb_joint_);
@@ -169,51 +163,49 @@ void swarmitfix::move_to_pose_and_return(
 void swarmitfix::main_task_algorithm(void)
 {
 	/*
-	    neutral pose OK
-	    tool:  -0.1412 -0.04 0.5718 3.1416 0.137 0
-	    wrist: 0.15 -0.04 0.4 0 -0.92 0
-	*/
+	 neutral pose OK
+	 tool:  -0.1412 -0.04 0.5718 3.1416 0.137 0
+	 wrist: 0.15 -0.04 0.4 0 -0.92 0
+	 */
 	// Move to the *neutral* PKM pose.
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, -0.04, 0.4, 0, -0.92, 0);
 	// Move shead to synchro position.
 	move_shead_joints(0.0);
 
-
 #if(SMB_PULL_LEGS)
 	// Pull out all SMB legs.
 	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 #endif
-/*
-    Podparcie nr 1: smb rot = 1
-    tool:  -0.33 0.0012 0.625 -0.8193 0.029 -2.3437
-    wrist: -0.0693 0 0.4097 0 -0.763 -0.03
+	/*
+	 Podparcie nr 1: smb rot = 1
+	 tool:  -0.33 0.0012 0.625 -0.8193 0.029 -2.3437
+	 wrist: -0.0693 0 0.4097 0 -0.763 -0.03
 
-    odejście:
-    tool:  -0.33 0 0.59 3.1416 0.02 0
-    wrist: -0.0609 0 0.3853 0 -0.803 0
-*/
+	 odejście:
+	 tool:  -0.33 0 0.59 3.1416 0.02 0
+	 wrist: -0.0609 0 0.3853 0 -0.803 0
+	 */
 	move_to_pose_and_return(-0.0693, 0, 0.4097, 0, -0.763, -0.03, -0.0609, 0, 0.3853, 0, -0.803, 0, 1, 0.5);
 	/*
-	    Podparcie 2: smb rot = 0, legs out
-	    tool:   -0.2919 0 0.626 -3.1416 -0.03 0
-	    wrist:  -0.0333 0 0.4081 0 -0.753 0
+	 Podparcie 2: smb rot = 0, legs out
+	 tool:   -0.2919 0 0.626 -3.1416 -0.03 0
+	 wrist:  -0.0333 0 0.4081 0 -0.753 0
 
-	    odejście z podparcia nr 1:
-	    tool:  -0.2919 0 0.6 -3.1416 0 0
-	    wrist: -0.0269 0 0.39 0 -0.783 0
-	*/
+	 odejście z podparcia nr 1:
+	 tool:  -0.2919 0 0.6 -3.1416 0 0
+	 wrist: -0.0269 0 0.39 0 -0.783 0
+	 */
 	move_to_pose_and_return(-0.0333, 0, 0.4081, 0, -0.753, 0, -0.0269, 0, 0.39, 0, -0.783, 0, 0, -0.5);
 	/*
-	    Podparcie nr 3: smb rot = -1
-	    tool: -0.3691 0 0.627 3.1416 -0.05 0
-	    wrist: -0.1149 0 0.404 0 -0.733 0
+	 Podparcie nr 3: smb rot = -1
+	 tool: -0.3691 0 0.627 3.1416 -0.05 0
+	 wrist: -0.1149 0 0.404 0 -0.733 0
 
-	    odejście:
-	    tool:  -0.3691 0 0.5847 3.1416 0.02 0
-	    wrist: -0.1 0 0.38 0 -0.803 0
-	*/
+	 odejście:
+	 tool:  -0.3691 0 0.5847 3.1416 0.02 0
+	 wrist: -0.1 0 0.38 0 -0.803 0
+	 */
 	move_to_pose_and_return(-0.1149, 0, 0.404, 0, -0.733, 0, -0.1, 0, 0.38, 0, -0.803, 0, -1, 0);
-
 
 #if(SMB_WALK)
 	// Move to SMB position 2 - rotate around leg 3 by 60 degrees.
