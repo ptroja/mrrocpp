@@ -102,11 +102,18 @@ public:
 	Homog_matrix(const Xyz_Angle_Axis_vector & l_vector);
 
 	/*!
-	 * Constructor from Eigen matrix
+	 * Constructor from Eigen matrix (reduced 3x4 matrix).
 	 *
-	 * @param[in] eigen_matrix matrix for initialization
+	 * @param[in] Eigen-based matrix for initialization.
 	 */
 	Homog_matrix(const Eigen::Matrix <double, 3, 4> & eigen_matrix);
+
+	/*!
+	 * Constructor from Eigen matrix (full 4x4 matrix).
+	 *
+	 * @param[in] Eigen-based matrix for initialization.
+	 */
+	Homog_matrix(const Eigen::Matrix <double, 4, 4> & eigen_matrix);
 
 	/*!
 	 * Constructor from rotation and translation C-style arrays
@@ -160,6 +167,16 @@ public:
 	 * @param[out] l_vector requested representation.
 	 */
 	void get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const;
+
+	/**
+	 * Get the XYZ_EULER_ZYZ representation without limits for beta (it can vary from <-PI, PI)).
+	 *
+	 * @param[out] l_vector requested representation.
+	 * @param [in] alpha_old - previous value used for solution selection.
+	 * @param [in] beta_old - previous value used for solution selection.
+	 * @param [in] gamma_old - previous value used for solution selection.
+	 */
+	void get_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector & l_vector, const double alfa, const double beta, const double gamma) const;
 
 	/*!
 	 * Set from the XYZ_EULER_ZYZ representation. Takes into consideration limits for beta <0, PI).
