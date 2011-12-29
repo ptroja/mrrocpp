@@ -1,3 +1,5 @@
+#include <QtXml/QDomDocument>
+
 #include "ui_ecp_r_spkm.h"
 #include "ui_r_spkm.h"
 #include "robot/spkm/const_spkm.h"
@@ -139,6 +141,58 @@ void wgt_spkm_ext::on_pushButton_import_clicked()
 		doubleSpinBox_des_Vector[i]->setValue(val[i]);
 	}
 
+}
+
+void wgt_spkm_ext::on_pushButton_importxml_clicked()
+{
+	try {
+
+		/*
+		 <Xyz_Euler_Zyz>
+		 <x>0.0533</x>
+		 <y>0</y>
+		 <z>0.436</z>
+		 <alpha>3.1416</alpha>
+		 <beta>0.783</beta>
+		 <gamma>3.1416</gamma>
+		 </Xyz_Euler_Zyz>
+		 */
+
+		QString xmlText = interface.get_main_window()->get_lineEdit_qstring();
+
+		QDomDocument doc;
+		doc.setContent(xmlText);
+
+		QDomNodeList list;
+		QString singlevalue;
+
+		list = doc.elementsByTagName("x");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[0]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+		list = doc.elementsByTagName("y");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[1]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+		list = doc.elementsByTagName("z");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[2]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+		list = doc.elementsByTagName("alpha");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[3]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+		list = doc.elementsByTagName("beta");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[4]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+		list = doc.elementsByTagName("gamma");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[5]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+	} catch (...) {
+		interface.ui_msg->message(lib::NON_FATAL_ERROR, "xml position import failed");
+	}
 }
 
 void wgt_spkm_ext::on_pushButton_export_clicked()

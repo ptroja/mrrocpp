@@ -61,6 +61,7 @@ private slots:
 	void on_pushButton_exportxml_clicked();
 
 	void on_pushButton_import_clicked();
+	void on_pushButton_importxml_clicked();
 	void on_pushButton_copy_clicked();
 	void on_pushButton_stop_clicked();
 
