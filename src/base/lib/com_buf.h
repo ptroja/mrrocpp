@@ -135,7 +135,13 @@ enum UI_TO_ECP_COMMAND
 	MAM_CLEAR,
 	MAM_SAVE,
 	MAM_EXIT,
-	MAM_CALIBRATE
+	MAM_CALIBRATE,
+
+	//! Swarm-related entries
+	PLAN_PREV,
+	PLAN_NEXT,
+	PLAN_EXEC,
+	PLAN_SAVE
 };
 
 //------------------------------------------------------------------------------
@@ -162,7 +168,10 @@ enum ECP_TO_UI_COMMAND
 	TR_DANGEROUS_FORCE_DETECTED,
 	CHOOSE_OPTION,
 	MAM_OPEN_WINDOW,
-	MAM_REFRESH_WINDOW
+	MAM_REFRESH_WINDOW,
+
+	//! Swarm-related entries
+	PLAN_STEP_MODE
 };
 
 //------------------------------------------------------------------------------
@@ -175,11 +184,12 @@ enum ECP_TO_UI_COMMAND
  */
 struct ECP_message
 {
-
 	/*! Type of message. */
 	ECP_TO_UI_COMMAND ecp_message;
+
 	/*! Robot name. */
 	robot_name_t robot_name;
+
 	/*! Number of options - from 2 to 4 - - for CHOOSE_OPTION mode. */
 	uint8_t nr_of_options;
 
@@ -215,6 +225,9 @@ struct ECP_message
 	/*! Robot positions + Sensor readings + Measure number. */
 	MAM;
 
+	//! XML string with current plan item
+	std::string plan_item;
+
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -223,21 +236,29 @@ struct ECP_message
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & ecp_message;
-		ar & robot_name;
-		ar & nr_of_options;
 
-		ar & string;
+		switch(ecp_message) {
+			case PLAN_STEP_MODE:
+				ar & plan_item;
+				break;
+			default:
+				ar & robot_name;
+				ar & nr_of_options;
 
-		ar & RS.robot_position;
-		ar & RS.sensor_reading;
+				ar & string;
 
-		ar & R2S.robot_position;
-		ar & R2S.digital_scales_sensor_reading;
-		ar & R2S.force_sensor_reading;
+				ar & RS.robot_position;
+				ar & RS.sensor_reading;
 
-		ar & MAM.robot_position;
-		ar & MAM.sensor_reading;
-		ar & MAM.measure_number;
+				ar & R2S.robot_position;
+				ar & R2S.digital_scales_sensor_reading;
+				ar & R2S.force_sensor_reading;
+
+				ar & MAM.robot_position;
+				ar & MAM.sensor_reading;
+				ar & MAM.measure_number;
+				break;
+		}
 	}
 };
 
@@ -247,7 +268,6 @@ struct ECP_message
  */
 struct UI_reply
 {
-
 	UI_TO_ECP_COMMAND reply;
 	int32_t integer_number;
 	double double_number;
@@ -258,16 +278,31 @@ struct UI_reply
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
+	//! XML string with current plan item
+	std::string plan_item;
+
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & reply;
-		ar & integer_number;
-		ar & double_number;
-		ar & coordinates;
-		ar & path;
-		ar & filename;
+
+		switch(reply) {
+			case PLAN_EXEC:
+				ar & plan_item;
+				break;
+			case PLAN_PREV:
+			case PLAN_NEXT:
+			case PLAN_SAVE:
+				break;
+			default:
+				ar & integer_number;
+				ar & double_number;
+				ar & coordinates;
+				ar & path;
+				ar & filename;
+				break;
+		}
 	}
 };
 
