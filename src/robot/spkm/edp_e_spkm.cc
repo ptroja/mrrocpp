@@ -430,7 +430,7 @@ void effector::parse_motor_command()
 	try {
 		switch (ecp_edp_cbuffer.set_pose_specification)
 		{
-			case lib::spkm::MOTOR: {
+			case lib::spkm::MOTOR:
 				DEBUG_COMMAND("MOTOR");
 
 				// Copy data directly from buffer
@@ -448,8 +448,8 @@ void effector::parse_motor_command()
 				}
 
 				break;
-			}
-			case lib::spkm::JOINT: {
+
+			case lib::spkm::JOINT:
 				DEBUG_COMMAND("JOINT");
 
 				// Copy data directly from buffer
@@ -474,12 +474,12 @@ void effector::parse_motor_command()
 				get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
 
 				break;
-			}
+
 			case lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL:
 				DEBUG_COMMAND("WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL");
 
 				// In case of SYNC_TRAPEZOIDAL and NON_SYNC_TRAPEZOIDAL those two types of commands are executed in exactly the same way.
-			case lib::spkm::XYZ_EULER_ZYZ: {
+			case lib::spkm::XYZ_EULER_ZYZ:
 				DEBUG_COMMAND("XYZ_EULER_ZYZ");
 
 #if(DEBUG_FRAMES)
@@ -523,7 +523,7 @@ void effector::parse_motor_command()
 				// Remember the currently desired joints as old.
 				desired_joints_old = desired_joints;
 				break;
-			}
+
 			case lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL: {
 				DEBUG_COMMAND("TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL");
 #if(DEBUG_FRAMES)
