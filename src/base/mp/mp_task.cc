@@ -239,7 +239,7 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 		if (ReceiveSingleMessage(block)) {
 			// UI Pulse arrived
 			if (ui_pulse.isFresh()) {
-				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse ui_pulse.isFresh()");
+				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "receive_ui_or_ecp_message pulse ui_pulse.isFresh()");
 
 				ui_pulse.markAsUsed();
 
@@ -413,7 +413,7 @@ void task::resume_all()
 
 void task::terminate_all()
 {
-	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "terminate_all poczatek");
+	//sr_ecp_msg->message(lib::NON_FATAL_ERROR, "terminate_all poczatek");
 	// Zatrzymanie wszystkich ECP
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 			{

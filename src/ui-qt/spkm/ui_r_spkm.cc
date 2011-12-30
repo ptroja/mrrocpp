@@ -50,19 +50,16 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::edp_create_int_extra_operations()
+void UiRobot::edp_create_int_extra_operations()
 {
 	//wgts[WGT_SPKM_INC]->synchro_depended_init();
-	return 1;
 }
 
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 
 {
 
 	eb.command(boost::bind(&ui::spkm::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
 
 }
 
@@ -94,7 +91,7 @@ int UiRobot::synchronise_int()
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
 	common::UiRobot::manage_interface();
@@ -153,7 +150,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()
@@ -216,7 +212,7 @@ void UiRobot::delete_ui_ecp_robot()
 	delete ui_ecp_robot;
 }
 
-int UiRobot::move_to_synchro_position()
+void UiRobot::move_to_synchro_position()
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -224,10 +220,9 @@ int UiRobot::move_to_synchro_position()
 	}
 	eb.command(boost::bind(&ui::spkm::UiRobot::execute_motor_motion, &(*this)));
 
-	return 1;
 }
 
-int UiRobot::move_to_front_position()
+void UiRobot::move_to_front_position()
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -235,10 +230,9 @@ int UiRobot::move_to_front_position()
 	}
 	eb.command(boost::bind(&ui::spkm::UiRobot::execute_joint_motion, &(*this)));
 
-	return 1;
 }
 
-int UiRobot::move_to_preset_position(int variant)
+void UiRobot::move_to_preset_position(int variant)
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -246,7 +240,6 @@ int UiRobot::move_to_preset_position(int variant)
 	}
 	eb.command(boost::bind(&ui::spkm::UiRobot::execute_joint_motion, &(*this)));
 
-	return 1;
 }
 
 int UiRobot::execute_motor_motion()

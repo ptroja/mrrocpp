@@ -44,7 +44,7 @@ public:
 	void null_ui_ecp_robot();
 
 	void setup_menubar();
-	int manage_interface();
+	void manage_interface();
 
 protected:
 	QAction *action_Synchronisation;

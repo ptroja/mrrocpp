@@ -136,7 +136,8 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 #endif
 
 		// Reset zero position.
-		if ((!robot_test_mode) && ((current_legs_state() == lib::smb::ALL_IN) || (current_legs_state() == lib::smb::ALL_OUT))) {
+		if ((!robot_test_mode)
+				&& ((current_legs_state() == lib::smb::ALL_IN) || (current_legs_state() == lib::smb::ALL_OUT))) {
 			/*// Homing of the motor controlling the legs rotation - set current position as 0.
 			 legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
 			 legs_rotation_node->monitorHomingStatus();*/
@@ -147,8 +148,6 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 #if(DEBUG_MOTORS)
 		cout << "legs_relative_zero_position: " << legs_relative_zero_position << "\n";
 #endif
-
-
 
 		// Lock data structure during update
 		{
@@ -176,7 +175,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 }
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-	motor_driven_effector(_shell, l_robot_name)
+		motor_driven_effector(_shell, l_robot_name)
 {
 	DEBUG_METHOD;
 
@@ -188,8 +187,8 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	if (!robot_test_mode) {
 		// Create gateway object.
 		if (this->config.exists("can_iface")) {
-			gateway
-					= (boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string> ("can_iface"));
+			gateway =
+					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
 		} else {
 			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
 		}
@@ -240,35 +239,38 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				// Execute motion.
 				execute_motor_motion();
 				break;
+
 			case lib::smb::QUICKSTOP:
 				DEBUG_COMMAND("QUICKSTOP");
 
 				if (!robot_test_mode) {
 					// Execute command
 					BOOST_FOREACH(maxon::epos * node, axes)
-					{
-						// Brake with Quickstop command
-						node->setState(maxon::epos::QUICKSTOP);
-					}
+							{
+								// Brake with Quickstop command
+								node->setState(maxon::epos::QUICKSTOP);
+							}
 
 					// Reset node right after.
 					BOOST_FOREACH(maxon::epos * node, axes)
-					{
-						// Reset node.
-						node->reset();
-					}
+							{
+								// Reset node.
+								node->reset();
+							}
 				} //: !test_mode
 				break;
+
 			case lib::smb::CLEAR_FAULT:
 				DEBUG_COMMAND("CLEAR_FAULT");
 
 				if (!robot_test_mode) {
 					BOOST_FOREACH(maxon::epos * node, axes)
-								{
-									node->clearFault();
-								}
+							{
+								node->clearFault();
+							}
 				} //: !test_mode
 				break;
+
 			case lib::smb::FESTO:
 				DEBUG_COMMAND("FESTO");
 
@@ -285,10 +287,12 @@ void effector::move_arm(const lib::c_buffer &instruction)
 					}
 				}
 				break;
+
 			default:
 				// Throw non-fatal error - invalid command.
 				BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
 				break;
+
 		}
 	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
 		// Standard error handling.
@@ -313,16 +317,17 @@ void effector::parse_motor_command()
 	if (current_legs_state() != lib::smb::TWO_IN_ONE_OUT) {
 		// Check the difference between current and desired values.
 		// Check motors.
-		if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::MOTOR) && (current_motor_pos[0]
-				!= ecp_edp_cbuffer.motor_pos[0]))
+		if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::MOTOR)
+				&& (current_motor_pos[0] != ecp_edp_cbuffer.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
-		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT) && (current_joints[0]
-				!= ecp_edp_cbuffer.joint_pos[0]))
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT)
+				&& (current_joints[0] != ecp_edp_cbuffer.joint_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check externals.
-		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::EXTERNAL) && (current_joints[0]
-				!= ecp_edp_cbuffer.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
+		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::EXTERNAL)
+				&& (current_joints[0]
+						!= ecp_edp_cbuffer.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
@@ -364,6 +369,7 @@ void effector::parse_motor_command()
 				// Throw non-fatal error - this mode requires synchronization.
 				BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
 			}
+
 			break;
 		case lib::smb::EXTERNAL:
 			DEBUG_COMMAND("EXTERNAL");
@@ -387,6 +393,7 @@ void effector::parse_motor_command()
 				// Throw non-fatal error - this mode requires synchronization.
 				BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
 			}
+
 			break;
 		default:
 			// Throw non-fatal error - invalid pose specification.

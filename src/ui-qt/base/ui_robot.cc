@@ -307,8 +307,7 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 	while ((state.ecp.trigger_fd = messip::port_connect(state.ecp.network_trigger_attach_point)) == NULL
 
 	) {
-		if (errno == EINTR
-		)
+		if (errno == EINTR)
 			break;
 		if ((tmp++) < lib::CONNECT_RETRY) {
 			usleep(lib::CONNECT_DELAY);
@@ -343,9 +342,8 @@ void UiRobot::edp_create()
 	}
 }
 
-int UiRobot::edp_create_int_extra_operations()
+void UiRobot::edp_create_int_extra_operations()
 {
-	return 1;
 }
 
 void UiRobot::pulse_ecp()
@@ -431,20 +429,19 @@ bool UiRobot::check_synchronised_and_loaded()
 
 }
 
-int UiRobot::move_to_synchro_position()
+void UiRobot::move_to_synchro_position()
 {
-	return 1;
+
 }
 
-int UiRobot::move_to_front_position()
+void UiRobot::move_to_front_position()
 {
-	return 1;
+
 }
 
-int UiRobot::move_to_preset_position(int variant)
+void UiRobot::move_to_preset_position(int variant)
 {
 
-	return 1;
 }
 
 bool UiRobot::is_edp_loaded()
@@ -452,7 +449,7 @@ bool UiRobot::is_edp_loaded()
 	return ((state.edp.state == UI_EDP_WAITING_TO_START_READER) || (state.edp.state == UI_EDP_WAITING_TO_STOP_READER));
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
 	Ui::MenuBar *menuBar = mw->getMenuBar();
@@ -509,10 +506,9 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
-int UiRobot::reload_configuration()
+void UiRobot::reload_configuration()
 {
 
 	//	printf("final_position: %lf, %lf, %lf, %lf, %lf, %lf\n ", final_position[0], final_position[1], final_position[2], final_position[3], final_position[4], final_position[5]);
@@ -626,7 +622,6 @@ int UiRobot::reload_configuration()
 		}
 	}
 
-	return 1;
 }
 
 void UiRobot::catch_ecp_robot_fe(ecp::exception::fe_r & error)
