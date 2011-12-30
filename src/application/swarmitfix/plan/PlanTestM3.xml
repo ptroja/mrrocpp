@@ -561,7 +561,7 @@
    <mbase>
       <item>
          <ind>-50</ind>
-         <bCind>60</bCind>
+         <bCind>46</bCind>
          <cx>136</cx>
          <cy>98.1495</cy>
          <theta>0</theta>
@@ -576,11 +576,20 @@
             <item>117.779</item>
          </pinY>
          <pinIndices>
-            <item>30</item>
-            <item>31</item>
-            <item>40</item>
+            <item>
+               <row>4</row>
+               <column>4</column>
+            </item>
+            <item>
+               <row>4</row>
+               <column>5</column>
+            </item>
+            <item>
+               <row>3</row>
+               <column>4</column>
+            </item>
          </pinIndices>
-         <pkmTheta>5.256</pkmTheta>
+         <pkmTheta>-1.02718</pkmTheta>
          <actions>
             <item>
                <pin>0</pin>
@@ -608,7 +617,7 @@
       </item>
       <item>
          <ind>50</ind>
-         <bCind>82</bCind>
+         <bCind>62</bCind>
          <cx>187</cx>
          <cy>49.0748</cy>
          <theta>3.14159</theta>
@@ -623,17 +632,26 @@
             <item>29.4449</item>
          </pinY>
          <pinIndices>
-            <item>24</item>
-            <item>23</item>
-            <item>14</item>
+            <item>
+               <row>5</row>
+               <column>6</column>
+            </item>
+            <item>
+               <row>5</row>
+               <column>5</column>
+            </item>
+            <item>
+               <row>6</row>
+               <column>6</column>
+            </item>
          </pinIndices>
          <pkmTheta>2.43009</pkmTheta>
          <actions>
             <item>
                <pin>0</pin>
-               <dTheta>0</dTheta>
-               <dThetaInd>0</dThetaInd>
-               <dPkmTheta>2.43009</dPkmTheta>
+               <dTheta>3.14159</dTheta>
+               <dThetaInd>3</dThetaInd>
+               <dPkmTheta>-0.711499</dPkmTheta>
             </item>
             <item>
                <pin>0</pin>
@@ -655,7 +673,7 @@
       </item>
       <item>
          <ind>150</ind>
-         <bCind>60</bCind>
+         <bCind>46</bCind>
          <cx>136</cx>
          <cy>98.1495</cy>
          <theta>0</theta>
@@ -670,11 +688,20 @@
             <item>117.779</item>
          </pinY>
          <pinIndices>
-            <item>30</item>
-            <item>31</item>
-            <item>40</item>
+            <item>
+               <row>4</row>
+               <column>4</column>
+            </item>
+            <item>
+               <row>4</row>
+               <column>5</column>
+            </item>
+            <item>
+               <row>3</row>
+               <column>4</column>
+            </item>
          </pinIndices>
-         <pkmTheta>5.72045</pkmTheta>
+         <pkmTheta>-0.562733</pkmTheta>
          <actions>
             <item>
                <pin>0</pin>
@@ -702,7 +729,7 @@
       </item>
       <item>
          <ind>250</ind>
-         <bCind>82</bCind>
+         <bCind>62</bCind>
          <cx>187</cx>
          <cy>49.0748</cy>
          <theta>3.14159</theta>
@@ -717,9 +744,18 @@
             <item>29.4449</item>
          </pinY>
          <pinIndices>
-            <item>24</item>
-            <item>23</item>
-            <item>14</item>
+            <item>
+               <row>5</row>
+               <column>6</column>
+            </item>
+            <item>
+               <row>5</row>
+               <column>5</column>
+            </item>
+            <item>
+               <row>6</row>
+               <column>6</column>
+            </item>
          </pinIndices>
          <pkmTheta>1.94203</pkmTheta>
          <actions>
@@ -749,7 +785,7 @@
       </item>
       <item>
          <ind>350</ind>
-         <bCind>60</bCind>
+         <bCind>46</bCind>
          <cx>136</cx>
          <cy>98.1495</cy>
          <theta>0</theta>
@@ -764,11 +800,20 @@
             <item>117.779</item>
          </pinY>
          <pinIndices>
-            <item>30</item>
-            <item>31</item>
-            <item>40</item>
+            <item>
+               <row>4</row>
+               <column>4</column>
+            </item>
+            <item>
+               <row>4</row>
+               <column>5</column>
+            </item>
+            <item>
+               <row>3</row>
+               <column>4</column>
+            </item>
          </pinIndices>
-         <pkmTheta>6.20871</pkmTheta>
+         <pkmTheta>-0.074475</pkmTheta>
          <actions>
             <item>
                <pin>0</pin>
@@ -796,7 +841,7 @@
       </item>
       <item>
          <ind>450</ind>
-         <bCind>91</bCind>
+         <bCind>69</bCind>
          <cx>204</cx>
          <cy>78.5196</cy>
          <theta>1.0472</theta>
@@ -811,9 +856,18 @@
             <item>88.3346</item>
          </pinY>
          <pinIndices>
-            <item>24</item>
-            <item>33</item>
-            <item>32</item>
+            <item>
+               <row>5</row>
+               <column>6</column>
+            </item>
+            <item>
+               <row>4</row>
+               <column>7</column>
+            </item>
+            <item>
+               <row>4</row>
+               <column>6</column>
+            </item>
          </pinIndices>
          <pkmTheta>-1.73281</pkmTheta>
          <actions>
@@ -843,7 +897,7 @@
       </item>
       <item>
          <ind>550</ind>
-         <bCind>60</bCind>
+         <bCind>46</bCind>
          <cx>136</cx>
          <cy>98.1495</cy>
          <theta>0</theta>
@@ -858,9 +912,18 @@
             <item>117.779</item>
          </pinY>
          <pinIndices>
-            <item>30</item>
-            <item>31</item>
-            <item>40</item>
+            <item>
+               <row>4</row>
+               <column>4</column>
+            </item>
+            <item>
+               <row>4</row>
+               <column>5</column>
+            </item>
+            <item>
+               <row>3</row>
+               <column>4</column>
+            </item>
          </pinIndices>
          <pkmTheta>0.390296</pkmTheta>
          <actions>
@@ -868,7 +931,7 @@
                <pin>0</pin>
                <dTheta>0</dTheta>
                <dThetaInd>0</dThetaInd>
-               <dPkmTheta>-5.81841</dPkmTheta>
+               <dPkmTheta>0.464771</dPkmTheta>
             </item>
             <item>
                <pin>0</pin>
@@ -885,12 +948,12 @@
          </actions>
          <numActions>1</numActions>
          <agent>1</agent>
-         <TBeg>56.4181</TBeg>
+         <TBeg>47.8975</TBeg>
          <TEnd>69.7613</TEnd>
       </item>
       <item>
          <ind>650</ind>
-         <bCind>92</bCind>
+         <bCind>70</bCind>
          <cx>204</cx>
          <cy>98.1495</cy>
          <theta>2.0944</theta>
@@ -905,9 +968,18 @@
             <item>88.3346</item>
          </pinY>
          <pinIndices>
-            <item>33</item>
-            <item>42</item>
-            <item>32</item>
+            <item>
+               <row>4</row>
+               <column>7</column>
+            </item>
+            <item>
+               <row>3</row>
+               <column>6</column>
+            </item>
+            <item>
+               <row>4</row>
+               <column>6</column>
+            </item>
          </pinIndices>
          <pkmTheta>1.54802</pkmTheta>
          <actions>
@@ -937,7 +1009,7 @@
       </item>
       <item>
          <ind>750</ind>
-         <bCind>60</bCind>
+         <bCind>46</bCind>
          <cx>136</cx>
          <cy>98.1495</cy>
          <theta>0</theta>
@@ -952,9 +1024,18 @@
             <item>117.779</item>
          </pinY>
          <pinIndices>
-            <item>30</item>
-            <item>31</item>
-            <item>40</item>
+            <item>
+               <row>4</row>
+               <column>4</column>
+            </item>
+            <item>
+               <row>4</row>
+               <column>5</column>
+            </item>
+            <item>
+               <row>3</row>
+               <column>4</column>
+            </item>
          </pinIndices>
          <pkmTheta>0.982068</pkmTheta>
          <actions>
@@ -2797,7 +2878,7 @@
             <beta>0.921994</beta>
             <gamma>3.14159</gamma>
          </Xyz_Euler_Zyz>
-         <expectedInitTime>9.56029</expectedInitTime>
+         <expectedInitTime>1.03971</expectedInitTime>
          <baseToPkmAlfa>3.14159</baseToPkmAlfa>
          <baseToPkmDx>10</baseToPkmDx>
          <baseToPkmDz>93.1</baseToPkmDz>
@@ -2832,8 +2913,8 @@
             <item>1</item>
          </hTw>
          <agent>1</agent>
-         <TBeg>56.4181</TBeg>
-         <TEnd>56.4181</TEnd>
+         <TBeg>47.8975</TBeg>
+         <TEnd>47.8975</TEnd>
       </item>
       <item>
          <ind>580</ind>
@@ -2906,8 +2987,8 @@
             <item>1</item>
          </hTw>
          <agent>1</agent>
-         <TBeg>56.6361</TBeg>
-         <TEnd>56.6361</TEnd>
+         <TBeg>48.1155</TBeg>
+         <TEnd>48.1155</TEnd>
       </item>
       <item>
          <ind>600</ind>
@@ -2980,8 +3061,8 @@
             <item>1</item>
          </hTw>
          <agent>1</agent>
-         <TBeg>57.322</TBeg>
-         <TEnd>57.322</TEnd>
+         <TBeg>48.8014</TBeg>
+         <TEnd>48.8014</TEnd>
       </item>
       <item>
          <ind>620</ind>

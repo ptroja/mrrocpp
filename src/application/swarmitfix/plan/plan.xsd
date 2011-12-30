@@ -15,7 +15,14 @@
                         <xs:element name="pinIndices">
                           <xs:complexType>
                             <xs:sequence maxOccurs="3" minOccurs="3">
-                              <xs:element name="item" type="xs:int"/>
+                              <xs:element name="item">
+                                <xs:complexType>
+                                  <xs:sequence>
+                                    <xs:element name="row" type="xs:int"/>
+                                    <xs:element name="column" type="xs:int"/>
+                                  </xs:sequence>
+                                </xs:complexType>
+                              </xs:element>
                             </xs:sequence>
                           </xs:complexType>
                         </xs:element>
