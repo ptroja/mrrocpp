@@ -89,7 +89,7 @@ double ppm(
 		T requestedMotionTime = 0
 		)
 {
-	Matrix<T,N,3> Time;
+	Matrix<T,N,3> Times;
 
 	// Iterate over axes
 	for(unsigned int l = 0; l < N; ++l) {
@@ -108,21 +108,21 @@ double ppm(
 
 		if(TriangularProfile) {
 			// tt: total motion time (eq. 3.33)
-			Time(l,2) = std::sqrt(2*delta*(dmax-amax)/(amax*dmax));
+			Times(l,2) = std::sqrt(2*delta*(dmax-amax)/(amax*dmax));
 			// acceleration and deceleration phase treated as a half of the total motion time
-			Time(l,0) = Time(l,1) = Time(l,2)/2;
+			Times(l,0) = Times(l,1) = Times(l,2)/2;
 		} else {
 			// ta: time to stop accelerate (eq. 3.35)
-			Time(l,0) = vmax/amax;
+			Times(l,0) = vmax/amax;
 
 			// td: time to start deceleration (eq. 3.42)
-			Time(l,1) = delta/vmax + vmax/(2*amax) + vmax/(2*dmax);
+			Times(l,1) = delta/vmax + vmax/(2*amax) + vmax/(2*dmax);
 
 			// Numerically stable version:
 			//Time(l,1) = (2*delta*amax*dmax+vmax*vmax*amax+vmax*vmax*dmax)/(2*vmax*amax*dmax);
 
 			// tt: total motion time (eq. 3.40)
-			Time(l,2) = delta/vmax + vmax/(2*amax) - vmax/(2*dmax);
+			Times(l,2) = delta/vmax + vmax/(2*amax) - vmax/(2*dmax);
 
 			// Numerically stable version:
 			//Time(l,2) = (2*delta*amax*dmax+vmax*vmax*dmax-vmax*vmax*amax)/(2*vmax*amax*dmax);
@@ -130,17 +130,31 @@ double ppm(
 
 //		std::cerr << "VLimit[" << l << "]: " << VTriangle <<
 //				" => " << (TriangularProfile ? "triangular" : "trapezoidal") << std::endl <<
-//				"Time[" << l << "]: " << Time(l,0) << " " << Time(l,1) << " " << Time(l,2) <<
+//				"Time[" << l << "]: " << Times(l,0) << " " << Times(l,1) << " " << Times(l,2) <<
 //				std::endl;
 	}
 
-	Matrix<T,1,3> maxTime = Time.colwise().maxCoeff();
+	Matrix<T,1,3> maxTimes = Times.colwise().maxCoeff();
 
-//	std::cerr << "maxTime: " << maxTime << std::endl;
-//	std::cerr << "(maxTime.col(2)-maxTime.col(1): " << (maxTime.col(2)-maxTime.col(1)) << std::endl;
+//	std::cerr << "maxTimes: " << maxTimes << std::endl;
 
-	// total time
-	T tt = maxTime(2);
+	// max of acceleration intervals
+	const T ta = maxTimes(0);
+
+	// max of constant velocity intervals
+	const T tV = (Times.col(1)-Times.col(0)).maxCoeff();
+
+	// max of deceleration intervals
+	const T tD = (Times.col(2)-Times.col(1)).maxCoeff();
+
+	// deceleration interval
+	const T td = ta + tV;
+
+	T tt = ta + tV + tD;
+
+	if (ta > td) {
+		tt += (ta - td);
+	}
 
 	// Make the motion longer
 	if(requestedMotionTime > 0) {
@@ -148,15 +162,6 @@ double ppm(
 			throw std::runtime_error("requested motion time too short");
 		}
 		tt = requestedMotionTime;
-	}
-
-	// acceleration interval
-	const T ta = maxTime(0);
-	// deceleration interval
-	const T td = tt - (maxTime.col(2)-maxTime.col(1)).maxCoeff();
-
-	if (ta > td) {
-		tt += (ta - td);
 	}
 
 //	std::cout
@@ -201,6 +206,8 @@ double ppm(
 //		"Anew:\n" << Anew << std::endl <<
 //		"Dnew:\n" << Dnew << std::endl <<
 //		std::endl;
+
+//	std::cerr << "tt: " << tt << std::endl;
 
 	return tt;
 }
