@@ -15,7 +15,7 @@
 #include <iostream>
 #include <cassert>
 
-#include <exception>
+#include <stdexcept>
 
 #include <boost/exception/exception.hpp>
 
