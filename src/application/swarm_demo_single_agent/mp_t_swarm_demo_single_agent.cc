@@ -22,7 +22,7 @@ namespace mp {
 namespace task {
 
 #define SMB_WALK 0
-#define SMB_PULL_LEGS 1
+#define SMB_PULL_LEGS 0
 
 task* return_created_mp_task(lib::configurator &_config)
 {
@@ -149,12 +149,12 @@ void swarmitfix::move_to_pose_and_return(double support_pkm_x_, double support_p
 	// Rotate shead.
 	move_shead_joints(shead_joint_);
 	// Support.
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, support_pkm_x_, support_pkm_y_, support_pkm_z_, support_pkm_alpha_, support_pkm_beta_, support_pkm_gamma_);
+	move_spkm_external(lib::epos::OPERATIONAL, support_pkm_x_, support_pkm_y_, support_pkm_z_, support_pkm_alpha_, support_pkm_beta_, support_pkm_gamma_);
 	wait_ms(1000);
 
 	// Move back to the *neutral* PKM pose.
 	// Support interpose.
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, inter_pkm_x_, inter_pkm_y_, inter_pkm_z_, inter_pkm_alpha_, inter_pkm_beta_, inter_pkm_gamma_);
+	move_spkm_external(lib::epos::OPERATIONAL, inter_pkm_x_, inter_pkm_y_, inter_pkm_z_, inter_pkm_alpha_, inter_pkm_beta_, inter_pkm_gamma_);
 	// Neutral.
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, -0.04, 0.4, 0, -0.92, 0);
 
@@ -335,7 +335,7 @@ void swarmitfix::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT moti
 	lib::spkm::spkm_epos_simple_command mp_ecp_spkm_epos_simple_command;
 	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
 	mp_ecp_spkm_epos_simple_command.motion_variant = motion_variant_;
-	mp_ecp_spkm_epos_simple_command.pose_specification = lib::spkm::XYZ_EULER_ZYZ;
+	mp_ecp_spkm_epos_simple_command.pose_specification = lib::spkm::WRIST_XYZ_EULER_ZYZ;
 	mp_ecp_spkm_epos_simple_command.estimated_time = 1.2;
 
 	mp_ecp_spkm_epos_simple_command.desired_position[0] = x1;

@@ -10,7 +10,7 @@
 #include "../base/ui_robot.h"
 
 wgt_spkm_ext::wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
-		wgt_base(_widget_label, _interface, parent), current_pose_specification(lib::spkm::XYZ_EULER_ZYZ)
+		wgt_base(_widget_label, _interface, parent), current_pose_specification(lib::spkm::WRIST_XYZ_EULER_ZYZ)
 {
 	ui.setupUi(this);
 	robot = dynamic_cast <mrrocpp::ui::spkm::UiRobot *>(_robot);
@@ -421,7 +421,7 @@ int wgt_spkm_ext::move_it()
 void wgt_spkm_ext::on_radioButton_no_tool_toggled()
 {
 	if (ui.radioButton_no_tool->isChecked()) {
-		current_pose_specification = lib::spkm::XYZ_EULER_ZYZ;
+		current_pose_specification = lib::spkm::WRIST_XYZ_EULER_ZYZ;
 		init();
 	}
 }
@@ -429,18 +429,11 @@ void wgt_spkm_ext::on_radioButton_no_tool_toggled()
 void wgt_spkm_ext::on_radioButton_tool_oriented_toggled()
 {
 	if (ui.radioButton_tool_oriented->isChecked()) {
-		current_pose_specification = lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
+		current_pose_specification = lib::spkm::TOOL_XYZ_EULER_ZYX;
 		init();
 	}
 }
 
-void wgt_spkm_ext::on_radioButton_wrist_oriented_toggled()
-{
-	if (ui.radioButton_wrist_oriented->isChecked()) {
-		current_pose_specification = lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
-		init();
-	}
-}
 
 void wgt_spkm_ext::showEvent(QShowEvent * event)
 {
