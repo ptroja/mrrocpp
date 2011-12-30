@@ -12,7 +12,7 @@ class Interface;
 class Mp
 {
 public:
-	Mp(Interface *iface);
+	Mp(Interface & iface);
 
 	void MPup();
 	int MPup_int();

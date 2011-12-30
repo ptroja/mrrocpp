@@ -94,8 +94,8 @@ Interface::Interface() :
 	ui_state = 1; // ui working
 	file_window_mode = ui::common::FSTRAJECTORY; // uczenie
 
-	all_robots = (boost::shared_ptr<AllRobots>) new AllRobots(this);
-	mp = (boost::shared_ptr<Mp>) new Mp(this);
+	all_robots = (boost::shared_ptr<AllRobots>) new AllRobots(*this);
+	mp = (boost::shared_ptr<Mp>) new Mp(*this);
 }
 
 Interface::~Interface()
