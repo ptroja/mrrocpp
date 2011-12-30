@@ -1,316 +1,11 @@
 <?xml version="1.0"?>
 <plan>
-  <head>
-    <item>
-      <agent>1</agent>
-      <TBeg>0</TBeg>
-      <TEnd>14.004</TEnd>
-      <ind>0</ind>
-      <cx>133.85</cx>
-      <cy>71.2372488</cy>
-      <cz>153.399876249792</cz>
-      <alfa>3.14159265358979</alfa>
-      <beta>0.0291652016955467</beta>
-      <gamma>-3.5712007574688e-018</gamma>
-      <line>
-        <sP>1</sP>
-        <eP>2</eP>
-        <sPos>[134.475 75.224 153.398759052789]</sPos>
-        <ePos>[127.477 75.224 153.165675361977]</ePos>
-        <a>0</a>
-        <b>-1</b>
-        <c>75.224</c>
-        <norm>1</norm>
-        <norm2>1</norm2>
-        <alfa>3.14159265358979</alfa>
-        <beta>4.71238898038469</beta>
-        <gamma>4.67909410238769</gamma>
-        <len>7.00188060501765</len>
-        <index/>
-      </line>
-      <lineseg/>
-      <actions>[1 1 1 1 1]</actions>
-      <numActions>1</numActions>
-      <k1>0</k1>
-      <k2>5.62811923452763</k2>
-      <ABeg>0</ABeg>
-      <AHoldMin>7.00188060501765</AHoldMin>
-      <AHoldMax>8.97815067192406</AHoldMax>
-    </item>
-    <item>
-      <agent>2</agent>
-      <TBeg>11.256</TBeg>
-      <TEnd>29.089</TEnd>
-      <ind>100</ind>
-      <cx>121.816620750903</cx>
-      <cy>76.8013838236449</cy>
-      <cz>152.579909145758</cz>
-      <alfa>2.31673726866616</alfa>
-      <beta>0.104485209399405</beta>
-      <gamma>-0.113543028798555</gamma>
-      <line>
-        <sP>2</sP>
-        <eP>3</eP>
-        <sPos>[127.477 75.224 153.165675361977]</sPos>
-        <ePos>[122.769 80.319 152.703587370056]</ePos>
-        <a>-1.0822005097706</a>
-        <b>-1</b>
-        <c>213.179674384027</c>
-        <norm>1.47348496542983</norm>
-        <norm2>2.17115794334775</norm2>
-        <alfa>2.31673726866616</alfa>
-        <beta>6.19273835058827</beta>
-        <gamma>4.6145528091107</gamma>
-        <len>6.95254013381281</len>
-        <index/>
-      </line>
-      <lineseg/>
-      <actions>[2 2 2 2 2]</actions>
-      <numActions>1</numActions>
-      <k1>7.00188060501765</k1>
-      <k2>13.9544207388305</k2>
-      <ABeg>5.62811923452763</ABeg>
-      <AHoldMin>14.5443444888756</AHoldMin>
-      <AHoldMax>16.2505971083497</AHoldMax>
-    </item>
-    <item>
-      <agent>1</agent>
-      <TBeg>27.909</TBeg>
-      <TEnd>44.827</TEnd>
-      <ind>200</ind>
-      <cx>121.154072264162</cx>
-      <cy>86.4967547319425</cy>
-      <cz>152.487824508455</cz>
-      <alfa>1.32193687926952</alfa>
-      <beta>-0.0334274143620926</beta>
-      <gamma>-0.163623730339831</gamma>
-      <line>
-        <sP>3</sP>
-        <eP>4</eP>
-        <sPos>[122.769 80.319 152.703587370056]</sPos>
-        <ePos>[124.493 87.103 152.901526112837]</ePos>
-        <a>-3.93503480278424</a>
-        <b>1</b>
-        <c>402.781287703019</c>
-        <norm>4.06011070035328</norm>
-        <norm2>16.4844988991232</norm2>
-        <alfa>1.32193687926952</alfa>
-        <beta>0.0291690156386314</beta>
-        <gamma>1.45648321577535</gamma>
-        <len>7.00242898899329</len>
-        <index/>
-      </line>
-      <lineseg/>
-      <actions>[3 4 5 6 7]</actions>
-      <numActions>5</numActions>
-      <k1>14.5443444888756</k1>
-      <k2>20.9568497278238</k2>
-      <ABeg>13.9544207388305</ABeg>
-      <AHoldMin>22.4136015744802</AHoldMin>
-      <AHoldMax>23.6916443804388</AHoldMax>
-    </item>
-    <item>
-      <agent>2</agent>
-      <TBeg>41.914</TBeg>
-      <TEnd>58.215</TEnd>
-      <ind>300</ind>
-      <cx>128.507433725312</cx>
-      <cy>93.0246724944258</cy>
-      <cz>153.233922570954</cz>
-      <alfa>0.52892800642557</alfa>
-      <beta>-0.0316839964920912</beta>
-      <gamma>-0.0375608886228783</gamma>
-      <line>
-        <sP>4</sP>
-        <eP>5</eP>
-        <sPos>[124.493 87.103 152.901526112837]</sPos>
-        <ePos>[130.536 90.635 153.333979833337]</ePos>
-        <a>-0.584477908323681</a>
-        <b>1</b>
-        <c>-14.3395917590599</c>
-        <norm>1.15828080590089</norm>
-        <norm2>1.34161442531843</norm2>
-        <alfa>0.52892800642557</alfa>
-        <beta>0.121832374011093</beta>
-        <gamma>1.49935536215832</gamma>
-        <len>7.01283745857367</len>
-        <index/>
-      </line>
-      <lineseg/>
-      <actions>[8 9 10 11 12]</actions>
-      <numActions>5</numActions>
-      <k1>22.4136015744802</k1>
-      <k2>27.9696871863974</k2>
-      <ABeg>20.9568497278238</ABeg>
-      <AHoldMin>29.1072842291411</AHoldMin>
-      <AHoldMax>30.6309929300584</AHoldMax>
-    </item>
-    <item>
-      <agent>1</agent>
-      <TBeg>55.939</TBeg>
-      <TEnd>72.581</TEnd>
-      <ind>400</ind>
-      <cx>137.378074933085</cx>
-      <cy>91.2547823352237</cy>
-      <cz>153.337215610484</cz>
-      <alfa>5.90753777738806</alfa>
-      <beta>0.0584342998263123</beta>
-      <gamma>-0.0173229991739129</gamma>
-      <line>
-        <sP>5</sP>
-        <eP>6</eP>
-        <sPos>[130.536 90.635 153.333979833337]</sPos>
-        <ePos>[137.22 87.999 153.34295584576]</ePos>
-        <a>0.394374625972473</a>
-        <b>1</b>
-        <c>-142.115086175943</c>
-        <norm>1.07495643893645</norm>
-        <norm2>1.15553134561093</norm2>
-        <alfa>5.90753777738806</alfa>
-        <beta>3.13818750270537</beta>
-        <gamma>1.56945341730537</gamma>
-        <len>7.18501444457832</len>
-        <index/>
-      </line>
-      <lineseg/>
-      <actions>[13 14 15 16 17]</actions>
-      <numActions>5</numActions>
-      <k1>29.1072842291411</k1>
-      <k2>35.1547016309757</k2>
-      <ABeg>27.9696871863974</ABeg>
-      <AHoldMin>36.290301300476</AHoldMin>
-      <AHoldMax>37.7070570713765</AHoldMax>
-    </item>
-    <item>
-      <agent>2</agent>
-      <TBeg>70.309</TBeg>
-      <TEnd>86.488</TEnd>
-      <ind>500</ind>
-      <cx>142.022600524719</cx>
-      <cy>83.0890894091542</cy>
-      <cz>153.045316086097</cz>
-      <alfa>5.02061580633516</alfa>
-      <beta>0.0294330761840645</beta>
-      <gamma>-0.109333719896452</gamma>
-      <line>
-        <sP>6</sP>
-        <eP>7</eP>
-        <sPos>[137.22 87.999 153.34295584576]</sPos>
-        <ePos>[139.334 81.359 153.243381373714]</ePos>
-        <a>3.14096499526962</a>
-        <b>1</b>
-        <c>-519.002216650898</c>
-        <norm>3.29631022531392</norm>
-        <norm2>10.8656611015091</norm2>
-        <alfa>5.02061580633516</alfa>
-        <beta>3.15658768503496</beta>
-        <gamma>1.61786393799775</gamma>
-        <len>6.96911121130115</len>
-        <index/>
-      </line>
-      <lineseg/>
-      <actions>[18 19 20 21 22]</actions>
-      <numActions>5</numActions>
-      <k1>36.290301300476</k1>
-      <k2>42.1238128422769</k2>
-      <ABeg>35.1547016309757</ABeg>
-      <AHoldMin>43.2439674958759</AHoldMin>
-      <AHoldMax>44.7133739162972</AHoldMax>
-    </item>
-    <item>
-      <agent>1</agent>
-      <TBeg>84.248</TBeg>
-      <TEnd>98.366</TEnd>
-      <ind>600</ind>
-      <cx>139.007086804255</cx>
-      <cy>74.0623860620021</cy>
-      <cz>153.262005077253</cz>
-      <alfa>4.09022877361726</alfa>
-      <beta>-0.0227751032110203</beta>
-      <gamma>-0.063022757834554</gamma>
-      <line>
-        <sP>7</sP>
-        <eP>8</eP>
-        <sPos>[139.334 81.359 153.243381373714]</sPos>
-        <ePos>[135.221 75.624 153.39179999648]</ePos>
-        <a>1.39435934840749</a>
-        <b>-1</b>
-        <c>-112.922665451009</c>
-        <norm>1.71587819861765</norm>
-        <norm2>2.94423799249136</norm2>
-        <alfa>4.09022877361726</alfa>
-        <beta>3.11571898282635</beta>
-        <gamma>4.74845857731887</gamma>
-        <len>7.05896749444164</len>
-        <index/>
-      </line>
-      <lineseg/>
-      <actions>[23 24 25 26 27]</actions>
-      <numActions>5</numActions>
-      <k1>43.2439674958759</k1>
-      <k2>49.1827803367185</k2>
-      <ABeg>42.1238128422769</ABeg>
-      <AHoldMin>49.1827803367185</AHoldMin>
-      <AHoldMax>49.1827803367185</AHoldMax>
-    </item>
-    <item>
-      <agent>2</agent>
-      <TBeg>NaN</TBeg>
-      <TEnd>NaN</TEnd>
-      <ind>700</ind>
-      <cx>137.367984447068</cx>
-      <cy>71.7768883672617</cy>
-      <cz>153.337590259428</cz>
-      <alfa>4.09022877361726</alfa>
-      <beta>-0.0122545807220648</beta>
-      <gamma>-0.0483218763554082</gamma>
-      <line>
-        <sP>7</sP>
-        <eP>8</eP>
-        <sPos>[139.334 81.359 153.243381373714]</sPos>
-        <ePos>[135.221 75.624 153.39179999648]</ePos>
-        <a>1.39435934840749</a>
-        <b>-1</b>
-        <c>-112.922665451009</c>
-        <norm>1.71587819861765</norm>
-        <norm2>2.94423799249136</norm2>
-        <alfa>4.09022877361726</alfa>
-        <beta>3.11571898282635</beta>
-        <gamma>4.74845857731887</gamma>
-        <len>7.05896749444164</len>
-        <index/>
-      </line>
-      <lineseg/>
-      <actions/>
-      <numActions/>
-      <k1/>
-      <k2/>
-      <ABeg/>
-      <AHoldMin/>
-      <AHoldMax/>
-    </item>
-  </head>
   <mbase>
     <item>
       <agent>1</agent>
       <TBeg>0</TBeg>
       <TEnd>14.819</TEnd>
       <ind>-50</ind>
-      <bCind>52</bCind>
-      <cx>119</cx>
-      <cy>107.9645</cy>
-      <theta>3.142</theta>
-      <pinX>
-        <pin1>1.36</pin1>
-        <pin2>1.02</pin2>
-        <pin3>1.19</pin3>
-      </pinX>
-      <pinY>
-        <pin1>1.1778</pin1>
-        <pin2>1.1778</pin2>
-        <pin3>0.8833</pin3>
-      </pinY>
-      <pkmTheta>5.097</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
@@ -325,21 +20,6 @@
       <TBeg>11.256</TBeg>
       <TEnd>29.837</TEnd>
       <ind>50</ind>
-      <bCind>58</bCind>
-      <cx>136</cx>
-      <cy>39.2598</cy>
-      <theta>0</theta>
-      <pinX>
-        <pin1>1.19</pin1>
-        <pin2>1.53</pin2>
-        <pin3>1.36</pin3>
-      </pinX>
-      <pinY>
-        <pin1>0.2944</pin1>
-        <pin2>0.2944</pin2>
-        <pin3>0.5889</pin3>
-      </pinY>
-      <pkmTheta>1.932</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
@@ -354,21 +34,6 @@
       <TBeg>15.819</TBeg>
       <TEnd>45.721</TEnd>
       <ind>150</ind>
-      <bCind>53</bCind>
-      <cx>119</cx>
-      <cy>127.5944</cy>
-      <theta>2.094</theta>
-      <pinX>
-        <pin1>1.36</pin1>
-        <pin2>1.19</pin2>
-        <pin3>1.02</pin3>
-      </pinX>
-      <pinY>
-        <pin1>1.1778</pin1>
-        <pin2>1.4722</pin2>
-        <pin3>1.1778</pin3>
-      </pinY>
-      <pkmTheta>5.812</pkmTheta>
       <actions>
         <item>
           <pin>1</pin>
@@ -383,21 +48,6 @@
       <TBeg>31.251</TBeg>
       <TEnd>59.033</TEnd>
       <ind>250</ind>
-      <bCind>67</bCind>
-      <cx>153</cx>
-      <cy>68.7047</cy>
-      <theta>2.094</theta>
-      <pinX>
-        <pin1>1.7</pin1>
-        <pin2>1.53</pin2>
-        <pin3>1.36</pin3>
-      </pinX>
-      <pinY>
-        <pin1>0.5889</pin1>
-        <pin2>0.8833</pin2>
-        <pin3>0.5889</pin3>
-      </pinY>
-      <pkmTheta>0.265</pkmTheta>
       <actions>
         <item>
           <pin>3</pin>
@@ -412,21 +62,6 @@
       <TBeg>46.497</TBeg>
       <TEnd>73.38</TEnd>
       <ind>350</ind>
-      <bCind>53</bCind>
-      <cx>119</cx>
-      <cy>127.5944</cy>
-      <theta>2.094</theta>
-      <pinX>
-        <pin1>1.36</pin1>
-        <pin2>1.19</pin2>
-        <pin3>1.02</pin3>
-      </pinX>
-      <pinY>
-        <pin1>1.1778</pin1>
-        <pin2>1.4722</pin2>
-        <pin3>1.1778</pin3>
-      </pinY>
-      <pkmTheta>5.181</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
@@ -441,21 +76,6 @@
       <TBeg>60.629</TBeg>
       <TEnd>86.488</TEnd>
       <ind>450</ind>
-      <bCind>66</bCind>
-      <cx>153</cx>
-      <cy>49.0748</cy>
-      <theta>1.047</theta>
-      <pinX>
-        <pin1>1.53</pin1>
-        <pin2>1.7</pin2>
-        <pin3>1.36</pin3>
-      </pinX>
-      <pinY>
-        <pin1>0.2944</pin1>
-        <pin2>0.5889</pin2>
-        <pin3>0.5889</pin3>
-      </pinY>
-      <pkmTheta>2.93</pkmTheta>
       <actions>
         <item>
           <pin>3</pin>
@@ -470,21 +90,6 @@
       <TBeg>74.38</TBeg>
       <TEnd>98.366</TEnd>
       <ind>550</ind>
-      <bCind>52</bCind>
-      <cx>119</cx>
-      <cy>107.9645</cy>
-      <theta>3.142</theta>
-      <pinX>
-        <pin1>1.36</pin1>
-        <pin2>1.02</pin2>
-        <pin3>1.19</pin3>
-      </pinX>
-      <pinY>
-        <pin1>1.1778</pin1>
-        <pin2>1.1778</pin2>
-        <pin3>0.8833</pin3>
-      </pinY>
-      <pkmTheta>4.198</pkmTheta>
       <actions>
         <item>
           <pin>1</pin>
