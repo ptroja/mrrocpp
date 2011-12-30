@@ -22,7 +22,6 @@
     <xsl:template match="/plan/mbase/item/theta"/>
     <xsl:template match="/plan/mbase/item/pinX"/>
     <xsl:template match="/plan/mbase/item/pinY"/>
-    <xsl:template match="/plan/mbase/item/pkmTheta"/>
     <!-- Remove PKM constants -->
     <xsl:template match="/plan/pkm/item/pkmbaseToFixedPkm"/>
     <xsl:template match="/plan/pkm/item/hlowered"/>

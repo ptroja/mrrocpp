@@ -69,7 +69,6 @@ int main(int argc, char *argv[])
 		//const Plan p = *plan(argv[1], xml_schema::Flags::dont_validate);
 		Plan p = *plan(argv[1], 0, props);
 
-		std::cerr << "head item # " << p.head().item().size() << std::endl;
 		std::cerr << "mbase item # " << p.mbase().item().size() << std::endl;
 		std::cerr << "pkm item # " << p.pkm().item().size() << std::endl;
 

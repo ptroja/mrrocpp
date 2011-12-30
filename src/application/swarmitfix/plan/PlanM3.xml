@@ -11,11 +11,12 @@
         <item>31</item>
         <item>40</item>
       </pinIndices>
+      <pkmTheta>5.256</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
           <dThetaInd>0</dThetaInd>
-          <dPkmTheta>-1.02718</dPkmTheta>
+          <dPkmTheta>-1.027</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
@@ -30,11 +31,12 @@
         <item>23</item>
         <item>14</item>
       </pinIndices>
+      <pkmTheta>2.43009</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
           <dThetaInd>0</dThetaInd>
-          <dPkmTheta>2.43009</dPkmTheta>
+          <dPkmTheta>2.43</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
@@ -49,11 +51,12 @@
         <item>31</item>
         <item>40</item>
       </pinIndices>
+      <pkmTheta>5.72045</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
           <dThetaInd>0</dThetaInd>
-          <dPkmTheta>0.464448</dPkmTheta>
+          <dPkmTheta>0.464</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
@@ -68,11 +71,12 @@
         <item>23</item>
         <item>14</item>
       </pinIndices>
+      <pkmTheta>1.94203</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
           <dThetaInd>0</dThetaInd>
-          <dPkmTheta>-0.488065</dPkmTheta>
+          <dPkmTheta>-0.488</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
@@ -87,11 +91,12 @@
         <item>31</item>
         <item>40</item>
       </pinIndices>
+      <pkmTheta>6.20871</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
           <dThetaInd>0</dThetaInd>
-          <dPkmTheta>0.488258</dPkmTheta>
+          <dPkmTheta>0.488</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
@@ -106,11 +111,12 @@
         <item>33</item>
         <item>32</item>
       </pinIndices>
+      <pkmTheta>-1.73281</pkmTheta>
       <actions>
         <item>
           <pin>1</pin>
           <dThetaInd>4</dThetaInd>
-          <dPkmTheta>2.60835</dPkmTheta>
+          <dPkmTheta>2.608</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
@@ -125,11 +131,12 @@
         <item>31</item>
         <item>40</item>
       </pinIndices>
+      <pkmTheta>0.390296</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
           <dThetaInd>0</dThetaInd>
-          <dPkmTheta>-5.81841</dPkmTheta>
+          <dPkmTheta>-5.818</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
@@ -144,11 +151,12 @@
         <item>42</item>
         <item>32</item>
       </pinIndices>
+      <pkmTheta>1.54802</pkmTheta>
       <actions>
         <item>
           <pin>3</pin>
           <dThetaInd>1</dThetaInd>
-          <dPkmTheta>3.28083</dPkmTheta>
+          <dPkmTheta>3.281</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
@@ -163,11 +171,12 @@
         <item>31</item>
         <item>40</item>
       </pinIndices>
+      <pkmTheta>0.982068</pkmTheta>
       <actions>
         <item>
           <pin>0</pin>
           <dThetaInd>0</dThetaInd>
-          <dPkmTheta>0.591772</dPkmTheta>
+          <dPkmTheta>0.592</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
