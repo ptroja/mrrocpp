@@ -56,10 +56,8 @@ void robot::create_command()
 	if (sbench_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
-		for (int i = 0; i < lib::sbench::NUM_OF_PINS; ++i) {
 
-			ecp_edp_cbuffer.pins_buf.pins_state[i] = sbench_command_data_port.data.pins_state[i];
-		}
+		ecp_edp_cbuffer.pins_buf = sbench_command_data_port.data;
 
 		if (is_new_data) {
 			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
@@ -102,9 +100,8 @@ void robot::get_reply()
 	// generator reply generation
 
 	if (sbench_reply_data_request_port.is_new_request()) {
-		for (int i = 0; i < lib::sbench::NUM_OF_PINS; ++i) {
-			sbench_reply_data_request_port.data.pins_state[i] = edp_ecp_rbuffer.pins_buf.pins_state[i];
-		}
+
+		sbench_reply_data_request_port.data = edp_ecp_rbuffer.pins_buf;
 
 		sbench_reply_data_request_port.set();
 	}

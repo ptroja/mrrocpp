@@ -21,6 +21,9 @@ static int translation_table[8][8] =
 
 pins_buffer::pins_buffer()
 {
+	// dodac sprawdzenie czy ktorys indeks sie nie dubluje
+
+
 }
 
 void pins_buffer::set_zeros()

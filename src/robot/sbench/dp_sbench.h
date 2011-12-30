@@ -43,8 +43,10 @@ class pins_buffer
 {
 	friend class mrrocpp::edp::sbench::effector;
 
-public:
+private:
 
+public:
+	bool pins_state[NUM_OF_PINS];
 	pins_buffer();
 
 	void set_zeros();
@@ -54,7 +56,6 @@ public:
 
 	pins_buffer & operator =(const pins_buffer &); // operator przypisania
 
-	bool pins_state[NUM_OF_PINS];
 }__attribute__((__packed__));
 
 /*!
