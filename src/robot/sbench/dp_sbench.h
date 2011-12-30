@@ -33,8 +33,11 @@ const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
  * @ingroup sbench
  */
 
-struct pins_buffer
+class pins_buffer
 {
+public:
+	pins_buffer();
+
 	bool pins_state[NUM_OF_PINS];
 }__attribute__((__packed__));
 

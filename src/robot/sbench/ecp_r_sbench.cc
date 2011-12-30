@@ -9,8 +9,8 @@
 #include "base/lib/impconst.h"
 #include "base/lib/sr/sr_ecp.h"
 
-#include "robot/sbench/ecp_r_sbench.h"
-#include "robot/sbench/kinematic_model_sbench.h"
+#include "ecp_r_sbench.h"
+#include "kinematic_model_sbench.h"
 
 namespace mrrocpp {
 namespace ecp {
