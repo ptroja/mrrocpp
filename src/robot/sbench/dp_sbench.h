@@ -13,6 +13,12 @@
 #include "const_sbench.h"
 
 namespace mrrocpp {
+namespace edp {
+namespace sbench {
+class effector;
+}
+}
+
 namespace lib {
 namespace sbench {
 
@@ -35,10 +41,16 @@ const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
 
 class pins_buffer
 {
+	friend class mrrocpp::edp::sbench::effector;
+
 public:
+
 	pins_buffer();
 
 	void set_zeros();
+
+	void set_value(int row, int column, int value);
+	bool get_value(int row, int column);
 
 	pins_buffer & operator =(const pins_buffer &); // operator przypisania
 
