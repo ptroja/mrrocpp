@@ -429,7 +429,7 @@ void wgt_spkm_ext::on_radioButton_no_tool_toggled()
 void wgt_spkm_ext::on_radioButton_tool_oriented_toggled()
 {
 	if (ui.radioButton_tool_oriented->isChecked()) {
-		current_pose_specification = lib::spkm::TOOL_XYZ_EULER_ZYX;
+		current_pose_specification = lib::spkm::TOOL_XYZ_EULER_ZYZ;
 		init();
 	}
 }

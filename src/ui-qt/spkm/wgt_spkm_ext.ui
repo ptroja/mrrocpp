@@ -107,7 +107,7 @@
       <item row="2" column="0">
        <widget class="QRadioButton" name="radioButton_tool_oriented">
         <property name="text">
-         <string>Tool ZYX</string>
+         <string>Tool ZYZ</string>
         </property>
        </widget>
       </item>
@@ -1251,12 +1251,6 @@
     </widget>
    </item>
   </layout>
-  <zorder>frame</zorder>
-  <zorder>frame_2</zorder>
-  <zorder>frame_3</zorder>
-  <zorder>frame_4</zorder>
-  <zorder>frame_5</zorder>
-  <zorder>frame_6</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

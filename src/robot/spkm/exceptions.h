@@ -30,7 +30,7 @@ inline std::string to_string(pose_specification const & e)
 	{
 		case lib::spkm::WRIST_XYZ_EULER_ZYZ:
 			return "WRIST_XYZ_EULER_ZYZ";
-		case lib::spkm::TOOL_XYZ_EULER_ZYX:
+		case lib::spkm::TOOL_XYZ_EULER_ZYZ:
 			return "TOOL_XYZ_EULER_ZYX";
 		case lib::spkm::JOINT:
 			return "JOINT";

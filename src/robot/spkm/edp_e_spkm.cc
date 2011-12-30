@@ -392,7 +392,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			std::cerr << "current_shead_frame:\n" << current_shead_frame << endl;
 			std::cerr << "current_end_effector_frame:\n" << current_end_effector_frame << endl;
 #endif
-		} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYX) {
+		} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
 			// Command was given in the tool (SHEAD) frame.
 			current_shead_frame = desired_shead_frame;
 			current_end_effector_frame = desired_shead_frame * !shead_frame;
@@ -519,10 +519,10 @@ void effector::parse_motor_command()
 				desired_joints_old = desired_joints;
 				break;
 
-			case lib::spkm::TOOL_XYZ_EULER_ZYX: {
-				DEBUG_COMMAND("TOOL_XYZ_EULER_ZYX");
+			case lib::spkm::TOOL_XYZ_EULER_ZYZ: {
+				DEBUG_COMMAND("TOOL_XYZ_EULER_ZYZ");
 #if(DEBUG_FRAMES)
-				std::cerr << "TOOL_XYZ_EULER_ZYX: [";
+				std::cerr << "TOOL_XYZ_EULER_ZYZ: [";
 				for (unsigned int i = 0; i < 6; ++i) {
 					std::cerr.precision(8);
 					std::cerr << ecp_edp_cbuffer.goal_pos[i] << ", ";
@@ -534,8 +534,8 @@ void effector::parse_motor_command()
 					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
 
 				// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
-//				desired_shead_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
-				desired_shead_frame.set_from_xyz_rpy(lib::Xyz_Rpy_vector(ecp_edp_cbuffer.goal_pos));
+				desired_shead_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
+//				desired_shead_frame.set_from_xyz_rpy(lib::Xyz_Rpy_vector(ecp_edp_cbuffer.goal_pos));
 #if(DEBUG_FRAMES)
 				std::cerr.precision(8);
 				std::cerr << "SHEAD frame: " << desired_shead_frame << endl;
@@ -764,11 +764,11 @@ void effector::interpolated_motion_in_operational_space()
 		DEBUG_COMMAND("WRIST_XYZ_EULER_ZYZ");
 		// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
 		desired_end_effector_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
-	} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYX) {
-		DEBUG_COMMAND("TOOL_XYZ_EULER_ZYX");
+	} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
+		DEBUG_COMMAND("TOOL_XYZ_EULER_ZYZ");
 		// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
-//		desired_shead_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
-		desired_shead_frame.set_from_xyz_rpy(lib::Xyz_Rpy_vector(ecp_edp_cbuffer.goal_pos));
+		desired_shead_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(ecp_edp_cbuffer.goal_pos));
+//		desired_shead_frame.set_from_xyz_rpy(lib::Xyz_Rpy_vector(ecp_edp_cbuffer.goal_pos));
 		// Transform to the wrist frame.
 		desired_end_effector_frame = desired_shead_frame * !shead_frame;
 #if(DEBUG_FRAMES)
@@ -823,7 +823,7 @@ void effector::interpolated_motion_in_operational_space()
 	if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::WRIST_XYZ_EULER_ZYZ){
 		// Perform motion in wrist frame.
 		cubic_polynomial_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
-	} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYX) {
+	} else if (ecp_edp_cbuffer.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
 		// Perform motion in tool frame.
 		cubic_polynomial_interpolate_motor_poses_in_tool_frame <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> (motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_shead_frame, desired_shead_frame, shead_frame);
 	} else
@@ -1182,19 +1182,18 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					}
 				}
 					break;
-				case lib::spkm::TOOL_XYZ_EULER_ZYX: {
-					DEBUG_COMMAND("TOOL_XYZ_EULER_ZYX");
+				case lib::spkm::TOOL_XYZ_EULER_ZYZ: {
+					DEBUG_COMMAND("TOOL_XYZ_EULER_ZYZ");
 					// Return current end-effector pose if it is known (last motion was performed in the cartesian space).
 					if (!is_current_cartesian_pose_known)
 						current_shead_frame.setIdentity();
 
-/*					Xyz_Euler_Zyz_vector zyz;
+					Xyz_Euler_Zyz_vector zyz;
 					current_shead_frame.get_xyz_euler_zyz(zyz);
-					zyz.to_table(edp_ecp_rbuffer.current_pose);*/
-//					desired_shead_frame.set_from_xyz_rpy(lib::Xyz_Rpy_vector(ecp_edp_cbuffer.goal_pos));
-					lib::Xyz_Rpy_vector rpy;
+					zyz.to_table(edp_ecp_rbuffer.current_pose);
+/*					lib::Xyz_Rpy_vector rpy;
 					current_shead_frame.get_xyz_rpy(rpy);
-					rpy.to_table(edp_ecp_rbuffer.current_pose);
+					rpy.to_table(edp_ecp_rbuffer.current_pose);*/
 
 /*					// Return current end-effector pose if it is known (last motion was performed in the cartesian space).
 					if (is_current_cartesian_pose_known)
@@ -1204,7 +1203,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						edp_ecp_rbuffer.current_pose.setIdentity();*/
 
 #if(DEBUG_FRAMES)
-					std::cerr << "Returned TOOL_XYZ_EULER_ZYX: " << rpy.transpose() << endl;
+					std::cerr << "Returned TOOL_XYZ_EULER_ZYZ: " << zyz.transpose() << endl;
 #endif
 
 					// Return additional informations regarding current and motion.
