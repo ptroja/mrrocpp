@@ -44,9 +44,10 @@ class pins_buffer
 	friend class mrrocpp::edp::sbench::effector;
 
 private:
+	bool pins_state[NUM_OF_PINS];
 
 public:
-	bool pins_state[NUM_OF_PINS];
+
 	pins_buffer();
 
 	void set_zeros();
