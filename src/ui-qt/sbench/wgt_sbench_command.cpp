@@ -64,7 +64,7 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 	QPalette pal;
 
 	for (int i = 0; i < SBENCH_MAX_EL; i++) {
-		if (robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data[i]) {
+		if (robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.pins_state[i]) {
 
 			font.setUnderline(true);
 
@@ -89,7 +89,7 @@ void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
 	on_pushButton_read_clicked();
 
 	for (int i; i < SBENCH_MAX_EL; i++) {
-		checkBox_Vector[i]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data[i]);
+		checkBox_Vector[i]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.pins_state[i]);
 	}
 
 }
@@ -106,7 +106,7 @@ void wgt_sbench_command::on_pushButton_execute_clicked()
 
 	for (int i = 0; i < SBENCH_MAX_EL; i++) {
 
-		robot->ui_ecp_robot->the_robot->sbench_command_data_port.data[i] = checkBox_Vector[i]->isChecked();
+		robot->ui_ecp_robot->the_robot->sbench_command_data_port.data.pins_state[i] = checkBox_Vector[i]->isChecked();
 	}
 
 	robot->ui_ecp_robot->the_robot->sbench_command_data_port.set();

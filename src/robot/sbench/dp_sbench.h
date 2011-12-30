@@ -32,7 +32,11 @@ const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
  * @brief SwarmItFix bench pins state typedef
  * @ingroup sbench
  */
-typedef bool pins_state_td[NUM_OF_PINS];
+
+struct pins_buffer
+{
+	bool pins_state[NUM_OF_PINS];
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Head EDP command buffer
@@ -40,7 +44,7 @@ typedef bool pins_state_td[NUM_OF_PINS];
  */
 struct cbuffer
 {
-	pins_state_td pins_state;
+	pins_buffer pins_buf;
 }__attribute__((__packed__));
 
 /*!
@@ -49,7 +53,7 @@ struct cbuffer
  */
 struct rbuffer
 {
-	pins_state_td pins_state;
+	pins_buffer pins_buf;
 }__attribute__((__packed__));
 
 } // namespace sbench

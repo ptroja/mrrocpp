@@ -17,14 +17,18 @@ namespace ecp {
 namespace sbench {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-		ecp::common::robot::ecp_robot(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _config, _sr_ecp), sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager), sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
+		ecp::common::robot::ecp_robot(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _config, _sr_ecp),
+		sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager),
+		sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
-		ecp::common::robot::ecp_robot(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _ecp_object), sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager), sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
+		ecp::common::robot::ecp_robot(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _ecp_object),
+		sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager),
+		sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -54,7 +58,7 @@ void robot::create_command()
 		// generator command interpretation
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; ++i) {
 
-			ecp_edp_cbuffer.pins_state[i] = sbench_command_data_port.data[i];
+			ecp_edp_cbuffer.pins_buf.pins_state[i] = sbench_command_data_port.data.pins_state[i];
 		}
 
 		if (is_new_data) {
@@ -99,7 +103,7 @@ void robot::get_reply()
 
 	if (sbench_reply_data_request_port.is_new_request()) {
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; ++i) {
-			sbench_reply_data_request_port.data[i] = edp_ecp_rbuffer.pins_state[i];
+			sbench_reply_data_request_port.data.pins_state[i] = edp_ecp_rbuffer.pins_buf.pins_state[i];
 		}
 
 		sbench_reply_data_request_port.set();
