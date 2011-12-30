@@ -38,6 +38,10 @@ class pins_buffer
 public:
 	pins_buffer();
 
+	void set_zeros();
+
+	pins_buffer & operator =(const pins_buffer &); // operator przypisania
+
 	bool pins_state[NUM_OF_PINS];
 }__attribute__((__packed__));
 

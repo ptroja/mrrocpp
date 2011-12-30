@@ -47,10 +47,7 @@ effector::effector(common::shell &_shell) :
 		}
 
 	} else {
-		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-
-			current_pins_buf.pins_state[i] = 0;
-		}
+		current_pins_buf.set_zeros();
 	}
 
 }
@@ -109,8 +106,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			} else {
 				ss << "0";
 			}
-			current_pins_buf.pins_state[i] = pins_buf.pins_state[i];
 		}
+		current_pins_buf = pins_buf;
 		ss << std::endl;
 		msg->message(ss.str());
 	} else {
@@ -151,11 +148,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		} // send command to hardware
 
 	}
-
-	for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-
-		edp_ecp_rbuffer.pins_buf.pins_state[i] = current_pins_buf.pins_state[i];
-	}
+	edp_ecp_rbuffer.pins_buf = current_pins_buf;
 
 	reply.servo_step = step_counter;
 }
