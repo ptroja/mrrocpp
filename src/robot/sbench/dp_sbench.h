@@ -13,6 +13,12 @@
 #include "const_sbench.h"
 
 namespace mrrocpp {
+namespace edp {
+namespace sbench {
+class effector;
+}
+}
+
 namespace lib {
 namespace sbench {
 
@@ -32,7 +38,26 @@ const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
  * @brief SwarmItFix bench pins state typedef
  * @ingroup sbench
  */
-typedef bool pins_state_td[NUM_OF_PINS];
+
+class pins_buffer
+{
+	friend class mrrocpp::edp::sbench::effector;
+
+private:
+	bool pins_state[NUM_OF_PINS];
+
+public:
+
+	pins_buffer();
+
+	void set_zeros();
+
+	void set_value(int row, int column, int value);
+	bool get_value(int row, int column);
+
+	pins_buffer & operator =(const pins_buffer &); // operator przypisania
+
+}__attribute__((__packed__));
 
 /*!
  * @brief SwarmItFix Head EDP command buffer
@@ -40,7 +65,7 @@ typedef bool pins_state_td[NUM_OF_PINS];
  */
 struct cbuffer
 {
-	pins_state_td pins_state;
+	pins_buffer pins_buf;
 }__attribute__((__packed__));
 
 /*!
@@ -49,7 +74,7 @@ struct cbuffer
  */
 struct rbuffer
 {
-	pins_state_td pins_state;
+	pins_buffer pins_buf;
 }__attribute__((__packed__));
 
 } // namespace sbench

@@ -63,23 +63,28 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 	QFont font;
 	QPalette pal;
 
-	for (int i = 0; i < SBENCH_MAX_EL; i++) {
-		if (robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data[i]) {
+	int sum = 0;
 
-			font.setUnderline(true);
+	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
+		for (int j = 0; j < SBENCH_MAX_COL; j++) {
+			if (robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j)) {
 
-			pal.setColor(QPalette::WindowText, Qt::blue);
-			pal.setColor(QPalette::Background, Qt::blue);
-		} else {
+				font.setUnderline(true);
 
-			font.setUnderline(false);
+				pal.setColor(QPalette::WindowText, Qt::blue);
+				pal.setColor(QPalette::Background, Qt::blue);
+			} else {
 
-			pal.setColor(QPalette::WindowText, Qt::black);
-			pal.setColor(QPalette::Background, Qt::black);
+				font.setUnderline(false);
+
+				pal.setColor(QPalette::WindowText, Qt::black);
+				pal.setColor(QPalette::Background, Qt::black);
+			}
+
+			checkBox_Vector[sum]->setFont(font);
+			checkBox_Vector[sum]->setPalette(pal);
+			sum++;
 		}
-
-		checkBox_Vector[i]->setFont(font);
-		checkBox_Vector[i]->setPalette(pal);
 	}
 
 }
@@ -87,9 +92,13 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
 {
 	on_pushButton_read_clicked();
+	int sum = 0;
 
-	for (int i; i < SBENCH_MAX_EL; i++) {
-		checkBox_Vector[i]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data[i]);
+	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
+		for (int j = 0; j < SBENCH_MAX_COL; j++) {
+			checkBox_Vector[sum]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j));
+			sum++;
+		}
 	}
 
 }
@@ -103,10 +112,13 @@ void wgt_sbench_command::on_pushButton_clear_clicked()
 
 void wgt_sbench_command::on_pushButton_execute_clicked()
 {
+	int sum = 0;
 
-	for (int i = 0; i < SBENCH_MAX_EL; i++) {
-
-		robot->ui_ecp_robot->the_robot->sbench_command_data_port.data[i] = checkBox_Vector[i]->isChecked();
+	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
+		for (int j = 0; j < SBENCH_MAX_COL; j++) {
+			robot->ui_ecp_robot->the_robot->sbench_command_data_port.data.set_value(i, j, checkBox_Vector[sum]->isChecked());
+			sum++;
+		}
 	}
 
 	robot->ui_ecp_robot->the_robot->sbench_command_data_port.set();
