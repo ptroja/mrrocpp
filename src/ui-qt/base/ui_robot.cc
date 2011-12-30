@@ -308,7 +308,8 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 	while ((state.ecp.trigger_fd = messip::port_connect(state.ecp.network_trigger_attach_point)) == NULL
 
 	) {
-		if (errno == EINTR)
+		if (errno == EINTR
+		)
 			break;
 		if ((tmp++) < lib::CONNECT_RETRY) {
 			usleep(lib::CONNECT_DELAY);
@@ -443,6 +444,26 @@ void UiRobot::move_to_front_position()
 void UiRobot::move_to_preset_position(int variant)
 {
 
+}
+
+void UiRobot::open_c_xyz_angle_axis_window()
+{
+	msg->message(lib::NON_FATAL_ERROR, "open_c_xyz_angle_axis_window not implemented for that robot");
+}
+
+void UiRobot::open_c_xyz_euler_zyz_window()
+{
+	msg->message(lib::NON_FATAL_ERROR, "open_c_xyz_euler_zyz_window not implemented for that robot");
+}
+
+void UiRobot::open_c_joint_window()
+{
+	msg->message(lib::NON_FATAL_ERROR, "open_c_joint_window not implemented for that robot");
+}
+
+void UiRobot::open_c_motor_window()
+{
+	msg->message(lib::NON_FATAL_ERROR, "open_c_motor_window not implemented for that robot");
 }
 
 bool UiRobot::is_edp_loaded()

@@ -213,8 +213,8 @@ void Interface::timer_slot()
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
-			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
+			char process_name_buffer[NAME_LENGTH + 1];snprintf
+			(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -410,17 +410,8 @@ void Interface::raise_ui_ecp_window_slot()
 			}
 
 			wgt_teaching_obj->my_open("C_XYZ_ANGLE_AXIS");
-#if (R_012 == 1)
-			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
-				 */
-			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
-				 */
-			}
-#endif
+
+			robot_m[ui_ecp_obj->ecp_to_ui_msg.robot_name]->open_c_xyz_angle_axis_window();
 
 			break;
 		case lib::C_XYZ_EULER_ZYZ:
@@ -429,17 +420,8 @@ void Interface::raise_ui_ecp_window_slot()
 			}
 
 			wgt_teaching_obj->my_open("C_XYZ_EULER_ZYZ");
-#if (R_012 == 1)
-			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
-				 */
-			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
-				 */
-			}
-#endif
+
+			robot_m[ui_ecp_obj->ecp_to_ui_msg.robot_name]->open_c_xyz_euler_zyz_window();
 
 			break;
 		case lib::C_JOINT:
@@ -448,13 +430,8 @@ void Interface::raise_ui_ecp_window_slot()
 			}
 
 			wgt_teaching_obj->my_open("C_JOINT");
-#if (R_012 == 1)
-			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_JOINTS]->my_open();
-			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_JOINTS]->my_open();
-			}
-#endif
+
+			robot_m[ui_ecp_obj->ecp_to_ui_msg.robot_name]->open_c_joint_window();
 
 			break;
 		case lib::C_MOTOR:
@@ -465,12 +442,8 @@ void Interface::raise_ui_ecp_window_slot()
 			}
 
 			wgt_teaching_obj->my_open("C_MOTOR");
-#if (R_012 == 1)
-			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME)
-				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
-			else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME)
-				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
-#endif
+
+			robot_m[ui_ecp_obj->ecp_to_ui_msg.robot_name]->open_c_motor_window();
 
 			break;
 		case lib::YES_NO:
@@ -753,7 +726,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-	if (uname(&sysinfo) == -1) {
+if(	uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -1234,7 +1207,8 @@ void Interface::initiate_configuration()
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL)
+				if (direntp == NULL
+				)
 					break;
 
 				// printf( "%s\n", direntp->d_name );
@@ -1320,7 +1294,8 @@ void Interface::fill_node_list()
 	if (dirp != NULL) {
 		for (;;) {
 			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL)
+			if (direntp == NULL
+			)
 				break;
 			all_node_list.push_back(std::string(direntp->d_name));
 		}

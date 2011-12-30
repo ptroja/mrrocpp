@@ -36,6 +36,16 @@ namespace irp6ot_m {
 //
 //
 
+void UiRobot::open_c_motor_window()
+{
+	wgts[WGT_MOTORS]->my_open();
+}
+
+void UiRobot::open_c_joint_window()
+{
+	wgts[WGT_JOINTS]->my_open();
+}
+
 int UiRobot::ui_get_edp_pid()
 {
 	return ui_ecp_robot->ecp->get_EDP_pid();
