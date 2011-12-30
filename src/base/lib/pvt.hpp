@@ -140,7 +140,7 @@ double ppm(
 //	std::cerr << "(maxTime.col(2)-maxTime.col(1): " << (maxTime.col(2)-maxTime.col(1)) << std::endl;
 
 	// total time
-	T tt = maxTime.col(2).maxCoeff();
+	T tt = maxTime(2);
 
 	// Make the motion longer
 	if(requestedMotionTime > 0) {
@@ -151,7 +151,7 @@ double ppm(
 	}
 
 	// acceleration interval
-	const T ta = maxTime.col(0).maxCoeff();
+	const T ta = maxTime(0);
 	// deceleration interval
 	const T td = tt - (maxTime.col(2)-maxTime.col(1)).maxCoeff();
 
