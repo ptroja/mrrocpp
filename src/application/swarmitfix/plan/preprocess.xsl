@@ -4,6 +4,8 @@
     <xsl:output indent="yes"/>
     <xsl:strip-space  elements="*"/>
 
+    <!-- Remove HEAD all together -->
+    <xsl:template match="/plan/head"/>
     <!-- Remove HEAD constants -->
     <xsl:template match="/plan/head/item/b"/>
     <xsl:template match="/plan/head/item/bcx"/>
@@ -13,10 +15,18 @@
     <xsl:template match="/plan/head/item/dcen"/>
     <xsl:template match="/plan/head/item/dh"/>
     <xsl:template match="/plan/head/item/eps"/>
+     <!-- Remove unused mobile base items -->
+    <xsl:template match="/plan/mbase/item/bCind"/>
+    <xsl:template match="/plan/mbase/item/cx"/>
+    <xsl:template match="/plan/mbase/item/cy"/>
+    <xsl:template match="/plan/mbase/item/theta"/>
+    <xsl:template match="/plan/mbase/item/pinX"/>
+    <xsl:template match="/plan/mbase/item/pinY"/>
     <!-- Remove PKM constants -->
     <xsl:template match="/plan/pkm/item/pkmbaseToFixedPkm"/>
     <xsl:template match="/plan/pkm/item/hlowered"/>
     <xsl:template match="/plan/pkm/item/Dz"/>
+    <xsl:template match="/plan/pkm/item/Dz2"/>
     <xsl:template match="/plan/pkm/item/maxPkmNeutralDist"/>
     <xsl:template match="/plan/pkm/item/PX"/>
     <xsl:template match="/plan/pkm/item/PZ"/>
@@ -25,8 +35,12 @@
     <xsl:template match="/plan/pkm/item/baseToPkmAlfa"/>
     <xsl:template match="/plan/pkm/item/baseToPkmDx"/>
     <xsl:template match="/plan/pkm/item/baseToPkmDz"/>
+    <xsl:template match="/plan/pkm/item/baseToPkmDz2"/>
     <xsl:template match="/plan/pkm/item/PkmNeutralBtoH"/>
+    <xsl:template match="/plan/pkm/item/PkmNeutralBtoHX"/>
+    <xsl:template match="/plan/pkm/item/PkmNeutralBtoHY"/>
     <xsl:template match="/plan/pkm/item/PkmNeutralZ"/>
+    <xsl:template match="/plan/pkm/item/PkmNeutralBeta"/>
     <xsl:template match="/plan/pkm/item/PY"/>
     <xsl:template match="/plan/pkm/item/hTw"/>
     <!-- Remove PKM joint coordinates -->
@@ -38,20 +52,8 @@
     <xsl:template match="/plan/pkm/item/psi2"/>
     <xsl:template match="/plan/pkm/item/psi3"/>
     <xsl:template match="/plan/pkm/item/beta7"/>
-    <!-- Remove mobile base duplicate coordinates -->
+    <!-- Remove mobile base duplicated coordinates -->
 	<xsl:template match="/plan/mbase/item/actions/item/dTheta"/>
-    
-    <!-- Parse matlab matrices with pin coordinates -->
-    <xsl:template match="/plan/mbase/item/pinY|pinX">
-        <xsl:element name="{name()}">
-            <!--
-            <matrix><xsl:value-of select="node()"/></matrix>
-            -->
-            <pin1><xsl:value-of select="format-number(substring-before(substring-after(node(),'['), ' ') div 100, '#.####')"/></pin1>
-            <pin2><xsl:value-of select="format-number(substring-before(substring-after(node(),' '), ' ') div 100, '#.####')"/></pin2>
-            <pin3><xsl:value-of select="format-number(substring-after(substring-after(substring-before(node(),']'), ' '), ' ') div 100, '#.####')"/></pin3>
-        </xsl:element>
-    </xsl:template>
     
     <!-- Format time values -->
     <xsl:template match="/plan/*/item/TBeg">
@@ -69,20 +71,8 @@
     <!-- Format mobile base pose values -->
     <xsl:template match="/plan/mbase/item/actions/item/dPkmTheta">
         <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.###")' /></xsl:element>
-    </xsl:template>
-    <xsl:template match="/plan/mbase/item/cx">
-        <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.####")' /></xsl:element>
-    </xsl:template>      
-    <xsl:template match="/plan/mbase/item/cy">
-        <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.####")' /></xsl:element>
-    </xsl:template>
-    <xsl:template match="/plan/mbase/item/theta">
-        <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.###")' /></xsl:element>
-    </xsl:template>
-    <xsl:template match="/plan/mbase/item/pkmTheta">
-        <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.###")' /></xsl:element>
-    </xsl:template>
-    
+    </xsl:template>    
+        
     <!-- Choose between Homog_matrix and XYZ_Euler_Zyz representation -->
     <!--
     <xsl:template match="/plan/pkm/item/Xyz_Euler_Zyz"/>
@@ -119,6 +109,10 @@
             <xsl:apply-templates select="item[position() &lt; $nA+1]"/>
         </actions>
     </xsl:template>
+    <!-- Remove list length list items -->
+    <!--
+    <xsl:template match="/plan/mbase/item/numActions"/>
+    -->
     
     <!-- Remove unneeded data -->
     <xsl:template match="/plan/svar"/>

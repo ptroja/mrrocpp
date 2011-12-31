@@ -10,8 +10,8 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
-Mp::Mp(Interface *iface) :
-		interface(*iface)
+Mp::Mp(Interface & iface) :
+		interface(iface)
 {
 	mp_state.state = UI_MP_NOT_PERMITED_TO_RUN; // mp wylaczone
 	mp_state.last_process_control_state = UI_MP_STATE_NOT_KNOWN;
@@ -29,64 +29,45 @@ void Mp::MPup()
 
 int Mp::MPup_int()
 {
-	// Do nothing if MP already exists
-	if(mp_state.pid != -1) {
-		return -1;
-	}
-
 	interface.set_ui_state_notification(UI_N_PROCESS_CREATION);
 
 	try {
 
-		if (interface.check_node_existence(mp_state.node_name, "mp")) {
-			mp_state.pid = interface.config->process_spawn(lib::MP_SECTION);
+		if (mp_state.pid == -1) {
 
-			if (mp_state.pid < 0) {
-				BOOST_THROW_EXCEPTION(lib::exception::system_error());
+			std::string mp_network_pulse_attach_point("/dev/name/global/");
+			mp_network_pulse_attach_point += mp_state.network_pulse_attach_point;
+
+			// sprawdzenie czy nie jest juz zarejestrowany serwer komunikacyjny MP
+			if (access(mp_network_pulse_attach_point.c_str(), R_OK) == 0) {
+				interface.ui_msg->message(lib::NON_FATAL_ERROR, "mp already exists");
+			} else if (interface.check_node_existence(mp_state.node_name, "mp")) {
+				mp_state.pid = interface.config->process_spawn(lib::MP_SECTION);
+
+				if (mp_state.pid > 0) {
+
+					mp_state.MP = (boost::shared_ptr <RemoteAgent>) new RemoteAgent(lib::MP_SECTION);
+					mp_state.pulse =
+							(boost::shared_ptr <OutputBuffer <char> >) new OutputBuffer <char>(*mp_state.MP, "MP_PULSE");
+
+					interface.teachingstate = ui::common::MP_RUNNING;
+
+					mp_state.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
+
+					interface.raise_process_control_window();
+				} else {
+					BOOST_THROW_EXCEPTION(lib::exception::system_error());
+				}
+				interface.manage_interface();
+
 			}
-
-			mp_state.MP = (boost::shared_ptr<RemoteAgent>) new RemoteAgent(lib::MP_SECTION);
-
-			// Check if connection is up&ready
-			mp_state.MP->Ping();
-
-			mp_state.pulse = (boost::shared_ptr<OutputBuffer<char> >) new OutputBuffer <char>(*mp_state.MP, "MP_PULSE");
-
-			interface.teachingstate = ui::common::MP_RUNNING;
-
-			mp_state.state = ui::common::UI_MP_WAITING_FOR_START_PULSE; // mp wlaczone
-
-			interface.raise_process_control_window();
-
-			interface.manage_interface();
 		}
 
 	} catch (...) {
-		// Revert to state before call
-		mp_state.pulse.reset();
-		mp_state.MP.reset();
-		if(mp_state.pid != 1) {
-			interface.block_sigchld();
-			if (kill(mp_state.pid, SIGTERM) == -1) {
-				perror("kill()");
-			} else {
-				//    		int status;
-				//    		if (waitpid(EDP_MASTER_Pid, &status, 0) == -1) {
-				//    			perror("waitpid()");
-				//    		}
-				interface.wait_for_child_termination(mp_state.pid, true);
-			}
-			interface.unblock_sigchld();
-
-			mp_state.pid = -1;
-		}
-		mp_state.state = ui::common::UI_MP_PERMITED_TO_RUN; // mp wylaczone
-		// interface.ui_state = 2;
-
-		return -1;
+		interface.ui_state = 2;
 	}
-
 	return 1;
+
 }
 
 void Mp::set_mp_state()
@@ -102,7 +83,7 @@ void Mp::set_mp_state()
 
 }
 
-int Mp::MPslay()
+void Mp::MPslay()
 {
 	try {
 		if (mp_state.pid != -1) {
@@ -124,6 +105,11 @@ int Mp::MPslay()
 			} else {
 				std::cerr << "MP not connected?" << std::endl;
 			}
+
+			// 	printf("dddd: %d\n", SignalKill(ini_con->mp-
+			// 	printf("mp slay\n");
+
+			//	SignalKill(mp.node_nr, mp.pid, 0, SIGTERM, 0, 0);
 
 			interface.block_sigchld();
 			if (kill(mp_state.pid, SIGTERM) == -1) {
@@ -163,11 +149,9 @@ int Mp::MPslay()
 	} catch (...) {
 		interface.ui_state = 2;
 	}
-	return 1;
-
 }
 
-int Mp::pulse_start_mp()
+void Mp::pulse_start_mp()
 
 {
 	try {
@@ -196,11 +180,10 @@ int Mp::pulse_start_mp()
 	} catch (...) {
 		interface.ui_state = 2;
 	}
-	return 1;
 
 }
 
-int Mp::pulse_stop_mp()
+void Mp::pulse_stop_mp()
 
 {
 	try {
@@ -215,11 +198,9 @@ int Mp::pulse_stop_mp()
 	} catch (...) {
 		interface.ui_state = 2;
 	}
-	return 1;
-
 }
 
-int Mp::pulse_pause_mp()
+void Mp::pulse_pause_mp()
 
 {
 	try {
@@ -234,11 +215,9 @@ int Mp::pulse_pause_mp()
 	} catch (...) {
 		interface.ui_state = 2;
 	}
-	return 1;
-
 }
 
-int Mp::pulse_resume_mp()
+void Mp::pulse_resume_mp()
 
 {
 	try {
@@ -253,11 +232,9 @@ int Mp::pulse_resume_mp()
 	} catch (...) {
 		interface.ui_state = 2;
 	}
-	return 1;
-
 }
 
-int Mp::pulse_trigger_mp()
+void Mp::pulse_trigger_mp()
 
 {
 	try {
@@ -270,11 +247,9 @@ int Mp::pulse_trigger_mp()
 	} catch (...) {
 		interface.ui_state = 2;
 	}
-	return 1;
-
 }
 
-int Mp::execute_mp_pulse(char pulse_code)
+void Mp::execute_mp_pulse(char pulse_code)
 {
 	try {
 		// printf("w send pulse\n");
@@ -284,12 +259,11 @@ int Mp::execute_mp_pulse(char pulse_code)
 	} catch (...) {
 		interface.ui_state = 2;
 	}
-	return 1;
 }
 
 void Mp::manage_interface()
 {
-	boost::shared_ptr <MainWindow> mw = interface.mw;
+	MainWindow & mw = *interface.mw;
 
 	if (mp_state.state != mp_state.last_manage_interface_state) {
 		// wlasciwosci menu task_menu
@@ -297,42 +271,42 @@ void Mp::manage_interface()
 		{
 			case common::UI_MP_NOT_PERMITED_TO_RUN:
 				//		std::cout << "UI_MP_NOT_PERMITED_TO_RUN" << std::endl;
-				mw->get_ui()->label_mp_notification->setText("NOT_PERMITED_TO_RUN");
-				mw->getMenuBar()->actionMP_Load->setEnabled(false);
-				mw->getMenuBar()->actionMP_Unload->setEnabled(false);
+				mw.get_ui()->label_mp_notification->setText("NOT_PERMITED_TO_RUN");
+				mw.getMenuBar()->actionMP_Load->setEnabled(false);
+				mw.getMenuBar()->actionMP_Unload->setEnabled(false);
 
 				break;
 			case common::UI_MP_PERMITED_TO_RUN:
 				//	std::cout << "UI_MP_PERMITED_TO_RUN" << std::endl;
-				mw->get_ui()->label_mp_notification->setText("PERMITED_TO_RUN");
+				mw.get_ui()->label_mp_notification->setText("PERMITED_TO_RUN");
 
-				mw->getMenuBar()->actionMP_Load->setEnabled(true);
-				mw->getMenuBar()->actionMP_Unload->setEnabled(false);
+				mw.getMenuBar()->actionMP_Load->setEnabled(true);
+				mw.getMenuBar()->actionMP_Unload->setEnabled(false);
 
 				break;
 			case common::UI_MP_WAITING_FOR_START_PULSE:
 				//	std::cout << "UI_MP_WAITING_FOR_START_PULSE" << std::endl;
-				mw->get_ui()->label_mp_notification->setText("WAITING_FOR_START_PULSE");
+				mw.get_ui()->label_mp_notification->setText("WAITING_FOR_START_PULSE");
 
-				mw->getMenuBar()->actionMP_Load->setEnabled(false);
-				mw->getMenuBar()->actionMP_Unload->setEnabled(true);
+				mw.getMenuBar()->actionMP_Load->setEnabled(false);
+				mw.getMenuBar()->actionMP_Unload->setEnabled(true);
 
 				break;
 			case common::UI_MP_TASK_RUNNING:
 				//	std::cout << "UI_MP_TASK_RUNNING" << std::endl;
 
-				mw->get_ui()->label_mp_notification->setText("TASK_RUNNING");
+				mw.get_ui()->label_mp_notification->setText("TASK_RUNNING");
 
-				mw->getMenuBar()->actionMP_Load->setEnabled(false);
-				mw->getMenuBar()->actionMP_Unload->setEnabled(false);
+				mw.getMenuBar()->actionMP_Load->setEnabled(false);
+				mw.getMenuBar()->actionMP_Unload->setEnabled(false);
 
 				break;
 			case common::UI_MP_TASK_PAUSED:
 				//  std::cout << "UI_MP_TASK_PAUSED" << std::endl;
-				mw->get_ui()->label_mp_notification->setText("TASK_PAUSED");
+				mw.get_ui()->label_mp_notification->setText("TASK_PAUSED");
 
-				mw->getMenuBar()->actionMP_Load->setEnabled(false);
-				mw->getMenuBar()->actionMP_Unload->setEnabled(false);
+				mw.getMenuBar()->actionMP_Load->setEnabled(false);
+				mw.getMenuBar()->actionMP_Unload->setEnabled(false);
 
 				break;
 			default:

@@ -89,24 +89,24 @@ void swarmitfix::execute_actions(const lib::smb::next_state_t::action_sequence_t
 {
 	BOOST_FOREACH(const lib::smb::action & act, actions)
 	{
-		// Legs up
-		if(act.getRotationPin())
-		{
-			// Setup EDP command
-			lib::smb::festo_command_td cmd;
-
-			// All IN...
-			cmd.leg[0] = lib::smb::IN;
-			cmd.leg[1] = lib::smb::IN;
-			cmd.leg[2] = lib::smb::IN;
-
-			// and only one OUT.
-			cmd.leg[act.getRotationPin()-1] = lib::smb::OUT;
-
-			// Execute motion generator
-			generator::stand_up gen(*this, cmd);
-			gen.Move();
-		}
+//		// Legs up
+//		if(act.getRotationPin())
+//		{
+//			// Setup EDP command
+//			lib::smb::festo_command_td cmd;
+//
+//			// All IN...
+//			cmd.leg[0] = lib::smb::IN;
+//			cmd.leg[1] = lib::smb::IN;
+//			cmd.leg[2] = lib::smb::IN;
+//
+//			// and only one OUT.
+//			cmd.leg[act.getRotationPin()-1] = lib::smb::OUT;
+//
+//			// Execute motion generator
+//			generator::stand_up gen(*this, cmd);
+//			gen.Move();
+//		}
 
 		// Rotate
 		{
@@ -123,13 +123,13 @@ void swarmitfix::execute_actions(const lib::smb::next_state_t::action_sequence_t
 			gen.Move();
 		}
 
-		// Legs down
-		if(act.getRotationPin())
-		{
-			// Execute motion generator (defaults to OUT)
-			generator::stand_up gen(*this);
-			gen.Move();
-		}
+//		// Legs down
+//		if(act.getRotationPin())
+//		{
+//			// Execute motion generator (defaults to OUT)
+//			generator::stand_up gen(*this);
+//			gen.Move();
+//		}
 	}
 }
 
