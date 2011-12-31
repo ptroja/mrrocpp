@@ -59,13 +59,14 @@ SET(GUI_CXX_SRCS
     base/WgtToolBase.cpp
     base/wgt_process_control.cpp
 	base/wgt_robot_process_control.cpp
-    base/ui_ecp_dialogs/wgt_yes_no.cpp
-    base/ui_ecp_dialogs/wgt_swarm.cpp
+    base/ui_ecp_dialogs/wgt_yes_no.cpp    
     base/ui_ecp_dialogs/wgt_message.cpp
     base/ui_ecp_dialogs/wgt_input_integer.cpp
     base/ui_ecp_dialogs/wgt_input_double.cpp
     base/ui_ecp_dialogs/wgt_choose_option.cpp
     base/ui_ecp_dialogs/wgt_teaching.cpp
+    base/ui_ecp_dialogs/wgt_swarm.cpp
+    base/ui_ecp_dialogs/xmlsyntaxhighlighter.cpp
    	base/menu_bar.cpp
 	base/allrobots.cpp
 	base/menu_bar_action.cpp

@@ -1,13 +1,21 @@
+#include <QHideEvent>
+#include <QtXml/QXmlSimpleReader>
+
+#include <boost/shared_ptr.hpp>
+
 #include "wgt_swarm.h"
 #include "../interface.h"
 #include "../ui_ecp.h"
-#include <QHideEvent>
+
+#include "xmlsyntaxhighlighter.h"
 
 wgt_swarm::wgt_swarm(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
-		wgt_base("Yes No Dialog", _interface, parent), ui(new Ui::wgt_swarmClass)
+		wgt_base("Swarm control", _interface, parent), ui(new Ui::wgt_swarmClass)
 {
 	ui->setupUi(this);
 
+	// Setup syntax highlighter
+	highlighter = (boost::shared_ptr<XmlSyntaxHighlighter>) new XmlSyntaxHighlighter(ui->textEdit->document());
 }
 
 wgt_swarm::~wgt_swarm()
@@ -55,11 +63,16 @@ void wgt_swarm::on_pushButton_next_clicked()
 
 void wgt_swarm::on_pushButton_exec_clicked()
 {
-	interface.ui_ecp_obj->ui_rep.reply = lib::PLAN_EXEC;
+	if(validate()) {
+		interface.ui_ecp_obj->ui_rep.reply = lib::PLAN_EXEC;
 
-	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
-	interface.ui_ecp_obj->ui_rep.plan_item = ui->textEdit->toPlainText().toStdString();
-	my_close();
+		interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
+		interface.ui_ecp_obj->ui_rep.plan_item = ui->textEdit->toPlainText().toStdString();
+
+		my_close();
+	} else {
+		interface.ui_msg->message(lib::NON_FATAL_ERROR, "plan item validation failed");
+	}
 }
 
 void wgt_swarm::on_pushButton_save_clicked()
@@ -75,3 +88,15 @@ void wgt_swarm::on_pushButton_reload_clicked()
 	ui->textEdit->setText(stored_plan_item.c_str());
 }
 
+bool wgt_swarm::validate()
+{
+	// Setup text to XML adapter
+	QXmlInputSource source;
+	source.setData(ui->textEdit->toPlainText());
+
+	// Set parser
+	QXmlSimpleReader reader;
+
+	// Return parsing status
+	return reader.parse(source);
+}
