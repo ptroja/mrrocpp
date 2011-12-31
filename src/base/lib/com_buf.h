@@ -38,7 +38,7 @@
 
 #include "base/lib/messip/messip.h"
 
-#define SWARM_STRING_SIZE 1024
+//#define SWARM_STRING_SIZE 1024
 
 namespace mrrocpp {
 namespace lib {
@@ -228,8 +228,8 @@ struct ECP_message
 	MAM;
 
 	//! XML string with current plan item
-	//std::string plan_item;
-	char plan_item[SWARM_STRING_SIZE];
+	std::string plan_item;
+	//char plan_item[SWARM_STRING_SIZE];
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -283,7 +283,8 @@ struct UI_reply
 	friend class boost::serialization::access;
 
 	//! XML string with current plan item
-	char plan_item[SWARM_STRING_SIZE];
+	std::string plan_item;
+	//char plan_item[SWARM_STRING_SIZE];
 
 	//! Serialization of the data structure
 	template <class Archive>
@@ -309,27 +310,6 @@ struct UI_reply
 				break;
 		}
 	}
-};
-
-//------------------------------------------------------------------------------
-/*!
- *  Message from UI to ECP.
- */
-struct UI_ECP_message
-{
-	UI_TO_ECP_COMMAND command;
-
-	union
-	{
-		/*! The name of the file. */
-		char filename[100];
-		/*! Time of the robot's motion. */
-		int motion_time;
-		/*! (axis - 1..6) && (+/- left/right). */
-		short move_type;
-		/*! Change of control type. */
-		POSE_SPECIFICATION ps;
-	};
 };
 
 //------------------------------------------------------------------------------
