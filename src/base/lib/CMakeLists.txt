@@ -43,9 +43,9 @@ add_library(mrrocpp
 )
 
 # Test utilites for Maxon EPOS trajectory calculation
-#add_executable(ppm_test
-#	ppm_test.cc
-#)
+add_executable(ppm_test
+	ppm_test.cc
+)
 #
 #add_executable(pvat_test
 #	pvat_test.cc

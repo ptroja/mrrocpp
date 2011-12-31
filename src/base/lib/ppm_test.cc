@@ -30,54 +30,31 @@ const uint32_t encoder_resolution[6] = {
 int
 main(int argc, char *argv[])
 {
-	for(double q = 1;; q *= 10.0) {
-	std::cout << "*** q = " << q << std::endl;
-	Matrix <double, 6, 1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
-
-	Matrix <double, 6, 1> Vdefault, Adefault, Ddefault;
-
-	// Move in [qc]
-	Delta(0) = 0;
-	Delta(1) = 0;
-	Delta(2) = 0;
-	Delta(3) = 0;
-	Delta(4) = 0;
-	Delta(5) = q;
-
-	for(int i = 0; i < 6; ++i) {
-		Vdefault(i) = _Vdefault[i];
-		Adefault(i) = _Adefault[i];
-		Ddefault(i) = _Ddefault[i];
-		Delta(i) = Delta(i) / encoder_resolution[i]; // [rot]
-		Vmax(i) = Vdefault(i) / 60; // [rpm]
-		Amax(i) = Adefault(i) / 60; // [rpm/s]
-	}
+	Eigen::Matrix<double,6,1> Delta, Vmax, Amax, Vnew, Anew, Dnew;
+	Delta << +90.36, +87.8, +112.6, +0.2425, +11.77, +2.462;
+	Vmax << +83.33, +83.33 ,+83.33, +83.33, +50, +83.33;
+	Amax << +833.3, +833.3, +833.3, +166.7, +100, +500;
 
 	const double t2 = ppm<6>(Delta, Vmax, Amax, Vnew, Anew, Dnew);
 
-	Vnew *= 60;
-	Anew *= 60;
-	Dnew *= 60;
+	std::cerr.precision(5);
+	std::cerr
+			<< "Delta:\n" << Delta.transpose() << std::endl
+			<< "Vmax:\n" << Vmax.transpose() << std::endl
+			<< "Amax:\n" << Amax.transpose() << std::endl << std::endl;
+
+	// Convert back to Maxon-specific units.
+	std::cerr
+			<< "Vnew:\n" << Vnew.transpose() << std::endl
+			<< "Anew:\n" << Anew.transpose() << std::endl
+			<< "Dnew:\n" << Dnew.transpose() << std::endl << std::endl;
+
+	std::cout << t2 << std::endl;
 
 	for(unsigned int i = 0; i < 6; ++i) {
-		Vnew(i) = trunc(Vnew(i));
-		Anew(i) = trunc(Anew(i));
-		Dnew(i) = trunc(Dnew(i));
-	}
-
-	std::cerr <<
-		"Vdiff:\n" << std::dec << Vdefault-Vnew << std::endl <<
-		"Adiff:\n" << std::scientific << Adefault-Anew << std::endl <<
-		"Ddiff:\n" << std::scientific << Ddefault-Dnew << std::endl <<
-		std::endl;
-
-	for(unsigned int i = 0; i < 6; ++i) {
-		assert(Vnew(i) <= Vdefault[i]);
-		assert(Anew(i) <= Adefault[i]);
-		assert(Dnew(i) <= Ddefault[i]);
-	}
-
-	std::cerr << std::fixed << "ppm: " << t2 << std::endl;
+		assert(Vnew(i) <= Vmax[i]);
+		assert(Anew(i) <= Amax[i]);
+		assert(Dnew(i) <= Amax[i]);
 	}
 
 	return 0;
