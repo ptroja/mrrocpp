@@ -402,7 +402,7 @@ void Interface::raise_ui_ecp_window_slot()
 
 		case lib::PLAN_STEP_MODE:
 
-			wgt_swarm_obj->my_open();
+			wgt_swarm_obj->my_open(true);
 
 			break;
 		case lib::C_XYZ_ANGLE_AXIS:

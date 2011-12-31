@@ -41,6 +41,9 @@ private:
 	//! Simple validator
 	bool validate();
 
+	//! Deactivate widget into idle mode
+	void reply();
+
 private slots:
 
 	void on_pushButton_prev_clicked();

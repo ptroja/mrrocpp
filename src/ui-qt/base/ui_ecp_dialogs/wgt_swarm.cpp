@@ -25,11 +25,6 @@ wgt_swarm::~wgt_swarm()
 
 void wgt_swarm::hideEvent(QHideEvent *event)
 {
-	if (interface.ui_ecp_obj->communication_state != ui::common::UI_ECP_REPLY_READY) {
-		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
-
-	}
-	interface.ui_ecp_obj->synchroniser.command();
 	//interface.ui_msg->message("wgt_swarm::hideEvent");
 	event->accept();
 }
@@ -42,6 +37,8 @@ void wgt_swarm::my_open(bool set_on_top)
 
 	ui->textEdit->setText(interface.ui_ecp_obj->ecp_to_ui_msg.plan_item.c_str());
 
+	this->setEnabled(true);
+
 	wgt_base::my_open(set_on_top);
 }
 
@@ -50,7 +47,7 @@ void wgt_swarm::on_pushButton_prev_clicked()
 	interface.ui_ecp_obj->ui_rep.reply = lib::PLAN_PREV;
 	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
 
-	my_close();
+	reply();
 }
 
 void wgt_swarm::on_pushButton_next_clicked()
@@ -58,7 +55,7 @@ void wgt_swarm::on_pushButton_next_clicked()
 	interface.ui_ecp_obj->ui_rep.reply = lib::PLAN_NEXT;
 	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
 
-	my_close();
+	reply();
 }
 
 void wgt_swarm::on_pushButton_exec_clicked()
@@ -69,7 +66,7 @@ void wgt_swarm::on_pushButton_exec_clicked()
 		interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
 		interface.ui_ecp_obj->ui_rep.plan_item = ui->textEdit->toPlainText().toStdString();
 
-		my_close();
+		reply();
 	} else {
 		interface.ui_msg->message(lib::NON_FATAL_ERROR, "plan item validation failed");
 	}
@@ -80,7 +77,7 @@ void wgt_swarm::on_pushButton_save_clicked()
 	interface.ui_ecp_obj->ui_rep.reply = lib::PLAN_SAVE;
 	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
 
-	my_close();
+	reply();
 }
 
 void wgt_swarm::on_pushButton_reload_clicked()
@@ -99,4 +96,14 @@ bool wgt_swarm::validate()
 
 	// Return parsing status
 	return reader.parse(source);
+}
+
+void wgt_swarm::reply()
+{
+	if (interface.ui_ecp_obj->communication_state != ui::common::UI_ECP_REPLY_READY) {
+		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
+	}
+	interface.ui_ecp_obj->synchroniser.command();
+
+	this->setEnabled(false);
 }

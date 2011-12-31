@@ -70,7 +70,7 @@ void ecp_buffer::operator()()
 	ch = messip::port_create(interface.ui_attach_point);
 	assert(ch);
 
-	while (1) {
+	while (true) {
 		// communication_state = ui::common::UI_ECP_REPLY_READY;
 		communication_state = UI_ECP_AFTER_REPLY;
 
