@@ -105,7 +105,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 	}
 
 	else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
-		gag->configure(0.005, 150,-10);
+		gag->configure(0.005, 150, -10);
 		gag->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
@@ -145,55 +145,55 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 		std::string path(mrrocpp_network_path);
-		path +=(char*) mp_command.ecp_next_state.data;
+		path += (char*) mp_command.ecp_next_state.data;
 
 		tig->flush_pose_list();
-		tig->load_file_with_path(path.c_str());
+		tig->load_file_with_path(path);
 		//		printf("\nTRACK ECP_GEN_TEACH_IN :%s\n\n", path1);
 		tig->initiate_pose_list();
 
 		tig->Move();
 
-        } else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH ||
-                   mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_JOINT) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH
+			|| mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_JOINT) {
 		std::string path(mrrocpp_network_path);
-		path +=(char*) mp_command.ecp_next_state.data;
+		path += (char*) mp_command.ecp_next_state.data;
 
-                switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
+		switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
 		{
-                        case lib::RELATIVE:
-                                sg->set_relative();
+			case lib::RELATIVE:
+				sg->set_relative();
 				break;
-                        case lib::ABSOLUTE:
-                                sg->set_absolute();
+			case lib::ABSOLUTE:
+				sg->set_absolute();
 				break;
 			default:
 				break;
 		}
-				sg->reset();
-                sg->load_trajectory_from_file(path.c_str());
-                sg->calculate_interpolate();
-                sg->Move();
-        } else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_ANGLE_AXIS) {
-            std::string path(mrrocpp_network_path);
-            path +=(char*) mp_command.ecp_next_state.data;
+		sg->reset();
+		sg->load_trajectory_from_file(path.c_str());
+		sg->calculate_interpolate();
+		sg->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_ANGLE_AXIS) {
+		std::string path(mrrocpp_network_path);
+		path += (char*) mp_command.ecp_next_state.data;
 
-            switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
-            {
-                    case lib::RELATIVE:
-                            sgaa->set_relative();
-                            break;
-                    case lib::ABSOLUTE:
-                            sgaa->set_absolute();
-                            break;
-                    default:
-                            break;
-            }
-                            sgaa->reset();
-            sgaa->load_trajectory_from_file(path.c_str());
-            sgaa->calculate_interpolate();
-            sgaa->Move();
-    }
+		switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
+		{
+			case lib::RELATIVE:
+				sgaa->set_relative();
+				break;
+			case lib::ABSOLUTE:
+				sgaa->set_absolute();
+				break;
+			default:
+				break;
+		}
+		sgaa->reset();
+		sgaa->load_trajectory_from_file(path.c_str());
+		sgaa->calculate_interpolate();
+		sgaa->Move();
+	}
 
 }
 

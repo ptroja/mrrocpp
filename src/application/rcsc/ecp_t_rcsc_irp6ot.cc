@@ -194,7 +194,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		path += (char*) mp_command.ecp_next_state.data;
 
 		tig->flush_pose_list();
-		tig->load_file_with_path(path.c_str());
+		tig->load_file_with_path(path);
 		//		printf("\nTRACK ECP_GEN_TEACH_IN :%s\n\n", path1);
 		tig->initiate_pose_list();
 

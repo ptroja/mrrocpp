@@ -30,14 +30,19 @@ class teach_in : public common::generator::generator
 
 protected:
 	/**
+	 * @brief pose list data type
+	 */
+	typedef std::list <ecp_taught_in_pose> pose_list_t;
+
+	/**
 	 * @brief pose list
 	 */
-	std::list <ecp_taught_in_pose> pose_list;
+	pose_list_t pose_list;
 
 	/**
 	 * @brief pose list iterator
 	 */
-	std::list <ecp_taught_in_pose>::iterator pose_list_iterator;
+	pose_list_t::iterator pose_list_iterator;
 
 public:
 
@@ -71,7 +76,7 @@ public:
 	 * @param file_name file path
 	 * @return operation success status
 	 */
-	bool load_file_with_path(const char* file_name);
+	bool load_file_with_path(const std::string & file_name);
 
 	/**
 	 * @brief save trajectory to file set by operator in UI
@@ -99,7 +104,7 @@ public:
 	 * @brief returns pose pointed by the current pose list iterator
 	 * @param tip ecp_taught_in_pose reference to return value
 	 */
-	const ecp_taught_in_pose & get_pose(void) const ;
+	const ecp_taught_in_pose & get_pose(void) const;
 
 	/**
 	 * @brief returns pose coordinates pointed by the current pose list iterator
@@ -128,7 +133,7 @@ public:
 	 * @brief checks if pose_list_iterator points last element of the pose list
 	 * @return check status
 	 */
-	bool is_last_list_element(void);
+	bool is_last_list_element(void) const;
 
 	/**
 	 * @brief sets pose as the pose list head
@@ -156,7 +161,7 @@ public:
 	 * @brief checks number of pose list elements
 	 * @return number of pose list elements
 	 */
-	int pose_list_length(void);
+	std::size_t pose_list_length(void) const;
 
 	virtual bool first_step();
 
