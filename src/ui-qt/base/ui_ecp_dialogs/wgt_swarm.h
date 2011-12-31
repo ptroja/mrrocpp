@@ -29,7 +29,7 @@ public:
 private:
 	Ui::wgt_swarmClass* ui;
 
-	char stored_plan_item[SWARM_STRING_SIZE];
+	std::string stored_plan_item;
 
 private slots:
 

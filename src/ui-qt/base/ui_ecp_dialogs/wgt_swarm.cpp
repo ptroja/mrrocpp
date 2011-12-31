@@ -30,9 +30,9 @@ void wgt_swarm::my_open(bool set_on_top)
 {
 	ui->label_message->setText(interface.ui_ecp_obj->ecp_to_ui_msg.string);
 
-	strcpy(stored_plan_item, interface.ui_ecp_obj->ecp_to_ui_msg.plan_item);
+	stored_plan_item = interface.ui_ecp_obj->ecp_to_ui_msg.plan_item;
 
-	ui->textEdit->setText(interface.ui_ecp_obj->ecp_to_ui_msg.plan_item);
+	ui->textEdit->setText(interface.ui_ecp_obj->ecp_to_ui_msg.plan_item.c_str());
 
 	wgt_base::my_open(set_on_top);
 }
@@ -58,7 +58,7 @@ void wgt_swarm::on_pushButton_exec_clicked()
 	interface.ui_ecp_obj->ui_rep.reply = lib::PLAN_EXEC;
 
 	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
-	strcpy(interface.ui_ecp_obj->ui_rep.plan_item, ui->textEdit->toPlainText().toStdString().c_str());
+	interface.ui_ecp_obj->ui_rep.plan_item = ui->textEdit->toPlainText().toStdString();
 	my_close();
 }
 
@@ -72,6 +72,6 @@ void wgt_swarm::on_pushButton_save_clicked()
 
 void wgt_swarm::on_pushButton_reload_clicked()
 {
-	ui->textEdit->setText(stored_plan_item);
+	ui->textEdit->setText(stored_plan_item.c_str());
 }
 
