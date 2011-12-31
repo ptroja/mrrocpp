@@ -1,6 +1,6 @@
 /*!
  * @file
- * @brief File contains dp_sbenchclass definition for SwarmItFix Head
+ * @brief File contains dp_sbench class definition for SwarmItFix bench
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup sbench
