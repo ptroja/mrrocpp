@@ -36,4 +36,4 @@ target_link_libraries(ecp_r_smb kinematicssmb dp_smb)
 target_link_libraries(mp_r_smb dp_smb)
 
 install(TARGETS edp_smb1 edp_smb2 DESTINATION bin)
-install(TARGETS edpsmb kinematicssmb ecp_r_smb mp_r_smb DESTINATION lib)
+install(TARGETS edpsmb kinematicssmb ecp_r_smb mp_r_smb dp_smb DESTINATION lib)
