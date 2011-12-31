@@ -60,10 +60,7 @@ typedef struct _segment
 	bool guarded_motion;
 
 	//! Constructor with reasonable defaults
-	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix()) :
-			goal_pose(_goal), motion_type(lib::epos::SYNC_TRAPEZOIDAL), duration(0), guarded_motion(false)
-	{
-	}
+	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix());
 
 	//! Serialization of the data structure
 	template <class Archive>
