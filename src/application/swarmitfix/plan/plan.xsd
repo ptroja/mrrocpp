@@ -18,8 +18,22 @@
                               <xs:element name="item">
                                 <xs:complexType>
                                   <xs:sequence>
-                                    <xs:element name="row" type="xs:int"/>
-                                    <xs:element name="column" type="xs:int"/>
+                                    <xs:element name="row">
+                                      <xs:simpleType>
+                                        <xs:restriction base="xs:int">
+                                          <xs:minInclusive value="1"/>
+                                          <xs:maxInclusive value="8"/>
+                                        </xs:restriction>
+                                      </xs:simpleType>
+                                    </xs:element>
+                                    <xs:element name="column">
+                                      <xs:simpleType>
+                                        <xs:restriction base="xs:int">
+                                          <xs:minInclusive value="1"/>
+                                          <xs:maxInclusive value="8"/>
+                                        </xs:restriction>
+                                      </xs:simpleType>
+                                    </xs:element>
                                   </xs:sequence>
                                 </xs:complexType>
                               </xs:element>
@@ -33,7 +47,7 @@
                               <xs:element name="item" maxOccurs="unbounded">
                                 <xs:complexType>
                                   <xs:sequence>
-                                    <xs:element name="pin" type="xs:int">
+                                    <xs:element name="pin">
                                       <xs:annotation>
                                         <xs:documentation>
                                     by which pin to rotate: 1 - left, 2 - right, 3 -
@@ -41,6 +55,12 @@
                                     base rotation
                                   </xs:documentation>
                                       </xs:annotation>
+                                      <xs:simpleType>
+                                        <xs:restriction base="xs:int">
+                                          <xs:minInclusive value="0"/>
+                                          <xs:maxInclusive value="3"/>
+                                        </xs:restriction>
+                                      </xs:simpleType>
                                     </xs:element>
                                     <xs:element name="dThetaInd">
                                       <xs:annotation>
@@ -139,6 +159,10 @@
         </xs:element>
       </xs:sequence>
     </xs:complexType>
+    <xs:unique name="ind">
+      <xs:selector xpath="pkm/item|mbase/item"/>
+      <xs:field xpath="ind"/>
+    </xs:unique>
   </xs:element>
   <xs:element name="ind" type="xs:int">
     <xs:annotation>
@@ -146,27 +170,49 @@
       </xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="numActions" type="xs:int"/>
+  <xs:element name="numActions">
+    <xs:simpleType>
+      <xs:restriction base="xs:int">
+        <xs:minExclusive value="0"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
   <xs:complexType name="State">
     <xs:sequence>
-      <xs:element name="agent" type="xs:int">
+      <xs:element name="agent">
         <xs:annotation>
           <xs:documentation>index of the agent
           </xs:documentation>
         </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:int">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="2"/>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:element>
-      <xs:element name="TBeg" type="xs:float">
+      <xs:element name="TBeg">
         <xs:annotation>
           <xs:documentation>time before the transition should be
             completed
           </xs:documentation>
         </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:float">
+            <xs:minInclusive value="0"/>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:element>
-      <xs:element name="TEnd" type="xs:float">
+      <xs:element name="TEnd">
         <xs:annotation>
           <xs:documentation>time after the next transition should start
           </xs:documentation>
         </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:float">
+            <xs:minExclusive value="0"/>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:element>
       <xs:element name="state_reached_in_time" type="xs:float" minOccurs="0">
         <xs:annotation>
