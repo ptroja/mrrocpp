@@ -10,6 +10,7 @@
  */
 
 #include <string>
+#include <boost/serialization/serialization.hpp>
 #include "const_sbench.h"
 
 namespace mrrocpp {
@@ -57,6 +58,16 @@ public:
 
 	pins_buffer & operator =(const pins_buffer &); // operator przypisania
 
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & pins_state;
+	}
+
 }__attribute__((__packed__));
 
 /*!
@@ -66,6 +77,17 @@ public:
 struct cbuffer
 {
 	pins_buffer pins_buf;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & pins_buf;
+	}
+
 }__attribute__((__packed__));
 
 /*!
@@ -75,6 +97,17 @@ struct cbuffer
 struct rbuffer
 {
 	pins_buffer pins_buf;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & pins_buf;
+	}
+
 }__attribute__((__packed__));
 
 } // namespace sbench
