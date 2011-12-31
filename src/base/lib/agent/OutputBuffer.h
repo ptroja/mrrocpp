@@ -14,6 +14,10 @@
 #include "BufferBase.h"
 #include "base/lib/xdr/xdr_oarchive.hpp"
 
+namespace mrrocpp {
+namespace lib {
+namespace agent {
+
 /**
  * Remote data buffer proxy
  */
@@ -39,5 +43,9 @@ public:
 		owner.Send(oa);
 	}
 };
+
+} // namespace agent
+} // namespace lib
+} // namespace mrrocpp
 
 #endif /* OUTPUTBUFFER_H_ */

@@ -21,6 +21,10 @@
 
 #include "base/lib/impconst.h"
 
+namespace mrrocpp {
+namespace lib {
+namespace agent {
+
 void RemoteAgent::Send(const xdr_oarchive <> & oa)
 {
 	// do a non-blocking send
@@ -66,3 +70,6 @@ RemoteAgent::~RemoteAgent()
 	}
 }
 
+} // namespace agent
+} // namespace lib
+} // namespace mrrocpp

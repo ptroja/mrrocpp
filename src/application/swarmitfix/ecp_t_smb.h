@@ -28,12 +28,12 @@ private:
 	/**
 	 * Input buffer for MP commands
 	 */
-	InputBuffer<lib::smb::next_state_t> nextstateBuffer;
+	lib::agent::InputBuffer<lib::smb::next_state_t> nextstateBuffer;
 
 	/**
 	 * Output buffer for MP notifications
 	 */
-	boost::shared_ptr<OutputBuffer<lib::notification_t> > notifyBuffer;
+	boost::shared_ptr<lib::agent::OutputBuffer<lib::notification_t> > notifyBuffer;
 
 	//! Execute translocate command action
 	void execute_actions(const lib::smb::next_state_t::action_sequence_t & actions);

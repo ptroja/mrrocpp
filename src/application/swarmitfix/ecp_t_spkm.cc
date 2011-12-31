@@ -26,8 +26,8 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	}
 
 	// Create task-dependent IO buffers
-	notifyBuffer = (boost::shared_ptr<OutputBuffer<lib::notification_t> >)
-			new OutputBuffer<lib::notification_t>(MP, ecp_m_robot->robot_name+lib::notifyBufferId);
+	notifyBuffer = (boost::shared_ptr<lib::agent::OutputBuffer<lib::notification_t> >)
+			new lib::agent::OutputBuffer<lib::notification_t>(MP, ecp_m_robot->robot_name+lib::notifyBufferId);
 
 	sr_ecp_msg->message("ecp spkm loaded");
 }

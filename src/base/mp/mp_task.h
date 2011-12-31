@@ -57,20 +57,20 @@ namespace task {
 
 //! Type for optionally active input data buffer
 template <class T>
-class InputPtr : private boost::shared_ptr<InputBuffer<T> > {
+class InputPtr : private boost::shared_ptr<lib::agent::InputBuffer<T> > {
 	//! Underlying implementation of 'optional' concept
-	typedef boost::shared_ptr<InputBuffer<T> > ptrType;
+	typedef boost::shared_ptr<lib::agent::InputBuffer<T> > ptrType;
 
 public:
 	//! Create input buffer and register within an agent
-	void Create(Agent & owner, const std::string & name, const T & default_value = T())
+	void Create(lib::agent::Agent & owner, const std::string & name, const T & default_value = T())
 	{
 		if(ptrType::get()) {
 	        std::ostringstream tmp;
 	        tmp << "optional Input buffer \"" << name << "\"already created";
 			throw std::runtime_error(tmp.str());
 		}
-		ptrType::operator=((ptrType) new InputBuffer<T>(owner, name, default_value));
+		ptrType::operator=((ptrType) new lib::agent::InputBuffer<T>(owner, name, default_value));
 	}
 
 	//! Reuse access operator from the underlying 'optional' concept type
@@ -82,20 +82,20 @@ public:
 
 //! Type for optionally inactive output data buffer
 template <class T>
-struct OutputPtr : private boost::shared_ptr<OutputBuffer<T> > {
+struct OutputPtr : private boost::shared_ptr<lib::agent::OutputBuffer<T> > {
 	//! Underlying implementation of 'optional' concept
-	typedef boost::shared_ptr<OutputBuffer<T> > ptrType;
+	typedef boost::shared_ptr<lib::agent::OutputBuffer<T> > ptrType;
 
 public:
 	//! Create input buffer and register within an agent
-	void Create(RemoteAgent & owner, const std::string & name)
+	void Create(lib::agent::RemoteAgent & owner, const std::string & name)
 	{
 		if(ptrType::get()) {
 	        std::ostringstream tmp;
 	        tmp << "optional Output buffer \"" << name << "\"already created";
 			throw std::runtime_error(tmp.str());
 		}
-		ptrType::operator=((ptrType) new OutputBuffer<T>(owner, name));
+		ptrType::operator=((ptrType) new lib::agent::OutputBuffer<T>(owner, name));
 	}
 
 	//! Reuse access operator from the underlying 'optional' concept type
@@ -283,7 +283,7 @@ protected:
 	/**
 	 * @brief pulse from UI
 	 */
-	InputBuffer<char> ui_pulse;
+	lib::agent::InputBuffer<char> ui_pulse;
 };
 
 /**

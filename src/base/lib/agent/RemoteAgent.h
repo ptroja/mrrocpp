@@ -7,6 +7,10 @@
 
 #include "../messip/messip_dataport.h"
 
+namespace mrrocpp {
+namespace lib {
+namespace agent {
+
 /**
  * Remote agent proxy
  */
@@ -35,5 +39,9 @@ private:
 
 	template <class T> friend class OutputBuffer;
 };
+
+} // namespace agent
+} // namespace lib
+} // namespace mrrocpp
 
 #endif /* __REMOTE_AGENT_H */

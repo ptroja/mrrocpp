@@ -34,12 +34,12 @@ protected:
 	/**
 	 * Input buffer for MP commands
 	 */
-	InputBuffer<lib::spkm::next_state_t> nextstateBuffer;
+	lib::agent::InputBuffer<lib::spkm::next_state_t> nextstateBuffer;
 
 	/**
 	 * Output buffer for MP notifications
 	 */
-	boost::shared_ptr<OutputBuffer<lib::notification_t> > notifyBuffer;
+	boost::shared_ptr<lib::agent::OutputBuffer<lib::notification_t> > notifyBuffer;
 };
 
 } // namespace task

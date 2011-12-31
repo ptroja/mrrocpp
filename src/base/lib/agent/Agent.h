@@ -12,6 +12,10 @@
 
 #include "InputBufferBase.h"
 
+namespace mrrocpp {
+namespace lib {
+namespace agent {
+
 /**
  * Base class for every agent
  */
@@ -79,5 +83,9 @@ private:
 	//! Remove buffer
 	void unregisterBuffer(InputBufferBase & buf);
 };
+
+} // namespace agent
+} // namespace lib
+} // namespace mrrocpp
 
 #endif /* __AGENT_H */

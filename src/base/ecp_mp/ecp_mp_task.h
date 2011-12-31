@@ -48,7 +48,7 @@ namespace task {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp_mp
  */
-class task : public Agent
+class task : public lib::agent::Agent
 {
 public:
 	/**
