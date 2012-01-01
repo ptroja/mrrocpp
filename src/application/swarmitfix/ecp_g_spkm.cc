@@ -2,6 +2,8 @@
  * Author: Piotr Trojanek
  */
 
+#include "base/lib/periodic_timer.h"
+
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
@@ -20,10 +22,10 @@ namespace generator {
 //
 //
 
-//constructor with parameters: task and time to sleep [s]
 spkm_pose::spkm_pose(task_t & _ecp_task, const lib::spkm::next_state_t::segment_sequence_t & _segments) :
 		generator_t(_ecp_task),
-		segments(_segments)
+		segments(_segments),
+		wakeup(20)
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 }
@@ -85,8 +87,6 @@ bool spkm_pose::next_step()
 	//if (the_robot->epos_motor_reply_data_request_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 	//}
 
-	// waits 20ms to check epos state
-	delay(20);
 	the_robot->epos_external_reply_data_request_port.get();
 
 	bool motion_in_progress = false;
@@ -101,6 +101,10 @@ bool spkm_pose::next_step()
 	if (motion_in_progress) {
 		// Request status report
 		the_robot->epos_external_reply_data_request_port.set_request();
+
+		// Delay until next EPOS query
+		wakeup.sleep();
+
 		return true;
 	}
 
