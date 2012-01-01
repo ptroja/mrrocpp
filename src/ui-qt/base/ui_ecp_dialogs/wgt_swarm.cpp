@@ -35,7 +35,7 @@ void wgt_swarm::my_open(bool set_on_top)
 
 	stored_plan_item = interface.ui_ecp_obj->ecp_to_ui_msg.plan_item;
 
-	ui->textEdit->setText(interface.ui_ecp_obj->ecp_to_ui_msg.plan_item.c_str());
+	ui->textEdit->setPlainText(interface.ui_ecp_obj->ecp_to_ui_msg.plan_item.c_str());
 
 	this->setEnabled(true);
 
