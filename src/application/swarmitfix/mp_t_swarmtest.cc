@@ -1,4 +1,5 @@
 #include <fstream>
+#include <sstream>
 
 #include <boost/foreach.hpp>
 #include <boost/thread/thread_time.hpp>
@@ -6,6 +7,11 @@
 #include "mp_t_swarmitfix.h"
 
 #include "planner.h"
+
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#include "serialization.h"
+
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/mp/mp_exceptions.h"
 
@@ -49,7 +55,7 @@ bool indexMatches(const T & it, int ind, const Plan & p)
 	return (!isFinished(it, p) && it->ind() == ind);
 }
 
-bool executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, OutputBuffer<lib::spkm::next_state_t> * outBuf)
+bool executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, lib::agent::OutputBuffer<lib::spkm::next_state_t> * outBuf)
 {
 	// Goal pose
 	lib::Homog_matrix hm;
@@ -101,7 +107,7 @@ bool executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, OutputBuffer<lib
 	}
 }
 
-bool executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, OutputBuffer<lib::smb::next_state_t> * outBuf)
+bool executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, lib::agent::OutputBuffer<lib::smb::next_state_t> * outBuf)
 {
 	// Setup command for the mobile base
 	lib::smb::next_state_t cmd(lib::smb::ACTION_LIST);
@@ -348,6 +354,35 @@ void swarmitfix::main_test_algorithm(void)
 //			}
 //
 //			ui_pulse.markAsUsed();
+
+			{
+				// create archive
+				std::stringstream ofs;
+				{
+					boost::archive::xml_oarchive oa(ofs);
+
+					// serialize data into XML
+					oa << boost::serialization::make_nvp("item", p->pkm().item().front());
+				}
+
+				// Request
+				lib::ECP_message ecp_to_ui_msg;
+
+				// Setup plan item
+				ecp_to_ui_msg.ecp_message = lib::PLAN_STEP_MODE;
+				ecp_to_ui_msg.plan_item = ofs.str();
+
+				// Reply
+				lib::UI_reply ui_to_ecp_rep;
+
+				if (messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+
+					uint64_t e = errno;
+					perror("ecp operator_reaction(): Send() to UI failed");
+					sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
+					BOOST_THROW_EXCEPTION(exception::se());
+				}
+			}
 		}
 
 		// If all iterators are at the end
