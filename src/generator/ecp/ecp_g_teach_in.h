@@ -11,6 +11,7 @@
 
 #include <list>
 
+#include "base/lib/ecp_ui_msg.h"
 #include "base/ecp/ecp_generator.h"
 #include "base/ecp/ecp_taught_in_pose.h"
 

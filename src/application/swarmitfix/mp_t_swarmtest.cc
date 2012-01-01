@@ -24,6 +24,7 @@
 
 #include "base/lib/swarmtypes.h"
 #include "base/mp/mp_robot.h"
+#include "base/lib/ecp_ui_msg.h"
 
 namespace mrrocpp {
 namespace mp {
