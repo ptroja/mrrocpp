@@ -38,8 +38,6 @@
 
 #include "base/lib/messip/messip.h"
 
-//#define SWARM_STRING_SIZE 1024
-
 namespace mrrocpp {
 namespace lib {
 
