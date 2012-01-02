@@ -23,7 +23,9 @@ namespace sbench {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup sbench
  */
-class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
+
+class robot : public common::robot::_ecp_robot <lib::c_buffer, lib::r_buffer>
+		, public kinematics::common::kinematics_manager
 {
 protected:
 
