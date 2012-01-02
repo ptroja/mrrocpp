@@ -87,20 +87,6 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	/*!
-	 * \brief method to deserialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void instruction_deserialization();
-
-	/*!
-	 * \brief method to serialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void reply_serialization();
-
 	lib::INSTRUCTION_TYPE variant_receive_instruction();
 	void variant_reply_to_instruction();
 

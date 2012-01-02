@@ -29,16 +29,6 @@ class robot : public common::robot::_ecp_robot <lib::sbench::cbuffer, lib::sbenc
 {
 protected:
 
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::sbench::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::sbench::rbuffer edp_ecp_rbuffer;
-
 	void create_kinematic_models_for_given_robot(void);
 
 public:

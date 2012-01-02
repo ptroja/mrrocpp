@@ -173,17 +173,6 @@ void effector::create_threads()
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
-void effector::instruction_deserialization()
-{
-//	memcpy(&ecp_edp_cbuffer, instruction.serialized_command, sizeof(ecp_edp_cbuffer));
-}
-
-void effector::reply_serialization(void)
-{
-	//assert(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
-//	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
-}
-
 lib::INSTRUCTION_TYPE effector::variant_receive_instruction()
 {
 	return receive_instruction(instruction);
