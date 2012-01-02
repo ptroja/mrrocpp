@@ -61,7 +61,6 @@ struct leg_reply
 	bool is_out;
 	bool is_attached;
 
-	leg_reply & operator =(const leg_reply &); // operator przypisania
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -118,7 +117,6 @@ struct festo_command_td
 struct multi_leg_reply_td
 {
 
-	multi_leg_reply_td & operator =(const multi_leg_reply_td &); // operator przypisania
 	leg_reply leg[LEG_CLAMP_NUMBER];
 
 	//! Give access to boost::serialization framework

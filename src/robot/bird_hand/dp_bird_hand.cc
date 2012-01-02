@@ -1,25 +1,20 @@
 /*!
  * @file
- * @brief File contains dp_shead class definition for SwarmItFix head
+ * @brief File contains dp_bird_hand class definition for bird_hand
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup shead
+ * @ingroup bird_hand
  */
 
 #include <cmath>
 #include <cstring>
 #include <ostream>
 
-#include "dp_shead.h"
+#include "dp_bird_hand.h"
 
 namespace mrrocpp {
 namespace lib {
-namespace shead {
-
-reply::reply() :
-		solidification_state(SOLIDIFICATION_STATE_INTERMEDIATE), vacuum_state(VACUUM_STATE_INTERMEDIATE)
-{
-}
+namespace bird_hand {
 
 } // namespace robot
 } // namespace mp
