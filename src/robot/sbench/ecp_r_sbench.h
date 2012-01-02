@@ -24,7 +24,7 @@ namespace sbench {
  * @ingroup sbench
  */
 
-class robot : public common::robot::_ecp_robot <lib::c_buffer, lib::r_buffer>
+class robot : public common::robot::_ecp_robot <lib::sbench::cbuffer, lib::sbench::rbuffer>
 		, public kinematics::common::kinematics_manager
 {
 protected:

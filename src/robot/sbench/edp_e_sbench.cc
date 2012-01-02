@@ -91,13 +91,16 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
 {
+
+	lib::sbench::cbuffer & local_instruction = (lib::sbench::cbuffer&) instruction;
+
 	msg->message("move_arm");
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
 	lib::sbench::pins_buffer pins_buf;
 
-	memcpy(&pins_buf, &(ecp_edp_cbuffer.pins_buf), sizeof(pins_buf));
+	memcpy(&pins_buf, &(local_instruction.pins_buf), sizeof(pins_buf));
 
 	if (robot_test_mode) {
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
@@ -148,7 +151,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		} // send command to hardware
 
 	}
-	edp_ecp_rbuffer.pins_buf = current_pins_buf;
+	reply.pins_buf = current_pins_buf;
 
 	reply.servo_step = step_counter;
 }
@@ -172,13 +175,23 @@ void effector::create_threads()
 
 void effector::instruction_deserialization()
 {
-	memcpy(&ecp_edp_cbuffer, instruction.serialized_command, sizeof(ecp_edp_cbuffer));
+//	memcpy(&ecp_edp_cbuffer, instruction.serialized_command, sizeof(ecp_edp_cbuffer));
 }
 
 void effector::reply_serialization(void)
 {
-	assert(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
-	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
+	//assert(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
+//	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
+}
+
+lib::INSTRUCTION_TYPE effector::variant_receive_instruction()
+{
+	return receive_instruction(instruction);
+}
+
+void effector::variant_reply_to_instruction()
+{
+	reply_to_instruction(reply);
 }
 
 } // namespace smb

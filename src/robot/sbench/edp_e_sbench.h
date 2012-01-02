@@ -29,8 +29,8 @@ class effector : public common::motor_driven_effector
 {
 protected:
 
-	lib::sbench::cbuffer ecp_edp_cbuffer;
-	lib::sbench::rbuffer edp_ecp_rbuffer;
+	// lib::sbench::cbuffer ecp_edp_cbuffer;
+	//lib::sbench::rbuffer edp_ecp_rbuffer;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!
@@ -101,8 +101,11 @@ public:
 	 */
 	void reply_serialization();
 
-	lib::c_buffer instruction;
-	lib::r_buffer reply;
+	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	void variant_reply_to_instruction();
+
+	lib::sbench::cbuffer instruction;
+	lib::sbench::rbuffer reply;
 
 private:
 	const std::string dev_name;

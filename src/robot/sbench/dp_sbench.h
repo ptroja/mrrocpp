@@ -12,6 +12,7 @@
 #include <string>
 #include <boost/serialization/serialization.hpp>
 #include "const_sbench.h"
+#include "../../base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -56,8 +57,6 @@ public:
 	void set_value(int row, int column, int value);
 	bool get_value(int row, int column);
 
-	pins_buffer & operator =(const pins_buffer &); // operator przypisania
-
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -74,7 +73,7 @@ public:
  * @brief SwarmItFix Head EDP command buffer
  * @ingroup sbench
  */
-struct cbuffer
+struct cbuffer : lib::c_buffer
 {
 	pins_buffer pins_buf;
 
@@ -85,6 +84,7 @@ struct cbuffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		ar & boost::serialization::base_object <c_buffer>(*this);
 		ar & pins_buf;
 	}
 
@@ -94,7 +94,7 @@ struct cbuffer
  * @brief SwarmItFix Head EDP reply buffer
  * @ingroup sbench
  */
-struct rbuffer
+struct rbuffer : lib::r_buffer
 {
 	pins_buffer pins_buf;
 
@@ -105,6 +105,8 @@ struct rbuffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <r_buffer>(*this);
 		ar & pins_buf;
 	}
 

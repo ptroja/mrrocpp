@@ -43,19 +43,6 @@ bool pins_buffer::get_value(int row, int column)
 	return pins_state[translation_table[row][column]];
 }
 
-pins_buffer & pins_buffer::operator=(const pins_buffer & wzor)
-{
-	// operator przypisania
-	// parametry macierzy przyjmuja wartosc jak parametry macierzy podanej jako argumet
-
-	if (this == &wzor)
-		return *this;
-
-	memcpy(pins_state, wzor.pins_state, sizeof(pins_state));
-
-	return *this;
-}
-
 } // namespace robot
 } // namespace mp
 } // namespace mrrocpp
