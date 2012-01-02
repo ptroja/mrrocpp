@@ -117,6 +117,34 @@ public:
 	UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
 	~UiRobot();
 
+	/*
+	 * opens move window on mp or ecp request
+	 * C_XYZ_ANGLE_AXIS variant
+	 */
+
+	virtual void open_c_xyz_angle_axis_window();
+
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_XYZ_EULER_ZYZ variant
+	 */
+
+	virtual void open_c_xyz_euler_zyz_window();
+
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_JOINT variant
+	 */
+
+	virtual void open_c_joint_window();
+
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_MOTOR variant
+	 */
+
+	virtual void open_c_motor_window();
+
 	bool is_edp_loaded();
 
 	void create_thread();

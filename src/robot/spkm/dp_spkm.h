@@ -60,10 +60,7 @@ typedef struct _segment
 	bool guarded_motion;
 
 	//! Constructor with reasonable defaults
-	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix()) :
-			goal_pose(_goal), motion_type(lib::epos::SYNC_TRAPEZOIDAL), duration(0), guarded_motion(false)
-	{
-	}
+	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix());
 
 	//! Serialization of the data structure
 	template <class Archive>
@@ -139,7 +136,7 @@ enum CBUFFER_VARIANT
  */
 typedef enum _POSE_SPECIFICATION
 {
-	XYZ_EULER_ZYZ, TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL, WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL, JOINT, MOTOR
+	WRIST_XYZ_EULER_ZYZ, TOOL_XYZ_EULER_ZYZ, JOINT, MOTOR
 } POSE_SPECIFICATION;
 
 /*!
@@ -255,7 +252,7 @@ struct cbuffer
 				ar & set_pose_specification;
 				switch (set_pose_specification)
 				{
-					case XYZ_EULER_ZYZ:
+					case WRIST_XYZ_EULER_ZYZ:
 						ar & goal_pos;
 						break;
 					case JOINT:

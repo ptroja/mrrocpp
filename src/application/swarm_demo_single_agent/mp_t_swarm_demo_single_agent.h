@@ -35,7 +35,12 @@ public:
 
 	void move_smb_and_spkm(int leg_number, double rotation);
 
-	void move_smb_external(double x1, double x2);
+	/*!
+	 * Sends a command to SMB.
+	 * @param legs_rotation_ - controls rotation of the legs (in external values -6, -5, ..., 5, 6).
+	 * @param pkm_rotation_ - rotates PKM by given angle [radians].
+	 */
+	void move_smb_external(double legs_rotation_, double pkm_rotation_);
 
 	void move_spkm_joints(double x1, double x2, double x3, double x4, double x5, double x6);
 	void move_shead_joints(double x1);

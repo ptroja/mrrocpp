@@ -450,20 +450,22 @@ void Homog_matrix::get_xyz_rpy(Xyz_Rpy_vector & l_vector) const
 
 	// alfa (wokol z) , beta (wokol y), gamma (wokol x)
 	l_vector[3] = atan2(matrix_m[2][1], matrix_m[2][2]);
-	l_vector[4] = atan2(matrix_m[2][0], hypot(matrix_m[0][0], matrix_m[1][0]));
+	l_vector[4] = atan2(-matrix_m[2][0], hypot(matrix_m[0][0], matrix_m[1][0]));
 	l_vector[5] = atan2(matrix_m[1][0], matrix_m[0][0]);
+
+	// TODO: właściwa implementacja!! str. 63 craig.
 }
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_RPY.
 void Homog_matrix::set_from_xyz_rpy(const Xyz_Rpy_vector & l_vector)
 {
 	// alfa (wokol z) , beta (wokol y), gamma (wokol x)
-	const double c_alfa = cos(l_vector[4]);
-	const double s_alfa = sin(l_vector[4]);
-	const double c_beta = cos(l_vector[5]);
-	const double s_beta = sin(l_vector[5]);
-	const double c_gamma = cos(l_vector[6]);
-	const double s_gamma = sin(l_vector[6]);
+	const double c_alfa = cos(l_vector[3]);
+	const double s_alfa = sin(l_vector[3]);
+	const double c_beta = cos(l_vector[4]);
+	const double s_beta = sin(l_vector[4]);
+	const double c_gamma = cos(l_vector[5]);
+	const double s_gamma = sin(l_vector[5]);
 
 	// Obliczenie macierzy rotacji.
 	matrix_m[0][0] = c_alfa * c_beta;

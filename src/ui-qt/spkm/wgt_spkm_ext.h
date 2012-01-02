@@ -81,7 +81,6 @@ private slots:
 
 	void on_radioButton_no_tool_toggled();
 	void on_radioButton_tool_oriented_toggled();
-	void on_radioButton_wrist_oriented_toggled();
 
 };
 

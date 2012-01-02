@@ -44,12 +44,12 @@ public:
 	/**
 	 * @brief head soldification command data port
 	 */
-	lib::single_thread_port <lib::sbench::pins_state_td> sbench_command_data_port;
+	lib::single_thread_port <lib::sbench::pins_buffer> sbench_command_data_port;
 
 	/**
 	 * @brief Head state reply data request port
 	 */
-	lib::single_thread_request_port <lib::sbench::pins_state_td> sbench_reply_data_request_port;
+	lib::single_thread_request_port <lib::sbench::pins_buffer> sbench_reply_data_request_port;
 
 	/**
 	 * @brief constructor called from UI

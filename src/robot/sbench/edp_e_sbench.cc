@@ -48,10 +48,7 @@ effector::effector(common::shell &_shell) :
 		}
 
 	} else {
-		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-
-			current_pins_state[i] = 0;
-		}
+		current_pins_buf.set_zeros();
 	}
 
 }
@@ -99,26 +96,26 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	lib::sbench::pins_state_td pins_state;
+	lib::sbench::pins_buffer pins_buf;
 
-	memcpy(&pins_state, &(ecp_edp_cbuffer.pins_state), sizeof(pins_state));
+	memcpy(&pins_buf, &(ecp_edp_cbuffer.pins_buf), sizeof(pins_buf));
 
 	if (robot_test_mode) {
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			if (pins_state[i]) {
+			if (pins_buf.pins_state[i]) {
 				ss << "1";
 			} else {
 				ss << "0";
 			}
-			current_pins_state[i] = pins_state[i];
 		}
+		current_pins_buf = pins_buf;
 		ss << std::endl;
 		msg->message(ss.str());
 	} else {
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			comedi_dio_write(device, (int) (i / 32), (i%32), pins_state[i]);
-		//	current_pins_state[i] = pins_state[i];
+			comedi_dio_write(device, (int) (i / 32), (i%32), pins_buf.pins_state[i]);
+			//	current_pins_state[i] = pins_state[i];
 		} // send command to hardware
 	}
 
@@ -148,15 +145,11 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			unsigned int current_read;
 			comedi_dio_read(device, (int) (i / 32), (i%32), &current_read);
-			current_pins_state[i] = current_read;
+			current_pins_buf.pins_state[i] = current_read;
 		} // send command to hardware
 
 	}
-
-	for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-
-		edp_ecp_rbuffer.pins_state[i] = current_pins_state[i];
-	}
+	edp_ecp_rbuffer.pins_buf = current_pins_buf;
 
 	reply.servo_step = step_counter;
 }

@@ -60,7 +60,7 @@ void ecp_gripper_opening (task& _ecp_task, double gripper_increment, int motion_
 
 	lib::trajectory_description tdes;
 
-	tdes.arm_type = lib::XYZ_EULER_ZYZ;
+	tdes.arm_type = lib::WRIST_XYZ_EULER_ZYZ;
 	tdes.interpolation_node_no = 1;
 	tdes.internode_step_no = motion_time;
 	tdes.value_in_step_no = tdes.internode_step_no - 2;
