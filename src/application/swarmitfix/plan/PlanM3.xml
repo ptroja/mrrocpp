@@ -165,7 +165,7 @@
           <column>6</column>
         </item>
       </pinIndices>
-      <pkmTheta>-1.73281</pkmTheta>
+      <pkmTheta>2.45598</pkmTheta>
       <actions>
         <item>
           <pin>1</pin>
@@ -223,12 +223,12 @@
           <column>6</column>
         </item>
       </pinIndices>
-      <pkmTheta>1.54802</pkmTheta>
+      <pkmTheta>2.59522</pkmTheta>
       <actions>
         <item>
           <pin>3</pin>
           <dThetaInd>1</dThetaInd>
-          <dPkmTheta>3.281</dPkmTheta>
+          <dPkmTheta>-0.908</dPkmTheta>
         </item>
       </actions>
       <numActions>1</numActions>
