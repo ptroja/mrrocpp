@@ -21,7 +21,6 @@
 #include "robot/maxon/epos.h"
 #include "robot/maxon/ipm_executor.h"
 
-
 namespace mrrocpp {
 namespace edp {
 namespace spkm {
@@ -186,11 +185,13 @@ public:
 	 * Currently simple memcpy implementation
 	 */
 	void reply_serialization();
+
+	lib::c_buffer instruction;
+	lib::r_buffer reply;
 };
 
 } // namespace spkm
 } // namespace edp
 } // namespace mrrocpp
-
 
 #endif

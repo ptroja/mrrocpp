@@ -27,7 +27,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
-		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME), dev_name("/dev/comedi0")
+		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME, instruction, reply), dev_name("/dev/comedi0")
 {
 
 	number_of_servos = lib::sbench::NUM_OF_SERVOS;

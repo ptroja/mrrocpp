@@ -174,7 +174,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 }
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-		motor_driven_effector(_shell, l_robot_name)
+		motor_driven_effector(_shell, l_robot_name, instruction, reply)
 {
 	DEBUG_METHOD;
 

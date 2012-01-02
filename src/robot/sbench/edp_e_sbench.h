@@ -101,6 +101,9 @@ public:
 	 */
 	void reply_serialization();
 
+	lib::c_buffer instruction;
+	lib::r_buffer reply;
+
 private:
 	const std::string dev_name;
 	comedi_t *device; // device descriptor

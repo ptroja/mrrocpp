@@ -95,7 +95,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
-		manip_effector(_shell, lib::bird_hand::ROBOT_NAME), macrostep_end_time(0), query_time(0)
+		manip_effector(_shell, lib::bird_hand::ROBOT_NAME, instruction, reply), macrostep_end_time(0), query_time(0)
 {
 	number_of_servos = lib::bird_hand::NUM_OF_SERVOS;
 	synchro_position_motor.resize(number_of_servos);

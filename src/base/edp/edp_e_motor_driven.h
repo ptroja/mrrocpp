@@ -262,7 +262,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name);
+	motor_driven_effector(shell &_shell, const lib::robot_name_t & l_robot_name, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref);
 
 	/*!
 	 * \brief class destructor
@@ -491,8 +491,9 @@ public:
 	 */
 	void single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	lib::c_buffer instruction;
-	lib::r_buffer reply;
+	// References to base types
+	lib::c_buffer & instruction;
+	lib::r_buffer & reply;
 
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

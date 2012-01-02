@@ -46,7 +46,7 @@ using namespace std;
 #define PARAMS ((mrrocpp::kinematics::spkm::kinematic_model_spkm*)this->get_current_kinematic_model())->get_kinematic_parameters()
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-	manip_effector(_shell, l_robot_name)
+	manip_effector(_shell, l_robot_name, instruction, reply)
 {
 	DEBUG_METHOD;
 
