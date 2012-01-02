@@ -18,6 +18,7 @@
 #include "robot/maxon/dp_epos.h"
 
 #include "const_spkm.h"
+#include "../../base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {

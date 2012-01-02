@@ -13,6 +13,7 @@
 
 #include "robot/maxon/dp_epos.h"
 #include "const_shead.h"
+#include "../../base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -89,7 +90,6 @@ struct reply
 {
 	//! Constructor with default values
 	reply();
-
 
 	solidification_state_t solidification_state;
 
