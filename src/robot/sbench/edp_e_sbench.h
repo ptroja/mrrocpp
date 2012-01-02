@@ -90,8 +90,8 @@ public:
 	lib::INSTRUCTION_TYPE variant_receive_instruction();
 	void variant_reply_to_instruction();
 
-	lib::sbench::cbuffer instruction;
-	lib::sbench::rbuffer reply;
+	lib::sbench::c_buffer instruction;
+	lib::sbench::r_buffer reply;
 
 private:
 	const std::string dev_name;

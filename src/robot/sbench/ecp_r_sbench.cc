@@ -17,7 +17,7 @@ namespace ecp {
 namespace sbench {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-		ecp::common::robot::_ecp_robot <lib::sbench::cbuffer, lib::sbench::rbuffer>(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _config, _sr_ecp)
+		ecp::common::robot::_ecp_robot <lib::sbench::c_buffer, lib::sbench::r_buffer>(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _config, _sr_ecp)
 		,
 		sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager)
 		,
@@ -28,7 +28,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
-		ecp::common::robot::_ecp_robot <lib::sbench::cbuffer, lib::sbench::rbuffer>(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _ecp_object)
+		ecp::common::robot::_ecp_robot <lib::sbench::c_buffer, lib::sbench::r_buffer>(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _ecp_object)
 		,
 		sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager)
 		,
@@ -61,7 +61,7 @@ void robot::create_command()
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 
-		ecp_command.pins_buf = sbench_command_data_port.data;
+		ecp_command.sbench.pins_buf = sbench_command_data_port.data;
 
 		if (is_new_data) {
 			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
@@ -93,7 +93,7 @@ void robot::create_command()
 void robot::get_reply()
 {
 	if (sbench_reply_data_request_port.is_new_request()) {
-		sbench_reply_data_request_port.data = reply_package.pins_buf;
+		sbench_reply_data_request_port.data = reply_package.sbench.pins_buf;
 		sbench_reply_data_request_port.set();
 	}
 }

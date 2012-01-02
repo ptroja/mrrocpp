@@ -92,7 +92,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 void effector::move_arm(const lib::c_buffer &instruction)
 {
 
-	lib::sbench::cbuffer & local_instruction = (lib::sbench::cbuffer&) instruction;
+	lib::sbench::c_buffer & local_instruction = (lib::sbench::c_buffer&) instruction;
 
 	msg->message("move_arm");
 
@@ -100,7 +100,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	lib::sbench::pins_buffer pins_buf;
 
-	memcpy(&pins_buf, &(local_instruction.pins_buf), sizeof(pins_buf));
+	memcpy(&pins_buf, &(local_instruction.sbench.pins_buf), sizeof(pins_buf));
 
 	if (robot_test_mode) {
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
@@ -151,7 +151,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		} // send command to hardware
 
 	}
-	reply.pins_buf = current_pins_buf;
+	reply.sbench.pins_buf = current_pins_buf;
 
 	reply.servo_step = step_counter;
 }

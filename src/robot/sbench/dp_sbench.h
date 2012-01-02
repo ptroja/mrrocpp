@@ -73,7 +73,7 @@ public:
  * @brief SwarmItFix Head EDP command buffer
  * @ingroup sbench
  */
-struct cbuffer : lib::c_buffer
+struct cbuffer
 {
 	pins_buffer pins_buf;
 
@@ -84,8 +84,28 @@ struct cbuffer : lib::c_buffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object <c_buffer>(*this);
 		ar & pins_buf;
+	}
+
+}__attribute__((__packed__));
+
+/*!
+ * @brief SwarmItFix Head EDP command buffer
+ * @ingroup sbench
+ */
+struct c_buffer : lib::c_buffer
+{
+	cbuffer sbench;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & sbench;
 	}
 
 }__attribute__((__packed__));
@@ -106,8 +126,25 @@ struct rbuffer : lib::r_buffer
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		// serialize base class informationZ
-		ar & boost::serialization::base_object <r_buffer>(*this);
 		ar & pins_buf;
+	}
+
+}__attribute__((__packed__));
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer sbench;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & sbench;
 	}
 
 }__attribute__((__packed__));
