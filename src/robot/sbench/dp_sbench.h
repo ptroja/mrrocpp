@@ -67,7 +67,7 @@ public:
 		ar & pins_state;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Head EDP command buffer
@@ -87,7 +87,7 @@ struct cbuffer
 		ar & pins_buf;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Head EDP command buffer
@@ -108,7 +108,7 @@ struct c_buffer : lib::c_buffer
 		ar & sbench;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Head EDP reply buffer
@@ -129,7 +129,7 @@ struct rbuffer : lib::r_buffer
 		ar & pins_buf;
 	}
 
-}__attribute__((__packed__));
+};
 
 struct r_buffer : lib::r_buffer
 {
@@ -147,7 +147,7 @@ struct r_buffer : lib::r_buffer
 		ar & sbench;
 	}
 
-}__attribute__((__packed__));
+};
 
 } // namespace sbench
 }

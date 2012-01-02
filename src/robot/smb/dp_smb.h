@@ -74,7 +74,7 @@ struct leg_reply
 		ar & is_attached;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base single leg festo command
@@ -108,7 +108,7 @@ struct festo_command_td
 		ar & undetachable;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base multi leg reply
@@ -129,7 +129,7 @@ struct multi_leg_reply_td
 		ar & leg;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Epos all controllers status
@@ -178,7 +178,7 @@ struct smb_epos_simple_command
 		ar & pkm_vs_base_rotation;
 		ar & estimated_time;
 	}
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base EDP command buffer
@@ -258,7 +258,7 @@ struct cbuffer
 		};
 	}
 
-}__attribute__((__packed__));
+};
 
 struct c_buffer : lib::c_buffer
 {
@@ -275,7 +275,7 @@ struct c_buffer : lib::c_buffer
 		ar & smb;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base EDP reply buffer
@@ -315,7 +315,7 @@ struct r_buffer : lib::r_buffer
 		ar & smb;
 	}
 
-}__attribute__((__packed__));
+};
 
 } // namespace smb
 }

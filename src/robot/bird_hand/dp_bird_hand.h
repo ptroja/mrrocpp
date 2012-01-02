@@ -73,7 +73,7 @@ struct single_joint_command
 		ar & desired_position;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief Bird Hand single joint reply status
@@ -113,7 +113,7 @@ struct single_joint_status
 		ar & upper_limit_of_measured_current;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief Bird Hand configuration command for single joint
@@ -121,16 +121,16 @@ struct single_joint_status
  */
 struct single_joint_configuration
 {
-	int p_factor;
-	int i_factor;
-	int d_factor;
-	int value_of_upper_limit_of_absolute_position;
-	int value_of_lower_limit_of_absolute_position;
-	int value_of_upper_limit_of_measured_current;
-	int value_of_upper_limit_of_absolute_value_of_torque;
-	int value_of_lower_limit_of_absolute_value_of_torque;
-	int value_of_lower_limit_of_absolute_value_of_meassured_torque;
-	int value_of_upper_limit_of_position_increment;
+	int32_t p_factor;
+	int32_t i_factor;
+	int32_t d_factor;
+	int32_t value_of_upper_limit_of_absolute_position;
+	int32_t value_of_lower_limit_of_absolute_position;
+	int32_t value_of_upper_limit_of_measured_current;
+	int32_t value_of_upper_limit_of_absolute_value_of_torque;
+	int32_t value_of_lower_limit_of_absolute_value_of_torque;
+	int32_t value_of_lower_limit_of_absolute_value_of_meassured_torque;
+	int32_t value_of_upper_limit_of_position_increment;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -151,7 +151,7 @@ struct single_joint_configuration
 		ar & value_of_upper_limit_of_position_increment;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief multi joint position/torque command for whole gripper
@@ -179,7 +179,7 @@ struct command
 		ar & ring_f;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief multi joint reply status for whole gripper
@@ -203,7 +203,7 @@ struct status
 		ar & ring_f;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief multi joint configuration command for whole gripper
@@ -226,7 +226,30 @@ struct configuration
 		ar & index_f;
 		ar & ring_f;
 	}
-}__attribute__((__packed__));
+};
+
+typedef struct
+{
+	/*!
+	 * @brief Motion duration in EDP steps
+	 */
+	int32_t motion_steps;
+	/*!
+	 * @brief EDP query step number
+	 */
+	int32_t ecp_query_step;
+	single_joint_command finger[NUM_OF_SERVOS];
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & motion_steps;
+		ar & ecp_query_step;
+		ar & finger;
+	}
+
+} command_structure_t;
 
 /*!
  * @brief Bird Hand EDP command buffer
@@ -237,18 +260,8 @@ struct cbuffer
 	/*!
 	 * @brief Motion command
 	 */
-	struct
-	{
-		/*!
-		 * @brief Motion duration in EDP steps
-		 */
-		int motion_steps;
-		/*!
-		 * @brief EDP query step number
-		 */
-		int ecp_query_step;
-		single_joint_command finger[NUM_OF_SERVOS];
-	} command_structure;
+	command_structure_t command_structure;
+
 	/*!
 	 * @brief Configuration command
 	 */
@@ -264,14 +277,11 @@ struct cbuffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & command_structure.motion_steps;
-		ar & command_structure.ecp_query_step;
-		ar & command_structure.finger;
-
+		ar & command_structure;
 		ar & configuration_command_structure.finger;
 	}
 
-}__attribute__((__packed__));
+};
 
 struct c_buffer : lib::c_buffer
 {
@@ -288,7 +298,7 @@ struct c_buffer : lib::c_buffer
 		ar & bird_hand;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief Bird Hand EDP reply buffer
@@ -317,7 +327,7 @@ struct rbuffer
 		ar & configuration_reply_structure.finger;
 	}
 
-}__attribute__((__packed__));
+};
 
 struct r_buffer : lib::r_buffer
 {
@@ -335,7 +345,7 @@ struct r_buffer : lib::r_buffer
 		ar & bird_hand;
 	}
 
-}__attribute__((__packed__));
+};
 
 } // namespace bird_hand
 } // namespace lib

@@ -107,7 +107,7 @@ private:
 		ar & vacuum_state;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Head EDP command buffer variant
@@ -178,7 +178,7 @@ private:
 		};
 	}
 
-}__attribute__((__packed__));
+};
 
 struct c_buffer : lib::c_buffer
 {
@@ -195,8 +195,7 @@ struct c_buffer : lib::c_buffer
 		ar & shead;
 	}
 
-}__attribute__((__packed__));
-
+};
 
 /*!
  * @brief SwarmItFix Head EDP reply buffer
@@ -220,7 +219,7 @@ private:
 		ar & epos_controller;
 	}
 
-}__attribute__((__packed__));
+};
 
 struct r_buffer : lib::r_buffer
 {
@@ -238,7 +237,7 @@ struct r_buffer : lib::r_buffer
 		ar & shead;
 	}
 
-}__attribute__((__packed__));
+};
 
 } // namespace shead
 }

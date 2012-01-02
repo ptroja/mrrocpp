@@ -192,7 +192,7 @@ struct spkm_epos_simple_command
 		ar & desired_position;
 		ar & estimated_time;
 	}
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP variant buffer
@@ -269,7 +269,7 @@ struct cbuffer
 				break;
 		};
 	}
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Head EDP command buffer
@@ -290,7 +290,7 @@ struct c_buffer : lib::c_buffer
 		ar & spkm;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP reply buffer
@@ -334,7 +334,7 @@ struct r_buffer : lib::r_buffer
 		ar & spkm;
 	}
 
-}__attribute__((__packed__));
+};
 
 } // namespace spkm
 } // namespace lib
