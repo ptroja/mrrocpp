@@ -90,8 +90,6 @@ struct reply
 	//! Constructor with default values
 	reply();
 
-	reply & operator =(const reply &); // operator przypisania
-
 	solidification_state_t solidification_state;
 
 	vacuum_state_t vacuum_state;

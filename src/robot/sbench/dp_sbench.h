@@ -56,8 +56,6 @@ public:
 	void set_value(int row, int column, int value);
 	bool get_value(int row, int column);
 
-	pins_buffer & operator =(const pins_buffer &); // operator przypisania
-
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 

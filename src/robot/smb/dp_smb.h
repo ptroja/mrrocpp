@@ -62,77 +62,31 @@ class action
 {
 public:
 	//! Constructor with reasonable defaults
-	action() :
-		rotationPin(0),
-		dThetaInd(0),
-		dPkmTheta(0),
-		duration(0)
-	{
-	}
+	action();
 
 	//! Get motion duration parameter
-    double getDuration() const
-    {
-    	return duration;
-    }
+    double getDuration() const;
 
     //! Get PKM rotation
-    double getdPkmTheta() const
-    {
-    	return dPkmTheta;
-    }
+    double getdPkmTheta() const;
 
     //! Get rotation pin
-    unsigned int getRotationPin() const
-    {
-    	return rotationPin;
-    }
+    unsigned int getRotationPin() const;
 
     //! Get mobile base transrotation
-    int getdThetaInd() const
-    {
-    	return dThetaInd;
-    }
+    int getdThetaInd() const;
 
     //! Set motion duration parameter
-    void setDuration(double duration)
-    {
-    	if(duration < 0) {
-    		BOOST_THROW_EXCEPTION(action_parameter_error());
-    	}
-
-    	this->duration = duration;
-    }
+    void setDuration(double duration);
 
     //! Set PKM relative rotation
-    void setdPkmTheta(double dPkmTheta)
-    {
-    	if (dPkmTheta < -2*M_PI || dPkmTheta > 2*M_PI) {
-    		BOOST_THROW_EXCEPTION(action_parameter_error());
-    	}
-
-    	this->dPkmTheta = dPkmTheta;
-    }
+    void setdPkmTheta(double dPkmTheta);
 
     //! Set PIN to rotate about
-    void setRotationPin(unsigned int rotationPin)
-    {
-    	if(rotationPin < 0 || rotationPin > 3) {
-    		BOOST_THROW_EXCEPTION(action_parameter_error());
-    	}
-
-    	this->rotationPin = rotationPin;
-    }
+    void setRotationPin(unsigned int rotationPin);
 
     //! Set mobile base relative rotation
-    void setdThetaInd(int dThetaInd)
-    {
-    	if (dThetaInd < -5 || dThetaInd > +5) {
-    		BOOST_THROW_EXCEPTION(action_parameter_error());
-    	}
-
-    	this->dThetaInd = dThetaInd;
-    }
+    void setdThetaInd(int dThetaInd);
 
 private:
 	//! Pin around which to rotate {0,1,2,3}
@@ -233,16 +187,7 @@ struct festo_command_td
 	bool undetachable[LEG_CLAMP_NUMBER];
 
 	//! Initialize "safe" command
-	festo_command_td()
-	{
-		for(int i = 0; i < LEG_CLAMP_NUMBER; ++i) {
-			// Defaults to out...
-			leg[i] = OUT;
-
-			// Do not ask...
-			undetachable[i] = false;
-		}
-	}
+	festo_command_td();
 
 private:
 	//! Give access to boost::serialization framework
@@ -267,6 +212,7 @@ struct smb_ext_epos_reply
 	lib::Homog_matrix current_frame;
 	lib::epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -292,12 +238,7 @@ struct motor_command
 	double estimated_time;
 
 	//! Initialize "safe" command
-	motor_command() :
-		base_vs_bench_rotation(0),
-		pkm_vs_base_rotation(0.0),
-		estimated_time(0.0)
-	{
-	}
+	motor_command();
 
 private:
 	//! Give access to boost::serialization framework
@@ -344,6 +285,7 @@ struct cbuffer
 	//! In another case, the NACK will be replied.
 	double duration;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -389,6 +331,7 @@ struct leg_reply
 	bool is_out;
 	bool is_attached;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -411,6 +354,7 @@ struct multi_leg_reply_td
 {
 	leg_reply leg[LEG_CLAMP_NUMBER];
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -432,6 +376,7 @@ struct rbuffer
 	multi_leg_reply_td multi_leg_reply;
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -442,7 +387,6 @@ struct rbuffer
 		ar & multi_leg_reply;
 		ar & epos_controller;
 	}
-
 };
 
 } // namespace smb

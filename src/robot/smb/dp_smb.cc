@@ -16,34 +16,89 @@ namespace mrrocpp {
 namespace lib {
 namespace smb {
 
-leg_reply & leg_reply::operator=(const leg_reply & wzor)
+action::action() :
+		rotationPin(0), dThetaInd(0), dPkmTheta(0), duration(0)
 {
-	// operator przypisania
-	// parametry macierzy przyjmuja wartosc jak parametry macierzy podanej jako argumet
-
-	if (this == &wzor)
-		return *this;
-
-	is_in = wzor.is_in;
-	is_out = wzor.is_out;
-	is_attached = wzor.is_attached;
-
-	return *this;
 }
 
-multi_leg_reply_td & multi_leg_reply_td::operator=(const multi_leg_reply_td & wzor)
+//! Get motion duration parameter
+double action::getDuration() const
 {
-	// operator przypisania
-	// parametry macierzy przyjmuja wartosc jak parametry macierzy podanej jako argumet
+	return duration;
+}
 
-	if (this == &wzor)
-		return *this;
+//! Get PKM rotation
+double action::getdPkmTheta() const
+{
+	return dPkmTheta;
+}
 
-	for (int i = 0; i < LEG_CLAMP_NUMBER; ++i) {
-		leg[i] = wzor.leg[i];
+//! Get rotation pin
+unsigned int action::getRotationPin() const
+{
+	return rotationPin;
+}
+
+//! Get mobile base transrotation
+int action::getdThetaInd() const
+{
+	return dThetaInd;
+}
+
+//! Set motion duration parameter
+void action::setDuration(double duration)
+{
+	if (duration < 0) {
+		BOOST_THROW_EXCEPTION(action_parameter_error());
 	}
 
-	return *this;
+	this->duration = duration;
+}
+
+//! Set PKM relative rotation
+void action::setdPkmTheta(double dPkmTheta)
+{
+	if (dPkmTheta < -2 * M_PI || dPkmTheta > 2 * M_PI) {
+		BOOST_THROW_EXCEPTION(action_parameter_error());
+	}
+
+	this->dPkmTheta = dPkmTheta;
+}
+
+//! Set PIN to rotate about
+void action::setRotationPin(unsigned int rotationPin)
+{
+	if (rotationPin < 0 || rotationPin > 3) {
+		BOOST_THROW_EXCEPTION(action_parameter_error());
+	}
+
+	this->rotationPin = rotationPin;
+}
+
+//! Set mobile base relative rotation
+void action::setdThetaInd(int dThetaInd)
+{
+	if (dThetaInd < -5 || dThetaInd > +5) {
+		BOOST_THROW_EXCEPTION(action_parameter_error());
+	}
+
+	this->dThetaInd = dThetaInd;
+}
+
+festo_command_td::festo_command_td()
+{
+	for (int i = 0; i < LEG_CLAMP_NUMBER; ++i) {
+		// Defaults to out...
+		leg[i] = OUT;
+
+		// Do not ask...
+		undetachable[i] = false;
+	}
+}
+
+motor_command::motor_command() :
+		base_vs_bench_rotation(0), pkm_vs_base_rotation(0.0), estimated_time(0.0)
+{
 }
 
 } // namespace robot
