@@ -62,7 +62,6 @@ struct leg_reply
 	bool is_out;
 	bool is_attached;
 
-
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -261,6 +260,23 @@ struct cbuffer
 
 }__attribute__((__packed__));
 
+struct c_buffer : lib::c_buffer
+{
+	cbuffer smb;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & smb;
+	}
+
+}__attribute__((__packed__));
+
 /*!
  * @brief SwarmItFix Mobile Base EDP reply buffer
  * @ingroup smb
@@ -282,6 +298,24 @@ struct rbuffer
 	}
 
 };
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer smb;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & smb;
+	}
+
+}__attribute__((__packed__));
 
 } // namespace smb
 }

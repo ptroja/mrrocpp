@@ -180,6 +180,24 @@ private:
 
 }__attribute__((__packed__));
 
+struct c_buffer : lib::c_buffer
+{
+	cbuffer shead;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & shead;
+	}
+
+}__attribute__((__packed__));
+
+
 /*!
  * @brief SwarmItFix Head EDP reply buffer
  * @ingroup shead
@@ -200,6 +218,24 @@ private:
 	{
 		ar & shead_reply;
 		ar & epos_controller;
+	}
+
+}__attribute__((__packed__));
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer shead;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & shead;
 	}
 
 }__attribute__((__packed__));

@@ -272,6 +272,27 @@ struct cbuffer
 }__attribute__((__packed__));
 
 /*!
+ * @brief SwarmItFix Head EDP command buffer
+ * @ingroup spkm
+ */
+struct c_buffer : lib::c_buffer
+{
+	cbuffer spkm;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & spkm;
+	}
+
+}__attribute__((__packed__));
+
+/*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP reply buffer
  * @ingroup spkm
  */
@@ -296,6 +317,24 @@ struct rbuffer
 		ar & contact;
 	}
 };
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer spkm;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & spkm;
+	}
+
+}__attribute__((__packed__));
 
 } // namespace spkm
 } // namespace lib
