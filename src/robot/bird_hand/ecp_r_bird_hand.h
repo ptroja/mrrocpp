@@ -24,19 +24,9 @@ namespace bird_hand {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup bird_hand
  */
-class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
+class robot : public common::robot::_ecp_robot <lib::bird_hand::c_buffer, lib::bird_hand::r_buffer>, public kinematics::common::kinematics_manager
 {
 protected:
-
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::bird_hand::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::bird_hand::rbuffer edp_ecp_rbuffer;
 
 	void create_kinematic_models_for_given_robot(void);
 

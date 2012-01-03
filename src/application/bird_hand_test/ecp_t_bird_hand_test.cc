@@ -23,10 +23,11 @@ namespace task {
 
 // KONSTRUKTORY
 bird_hand_test::bird_hand_test(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::_task <ecp::bird_hand::robot>(_config)
+//		common::task::task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
+	ecp_m_robot = (boost::shared_ptr <robot_t>) new robot(*this);
 
 	gt = new common::generator::transparent(*this);
 	g_sleep = new common::generator::sleep(*this);

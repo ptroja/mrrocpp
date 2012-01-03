@@ -37,7 +37,7 @@ endif(ROBOT_BIRD_HAND)
 
 if(ROBOT_BIRD_HAND)
 if(ROBOTS_012)
-add_subdirectory (graspit)
+#add_subdirectory (graspit)
 endif(ROBOTS_012)
 endif(ROBOT_BIRD_HAND)
 
