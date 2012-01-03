@@ -54,11 +54,9 @@ protected:
 	//! Check state of the EPOS controller.
 	void check_controller_state();
 
-	lib::shead::cbuffer ecp_edp_cbuffer;
-	lib::shead::rbuffer edp_ecp_rbuffer;
-
 	//! Virtual state for test mode
-	struct _virtual_state {
+	struct _virtual_state
+	{
 		//! Solidification state
 		lib::shead::solidification_state_t solidification_state;
 
@@ -67,9 +65,10 @@ protected:
 
 		//! Setup startup values
 		_virtual_state() :
-			solidification_state(lib::shead::SOLIDIFICATION_STATE_OFF),
-			vacuum_state(lib::shead::VACUUM_STATE_OFF)
-		{};
+				solidification_state(lib::shead::SOLIDIFICATION_STATE_OFF), vacuum_state(lib::shead::VACUUM_STATE_OFF)
+		{
+		}
+		;
 	} virtual_state;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
@@ -127,22 +126,11 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	/*!
-	 * \brief method to deserialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void instruction_deserialization();
+	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	void variant_reply_to_instruction();
 
-	/*!
-	 * \brief method to serialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void reply_serialization();
-
-	lib::c_buffer instruction;
-	lib::r_buffer reply;
+	lib::shead::c_buffer instruction;
+	lib::shead::r_buffer reply;
 
 };
 
