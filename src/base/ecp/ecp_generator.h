@@ -142,7 +142,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	_generator(common::task::_task <ECP_ROBOT_T> & _ecp_task) :
+	_generator(task_t & _ecp_task) :
 			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), ecp_t(_ecp_task) //, the_robot(ecp_t.ecp_m_robot)
 	{
 		if (ecp_t.ecp_m_robot.get()) {
