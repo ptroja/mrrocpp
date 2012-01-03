@@ -155,7 +155,7 @@ public:
 	{
 	}
 
-	};
+};
 
 typedef _generator <robot::ecp_robot> generator;
 

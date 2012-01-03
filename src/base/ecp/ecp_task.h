@@ -71,12 +71,6 @@ private:
 	 */
 	void initialize_communication(void);
 
-public:
-	/**
-	 * @brief Generic robot object pointer
-	 */
-	boost::shared_ptr<robot::ecp_robot_base> ecp_m_robot;
-
 protected:
 	/**
 	 * @brief Gets next state from MP
@@ -88,6 +82,9 @@ protected:
 
 	//! Type of the MP to ECP command package
 	typedef lib::MP_COMMAND_PACKAGE mp_command_t;
+
+public:
+	const boost::shared_ptr<robot::ecp_robot_base> & ecp_m_robot;
 
 public:
 	// TODO: following packages should be 'protected'
@@ -144,7 +141,7 @@ public:
 	 * @brief Constructor
 	 * @param _config configurator object reference.
 	 */
-	task_base(lib::configurator &_config);
+	task_base(lib::configurator &_config, boost::shared_ptr<robot::ecp_robot_base> & robot_ref);
 
 	/**
 	 * @brief Destructor
@@ -219,9 +216,8 @@ public:
 	 * @param _config configurator object reference.
 	 */
 	_task(lib::configurator &_config) :
-		task_base(_config)
+		task_base(_config, *((boost::shared_ptr<robot::ecp_robot_base> *) &ecp_m_robot))
 	{
-		ecp_m_robot = boost::dynamic_pointer_cast<ECP_ROBOT_T>(task_base::ecp_m_robot);
 	}
 
 	/**

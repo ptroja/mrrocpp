@@ -279,6 +279,11 @@ struct UI_reply
 	char path[80];
 	char filename[20];
 
+	UI_reply() {
+		path[0] = '\0';
+		filename[0] = '\0';
+	}
+
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
