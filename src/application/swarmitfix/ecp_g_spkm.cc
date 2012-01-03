@@ -33,7 +33,7 @@ spkm_pose::spkm_pose(task_t & _ecp_task, const lib::spkm::next_state_t::segment_
 void spkm_pose::request_segment_execution(robot_t & robot, const lib::spkm::segment_t & segment)
 {
 	// Copy the motion type
-	robot.epos_external_command_data_port.data.pose_specification = lib::spkm::XYZ_EULER_ZYZ;
+	robot.epos_external_command_data_port.data.pose_specification = lib::spkm::TOOL_XYZ_EULER_ZYZ;
 	robot.epos_external_command_data_port.data.motion_variant = segment.motion_type;
 	robot.epos_external_command_data_port.data.estimated_time = segment.duration;
 
@@ -73,7 +73,7 @@ bool spkm_pose::first_step()
 	request_segment_execution(*the_robot, *segment_iterator);
 
 	// Request status report
-	the_robot->epos_external_reply_data_request_port.set_data = lib::spkm::XYZ_EULER_ZYZ;
+	the_robot->epos_external_reply_data_request_port.set_data = lib::spkm::TOOL_XYZ_EULER_ZYZ;
 	the_robot->epos_external_reply_data_request_port.set_request();
 
 	return true;

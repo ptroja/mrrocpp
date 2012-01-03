@@ -58,7 +58,7 @@ private:
 
 //	int synchro_depended_widgets_disable(bool _set_disabled);
 
-	int get_desired_position();
+	void get_desired_position();
 	int move_it();
 	//int motion(/* TR PtWidget_t *widget, ApInfo_t *apinfo, PtCallbackInfo_t *cbinfo*/);
 	//int set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip);

@@ -19,6 +19,7 @@
 #include "robot/maxon/dp_epos.h"
 #include "const_smb.h"
 #include "base/lib/exception.h"
+#include "base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -344,6 +345,7 @@ struct cbuffer
 	//! In another case, the NACK will be replied.
 	double duration;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 

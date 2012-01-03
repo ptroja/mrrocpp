@@ -8,6 +8,10 @@
 #ifndef ECP_UI_MSG_H_
 #define ECP_UI_MSG_H_
 
+#include <boost/serialization/serialization.hpp>
+
+#include "base/lib/impconst.h"
+
 namespace mrrocpp {
 namespace lib {
 

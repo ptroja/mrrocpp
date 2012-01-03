@@ -42,7 +42,7 @@ private:
 	void init_mr_and_si();
 	void copy_mr_and_si();
 
-	int synchro_depended_widgets_disable(bool _set_disabled);
+	void synchro_depended_widgets_disable(bool _set_disabled);
 
 	int init_mr();
 	int copy_mr();

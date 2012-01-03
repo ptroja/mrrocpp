@@ -173,7 +173,7 @@ int wgt_irp6_m_tool_angle_axis::init()
 //	move_it();
 //}
 
-int wgt_irp6_m_tool_angle_axis::get_desired_position()
+void wgt_irp6_m_tool_angle_axis::get_desired_position()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -190,7 +190,6 @@ int wgt_irp6_m_tool_angle_axis::get_desired_position()
 			}
 		}
 	}
-	return 1;
 }
 
 int wgt_irp6_m_tool_angle_axis::move_it()

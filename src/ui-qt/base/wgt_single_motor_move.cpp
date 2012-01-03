@@ -39,7 +39,7 @@ void wgt_single_motor_move::init_and_copy()
 	emit init_and_copy_signal();
 }
 
-int wgt_single_motor_move::synchro_depended_widgets_disable(bool _set_disabled)
+void wgt_single_motor_move::synchro_depended_widgets_disable(bool _set_disabled)
 {
 	ui.pushButton_execute_mr->setDisabled(_set_disabled);
 	ui.pushButton_read_mr->setDisabled(_set_disabled);
@@ -57,8 +57,6 @@ int wgt_single_motor_move::synchro_depended_widgets_disable(bool _set_disabled)
 	ui.doubleSpinBox_des_si->setDisabled(_set_disabled);
 	ui.pushButton_l_si->setDisabled(_set_disabled);
 	ui.pushButton_r_si->setDisabled(_set_disabled);
-
-	return 1;
 }
 
 void wgt_single_motor_move::init_and_copy_slot()
