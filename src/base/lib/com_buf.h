@@ -363,6 +363,7 @@ struct edp_error
 	uint64_t error0;
 	uint64_t error1;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -417,6 +418,7 @@ _robot_model
 		double weight;
 	} force_tool;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -472,6 +474,7 @@ typedef struct c_buffer_arm
 	} pf_def;
 	//----------------------------------------------------------
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -546,28 +549,6 @@ struct c_buffer
 	//                      METHODS
 	//-----------------------------------------------------
 
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & instruction_type;
-		ar & set_type;
-		ar & get_type;
-		ar & get_robot_model_type;
-		ar & set_arm_type;
-		ar & get_arm_type;
-		ar & output_values;
-		ar & interpolation_type;
-		ar & motion_type;
-		ar & motion_steps;
-		ar & value_in_step_no;
-		ar & robot_model;
-		ar & arm;
-	}
-
 	c_buffer(void); // by W odkomentowane
 	/*!
 	 *  Oczytac wejscia?
@@ -604,6 +585,29 @@ struct c_buffer
 	 *  @todo Translate to English.
 	 */
 	bool is_set_arm() const;
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & instruction_type;
+		ar & set_type;
+		ar & get_type;
+		ar & get_robot_model_type;
+		ar & set_arm_type;
+		ar & get_arm_type;
+		ar & output_values;
+		ar & interpolation_type;
+		ar & motion_type;
+		ar & motion_steps;
+		ar & value_in_step_no;
+		ar & robot_model;
+		ar & arm;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -626,6 +630,7 @@ typedef struct _controller_state_t
 	//! Flag informing whewher robot is in fault state or not.
 	bool robot_in_fault_state;
 
+private:
 	//! Give access to boost::serialization framework.
 	friend class boost::serialization::access;
 
@@ -704,8 +709,7 @@ typedef struct r_buffer_arm
 	 */
 	int16_t gripper_reg_state;
 
-	//----------------------------------------------------------
-
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -749,6 +753,10 @@ struct r_buffer_base
 	//! Set default values
 	r_buffer_base();
 
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
@@ -786,8 +794,9 @@ struct r_buffer : r_buffer_base
 	//-----------------------------------------------------
 	//                      METHODS
 	//-----------------------------------------------------
-	r_buffer(void); // W odkomentowane
+	r_buffer(void);
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -842,7 +851,7 @@ struct ecp_next_state_t
 	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
 	/*! Target position for the mobile robot. */
-playerpos_goal_t	playerpos_goal;
+	playerpos_goal_t playerpos_goal;
 
 	const char * get_mp_2_ecp_next_state_string() const;
 
@@ -905,6 +914,7 @@ struct ECP_REPLY_PACKAGE
 	r_buffer reply_package;
 	char recognized_command[ECP_2_MP_STRING_SIZE];
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -924,6 +934,7 @@ struct ECP_REPLY_PACKAGE
  */
 typedef struct _empty
 {
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
