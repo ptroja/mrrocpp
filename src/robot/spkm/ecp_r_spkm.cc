@@ -27,8 +27,6 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
 		epos_external_reply_data_request_port(lib::spkm::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
 {
-	// Stworzenie listy dostepnych kinematyk.
-	create_kinematic_models_for_given_robot();
 }
 
 robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object) :
@@ -42,8 +40,6 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
 		epos_external_reply_data_request_port(lib::spkm::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
 {
-	// Stworzenie listy dostepnych kinematyk.
-	create_kinematic_models_for_given_robot();
 }
 
 void robot::create_command()
@@ -226,7 +222,7 @@ void robot::get_reply()
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
 		sr_ecp_msg.message("ECP get_reply epos_external_reply_data_request_port");
-#if 1
+
 		// generator reply generation
 		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
 			epos_external_reply_data_request_port.data.epos_controller[i].position =
@@ -243,22 +239,9 @@ void robot::get_reply()
 			epos_external_reply_data_request_port.data.current_pose[i] = edp_ecp_rbuffer.current_pose[i];
 		}
 
-#else
-		epos_external_reply_data_request_port.data = edp_ecp_rbuffer;
-#endif
-
 		epos_external_reply_data_request_port.set();
 	}
 
-}
-
-// Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
-void robot::create_kinematic_models_for_given_robot(void)
-{
-	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm());
-	// Ustawienie aktywnego modelu.
-	set_kinematic_model(0);
 }
 
 } // namespace spkm

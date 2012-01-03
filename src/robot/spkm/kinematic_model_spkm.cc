@@ -22,17 +22,17 @@ namespace kinematics {
 namespace spkm {
 
 //! Prints reference frames.
-#define DEBUG_KINEMATICS 0
+#define DEBUG_KINEMATICS 1
 
-//! Eps used in Spherical wrist inverse kinematics.
-#define EPS 1.0e-10
-
-
-
-kinematic_model_spkm::kinematic_model_spkm(void)
+kinematic_model_spkm::kinematic_model_spkm(const kinematic_parameters_spkm & params_)
+	: params(params_)
 {
 	// Set model name.
 	set_kinematic_model_label("PKM 6DOF (SW+PM) kinematic model. PM inverse kinematics by D.Zlatanow and M.Zoppi");
+}
+
+const kinematic_parameters_spkm & kinematic_model_spkm::get_kinematic_parameters() {
+	return params;
 }
 
 void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_position) const
@@ -40,9 +40,9 @@ void kinematic_model_spkm::check_motor_position(const lib::MotorArray & motor_po
 	// Check upper limit for every motor.
 	for (int i = 0; i < 6; ++i) {
 		if (motor_position[i] > params.upper_motor_pos_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(UPPER_LIMIT) << desired_value(motor_position[i]));
+			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(UPPER_LIMIT) << desired_value(motor_position[i]) << limit_value(params.upper_motor_pos_limits[i]));
 		else if (motor_position[i] < params.lower_motor_pos_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(LOWER_LIMIT) << desired_value(motor_position[i]));
+			BOOST_THROW_EXCEPTION(nfe_motor_limit() << motor_number(i) << limit_type(LOWER_LIMIT) << desired_value(motor_position[i]) << limit_value(params.lower_motor_pos_limits[i]));
 	}
 }
 
@@ -51,9 +51,9 @@ void kinematic_model_spkm::check_joints(const lib::JointArray & q) const
 	// Check joint limit for every axis.
 	for (int i = 0; i < 6; ++i) {
 		if (q[i] > params.upper_joints_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_joint_limit() << joint_number(i) << limit_type(UPPER_LIMIT));
+			BOOST_THROW_EXCEPTION(nfe_joint_limit() << joint_number(i) << limit_type(UPPER_LIMIT) << limit_value(params.upper_joints_limits[i]));
 		else if (q[i] < params.lower_joints_limits[i])
-			BOOST_THROW_EXCEPTION(nfe_joint_limit() << joint_number(i) << limit_type(LOWER_LIMIT));
+			BOOST_THROW_EXCEPTION(nfe_joint_limit() << joint_number(i) << limit_type(LOWER_LIMIT) << limit_value(params.lower_joints_limits[i]));
 	}
 }
 
@@ -90,9 +90,9 @@ void kinematic_model_spkm::check_cartesian_pose(const lib::Homog_matrix& H_) con
 	// Check thyk alpha angle.
 	for (int i = 0; i < 3; ++i) {
 		if (thyk_alpha[i] > params.upper_alpha_thyk_angle_limit[i])
-			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_alpha[i]));
+			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_alpha[i]) << limit_value(params.upper_alpha_thyk_angle_limit[i]));
 		else if (thyk_alpha[i] < params.lower_alpha_thyk_angle_limit[i])
-			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_alpha[i]));
+			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_alpha[i]) << limit_value(params.lower_alpha_thyk_angle_limit[i]));
 	}
 
 	// Thyk beta = rotation around the y axes of legs A, B, and C of the upper platform: alpha = arc tan (|x|/|z|).
@@ -107,9 +107,9 @@ void kinematic_model_spkm::check_cartesian_pose(const lib::Homog_matrix& H_) con
 	// Check thyk beta angle.
 	for (int i = 0; i < 3; ++i) {
 		if (thyk_beta[i] > params.upper_beta_thyk_angle_limit[i])
-			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_beta[i]));
+			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_beta[i]) << desired_value(thyk_alpha[i]) << limit_value(params.upper_beta_thyk_angle_limit[i]));
 		else if (thyk_beta[i] < params.lower_beta_thyk_angle_limit[i])
-			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_beta[i]));
+			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_beta[i]) << desired_value(thyk_alpha[i]) << limit_value(params.lower_beta_thyk_angle_limit[i]));
 	}
 
 }
@@ -295,74 +295,13 @@ Homog4d kinematic_model_spkm::PM_O_P_T_from_e(const Vector5d & e_)
 
 Vector3d kinematic_model_spkm::SW_inverse(const Homog4d & wrist_twist_, const lib::JointArray & local_current_joints)
 {
-	double phi, theta, psi, dist;
-	double phi2, theta2, psi2, dist2;
 	Vector3d thetas;
+	mrrocpp::lib::Xyz_Euler_Zyz_vector xyz_zyz;
+	mrrocpp::lib::Homog_matrix tmp(wrist_twist_);
 
-#if(DEBUG_KINEMATICS)
-		std::cout.precision(15);
-		std::cout<<"u33 = "<< wrist_twist_(2,2) << endl;
-#endif
-
-	if ((wrist_twist_(2,2) < (1 + EPS)) && (wrist_twist_(2,2) > (1 - EPS))) {
-		// If u33 = 1 then theta is 0.
-		theta = 0;
-		// Infinite number of solutions: only the phi + psi value can be computed, thus we assume, that phi will equal to the previous one.
-		phi = local_current_joints[3];
-		psi = atan2(wrist_twist_(1,0), wrist_twist_(0,0)) - phi;
-		// atan2(r(2,1), r(1,1)) - phi
-#if(DEBUG_KINEMATICS)
-		std::cout.precision(15);
-		std::cout<<"CASE I: u33=1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
-#endif
-		thetas << phi, theta, psi;
-	} else if ((wrist_twist_(2,2) < (-1 + EPS)) && (wrist_twist_(2,2) > (-1 - EPS))) {
-		// If u33 = -1 then theta is equal to pi.
-		theta = M_PI;
-		// Infinite number of solutions: only the phi - psi value can be computed, thus we assume, that phi will equal to the previous one.
-		phi = local_current_joints[3];
-		psi = - atan2(-wrist_twist_(0,1), -wrist_twist_(0,0)) + phi;
-#if(DEBUG_KINEMATICS)
-		std::cout.precision(15);
-		std::cout<<"CASE II: u33=-1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
-#endif
-		thetas << phi, theta, psi;
-	} else {
-		// Two possible solutions.
-//		double sb = hypot(wrist_twist_(2,0), wrist_twist_(2,1));
-
-		// First solution.
-		theta = atan2(sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)), wrist_twist_(2,2));
-//		theta = atan2(sb, wrist_twist_(2,2));
-
-		phi = atan2(wrist_twist_(1,2), wrist_twist_(0,2));
-		psi = atan2(wrist_twist_(2,1), -wrist_twist_(2,0));
-#if(DEBUG_KINEMATICS)
-		std::cout.precision(15);
-		std::cout<<"CASE III: atan(u33, sqrt(1-u33^3)) => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
-#endif
-		// Compute maximal delta.
-		dist = std::max(std::max(fabs(phi - local_current_joints[3]), fabs(theta - local_current_joints[4])), fabs(psi - local_current_joints[5]));
-
-		// Second solution.
-		theta2 = atan2(-sqrt(1 - wrist_twist_(2,2)*wrist_twist_(2,2)), wrist_twist_(2,2));
-//		theta = atan2(-sb, wrist_twist_(2,2));
-
-		phi2 = atan2(-wrist_twist_(1,2), -wrist_twist_(0,2));
-		psi2 = atan2(-wrist_twist_(2,1), wrist_twist_(2,0));
-#if(DEBUG_KINEMATICS)
-		std::cout.precision(15);
-		std::cout<<"CASE IV: atan(u33, -sqrt(1-u33^3)) => ["<<phi2<<", "<<theta2<<", "<<psi2<<"]\n";
-#endif
-		// Compute maximal delta.
-		dist2 = std::max(std::max(fabs(phi2 - local_current_joints[3]), fabs(theta2 - local_current_joints[4])), fabs(psi2 - local_current_joints[5]));
-
-		// Select best solution.
-		if (dist < dist2)
-			thetas << phi, theta, psi;
-		else
-			thetas << phi2, theta2, psi2;
-	}
+	// Get euler zyz angles (choose solution on the base of previous settings).
+	tmp.get_xyz_euler_zyz_without_limits(xyz_zyz, local_current_joints[3], local_current_joints[4], local_current_joints[5]);
+	thetas << xyz_zyz(3), xyz_zyz(4), xyz_zyz(5);
 
 	// Return vector with thetas.
 #if(DEBUG_KINEMATICS)

@@ -129,10 +129,16 @@ public:
 	void command_all_out();
 
 	/*!
-	 * \brief moves all legs that are in the upper position down and detach them
+	 * \brief moves one or two legs out
 	 */
 
 	void move_one_or_two_out();
+
+	/*!
+	 * \brief moves one or two legs in
+	 */
+
+	void move_one_or_two_in();
 
 	/*!
 	 * \brief festo command one_up_two_down variant in move_arm
@@ -159,7 +165,7 @@ public:
 	 * \brief checks if upper halotron of particular leg is active
 	 * \param leg_number counter from 1
 	 */
-	bool is_inper_halotron_active(int leg_number);
+	bool is_upper_halotron_active(int leg_number);
 
 	/*!
 	 * \brief checks if lower halotron of particular leg is active

@@ -13,6 +13,7 @@
 
 #include "robot/maxon/dp_epos.h"
 #include "const_shead.h"
+#include "../../base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -24,11 +25,11 @@ namespace shead {
  */
 typedef enum _POSE_SPECIFICATION
 {
-	FRAME, JOINT, MOTOR
+	MOTOR, JOINT
 } POSE_SPECIFICATION;
 
 /*!
- * @brief SwarmItFix Head head soldification command data port
+ * @brief SwarmItFix Head head solidification command data port
  * @ingroup shead
  */
 const std::string SOLIDIFICATION_ACTIVATION_DATA_PORT = "SHEAD_SOLIDIFICATION_ACTIVATION_DATA_PORT";
@@ -46,42 +47,40 @@ const std::string VACUUM_ACTIVATION_DATA_PORT = "SHEAD_VACUUM_ACTIVATION_DATA_PO
 const std::string REPLY_DATA_REQUEST_PORT = "SHEAD_REPLY_DATA_REQUEST_PORT";
 
 /*!
- * @brief SwarmItFix Head EDP state of the head soldification enum
+ * @brief SwarmItFix Head EDP state of the head solidification
  * @ingroup shead
  */
-enum STATE_OF_THE_SOLDIFICATION
+typedef enum _STATE_OF_THE_SOLIDIFICATION
 {
-	SOLDIFICATION_STATE_ON, SOLDIFICATION_STATE_OFF, SOLDIFICATION_STATE_INTERMEDIATE
-};
+	SOLIDIFICATION_STATE_ON, SOLIDIFICATION_STATE_OFF, SOLIDIFICATION_STATE_INTERMEDIATE
+} solidification_state_t;
 
 /*!
- * @brief SwarmItFix Head EDP state of the vacuum enum
+ * @brief SwarmItFix Head EDP state of the vacuum
  * @ingroup shead
  */
-enum STATE_OF_THE_VACUUM
+typedef enum _STATE_OF_THE_VACUUM
 {
 	VACUUM_STATE_ON, VACUUM_STATE_OFF, VACUUM_STATE_INTERMEDIATE
-};
+} vacuum_state_t;
 
 /*!
- * @brief SwarmItFix Head EDP head soldification command enum
+ * @brief SwarmItFix Head EDP head solidification command
  * @ingroup shead
  */
 enum SOLIDIFICATION_ACTIVATION
 {
 	SOLIDIFICATION_ON, SOLIDIFICATION_OFF
 };
-// namespace mrrocpp
 
 /*!
- * @brief SwarmItFix Head EDP vacuum activation command enum
+ * @brief SwarmItFix Head EDP vacuum activation command
  * @ingroup shead
  */
 enum VACUUM_ACTIVATION
 {
 	VACUUM_ON, VACUUM_OFF
 };
-// namespace mrrocpp
 
 /*!
  * @brief SwarmItFix Head reply buffer
@@ -89,10 +88,14 @@ enum VACUUM_ACTIVATION
  */
 struct reply
 {
-	STATE_OF_THE_SOLDIFICATION soldification_state;
-	STATE_OF_THE_VACUUM vacuum_state;
-	bool contacts[3];
+	//! Constructor with default values
+	reply();
 
+	solidification_state_t solidification_state;
+
+	vacuum_state_t vacuum_state;
+
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -100,15 +103,14 @@ struct reply
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & soldification_state;
+		ar & solidification_state;
 		ar & vacuum_state;
-		ar & contacts;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
- * @brief SwarmItFix Head EDP command buffer variant enum
+ * @brief SwarmItFix Head EDP command buffer variant
  * @ingroup shead
  */
 enum CBUFFER_VARIANT
@@ -122,11 +124,11 @@ enum CBUFFER_VARIANT
  */
 struct cbuffer
 {
-
 	//! Variant of the command
 	CBUFFER_VARIANT variant;
 
 	lib::shead::SOLIDIFICATION_ACTIVATION head_solidification;
+
 	lib::shead::VACUUM_ACTIVATION vacuum_activation;
 
 	//! Pose specification type
@@ -134,12 +136,6 @@ struct cbuffer
 
 	//! Pose specification type
 	POSE_SPECIFICATION get_pose_specification;
-
-	//! Motion interpolation variant
-	lib::epos::EPOS_MOTION_VARIANT motion_variant;
-
-	//! Motion time - used in the Interpolated Position Mode.
-	double estimated_time;
 
 	int32_t motor_pos[NUM_OF_SERVOS];
 
@@ -151,12 +147,7 @@ struct cbuffer
 	//! In another case, the NACK will be replied.
 	double duration;
 
-	//! True if the contact is expected during the motion.
-	//! The NACK will be replied if:
-	//! - the contact was expected and did not happened
-	//! - OR the contact was NOT expected and did happened.
-	bool guarded_motion;
-
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -181,15 +172,30 @@ struct cbuffer
 						ar & motor_pos;
 						break;
 				}
-				ar & motion_variant;
-				ar & estimated_time;
 				break;
 			default:
 				break;
 		};
 	}
 
-}__attribute__((__packed__));
+};
+
+struct c_buffer : lib::c_buffer
+{
+	cbuffer shead;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & shead;
+	}
+
+};
 
 /*!
  * @brief SwarmItFix Head EDP reply buffer
@@ -198,8 +204,10 @@ struct cbuffer
 struct rbuffer
 {
 	reply shead_reply;
-	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 
+	epos::single_controller_epos_reply epos_controller;
+
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -211,7 +219,25 @@ struct rbuffer
 		ar & epos_controller;
 	}
 
-}__attribute__((__packed__));
+};
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer shead;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & shead;
+	}
+
+};
 
 } // namespace shead
 }

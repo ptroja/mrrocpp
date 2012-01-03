@@ -95,11 +95,25 @@ protected:
 	 */
 	bool no_data;
 
+//	T _data;
+
 public:
 	/**
 	 * @brief data stored basing on template
 	 */
 	T data;
+
+	/*
+	 T & data() {
+	 set();
+	 return _data;
+	 }
+
+	 const T & data() const
+	 {
+	 return _data;
+	 }
+	 */
 
 	/**
 	 * @brief Constructor

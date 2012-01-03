@@ -29,8 +29,8 @@ class effector : public common::motor_driven_effector
 {
 protected:
 
-	lib::sbench::cbuffer ecp_edp_cbuffer;
-	lib::sbench::rbuffer edp_ecp_rbuffer;
+	// lib::sbench::cbuffer ecp_edp_cbuffer;
+	//lib::sbench::rbuffer edp_ecp_rbuffer;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!
@@ -45,7 +45,7 @@ protected:
 	 *
 	 * it is cipied from desired in test_mode or read in hardware_mode
 	 */
-	lib::sbench::pins_state_td current_pins_state;
+	lib::sbench::pins_buffer current_pins_buf;
 
 public:
 
@@ -87,19 +87,11 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	/*!
-	 * \brief method to deserialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void instruction_deserialization();
+	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	void variant_reply_to_instruction();
 
-	/*!
-	 * \brief method to serialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void reply_serialization();
+	lib::sbench::c_buffer instruction;
+	lib::sbench::r_buffer reply;
 
 private:
 	const std::string dev_name;

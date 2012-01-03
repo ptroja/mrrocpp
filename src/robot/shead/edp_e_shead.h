@@ -13,6 +13,9 @@
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_shead.h"
 
+#include "robot/canopen/gateway.h"
+#include "robot/maxon/epos.h"
+
 namespace mrrocpp {
 namespace edp {
 namespace shead {
@@ -27,9 +30,46 @@ namespace shead {
 class effector : public common::motor_driven_effector
 {
 protected:
+	//! Access to the CAN gateway unit
+	boost::shared_ptr <canopen::gateway> gateway;
 
-	lib::shead::cbuffer ecp_edp_cbuffer;
-	lib::shead::rbuffer edp_ecp_rbuffer;
+	//! Digitial_input axis
+	boost::shared_ptr <maxon::epos> epos_node;
+
+	//! Default axis velocity [rpm]
+	static const uint32_t Vdefault;
+
+	//! Default axis acceleration [rpm/s]
+	static const uint32_t Adefault;
+
+	//! Default axis deceleration [rpm/s]
+	static const uint32_t Ddefault;
+
+	//! Parse command for motors.
+	void parse_motor_command();
+
+	//! Execute parsed command.
+	void execute_motor_motion();
+
+	//! Check state of the EPOS controller.
+	void check_controller_state();
+
+	//! Virtual state for test mode
+	struct _virtual_state
+	{
+		//! Solidification state
+		lib::shead::solidification_state_t solidification_state;
+
+		//! Vacuum state
+		lib::shead::vacuum_state_t vacuum_state;
+
+		//! Setup startup values
+		_virtual_state() :
+				solidification_state(lib::shead::SOLIDIFICATION_STATE_OFF), vacuum_state(lib::shead::VACUUM_STATE_OFF)
+		{
+		}
+		;
+	} virtual_state;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!
@@ -86,19 +126,11 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	/*!
-	 * \brief method to deserialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void instruction_deserialization();
+	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	void variant_reply_to_instruction();
 
-	/*!
-	 * \brief method to serialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void reply_serialization();
+	lib::shead::c_buffer instruction;
+	lib::shead::r_buffer reply;
 
 };
 

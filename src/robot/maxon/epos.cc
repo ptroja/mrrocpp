@@ -93,14 +93,14 @@ using namespace canopen;
 /************************************************************/
 
 // FIXME: this value should be 60, but it has to be tested
-const unsigned epos::SECONDS_PER_MINUTE = 60 * 60;
+const unsigned epos::SECONDS_PER_MINUTE = 60;
 
 /************************************************************/
 /*          high-level read functions */
 /************************************************************/
 
-epos::epos(gateway & _device, uint8_t _nodeId) :
-		device(_device), nodeId(_nodeId)
+epos::epos(gateway & _device, uint8_t _nodeId, const std::string & _deviceName) :
+		device(_device), nodeId(_nodeId), deviceName(_deviceName)
 {
 	// Read the cached parameters
 	OpMode = getActualOperationMode();
@@ -140,6 +140,11 @@ epos::epos(gateway & _device, uint8_t _nodeId) :
 	getGearRatioDenominator() << " maximal speed " <<
 	getGearMaximalSpeed() << std::endl;
 #endif
+}
+
+const std::string & epos::getDeviceName() const
+{
+	return deviceName;
 }
 
 /* read EPOS status word */
@@ -624,6 +629,7 @@ void epos::clearFault(void)
 		if (errNum > 0) {
 			clearNumberOfErrors();
 		}
+
 		// Reset errors.
 		setState(maxon::epos::FAULT_RESET);
 
@@ -671,6 +677,10 @@ void epos::reset()
 	// TODO: handle initial error conditions
 	actual_state_t state = getState();
 
+	std::cout << "EPOS node " << (unsigned int) nodeId
+			<< ": resetting from state '" << stateDescription(state) << "'"
+			<< std::endl;
+
 	// FAULT
 	if (state == FAULT) {
 		UNSIGNED8 errReg = getErrorRegister();
@@ -704,7 +714,9 @@ void epos::reset()
 	do {
 		state = getState();
 
-		if (state == READY_TO_SWITCH_ON) { // Operation enable
+		if (state == READY_TO_SWITCH_ON) {
+			break;
+		} else if (state == QUICK_STOP_ACTIVE) {
 			break;
 		} else if (state == FAULT) {
 			BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
@@ -720,15 +732,15 @@ void epos::reset()
 		// Wait for device state to change
 		boost::thread::sleep(wakeup);
 
-	} while (retry--);
+	} while (--retry);
 
 	if (retry == 0) {
 		BOOST_THROW_EXCEPTION(fe() << reason("Timeout shutting device down"));
 	}
 
 	// Ready-to-switch-On expected
-	if (state != READY_TO_SWITCH_ON) {
-		BOOST_THROW_EXCEPTION(fe() << reason("Ready-to-switch-On expected"));
+	if (state != READY_TO_SWITCH_ON && state != QUICK_STOP_ACTIVE) {
+		BOOST_THROW_EXCEPTION(fe() << reason("Ready-to-switch-On or Quick-Stop-Active expected"));
 	}
 
 	// Enable
@@ -773,7 +785,7 @@ void epos::reset()
 		// Wait for device state to change
 		boost::thread::sleep(wakeup);
 
-	} while (retry--);
+	} while (--retry);
 
 	if (retry == 0) {
 		BOOST_THROW_EXCEPTION(fe() << reason("Timeout enabling device"));
@@ -864,7 +876,6 @@ void epos::setState(desired_state_t state)
 	}
 }
 
-/* returns software version as HEX  --  14.1.33*/
 UNSIGNED8 epos::getNodeID()
 {
 	return ReadObjectValue <UNSIGNED8>(0x2000, 0x00);
@@ -1759,7 +1770,7 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 
 	// Set homing parameters
 	setHomeOffset(offset);
-	setSpeedForZeroSearch(100);
+	setSpeedForZeroSearch(10);
 	setCurrentThresholdForHomingMode(1500);
 
 	// Display current homing parameters
@@ -1982,10 +1993,30 @@ void epos::monitorHomingStatus()
 	INTEGER32 posactual, velactual;
 	INTEGER16 curactual;
 	UNSIGNED16 status;
+#if 0
+	// Recovery retry counter
+	unsigned int retry = 0;
 
+	// Recovery status flag
+	bool recovered = false;
+
+	// It takes some time to recovery from FAULT state
+	while(retry++ < 5) {
+		if(getState() == FAULT) {
+
+
+
+#endif
 	printf("\nEPOS operating figures (note: update here is done AS FAST AS POSSIBLE!):\n");
 	int i = 0;
+
+	// Periodic timer
+	boost::system_time wakeup = boost::get_system_time();
+
 	do {
+		// Wait for device state to change
+		boost::thread::sleep(wakeup);
+
 		i++;
 		posactual = getActualPosition();
 		velactual = getActualVelocity();
@@ -1993,13 +2024,16 @@ void epos::monitorHomingStatus()
 
 		status = getStatusWord();
 
-		printf("\r%d EPOS: pos=%+10d; v =  %+4drpm I=%+4dmA status = %#06x ", i, posactual, velactual, curactual, status);
+		printf("\r%d EPOS: pos=%+10d; v =%+4drpm I=%+5dmA status = %#06x ", i, posactual, velactual, curactual, status);
 
 		fflush(stdout);
 
 		if ((status & E_BIT13) == E_BIT13) {
 			BOOST_THROW_EXCEPTION(fe() << reason("HOMING ERROR!"));
 		}
+
+		// Increment the wakeup time
+		wakeup += boost::posix_time::milliseconds(5);
 
 	} while (((status & E_BIT10) != E_BIT10) && ((status & E_BIT12) != E_BIT12));
 	// bit 10 says: target reached!, bit 12: homing attained
@@ -2126,7 +2160,7 @@ void epos::setDigitalOutputs(digital_outputs_t cmd)
 
 	WriteObjectValue(0x2078, 0x01, val);
 
-	DigitalOutputs = val;
+	DigitalOutputs = cmd;
 }
 
 UNSIGNED16 epos::getDigitalOutputs()

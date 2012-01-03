@@ -6,6 +6,7 @@
 
 #include "base/lib/sr/srlib.h"
 
+#include "robot/smb/ecp_r_smb1.h"
 #include "robot/smb/ecp_r_smb2.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_sleep.h"
@@ -23,12 +24,18 @@ namespace task {
 
 // KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
-		common::task::task(_config)
+		common::task::_task <ecp::smb::robot>(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = (boost::shared_ptr <robot_t>) new smb2::robot(*this);
+	if (config.robot_name == lib::smb1::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new smb1::robot(*this);
+	} else if (config.robot_name == lib::smb2::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new smb2::robot(*this);
+	} else {
+		// TODO: throw
+	}
 
-	gt = new common::generator::transparent(*this);
+//	gt = new common::generator::transparent(*this);
 
 	g_sleep = new common::generator::sleep(*this);
 

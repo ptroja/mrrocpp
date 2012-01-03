@@ -6,7 +6,7 @@
 #include "../../irp6p_m/ui_r_irp6p_m.h"
 
 wgt_teaching::wgt_teaching(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
-	wgt_base("Teaching Dialog", _interface, parent), ui(new Ui::wgt_teachingClass)
+		wgt_base("Teaching Dialog", _interface, parent), ui(new Ui::wgt_teachingClass)
 {
 	ui->setupUi(this);
 
@@ -31,12 +31,12 @@ void wgt_teaching::on_pushButton_send_move_clicked()
 
 	if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
 		for (int i = 0; i < lib::irp6ot_m::NUM_OF_SERVOS; i++)
-			interface.ui_ecp_obj->ui_rep.coordinates[i]
-					= interface.robot_m[lib::irp6ot_m::ROBOT_NAME]->getCurrentPos()[i]; ///???
+			interface.ui_ecp_obj->ui_rep.coordinates[i] =
+					interface.robot_m[lib::irp6ot_m::ROBOT_NAME]->getCurrentPos()[i]; ///???
 	} else if (interface.ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		for (int i = 0; i < lib::irp6p_m::NUM_OF_SERVOS; i++)
-			interface.ui_ecp_obj->ui_rep.coordinates[i]
-					= interface.robot_m[lib::irp6p_m::ROBOT_NAME]->getCurrentPos()[i]; ///???
+			interface.ui_ecp_obj->ui_rep.coordinates[i] =
+					interface.robot_m[lib::irp6p_m::ROBOT_NAME]->getCurrentPos()[i]; ///???
 	}
 
 	interface.ui_ecp_obj->ui_rep.double_number = ui->doubleSpinBox_input->value();
@@ -55,7 +55,8 @@ void wgt_teaching::on_pushButton_end_motion_clicked()
 	my_close();
 }
 
-Ui::wgt_teachingClass * wgt_teaching::get_ui()
+void wgt_teaching::my_open(QString label, bool set_on_top)
 {
-	return ui;
+	ui->label_message->setText(label);
+	wgt_base::my_open(set_on_top);
 }

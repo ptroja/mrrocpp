@@ -7,7 +7,6 @@
 #include "edp_e_smb1.h"
 #include "const_smb1.h"
 #include "base/edp/reader.h"
-// Kinematyki.
 #include "robot/smb/kinematic_model_smb.h"
 
 #include "base/lib/exception.h"
@@ -16,6 +15,9 @@ using namespace mrrocpp::lib::exception;
 namespace mrrocpp {
 namespace edp {
 namespace smb1 {
+
+// Access to kinematic parameters.
+#define PARAMS ((mrrocpp::kinematics::smb::model*)this->get_current_kinematic_model())
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
@@ -61,7 +63,7 @@ void effector::synchronise(void)
 
 		// Loop until reaching zero offset.
 		while(pkm_rotation_node->getAnalogInput1() != offset) {
-			std::cout <<
+			std::cout << std::dec <<
 					"AnalogVelocitySetpoint = " << (int) pkm_rotation_node->getAnalogVelocitySetpoint() <<
 					" AnalogInput = " << (int) pkm_rotation_node->getAnalogInput1() <<
 					" offset " << ((int) offset) << std::endl;
@@ -73,21 +75,20 @@ void effector::synchronise(void)
 		};
 
 		// Disable analog velocity setpoint.
-		pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, true, false);
-
-
-		// Step 2: Homing.
-		// Activate homing mode.
-		//pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, -1970);
-		// Step-by-step homing in order to omit the offset setting (the value will be stored in the EPOS for every agent separatelly).
-		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-		pkm_rotation_node->reset();
-		pkm_rotation_node->startHoming();
-		pkm_rotation_node->monitorHomingStatus();
+		pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, false, false);
 
 		// Restore velocity and acceleration limits.
 		pkm_rotation_node->setMaxProfileVelocity(Vdefault[1]);
 		pkm_rotation_node->setMaxAcceleration(Adefault[1]);
+
+		// Step 2: Homing.
+		// Activate homing mode.
+		pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, 9850);
+		// Step-by-step homing in order to omit the offset setting (the value will be stored in the EPOS for every agent separatelly).
+/*		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		pkm_rotation_node->reset();
+		pkm_rotation_node->startHoming();
+		pkm_rotation_node->monitorHomingStatus();*/
 
 		// Compute joints positions in the home position
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
@@ -95,6 +96,10 @@ void effector::synchronise(void)
 		// Homing of the motor controlling the legs rotation - set current position as 0.
 		//legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
 		legs_relative_zero_position = legs_rotation_node->getActualPosition();
+
+		// Set *extended* limits for PKM rotation.
+		axes[1]->setMinimalPositionLimit(PARAMS->lower_pkm_motor_pos_limits - 1000);
+		axes[1]->setMaximalPositionLimit(PARAMS->upper_pkm_motor_pos_limits + 1000);
 
 		// Check whether the synchronization was successful.
 		check_controller_state();

@@ -18,6 +18,7 @@
 #include "robot/maxon/dp_epos.h"
 
 #include "const_spkm.h"
+#include "../../base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -60,10 +61,7 @@ typedef struct _segment
 	bool guarded_motion;
 
 	//! Constructor with reasonable defaults
-	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix()) :
-			goal_pose(_goal), motion_type(lib::epos::SYNC_TRAPEZOIDAL), duration(0), guarded_motion(false)
-	{
-	}
+	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix());
 
 	//! Serialization of the data structure
 	template <class Archive>
@@ -138,7 +136,7 @@ enum CBUFFER_VARIANT
  */
 typedef enum _POSE_SPECIFICATION
 {
-	XYZ_EULER_ZYZ, TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL, WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL, JOINT, MOTOR
+	WRIST_XYZ_EULER_ZYZ, TOOL_XYZ_EULER_ZYZ, JOINT, MOTOR
 } POSE_SPECIFICATION;
 
 /*!
@@ -194,7 +192,7 @@ struct spkm_epos_simple_command
 		ar & desired_position;
 		ar & estimated_time;
 	}
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP variant buffer
@@ -254,7 +252,7 @@ struct cbuffer
 				ar & set_pose_specification;
 				switch (set_pose_specification)
 				{
-					case XYZ_EULER_ZYZ:
+					case WRIST_XYZ_EULER_ZYZ:
 						ar & goal_pos;
 						break;
 					case JOINT:
@@ -271,7 +269,28 @@ struct cbuffer
 				break;
 		};
 	}
-}__attribute__((__packed__));
+};
+
+/*!
+ * @brief SwarmItFix Head EDP command buffer
+ * @ingroup spkm
+ */
+struct c_buffer : lib::c_buffer
+{
+	cbuffer spkm;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & spkm;
+	}
+
+};
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP reply buffer
@@ -297,6 +316,24 @@ struct rbuffer
 		ar & epos_controller;
 		ar & contact;
 	}
+};
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer spkm;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & spkm;
+	}
+
 };
 
 } // namespace spkm

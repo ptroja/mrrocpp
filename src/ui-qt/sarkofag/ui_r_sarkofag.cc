@@ -45,10 +45,9 @@ void UiRobot::create_ui_ecp_robot()
 	//return 1;
 }
 
-int UiRobot::edp_create_int_extra_operations()
+void UiRobot::edp_create_int_extra_operations()
 {
 	wgts[WGT_SARKOFAG_MOVE]->synchro_depended_init();
-	return 1;
 }
 
 int UiRobot::execute_motor_motion()
@@ -75,14 +74,9 @@ int UiRobot::execute_joint_motion()
 	return 1;
 }
 
-int UiRobot::synchronise()
-
+void UiRobot::synchronise()
 {
-
 	eb.command(boost::bind(&ui::sarkofag::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
-
 }
 
 int UiRobot::synchronise_int()
@@ -119,7 +113,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	add_wgt <wgt_single_motor_move>(WGT_SARKOFAG_MOVE, "Sarkofag moves");
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	single_motor::UiRobot::manage_interface();
@@ -165,7 +159,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()

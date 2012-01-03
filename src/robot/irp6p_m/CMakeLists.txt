@@ -1,4 +1,4 @@
-if(ROBOT_IRP6_POSTUMENT_M)
+
 add_executable(edp_irp6p_m
 	edp_irp6p_m_effector.cc
 	sg_irp6p_m.cc
@@ -36,10 +36,10 @@ add_library(kinematicsirp6p_m
 target_link_libraries(kinematicsirp6p_m kinematics)
 	
 add_library(ecp_r_irp6p_m ecp_r_irp6p_m.cc)
+add_library(mp_r_irp6p_m mp_r_irp6p_m.cc)
 	
 target_link_libraries(ecp_r_irp6p_m kinematicsirp6p_m)
 
 install(TARGETS edp_irp6p_m DESTINATION bin)
-install(TARGETS kinematicsirp6p_m ecp_r_irp6p_m DESTINATION lib)
+install(TARGETS kinematicsirp6p_m ecp_r_irp6p_m mp_r_irp6p_m DESTINATION lib)
 
-endif(ROBOT_IRP6_POSTUMENT_M)

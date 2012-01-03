@@ -9,6 +9,7 @@
 #include <QGridLayout>
 #include <QSignalMapper>
 #include <iostream>
+#include "ui_ecp.h"
 
 namespace mrrocpp {
 namespace ui {

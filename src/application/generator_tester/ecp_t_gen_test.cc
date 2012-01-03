@@ -12,30 +12,28 @@ namespace common {
 namespace task {
 
 gen_test::gen_test(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::task(_config)
 {
 	// the robot is choose dependently on the section of configuration file sent as argv[4]
 	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
-	} else if (config.robot_name == lib::polycrank::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new polycrank::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else if (config.robot_name == lib::conveyor::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new conveyor::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new conveyor::robot(*this);
 	} else {
 		// TODO: throw
 	}
 
-        sub_task::sub_task* ecpst;
-        ecpst = new sub_task::sub_task_const_vel_gen_test(*this);
-        subtask_m[ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST] = ecpst;
+	sub_task::sub_task* ecpst;
+	ecpst = new sub_task::sub_task_const_vel_gen_test(*this);
+	subtask_m[ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST] = ecpst;
 
-        ecpst = new sub_task::sub_task_smooth_gen_test(*this);
-        subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST] = ecpst;
+	ecpst = new sub_task::sub_task_smooth_gen_test(*this);
+	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST] = ecpst;
 
-        ecpst = new sub_task::sub_task_spline_gen_test(*this);
-        subtask_m[ecp_mp::sub_task::ECP_ST_SPLINE_GEN_TEST] = ecpst;
+	ecpst = new sub_task::sub_task_spline_gen_test(*this);
+	subtask_m[ecp_mp::sub_task::ECP_ST_SPLINE_GEN_TEST] = ecpst;
 
 	sr_ecp_msg->message("ecp GEN_TEST loaded");
 }

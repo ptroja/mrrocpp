@@ -19,8 +19,6 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-
-#include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
@@ -77,9 +75,10 @@ public:
 	void configureProperSensor(const char *propSensor);
 	void configureProperTransmitter(const char *propTrans);
 
-}; // end : class mp_task_fsautomat
+};
+// end : class mp_task_fsautomat
 
-} // namespace task
+}// namespace task
 } // namespace mp
 } // namespace mrrocpp
 

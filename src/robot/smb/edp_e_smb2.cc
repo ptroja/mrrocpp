@@ -21,6 +21,9 @@ namespace mrrocpp {
 namespace edp {
 namespace smb2 {
 
+// Access to kinematic parameters.
+#define PARAMS ((mrrocpp::kinematics::smb::model*)this->get_current_kinematic_model())
+
 // Konstruktor.
 effector::effector(common::shell &_shell) :
 	smb::effector(_shell, lib::smb2::ROBOT_NAME)
@@ -131,6 +134,10 @@ void effector::synchronise(void)
 		// Homing of the motor controlling the legs rotation - set current position as 0.
 		//legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
 		legs_relative_zero_position = legs_rotation_node->getActualPosition();
+
+		// Set *extended* limits for PKM rotation.
+		axes[1]->setMinimalPositionLimit(PARAMS->lower_pkm_motor_pos_limits - 1000);
+		axes[1]->setMaximalPositionLimit(PARAMS->upper_pkm_motor_pos_limits + 1000);
 
 		// Check whether the synchronization was successful.
 		check_controller_state();

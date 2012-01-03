@@ -73,7 +73,7 @@ void UiRobot::setup_menubar()
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	common::UiRobot::manage_interface();
@@ -89,8 +89,6 @@ int UiRobot::manage_interface()
 			break;
 		case common::UI_EDP_WAITING_TO_START_READER:
 		case common::UI_EDP_WAITING_TO_STOP_READER:
-
-
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
@@ -124,7 +122,6 @@ int UiRobot::manage_interface()
 
 	}
 
-	return 1;
 }
 
 }

@@ -34,7 +34,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
-	motor_driven_effector(_shell, lib::sarkofag::ROBOT_NAME)
+	motor_driven_effector(_shell, lib::sarkofag::ROBOT_NAME, instruction, reply)
 {
 
 	number_of_servos = lib::sarkofag::NUM_OF_SERVOS;
