@@ -17,10 +17,9 @@ namespace generator {
 
 using namespace std;
 
-get_position::get_position(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
-		common::generator::generator(_ecp_task)
+get_position::get_position(task_t & _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
+		generator_t(_ecp_task)
 {
-	position = vector <double>();
 	this->axes_num = axes_num;
 	this->pose_spec = pose_spec;
 }
@@ -52,6 +51,7 @@ bool get_position::first_step()
 			break;
 		default:
 			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
+			break;
 	}
 	return true;
 }
@@ -86,7 +86,7 @@ bool get_position::next_step()
 	return false;
 }
 
-vector <double> get_position::get_position_vector()
+const vector<double> & get_position::get_position_vector() const
 {
 	return position;
 }
