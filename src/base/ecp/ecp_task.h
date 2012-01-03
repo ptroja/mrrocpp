@@ -70,6 +70,13 @@ private:
 	 * @brief Initializes communication channels
 	 */
 	void initialize_communication(void);
+
+public:
+	/**
+	 * @brief Generic robot object pointer
+	 */
+	boost::shared_ptr<robot::ecp_robot_base> ecp_m_robot;
+
 protected:
 	/**
 	 * @brief Gets next state from MP
@@ -214,6 +221,7 @@ public:
 	_task(lib::configurator &_config) :
 		task_base(_config)
 	{
+		ecp_m_robot = boost::dynamic_pointer_cast<ECP_ROBOT_T>(task_base::ecp_m_robot);
 	}
 
 	/**
@@ -234,9 +242,9 @@ public:
 	typedef _task <ECP_ROBOT_T> task_t;
 
 	/**
-	 * @brief Associated single robot object shared pointer
+	 * @brief Associated robot object shared pointer
 	 */
-	boost::shared_ptr <ECP_ROBOT_T> ecp_m_robot;
+	boost::shared_ptr<ECP_ROBOT_T> ecp_m_robot;
 };
 
 typedef _task <robot::ecp_robot> task;
