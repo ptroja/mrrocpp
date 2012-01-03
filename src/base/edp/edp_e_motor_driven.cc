@@ -108,6 +108,7 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
 			printf("EFF_TYPE: %d\n", instruction.get_arm_type);
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_GET_END_EFFECTOR_TYPE));
+			break;
 	}
 
 }
@@ -129,7 +130,7 @@ void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruct
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_SET_END_EFFECTOR_TYPE));
-
+			break;
 	}
 
 }
@@ -153,7 +154,7 @@ void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instructi
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_SET_END_EFFECTOR_TYPE));
-
+			break;
 	}
 
 }
@@ -427,7 +428,7 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 				default: // blad
 					// ustawi numer bledu
 					BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_REPLY_TYPE));
-
+					break;
 			}
 			break;
 		case lib::SET_GET:
@@ -486,13 +487,13 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 				default: // blad
 					// ustawi numer bledu
 					BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_REPLY_TYPE));
-
+					break;
 			}
 			break;
 		default: // blad
 			// ustawi numer bledu
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_INSTRUCTION_TYPE));
-
+			break;
 	}
 
 	// printf("interpret instruction koniec\n");
@@ -645,10 +646,9 @@ void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 				get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
 			}
 			break;
-		default: {
-
+		default:
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_TYPE));
-		}
+			break;
 	}
 
 	// kinematyka nie stwierdzila bledow, przepisanie wartosci
@@ -676,6 +676,7 @@ void motor_driven_effector::set_robot_model(const lib::c_buffer &instruction)
 			// ustawia numer bledu
 
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_SET_ROBOT_MODEL_TYPE));
+			break;
 	}
 }
 
@@ -697,6 +698,7 @@ void motor_driven_effector::get_robot_model(lib::c_buffer &instruction)
 		default: // blad: nie istniejaca specyfikacja modelu robota
 			// ustawie numer bledu
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_GET_ROBOT_MODEL_TYPE));
+			break;
 
 	}
 }
@@ -731,7 +733,7 @@ void motor_driven_effector::compute_joints(const lib::c_buffer &instruction)
 			break;
 		default:
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_TYPE));
-
+			break;
 	}
 	// check_joints(desired_joints);
 	get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
@@ -1018,20 +1020,20 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 
 								/* Oczekiwanie na poprawne zakoczenie synchronizacji */
 								next_state = WAIT_Q;
-							} else
+							} else {
 								// blad: jedyna instrukcja w tym stanie moze by polecenie
 								// synchronizacji lub ruchow presynchronizacyjnych
 								// Bez synchronizacji adna inna instrukcja nie moze by wykonana przez EDP
 								/* Informacja o bedzie polegajcym na braku polecenia synchronizacji */
 								BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(NOT_YET_SYNCHRONISED));
-
+							}
 							break;
 						default: // blad: jedyna instrukcja w tym stanie moze by polecenie
 							// synchronizacji lub ruchow presynchronizacyjnych
 							// Bez synchronizacji adna inna instrukcja nie moze by wykonana przez EDP
 							/* Informacja o bedzie polegajcym na braku polecenia synchronizacji */
 							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(INVALID_INSTRUCTION_TYPE));
-
+							break;
 					}
 					break;
 				case SYNCHRO_TERMINATED:
@@ -1214,16 +1216,19 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 							// okreslenie numeru bledu
 
 							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(ALREADY_SYNCHRONISED));
+							break;
 
 						case lib::QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
 							// okreslenie numeru bledu
 
 							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(QUERY_NOT_EXPECTED));
+							break;
 
 						default: // blad: nieznana instrukcja
 							// okreslenie numeru bledu
 
 							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(UNKNOWN_INSTRUCTION));
+							break;
 
 					}
 					next_state = EXECUTE_INSTRUCTION;
