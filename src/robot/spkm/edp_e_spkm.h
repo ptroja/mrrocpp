@@ -49,19 +49,19 @@ private:
 	 * \brief Tool transformation (SHEAD).
 	 * \author tkornuta
 	 */
-	lib::Homog_matrix shead_frame;
+	lib::Homog_matrix spkm_frame;
 
 	/*!
 	 * \brief Desired tool frame (pose of the SHEAD tip in the PKM base reference frame).
 	 * \author tkornuta
 	 */
-	lib::Homog_matrix desired_shead_frame;
+	lib::Homog_matrix desired_spkm_frame;
 
 	/*!
 	 * \brief Current tool frame (pose of the SHEAD tip in the PKM base reference frame).
 	 * \author tkornuta
 	 */
-	lib::Homog_matrix current_shead_frame;
+	lib::Homog_matrix current_spkm_frame;
 
 	//! Method checks the state of EPOS controllers.
 	void check_controller_state();
@@ -97,12 +97,6 @@ protected:
 
 	//! Handler for the asynchronous execution of the interpolated profile motion
 	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
-
-	//! Buffer containing received command.
-	lib::spkm::cbuffer ecp_edp_cbuffer;
-
-	//! Buffer storing EDP response.
-	lib::spkm::rbuffer edp_ecp_rbuffer;
 
 public:
 
@@ -172,22 +166,11 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	/*!
-	 * @brief method to deserialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void instruction_deserialization();
+	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	void variant_reply_to_instruction();
 
-	/*!
-	 * @brief method to serialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void reply_serialization();
-
-	lib::c_buffer instruction;
-	lib::r_buffer reply;
+	lib::spkm::c_buffer instruction;
+	lib::spkm::r_buffer reply;
 };
 
 } // namespace spkm
