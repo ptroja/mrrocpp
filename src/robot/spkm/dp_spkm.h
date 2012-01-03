@@ -252,6 +252,7 @@ struct cbuffer
 				ar & set_pose_specification;
 				switch (set_pose_specification)
 				{
+					case TOOL_XYZ_EULER_ZYZ:
 					case WRIST_XYZ_EULER_ZYZ:
 						ar & goal_pos;
 						break;

@@ -12,7 +12,7 @@ namespace ecp {
 namespace spkm {
 namespace task {
 
-class swarmitfix : public common::task::task
+class swarmitfix : public common::task::_task <ecp::spkm::robot>
 {
 protected:
 	//! Move the robot the the specified pose

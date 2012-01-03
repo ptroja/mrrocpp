@@ -32,19 +32,10 @@ namespace spkm {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup spkm
  */
-class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
+class robot : public common::robot::_ecp_robot <lib::spkm::c_buffer, lib::spkm::r_buffer>
+		, public kinematics::common::kinematics_manager
 {
 private:
-
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::spkm::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::spkm::rbuffer edp_ecp_rbuffer;
 
 public:
 	/**

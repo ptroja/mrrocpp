@@ -23,7 +23,7 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup generators
  */
-class joint_epos_command : public common::generator::generator
+class joint_epos_command : public common::generator::_generator <ecp::spkm::robot>
 {
 private:
 
@@ -45,7 +45,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	joint_epos_command(common::task::task& _ecp_task);
+	joint_epos_command(task_t & _ecp_task);
 
 	bool first_step();
 	bool next_step();
@@ -60,7 +60,7 @@ public:
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup generators
  */
-class external_epos_command : public common::generator::generator
+class external_epos_command : public common::generator::_generator <ecp::spkm::robot>
 {
 private:
 
@@ -82,7 +82,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	external_epos_command(common::task::task& _ecp_task);
+	external_epos_command(task_t & _ecp_task);
 
 	bool first_step();
 	bool next_step();
