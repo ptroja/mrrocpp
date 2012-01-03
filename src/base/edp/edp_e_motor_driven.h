@@ -491,7 +491,7 @@ public:
 	 */
 	void single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	virtual lib::INSTRUCTION_TYPE variant_receive_instruction();
+	virtual lib::INSTRUCTION_TYPE receive_instruction();
 	virtual void variant_reply_to_instruction();
 
 	// References to base types

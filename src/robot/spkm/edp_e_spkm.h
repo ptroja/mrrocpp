@@ -163,7 +163,7 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	lib::INSTRUCTION_TYPE receive_instruction();
 	void variant_reply_to_instruction();
 
 	lib::spkm::c_buffer instruction;

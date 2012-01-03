@@ -1247,9 +1247,9 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 	manip_effector::single_thread_master_order(nm_task, nm_tryb);
 }
 
-lib::INSTRUCTION_TYPE effector::variant_receive_instruction()
+lib::INSTRUCTION_TYPE effector::receive_instruction()
 {
-	return receive_instruction(instruction);
+	return common::effector::receive_instruction(instruction);
 }
 
 void effector::variant_reply_to_instruction()
