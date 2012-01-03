@@ -14,7 +14,7 @@ namespace task {
 
 // KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
-		task_t(_config)
+		common::task::_task <ecp::shead::robot>(_config)
 {
 
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
