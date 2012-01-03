@@ -63,6 +63,10 @@ typedef struct _segment
 	//! Constructor with reasonable defaults
 	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix());
 
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
@@ -155,6 +159,7 @@ struct spkm_ext_epos_reply
 
 	bool contact;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -181,6 +186,7 @@ struct spkm_epos_simple_command
 
 	double estimated_time;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -237,6 +243,7 @@ struct cbuffer
 	//! - OR the contact was NOT expected and did happened.
 	bool guarded_motion;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -307,6 +314,7 @@ struct rbuffer
 
 	bool contact;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
