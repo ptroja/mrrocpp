@@ -43,13 +43,12 @@ const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
 
 class pins_buffer
 {
+private:
 	friend class mrrocpp::edp::sbench::effector;
 
-private:
 	bool pins_state[NUM_OF_PINS];
 
 public:
-
 	pins_buffer();
 
 	void set_zeros();
@@ -57,6 +56,7 @@ public:
 	void set_value(int row, int column, int value);
 	bool get_value(int row, int column);
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -77,6 +77,7 @@ struct cbuffer
 {
 	pins_buffer pins_buf;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -97,6 +98,7 @@ struct c_buffer : lib::c_buffer
 {
 	cbuffer sbench;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -118,6 +120,7 @@ struct rbuffer : lib::r_buffer
 {
 	pins_buffer pins_buf;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 

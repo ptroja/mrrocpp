@@ -17,10 +17,8 @@ namespace ecp {
 namespace sbench {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-		ecp::common::robot::_ecp_robot <lib::sbench::c_buffer, lib::sbench::r_buffer>(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _config, _sr_ecp)
-		,
-		sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager)
-		,
+		ecp::common::robot::_ecp_robot <lib::sbench::c_buffer, lib::sbench::r_buffer>(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _config, _sr_ecp),
+		sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager),
 		sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
@@ -28,10 +26,8 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
-		ecp::common::robot::_ecp_robot <lib::sbench::c_buffer, lib::sbench::r_buffer>(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _ecp_object)
-		,
-		sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager)
-		,
+		ecp::common::robot::_ecp_robot <lib::sbench::c_buffer, lib::sbench::r_buffer>(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _ecp_object),
+		sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager),
 		sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.

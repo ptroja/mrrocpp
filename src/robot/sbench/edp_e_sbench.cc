@@ -101,7 +101,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	lib::sbench::pins_buffer pins_buf;
 
-	memcpy(&pins_buf, &(local_instruction.sbench.pins_buf), sizeof(pins_buf));
+	pins_buf = local_instruction.sbench.pins_buf;
 
 	if (robot_test_mode) {
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
@@ -171,7 +171,7 @@ void effector::create_kinematic_models_for_given_robot(void)
 void effector::create_threads()
 {
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
+	//vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
 lib::INSTRUCTION_TYPE effector::receive_instruction()
