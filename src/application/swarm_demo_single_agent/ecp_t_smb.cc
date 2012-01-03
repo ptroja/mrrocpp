@@ -24,7 +24,7 @@ namespace task {
 
 // KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
-		common::task::task(_config)
+		common::task::_task <ecp::smb::robot>(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	if (config.robot_name == lib::smb1::ROBOT_NAME) {
@@ -35,7 +35,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 		// TODO: throw
 	}
 
-	gt = new common::generator::transparent(*this);
+//	gt = new common::generator::transparent(*this);
 
 	g_sleep = new common::generator::sleep(*this);
 
