@@ -21,6 +21,11 @@ add_subdirectory (playerjoy)
 add_subdirectory (pnml)
 add_subdirectory (rcsc)
 add_subdirectory (swarm_demo_irp6)
+
+
+
+
+
 add_subdirectory (tcim_bug)
 add_subdirectory (teach)
 add_subdirectory (teach-dll)
@@ -37,7 +42,7 @@ endif(ROBOT_BIRD_HAND)
 
 if(ROBOT_BIRD_HAND)
 if(ROBOTS_012)
-#add_subdirectory (graspit)
+add_subdirectory (graspit)
 endif(ROBOTS_012)
 endif(ROBOT_BIRD_HAND)
 
