@@ -68,8 +68,8 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 	} else {
 		current_legs_state = lib::smb::ALL_IN;
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_in = true;
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_out = false;
+			master.reply.smb.multi_leg_reply.leg[i].is_in = true;
+			master.reply.smb.multi_leg_reply.leg[i].is_out = false;
 		}
 
 	}
@@ -291,7 +291,7 @@ void festo_and_inputs::command()
 
 	master.msg->message("FESTO");
 
-	festo_command = master.ecp_edp_cbuffer.festo_command;
+	festo_command = master.instruction.smb.festo_command;
 
 	if (robot_test_mode) {
 		ss << festo_command.leg[2];
@@ -784,11 +784,11 @@ bool festo_and_inputs::test_mode_set_reply()
 	if (robot_test_mode) {
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 			if (festo_command.leg[i] == lib::smb::IN) {
-				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_in = true;
-				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_out = false;
+				master.reply.smb.multi_leg_reply.leg[i].is_in = true;
+				master.reply.smb.multi_leg_reply.leg[i].is_out = false;
 			} else {
-				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_in = false;
-				master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_out = true;
+				master.reply.smb.multi_leg_reply.leg[i].is_in = false;
+				master.reply.smb.multi_leg_reply.leg[i].is_out = true;
 			}
 
 		}
@@ -815,9 +815,9 @@ void festo_and_inputs::create_reply()
 	if (!robot_test_mode) {
 		read_state();
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_out = is_lower_halotron_active(i + 1);
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_in = is_upper_halotron_active(i + 1);
-			master.edp_ecp_rbuffer.multi_leg_reply.leg[i].is_attached = is_attached(i + 1);
+			master.reply.smb.multi_leg_reply.leg[i].is_out = is_lower_halotron_active(i + 1);
+			master.reply.smb.multi_leg_reply.leg[i].is_in = is_upper_halotron_active(i + 1);
+			master.reply.smb.multi_leg_reply.leg[i].is_attached = is_attached(i + 1);
 		}
 		//std::cout << "epos digital inputs = " << epos_digits << std::endl;
 	}
