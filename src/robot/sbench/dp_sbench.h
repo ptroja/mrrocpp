@@ -138,6 +138,7 @@ struct r_buffer : lib::r_buffer
 {
 	rbuffer sbench;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
