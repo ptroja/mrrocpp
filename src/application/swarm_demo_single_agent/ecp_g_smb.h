@@ -6,7 +6,7 @@
 
 #ifndef ECP_G_SMB_SWARM_DEMO_SINGLE_AGENT_H_
 #define ECP_G_SMB_SWARM_DEMO_SINGLE_AGENT_H_
-
+#include "robot/smb/ecp_r_smb.h"
 #include "base/ecp/ecp_generator.h"
 #include "robot/smb/dp_smb.h"
 
@@ -21,7 +21,7 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup generators
  */
-class legs_command : public common::generator::generator
+class legs_command : public common::generator::_generator <ecp::smb::robot>
 {
 
 private:
@@ -43,7 +43,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	legs_command(common::task::task& _ecp_task);
+	legs_command(task_t & _ecp_task);
 
 	bool first_step();
 	bool next_step();
@@ -59,7 +59,7 @@ public:
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup generators
  */
-class external_epos_command : public common::generator::generator
+class external_epos_command : public common::generator::_generator <ecp::smb::robot>
 {
 private:
 
@@ -81,7 +81,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	external_epos_command(common::task::task& _ecp_task);
+	external_epos_command(task_t & _ecp_task);
 
 	bool first_step();
 	bool next_step();

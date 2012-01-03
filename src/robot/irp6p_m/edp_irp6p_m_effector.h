@@ -46,6 +46,9 @@ public:
 
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
+	lib::c_buffer instruction;
+	lib::r_buffer reply;
+
 };
 
 } // namespace common

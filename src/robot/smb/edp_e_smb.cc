@@ -6,7 +6,6 @@
 #include <boost/thread/thread.hpp>
 #include <boost/thread/thread_time.hpp>
 #include <boost/foreach.hpp>
-#include <boost/static_assert.hpp>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
@@ -175,7 +174,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 }
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-		motor_driven_effector(_shell, l_robot_name)
+		motor_driven_effector(_shell, l_robot_name, instruction, reply)
 {
 	DEBUG_METHOD;
 
@@ -226,9 +225,10 @@ lib::smb::ALL_LEGS_VARIANT effector::next_legs_state(void)
 void effector::move_arm(const lib::c_buffer &instruction)
 {
 	DEBUG_METHOD;
+	lib::smb::c_buffer & local_instruction = (lib::smb::c_buffer&) instruction;
 
 	try {
-		switch (ecp_edp_cbuffer.variant)
+		switch (local_instruction.smb.variant)
 		{
 			case lib::smb::POSE:
 				DEBUG_COMMAND("POSE");
@@ -317,29 +317,29 @@ void effector::parse_motor_command()
 	if (current_legs_state() != lib::smb::TWO_IN_ONE_OUT) {
 		// Check the difference between current and desired values.
 		// Check motors.
-		if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::MOTOR)
-				&& (current_motor_pos[0] != ecp_edp_cbuffer.motor_pos[0]))
+		if ((instruction.smb.set_pose_specification == lib::smb::MOTOR)
+				&& (current_motor_pos[0] != instruction.smb.motor_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
-		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::JOINT)
-				&& (current_joints[0] != ecp_edp_cbuffer.joint_pos[0]))
+		else if ((instruction.smb.set_pose_specification == lib::smb::JOINT)
+				&& (current_joints[0] != instruction.smb.joint_pos[0]))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check externals.
-		else if ((ecp_edp_cbuffer.set_pose_specification == lib::smb::EXTERNAL)
+		else if ((instruction.smb.set_pose_specification == lib::smb::EXTERNAL)
 				&& (current_joints[0]
-						!= ecp_edp_cbuffer.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
+						!= instruction.smb.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
 	// Interpret command according to the pose specification.
-	switch (ecp_edp_cbuffer.set_pose_specification)
+	switch (instruction.smb.set_pose_specification)
 	{
 		case lib::smb::MOTOR:
 			DEBUG_COMMAND("MOTOR");
 
 			// Copy data directly from buffer.
 			for (int i = 0; i < number_of_servos; ++i) {
-				desired_motor_pos_new[i] = ecp_edp_cbuffer.motor_pos[i];
+				desired_motor_pos_new[i] = instruction.smb.motor_pos[i];
 			}
 #if(DEBUG_MOTORS)
 			cout << "MOTOR: " << desired_motor_pos_new.transpose() << endl;
@@ -354,7 +354,7 @@ void effector::parse_motor_command()
 
 			// Copy data directly from buffer.
 			for (int i = 0; i < number_of_servos; ++i) {
-				desired_joints[i] = ecp_edp_cbuffer.joint_pos[i];
+				desired_joints[i] = instruction.smb.joint_pos[i];
 			}
 #if(DEBUG_JOINTS)
 			cout << "JOINT: " << desired_joints.transpose() << endl;
@@ -375,10 +375,10 @@ void effector::parse_motor_command()
 			DEBUG_COMMAND("EXTERNAL");
 
 			// Leg rotational joint: Copy data directly from buffer and recalculate joint value.
-			desired_joints[0] = ecp_edp_cbuffer.base_vs_bench_rotation
+			desired_joints[0] = instruction.smb.base_vs_bench_rotation
 					* mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio;
 			// SPKM rotational joint: Copy data joint value directly from buffer.
-			desired_joints[1] = ecp_edp_cbuffer.pkm_vs_base_rotation;
+			desired_joints[1] = instruction.smb.pkm_vs_base_rotation;
 #if(DEBUG_JOINTS)
 			cout << "JOINT[0]: " << desired_joints[0] << endl;
 			cout << "JOINT[1]: " << desired_joints[1] << endl;
@@ -399,7 +399,7 @@ void effector::parse_motor_command()
 			// Throw non-fatal error - invalid pose specification.
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
 			break;
-	} //: switch (ecp_edp_cbuffer.set_pose_specification)
+	} //: switch (instruction.smb.set_pose_specification)
 }
 
 void effector::execute_motor_motion()
@@ -445,12 +445,14 @@ void effector::execute_motor_motion()
 			}
 		}//: for
 	}//: is_synchronised
+
 }
 
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
 	DEBUG_METHOD;
+	lib::smb::c_buffer & local_instruction = (lib::smb::c_buffer&) instruction;
 
 	try {
 		// Check controller state.
@@ -458,7 +460,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 		// Handle only GET and SETGET instructions.
 		if (instruction.instruction_type != lib::SET) {
-			switch (ecp_edp_cbuffer.get_pose_specification)
+			switch (local_instruction.smb.get_pose_specification)
 			{
 
 				case lib::smb::MOTOR:
@@ -474,14 +476,14 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 								// ... compute relative position.
 								current_motor_pos[i] -= legs_relative_zero_position;
 							// Copy values to buffer.
-							edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
-							edp_ecp_rbuffer.epos_controller[i].current = axes[i]->getActualCurrent();
-							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
+							reply.smb.epos_controller[i].position = current_motor_pos[i];
+							reply.smb.epos_controller[i].current = axes[i]->getActualCurrent();
+							reply.smb.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
 						} else {
 							// Copy values to buffer.
-							edp_ecp_rbuffer.epos_controller[i].position = current_motor_pos[i];
-							edp_ecp_rbuffer.epos_controller[i].current = 0;
-							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+							reply.smb.epos_controller[i].position = current_motor_pos[i];
+							reply.smb.epos_controller[i].current = 0;
+							reply.smb.epos_controller[i].motion_in_progress = false;
 						}
 					}
 					break;
@@ -497,12 +499,12 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 								// ... compute relative position.
 								current_motor_pos[i] -= legs_relative_zero_position;
 							// Copy values to buffer.
-							edp_ecp_rbuffer.epos_controller[i].current = axes[i]->getActualCurrent();
-							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
+							reply.smb.epos_controller[i].current = axes[i]->getActualCurrent();
+							reply.smb.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
 						} else {
 							// Copy values to buffer.
-							edp_ecp_rbuffer.epos_controller[i].current = 0;
-							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+							reply.smb.epos_controller[i].current = 0;
+							reply.smb.epos_controller[i].motion_in_progress = false;
 						}
 					}
 
@@ -511,7 +513,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 					// Copy values to buffer.
 					for (int i = 0; i < number_of_servos; ++i) {
-						edp_ecp_rbuffer.epos_controller[i].position = current_joints[i];
+						reply.smb.epos_controller[i].position = current_joints[i];
 					}
 					break;
 				case lib::smb::EXTERNAL:
@@ -527,12 +529,12 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 								// ... compute relative position.
 								current_motor_pos[i] -= legs_relative_zero_position;
 							// Copy values to buffer.
-							edp_ecp_rbuffer.epos_controller[i].current = axes[i]->getActualCurrent();
-							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
+							reply.smb.epos_controller[i].current = axes[i]->getActualCurrent();
+							reply.smb.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
 						} else {
 							// Copy values to buffer.
-							edp_ecp_rbuffer.epos_controller[i].current = 0;
-							edp_ecp_rbuffer.epos_controller[i].motion_in_progress = false;
+							reply.smb.epos_controller[i].current = 0;
+							reply.smb.epos_controller[i].motion_in_progress = false;
 						}
 					}
 
@@ -540,10 +542,10 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 					// Leg rotational joint: recalculate joint value and copy data to buffer.
-					edp_ecp_rbuffer.epos_controller[0].position = current_joints[0]
+					reply.smb.epos_controller[0].position = current_joints[0]
 							/ mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio;
 					// SPKM rotational joint: copy data to buffer.
-					edp_ecp_rbuffer.epos_controller[1].position = current_joints[1];
+					reply.smb.epos_controller[1].position = current_joints[1];
 					break;
 				default:
 					// Throw non-fatal error - motion type not supported.
@@ -586,16 +588,14 @@ void effector::create_threads()
 	// vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
-void effector::instruction_deserialization()
+lib::INSTRUCTION_TYPE effector::variant_receive_instruction()
 {
-	BOOST_STATIC_ASSERT(sizeof(ecp_edp_cbuffer) <= sizeof(instruction.serialized_command));
-	memcpy(&ecp_edp_cbuffer, instruction.serialized_command, sizeof(ecp_edp_cbuffer));
+	return receive_instruction(instruction);
 }
 
-void effector::reply_serialization(void)
+void effector::variant_reply_to_instruction()
 {
-	BOOST_STATIC_ASSERT(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
-	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
+	reply_to_instruction(reply);
 }
 
 } // namespace smb

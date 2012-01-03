@@ -256,7 +256,7 @@ private:
 		ar & undetachable;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Epos all controllers status
@@ -311,7 +311,7 @@ private:
 		ar & pkm_vs_base_rotation;
 		ar & estimated_time;
 	}
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base EDP command buffer
@@ -377,7 +377,25 @@ struct cbuffer
 		};
 	}
 
-}__attribute__((__packed__));
+};
+
+struct c_buffer : lib::c_buffer
+{
+	cbuffer smb;
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & smb;
+	}
+
+};
 
 /*!
  * @brief SwarmItFix Mobile Base single leg status
@@ -389,6 +407,7 @@ struct leg_reply
 	bool is_out;
 	bool is_attached;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -401,7 +420,7 @@ struct leg_reply
 		ar & is_attached;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base multi leg reply
@@ -411,6 +430,7 @@ struct multi_leg_reply_td
 {
 	leg_reply leg[LEG_CLAMP_NUMBER];
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -421,7 +441,7 @@ struct multi_leg_reply_td
 		ar & leg;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base EDP reply buffer
@@ -432,6 +452,7 @@ struct rbuffer
 	multi_leg_reply_td multi_leg_reply;
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -441,6 +462,25 @@ struct rbuffer
 	{
 		ar & multi_leg_reply;
 		ar & epos_controller;
+	}
+
+};
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer smb;
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class information
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & smb;
 	}
 
 };

@@ -36,7 +36,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-	motor_driven_effector(_shell, l_robot_name)
+		motor_driven_effector(_shell, l_robot_name, instruction, reply)
 {
 	number_of_servos = lib::shead::NUM_OF_SERVOS;
 
@@ -48,8 +48,8 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	if (!robot_test_mode) {
 		// Create gateway object.
 		if (this->config.exists("can_iface")) {
-			gateway
-					= (boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string> ("can_iface"));
+			gateway =
+					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
 		} else {
 			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
 		}
@@ -220,11 +220,11 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 void effector::parse_motor_command()
 {
 	// Interpret command according to the pose specification.
-	switch (ecp_edp_cbuffer.set_pose_specification)
+	switch (instruction.shead.set_pose_specification)
 	{
 		case lib::shead::MOTOR:
 			// Copy data directly from buffer.
-			desired_motor_pos_new[0] = ecp_edp_cbuffer.motor_pos[0];
+			desired_motor_pos_new[0] = instruction.shead.motor_pos[0];
 
 			// Check the desired motor (only motors!) values if they are absolute.
 			get_current_kinematic_model()->check_motor_position(desired_motor_pos_new);
@@ -233,7 +233,7 @@ void effector::parse_motor_command()
 			break;
 		case lib::shead::JOINT:
 			// Copy data directly from buffer.
-			desired_joints[0] = ecp_edp_cbuffer.joint_pos[0];
+			desired_joints[0] = instruction.shead.joint_pos[0];
 
 			if (is_synchronised()) {
 				// Transform desired joint to motors (and check motors/joints values).
@@ -249,7 +249,7 @@ void effector::parse_motor_command()
 			// Throw non-fatal error - invalid pose specification.
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_pose_specification());
 			break;
-	} //: switch (ecp_edp_cbuffer.set_pose_specification)
+	} //: switch (instruction.shead.set_pose_specification)
 }
 
 void effector::execute_motor_motion()
@@ -279,16 +279,18 @@ void effector::execute_motor_motion()
 			// Virtually "move" to desired relative position.
 			current_motor_pos[0] += desired_motor_pos_new[0];
 		}
-	}//: is_synchronised
+	} //: is_synchronised
 }
 
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
 {
+	lib::shead::c_buffer & local_instruction = (lib::shead::c_buffer&) instruction;
+
 	try {
 		msg->message("move_arm");
 
-		switch (ecp_edp_cbuffer.variant)
+		switch (local_instruction.shead.variant)
 		{
 			case lib::shead::POSE:
 #if(DEBUG_COMMANDS)
@@ -315,9 +317,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				}
 				break;
 			case lib::shead::SOLIDIFICATION:
-				switch(ecp_edp_cbuffer.head_solidification) {
+				switch (local_instruction.shead.head_solidification)
+				{
 					case lib::shead::SOLIDIFICATION_STATE_ON:
-						if(!robot_test_mode) {
+						if (!robot_test_mode) {
 							// Get current output state
 							maxon::epos::digital_outputs_t outputs = epos_node->getCommandedDigitalOutputs();
 
@@ -332,7 +335,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 						break;
 					case lib::shead::SOLIDIFICATION_STATE_OFF:
-						if(!robot_test_mode) {
+						if (!robot_test_mode) {
 							// Get current output state
 							maxon::epos::digital_outputs_t outputs = epos_node->getCommandedDigitalOutputs();
 
@@ -352,9 +355,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				}
 				break;
 			case lib::shead::VACUUM:
-				switch(ecp_edp_cbuffer.vacuum_activation) {
+				switch (local_instruction.shead.vacuum_activation)
+				{
 					case lib::shead::VACUUM_ON:
-						if(!robot_test_mode) {
+						if (!robot_test_mode) {
 							// Get current output state
 							maxon::epos::digital_outputs_t outputs = epos_node->getCommandedDigitalOutputs();
 
@@ -368,7 +372,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 						break;
 					case lib::shead::VACUUM_OFF:
-						if(!robot_test_mode) {
+						if (!robot_test_mode) {
 							// Get current output state
 							maxon::epos::digital_outputs_t outputs = epos_node->getCommandedDigitalOutputs();
 
@@ -408,44 +412,46 @@ void effector::move_arm(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
+	DEBUG_METHOD;
+
+	lib::shead::c_buffer & local_instruction = (lib::shead::c_buffer&) instruction;
+
 	try {
 		// Check controller state.
 		check_controller_state();
 
 		// Handle only GET and SET_GET instructions.
-		if (instruction.instruction_type != lib::SET) {
+		if (local_instruction.instruction_type != lib::SET) {
 
-			if(robot_test_mode) {
+			if (robot_test_mode) {
 				// Copy data from virtual state
-				edp_ecp_rbuffer.shead_reply.solidification_state = virtual_state.solidification_state;
-				edp_ecp_rbuffer.shead_reply.vacuum_state = virtual_state.vacuum_state;
+				reply.shead.shead_reply.solidification_state = virtual_state.solidification_state;
+				reply.shead.shead_reply.vacuum_state = virtual_state.vacuum_state;
 			} else {
 				// Ask about current solidification control pins state
-				edp_ecp_rbuffer.shead_reply.solidification_state =
-						(epos_node->getCommandedDigitalOutputs()[1] && epos_node->getCommandedDigitalOutputs()[2]) ?
-								lib::shead::SOLIDIFICATION_STATE_ON : lib::shead::SOLIDIFICATION_STATE_OFF;
+				reply.shead.shead_reply.solidification_state =
+						(epos_node->getCommandedDigitalOutputs()[1] && epos_node->getCommandedDigitalOutputs()[2]) ? lib::shead::SOLIDIFICATION_STATE_ON : lib::shead::SOLIDIFICATION_STATE_OFF;
 
 				// Ask about current vacuum control pins state
-				edp_ecp_rbuffer.shead_reply.vacuum_state =
-						(epos_node->getCommandedDigitalOutputs()[3]) ?
-								lib::shead::VACUUM_STATE_ON : lib::shead::VACUUM_STATE_OFF;
+				reply.shead.shead_reply.vacuum_state =
+						(epos_node->getCommandedDigitalOutputs()[3]) ? lib::shead::VACUUM_STATE_ON : lib::shead::VACUUM_STATE_OFF;
 			}
 
-			switch (ecp_edp_cbuffer.get_pose_specification)
+			switch (local_instruction.shead.get_pose_specification)
 			{
 				case lib::shead::MOTOR:
 					if (!robot_test_mode) {
 						// Update current position.
 						current_motor_pos[0] = epos_node->getActualPosition();
 						// Copy values to buffer.
-						edp_ecp_rbuffer.epos_controller.position = current_motor_pos[0];
-						edp_ecp_rbuffer.epos_controller.current = epos_node->getActualCurrent();
-						edp_ecp_rbuffer.epos_controller.motion_in_progress = !epos_node->isTargetReached();
+						reply.shead.epos_controller.position = current_motor_pos[0];
+						reply.shead.epos_controller.current = epos_node->getActualCurrent();
+						reply.shead.epos_controller.motion_in_progress = !epos_node->isTargetReached();
 					} else {
 						// Copy values to buffer.
-						edp_ecp_rbuffer.epos_controller.position = current_motor_pos[0];
-						edp_ecp_rbuffer.epos_controller.current = 0;
-						edp_ecp_rbuffer.epos_controller.motion_in_progress = false;
+						reply.shead.epos_controller.position = current_motor_pos[0];
+						reply.shead.epos_controller.current = 0;
+						reply.shead.epos_controller.motion_in_progress = false;
 					}
 					break;
 				case lib::shead::JOINT:
@@ -453,19 +459,19 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						// Update current position.
 						current_motor_pos[0] = epos_node->getActualPosition();
 						// Copy values to buffer.
-						edp_ecp_rbuffer.epos_controller.current = epos_node->getActualCurrent();
-						edp_ecp_rbuffer.epos_controller.motion_in_progress = !epos_node->isTargetReached();
+						reply.shead.epos_controller.current = epos_node->getActualCurrent();
+						reply.shead.epos_controller.motion_in_progress = !epos_node->isTargetReached();
 					} else {
 						// Copy values to buffer.
-						edp_ecp_rbuffer.epos_controller.current = 0;
-						edp_ecp_rbuffer.epos_controller.motion_in_progress = false;
+						reply.shead.epos_controller.current = 0;
+						reply.shead.epos_controller.motion_in_progress = false;
 					}
 
 					// Calculate current joint values.
 					get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
 					// Copy values to buffer.
-					edp_ecp_rbuffer.epos_controller.position = current_joints[0];
+					reply.shead.epos_controller.position = current_joints[0];
 					break;
 				default:
 					// Throw non-fatal error - motion type not supported.
@@ -507,16 +513,14 @@ void effector::create_threads()
 	//vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
-void effector::instruction_deserialization()
+lib::INSTRUCTION_TYPE effector::variant_receive_instruction()
 {
-	BOOST_STATIC_ASSERT(sizeof(ecp_edp_cbuffer) <= sizeof(instruction.serialized_command));
-	memcpy(&ecp_edp_cbuffer, instruction.serialized_command, sizeof(ecp_edp_cbuffer));
+	return receive_instruction(instruction);
 }
 
-void effector::reply_serialization(void)
+void effector::variant_reply_to_instruction()
 {
-	BOOST_STATIC_ASSERT(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
-	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
+	reply_to_instruction(reply);
 }
 
 } // namespace shead

@@ -41,9 +41,6 @@
 namespace mrrocpp {
 namespace lib {
 
-#define ECP_EDP_SERIALIZED_COMMAND_SIZE 200
-#define EDP_ECP_SERIALIZED_REPLY_SIZE 200
-
 typedef messip_channel_t * fd_client_t;
 static const fd_client_t invalid_fd = NULL;
 typedef messip_channel_t * fd_server_t;
@@ -544,7 +541,6 @@ struct c_buffer
 	uint16_t value_in_step_no;
 	c_buffer_robot_model_t robot_model;
 	c_buffer_arm_t arm;
-	uint32_t serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
 
 	//-----------------------------------------------------
 	//                      METHODS
@@ -570,7 +566,6 @@ struct c_buffer
 		ar & value_in_step_no;
 		ar & robot_model;
 		ar & arm;
-		ar & serialized_command;
 	}
 
 	c_buffer(void); // by W odkomentowane
@@ -787,7 +782,6 @@ struct r_buffer : r_buffer_base
 
 	r_buffer_robot_model_t robot_model;
 	r_buffer_arm_t arm;
-	uint32_t serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
 
 	//-----------------------------------------------------
 	//                      METHODS
@@ -812,7 +806,6 @@ struct r_buffer : r_buffer_base
 		// The following are unions... probably have to handle with boost::variant
 		ar & robot_model;
 		ar & arm;
-		ar & serialized_reply;
 	}
 };
 

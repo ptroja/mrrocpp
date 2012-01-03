@@ -28,7 +28,7 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
-		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME), dev_name("/dev/comedi0")
+		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME, instruction, reply), dev_name("/dev/comedi0")
 {
 
 	number_of_servos = lib::sbench::NUM_OF_SERVOS;
@@ -48,10 +48,7 @@ effector::effector(common::shell &_shell) :
 		}
 
 	} else {
-		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-
-			current_pins_state[i] = 0;
-		}
+		current_pins_buf.set_zeros();
 	}
 
 }
@@ -95,30 +92,33 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
 {
+
+	lib::sbench::c_buffer & local_instruction = (lib::sbench::c_buffer&) instruction;
+
 	msg->message("move_arm");
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	lib::sbench::pins_state_td pins_state;
+	lib::sbench::pins_buffer pins_buf;
 
-	memcpy(&pins_state, &(ecp_edp_cbuffer.pins_state), sizeof(pins_state));
+	memcpy(&pins_buf, &(local_instruction.sbench.pins_buf), sizeof(pins_buf));
 
 	if (robot_test_mode) {
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			if (pins_state[i]) {
+			if (pins_buf.pins_state[i]) {
 				ss << "1";
 			} else {
 				ss << "0";
 			}
-			current_pins_state[i] = pins_state[i];
 		}
+		current_pins_buf = pins_buf;
 		ss << std::endl;
 		msg->message(ss.str());
 	} else {
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			comedi_dio_write(device, (int) (i / 32), (i%32), pins_state[i]);
-		//	current_pins_state[i] = pins_state[i];
+			comedi_dio_write(device, (int) (i / 32), (i%32), pins_buf.pins_state[i]);
+			//	current_pins_state[i] = pins_state[i];
 		} // send command to hardware
 	}
 
@@ -148,15 +148,11 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			unsigned int current_read;
 			comedi_dio_read(device, (int) (i / 32), (i%32), &current_read);
-			current_pins_state[i] = current_read;
+			current_pins_buf.pins_state[i] = current_read;
 		} // send command to hardware
 
 	}
-
-	for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-
-		edp_ecp_rbuffer.pins_state[i] = current_pins_state[i];
-	}
+	reply.sbench.pins_buf = current_pins_buf;
 
 	reply.servo_step = step_counter;
 }
@@ -178,16 +174,14 @@ void effector::create_threads()
 	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
-void effector::instruction_deserialization()
+lib::INSTRUCTION_TYPE effector::variant_receive_instruction()
 {
-	BOOST_STATIC_ASSERT(sizeof(ecp_edp_cbuffer) <= sizeof(instruction.serialized_command));
-	memcpy(&ecp_edp_cbuffer, instruction.serialized_command, sizeof(ecp_edp_cbuffer));
+	return receive_instruction(instruction);
 }
 
-void effector::reply_serialization(void)
+void effector::variant_reply_to_instruction()
 {
-	BOOST_STATIC_ASSERT(sizeof(reply.serialized_reply) >= sizeof(edp_ecp_rbuffer));
-	memcpy(reply.serialized_reply, &edp_ecp_rbuffer, sizeof(edp_ecp_rbuffer));
+	reply_to_instruction(reply);
 }
 
 } // namespace smb

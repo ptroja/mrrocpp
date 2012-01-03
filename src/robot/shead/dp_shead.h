@@ -13,6 +13,7 @@
 
 #include "robot/maxon/dp_epos.h"
 #include "const_shead.h"
+#include "../../base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -88,11 +89,7 @@ enum VACUUM_ACTIVATION
 struct reply
 {
 	//! Constructor with default values
-	reply() :
-		solidification_state(SOLIDIFICATION_STATE_INTERMEDIATE),
-		vacuum_state(VACUUM_STATE_INTERMEDIATE)
-	{
-	}
+	reply();
 
 	solidification_state_t solidification_state;
 
@@ -110,7 +107,7 @@ private:
 		ar & vacuum_state;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Head EDP command buffer variant
@@ -181,7 +178,24 @@ private:
 		};
 	}
 
-}__attribute__((__packed__));
+};
+
+struct c_buffer : lib::c_buffer
+{
+	cbuffer shead;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & shead;
+	}
+
+};
 
 /*!
  * @brief SwarmItFix Head EDP reply buffer
@@ -205,7 +219,25 @@ private:
 		ar & epos_controller;
 	}
 
-}__attribute__((__packed__));
+};
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer shead;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & shead;
+	}
+
+};
 
 } // namespace shead
 }

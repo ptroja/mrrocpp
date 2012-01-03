@@ -10,6 +10,7 @@
 #include "base/ecp/ecp_generator.h"
 #include "base/lib/single_thread_port.h"
 #include "robot/bird_hand/dp_bird_hand.h"
+#include "robot/bird_hand/ecp_r_bird_hand.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -23,7 +24,7 @@ namespace generator {
  * \author kczajkow
  * \date Jan 05, 2010
  */
-class bird_hand : public common::generator::generator
+class bird_hand : public common::generator::_generator <ecp::bird_hand::robot>
 {
 private:
 	//! zadawanie nastaw regulatorow
@@ -57,7 +58,7 @@ public:
 	void create_ecp_mp_reply();
 	void get_mp_ecp_command();
 
-	bird_hand(common::task::task& _ecp_task); //constructor
+	bird_hand(task_t & _ecp_task); //constructor
 	bool first_step(); //first step generation
 	bool next_step(); //next step generation
 };

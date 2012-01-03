@@ -91,9 +91,6 @@ protected:
 	//! Method checks the state of EPOS controllers.
 	void check_controller_state();
 
-	lib::smb::cbuffer ecp_edp_cbuffer;
-	lib::smb::rbuffer edp_ecp_rbuffer;
-
 	/*!
 	 * \brief method,  creates a list of available kinematic models for smb effector.
 	 *
@@ -156,19 +153,11 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	/*!
-	 * \brief method to deserialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void instruction_deserialization();
+	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	void variant_reply_to_instruction();
 
-	/*!
-	 * \brief method to serialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void reply_serialization();
+	lib::smb::c_buffer instruction;
+	lib::smb::r_buffer reply;
 
 };
 

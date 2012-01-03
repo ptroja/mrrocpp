@@ -19,14 +19,14 @@ namespace generator {
 ////////////////////////////////////////////////////////
 
 //constructor with parameters: task and time to sleep [s]
-joint_epos_command::joint_epos_command(common::task::task& _ecp_task) :
-		common::generator::generator(_ecp_task)
+joint_epos_command::joint_epos_command(task_t & _ecp_task) :
+		generator_t(_ecp_task)
 {
 
-	epos_joint_command_data_port = the_robot->port_manager.get_port < lib::epos::epos_simple_command
-			> (lib::epos::EPOS_JOINT_COMMAND_DATA_PORT);
-	epos_joint_reply_data_request_port = the_robot->port_manager.get_request_port < lib::epos::epos_reply
-			> (lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT);
+	epos_joint_command_data_port =
+			the_robot->port_manager.get_port <lib::epos::epos_simple_command>(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT);
+	epos_joint_reply_data_request_port =
+			the_robot->port_manager.get_request_port <lib::epos::epos_reply>(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT);
 
 }
 

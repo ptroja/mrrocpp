@@ -19,8 +19,8 @@ namespace generator {
 ////////////////////////////////////////////////////////
 
 //constructor with parameters: task and time to sleep [s]
-joint_epos_command::joint_epos_command(common::task::task& _ecp_task) :
-		common::generator::generator(_ecp_task)
+joint_epos_command::joint_epos_command(task_t & _ecp_task) :
+		generator_t(_ecp_task)
 {
 
 	epos_joint_command_data_port =
@@ -84,8 +84,8 @@ void joint_epos_command::get_mp_ecp_command()
 ////////////////////////////////////////////////////////
 
 //constructor with parameters: task and time to sleep [s]
-external_epos_command::external_epos_command(common::task::task& _ecp_task) :
-		common::generator::generator(_ecp_task)
+external_epos_command::external_epos_command(task_t & _ecp_task) :
+		generator_t(_ecp_task)
 {
 
 	epos_external_command_data_port =
@@ -103,7 +103,7 @@ bool external_epos_command::first_step()
 	sr_ecp_msg.message("legs_command: first_step");
 	epos_external_command_data_port->data = mp_ecp_epos_simple_command;
 	epos_external_command_data_port->set();
-	epos_external_reply_data_request_port->set_data = lib::spkm::XYZ_EULER_ZYZ;
+	epos_external_reply_data_request_port->set_data = lib::spkm::WRIST_XYZ_EULER_ZYZ;
 	epos_external_reply_data_request_port->set_request();
 
 	return true;
@@ -125,7 +125,7 @@ bool external_epos_command::next_step()
 	}
 
 	if (motion_in_progress) {
-		epos_external_reply_data_request_port->set_data = lib::spkm::XYZ_EULER_ZYZ;
+		epos_external_reply_data_request_port->set_data = lib::spkm::WRIST_XYZ_EULER_ZYZ;
 		epos_external_reply_data_request_port->set_request();
 		return true;
 	} else {

@@ -9,22 +9,30 @@
 #include "base/lib/impconst.h"
 #include "base/lib/sr/sr_ecp.h"
 
-#include "robot/sbench/ecp_r_sbench.h"
-#include "robot/sbench/kinematic_model_sbench.h"
+#include "ecp_r_sbench.h"
+#include "kinematic_model_sbench.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace sbench {
 
 robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-		ecp::common::robot::ecp_robot(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _config, _sr_ecp), sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager), sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
+		ecp::common::robot::_ecp_robot <lib::sbench::c_buffer, lib::sbench::r_buffer>(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _config, _sr_ecp)
+		,
+		sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager)
+		,
+		sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
-		ecp::common::robot::ecp_robot(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _ecp_object), sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager), sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
+		ecp::common::robot::_ecp_robot <lib::sbench::c_buffer, lib::sbench::r_buffer>(lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS, _ecp_object)
+		,
+		sbench_command_data_port(lib::sbench::COMMAND_DATA_PORT, port_manager)
+		,
+		sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
@@ -52,10 +60,8 @@ void robot::create_command()
 	if (sbench_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
-		for (int i = 0; i < lib::sbench::NUM_OF_PINS; ++i) {
 
-			ecp_edp_cbuffer.pins_state[i] = sbench_command_data_port.data[i];
-		}
+		ecp_command.sbench.pins_buf = sbench_command_data_port.data;
 
 		if (is_new_data) {
 			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
@@ -82,29 +88,14 @@ void robot::create_command()
 		ecp_command.get_type = ARM_DEFINITION;
 	}
 
-	// message serialization
-	if (communicate_with_edp) {
-		memcpy(ecp_command.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
-		assert(sizeof(ecp_command.serialized_command) >= sizeof(ecp_edp_cbuffer));
-	}
 }
 
 void robot::get_reply()
 {
-
-	// message deserialization
-	memcpy(&edp_ecp_rbuffer, reply_package.serialized_reply, sizeof(edp_ecp_rbuffer));
-
-	// generator reply generation
-
 	if (sbench_reply_data_request_port.is_new_request()) {
-		for (int i = 0; i < lib::sbench::NUM_OF_PINS; ++i) {
-			sbench_reply_data_request_port.data[i] = edp_ecp_rbuffer.pins_state[i];
-		}
-
+		sbench_reply_data_request_port.data = reply_package.sbench.pins_buf;
 		sbench_reply_data_request_port.set();
 	}
-
 }
 
 } // namespace smb

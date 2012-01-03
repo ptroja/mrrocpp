@@ -10,9 +10,17 @@
  */
 
 #include <string>
+#include <boost/serialization/serialization.hpp>
 #include "const_sbench.h"
+#include "../../base/lib/com_buf.h"
 
 namespace mrrocpp {
+namespace edp {
+namespace sbench {
+class effector;
+}
+}
+
 namespace lib {
 namespace sbench {
 
@@ -32,7 +40,34 @@ const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
  * @brief SwarmItFix bench pins state typedef
  * @ingroup sbench
  */
-typedef bool pins_state_td[NUM_OF_PINS];
+
+class pins_buffer
+{
+	friend class mrrocpp::edp::sbench::effector;
+
+private:
+	bool pins_state[NUM_OF_PINS];
+
+public:
+
+	pins_buffer();
+
+	void set_zeros();
+
+	void set_value(int row, int column, int value);
+	bool get_value(int row, int column);
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & pins_state;
+	}
+
+};
 
 /*!
  * @brief SwarmItFix Head EDP command buffer
@@ -40,17 +75,79 @@ typedef bool pins_state_td[NUM_OF_PINS];
  */
 struct cbuffer
 {
-	pins_state_td pins_state;
-}__attribute__((__packed__));
+	pins_buffer pins_buf;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & pins_buf;
+	}
+
+};
+
+/*!
+ * @brief SwarmItFix Head EDP command buffer
+ * @ingroup sbench
+ */
+struct c_buffer : lib::c_buffer
+{
+	cbuffer sbench;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & sbench;
+	}
+
+};
 
 /*!
  * @brief SwarmItFix Head EDP reply buffer
  * @ingroup sbench
  */
-struct rbuffer
+struct rbuffer : lib::r_buffer
 {
-	pins_state_td pins_state;
-}__attribute__((__packed__));
+	pins_buffer pins_buf;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & pins_buf;
+	}
+
+};
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer sbench;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & sbench;
+	}
+
+};
 
 } // namespace sbench
 }

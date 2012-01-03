@@ -20,8 +20,8 @@ namespace generator {
 ////////////////////////////////////////////////////////
 
 //constructor with parameters: task and time to sleep [s]
-legs_command::legs_command(common::task::task& _ecp_task) :
-		common::generator::generator(_ecp_task)
+legs_command::legs_command(task_t & _ecp_task) :
+		generator_t(_ecp_task)
 {
 
 	smb_festo_command_data_port =
@@ -68,8 +68,8 @@ void legs_command::get_mp_ecp_command()
 ////////////////////////////////////////////////////////
 
 //constructor with parameters: task and time to sleep [s]
-external_epos_command::external_epos_command(common::task::task& _ecp_task) :
-		common::generator::generator(_ecp_task)
+external_epos_command::external_epos_command(task_t & _ecp_task) :
+		generator_t(_ecp_task)
 {
 
 	epos_external_command_data_port =

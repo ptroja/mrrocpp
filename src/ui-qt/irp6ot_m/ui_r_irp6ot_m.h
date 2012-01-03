@@ -51,6 +51,20 @@ public:
 
 	virtual void synchronise();
 
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_MOTOR variant
+	 */
+
+	void open_c_motor_window();
+
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_JOINTvariant
+	 */
+
+	void open_c_joint_window();
+
 	void move_to_synchro_position();
 	void move_to_front_position();
 	void move_to_preset_position(int variant);
