@@ -9,6 +9,10 @@
 #include <QTimer>
 #include <QCheckBox>
 
+#define SBENCH_MAX_ROW 8
+#define SBENCH_MAX_COL 8
+#define SBENCH_MAX_EL 64
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -35,7 +39,9 @@ private:
 	Ui::wgt_sbench_commandClass ui;
 	mrrocpp::ui::sbench::UiRobot* robot;
 
-	QVector <QCheckBox*> checkBox_Vector;
+	QCheckBox* docks[SBENCH_MAX_ROW][SBENCH_MAX_COL];
+
+//	QVector <QCheckBox*> checkBox_Vector;
 
 private slots:
 
