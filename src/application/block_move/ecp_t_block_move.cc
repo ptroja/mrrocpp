@@ -73,7 +73,15 @@ block_move::block_move(lib::configurator &_config) :
 	ds_rpc->configure_sensor();
 
 	//int tm1 = config.value <int> ("sm1_timeout", "[ecp_block_move]");
-	int tm2 = config.value <int> ("sm2_timeout", "[ecp_block_move]");
+
+	//get position compute parameters
+	ecp_bm_config_section_name = "[ecp_block_move]";
+	offset = config.value <6, 1> ("offset", ecp_bm_config_section_name);
+	block_size = config.value <6, 1> ("block_size", ecp_bm_config_section_name);
+	correction = config.value <6, 1> ("correction", ecp_bm_config_section_name);
+	position = config.value <6, 1> ("position", ecp_bm_config_section_name);
+	int tm2 = config.value <int> ("sm2_timeout", ecp_bm_config_section_name);
+
 /*
 	//board localization servovision
 	sr_ecp_msg->message("Creating visual servo 1...");
@@ -151,11 +159,9 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 		sr_ecp_msg->message("configurate servovision...");
 
-		/*if(param == BOARD_COLOR) {
+/*		if(param == BOARD_COLOR) {
 
-			sm1->add_termination_condition(object_reached_term_cond1);
-			sm1->add_termination_condition(timeout_term_cond1);
-			sm1->Move();
+			sm1_move();
 
 			//obsługa warunku zakończenia pracy - warunek stopu
 			if(object_reached_term_cond1->is_condition_met()) {
@@ -164,15 +170,15 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 				//odczyt pozycji w ANGLE_AXIS
 				gp->Move();
-				position = gp->get_position_vector();
+				position_vector = gp->get_position_vector();
 
 				if(!position.size()) {
 					sr_ecp_msg->message("get_position_vector is empty");
 				}
 
 				std::cout << "POSITION" << endl;
-				for(size_t i = 0; i < position.size(); ++i) {
-					std::cout << position[i] << std::endl;
+				for(size_t i = 0; i < position_vector.size(); ++i) {
+					std::cout << position_vector[i] << std::endl;
 				}
 				std::cout << std::endl;
 			}
@@ -220,16 +226,7 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 		sr_ecp_msg->message("configurate Smooth Generator...");
 
-		position[0] = 0.866214;
-		position[1] = 2.34313;
-		position[2] = 0.118003;
-		position[3] = 0.0759266;
-		position[4] = 3.03335;
-		position[5] = -0.0748947;
-
 		int param = (int) mp_command.ecp_next_state.variant;
-
-		//char* file_name = (char*) mp_command.ecp_next_state.data;
 
 		sr_ecp_msg->message("after loading param from variant");
 
@@ -242,29 +239,31 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 		change_pos[4] = 0;
 		change_pos[5] = 0;
 
-		sr_ecp_msg->message("change_pos values set");
-
-		//std::vector <double> build_start_coordinates(6);
-		//std::ifstream f_stream(file_name);
-
-		//for(int i = 0; i < 6; i++) {
-		//	if(!(f_stream >> build_start_coordinates[i])) {
-		//		return;
-		//	}
-		//}
-
-		/*
-		std::cout << "coordinates: " << std::endl;
-		for(int i = 0; i < 6; ++i) {
-			std::cout << build_start_coordinates[i] << std::endl;
+		std::cout << "CHANGE_POSITION" << endl;
+		for(size_t i = 0; i < 6; ++i) {
+			std::cout << change_pos[i] << std::endl;
 		}
-		*/
+		std::cout << std::endl;
+
+		position_on_board(0,0) = change_pos[0] - 1.0;
+		position_on_board(1,0) = change_pos[1] - 1.0;
+		position_on_board(2,0) = change_pos[2] - 2.0;
+		position_on_board(3,0) = 0;
+		position_on_board(4,0) = 0;
+		position_on_board(5,0) = 0;
+
+		correction_weights(0,0) = (position_on_board(0,0) == 0.0) ? 0 : 1;
+		correction_weights(1,0) = (position_on_board(1,0) == 0.0) ? 0 : 1;
+		correction_weights(2,0) = 0;
+		correction_weights(3,0) = 0;
+		correction_weights(4,0) = 0;
+		correction_weights(5,0) = 0;
 
 		sr_ecp_msg->message("after load coordinates");
 
 		int do_move = 0;	//czy zmieniac pozycje
 		for(int i = 0; i < 6; ++i) {
-			if(abs(change_pos[i]) < 4 && change_pos[i] != 0) {
+			if(abs(position_on_board(i,0)) < 4 && position_on_board(i,0) >= 0) {
 				do_move = 1;
 			}
 		}
@@ -274,29 +273,28 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 			sg->reset();
 			sg->set_absolute();
 
-			std::vector <double> coordinates(6);
+			std::vector <double> coordinates_vector(6);
 
 			sr_ecp_msg->message("after reset and set_absoulute");
 
-			double offset_x = config.value <double> ("offset_x", "[ecp_block_move]");
-			double offset_y = config.value <double> ("offset_y", "[ecp_block_move]");
-			double corr_x = config.value <double> ("corr_x", "[ecp_block_move]");
-			double corr_y = config.value <double> ("corr_y", "[ecp_block_move]");
-
-			std::cout << offset_x << ", " << offset_y << std::endl;
-
-			std::cout << "CHANGE_POSITION" << endl;
+			std::cout << "POSITION ON BOARD" << endl;
 			for(size_t i = 0; i < 6; ++i) {
-				std::cout << change_pos[i] << std::endl;
+				std::cout << position_on_board(i,0) << std::endl;
 			}
 			std::cout << std::endl;
 
-			coordinates[0] = position[0] + offset_x + (4 - change_pos[0])*BLOCK_WIDTH + corr_x*(change_pos[0] - 1);
+
+			/*coordinates[0] = position[0] + offset_x + (4 - change_pos[0])*BLOCK_WIDTH + corr_x*(change_pos[0] - 1);
 			coordinates[1] = position[1] + offset_y + (4 - change_pos[1])*BLOCK_WIDTH + corr_y*(change_pos[0] - 1);
 			coordinates[2] = position[2] + (change_pos[2]-3)*BLOCK_HEIGHT;
 			coordinates[3] = position[3] + change_pos[3]*BLOCK_WIDTH;
 			coordinates[4] = position[4] + change_pos[4]*BLOCK_WIDTH;
 			coordinates[5] = position[5] + change_pos[5]*BLOCK_WIDTH;
+			*/
+
+			for(size_t i = 0; i < 6; ++i) {
+				coordinates_vector[i] = position(i) + offset(i,0) + position_on_board(i,0)*block_size(i,0) + correction(i,0)*correction_weights(i,0);
+			}
 
 			/*
 			std::cout << "coordinates: " << std::endl;
@@ -307,7 +305,7 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 			sr_ecp_msg->message("coordinates ready");
 
-			sg->load_absolute_angle_axis_trajectory_pose(coordinates);
+			sg->load_absolute_angle_axis_trajectory_pose(coordinates_vector);
 
 			sr_ecp_msg->message("pose loaded");
 
@@ -322,6 +320,12 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 	}
 
+}
+
+void block_move::sm1_move(void) {
+	//sm1->add_termination_condition(object_reached_term_cond1);
+	//sm1->add_termination_condition(timeout_term_cond1);
+	//sm1->Move();
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)

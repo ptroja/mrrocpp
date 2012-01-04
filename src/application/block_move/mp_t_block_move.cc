@@ -200,9 +200,9 @@ void block_move::main_task_algorithm(void)
 
 	block_position_list list_from_file = get_list_from_file("../../src/application/block_move/con/structure.con");
 	planned_list = create_plan(list_from_file);
-
-	int count_servo_try_1 = config.value <int> ("count_servo_try_1", "[mp_block_move]");
 /*
+	int count_servo_try_1 = config.value <int> ("count_servo_try_1", "[mp_block_move]");
+
 	for(int h = 0; h < count_servo_try_1; ++h) {
 
 		sr_ecp_msg->message("Reaching building place...");
@@ -298,6 +298,14 @@ void block_move::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Raising up...");
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/build.trj", 0, lib::irp6p_m::ROBOT_NAME);
+		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+		sr_ecp_msg->message("Force approach");
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, BUILDING, "", 0, lib::irp6p_m::ROBOT_NAME);
+		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+		sr_ecp_msg->message("Raising up...");
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_after_pushing.trj", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		wait_ms(4000);

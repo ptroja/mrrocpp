@@ -72,7 +72,7 @@ public:
 		return false;
 	}
 
-	bool operator> (BlockPosition &bp) {
+	bool operator< (BlockPosition &bp) {
 		if(this->getPosition()[2] > bp.getPosition()[2]) {
 			return true;
 		}
@@ -89,7 +89,7 @@ public:
 		return false;
 	}
 
-	bool operator< (BlockPosition &bp) {
+	bool operator> (BlockPosition &bp) {
 		if(this->getPosition()[2] < bp.getPosition()[2]) {
 			return true;
 		}
