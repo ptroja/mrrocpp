@@ -88,7 +88,9 @@ void manip_trans_t::operator()()
 
 			// rzucone jesli wyjatek zostanie rzucony w drugiej fazie move_arm w wariancie silowym
 			if (master.move_arm_second_phase) {
-				// oczekiwanie na zezwolenie ruchu od edp_master
+				// oczekiwanie na zezwolenie ruchu od edp_master,
+				// wtym wariancie intrukcja ruchu zostanei zignorowana a do mastera
+				// zostanei wyslany wyjatek z drugiej fazy move_arm
 				master_to_trans_synchroniser.wait();
 				error = boost::current_exception();
 				printf("transformation thread error\n");
