@@ -24,6 +24,9 @@ namespace sbench {
  * \brief class of EDP SwarmItFix head effector
  *
  * This head is built on top of the SPKM manipulator
+ *
+ * See http://www.festo.com/net/SupportPortal/Downloads/51705/526410g1.pdf
+ * for details about CAN communication.
  */
 class effector : public common::motor_driven_effector
 {
@@ -55,6 +58,9 @@ public:
 	 * The attributes are initialized here.
 	 */
 	effector(common::shell &_shell);
+
+	//! Destructor
+	~effector();
 
 	/*!
 	 * \brief method to create threads other then EDP master thread.
