@@ -48,9 +48,24 @@ effector::effector(common::shell &_shell) :
 		}
 
 	} else {
+		// Set pointer just for safety
+		device = NULL;
+
 		current_pins_buf.set_zeros();
 	}
 
+}
+
+effector::~effector()
+{
+	if(!robot_test_mode) {
+		// Detach from hardware
+		if (device) {
+			if(comedi_close(device) == -1) {
+				throw std::runtime_error("comedi_close() failed");
+			}
+		}
+	}
 }
 
 void effector::get_controller_state(lib::c_buffer &instruction)
@@ -93,15 +108,13 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 void effector::move_arm(const lib::c_buffer &instruction)
 {
 
-	lib::sbench::c_buffer & local_instruction = (lib::sbench::c_buffer&) instruction;
+	const lib::sbench::c_buffer & local_instruction = (lib::sbench::c_buffer &) instruction;
 
 	msg->message("move_arm");
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	lib::sbench::pins_buffer pins_buf;
-
-	pins_buf = local_instruction.sbench.pins_buf;
+	const lib::sbench::pins_buffer & pins_buf = local_instruction.sbench.pins_buf;
 
 	if (robot_test_mode) {
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
