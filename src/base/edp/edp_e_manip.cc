@@ -486,6 +486,7 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 			 }
 			 */
 			mt_tt_obj->trans_t_to_master_synchroniser.command();
+			move_arm_second_phase = true;
 		}
 
 		last_force_step_counter = step_counter;
