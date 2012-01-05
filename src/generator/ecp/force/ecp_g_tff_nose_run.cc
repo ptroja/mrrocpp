@@ -26,7 +26,11 @@ namespace common {
 namespace generator {
 
 tff_nose_run::tff_nose_run(common::task::task& _ecp_task, int step) :
-		common::generator::generator(_ecp_task), step_no(step)
+		common::generator::generator(_ecp_task),
+		pulse_check_activated(false),
+		force_meassure(false),
+		step_no(step),
+		communication_type_variant(ecp_mp::generator::no_data)
 {
 	// domyslnie wszytkie osie podatne a pulse_check nieaktywne
 	configure_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT);
@@ -36,7 +40,6 @@ tff_nose_run::tff_nose_run(common::task::task& _ecp_task, int step) :
 	configure_reciprocal_damping(lib::FORCE_RECIPROCAL_DAMPING, lib::FORCE_RECIPROCAL_DAMPING, lib::FORCE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING);
 	configure_inertia(lib::FORCE_INERTIA, lib::FORCE_INERTIA, lib::FORCE_INERTIA, lib::TORQUE_INERTIA, lib::TORQUE_INERTIA, lib::TORQUE_INERTIA);
 
-	set_force_meassure(false);
 }
 
 void tff_nose_run::set_force_meassure(bool fm)

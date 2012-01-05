@@ -766,11 +766,22 @@ void rubik_cube_solver::approach_op(int mode)
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	//podnoszenie o 2 milimetry nad kostk
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.002", 0, lib::irp6ot_tfg::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::irp6ot_tfg::ROBOT_NAME.c_str());
-	//zaciskanie na kostce
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "-0.017", 0, lib::irp6ot_tfg::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::irp6ot_tfg::ROBOT_NAME.c_str());
+
+	// uruchomienie tff_nose run dla traka z podatnoscia w jednej osi
+	// uruchomienie zaciskania chwytaka traka do pozycji zadanej odpowiadajacej zacisnieciu na kostce z pol centymentrowym luzem
+	// oczekiwania na zakonczenie ruchu chwytaka
+	//zakonczenie generatora traka
+	// uruchomienie tff_nose run dla traka z podatnoscia w dwoch osiach
+	// uruchomienie zaciskania chwytaka traka do pozycji zadanej odpowiadajacej calkowitemu zacisnieciu na kostce bez luzu
+	// oczekiwania na zakonczenie ruchu chwytaka
+	//zakonczenie generatora traka
+	/*
+	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.002", 0, lib::irp6ot_tfg::ROBOT_NAME);
+	 wait_for_task_termination(false, 1, lib::irp6ot_tfg::ROBOT_NAME.c_str());
+	 //zaciskanie na kostce
+	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "-0.017", 0, lib::irp6ot_tfg::ROBOT_NAME);
+	 wait_for_task_termination(false, 1, lib::irp6ot_tfg::ROBOT_NAME.c_str());
+	 */
 	//zadanie chwytania kostki (koniec)
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) lib::ABSOLUTE, "../src/application/rcsc/trj/irp6ot_sm_ap_3.trj", 0, lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
