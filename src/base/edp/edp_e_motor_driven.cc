@@ -205,7 +205,8 @@ motor_driven_effector::motor_driven_effector(shell &_shell, const lib::robot_nam
 		step_counter(0),
 		number_of_servos(-1),
 		instruction(c_buffer_ref),
-		reply(r_buffer_ref)
+		reply(r_buffer_ref),
+		move_arm_second_phase(false)
 {
 	controller_state_edp_buf.is_synchronised = false;
 	controller_state_edp_buf.is_power_on = true;

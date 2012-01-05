@@ -32,12 +32,12 @@ namespace task {
 
 task_base::task_base(lib::configurator &_config, boost::shared_ptr<robot::ecp_robot_base> & robot_ref) :
 		ecp_mp::task::task(_config),
+		ecp_m_robot(robot_ref),
 		MP(lib::MP_SECTION),
 		reply(MP, _config.section_name),
 		command(*this, "MP_COMMAND"),
 		mp_command(command.access),
 		mp_2_ecp_next_state_string(mp_command.ecp_next_state.next_state),
-		ecp_m_robot(robot_ref),
 		continuous_coordination(false)
 {
 	initialize_communication();

@@ -9,10 +9,6 @@
 
 #include <QFont>
 
-#define SBENCH_MAX_ROW 8
-#define SBENCH_MAX_COL 8
-#define SBENCH_MAX_EL 64
-
 wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
 		wgt_base(_widget_label, _interface, parent)
 {
@@ -22,11 +18,41 @@ wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::commo
 	// utworzenie list widgetow
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
+			int k = (i + 1) % 2;
+
 			QCheckBox *tmp_checkbox;
 			tmp_checkbox = new QCheckBox(this);
 
 			std::stringstream tmp_stringsteam;
-			tmp_stringsteam << i * SBENCH_MAX_COL + j;
+			tmp_stringsteam << i + 1 << "-";
+
+			switch (j)
+			{
+				case 0:
+					tmp_stringsteam << "I";
+					break;
+				case 1:
+					tmp_stringsteam << "II";
+					break;
+				case 2:
+					tmp_stringsteam << "III";
+					break;
+				case 3:
+					tmp_stringsteam << "IV";
+					break;
+				case 4:
+					tmp_stringsteam << "V";
+					break;
+				case 5:
+					tmp_stringsteam << "VI";
+					break;
+				case 6:
+					tmp_stringsteam << "VII";
+					break;
+				case 7:
+					tmp_stringsteam << "VIII";
+					break;
+			}
 
 			tmp_checkbox->setText(tmp_stringsteam.str().c_str());
 			/*
@@ -41,9 +67,17 @@ wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::commo
 			 tmp_checkbox->repaint();
 			 tmp_checkbox->update();
 			 */
-			int k = i % 2;
+
 			ui.gridLayout->addWidget(tmp_checkbox, i, (2 * j) + k);
-			checkBox_Vector.append(tmp_checkbox);
+		//	checkBox_Vector.append(tmp_checkbox);
+
+			docks[i][j] = tmp_checkbox;
+
+			// unused docks are disabled
+			if (((k == 0) && (i > 6)) || ((k == 1) && (j > 6))) {
+				tmp_checkbox->setDisabled(true);
+			}
+
 		}
 	}
 
@@ -63,7 +97,7 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 	QFont font;
 	QPalette pal;
 
-	int sum = 0;
+//	int sum = 0;
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
@@ -80,10 +114,11 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 				pal.setColor(QPalette::WindowText, Qt::black);
 				pal.setColor(QPalette::Background, Qt::black);
 			}
-
-			checkBox_Vector[sum]->setFont(font);
-			checkBox_Vector[sum]->setPalette(pal);
-			sum++;
+			docks[i][j]->setFont(font);
+			docks[i][j]->setPalette(pal);
+			//	checkBox_Vector[sum]->setFont(font);
+			//	checkBox_Vector[sum]->setPalette(pal);
+			//	sum++;
 		}
 	}
 
@@ -92,12 +127,13 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
 {
 	on_pushButton_read_clicked();
-	int sum = 0;
+//	int sum = 0;
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			checkBox_Vector[sum]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j));
-			sum++;
+			docks[i][j]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j));
+			//checkBox_Vector[sum]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j));
+			//sum++;
 		}
 	}
 
@@ -105,19 +141,28 @@ void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
 
 void wgt_sbench_command::on_pushButton_clear_clicked()
 {
-	for (int i; i < SBENCH_MAX_EL; i++) {
-		checkBox_Vector[i]->setChecked(false);
+
+	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
+		for (int j = 0; j < SBENCH_MAX_COL; j++) {
+			docks[i][j]->setChecked(false);
+
+		}
 	}
+	/*
+	 for (int i; i < SBENCH_MAX_EL; i++) {
+	 checkBox_Vector[i]->setChecked(false);
+	 }
+	 */
 }
 
 void wgt_sbench_command::on_pushButton_execute_clicked()
 {
-	int sum = 0;
+//	int sum = 0;
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			robot->ui_ecp_robot->the_robot->sbench_command_data_port.data.set_value(i, j, checkBox_Vector[sum]->isChecked());
-			sum++;
+			robot->ui_ecp_robot->the_robot->sbench_command_data_port.data.set_value(i, j, docks[i][j]->isChecked());
+			//	sum++;
 		}
 	}
 

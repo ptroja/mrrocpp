@@ -216,7 +216,7 @@ public:
 	 * @param _config configurator object reference.
 	 */
 	_task(lib::configurator &_config) :
-		task_base(_config, *((boost::shared_ptr<robot::ecp_robot_base> *) &ecp_m_robot))
+		task_base(_config, (boost::shared_ptr<robot::ecp_robot_base> &) ecp_m_robot)
 	{
 	}
 

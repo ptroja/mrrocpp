@@ -39,6 +39,8 @@ void manip_trans_t::operator()()
 		//domyslnie brak bledu boost
 		error = boost::exception_ptr();
 
+		master.move_arm_second_phase = false;
+
 		// przekopiowanie instrukcji z bufora watku komunikacji z ECP (edp_master)
 
 		current_cmd = tmp_cmd;
@@ -46,7 +48,7 @@ void manip_trans_t::operator()()
 
 		try {
 			// TODO: this thread is for handling special case of move_arm instruction;
-			// all the othrer call can (and should...) be done from the main communication thread;
+			// all the other call can (and should...) be done from the main communication thread;
 			// they do not need to be processed asynchronously.
 			switch (current_cmd.trans_t_task)
 			{
@@ -74,6 +76,7 @@ void manip_trans_t::operator()()
 					master.move_arm(current_cmd.instruction); // wariant dla watku edp_trans_t
 					break;
 				default: // blad: z reply_type wynika, e odpowied nie ma zawiera narzedzia
+					//dodac rzucanie wyjatku
 					break;
 			}
 
@@ -82,8 +85,20 @@ void manip_trans_t::operator()()
 		// sekcja przechwytujaca bledy i przygotowujaca do ich rzucania w watku master
 
 		catch (...) {
-			error = boost::current_exception();
-			printf("transformation thread unidentified_error\n");
+
+			// rzucone jesli wyjatek zostanie rzucony w drugiej fazie move_arm w wariancie silowym
+			if (master.move_arm_second_phase) {
+				// oczekiwanie na zezwolenie ruchu od edp_master,
+				// wtym wariancie intrukcja ruchu zostanei zignorowana a do mastera
+				// zostanei wyslany wyjatek z drugiej fazy move_arm
+				master_to_trans_synchroniser.wait();
+				error = boost::current_exception();
+				printf("transformation thread error\n");
+
+			} else {
+				error = boost::current_exception();
+				printf("transformation thread error\n");
+			}
 
 			trans_t_to_master_synchroniser.command();
 			// Wylapywanie niezdefiniowanych bledow
