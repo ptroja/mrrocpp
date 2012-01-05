@@ -22,6 +22,9 @@
 #ifndef __COM_BUF_H
 #define __COM_BUF_H
 
+#include "base/lib/xdr/xdr_iarchive.hpp"
+#include "base/lib/xdr/xdr_oarchive.hpp"
+
 #include <vector>
 
 #include <boost/serialization/serialization.hpp>
@@ -1080,6 +1083,57 @@ public:
 
 	playerpos_goal_t(double _x, double _y, double _t);
 	playerpos_goal_t();
+};
+
+//------------------------------------------------------------------------------
+/*!
+ *  Wariantowy buffor do serialziacja
+ *  obecna implementacja allokuje staly obszar pamieci
+ *  @todo Translate to English.
+ */
+class seter_geter_buffer
+{
+public:
+
+	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
+
+template	<typename BUFFER_TYPE>
+	void set(const BUFFER_TYPE & buffer)
+	{
+		xdr_oarchive<> oa;
+		oa << buffer;
+		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
+		assert(MP_2_ECP_STRING_SIZE > oa.getArchiveSize());
+
+		// serializacja
+		memcpy(data, oa.get_buffer(), oa.getArchiveSize());
+	}
+
+	template <typename BUFFER_TYPE>
+	void get(BUFFER_TYPE & buffer)
+	{
+		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
+		assert(MP_2_ECP_STRING_SIZE > sizeof(buffer));
+
+		// deserializacja
+		xdr_iarchive<> ia(data, MP_2_ECP_STRING_SIZE);
+
+		ia >> buffer;
+
+		//	memcpy(&buffer, data, sizeof(buffer) );
+	}
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & data;
+		// ar & playerpos_goal; // this is not used at this moment
+	}
 };
 
 //------------------------------------------------------------------------------
