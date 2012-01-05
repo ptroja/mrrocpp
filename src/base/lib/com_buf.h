@@ -1091,7 +1091,7 @@ public:
  *  obecna implementacja allokuje staly obszar pamieci
  *  @todo Translate to English.
  */
-class seter_geter_buffer
+class seter_geter_buffer_t
 {
 public:
 
@@ -1146,10 +1146,10 @@ struct ecp_next_state_t
 	std::string next_state;
 
 	int variant;
-	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
+	seter_geter_buffer_t sg_buf;
 
 	/*! Target position for the mobile robot. */
-playerpos_goal_t	playerpos_goal;
+	playerpos_goal_t playerpos_goal;
 
 	const char * get_mp_2_ecp_next_state_string() const;
 
@@ -1163,7 +1163,7 @@ private:
 	{
 		ar & next_state;
 		ar & variant;
-		ar & data;
+		ar & sg_buf;
 		// ar & playerpos_goal; // this is not used at this moment
 	}
 };

@@ -10,7 +10,6 @@
 
 #include <boost/foreach.hpp>
 
-
 #include "base/mp/mp_robot.h"
 
 #include "robot/player/ecp_mp_t_player.h"
@@ -34,9 +33,9 @@ void set_next_ecps_state::configure(const std::string & l_mp_2_ecp_next_state, i
 	ecp_next_state.variant = l_mp_2_ecp_next_state_variant;
 	if (l_mp_2_ecp_next_state_string) {
 		if (str_len == 0) {
-			strcpy(reinterpret_cast <char*>(ecp_next_state.data), l_mp_2_ecp_next_state_string);
+			strcpy(reinterpret_cast <char*>(ecp_next_state.sg_buf.data), l_mp_2_ecp_next_state_string);
 		} else {
-			memcpy(ecp_next_state.data, l_mp_2_ecp_next_state_string, str_len);
+			memcpy(ecp_next_state.sg_buf.data, l_mp_2_ecp_next_state_string, str_len);
 		}
 	}
 }

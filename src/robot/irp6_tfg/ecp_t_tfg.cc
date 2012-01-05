@@ -51,7 +51,7 @@ void tfg::mp_2_ecp_next_state_string_handler(void)
         } else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY) {
 
                 cvg->reset();
-                std::vector <double> pos(1, atof((char*) mp_command.ecp_next_state.data));
+                std::vector <double> pos(1, atof((char*) mp_command.ecp_next_state.sg_buf.data));
                 std::vector <double> joint_velocity(1, 0.006);
 
                 cvg->set_joint_velocity_vector(joint_velocity);
