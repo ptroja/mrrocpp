@@ -759,8 +759,9 @@ void rubik_cube_solver::approach_op(int mode)
 	/*
 	 //generator sledzacy kostke
 	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_IB_EIH, (int) 1, "", 0, lib::irp6ot_m::ROBOT_NAME);
+
+	 //wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	 */
-	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	// docisniecie chwytaka tracka do kostki
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
