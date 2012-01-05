@@ -123,6 +123,9 @@ void external_epos_command::create_ecp_mp_reply()
 
 void external_epos_command::get_mp_ecp_command()
 {
+
+	// ecp_t.mp_command.ecp_next_state.sg_buf.get(mp_ecp_epos_simple_command);
+
 	memcpy(&mp_ecp_epos_simple_command, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(mp_ecp_epos_simple_command));
 }
 
