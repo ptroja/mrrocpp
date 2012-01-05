@@ -1097,33 +1097,35 @@ public:
 
 	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
-template	<typename BUFFER_TYPE>
-	void set(const BUFFER_TYPE & buffer)
-	{
-		xdr_oarchive<> oa;
-		oa << buffer;
-		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
-		assert(MP_2_ECP_STRING_SIZE > oa.getArchiveSize());
+	/*
+	 template	<typename BUFFER_TYPE>
+	 void set(const BUFFER_TYPE & buffer)
+	 {
+	 xdr_oarchive<> oa;
+	 oa << buffer;
+	 //sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
+	 assert(MP_2_ECP_STRING_SIZE > oa.getArchiveSize());
 
-		// serializacja
-		memcpy(data, oa.get_buffer(), oa.getArchiveSize());
-	}
+	 // serializacja
+	 memcpy(data, oa.get_buffer(), oa.getArchiveSize());
+	 }
 
-	template <typename BUFFER_TYPE>
-	void get(BUFFER_TYPE & buffer)
-	{
-		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
-		assert(MP_2_ECP_STRING_SIZE > sizeof(buffer));
+	 template <typename BUFFER_TYPE>
+	 void get(BUFFER_TYPE & buffer)
+	 {
+	 //sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
+	 assert(MP_2_ECP_STRING_SIZE > sizeof(buffer));
 
-		// deserializacja
-		xdr_iarchive<> ia(data, MP_2_ECP_STRING_SIZE);
+	 // deserializacja
+	 xdr_iarchive<> ia(data, MP_2_ECP_STRING_SIZE);
 
-		ia >> buffer;
+	 ia >> buffer;
 
-		//	memcpy(&buffer, data, sizeof(buffer) );
-	}
+	 //	memcpy(&buffer, data, sizeof(buffer) );
+	 }
+	 */
 
-private:
+private	:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
