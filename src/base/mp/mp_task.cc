@@ -90,7 +90,7 @@ void task::stop_and_terminate()
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_ecp_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, const lib::robot_name_t & robot_name)
+void task::set_next_ecp_state(const std::string & l_state, int l_variant, const std::string & l_string, int str_len, const lib::robot_name_t & robot_name)
 {
 	// setting the next ecps state
 	generator::set_next_ecps_state mp_snes_gen(*this);

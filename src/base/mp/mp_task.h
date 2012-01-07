@@ -169,7 +169,7 @@ public:
 	 * @param str_len string length
 	 * @param robot_name robot to receive a command
 	 */
-	void set_next_ecp_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, const lib::robot_name_t & robot_name);
+	void set_next_ecp_state(const std::string & l_state, int l_variant, const std::string & l_string, int str_len, const lib::robot_name_t & robot_name);
 
 	/**
 	 * @brief sends end motion command to ECP's
