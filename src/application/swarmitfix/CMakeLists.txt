@@ -12,13 +12,13 @@ add_executable(plantest
 	ParsePlan.cc planner.cc
 )
 
-target_link_libraries(plantest ${Boost_THREAD_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${XERCES_LIBRARIES} mrrocpp)
+target_link_libraries(plantest ${Boost_THREAD_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${XERCES_LIBRARIES} mrrocpp)
 
 add_executable(mp_swarmitfix
 	mp_t_swarmitfix.cc mp_t_swarmitfix_logic.cc mp_t_swarmtest.cc planner.cc WorkersStatus.cc ${PLAN_SRCS}
 )
 
-target_link_libraries(mp_swarmitfix ${XERCES_LIBRARIES} mp ${Boost_FILESYSTEM_LIBRARY})
+target_link_libraries(mp_swarmitfix ${XERCES_LIBRARIES} mp ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 
 install(TARGETS mp_swarmitfix DESTINATION bin)
 

@@ -13,6 +13,7 @@
 #include <boost/bind.hpp>
 
 #include <boost/filesystem.hpp>
+#include <boost/version.hpp>
 
 #include "planner.h"
 #include "plan.hxx"
@@ -30,7 +31,11 @@ planner::planner(const std::string & path) :
 	xml_schema::Properties props;
 
 	// Add XSD validation to parser's properties
+#if BOOST_VERSION >=104400
+	props.no_namespace_schema_location (xsdpath.string());
+#else
 	props.no_namespace_schema_location (xsdpath.file_string());
+#endif
 
 	// Read plan from XML file
 	try {
