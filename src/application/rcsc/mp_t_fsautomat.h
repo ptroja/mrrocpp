@@ -27,7 +27,6 @@
 #include "robot/smb/mp_r_smb.h"
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
-#include "robot/player/const_player.h"
 
 namespace mrrocpp {
 namespace mp {

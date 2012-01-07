@@ -57,20 +57,21 @@ namespace task {
 
 //! Type for optionally active input data buffer
 template <class T>
-class InputPtr : private boost::shared_ptr<InputBuffer<T> > {
+class InputPtr : private boost::shared_ptr <InputBuffer <T> >
+{
 	//! Underlying implementation of 'optional' concept
-	typedef boost::shared_ptr<InputBuffer<T> > ptrType;
+	typedef boost::shared_ptr <InputBuffer <T> > ptrType;
 
 public:
 	//! Create input buffer and register within an agent
 	void Create(Agent & owner, const std::string & name, const T & default_value = T())
 	{
-		if(ptrType::get()) {
-	        std::ostringstream tmp;
-	        tmp << "optional Input buffer \"" << name << "\"already created";
+		if (ptrType::get()) {
+			std::ostringstream tmp;
+			tmp << "optional Input buffer \"" << name << "\"already created";
 			throw std::runtime_error(tmp.str());
 		}
-		ptrType::operator=((ptrType) new InputBuffer<T>(owner, name, default_value));
+		ptrType::operator=((ptrType) new InputBuffer <T>(owner, name, default_value));
 	}
 
 	//! Reuse access operator from the underlying 'optional' concept type
@@ -79,20 +80,21 @@ public:
 
 //! Type for optionally inactive output data buffer
 template <class T>
-struct OutputPtr : private boost::shared_ptr<OutputBuffer<T> > {
+struct OutputPtr : private boost::shared_ptr <OutputBuffer <T> >
+{
 	//! Underlying implementation of 'optional' concept
-	typedef boost::shared_ptr<OutputBuffer<T> > ptrType;
+	typedef boost::shared_ptr <OutputBuffer <T> > ptrType;
 
 public:
 	//! Create input buffer and register within an agent
 	void Create(RemoteAgent & owner, const std::string & name)
 	{
-		if(ptrType::get()) {
-	        std::ostringstream tmp;
-	        tmp << "optional Output buffer \"" << name << "\"already created";
+		if (ptrType::get()) {
+			std::ostringstream tmp;
+			tmp << "optional Output buffer \"" << name << "\"already created";
 			throw std::runtime_error(tmp.str());
 		}
-		ptrType::operator=((ptrType) new OutputBuffer<T>(owner, name));
+		ptrType::operator=((ptrType) new OutputBuffer <T>(owner, name));
 	}
 
 	//! Reuse access operator from the underlying 'optional' concept type
@@ -159,13 +161,6 @@ public:
 	} WAIT_FOR_NEW_PULSE_MODE;
 
 	/**
-	 * @brief sets the goal pf player controlled robot
-	 * @param robot_l robot label
-	 * @param goal motion goal
-	 */
-	void set_next_playerpos_goal(lib::robot_name_t robot_l, const lib::playerpos_goal_t &goal);
-
-	/**
 	 * @brief sets the next state of ECP
 	 * it calls dedicated generator and then sends new command in generator Move instruction
 	 * @param l_state state label sent to ECP
@@ -192,7 +187,7 @@ public:
 	 */
 	void wait_for_task_termination(bool activate_trigger, int number_of_robots, ...);
 
-	void wait_for_task_termination(bool activate_trigger, const std::vector<lib::robot_name_t> & robotSet);
+	void wait_for_task_termination(bool activate_trigger, const std::vector <lib::robot_name_t> & robotSet);
 
 	/**
 	 * @brief sends end motion command to ECP's - mkisiel xml task version
@@ -212,12 +207,12 @@ public:
 	/**
 	 * @brief waits for START pulse from UI
 	 */
-	void wait_for_start(void);// by Y&W
+	void wait_for_start(void); // by Y&W
 
 	/**
 	 * @brief waits for STOP pulse from UI
 	 */
-	void wait_for_stop(void);// by Y&W dodany tryb
+	void wait_for_stop(void); // by Y&W dodany tryb
 
 	/**
 	 * @brief starts all ECP's
@@ -279,7 +274,7 @@ private:
 	/**
 	 * @brief pulse from UI
 	 */
-	InputBuffer<char> ui_pulse;
+	InputBuffer <char> ui_pulse;
 };
 
 /**

@@ -15,17 +15,11 @@ add_subdirectory (haptic)
 add_subdirectory (haptic_stiffness)
 add_subdirectory (mm_test)
 add_subdirectory (mp_common)
-add_subdirectory (multiplayer)
 add_subdirectory (neuron)
 add_subdirectory (playerjoy)
 add_subdirectory (pnml)
 add_subdirectory (rcsc)
 add_subdirectory (swarm_demo_irp6)
-
-
-
-
-
 add_subdirectory (tcim_bug)
 add_subdirectory (teach)
 add_subdirectory (teach-dll)

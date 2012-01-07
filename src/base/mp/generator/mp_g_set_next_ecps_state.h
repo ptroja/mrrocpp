@@ -52,13 +52,7 @@ public:
 	 * @param str_len above string length
 	 */
 	void
-			configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string, int str_len);
-
-	/**
-	 * @brief sets ecp_next_state structure (player variant)
-	 * @param _goal player goal structure reference
-	 */
-	void configure(const lib::playerpos_goal_t &_goal);
+	configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const char* l_mp_2_ecp_next_state_string, int str_len);
 
 	bool first_step();
 	bool next_step();

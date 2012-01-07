@@ -10,10 +10,8 @@
 
 #include <boost/foreach.hpp>
 
-
 #include "base/mp/mp_robot.h"
 
-#include "robot/player/ecp_mp_t_player.h"
 #include "generator/mp/mp_g_delta_tight_coop.h"
 
 namespace mrrocpp {
@@ -21,7 +19,7 @@ namespace mp {
 namespace generator {
 
 delta::delta(task::task& _mp_task) :
-	generator(_mp_task)
+		generator(_mp_task)
 {
 }
 
@@ -30,7 +28,7 @@ delta::delta(task::task& _mp_task) :
 // ####################################################################################################
 
 tight_coop::tight_coop(task::task& _mp_task, lib::trajectory_description irp6ot_tr_des, lib::trajectory_description irp6p_tr_des) :
-	delta(_mp_task)
+		delta(_mp_task)
 {
 	irp6ot_td = irp6ot_tr_des;
 	irp6p_td = irp6p_tr_des;
@@ -50,19 +48,19 @@ bool tight_coop::first_step()
 	idle_step_counter = 2;
 
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->mp_command.command = lib::NEXT_POSE;
-					robot_node.second->mp_command.instruction.instruction_type = lib::GET;
-					robot_node.second->mp_command.instruction.get_type = ARM_DEFINITION;
-					robot_node.second->mp_command.instruction.set_type = ARM_DEFINITION;
-					//robot_node.second->mp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
-					//robot_node.second->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
-					robot_node.second->mp_command.instruction.motion_type = lib::ABSOLUTE;
-					robot_node.second->mp_command.instruction.interpolation_type = lib::MIM;
-					robot_node.second->mp_command.instruction.motion_steps = irp6ot_td.internode_step_no;
-					robot_node.second->mp_command.instruction.value_in_step_no = irp6ot_td.value_in_step_no;
-					robot_node.second->communicate_with_ecp = true;
-				}
+			{
+				robot_node.second->mp_command.command = lib::NEXT_POSE;
+				robot_node.second->mp_command.instruction.instruction_type = lib::GET;
+				robot_node.second->mp_command.instruction.get_type = ARM_DEFINITION;
+				robot_node.second->mp_command.instruction.set_type = ARM_DEFINITION;
+				//robot_node.second->mp_command.instruction.set_arm_type = lib::XYZ_EULER_ZYZ;
+				//robot_node.second->mp_command.instruction.get_arm_type = lib::XYZ_EULER_ZYZ;
+				robot_node.second->mp_command.instruction.motion_type = lib::ABSOLUTE;
+				robot_node.second->mp_command.instruction.interpolation_type = lib::MIM;
+				robot_node.second->mp_command.instruction.motion_steps = irp6ot_td.internode_step_no;
+				robot_node.second->mp_command.instruction.value_in_step_no = irp6ot_td.value_in_step_no;
+				robot_node.second->communicate_with_ecp = true;
+			}
 
 	return true;
 }
@@ -97,13 +95,12 @@ bool tight_coop::next_step()
 	// (okreslenie kolejnego wezla interpolacji)
 	// i: licznik kolejnych wspolrzednych wektora [0..6]
 	for (int i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
-		robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i]
-				= robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
+		robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i] =
+				robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
 						+ node_counter * irp6ot_td.coordinate_delta[i] / irp6ot_td.interpolation_node_no;
 	// printf("X_d= %lf  X_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[0],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[0]);
 	// printf("Y_d= %lf  Y_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[1],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[1]);
 	// printf("Z_d= %lf  Z_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[2],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[2]);
-
 
 	// by Y - ZAKOMENTOWANE ponizej - nie wiadomo jaka idea temu przyswiecala
 	// ale dzialalo to zle z generatorami transparentnymi ECP
@@ -123,8 +120,8 @@ bool tight_coop::next_step()
 		// (okreslenie kolejnego wezla interpolacji)
 		// i: licznik kolejnych wspolrzednych wektora [0..6]
 		for (int i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
-			robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i]
-					= robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
+			robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i] =
+					robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
 							+ node_counter * irp6p_td.coordinate_delta[i] / irp6p_td.interpolation_node_no;
 
 	}

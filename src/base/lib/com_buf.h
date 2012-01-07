@@ -1066,26 +1066,6 @@ struct r_buffer : r_buffer_base
 };
 
 //------------------------------------------------------------------------------
-/*! Target position for the mobile robot. */
-class playerpos_goal_t
-{
-private:
-	double x, y, t;
-
-public:
-	void forward(double length);
-	void turn(double angle);
-	void setGoal(double _x, double _y, double _z);
-
-	double getX() const;
-	double getY() const;
-	double getT() const;
-
-	playerpos_goal_t(double _x, double _y, double _t);
-	playerpos_goal_t();
-};
-
-//------------------------------------------------------------------------------
 /*!
  *  Wariantowy buffor do serialziacja
  *  obecna implementacja allokuje staly obszar pamieci
@@ -1147,9 +1127,6 @@ struct ecp_next_state_t
 
 	int variant;
 	seter_geter_buffer_t sg_buf;
-
-	/*! Target position for the mobile robot. */
-	playerpos_goal_t playerpos_goal;
 
 	const char * get_mp_2_ecp_next_state_string() const;
 

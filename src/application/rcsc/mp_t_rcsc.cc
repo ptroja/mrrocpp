@@ -45,7 +45,7 @@
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
-#include "robot/player/const_player.h"
+
 
 #include <boost/foreach.hpp>
 
