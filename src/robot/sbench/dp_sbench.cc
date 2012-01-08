@@ -29,7 +29,7 @@ pins_buffer::pins_buffer()
 			for (int k = 0; k < 8; k++) {
 				for (int g = 0; g < 8; g++) {
 					if ((!((k == i) && (j == g))) && (translation_table[k][g] == translation_table[i][j])) {
-						std::cout << "multiply value at translation_table dp_sbench\n\n\n";
+						std::cout << "multiple values in pin translation_table dp_sbench\n\n\n";
 					}
 				}
 			}
@@ -42,17 +42,16 @@ pins_buffer::pins_buffer()
 void pins_buffer::set_zeros()
 {
 	for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-
-		pins_state[i] = 0;
+		pins_state[i] = false;
 	}
 }
 
-void pins_buffer::set_value(int row, int column, int value)
+void pins_buffer::set_value(int row, int column, bool value)
 {
 	pins_state[translation_table[row][column]] = value;
 }
 
-bool pins_buffer::get_value(int row, int column)
+bool pins_buffer::get_value(int row, int column) const
 {
 	return pins_state[translation_table[row][column]];
 }

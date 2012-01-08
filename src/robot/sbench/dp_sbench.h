@@ -53,8 +53,8 @@ public:
 
 	void set_zeros();
 
-	void set_value(int row, int column, int value);
-	bool get_value(int row, int column);
+	void set_value(int row, int column, bool value);
+	bool get_value(int row, int column) const;
 
 private:
 	//! Give access to boost::serialization framework
