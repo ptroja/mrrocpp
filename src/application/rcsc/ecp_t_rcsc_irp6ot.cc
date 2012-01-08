@@ -44,10 +44,10 @@ rcsc::rcsc(lib::configurator &_config) :
 	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
 	tig = new common::generator::teach_in(*this);
 
-        sg = new common::generator::newsmooth(*this, lib::ECP_JOINT, 7);
-        sg->set_debug(true);
-        sgaa = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
-        sgaa->set_debug(true);
+	sg = new common::generator::newsmooth(*this, lib::ECP_JOINT, 7);
+	sg->set_debug(true);
+	sgaa = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
+	sgaa->set_debug(true);
 
 	wmg = new common::generator::weight_measure(*this, 1);
 
@@ -105,8 +105,8 @@ rcsc::~rcsc()
 	delete rfrg;
 	delete tig;
 	//	delete befg;
-        delete sg;
-        delete sgaa;
+	delete sg;
+	delete sgaa;
 	delete wmg;
 	delete go_st;
 }
@@ -200,46 +200,46 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 		tig->Move();
 
-        } else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH ||
-                   mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_JOINT) {
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH
+			|| mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_JOINT) {
 		std::string path(mrrocpp_network_path);
-		path += (char*) mp_command.ecp_next_state.sg_buf.data;
+		path += mp_command.ecp_next_state.sg_buf.get <std::string>();
 
-                switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
+		switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
 		{
-                        case lib::RELATIVE:
-                                sg->set_relative();
+			case lib::RELATIVE:
+				sg->set_relative();
 				break;
-                        case lib::ABSOLUTE:
-                                sg->set_absolute();
+			case lib::ABSOLUTE:
+				sg->set_absolute();
 				break;
 			default:
 				break;
 		}
-				sg->reset();
-                sg->load_trajectory_from_file(path.c_str());
-                sg->calculate_interpolate();
-                sg->Move();
-        } else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_ANGLE_AXIS) {
-                std::string path(mrrocpp_network_path);
-                path += (char*) mp_command.ecp_next_state.sg_buf.data;
+		sg->reset();
+		sg->load_trajectory_from_file(path.c_str());
+		sg->calculate_interpolate();
+		sg->Move();
+	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_ANGLE_AXIS) {
+		std::string path(mrrocpp_network_path);
+		path += mp_command.ecp_next_state.sg_buf.get <std::string>();
 
-                switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
-                {
-                        case lib::RELATIVE:
-                                sgaa->set_relative();
-                                break;
-                        case lib::ABSOLUTE:
-                                sgaa->set_absolute();
-                                break;
-                        default:
-                                break;
-                }
-                sgaa->reset();
-                sgaa->load_trajectory_from_file(path.c_str());
-                sgaa->calculate_interpolate();
-                sgaa->Move();
-        }
+		switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
+		{
+			case lib::RELATIVE:
+				sgaa->set_relative();
+				break;
+			case lib::ABSOLUTE:
+				sgaa->set_absolute();
+				break;
+			default:
+				break;
+		}
+		sgaa->reset();
+		sgaa->load_trajectory_from_file(path.c_str());
+		sgaa->calculate_interpolate();
+		sgaa->Move();
+	}
 
 }
 
