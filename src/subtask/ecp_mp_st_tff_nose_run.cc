@@ -12,24 +12,53 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sub_task {
 
-void behaviour_specification_data_type::set_behaviour(lib::BEHAVIOUR_SPECIFICATION x, lib::BEHAVIOUR_SPECIFICATION y, lib::BEHAVIOUR_SPECIFICATION z, lib::BEHAVIOUR_SPECIFICATION ax, lib::BEHAVIOUR_SPECIFICATION ay, lib::BEHAVIOUR_SPECIFICATION az)
+void behaviour_specification_data_type::set_compliance(bool x, bool y, bool z, bool ax, bool ay, bool az)
 {
-	behaviour[0] = x;
-	behaviour[1] = y;
-	behaviour[2] = z;
-	behaviour[3] = ax;
-	behaviour[4] = ay;
-	behaviour[5] = az;
+	if (x) {
+		behaviour[0] = lib::CONTACT;
+	} else {
+		behaviour[0] = lib::UNGUARDED_MOTION;
+	}
+
+	if (y) {
+		behaviour[1] = lib::CONTACT;
+	} else {
+		behaviour[1] = lib::UNGUARDED_MOTION;
+	}
+
+	if (z) {
+		behaviour[2] = lib::CONTACT;
+	} else {
+		behaviour[2] = lib::UNGUARDED_MOTION;
+	}
+
+	if (ax) {
+		behaviour[3] = lib::CONTACT;
+	} else {
+		behaviour[3] = lib::UNGUARDED_MOTION;
+	}
+
+	if (ay) {
+		behaviour[4] = lib::CONTACT;
+	} else {
+		behaviour[4] = lib::UNGUARDED_MOTION;
+	}
+
+	if (az) {
+		behaviour[5] = lib::CONTACT;
+	} else {
+		behaviour[5] = lib::UNGUARDED_MOTION;
+	}
+
 }
 
-behaviour_specification_data_type::behaviour_specification_data_type(lib::BEHAVIOUR_SPECIFICATION x, lib::BEHAVIOUR_SPECIFICATION y, lib::BEHAVIOUR_SPECIFICATION z, lib::BEHAVIOUR_SPECIFICATION ax, lib::BEHAVIOUR_SPECIFICATION ay, lib::BEHAVIOUR_SPECIFICATION az)
+behaviour_specification_data_type::behaviour_specification_data_type(bool x, bool y, bool z, bool ax, bool ay, bool az)
 {
-	set_behaviour(x, y, z, ax, ay, az);
+	set_compliance(x, y, z, ax, ay, az);
 }
-
 behaviour_specification_data_type::behaviour_specification_data_type()
 {
-	set_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT);
+	set_compliance(true, true, true, true, true, true);
 }
 
 } // namespace common

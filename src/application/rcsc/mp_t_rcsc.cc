@@ -726,7 +726,7 @@ void rubik_cube_solver::approach_op(int mode)
 	if (config.exists_and_true("irp6p_compliant")) {
 		// wlaczenie genrator tff_nose_run_generator w postumencie
 
-		ecp_mp::sub_task::behaviour_specification_data_type beh(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT);
+		ecp_mp::sub_task::behaviour_specification_data_type beh(true, true, true, true, true, true);
 
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, beh, lib::irp6p_m::ROBOT_NAME);
 
@@ -767,9 +767,13 @@ void rubik_cube_solver::approach_op(int mode)
 	// docisniecie chwytaka tracka do kostki
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", lib::irp6ot_m::ROBOT_NAME);
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
-	//podnoszenie o 2 milimetry nad kostk
+	//podnoszenie o 2 milimetry nad kostke
 	// uruchomienie tff_nose run dla traka z podatnoscia w jednej osi
+	ecp_mp::sub_task::behaviour_specification_data_type beh(true, false, false, false, false, false);
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, beh, lib::irp6p_m::ROBOT_NAME);
+
 	// uruchomienie zaciskania chwytaka traka do pozycji zadanej odpowiadajacej zacisnieciu na kostce z pol centymentrowym luzem
+
 	// oczekiwania na zakonczenie ruchu chwytaka
 	//zakonczenie generatora traka
 	// uruchomienie tff_nose run dla traka z podatnoscia w dwoch osiach
