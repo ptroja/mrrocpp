@@ -28,7 +28,6 @@
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
 
-
 using namespace logger;
 
 namespace mrrocpp {
@@ -67,7 +66,7 @@ void visualservo_tester::main_task_algorithm(void)
 {
 	if (run_vs) {
 		sr_ecp_msg->message("Starting visual servo");
-		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", 0, robot_name);
+		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", robot_name);
 		sr_ecp_msg->message("Visual servo started.");
 
 		char txt[128];
@@ -83,7 +82,7 @@ void visualservo_tester::main_task_algorithm(void)
 	if (run_conveyor) {
 		sr_ecp_msg->message("Starting conveyor");
 
-		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_CONVEYOR_VS_TEST, 0, "", 0, lib::conveyor::ROBOT_NAME);
+		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_CONVEYOR_VS_TEST, 0, "", lib::conveyor::ROBOT_NAME);
 
 		sr_ecp_msg->message("Conveyor started.");
 	}

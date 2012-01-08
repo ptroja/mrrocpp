@@ -117,9 +117,9 @@ mmtest::mmtest(lib::configurator &_config) :
  ss << rel_aa;
  sr_ecp_msg->message(ss.str().c_str());
 
- set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", 0, manipulator_name);
+ set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", manipulator_name);
  wait_for_task_termination(false, 1,  manipulator_name.c_str());
- set_next_ecp_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", 0, manipulator_name);
+ set_next_ecp_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", manipulator_name);
  wait_for_task_termination(false, 1, manipulator_name.c_str());
  */
 
@@ -271,7 +271,7 @@ void mmtest::main_task_algorithm(void)
 
 		 char temp_str[20];//args to ecp
 		 sprintf (temp_str, "%lf %lf", 2.0, K_MAX+i*0.005);//direction, duration in k in arg in frames in time
-		 set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, lib::irp6p_m::ROBOT_NAME);
+		 set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 		 wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 		 }
 		 */
@@ -285,7 +285,7 @@ void mmtest::main_task_algorithm(void)
 		//DODATKOWY OBROT ZEBY NIE BYLO MOZLIWOSCI OBROTU DO TYLU
 		char str[20]; //args to ecp
 		sprintf(str, "%lf", -PI * 3 / 4); //-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, str, 0, lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, str, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		int sx = 3, sy = 3;
@@ -300,7 +300,7 @@ void mmtest::main_task_algorithm(void)
 
 			if (sx < x) {
 				sprintf(temp, "%lf %lf", 2.0, K_MAX); //direction, duration in k in arg in frames in time
-				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, 0, lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 				sx++;
 				std::cout << "x " << x << " y " << y << std::endl;
@@ -308,7 +308,7 @@ void mmtest::main_task_algorithm(void)
 			}
 			if (sx > x) {
 				sprintf(temp, "%lf %lf", 0.0, K_MAX); //direction, duration in k in arg in frames in time
-				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, 0, lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 				sx--;
 				std::cout << "x " << x << " y " << y << std::endl;
@@ -316,7 +316,7 @@ void mmtest::main_task_algorithm(void)
 			}
 			if (sy < y) {
 				sprintf(temp, "%lf %lf", 3.0, K_MAX); //direction, duration in k in arg in frames in time
-				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, 0, lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 				sy++;
 				std::cout << "x " << x << " y " << y << std::endl;
@@ -324,7 +324,7 @@ void mmtest::main_task_algorithm(void)
 			}
 			if (sy > y) {
 				sprintf(temp, "%lf %lf", 1.0, K_MAX); //direction, duration in k in arg in frames in time
-				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, 0, lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 				sy--;
 				std::cout << "x " << x << " y " << y << std::endl;
@@ -348,7 +348,7 @@ void mmtest::main_task_algorithm(void)
 			std::cout << "POINT: " << (*rit).x << "," << (*rit).y << std::endl;
 
 			sr_ecp_msg->message("BIAS");
-			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, manipulator_name);
+			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", manipulator_name);
 			wait_for_task_termination(false, 1, manipulator_name.c_str());
 
 			char temp_str[20]; //args to ecp
@@ -356,46 +356,46 @@ void mmtest::main_task_algorithm(void)
 			if ((*rit).y > (*prit).y) //((*rit).x<(*prit).x)//x-
 					{
 				sprintf(temp_str, "%lf", PI / 4); //-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
-				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E') {
 					sprintf(temp_str, "%lf %lf", 3.0, K_MAX); //direction, duration in k in arg in frames in time
-					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, lib::irp6p_m::ROBOT_NAME);
+					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 					wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 				}
 			} else if ((*rit).y < (*prit).y) //((*rit).x>(*prit).x)//x+
 					{
 				sprintf(temp_str, "%lf", -PI * 3 / 4); //-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
-				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E') {
 					sprintf(temp_str, "%lf %lf", 1.0, K_MAX); //direction, duration in k in arg in frames in time
-					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, lib::irp6p_m::ROBOT_NAME);
+					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 					wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 				}
 
 			} else if ((*rit).x > (*prit).x) //((*rit).y<(*prit).y)//y-
 					{
 				sprintf(temp_str, "%lf", -PI / 4); //-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
-				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E') {
 					sprintf(temp_str, "%lf %lf", 2.0, K_MAX); //direction, duration in k in arg in frames in time
-					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, lib::irp6p_m::ROBOT_NAME);
+					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 					wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 				}
 			} else if ((*rit).x < (*prit).x) //((*rit).y>(*prit).y)//y+
 					{
 				sprintf(temp_str, "%lf", PI * 3 / 4); //-3/4, -1/4, 1/4, 3/4 - BEZWGLEDNE POLOZENIE!
-				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, 0, lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E') {
 					sprintf(temp_str, "%lf %lf", 0.0, K_MAX); //direction, duration in k in arg in frames in time
-					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, 0, lib::irp6p_m::ROBOT_NAME);
+					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 					wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 				}
 			}

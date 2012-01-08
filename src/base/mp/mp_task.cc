@@ -90,7 +90,7 @@ void task::stop_and_terminate()
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_ecp_state(const std::string & l_state, int l_variant, const std::string & l_string, int str_len, const lib::robot_name_t & robot_name)
+void task::set_next_ecp_state(const std::string & l_state, int l_variant, const std::string & l_string, const lib::robot_name_t & robot_name)
 {
 	// setting the next ecps state
 	generator::set_next_ecps_state mp_snes_gen(*this);
@@ -98,14 +98,14 @@ void task::set_next_ecp_state(const std::string & l_state, int l_variant, const 
 	// Copy given robots to the map container
 	mp_snes_gen.robot_m[robot_name] = robot_m[robot_name];
 
-	mp_snes_gen.configure(l_state, l_variant, l_string, str_len);
+	mp_snes_gen.configure(l_state, l_variant, l_string);
 	mp_snes_gen.Move();
 }
 
 // metody do obslugi najczesniej uzywanych generatorow
 void task::set_next_ecp_state_string(const std::string & l_state, int l_variant, const std::string & l_string, const lib::robot_name_t & robot_name)
 {
-	set_next_ecp_state(l_state, l_variant, l_string, 0, robot_name);
+	set_next_ecp_state(l_state, l_variant, l_string, robot_name);
 }
 
 // delay MP replacement

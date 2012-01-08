@@ -469,15 +469,15 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	configure_edp_force_sensor(true, true);
 
 	// wlaczenie generatora zacisku na kostce w robocie irp6p
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0, "", 0, lib::irp6p_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0, "", lib::irp6p_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	//wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 	// wlaczenie generatora zacisku na kostce w robocie irp6p
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_1, "", 0, lib::irp6p_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_1, "", lib::irp6p_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	//wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 	// wlaczenie generatora zacisku na kostce w robocie irp6p
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_2, "", 0, lib::irp6p_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_2, "", lib::irp6p_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	//wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
@@ -486,7 +486,7 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	{
 		case common::CL_90:
 			//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
-			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CL_90, "", 0, lib::irp6ot_m::ROBOT_NAME);
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CL_90, "", lib::irp6ot_m::ROBOT_NAME);
 			// uruchomienie generatora empty_gen
 			wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 			// wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
@@ -495,14 +495,14 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 			break;
 		case common::CCL_90:
 			//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
-			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CCL_90, "", 0, lib::irp6ot_m::ROBOT_NAME);
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CCL_90, "", lib::irp6ot_m::ROBOT_NAME);
 			// uruchomienie generatora empty_gen
 			wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 			//wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
 			break;
 		case common::CL_180:
 			//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
-			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CL_180, "", 0, lib::irp6ot_m::ROBOT_NAME);
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CL_180, "", lib::irp6ot_m::ROBOT_NAME);
 			// uruchomienie generatora empty_gen
 			wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 			//wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
@@ -595,36 +595,36 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	configure_edp_force_sensor(true, true);
 
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_1, "", 0, lib::irp6ot_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_1, "", lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_2, "", 0, lib::irp6ot_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_2, "", lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// docisniecie chwytaka tracka do kostki
 
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// zacisniecie tracka na kostce
 
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_3, "", 0, lib::irp6ot_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_3, "", lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// wstepne rozwarcie chwytaka postumenta
-	//set_next_ecp_state ((int) ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, (int) ecp_mp::task::RCSC_GO_VAR_1, "",  0, lib::irp6p_m::ROBOT_NAME);
+	//set_next_ecp_state ((int) ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, (int) ecp_mp::task::RCSC_GO_VAR_1, "",  lib::irp6p_m::ROBOT_NAME);
 	set_next_ecp_state_string(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.002", lib::irp6p_tfg::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
 
 	// ostateczne zacisniecie tracka na kostce
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_4, "", 0, lib::irp6ot_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_4, "", lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
@@ -690,11 +690,11 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 void rubik_cube_solver::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 {
 	if (configure_track) {
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", lib::irp6ot_m::ROBOT_NAME);
 	}
 
 	if (configure_postument) {
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", lib::irp6p_m::ROBOT_NAME);
 	}
 
 	if ((configure_track) && (!configure_postument)) {
@@ -725,7 +725,7 @@ void rubik_cube_solver::approach_op(int mode)
 
 	if (config.exists_and_true("irp6p_compliant")) {
 		// wlaczenie genrator tff_nose_run_generator w postumencie
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", lib::irp6p_m::ROBOT_NAME);
 
 		// uruchomienie generatora empty_gen
 		wait_for_task_termination(true, 1, lib::irp6p_m::ROBOT_NAME.c_str());
@@ -735,7 +735,7 @@ void rubik_cube_solver::approach_op(int mode)
 	} else {
 		sr_ecp_msg->message("trak podatny");
 		// wlaczenie genrator tff_nose_run_generator w tracku
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", lib::irp6ot_m::ROBOT_NAME);
 
 		// uruchomienie generatora empty_gen
 		wait_for_task_termination(true, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
@@ -757,12 +757,12 @@ void rubik_cube_solver::approach_op(int mode)
 	//wait_for_task_termination(false, 2, lib::festival::ROBOT_NAME.c_str(), lib::irp6ot_m::ROBOT_NAME.c_str());
 	/*
 	 //generator sledzacy kostke
-	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_IB_EIH, (int) 1, "", 0, lib::irp6ot_m::ROBOT_NAME);
+	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_IB_EIH, (int) 1, "", lib::irp6ot_m::ROBOT_NAME);
 
 	 //wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	 */
 	// docisniecie chwytaka tracka do kostki
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", lib::irp6ot_m::ROBOT_NAME);
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	//podnoszenie o 2 milimetry nad kostk
 	// uruchomienie tff_nose run dla traka z podatnoscia w jednej osi

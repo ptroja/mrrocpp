@@ -59,8 +59,8 @@ void swarm_demo::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Both Bias");
 
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", 0, lib::irp6ot_m::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", 0, lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Postument Angle axis");
@@ -70,7 +70,7 @@ void swarm_demo::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Postument Force approach");
 
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Track Joint");
@@ -85,7 +85,7 @@ void swarm_demo::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Track Force approach");
 
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", lib::irp6ot_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Postument angle axis2");
@@ -95,7 +95,7 @@ void swarm_demo::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Postument Force approach");
 
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Track angle axis2");
@@ -105,7 +105,7 @@ void swarm_demo::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Track Force approach");
 
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", lib::irp6ot_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Wait");

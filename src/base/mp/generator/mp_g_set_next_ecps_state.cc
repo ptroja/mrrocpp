@@ -26,18 +26,11 @@ set_next_ecps_state::set_next_ecps_state(task::task& _mp_task) :
 	wait_for_ECP_message = true;
 }
 
-void set_next_ecps_state::configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const std::string & l_mp_2_ecp_next_state_string, int str_len)
+void set_next_ecps_state::configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const std::string & l_mp_2_ecp_next_state_string)
 {
 	ecp_next_state.next_state = l_mp_2_ecp_next_state;
 	ecp_next_state.variant = l_mp_2_ecp_next_state_variant;
-	if (l_mp_2_ecp_next_state_string != "") {
-		if (str_len == 0) {
-			// strcpy(reinterpret_cast <char*>(ecp_next_state.sg_buf.data), l_mp_2_ecp_next_state_string.c_str());
-			ecp_next_state.sg_buf.set(l_mp_2_ecp_next_state_string);
-		} else {
-			memcpy(ecp_next_state.sg_buf.data, l_mp_2_ecp_next_state_string.c_str(), str_len);
-		}
-	}
+	ecp_next_state.sg_buf.set(l_mp_2_ecp_next_state_string);
 }
 
 // ----------------------------------------------------------------------------------------------

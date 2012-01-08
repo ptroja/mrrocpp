@@ -52,7 +52,7 @@ public:
 	 * @param str_len above string length
 	 */
 	void
-	configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const std::string & l_mp_2_ecp_next_state_string, int str_len);
+	configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const std::string & l_mp_2_ecp_next_state_string);
 
 	bool first_step();
 	bool next_step();

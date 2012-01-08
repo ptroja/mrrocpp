@@ -387,9 +387,9 @@ void fsautomat::executeMotion(const common::State &state)
 	std::cout << "STATE STRING w executeMotion:  " << state.getStringArgument() << std::endl;
 	int trjConf = config.value <int>("trajectory_from_xml", "[xml_settings]");
 	if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
-		set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, state.getRobot());
+		set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), state.getRobot());
 	} else {
-		set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument().c_str(), 0, state.getRobot());
+		set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument().c_str(), state.getRobot());
 	}
 }
 
