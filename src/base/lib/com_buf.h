@@ -1136,8 +1136,6 @@ struct ecp_next_state_t
 	int variant;
 	seter_geter_buffer_t sg_buf;
 
-	const char * get_mp_2_ecp_next_state_string() const;
-
 private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;

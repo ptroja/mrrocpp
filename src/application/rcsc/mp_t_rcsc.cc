@@ -725,7 +725,10 @@ void rubik_cube_solver::approach_op(int mode)
 
 	if (config.exists_and_true("irp6p_compliant")) {
 		// wlaczenie genrator tff_nose_run_generator w postumencie
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 0, "", lib::irp6p_m::ROBOT_NAME);
+
+		ecp_mp::sub_task::behaviour_specification_data_type beh(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT);
+
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, beh, lib::irp6p_m::ROBOT_NAME);
 
 		// uruchomienie generatora empty_gen
 		wait_for_task_termination(true, 1, lib::irp6p_m::ROBOT_NAME.c_str());

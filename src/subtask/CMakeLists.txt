@@ -10,4 +10,4 @@ add_library(ecp_mp_subtasks
 	)
 
 target_link_libraries(ecp_subtasks ecp_mp_subtasks ecp_generators)
-install(TARGETS ecp_subtasks DESTINATION lib)
+install(TARGETS ecp_subtasks ecp_mp_subtasks DESTINATION lib)

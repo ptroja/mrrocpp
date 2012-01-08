@@ -34,10 +34,5 @@ r_buffer::r_buffer(void) :
 //  robot_model.tool_frame_def.address_byte = 0;
 }
 
-const char * ecp_next_state_t::get_mp_2_ecp_next_state_string() const
-{
-	return reinterpret_cast <const char*>(sg_buf.data);
-}
-
 } // namespace lib
 } // namespace mrrocpp
