@@ -53,11 +53,11 @@ public:
 	 */
 
 	template <typename BUFFER_TYPE>
-	void configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, BUFFER_TYPE & l_mp_2_ecp_next_state_string)
+	void configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, BUFFER_TYPE & l_mp_2_ecp_next_state_data)
 	{
 		ecp_next_state.next_state = l_mp_2_ecp_next_state;
 		ecp_next_state.variant = l_mp_2_ecp_next_state_variant;
-		ecp_next_state.sg_buf.set(l_mp_2_ecp_next_state_string);
+		ecp_next_state.sg_buf.set(l_mp_2_ecp_next_state_data);
 	}
 
 	bool first_step();

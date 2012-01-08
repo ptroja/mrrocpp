@@ -88,12 +88,6 @@ void task::stop_and_terminate()
 	terminate_all();
 }
 
-// metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_ecp_state_string(const std::string & l_state, int l_variant, const std::string & l_string, const lib::robot_name_t & robot_name)
-{
-	set_next_ecp_state(l_state, l_variant, l_string, robot_name);
-}
-
 // delay MP replacement
 void task::wait_ms(int _ms_delay) // zamiast delay
 {

@@ -233,7 +233,7 @@ void mmtest::main_task_algorithm(void)
 		 if(param<1.0)
 		 {
 		 sr_ecp_msg->message("SZCZEKI WYSZCZERZ");
-		 set_next_ecp_state_string(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki2.trj", 0,
+		 set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/szczeki2.trj", 0,
 		 lib::irp6p_m::ROBOT_NAME);
 		 wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
@@ -265,7 +265,7 @@ void mmtest::main_task_algorithm(void)
 		 for(int i=0;i<10;i++)
 		 {
 		 sr_ecp_msg->message("SZCZEKI W DOL");
-		 set_next_ecp_state_string(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz_bok.trj", 0,
+		 set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz_bok.trj", 0,
 		 lib::irp6p_m::ROBOT_NAME);
 		 wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
@@ -277,7 +277,7 @@ void mmtest::main_task_algorithm(void)
 		 */
 
 		sr_ecp_msg->message("SZCZEKI W DOL - ladna pozycja nad labiryntem");
-		set_next_ecp_state_string(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz_bok.trj", lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_pocz_bok.trj", lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		/* POZYCJA POCZATKOWA ZANIM SZCZEKI W DOL! *//* liczona z (3,3) */
@@ -335,7 +335,7 @@ void mmtest::main_task_algorithm(void)
 		/* USTAWIONY */
 
 		sr_ecp_msg->message("SZCZEKI W DOL2");
-		set_next_ecp_state_string(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_dol.trj", lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_dol.trj", lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		//std::cout<<"ECP REPLY: "<<robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0]<<std::endl;
@@ -406,14 +406,14 @@ void mmtest::main_task_algorithm(void)
 				param = param + 1.0;
 
 				//PODNIES SIE
-				set_next_ecp_state_string(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-				set_next_ecp_state_string(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 				//WYJEDZ
 				sr_ecp_msg->message("WYJEDZ");
-				set_next_ecp_state_string(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_powtorz.trj", lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/poz_powtorz.trj", lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 				std::cout << "POWTORZ!" << std::endl;
@@ -426,7 +426,7 @@ void mmtest::main_task_algorithm(void)
 	} //while()
 
 	//PODNIES SIE
-	set_next_ecp_state_string(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 //*/
