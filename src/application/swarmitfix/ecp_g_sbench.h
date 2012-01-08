@@ -1,29 +1,27 @@
 /*
- * ecp_g_spkm.h
+ * ecp_g_sbench.h
  *
  * Author: ptroja
  */
 
-#ifndef ECP_G_SPKM_H_
-#define ECP_G_SPKM_H_
+#ifndef ECP_G_SBENCH_H_
+#define ECP_G_SBENCH_H_
 
-#include "base/lib/periodic_timer.h"
-
-#include "robot/spkm/ecp_r_spkm.h"
-#include "robot/spkm/dp_spkm.h"
+#include "robot/sbench/ecp_r_sbench.h"
+#include "robot/sbench/dp_sbench.h"
 
 #include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace spkm {
+namespace sbench {
 namespace generator {
 
-class spkm_pose : public common::generator::_generator<ecp::spkm::robot>
+class pin_config : public common::generator::_generator<ecp::sbench::robot>
 {
 public:
 	//! Constructor
-	spkm_pose(task_t & _ecp_task, const lib::spkm::next_state_t::segment_sequence_t & _segments);
+	pin_config(task_t & _ecp_task, const lib::sbench::pins_buffer & _pins_buffer);
 
 	//! first step generation
 	bool first_step();
@@ -32,34 +30,12 @@ public:
 	bool next_step();
 
 private:
-	//! Motion segment iterator
-	lib::spkm::next_state_t::segment_sequence_t::const_iterator segment_iterator;
-
-	//! Request execution of a single motion segment
-	void request_segment_execution(robot_t & robot, const lib::spkm::segment_t & segment);
-
-	//! Motion segments
-	const lib::spkm::next_state_t::segment_sequence_t & segments;
-
-	//! Wakeup timer
-	lib::periodic_timer wakeup;
-};
-
-class spkm_quickstop : public common::generator::_generator<ecp::spkm::robot>
-{
-public:
-	//! Constructor
-	spkm_quickstop(task_t & _ecp_task);
-
-	//! first step generation
-	bool first_step();
-
-	//! next step generation
-	bool next_step();
+	//! Pin configuration
+	const lib::sbench::pins_buffer & pin_configuration;
 };
 
 } // namespace generator
-} // namespace spkm
+} // namespace sbench
 } // namespace ecp
 } // namespace mrrocpp
 

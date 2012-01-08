@@ -1,15 +1,15 @@
 #include "base/lib/sr/srlib.h"
 
-#include "robot/spkm/ecp_r_spkm1.h"
-#include "robot/spkm/ecp_r_spkm2.h"
+#include "robot/sbench/ecp_r_sbench1.h"
+#include "robot/sbench/ecp_r_sbench2.h"
 
-#include "ecp_t_spkm.h"
-#include "ecp_g_spkm.h"
-#include "ecp_mp_g_spkm.h"
+#include "ecp_t_sbench.h"
+#include "ecp_g_sbench.h"
+#include "ecp_mp_g_sbench.h"
 
 namespace mrrocpp {
 namespace ecp {
-namespace spkm {
+namespace sbench {
 namespace task {
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
@@ -17,24 +17,18 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	nextstateBuffer(*this, lib::commandBufferId)
 {
 	// Create the robot object
-	if (config.robot_name == lib::spkm1::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm1::robot(*this);
-	} else if (config.robot_name == lib::spkm2::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm2::robot(*this);
-	} else {
-		throw std::runtime_error(config.robot_name + ": unknown robot");
-	}
+	ecp_m_robot = (boost::shared_ptr <robot_t>) new sbench::robot(*this);
 
 	// Create task-dependent IO buffers
 	notifyBuffer = (boost::shared_ptr<lib::agent::OutputBuffer<lib::notification_t> >)
 			new lib::agent::OutputBuffer<lib::notification_t>(MP, ecp_m_robot->robot_name+lib::notifyBufferId);
 
-	sr_ecp_msg->message("ecp spkm loaded");
+	sr_ecp_msg->message("ecp sbench loaded");
 }
 
 void swarmitfix::main_task_algorithm(void)
 {
-	std::cerr << "spkm> swarmitfix::main_task_algorithm" << std::endl;
+	std::cerr << "sbench> swarmitfix::main_task_algorithm" << std::endl;
 
 	if (0) {
 		// Start PKM pose (also known as "neutral")
@@ -43,23 +37,17 @@ void swarmitfix::main_task_algorithm(void)
 				);
 
 		// Setup single motion sequence
-		lib::spkm::next_state_t::segment_sequence_t sequence;
-
-		// Insert single motion segment
-		sequence.push_back(hm);
+		lib::sbench::pins_buffer pins;
 
 		// Generator for motion execution
-		generator::spkm_pose g_pose(*this, sequence);
+		generator::pin_config g_pin_setup(*this, pins);
 
 		// Move the robot the the specified pose
-		g_pose.Move();
+		g_pin_setup.Move();
 	}
 
 	//! Move the robot the the specified pose
-	generator::spkm_pose g_pose(*this, nextstateBuffer.access.segments);
-
-	//! Stop the robot in case of emergency
-	generator::spkm_quickstop g_quickstop(*this);
+	generator::pin_config g_pin_config(*this, nextstateBuffer.access);
 
 	// Loop execution coordinator's commands
 	while(true) {
@@ -72,15 +60,8 @@ void swarmitfix::main_task_algorithm(void)
 			// Mark command as used
 			nextstateBuffer.markAsUsed();
 
-			// Dispatch to selected generator
-			switch(nextstateBuffer.Get().variant) {
-				case lib::spkm::POSE_LIST:
-					g_pose.Move();
-					break;
-				default:
-					g_quickstop.Move();
-					break;
-			}
+			// Dispatch to the generator
+			g_pin_config.Move();
 
 		} catch (const std::exception & e) {
 			// Report problem...
@@ -96,14 +77,14 @@ void swarmitfix::main_task_algorithm(void)
 }
 
 }
-} // namespace spkm
+} // namespace sbench
 
 namespace common {
 namespace task {
 
 task_base* return_created_ecp_task(lib::configurator &_config)
 {
-	return new spkm::task::swarmitfix(_config);
+	return new sbench::task::swarmitfix(_config);
 }
 
 }

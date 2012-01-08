@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_sbench_SWARMITFIX_H)
-#define _ECP_T_sbench_SWARMITFIX_H
+#if !defined(_ECP_T_SBENCH_SWARMITFIX_H)
+#define _ECP_T_SBENCH_SWARMITFIX_H
 
 #include <boost/shared_ptr.hpp>
 
@@ -25,16 +25,13 @@ public:
 	void main_task_algorithm(void);
 
 protected:
-	//! Move the robot the the specified pose
-	boost::shared_ptr<generator::sbench_pose> g_pose;
-
-	//! Stop the robot in case of emergency
-	boost::shared_ptr<generator::sbench_quickstop> g_quickstop;
+	//! Configure bench pins
+	boost::shared_ptr<generator::pin_config> g_pin_config;
 
 	/**
 	 * Input buffer for MP commands
 	 */
-	lib::agent::InputBuffer<lib::sbench::next_state_t> nextstateBuffer;
+	lib::agent::InputBuffer<lib::sbench::pins_buffer> nextstateBuffer;
 
 	/**
 	 * Output buffer for MP notifications
