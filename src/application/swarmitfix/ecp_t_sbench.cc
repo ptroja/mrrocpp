@@ -1,11 +1,9 @@
 #include "base/lib/sr/srlib.h"
 
-#include "robot/sbench/ecp_r_sbench1.h"
-#include "robot/sbench/ecp_r_sbench2.h"
+#include "robot/sbench/ecp_r_sbench.h"
 
 #include "ecp_t_sbench.h"
 #include "ecp_g_sbench.h"
-#include "ecp_mp_g_sbench.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -31,22 +29,17 @@ void swarmitfix::main_task_algorithm(void)
 	std::cerr << "sbench> swarmitfix::main_task_algorithm" << std::endl;
 
 	if (0) {
-		// Start PKM pose (also known as "neutral")
-		lib::Homog_matrix hm = lib::Xyz_Euler_Zyz_vector(
-				0.15, 0, 0.405, 0, -1.045, 0
-				);
-
-		// Setup single motion sequence
+		// Setup initial pin state
 		lib::sbench::pins_buffer pins;
 
-		// Generator for motion execution
+		// Generator to execute the command
 		generator::pin_config g_pin_setup(*this, pins);
 
-		// Move the robot the the specified pose
+		// Command the robot
 		g_pin_setup.Move();
 	}
 
-	//! Move the robot the the specified pose
+	// Generator to change state of the pins
 	generator::pin_config g_pin_config(*this, nextstateBuffer.access);
 
 	// Loop execution coordinator's commands

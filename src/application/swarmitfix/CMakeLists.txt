@@ -29,16 +29,21 @@ add_executable(ecp_spkm
 	ecp_t_spkm.cc
 )
 
-target_link_libraries(ecp_spkm ecp_r_spkm ecp 
-)
+target_link_libraries(ecp_spkm ecp_r_spkm ecp)
 
 add_executable(ecp_smb
 	ecp_g_smb.cc
 	ecp_t_smb.cc
 )
 
-target_link_libraries(ecp_smb ecp_r_smb ecp 
+target_link_libraries(ecp_smb ecp_r_smb ecp)
+
+add_executable(ecp_sbench
+	ecp_g_sbench.cc
+	ecp_t_sbench.cc
 )
 
-install(TARGETS ecp_spkm ecp_smb DESTINATION bin)
+target_link_libraries(ecp_sbench ecp_r_sbench ecp)
+
+install(TARGETS ecp_spkm ecp_smb ecp_sbench DESTINATION bin)
 install(FILES plan/plan.xsd DESTINATION bin)
