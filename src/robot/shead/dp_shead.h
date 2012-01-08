@@ -184,6 +184,7 @@ struct c_buffer : lib::c_buffer
 {
 	cbuffer shead;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -225,6 +226,7 @@ struct r_buffer : lib::r_buffer
 {
 	rbuffer shead;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -232,11 +234,58 @@ struct r_buffer : lib::r_buffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		// serialize base class informationZ
+		// serialize base class information
 		ar & boost::serialization::base_object <lib::r_buffer>(*this);
 		ar & shead;
 	}
 
+};
+
+//! Command from coordinator
+struct next_state {
+	//! Command variants
+	typedef enum {ROTATE, CONTROL, QUICKSTOP } command_t;
+
+	//! Command variant itself
+	command_t command;
+
+	//! Control command type
+	typedef struct _control {
+		//! Requested state of solidification
+		SOLIDIFICATION_ACTIVATION solidify;
+
+		//! Requested state of vacuum
+		VACUUM_ACTIVATION vacuum;
+	} control_t;
+
+	//! Control command
+	control_t control;
+
+	//! Goal rotation pose
+	double pose;
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class information
+		ar & command;
+		switch(command) {
+			case ROTATE:
+				ar & pose;
+				break;
+			case CONTROL:
+				ar & control.solidify;
+				ar & control.vacuum;
+				break;
+			default:
+				break;
+		}
+	}
 };
 
 } // namespace shead

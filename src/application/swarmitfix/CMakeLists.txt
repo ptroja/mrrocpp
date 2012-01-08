@@ -45,5 +45,12 @@ add_executable(ecp_sbench
 
 target_link_libraries(ecp_sbench ecp_r_sbench ecp)
 
-install(TARGETS ecp_spkm ecp_smb ecp_sbench DESTINATION bin)
+add_executable(ecp_shead
+	ecp_g_shead.cc
+	ecp_t_shead.cc
+)
+
+target_link_libraries(ecp_shead ecp_r_shead ecp)
+
+install(TARGETS ecp_spkm ecp_smb ecp_sbench ecp_shead DESTINATION bin)
 install(FILES plan/plan.xsd DESTINATION bin)

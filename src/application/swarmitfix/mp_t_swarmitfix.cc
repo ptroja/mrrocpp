@@ -5,6 +5,7 @@
 #include "robot/spkm/mp_r_spkm2.h"
 #include "robot/smb/mp_r_smb1.h"
 #include "robot/smb/mp_r_smb2.h"
+#include "robot/sbench/mp_r_sbench.h"
 // End of user code
 
 #include "base/lib/sr/srlib.h"
@@ -38,6 +39,9 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	if(IS_MP_ROBOT_ACTIVE(smb1)) {
 		IO.transmitters.smb1.inputs.notification.Create(*this, lib::smb1::ROBOT_NAME+"notification");
 	}
+	if(IS_MP_ROBOT_ACTIVE(sbench)) {
+		IO.transmitters.sbench.inputs.notification.Create(*this, lib::sbench::ROBOT_NAME+"notification");
+	}
 
 	// Call the robot activation so we can support only the active ones
 	create_robots();
@@ -55,6 +59,9 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	if(is_robot_activated(lib::smb1::ROBOT_NAME)) {
 		IO.transmitters.smb1.outputs.command.Create(robot_m[lib::smb1::ROBOT_NAME]->ecp, "command");
 	}
+	if(is_robot_activated(lib::sbench::ROBOT_NAME)) {
+		IO.transmitters.smb1.outputs.command.Create(robot_m[lib::sbench::ROBOT_NAME]->ecp, "command");
+	}
 	
 	// Start of user code Initialize internal memory variables
 // End of user code
@@ -67,6 +74,7 @@ void swarmitfix::create_robots()
 	ACTIVATE_MP_ROBOT(smb1);
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
+	ACTIVATE_MP_ROBOT(sbench);
 }
 
 void swarmitfix::main_task_algorithm(void)

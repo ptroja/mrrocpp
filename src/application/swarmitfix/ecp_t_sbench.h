@@ -5,7 +5,6 @@
 
 #include "robot/sbench/ecp_r_sbench.h"
 #include "base/ecp/ecp_task.h"
-#include "ecp_g_sbench.h"
 
 #include "base/lib/agent/OutputBuffer.h"
 #include "base/lib/swarmtypes.h"
@@ -25,9 +24,6 @@ public:
 	void main_task_algorithm(void);
 
 protected:
-	//! Configure bench pins
-	boost::shared_ptr<generator::pin_config> g_pin_config;
-
 	/**
 	 * Input buffer for MP commands
 	 */

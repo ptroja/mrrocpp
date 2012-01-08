@@ -11,6 +11,7 @@
 #include "base/lib/swarmtypes.h"
 #include "robot/spkm/dp_spkm.h"
 #include "robot/smb/dp_smb.h"
+#include "robot/sbench/dp_sbench.h"
 #include "planner.h"
 
 
@@ -143,7 +144,35 @@ typedef struct _IO {
 		
 		//! Transmitter's data structure itself
 		smb1_t smb1;
+
+		//! Composite data type for transmitter's data buffers
+		typedef struct _sbench {
+
+			//! Input buffers
+			struct _inputs {
+
+				//! Data type of input buffer
+				typedef InputPtr<lib::notification_t> notification_t;
+
+				//! InputBuffer: Status of the agent
+				notification_t notification;
+
+			} inputs;
+
+			//! Output buffers
+			struct _outputs {
+				//! Data type of output buffer
+				typedef OutputPtr<lib::sbench::pins_buffer> command_t;
+
+				//! OutputBuffer: Command to execute
+				command_t command;
+
+			} outputs;
+
+		} sbench_t;
 		
+		//! Transmitter's data structure itself
+		sbench_t sbench;
 
 	} transmitters_t;
 	
