@@ -7,12 +7,13 @@
  */
 
 #include "mp_r_sbench.h"
+#include "robot/sbench/const_sbench.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-sbench::sbench(const lib::robot_name_t & l_robot_name, task::task &mp_object_l) :
+sbench::sbench(task::task &mp_object_l) :
 		mp::robot::robot(lib::sbench::ROBOT_NAME, mp_object_l, lib::sbench::NUM_OF_SERVOS)
 {
 }
