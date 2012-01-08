@@ -36,7 +36,7 @@ task* return_created_mp_task(lib::configurator &_config)
 }
 
 edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
 }
 
@@ -108,16 +108,15 @@ void edge_follow_mr::main_task_algorithm(void)
 	 */
 
 	// sekwencja generator na wybranym manipulatorze
-
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", 0, manipulator_name);
-
-	wait_for_task_termination(false, 1, manipulator_name.c_str());
-
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", 0, manipulator_name);
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
-	set_next_ecp_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", 0, manipulator_name);
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", manipulator_name);
+
+	wait_for_task_termination(false, 1, manipulator_name.c_str());
+
+	set_next_ecp_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 

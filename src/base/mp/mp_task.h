@@ -17,6 +17,8 @@
 #include "base/lib/agent/InputBuffer.h"
 #include "base/lib/agent/OutputBuffer.h"
 
+#include "generator/mp_g_set_next_ecps_state.h"
+
 namespace mrrocpp {
 namespace mp {
 
@@ -57,19 +59,21 @@ namespace task {
 
 //! Type for optionally active input data buffer
 template <class T>
-class InputPtr : private boost::shared_ptr<lib::agent::InputBuffer<T> > {
+class InputPtr : private boost::shared_ptr <lib::agent::InputBuffer <T> >
+{
 	//! Underlying implementation of 'optional' concept
-	typedef boost::shared_ptr<lib::agent::InputBuffer<T> > ptrType;
+	typedef boost::shared_ptr <lib::agent::InputBuffer <T> > ptrType;
 
 public:
 	//! Create input buffer and register within an agent
 	void Create(lib::agent::Agent & owner, const std::string & name, const T & default_value = T())
 	{
-		if(ptrType::get()) {
-	        std::ostringstream tmp;
-	        tmp << "optional Input buffer \"" << name << "\"already created";
+		if (ptrType::get()) {
+			std::ostringstream tmp;
+			tmp << "optional Input buffer \"" << name << "\"already created";
 			throw std::runtime_error(tmp.str());
 		}
+
 		ptrType::operator=((ptrType) new lib::agent::InputBuffer<T>(owner, name, default_value));
 	}
 
@@ -82,19 +86,21 @@ public:
 
 //! Type for optionally inactive output data buffer
 template <class T>
-struct OutputPtr : private boost::shared_ptr<lib::agent::OutputBuffer<T> > {
+struct OutputPtr : private boost::shared_ptr <lib::agent::OutputBuffer <T> >
+{
 	//! Underlying implementation of 'optional' concept
-	typedef boost::shared_ptr<lib::agent::OutputBuffer<T> > ptrType;
+	typedef boost::shared_ptr <lib::agent::OutputBuffer <T> > ptrType;
 
 public:
 	//! Create input buffer and register within an agent
 	void Create(lib::agent::RemoteAgent & owner, const std::string & name)
 	{
-		if(ptrType::get()) {
-	        std::ostringstream tmp;
-	        tmp << "optional Output buffer \"" << name << "\"already created";
+		if (ptrType::get()) {
+			std::ostringstream tmp;
+			tmp << "optional Output buffer \"" << name << "\"already created";
 			throw std::runtime_error(tmp.str());
 		}
+
 		ptrType::operator=((ptrType) new lib::agent::OutputBuffer<T>(owner, name));
 	}
 
@@ -165,13 +171,6 @@ public:
 	} WAIT_FOR_NEW_PULSE_MODE;
 
 	/**
-	 * @brief sets the goal pf player controlled robot
-	 * @param robot_l robot label
-	 * @param goal motion goal
-	 */
-	void set_next_playerpos_goal(lib::robot_name_t robot_l, const lib::playerpos_goal_t &goal);
-
-	/**
 	 * @brief sets the next state of ECP
 	 * it calls dedicated generator and then sends new command in generator Move instruction
 	 * @param l_state state label sent to ECP
@@ -180,7 +179,18 @@ public:
 	 * @param str_len string length
 	 * @param robot_name robot to receive a command
 	 */
-	void set_next_ecp_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, const lib::robot_name_t & robot_name);
+	template <typename BUFFER_TYPE>
+	void set_next_ecp_state(const std::string & l_state, int l_variant, const BUFFER_TYPE & l_data, const lib::robot_name_t & robot_name)
+	{
+		// setting the next ecps state
+		generator::set_next_ecps_state mp_snes_gen(*this);
+
+		// Copy given robots to the map container
+		mp_snes_gen.robot_m[robot_name] = robot_m[robot_name];
+
+		mp_snes_gen.configure(l_state, l_variant, l_data);
+		mp_snes_gen.Move();
+	}
 
 	/**
 	 * @brief sends end motion command to ECP's
@@ -198,7 +208,7 @@ public:
 	 */
 	void wait_for_task_termination(bool activate_trigger, int number_of_robots, ...);
 
-	void wait_for_task_termination(bool activate_trigger, const std::vector<lib::robot_name_t> & robotSet);
+	void wait_for_task_termination(bool activate_trigger, const std::vector <lib::robot_name_t> & robotSet);
 
 	/**
 	 * @brief sends end motion command to ECP's - mkisiel xml task version
@@ -218,12 +228,12 @@ public:
 	/**
 	 * @brief waits for START pulse from UI
 	 */
-	void wait_for_start(void);// by Y&W
+	void wait_for_start(void); // by Y&W
 
 	/**
 	 * @brief waits for STOP pulse from UI
 	 */
-	void wait_for_stop(void);// by Y&W dodany tryb
+	void wait_for_stop(void); // by Y&W dodany tryb
 
 	/**
 	 * @brief starts all ECP's

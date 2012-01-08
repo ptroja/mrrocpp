@@ -57,7 +57,6 @@
 #include "robot/smb/mp_r_smb2.h"
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
-#include "robot/player/const_player.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -92,8 +91,6 @@ void fsautomat::create_robots()
 	ACTIVATE_MP_ROBOT(irp6p_m);
 	ACTIVATE_MP_ROBOT(sarkofag);
 
-	ACTIVATE_MP_DEFAULT_ROBOT(electron);
-	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
 	ACTIVATE_MP_DEFAULT_ROBOT(festival);
 
 }
@@ -390,9 +387,9 @@ void fsautomat::executeMotion(const common::State &state)
 	std::cout << "STATE STRING w executeMotion:  " << state.getStringArgument() << std::endl;
 	int trjConf = config.value <int>("trajectory_from_xml", "[xml_settings]");
 	if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
-		set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, state.getRobot());
+		//	set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), state.getRobot());
 	} else {
-		set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument().c_str(), 0, state.getRobot());
+		//	set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument().c_str(), state.getRobot());
 	}
 }
 

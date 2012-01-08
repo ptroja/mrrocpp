@@ -9,6 +9,8 @@
  * @ingroup generators
  */
 
+#include "ecp_mp_g_tff_nose_run.h"
+
 #include "generator/ecp/ecp_g_teach_in.h"
 #include "base/lib/mrmath/mrmath.h"
 
@@ -89,7 +91,7 @@ public:
 	 * @param az angular z direction
 	 */
 	void
-			configure_behaviour(lib::BEHAVIOUR_SPECIFICATION x, lib::BEHAVIOUR_SPECIFICATION y, lib::BEHAVIOUR_SPECIFICATION z, lib::BEHAVIOUR_SPECIFICATION ax, lib::BEHAVIOUR_SPECIFICATION ay, lib::BEHAVIOUR_SPECIFICATION az);
+	configure_behaviour(lib::BEHAVIOUR_SPECIFICATION x, lib::BEHAVIOUR_SPECIFICATION y, lib::BEHAVIOUR_SPECIFICATION z, lib::BEHAVIOUR_SPECIFICATION ax, lib::BEHAVIOUR_SPECIFICATION ay, lib::BEHAVIOUR_SPECIFICATION az);
 
 	/**
 	 * @brief Sets desired velocity for all directions
@@ -138,10 +140,10 @@ public:
 	bool first_step();
 	bool next_step();
 
-}; // end : class ecp_tff_nose_run_generator
+};
+// end : class ecp_tff_nose_run_generator
 
-
-} // namespace generator
+}// namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

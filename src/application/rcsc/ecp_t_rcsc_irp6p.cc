@@ -32,10 +32,10 @@ namespace task {
 
 // KONSTRUKTORY
 rcsc::rcsc(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
+	ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 
 	gt = new common::generator::transparent(*this);
 	rgg = new common::generator::tff_rubik_grab(*this, 8);
@@ -43,10 +43,10 @@ rcsc::rcsc(lib::configurator &_config) :
 	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
 	tig = new common::generator::teach_in(*this);
 
-        sg = new common::generator::newsmooth(*this, lib::ECP_JOINT, 6);
-        sg->set_debug(true);
-        sgaa = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
-        sgaa->set_debug(true);
+	sg = new common::generator::newsmooth(*this, lib::ECP_JOINT, 6);
+	sg->set_debug(true);
+	sgaa = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
+	sgaa->set_debug(true);
 
 	go_st = new common::sub_task::gripper_opening(*this);
 
@@ -145,7 +145,11 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 		std::string path(mrrocpp_network_path);
+<<<<<<< HEAD
 		path += (char*) mp_command.ecp_next_state.data;
+=======
+		path += (char*) mp_command.ecp_next_state.sg_buf.data;
+>>>>>>> wut-rcprg/master
 
 		tig->flush_pose_list();
 		tig->load_file_with_path(path);
@@ -157,7 +161,11 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH
 			|| mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_JOINT) {
 		std::string path(mrrocpp_network_path);
+<<<<<<< HEAD
 		path += (char*) mp_command.ecp_next_state.data;
+=======
+		path += mp_command.ecp_next_state.sg_buf.get <std::string>();
+>>>>>>> wut-rcprg/master
 
 		switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
 		{
@@ -176,7 +184,11 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		sg->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_ANGLE_AXIS) {
 		std::string path(mrrocpp_network_path);
+<<<<<<< HEAD
 		path += (char*) mp_command.ecp_next_state.data;
+=======
+		path += mp_command.ecp_next_state.sg_buf.get <std::string>();
+>>>>>>> wut-rcprg/master
 
 		switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
 		{

@@ -22,6 +22,9 @@
 #ifndef __COM_BUF_H
 #define __COM_BUF_H
 
+#include "base/lib/xdr/xdr_iarchive.hpp"
+#include "base/lib/xdr/xdr_oarchive.hpp"
+
 #include <vector>
 
 #include <boost/serialization/serialization.hpp>
@@ -819,23 +822,62 @@ private:
 };
 
 //------------------------------------------------------------------------------
-/*! Target position for the mobile robot. */
-class playerpos_goal_t
+/*!
+ *  Wariantowy buffor do serialziacja
+ *  obecna implementacja allokuje staly obszar pamieci
+ *  @todo Translate to English.
+ */
+class seter_geter_buffer_t
 {
-private:
-	double x, y, t;
-
 public:
-	void forward(double length);
-	void turn(double angle);
-	void setGoal(double _x, double _y, double _z);
 
-	double getX() const;
-	double getY() const;
-	double getT() const;
+	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
-	playerpos_goal_t(double _x, double _y, double _t);
-	playerpos_goal_t();
+	template <typename BUFFER_TYPE>
+	void set(const BUFFER_TYPE & buffer)
+	{
+		xdr_oarchive <> oa;
+		oa << buffer;
+		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
+		assert(MP_2_ECP_STRING_SIZE > oa.getArchiveSize());
+
+		// serializacja
+		memcpy(data, oa.get_buffer(), oa.getArchiveSize());
+	}
+
+	template <typename BUFFER_TYPE>
+	void get(BUFFER_TYPE & buffer) const
+	{
+		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
+		assert(MP_2_ECP_STRING_SIZE > sizeof(buffer));
+
+		// deserializacja
+		xdr_iarchive <> ia((const char *) data, (std::size_t) MP_2_ECP_STRING_SIZE);
+
+		ia >> buffer;
+	}
+
+	template <typename BUFFER_TYPE>
+	BUFFER_TYPE get() const
+	{
+		BUFFER_TYPE buffer_tmp;
+
+		get(buffer_tmp);
+
+		return buffer_tmp;
+	}
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & data;
+		// ar & playerpos_goal; // this is not used at this moment
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -848,12 +890,8 @@ struct ecp_next_state_t
 	std::string next_state;
 
 	int variant;
-	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
-	/*! Target position for the mobile robot. */
-	playerpos_goal_t playerpos_goal;
-
-	const char * get_mp_2_ecp_next_state_string() const;
+	seter_geter_buffer_t sg_buf;
 
 private:
 	//! Give access to boost::serialization framework
@@ -865,7 +903,7 @@ private:
 	{
 		ar & next_state;
 		ar & variant;
-		ar & data;
+		ar & sg_buf;
 		// ar & playerpos_goal; // this is not used at this moment
 	}
 };

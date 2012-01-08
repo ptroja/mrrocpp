@@ -262,7 +262,6 @@ void swarmitfix::main_task_algorithm(void)
 void swarmitfix::move_smb_legs(lib::smb::FESTO_LEG l1, lib::smb::FESTO_LEG l2, lib::smb::FESTO_LEG l3)
 {
 	lib::smb::festo_command_td mp_ecp_festo_command;
-	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
 
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 		mp_ecp_festo_command.undetachable[i] = false;
@@ -272,9 +271,7 @@ void swarmitfix::move_smb_legs(lib::smb::FESTO_LEG l1, lib::smb::FESTO_LEG l2, l
 	mp_ecp_festo_command.leg[1] = l2;
 	mp_ecp_festo_command.leg[2] = l3;
 
-	memcpy(mp_ecp_string, &mp_ecp_festo_command, sizeof(mp_ecp_festo_command));
-
-	set_next_ecp_state(ecp_mp::smb::generator::ECP_LEGS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::smb1::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::smb::generator::ECP_LEGS_COMMAND, 0, mp_ecp_festo_command, lib::smb1::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::smb1::ROBOT_NAME.c_str());
 
 }
@@ -282,14 +279,11 @@ void swarmitfix::move_smb_legs(lib::smb::FESTO_LEG l1, lib::smb::FESTO_LEG l2, l
 void swarmitfix::move_smb_external(double legs_rotation_, double pkm_rotation_)
 {
 	lib::smb::motor_command mp_ecp_smb_epos_simple_command;
-	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
 
 	mp_ecp_smb_epos_simple_command.base_vs_bench_rotation = legs_rotation_;
 	mp_ecp_smb_epos_simple_command.pkm_vs_base_rotation = pkm_rotation_;
 
-	memcpy(mp_ecp_string, &mp_ecp_smb_epos_simple_command, sizeof(mp_ecp_smb_epos_simple_command));
-
-	set_next_ecp_state(ecp_mp::smb::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::smb1::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::smb::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_smb_epos_simple_command, lib::smb1::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::smb1::ROBOT_NAME.c_str());
 
 }
@@ -297,7 +291,6 @@ void swarmitfix::move_smb_external(double legs_rotation_, double pkm_rotation_)
 void swarmitfix::move_spkm_joints(double x1, double x2, double x3, double x4, double x5, double x6)
 {
 	lib::epos::epos_simple_command mp_ecp_spkm_epos_simple_command;
-	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
 	mp_ecp_spkm_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
 	mp_ecp_spkm_epos_simple_command.desired_position[0] = x1;
@@ -307,9 +300,7 @@ void swarmitfix::move_spkm_joints(double x1, double x2, double x3, double x4, do
 	mp_ecp_spkm_epos_simple_command.desired_position[4] = x5;
 	mp_ecp_spkm_epos_simple_command.desired_position[5] = x6;
 
-	memcpy(mp_ecp_string, &mp_ecp_spkm_epos_simple_command, sizeof(mp_ecp_spkm_epos_simple_command));
-
-	set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm1::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_spkm_epos_simple_command, lib::spkm1::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::spkm1::ROBOT_NAME.c_str());
 
 }
@@ -317,14 +308,11 @@ void swarmitfix::move_spkm_joints(double x1, double x2, double x3, double x4, do
 void swarmitfix::move_shead_joints(double x1)
 {
 	lib::epos::epos_simple_command mp_ecp_shead_epos_simple_command;
-	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
 	mp_ecp_shead_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 
 	mp_ecp_shead_epos_simple_command.desired_position[0] = x1;
 
-	memcpy(mp_ecp_string, &mp_ecp_shead_epos_simple_command, sizeof(mp_ecp_shead_epos_simple_command));
-
-	set_next_ecp_state(ecp_mp::shead::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::shead1::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::shead::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_shead_epos_simple_command, lib::shead1::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::shead1::ROBOT_NAME.c_str());
 
 }
@@ -332,7 +320,6 @@ void swarmitfix::move_shead_joints(double x1)
 void swarmitfix::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double x1, double x2, double x3, double x4, double x5, double x6)
 {
 	lib::spkm::spkm_epos_simple_command mp_ecp_spkm_epos_simple_command;
-	char mp_ecp_string[lib::MP_2_ECP_STRING_SIZE];
 	mp_ecp_spkm_epos_simple_command.motion_variant = motion_variant_;
 	mp_ecp_spkm_epos_simple_command.pose_specification = lib::spkm::WRIST_XYZ_EULER_ZYZ;
 	mp_ecp_spkm_epos_simple_command.estimated_time = 1.2;
@@ -344,9 +331,7 @@ void swarmitfix::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT moti
 	mp_ecp_spkm_epos_simple_command.desired_position[4] = x5;
 	mp_ecp_spkm_epos_simple_command.desired_position[5] = x6;
 
-	memcpy(mp_ecp_string, &mp_ecp_spkm_epos_simple_command, sizeof(mp_ecp_spkm_epos_simple_command));
-
-	set_next_ecp_state(ecp_mp::spkm::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_string, sizeof(mp_ecp_string), lib::spkm1::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::spkm::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_spkm_epos_simple_command, lib::spkm1::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::spkm1::ROBOT_NAME.c_str());
 
 }

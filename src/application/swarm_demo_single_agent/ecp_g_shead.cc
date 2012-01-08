@@ -74,7 +74,8 @@ void joint_epos_command::create_ecp_mp_reply()
 
 void joint_epos_command::get_mp_ecp_command()
 {
-	memcpy(&mp_ecp_epos_simple_command, ecp_t.mp_command.ecp_next_state.data, sizeof(mp_ecp_epos_simple_command));
+	ecp_t.mp_command.ecp_next_state.sg_buf.get(mp_ecp_epos_simple_command);
+	//memcpy(&mp_ecp_epos_simple_command, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(mp_ecp_epos_simple_command));
 }
 
 } // namespace generator

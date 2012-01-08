@@ -25,7 +25,6 @@
 #include "mp_task.h"
 #include "generator/mp_g_wait_for_task_termination.h"
 #include "generator/mp_g_delay_ms_condition.h"
-#include "generator/mp_g_set_next_ecps_state.h"
 #include "generator/mp_g_send_end_motion_to_ecps.h"
 #include "mp_robot.h"
 
@@ -42,7 +41,8 @@ static void va_to_robot_map(int num, va_list arguments, const common::robots_t &
 {
 	for (int i = 0; i < num; ++i) // Loop until all numbers are added
 			{
-		lib::robot_name_t robot_l = (lib::robot_name_t) (va_arg ( arguments, const char* )); // Adds the next value in argument list to sum.
+		lib::robot_name_t
+		robot_l = (lib::robot_name_t) (va_arg ( arguments, const char* )); // Adds the next value in argument list to sum.
 		if (from.count(robot_l) == 0) {
 			std::cerr << "usunieto nadmiarowe roboty" << std::endl;
 		} else {
@@ -86,32 +86,6 @@ void task::stop_and_terminate()
 		exit(EXIT_FAILURE);
 	}
 	terminate_all();
-}
-
-// metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_playerpos_goal(lib::robot_name_t robot_l, const lib::playerpos_goal_t &goal)
-{
-	// setting the next ecps state
-	generator::set_next_ecps_state mp_snes_gen(*this);
-
-	mp_snes_gen.robot_m[robot_l] = robot_m[robot_l];
-
-	mp_snes_gen.configure(goal);
-
-	mp_snes_gen.Move();
-}
-
-// metody do obslugi najczesniej uzywanych generatorow
-void task::set_next_ecp_state(const std::string & l_state, int l_variant, const char* l_string, int str_len, const lib::robot_name_t & robot_name)
-{
-	// setting the next ecps state
-	generator::set_next_ecps_state mp_snes_gen(*this);
-
-	// Copy given robots to the map container
-	mp_snes_gen.robot_m[robot_name] = robot_m[robot_name];
-
-	mp_snes_gen.configure(l_state, l_variant, l_string, str_len);
-	mp_snes_gen.Move();
 }
 
 // delay MP replacement

@@ -498,6 +498,9 @@ public:
 	lib::c_buffer & instruction;
 	lib::r_buffer & reply;
 
+	// for the force variant of move arm and transformation thread error handling
+	bool move_arm_second_phase;
+
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 

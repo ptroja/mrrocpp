@@ -49,9 +49,6 @@ public:
 	lib::condition_synchroniser master_to_trans_synchroniser;
 	lib::condition_synchroniser trans_t_to_master_synchroniser;
 
-	// wskaznik na bledy (rzutowany na odpowiedni blad)
-	void* error_pointer;
-
 	//wskaznik na nowe bledy boost
 	boost::exception_ptr error;
 
