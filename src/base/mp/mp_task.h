@@ -172,6 +172,16 @@ public:
 	void set_next_ecp_state(const std::string & l_state, int l_variant, const std::string & l_string, int str_len, const lib::robot_name_t & robot_name);
 
 	/**
+	 * @brief sets the next state with string argument to ECP
+	 * it calls dedicated generator and then sends new command in generator Move instruction
+	 * @param l_state state label sent to ECP
+	 * @param l_variant variant value sent to ECP
+	 * @param l_string string sent to ECP
+	 * @param robot_name robot to receive a command
+	 */
+	void set_next_ecp_state_string(const std::string & l_state, int l_variant, const std::string & l_string, const lib::robot_name_t & robot_name);
+
+	/**
 	 * @brief sends end motion command to ECP's
 	 * it calls dedicated generator and then sends command in generator Move instruction
 	 * @param number_of_robots number of robots to receive command

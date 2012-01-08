@@ -102,6 +102,12 @@ void task::set_next_ecp_state(const std::string & l_state, int l_variant, const 
 	mp_snes_gen.Move();
 }
 
+// metody do obslugi najczesniej uzywanych generatorow
+void task::set_next_ecp_state_string(const std::string & l_state, int l_variant, const std::string & l_string, const lib::robot_name_t & robot_name)
+{
+	set_next_ecp_state(l_state, l_variant, l_string, 0, robot_name);
+}
+
 // delay MP replacement
 void task::wait_ms(int _ms_delay) // zamiast delay
 {
