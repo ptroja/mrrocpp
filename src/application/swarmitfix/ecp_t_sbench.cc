@@ -5,6 +5,7 @@
 
 #include "ecp_t_spkm.h"
 #include "ecp_g_spkm.h"
+#include "ecp_mp_g_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {

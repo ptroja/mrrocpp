@@ -7,7 +7,6 @@
 
 #include "ecp_t_smb.h"
 #include "ecp_g_smb.h"
-#include "ecp_mp_g_smb.h"
 #include "robot/smb/dp_smb.h"
 
 namespace mrrocpp {

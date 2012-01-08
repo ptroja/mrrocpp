@@ -1,6 +1,4 @@
 // Start of user code user defined headers
-#include "ecp_mp_g_spkm.h"
-
 #include "robot/shead/mp_r_shead1.h"
 #include "robot/shead/mp_r_shead2.h"
 #include "robot/spkm/mp_r_spkm1.h"
