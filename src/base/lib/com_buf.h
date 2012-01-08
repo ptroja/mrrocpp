@@ -1099,8 +1099,16 @@ public:
 		xdr_iarchive <> ia((const char *) data, (std::size_t) MP_2_ECP_STRING_SIZE);
 
 		ia >> buffer;
+	}
 
-		//	memcpy(&buffer, data, sizeof(buffer) );
+	template <typename BUFFER_TYPE>
+	BUFFER_TYPE get() const
+	{
+		BUFFER_TYPE buffer_tmp;
+
+		get(buffer_tmp);
+
+		return buffer_tmp;
 	}
 
 private:

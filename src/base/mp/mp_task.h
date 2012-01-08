@@ -172,7 +172,7 @@ public:
 	 * @param robot_name robot to receive a command
 	 */
 	template <typename BUFFER_TYPE>
-	void set_next_ecp_state(const std::string & l_state, int l_variant, BUFFER_TYPE & l_data, const lib::robot_name_t & robot_name)
+	void set_next_ecp_state(const std::string & l_state, int l_variant, const BUFFER_TYPE & l_data, const lib::robot_name_t & robot_name)
 	{
 		// setting the next ecps state
 		generator::set_next_ecps_state mp_snes_gen(*this);

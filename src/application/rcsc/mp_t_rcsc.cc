@@ -514,7 +514,7 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	// rozwarcie chwytaka tracka
 
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.02", lib::irp6ot_tfg::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, 0.02, lib::irp6ot_tfg::ROBOT_NAME);
 
 	// uruchomienie generatora empty_gen
 	wait_for_task_termination(false, 1, lib::irp6ot_tfg::ROBOT_NAME.c_str());
@@ -618,7 +618,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 
 	// wstepne rozwarcie chwytaka postumenta
 	//set_next_ecp_state ((int) ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, (int) ecp_mp::task::RCSC_GO_VAR_1, "",  lib::irp6p_m::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.002", lib::irp6p_tfg::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, 0.002, lib::irp6p_tfg::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
 
@@ -629,7 +629,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// dalsze rozwarcie chwytaka postumenta
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.02", lib::irp6p_tfg::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, 0.02, lib::irp6p_tfg::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
 
@@ -719,8 +719,8 @@ void rubik_cube_solver::approach_op(int mode)
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
 	//wait_for_task_termination(false, 1, lib::festival::ROBOT_NAME.c_str());
 
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, "0.075", lib::irp6ot_tfg::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, "0.075", lib::irp6p_tfg::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.075, lib::irp6ot_tfg::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.075, lib::irp6p_tfg::ROBOT_NAME);
 	wait_for_task_termination(false, 2, lib::irp6ot_tfg::ROBOT_NAME.c_str(), lib::irp6p_tfg::ROBOT_NAME.c_str());
 
 	if (config.exists_and_true("irp6p_compliant")) {
@@ -774,10 +774,10 @@ void rubik_cube_solver::approach_op(int mode)
 	// oczekiwania na zakonczenie ruchu chwytaka
 	//zakonczenie generatora traka
 	/*
-	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "0.002", 0, lib::irp6ot_tfg::ROBOT_NAME);
+	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, 0.002, 0, lib::irp6ot_tfg::ROBOT_NAME);
 	 wait_for_task_termination(false, 1, lib::irp6ot_tfg::ROBOT_NAME.c_str());
 	 //zaciskanie na kostce
-	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, "-0.017", 0, lib::irp6ot_tfg::ROBOT_NAME);
+	 set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, -0.017, 0, lib::irp6ot_tfg::ROBOT_NAME);
 	 wait_for_task_termination(false, 1, lib::irp6ot_tfg::ROBOT_NAME.c_str());
 	 */
 	//zadanie chwytania kostki (koniec)
