@@ -36,7 +36,6 @@
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
 
-
 namespace mrrocpp {
 namespace mp {
 namespace task {
@@ -65,7 +64,8 @@ ball::ball(lib::configurator &_config) :
 void ball::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 {
 	if (configure_track) {
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "",  lib::irp6ot_m::ROBOT_NAME);
+
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", lib::irp6ot_m::ROBOT_NAME);
 	}
 
 	if (configure_postument) {
