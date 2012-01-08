@@ -51,8 +51,14 @@ public:
 	 * @param l_mp_2_ecp_next_state_string next state string to store extra parameters
 	 * @param str_len above string length
 	 */
-	void
-	configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const std::string & l_mp_2_ecp_next_state_string);
+
+	template <typename BUFFER_TYPE>
+	void configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, BUFFER_TYPE & l_mp_2_ecp_next_state_string)
+	{
+		ecp_next_state.next_state = l_mp_2_ecp_next_state;
+		ecp_next_state.variant = l_mp_2_ecp_next_state_variant;
+		ecp_next_state.sg_buf.set(l_mp_2_ecp_next_state_string);
+	}
 
 	bool first_step();
 	bool next_step();

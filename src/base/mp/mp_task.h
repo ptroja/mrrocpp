@@ -17,6 +17,8 @@
 #include "base/lib/agent/InputBuffer.h"
 #include "base/lib/agent/OutputBuffer.h"
 
+#include "generator/mp_g_set_next_ecps_state.h"
+
 namespace mrrocpp {
 namespace mp {
 
@@ -169,7 +171,18 @@ public:
 	 * @param str_len string length
 	 * @param robot_name robot to receive a command
 	 */
-	void set_next_ecp_state(const std::string & l_state, int l_variant, const std::string & l_string, const lib::robot_name_t & robot_name);
+	template <typename BUFFER_TYPE>
+	void set_next_ecp_state(const std::string & l_state, int l_variant, BUFFER_TYPE & l_string, const lib::robot_name_t & robot_name)
+	{
+		// setting the next ecps state
+		generator::set_next_ecps_state mp_snes_gen(*this);
+
+		// Copy given robots to the map container
+		mp_snes_gen.robot_m[robot_name] = robot_m[robot_name];
+
+		mp_snes_gen.configure(l_state, l_variant, l_string);
+		mp_snes_gen.Move();
+	}
 
 	/**
 	 * @brief sets the next state with string argument to ECP

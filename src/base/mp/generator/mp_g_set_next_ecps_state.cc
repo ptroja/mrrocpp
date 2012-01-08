@@ -26,12 +26,6 @@ set_next_ecps_state::set_next_ecps_state(task::task& _mp_task) :
 	wait_for_ECP_message = true;
 }
 
-void set_next_ecps_state::configure(const std::string & l_mp_2_ecp_next_state, int l_mp_2_ecp_next_state_variant, const std::string & l_mp_2_ecp_next_state_string)
-{
-	ecp_next_state.next_state = l_mp_2_ecp_next_state;
-	ecp_next_state.variant = l_mp_2_ecp_next_state_variant;
-	ecp_next_state.sg_buf.set(l_mp_2_ecp_next_state_string);
-}
 
 // ----------------------------------------------------------------------------------------------
 // ---------------------------------    metoda	first_step -------------------------------------
