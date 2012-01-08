@@ -56,8 +56,6 @@ public:
 	 */
 	const int step_no;
 
-	ecp_mp::generator::communication_type communication_type_variant;
-
 	/**
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
