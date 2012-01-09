@@ -8,8 +8,6 @@
 
 #include "planner.h"
 
-#include "PlanIterators.h"
-
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include "serialization.h"
@@ -187,22 +185,6 @@ void swarmitfix::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, IO
 	}
 }
 
-#if 0
-//! Dummy generator for handling UI commands
-class dummy : public mp::generator::generator {
-public:
-	//! Dummy implementation of required abstract method
-	bool first_step() {
-		throw std::logic_error("Generator not intended for execution");
-	}
-
-	//! Dummy implementation of required abstract method
-	bool next_step() {
-		throw std::logic_error("Generator not intended for execution");
-	}
-
-};
-#endif
 
 void swarmitfix::handleNotification(const lib::robot_name_t & robot_name, IO_t::transmitters_t::inputs_t & inputs)
 {
@@ -230,10 +212,8 @@ void swarmitfix::main_test_algorithm(void)
 	Plan * p = pp.getPlan();
 
 	// Plan iterators
-	PkmConstIterator spkm1_it(p->pkm().item(), 1);
-	PkmConstIterator spkm2_it(p->pkm().item(), 2);
-	MbaseConstIterator smb1_it(p->mbase().item(), 1);
-	MbaseConstIterator smb2_it(p->mbase().item(), 2);
+	Plan::PkmType::ItemSequence::const_iterator pkm_it = p->pkm().item().begin();
+	Plan::MbaseType::ItemSequence::const_iterator smb_it = p->mbase().item().begin();
 
 	// Time index counter
 	int ind = 0;
@@ -250,47 +230,24 @@ void swarmitfix::main_test_algorithm(void)
 
 	for (; current_plan_status == ONGOING; ++ind) {
 		std::cout << "plan index = " << ind << std::endl;
-//		std::cout << "\tspkm1@" << spkm1_it->ind() << std::endl;
-//		std::cout << "\tspkm2@" << spkm2_it->ind() << std::endl;
-//		std::cout << "\tsmb1@" << smb1_it->ind() << std::endl;
-//		std::cout << "\tsmb2@" << smb2_it->ind() << std::endl;
+
 		// Diagnostic timestamp
 		boost::system_time start_timestamp = boost::get_system_time();
 
 		State * currentActionState;
 
-//		std::cerr << "plan index = " << ind << "\t" <<
-//			isFinished(spkm1_it, *p) <<
-//			isFinished(spkm2_it, *p) <<
-//			isFinished(smb1_it, *p) <<
-//			isFinished(smb2_it, *p) << std::endl;
+		// Execute PKM+HEAD command item
+		if((pkm_it != p->pkm().item().end()) && (pkm_it->ind() == ind)) {
+			currentActionState = (State *) &(*pkm_it);
 
-		// Execute command for spkm1
-		if(!spkm1_it.isFinished() && spkm1_it->ind() == ind) {
-			currentActionState = (State *) &(*spkm1_it);
-
-			executeCommandItem(*spkm1_it++, IO);
+			executeCommandItem(*pkm_it++, IO);
 		}
 
-		// Execute command for spkm2
-		if(!spkm2_it.isFinished() && spkm2_it->ind() == ind) {
-			currentActionState = (State *) &(*spkm2_it);
+		// Execute MBASE+BENCH command item
+		if((smb_it != p->mbase().item().end()) && (smb_it->ind() == ind)) {
+			currentActionState = (State *) &(*smb_it);
 
-			executeCommandItem(*spkm2_it++, IO);
-		}
-
-		// Execute command for smb1
-		if(!smb1_it.isFinished() && smb1_it->ind() == ind) {
-			currentActionState = (State *) &(*smb1_it);
-
-			executeCommandItem(*smb1_it++, IO);
-		}
-
-		// Execute command for smb2
-		if(!smb2_it.isFinished() && smb2_it->ind() == ind) {
-			currentActionState = (State *) &(*smb2_it);
-
-			executeCommandItem(*smb2_it++, IO);
+			executeCommandItem(*smb_it++, IO);
 		}
 
 		const bool record_timestamp = !current_workers_status.allIdle();
@@ -371,11 +328,9 @@ void swarmitfix::main_test_algorithm(void)
 
 		// If all iterators are at the end...
 		if(
-				spkm1_it.isFinished() &&
-				spkm2_it.isFinished() &&
-				smb1_it.isFinished() &&
-				smb2_it.isFinished()
-				)
+				(pkm_it == p->pkm().item().end()) &&
+				(smb_it == p->mbase().item().end())
+			)
 		{
 			// ...then finish
 			break;
