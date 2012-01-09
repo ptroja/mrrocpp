@@ -7,7 +7,7 @@
 #ifndef ECP_G_SPKM_H_
 #define ECP_G_SPKM_H_
 
-#include "base/lib/periodic_timer.h"
+#include <boost/thread/thread_time.hpp>
 
 #include "robot/spkm/ecp_r_spkm.h"
 #include "robot/spkm/dp_spkm.h"
@@ -42,7 +42,10 @@ private:
 	const lib::spkm::next_state_t::segment_sequence_t & segments;
 
 	//! Wakeup timer
-	lib::periodic_timer wakeup;
+	boost::system_time wakeup;
+
+	//! Effector query interval
+	const boost::posix_time::time_duration query_interval;
 };
 
 class spkm_quickstop : public common::generator::_generator<ecp::spkm::robot>

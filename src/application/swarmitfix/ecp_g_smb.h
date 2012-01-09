@@ -7,12 +7,12 @@
 #ifndef ECP_G_SMB_H_
 #define ECP_G_SMB_H_
 
+#include <boost/thread/thread_time.hpp>
+
 #include "robot/smb/ecp_r_smb.h"
 #include "robot/smb/dp_smb.h"
 
 #include "base/ecp/ecp_generator.h"
-
-#include "base/lib/periodic_timer.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -76,8 +76,11 @@ public:
 private:
 	lib::smb::motor_command simple_command;
 
-	//! Periodic query timer
-	lib::periodic_timer wakeup;
+	//! Wakeup timer
+	boost::system_time wakeup;
+
+	//! Effector query interval
+	const boost::posix_time::time_duration query_interval;
 };
 
 

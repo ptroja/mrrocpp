@@ -31,7 +31,7 @@ bool rotate::first_step()
 	// Request status data
 	the_robot->epos_joint_reply_data_request_port.set_request();
 
-	// Record
+	// Record current wall clock
 	wakeup = boost::get_system_time();
 
 	return true;
@@ -45,7 +45,7 @@ bool rotate::next_step()
 		// Request next status data
 		the_robot->epos_joint_reply_data_request_port.set_request();
 
-		// Sleep before next query
+		// Delay until next EPOS query
 		wakeup += query_interval;
 		boost::thread::sleep(wakeup);
 

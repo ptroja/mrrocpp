@@ -2,8 +2,6 @@
  * Author: Piotr Trojanek
  */
 
-#include "base/lib/periodic_timer.h"
-
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"

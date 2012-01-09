@@ -2,6 +2,9 @@
  * Author: Piotr Trojanek
  */
 
+#include <boost/thread/thread.hpp>
+#include <boost/date_time/time_duration.hpp>
+
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
@@ -81,7 +84,7 @@ bool stand_up::next_step()
 rotate::rotate(task_t & _ecp_task,
 		const lib::smb::motor_command & cmd) :
 		generator_t(_ecp_task),
-		wakeup(20)
+		query_interval(boost::posix_time::milliseconds(20))
 {
 	// Keep internal copy of a command
 	simple_command = cmd;
@@ -93,6 +96,9 @@ bool rotate::first_step()
 	the_robot->epos_external_command_data_port.data = simple_command;
 	the_robot->epos_external_command_data_port.set();
 	the_robot->epos_external_reply_data_request_port.set_request();
+
+	// Record current wall clock
+	wakeup = boost::get_system_time();
 
 	return true;
 }
@@ -111,8 +117,9 @@ bool rotate::next_step()
 	}
 
 	if (motion_in_progress) {
-		// Wait so not to query EDP too often
-		wakeup.sleep();
+		// Delay until next EPOS query
+		wakeup += query_interval;
+		boost::thread::sleep(wakeup);
 
 		// Ask about current status
 		the_robot->epos_external_reply_data_request_port.set_request();

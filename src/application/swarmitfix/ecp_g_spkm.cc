@@ -2,7 +2,8 @@
  * Author: Piotr Trojanek
  */
 
-#include "base/lib/periodic_timer.h"
+#include <boost/thread/thread.hpp>
+#include <boost/date_time/time_duration.hpp>
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
@@ -25,7 +26,7 @@ namespace generator {
 spkm_pose::spkm_pose(task_t & _ecp_task, const lib::spkm::next_state_t::segment_sequence_t & _segments) :
 		generator_t(_ecp_task),
 		segments(_segments),
-		wakeup(20)
+		query_interval(boost::posix_time::milliseconds(20))
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 }
@@ -76,6 +77,9 @@ bool spkm_pose::first_step()
 	the_robot->epos_external_reply_data_request_port.set_data = lib::spkm::TOOL_XYZ_EULER_ZYZ;
 	the_robot->epos_external_reply_data_request_port.set_request();
 
+	// Record current wall clock
+	wakeup = boost::get_system_time();
+
 	return true;
 }
 
@@ -103,7 +107,8 @@ bool spkm_pose::next_step()
 		the_robot->epos_external_reply_data_request_port.set_request();
 
 		// Delay until next EPOS query
-		wakeup.sleep();
+		wakeup += query_interval;
+		boost::thread::sleep(wakeup);
 
 		return true;
 	}
