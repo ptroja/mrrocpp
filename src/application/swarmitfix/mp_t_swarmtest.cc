@@ -8,6 +8,8 @@
 
 #include "planner.h"
 
+#include "PlanIterators.h"
+
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include "serialization.h"
@@ -30,32 +32,6 @@
 namespace mrrocpp {
 namespace mp {
 namespace task {
-
-//! Check if PKM agent has completed all planned actions
-bool isFinished(const Plan::PkmType::ItemConstIterator & it, const Plan & p)
-{
-	return (it == p.pkm().item().end());
-}
-
-//! Check if mobile base has completed all planned actions
-bool isFinished(const Plan::MbaseType::ItemConstIterator & it, const Plan & p)
-{
-	return (it == p.mbase().item().end());
-}
-
-//! Fast-forward s-agent's plan item iterator until pointing next command
-template<typename T>
-void fastForward(T & it, int id, const Plan & p)
-{
-	while(!isFinished(it, p) && it->agent() != id) ++it;
-}
-
-//! Check if pointed s-agent's command matches time index
-template<typename T>
-bool indexMatches(const T & it, int ind, const Plan & p)
-{
-	return (!isFinished(it, p) && it->ind() == ind);
-}
 
 void swarmitfix::executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, IO_t & IO)
 {
@@ -107,7 +83,7 @@ void swarmitfix::executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, IO_t
 	}
 
 	// Display PKM's command
-	std::cerr << "MP: spkm" << pkmCmd.agent() << std::endl;
+	std::cerr << "MP: spkm" << (unsigned int) pkmCmd.agent() << " @" << pkmCmd.ind() << std::endl;
 	std::cerr << "\tpose\n" << cmd_spkm.segment.goal_pose << std::endl;
 	std::cerr << "\tmotion type " << cmd_spkm.segment.motion_type << std::endl;
 	std::cerr << "\tduration " << cmd_spkm.segment.duration << std::endl;
@@ -153,7 +129,7 @@ void swarmitfix::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, IO
 	// Setup command for the mobile base
 	lib::smb::next_state_t cmd_smb(lib::smb::ACTION_LIST);
 
-	std::cerr << "MP: smb" << smbCmd.agent() << " # of SMB segments = " << smbCmd.actions().item().size() << std::endl;
+	std::cerr << "MP: smb" << (unsigned int) smbCmd.agent() << " @" << smbCmd.ind() << " # of actions = " << smbCmd.actions().item().size() << std::endl;
 
 	// Iterate over action sequence
 	BOOST_FOREACH(const Plan::MbaseType::ItemType::ActionsType::ItemType & it, smbCmd.actions().item())
@@ -254,16 +230,10 @@ void swarmitfix::main_test_algorithm(void)
 	Plan * p = pp.getPlan();
 
 	// Plan iterators
-	Plan::PkmType::ItemConstIterator spkm1_it = p->pkm().item().begin();
-	Plan::PkmType::ItemConstIterator spkm2_it = p->pkm().item().begin();
-	Plan::MbaseType::ItemConstIterator smb1_it = p->mbase().item().begin();
-	Plan::MbaseType::ItemConstIterator smb2_it = p->mbase().item().begin();
-
-	// Setup iterators
-	fastForward(spkm1_it, 1, *p);
-	fastForward(spkm2_it, 2, *p);
-	fastForward(smb1_it, 1, *p);
-	fastForward(smb2_it, 2, *p);
+	PkmConstIterator spkm1_it(p->pkm().item(), 1);
+	PkmConstIterator spkm2_it(p->pkm().item(), 2);
+	MbaseConstIterator smb1_it(p->mbase().item(), 1);
+	MbaseConstIterator smb2_it(p->mbase().item(), 2);
 
 	// Time index counter
 	int ind = 0;
@@ -279,6 +249,11 @@ void swarmitfix::main_test_algorithm(void)
 	current_plan_status = ONGOING;
 
 	for (; current_plan_status == ONGOING; ++ind) {
+		std::cout << "plan index = " << ind << std::endl;
+//		std::cout << "\tspkm1@" << spkm1_it->ind() << std::endl;
+//		std::cout << "\tspkm2@" << spkm2_it->ind() << std::endl;
+//		std::cout << "\tsmb1@" << smb1_it->ind() << std::endl;
+//		std::cout << "\tsmb2@" << smb2_it->ind() << std::endl;
 		// Diagnostic timestamp
 		boost::system_time start_timestamp = boost::get_system_time();
 
@@ -291,43 +266,31 @@ void swarmitfix::main_test_algorithm(void)
 //			isFinished(smb2_it, *p) << std::endl;
 
 		// Execute command for spkm1
-		if(indexMatches(spkm1_it, ind, *p)) {
+		if(!spkm1_it.isFinished() && spkm1_it->ind() == ind) {
 			currentActionState = (State *) &(*spkm1_it);
 
 			executeCommandItem(*spkm1_it++, IO);
-
-			// Fast-forward upto next command
-			fastForward(spkm1_it, 1, *p);
 		}
 
 		// Execute command for spkm2
-		if(indexMatches(spkm2_it, ind, *p)) {
+		if(!spkm2_it.isFinished() && spkm2_it->ind() == ind) {
 			currentActionState = (State *) &(*spkm2_it);
 
 			executeCommandItem(*spkm2_it++, IO);
-
-			// Fast-forward upto next command
-			fastForward(spkm2_it, 2, *p);
 		}
 
 		// Execute command for smb1
-		if(indexMatches(smb1_it, ind, *p)) {
+		if(!smb1_it.isFinished() && smb1_it->ind() == ind) {
 			currentActionState = (State *) &(*smb1_it);
 
 			executeCommandItem(*smb1_it++, IO);
-
-			// Fast-forward upto next command
-			fastForward(smb1_it, 1, *p);
 		}
 
 		// Execute command for smb2
-		if(indexMatches(smb2_it, ind, *p)) {
+		if(!smb2_it.isFinished() && smb2_it->ind() == ind) {
 			currentActionState = (State *) &(*smb2_it);
 
 			executeCommandItem(*smb2_it++, IO);
-
-			// Fast-forward upto next command
-			fastForward(smb2_it, 2, *p);
 		}
 
 		const bool record_timestamp = !current_workers_status.allIdle();
@@ -408,10 +371,10 @@ void swarmitfix::main_test_algorithm(void)
 
 		// If all iterators are at the end...
 		if(
-				isFinished(spkm1_it, *p) &&
-				isFinished(spkm2_it, *p) &&
-				isFinished(smb1_it, *p) &&
-				isFinished(smb2_it, *p)
+				spkm1_it.isFinished() &&
+				spkm2_it.isFinished() &&
+				smb1_it.isFinished() &&
+				smb2_it.isFinished()
 				)
 		{
 			// ...then finish
