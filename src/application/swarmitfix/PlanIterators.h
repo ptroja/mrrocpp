@@ -41,18 +41,32 @@ public:
 	PlanItemConstIterator operator++(int) {
 		PlanItemConstIterator tmp = (*this);
 
-		if(!isFinished()) BaseType::operator++();
-		while(!isFinished() && (BaseType::operator->()->agent() != agent_id)) BaseType::operator++();
+		do {
+			 BaseType::operator++();
+		} while(!isFinished() && (BaseType::operator->()->agent() != agent_id));
 
 		return (tmp);
 	}
 
 	//! Increment iterator to point to next agent's item (prefix)
 	PlanItemConstIterator & operator++() {
-		if(!isFinished()) BaseType::operator++();
-		while(!isFinished() && (BaseType::operator->()->agent() != agent_id)) BaseType::operator++();
-
 		return (*this)++;
+	}
+
+	//! Decrement iterator until it points to next agent's item (postfix)
+	PlanItemConstIterator operator--(int) {
+		PlanItemConstIterator tmp = (*this);
+
+		do {
+			 BaseType::operator--();
+		} while(!isFinished() && (BaseType::operator->()->agent() != agent_id));
+
+		return (tmp);
+	}
+
+	//! Decrement iterator to point to next agent's item (prefix)
+	PlanItemConstIterator & operator--() {
+		return (*this)--;
 	}
 
 	//! Reuse value extraction operators from base type
