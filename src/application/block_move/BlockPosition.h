@@ -40,6 +40,10 @@ public:
 		return position;
 	}
 
+	int getValue() {
+		return 0;
+	}
+
 	void print() {
 		string w_col;
 		switch(color) {
