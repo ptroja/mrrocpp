@@ -215,53 +215,50 @@ void swarmitfix::main_test_algorithm(void)
 
 	Plan * p = pp.getPlan();
 
-	// Plan iterators
-	Plan::PkmType::ItemSequence::iterator pkm_it = p->pkm().item().begin();
-	Plan::MbaseType::ItemSequence::iterator smb_it = p->mbase().item().begin();
-
 	// Time index counter
-	int ind = 0;
+	int indMin = 0, indMax = 0;
 
 	// Setup index counter at the beginning of the plan
 	BOOST_FOREACH(const Plan::PkmType::ItemType & it, p->pkm().item()) {
-		if(ind > it.ind()) ind = it.ind();
+		if(indMin > it.ind()) indMin = it.ind();
+		if(indMax < it.ind()) indMax = it.ind();
 	}
 	BOOST_FOREACH(const Plan::MbaseType::ItemType & it, p->mbase().item()) {
-		if(ind > it.ind()) ind = it.ind();
+		if(indMin > it.ind()) indMin = it.ind();
+		if(indMax < it.ind()) indMax = it.ind();
 	}
 
 	current_plan_status = ONGOING;
 
-	for (int dir = 0; current_plan_status == ONGOING; ind += dir) {
+	for (int ind = indMin, dir = 0; current_plan_status == ONGOING; ind += dir) {
+
+		if(ind < indMin) ind = indMin;
+		if(ind > indMax) ind = indMax;
+
 		std::cout << "plan index = " << ind << std::endl;
 
 		// Diagnostic timestamp
 		boost::system_time start_timestamp;
 
+		// Plan iterators
+		const Plan::PkmType::ItemSequence::iterator pkm_it = StateAtInd(ind, p->pkm().item());
+		const Plan::MbaseType::ItemSequence::iterator smb_it = StateAtInd(ind, p->mbase().item());
+
+		// Current state
 		State * currentActionState;
 
 		// Execute matching command item
-		if((pkm_it != p->pkm().item().end()) && (pkm_it->ind() == ind)) {
-			currentActionState = (State *) &(*pkm_it);
+		if(pkm_it != p->pkm().item().end()) {
 
 			switch(step_mode(*pkm_it)) {
 				case lib::PLAN_PREV:
-					if(pkm_it != p->pkm().item().begin()) {
-						--pkm_it;
-						dir = -1;
-					} else {
-						dir = 0;
-					}
+					dir = -1;
 					break;
 				case lib::PLAN_NEXT:
-					if(pkm_it != p->pkm().item().end()) {
-						++pkm_it;
-						dir = +1;
-					} else {
-						dir = 0;
-					}
+					dir = +1;
 					break;
 				case lib::PLAN_EXEC:
+					currentActionState = (State *) &(*pkm_it);
 					start_timestamp = boost::get_system_time();
 					executeCommandItem(*pkm_it, IO);
 					dir = 0;
@@ -273,27 +270,17 @@ void swarmitfix::main_test_algorithm(void)
 				default:
 					break;
 			}
-		} else if((smb_it != p->mbase().item().end()) && (smb_it->ind() == ind)) {
-			currentActionState = (State *) &(*smb_it);
+		} else if(smb_it != p->mbase().item().end()) {
 
 			switch(step_mode(*smb_it)) {
 				case lib::PLAN_PREV:
-					if(smb_it != p->mbase().item().begin()) {
-						--smb_it;
-						dir = -1;
-					} else {
-						dir = 0;
-					}
+					dir = -1;
 					break;
 				case lib::PLAN_NEXT:
-					if(smb_it != p->mbase().item().end()) {
-						++smb_it;
-						dir = +1;
-					} else {
-						dir = 0;
-					}
+					dir = +1;
 					break;
 				case lib::PLAN_EXEC:
+					currentActionState = (State *) &(*smb_it);
 					start_timestamp = boost::get_system_time();
 					executeCommandItem(*smb_it, IO);
 					dir = 0;

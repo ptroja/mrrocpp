@@ -272,6 +272,17 @@ planner pp;
 		return ui_to_ecp_rep.reply;
 	}
 
+	//! Access to plan items at given index
+	template<typename T>
+	typename T::iterator StateAtInd(int ind, T & items)
+	{
+		typename T::iterator it = items.begin();
+
+		while((it != items.end()) && it->ind() != ind) ++it;
+
+		return it;
+	}
+
 public:
 	//! Constructor
 	swarmitfix(lib::configurator &_config);
