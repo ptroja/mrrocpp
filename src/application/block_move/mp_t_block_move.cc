@@ -193,7 +193,7 @@ void block_move::main_task_algorithm(void)
 			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-			wait_ms(4000);
+			wait_ms(1000);
 
 			sr_ecp_msg->message("Board localization - servovision");
 
@@ -234,7 +234,7 @@ void block_move::main_task_algorithm(void)
 				set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-				wait_ms(4000);
+				wait_ms(1000);
 
 				sr_ecp_msg->message("Block localization - servovision");
 
@@ -249,26 +249,26 @@ void block_move::main_task_algorithm(void)
 				sr_ecp_msg->message("Block not localized!!!");
 			}
 
-			wait_ms(4000);
+			wait_ms(1000);
 
 			sr_ecp_msg->message("Force approach");
 			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, BLOCK_REACHING, "", 0, lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-			wait_ms(4000);
+			wait_ms(1000);
 
 			sr_ecp_msg->message("Go up");
 			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_to_p0.trj", 0, lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-			wait_ms(4000);
+			wait_ms(1000);
 		}
 
 		sr_ecp_msg->message("Reaching building place...");
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-		wait_ms(4000);
+		wait_ms(1000);
 
 		int param = 100*present_position[0] + 10*present_position[1] + present_position[2];
 
@@ -276,7 +276,7 @@ void block_move::main_task_algorithm(void)
 		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, param, "", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-		wait_ms(4000);
+		wait_ms(1000);
 
 		sr_ecp_msg->message("Force approach");
 		set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, BUILDING, "", 0, lib::irp6p_m::ROBOT_NAME);
@@ -296,7 +296,7 @@ void block_move::main_task_algorithm(void)
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_after_pushing.trj", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-		wait_ms(4000);
+		wait_ms(1000);
 
 		sr_ecp_msg->message("end of main loop");
 	}

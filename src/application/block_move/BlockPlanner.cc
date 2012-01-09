@@ -60,11 +60,13 @@ BlockPlanner::BlockPlanner(int w, int bc, block_position_list bl) :
 
 	std::cout << "Block Planner start" << std::endl;
 
-	IntVarArgs bl_va;
+	IntArgs bl_va(bc);
 
+	int counter = 0;
 	for(block_position_list::iterator it = bl.begin(); it != bl.end(); ++it) {
 		int f_val = count_f(*it);
-		bl_va << IntVar(*this, f_val, f_val);
+		bl_va[counter] = IntVar(*this, f_val, f_val).val();
+		counter++;
 	}
 
 	std::cout << "Block Planner distinct constraint" << std::endl;
@@ -82,8 +84,10 @@ BlockPlanner::BlockPlanner(int w, int bc, block_position_list bl) :
 	std::cout << "Block Planner member" << std::endl;
 
 	//get only members of blocks_list
+
+	IntSet is(bl_va);
 	for(int i = 0; i < blocks_count; i++) {
-		member(*this, bl_va, succ[i]);
+		dom(*this, succ[i], is);
 	}
 
 	std::cout << "Block Planner first move" << std::endl;
@@ -128,20 +132,3 @@ block_position_list BlockPlanner::getPlan(void) {
 	}
 	return l;
 }
-
-/*
-int main(int argc, char* argv[]) {
-
-	//input data: blocks_list
-	int* bl;
-	bl[0] = 15;	bl[1] = 14;	bl[2] = 11;
-	bl[3] = 10;	bl[4] = 31; bl[5] = 2;	bl[6] = 18;
-
-	BlockPlanner* bp = new BlockPlanner(WIDTH, 2, 7, bl);
-	DFS<BlockPlanner> e(bp);
-	bp->print();
-	delete bp;
-
-	return 0;
-}
-*/

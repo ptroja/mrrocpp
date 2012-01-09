@@ -221,8 +221,8 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 		position_on_board(4,0) = 0;
 		position_on_board(5,0) = 0;
 
-		correction_weights(0,0) = (position_on_board(0,0) == 0.0) ? 0 : 1;
-		correction_weights(1,0) = (position_on_board(1,0) == 0.0) ? 0 : 1;
+		correction_weights(0,0) = (position_on_board(0,0) == 3.0) ? 0 : 1;
+		correction_weights(1,0) = (position_on_board(1,0) == 3.0) ? 0 : 1;
 		correction_weights(2,0) = 0;
 		correction_weights(3,0) = 0;
 		correction_weights(4,0) = 0;
