@@ -19,7 +19,7 @@ namespace lib {
 /*!
  *  Reply types from UI to ECP and commands from UI (pressing a button).
  */
-enum UI_TO_ECP_COMMAND
+typedef enum _UI_TO_ECP_COMMAND
 {
 	NEXT,
 	QUIT,
@@ -72,7 +72,7 @@ enum UI_TO_ECP_COMMAND
 	PLAN_NEXT,
 	PLAN_EXEC,
 	PLAN_SAVE
-};
+} UI_TO_ECP_COMMAND;
 
 //------------------------------------------------------------------------------
 /*!
@@ -213,9 +213,6 @@ struct UI_reply
 	char path[80];
 	char filename[20];
 
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
 	//! XML string with current plan item
 	std::string plan_item;
 
@@ -226,6 +223,9 @@ struct UI_reply
 	}
 
 private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
