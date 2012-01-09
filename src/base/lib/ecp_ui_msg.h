@@ -19,7 +19,7 @@ namespace lib {
 /*!
  *  Reply types from UI to ECP and commands from UI (pressing a button).
  */
-typedef enum _UI_TO_ECP_COMMAND
+enum UI_TO_ECP_COMMAND
 {
 	NEXT,
 	QUIT,
@@ -72,7 +72,7 @@ typedef enum _UI_TO_ECP_COMMAND
 	PLAN_NEXT,
 	PLAN_EXEC,
 	PLAN_SAVE
-} UI_TO_ECP_COMMAND;
+};
 
 //------------------------------------------------------------------------------
 /*!

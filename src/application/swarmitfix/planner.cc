@@ -18,6 +18,8 @@
 #include "planner.h"
 #include "plan.hxx"
 
+std::string planner::planpath = "planpath";
+
 planner::planner(const std::string & path) :
 	state(STOPPED)
 {

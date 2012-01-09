@@ -27,10 +27,9 @@ WorkersStatus::WorkersStatus()
 	status[lib::shead2::ROBOT_NAME] = IDLE;
 	status[lib::sbench::ROBOT_NAME] = IDLE;
 }
-#include <iostream>
+
 bool WorkersStatus::allIdle() const
 {
-	std::cout << "WorkersStatus::allIdle()" << std::endl;
 	BOOST_FOREACH(const container_t::value_type & v, status) {
 		if (v.second == BUSY) return false;
 	}

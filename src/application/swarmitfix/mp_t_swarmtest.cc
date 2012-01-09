@@ -8,10 +8,6 @@
 
 #include "planner.h"
 
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
-#include "serialization.h"
-
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/mp/mp_exceptions.h"
 
@@ -198,6 +194,14 @@ void swarmitfix::handleNotification(const lib::robot_name_t & robot_name, IO_t::
 	}
 }
 
+void swarmitfix::save_plan(const Plan & p)
+{
+	std::cout << "Save to file." << std::endl;
+	std::string savepath = config.value<std::string>(planner::planpath);
+	std::ofstream ofs ("foo.xml"/*savepath.c_str()*/);
+	plan(ofs, p);
+}
+
 void swarmitfix::main_test_algorithm(void)
 {
 	sr_ecp_msg->message("swarm test started");
@@ -212,8 +216,8 @@ void swarmitfix::main_test_algorithm(void)
 	Plan * p = pp.getPlan();
 
 	// Plan iterators
-	Plan::PkmType::ItemSequence::const_iterator pkm_it = p->pkm().item().begin();
-	Plan::MbaseType::ItemSequence::const_iterator smb_it = p->mbase().item().begin();
+	Plan::PkmType::ItemSequence::iterator pkm_it = p->pkm().item().begin();
+	Plan::MbaseType::ItemSequence::iterator smb_it = p->mbase().item().begin();
 
 	// Time index counter
 	int ind = 0;
@@ -228,26 +232,81 @@ void swarmitfix::main_test_algorithm(void)
 
 	current_plan_status = ONGOING;
 
-	for (; current_plan_status == ONGOING; ++ind) {
+	for (int dir = 0; current_plan_status == ONGOING; ind += dir) {
 		std::cout << "plan index = " << ind << std::endl;
 
 		// Diagnostic timestamp
-		boost::system_time start_timestamp = boost::get_system_time();
+		boost::system_time start_timestamp;
 
 		State * currentActionState;
 
-		// Execute PKM+HEAD command item
+		// Execute matching command item
 		if((pkm_it != p->pkm().item().end()) && (pkm_it->ind() == ind)) {
 			currentActionState = (State *) &(*pkm_it);
 
-			executeCommandItem(*pkm_it++, IO);
-		}
-
-		// Execute MBASE+BENCH command item
-		if((smb_it != p->mbase().item().end()) && (smb_it->ind() == ind)) {
+			switch(step_mode(*pkm_it)) {
+				case lib::PLAN_PREV:
+					if(pkm_it != p->pkm().item().begin()) {
+						--pkm_it;
+						dir = -1;
+					} else {
+						dir = 0;
+					}
+					break;
+				case lib::PLAN_NEXT:
+					if(pkm_it != p->pkm().item().end()) {
+						++pkm_it;
+						dir = +1;
+					} else {
+						dir = 0;
+					}
+					break;
+				case lib::PLAN_EXEC:
+					start_timestamp = boost::get_system_time();
+					executeCommandItem(*pkm_it, IO);
+					dir = 0;
+					break;
+				case lib::PLAN_SAVE:
+					save_plan(*p);
+					dir = 0;
+					break;
+				default:
+					break;
+			}
+		} else if((smb_it != p->mbase().item().end()) && (smb_it->ind() == ind)) {
 			currentActionState = (State *) &(*smb_it);
 
-			executeCommandItem(*smb_it++, IO);
+			switch(step_mode(*smb_it)) {
+				case lib::PLAN_PREV:
+					if(smb_it != p->mbase().item().begin()) {
+						--smb_it;
+						dir = -1;
+					} else {
+						dir = 0;
+					}
+					break;
+				case lib::PLAN_NEXT:
+					if(smb_it != p->mbase().item().end()) {
+						++smb_it;
+						dir = +1;
+					} else {
+						dir = 0;
+					}
+					break;
+				case lib::PLAN_EXEC:
+					start_timestamp = boost::get_system_time();
+					executeCommandItem(*smb_it, IO);
+					dir = 0;
+					break;
+				case lib::PLAN_SAVE:
+					save_plan(*p);
+					dir = 0;
+					break;
+				default:
+					break;
+			}
+		} else {
+			continue;
 		}
 
 		const bool record_timestamp = !current_workers_status.allIdle();
@@ -296,34 +355,6 @@ void swarmitfix::main_test_algorithm(void)
 //
 //			ui_pulse.markAsUsed();
 
-			{
-				// create archive
-				std::stringstream ofs;
-				{
-					boost::archive::xml_oarchive oa(ofs);
-
-					// serialize data into XML
-					oa << boost::serialization::make_nvp("item", p->pkm().item().front());
-				}
-
-				// Request
-				lib::ECP_message ecp_to_ui_msg;
-
-				// Setup plan item
-				ecp_to_ui_msg.ecp_message = lib::PLAN_STEP_MODE;
-				ecp_to_ui_msg.plan_item = ofs.str();
-
-				// Reply
-				lib::UI_reply ui_to_ecp_rep;
-
-				if (messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
-
-					uint64_t e = errno;
-					perror("ecp operator_reaction(): Send() to UI failed");
-					sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-					BOOST_THROW_EXCEPTION(exception::se());
-				}
-			}
 		}
 
 		// If all iterators are at the end...

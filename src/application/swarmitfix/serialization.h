@@ -26,6 +26,7 @@ void serialize(Archive & ar, Pkm::ItemType & item, const boost::serialization::v
 {
     // invoke serialization of the base class
 	ar & boost::serialization::make_nvp("State", boost::serialization::base_object<State>(item));
+	ar & boost::serialization::make_nvp("ind", item.ind());
 
     ar & boost::serialization::make_nvp("x", item.Xyz_Euler_Zyz()->x());
     ar & boost::serialization::make_nvp("y", item.Xyz_Euler_Zyz()->y());
@@ -38,17 +39,18 @@ void serialize(Archive & ar, Pkm::ItemType & item, const boost::serialization::v
 template<class Archive>
 void serialize(Archive & ar, Mbase::ItemType & item, const boost::serialization::version_type &)
 {
-//    // invoke serialization of the base class
+    // invoke serialization of the base class
 	ar & boost::serialization::make_nvp("State", boost::serialization::base_object<State>(item));
+	ar & boost::serialization::make_nvp("ind", item.ind());
 
-    ar & boost::serialization::make_nvp("numActions", item.numActions());
+    ar & boost::serialization::make_nvp("numActions", (int &) item.numActions());
 
     Plan::MbaseType::ItemType::ActionsType::ItemIterator it = item.actions().item().begin();
 
     for(int i = 0; i < item.numActions(); ++i) {
-    	ar & boost::serialization::make_nvp("pin", it->pin());
-    	ar & boost::serialization::make_nvp("dThetaInd", it->dThetaInd());
-    	ar & boost::serialization::make_nvp("dPkmTheta", it->dPkmTheta());
+    	ar & boost::serialization::make_nvp("pin", (int &) item.actions().item()[i].pin());
+    	ar & boost::serialization::make_nvp("dThetaInd", (float &) item.actions().item()[i].dThetaInd());
+    	ar & boost::serialization::make_nvp("dPkmTheta", (float &) item.actions().item()[i].dPkmTheta());
     }
 }
 
