@@ -345,10 +345,7 @@ void swarmitfix::main_test_algorithm(void)
 		}
 
 		// If all iterators are at the end...
-		if(
-				(pkm_it == p->pkm().item().end()) &&
-				(smb_it == p->mbase().item().end())
-			)
+		if(ind == indMax && dir > 0)
 		{
 			// ...then finish
 			break;
