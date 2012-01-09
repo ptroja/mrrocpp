@@ -55,6 +55,10 @@
     <!-- Remove mobile base duplicated coordinates -->
 	<xsl:template match="/plan/mbase/item/actions/item/dTheta"/>
     
+    <!-- Remove tool-timing data -->
+    <xsl:template match="/plan/pointNum"/>
+    <xsl:template match="/plan/toolTimes"/>    
+    
     <!-- Format time values -->
     <xsl:template match="/plan/*/item/TBeg">
         <TBeg><xsl:value-of select='format-number(node(), "#.###")' /></TBeg>        
