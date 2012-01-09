@@ -99,6 +99,11 @@
                     <xs:extension base="State">
                       <xs:sequence>
                         <xs:element ref="ind"/>
+                        <xs:element name="beta7" type="xs:float">
+                          <xs:annotation>
+                            <xs:documentation>orientation of the head</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
                         <xs:choice minOccurs="1" maxOccurs="1">
                           <xs:annotation>
                             <xs:documentation>pose expressed in one of the supported coordiate systems</xs:documentation>

@@ -51,7 +51,6 @@
     <xsl:template match="/plan/pkm/item/psi1"/>
     <xsl:template match="/plan/pkm/item/psi2"/>
     <xsl:template match="/plan/pkm/item/psi3"/>
-    <xsl:template match="/plan/pkm/item/beta7"/>
     <!-- Remove mobile base duplicated coordinates -->
 	<xsl:template match="/plan/mbase/item/actions/item/dTheta"/>
     
@@ -71,6 +70,9 @@
     <xsl:template match="/plan/pkm/item/Xyz_Euler_Zyz/*">
         <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.####")' /></xsl:element>
     </xsl:template>
+    <xsl:template match="/plan/pkm/item/beta7">
+        <xsl:element name="{name()}"><xsl:value-of select='format-number(node(), "#.####")' /></xsl:element>
+    </xsl:template>   
     
     <!-- Format mobile base pose values -->
     <xsl:template match="/plan/mbase/item/actions/item/dPkmTheta">
