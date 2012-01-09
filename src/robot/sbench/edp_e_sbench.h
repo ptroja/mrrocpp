@@ -10,9 +10,10 @@
 #ifndef __EDP_E_SBENCH_H
 #define __EDP_E_SBENCH_H
 
+#include <comedilib.h>
+
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_sbench.h"
-#include <comedilib.h>
 
 namespace mrrocpp {
 namespace edp {
