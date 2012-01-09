@@ -14,6 +14,12 @@ wgt_swarm::wgt_swarm(mrrocpp::ui::common::Interface& _interface, QWidget *parent
 {
 	ui->setupUi(this);
 
+	ui->pushButton_prev->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/media-seek-backward-32.png"));
+	ui->pushButton_next->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/media-seek-forward-32.png"));
+	ui->pushButton_reload->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/refresh-32.png"));
+	ui->pushButton_save->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/standardbutton-save-32.png"));
+	ui->pushButton_exec->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/standardbutton-apply-32.png"));
+
 	// Setup syntax highlighter
 	highlighter = (boost::shared_ptr<XmlSyntaxHighlighter>) new XmlSyntaxHighlighter(ui->textEdit->document());
 }
@@ -82,7 +88,7 @@ void wgt_swarm::on_pushButton_save_clicked()
 
 void wgt_swarm::on_pushButton_reload_clicked()
 {
-	ui->textEdit->setText(stored_plan_item.c_str());
+	ui->textEdit->setPlainText(stored_plan_item.c_str());
 }
 
 bool wgt_swarm::validate()
