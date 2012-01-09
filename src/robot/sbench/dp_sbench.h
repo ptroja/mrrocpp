@@ -3,7 +3,7 @@
 
 /*!
  * @file
- * @brief File contains data port communication structures for SwarmItFix Head
+ * @brief File contains data port communication structures for SwarmItFix Bench
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup sbench
@@ -70,7 +70,7 @@ public:
 };
 
 /*!
- * @brief SwarmItFix Head EDP command buffer
+ * @brief SwarmItFix Bench EDP command buffer
  * @ingroup sbench
  */
 struct cbuffer
@@ -90,7 +90,7 @@ struct cbuffer
 };
 
 /*!
- * @brief SwarmItFix Head EDP command buffer
+ * @brief SwarmItFix Bench EDP command buffer
  * @ingroup sbench
  */
 struct c_buffer : lib::c_buffer
@@ -111,7 +111,7 @@ struct c_buffer : lib::c_buffer
 };
 
 /*!
- * @brief SwarmItFix Head EDP reply buffer
+ * @brief SwarmItFix Bench EDP reply buffer
  * @ingroup sbench
  */
 struct rbuffer : lib::r_buffer
