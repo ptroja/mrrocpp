@@ -41,21 +41,18 @@ void swarmitfix::main_task_algorithm(void)
 				0.15, 0, 0.405, 0, -1.045, 0
 				);
 
-		// Setup single motion sequence
-		lib::spkm::next_state_t::segment_sequence_t sequence;
-
-		// Insert single motion segment
-		sequence.push_back(hm);
+		// Setup single motion segment
+		lib::spkm::segment_t segment(hm);
 
 		// Generator for motion execution
-		generator::spkm_pose g_pose(*this, sequence);
+		generator::spkm_pose g_pose(*this, segment);
 
 		// Move the robot the the specified pose
 		g_pose.Move();
 	}
 
 	//! Move the robot the the specified pose
-	generator::spkm_pose g_pose(*this, nextstateBuffer.access.segments);
+	generator::spkm_pose g_pose(*this, nextstateBuffer.access.segment);
 
 	//! Stop the robot in case of emergency
 	generator::spkm_quickstop g_quickstop(*this);
@@ -73,7 +70,7 @@ void swarmitfix::main_task_algorithm(void)
 
 			// Dispatch to selected generator
 			switch(nextstateBuffer.Get().variant) {
-				case lib::spkm::POSE_LIST:
+				case lib::spkm::GOAL_POSE:
 					g_pose.Move();
 					break;
 				default:

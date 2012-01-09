@@ -15,6 +15,7 @@
 #include "robot/smb/const_smb2.h"
 #include "robot/shead/const_shead1.h"
 #include "robot/shead/const_shead2.h"
+#include "robot/sbench/const_sbench.h"
 
 WorkersStatus::WorkersStatus()
 {
@@ -24,6 +25,7 @@ WorkersStatus::WorkersStatus()
 	status[lib::smb2::ROBOT_NAME] = IDLE;
 	status[lib::shead1::ROBOT_NAME] = IDLE;
 	status[lib::shead2::ROBOT_NAME] = IDLE;
+	status[lib::sbench::ROBOT_NAME] = IDLE;
 }
 
 bool WorkersStatus::allIdle() const

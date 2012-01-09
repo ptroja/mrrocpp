@@ -23,9 +23,9 @@ namespace generator {
 //
 //
 
-spkm_pose::spkm_pose(task_t & _ecp_task, const lib::spkm::next_state_t::segment_sequence_t & _segments) :
+spkm_pose::spkm_pose(task_t & _ecp_task, const lib::spkm::segment_t & _segment) :
 		generator_t(_ecp_task),
-		segments(_segments),
+		segment(_segment),
 		query_interval(boost::posix_time::milliseconds(20))
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
@@ -53,25 +53,14 @@ bool spkm_pose::first_step()
 {
 	sr_ecp_msg.message("spkm_pose: first_step");
 
-	std::cerr << "ECP # of segments = " << segments.size() << std::endl;
-	for(lib::spkm::next_state_t::segment_sequence_t::const_iterator it = segments.begin();
-			it != segments.end();
-			++it) {
-		std::cerr << "pose\n" << it->goal_pose << std::endl;
-		std::cerr << "motion type " << it->motion_type << std::endl;
-		std::cerr << "duration " << it->duration << std::endl;
-		std::cerr << "guarded_motion " << it->guarded_motion << std::endl;
-	}
-
-	// skip the empty command sequence
-	if(segments.empty())
-		return false;
-
-	// set iterator to the first command
-	segment_iterator = segments.begin();
+	std::cerr << "ECP segment:" << std::endl;
+	std::cerr << "\tpose" << segment.goal_pose << std::endl;
+	std::cerr << "\tmotion type " << segment.motion_type << std::endl;
+	std::cerr << "\tduration " << segment.duration << std::endl;
+	std::cerr << "\tguarded_motion " << segment.guarded_motion << std::endl;
 
 	// Prepare command for execution of the first motion segment
-	request_segment_execution(*the_robot, *segment_iterator);
+	request_segment_execution(*the_robot, segment);
 
 	// Request status report
 	the_robot->epos_external_reply_data_request_port.set_data = lib::spkm::TOOL_XYZ_EULER_ZYZ;
@@ -113,21 +102,8 @@ bool spkm_pose::next_step()
 		return true;
 	}
 
-	// Increment segment iterator
-	++segment_iterator;
-
-	// Check if the motion sequence is completed
-	if (segment_iterator == segments.end())
-		return false;
-
-	// Prepare command for execution of a next motion segment
-	request_segment_execution(*the_robot, *segment_iterator);
-
-	// Request status report
-	the_robot->epos_external_reply_data_request_port.set_request();
-
-	// Continue
-	return true;
+	// Terminate
+	return false;
 }
 
 //

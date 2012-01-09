@@ -9,11 +9,11 @@
 #include "base/lib/impconst.h"
 
 #include "base/lib/swarmtypes.h"
+#include "robot/shead/dp_shead.h"
 #include "robot/spkm/dp_spkm.h"
 #include "robot/smb/dp_smb.h"
 #include "robot/sbench/dp_sbench.h"
 #include "planner.h"
-
 
 namespace mrrocpp {
 namespace mp {
@@ -28,20 +28,23 @@ typedef struct _IO {
 
 	//! Composite data type for inter-agent communication subsystem 
 	typedef struct _transmitters {
+
+		//! Common input buffers
+		typedef struct _inputs {
 	
+			//! Data type of input buffer
+			typedef InputPtr<lib::notification_t> notification_t;
+
+			//! InputBuffer: Status of the agent
+			notification_t notification;
+
+		} inputs_t;
+
 		//! Composite data type for transmitter's data buffers  
-		typedef struct _spkm2 {
+		typedef struct _spkm {
 		
 			//! Input buffers
-			struct _inputs { 
-		
-				//! Data type of input buffer 
-				typedef InputPtr<lib::notification_t> notification_t;
-	
-				//! InputBuffer: Status of the agent
-				notification_t notification;
-				
-			} inputs;
+			inputs_t inputs;
 			
 			//! Output buffers
 			struct _outputs {
@@ -53,24 +56,15 @@ typedef struct _IO {
 			
 			} outputs;
 			
-		} spkm2_t;
+		} spkm_t;
 		
 		//! Transmitter's data structure itself
-		spkm2_t spkm2;
 		
 		//! Composite data type for transmitter's data buffers  
-		typedef struct _smb2 {
+		typedef struct _smb {
 		
 			//! Input buffers
-			struct _inputs { 
-		
-				//! Data type of input buffer 
-				typedef InputPtr<lib::notification_t> notification_t;
-	
-				//! InputBuffer: Status of the agent
-				notification_t notification;
-				
-			} inputs;
+			inputs_t inputs;
 			
 			//! Output buffers
 			struct _outputs {
@@ -82,82 +76,31 @@ typedef struct _IO {
 
 			} outputs;
 			
-		} smb2_t;
+		} smb_t;
 		
-		//! Transmitter's data structure itself
-		smb2_t smb2;
-		
-		//! Composite data type for transmitter's data buffers  
-		typedef struct _spkm1 {
-		
-			//! Input buffers
-			struct _inputs { 
-		
-				//! Data type of input buffer 
-				typedef InputPtr<lib::notification_t> notification_t;
-	
-				//! InputBuffer: Status of the agent
-				notification_t notification;
-				
-			} inputs;
-			
-			//! Output buffers
-			struct _outputs {
-				//! Data type of output buffer
-				typedef OutputPtr<lib::spkm::next_state_t> command_t;
+		//! Composite data type for transmitter's data buffers
+		typedef struct _shead {
 
-				//! OutputBuffer: Command to execute
-				command_t command;
-			
-			} outputs;
-			
-		} spkm1_t;
-		
-		//! Transmitter's data structure itself
-		spkm1_t spkm1;
-		
-		//! Composite data type for transmitter's data buffers  
-		typedef struct _smb1 {
-		
 			//! Input buffers
-			struct _inputs { 
-		
-				//! Data type of input buffer 
-				typedef InputPtr<lib::notification_t> notification_t;
-	
-				//! InputBuffer: Status of the agent
-				notification_t notification;
-				
-			} inputs;
-			
+			inputs_t inputs;
+
 			//! Output buffers
 			struct _outputs {
 				//! Data type of output buffer
-				typedef OutputPtr<lib::smb::next_state_t> command_t;
+				typedef OutputPtr<lib::shead::next_state> command_t;
 
 				//! OutputBuffer: Command to execute
 				command_t command;
 
 			} outputs;
-			
-		} smb1_t;
-		
-		//! Transmitter's data structure itself
-		smb1_t smb1;
 
+		} shead_t;
+		
 		//! Composite data type for transmitter's data buffers
 		typedef struct _sbench {
 
 			//! Input buffers
-			struct _inputs {
-
-				//! Data type of input buffer
-				typedef InputPtr<lib::notification_t> notification_t;
-
-				//! InputBuffer: Status of the agent
-				notification_t notification;
-
-			} inputs;
+			inputs_t inputs;
 
 			//! Output buffers
 			struct _outputs {
@@ -171,7 +114,10 @@ typedef struct _IO {
 
 		} sbench_t;
 		
-		//! Transmitter's data structure itself
+		//! Transmitter's data structures itself
+		smb_t smb1, smb2;
+		spkm_t spkm1, spkm2;
+		shead_t shead1, shead2;
 		sbench_t sbench;
 
 	} transmitters_t;
@@ -179,7 +125,6 @@ typedef struct _IO {
 	//! Inter-agent communication subsystem itself
 	transmitters_t transmitters;
 	
-
 	//! Composite data type for sensory subsystem 
 	typedef struct _sensors {
 	
@@ -262,7 +207,18 @@ planner pp;
 	
 	//! Transition function: Send stop commands to all the busy robots
 	void b2_stop_all(void);
-	
+
+	//! Alternative task for testing (reuses the same I/O buffers as the final task)
+	void main_test_algorithm(void);
+
+	//! Helper function
+	void handleNotification(const lib::robot_name_t & robot_name, IO_t::transmitters_t::inputs_t & inputs);
+
+	//! Execute PKM+HEAD plan item
+	void executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, IO_t & IO);
+
+	//! Execute MB+BENCH plan item
+	void executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, IO_t IO);
 
 public:
 	//! Constructor
@@ -273,9 +229,6 @@ public:
 
 	// methods for mp template
 	void main_task_algorithm(void);
-
-	//! Alternative task for testing (reuses the same I/O buffers as the final task)
-	void main_test_algorithm(void);
 };
 
 /** @} */// end of swarmitfix

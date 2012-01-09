@@ -15,6 +15,7 @@
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/mp/mp_exceptions.h"
 
+#include "robot/sbench/const_sbench.h"
 #include "robot/spkm/const_spkm1.h"
 #include "robot/spkm/const_spkm2.h"
 #include "robot/smb/const_smb1.h"
@@ -56,7 +57,7 @@ bool indexMatches(const T & it, int ind, const Plan & p)
 	return (!isFinished(it, p) && it->ind() == ind);
 }
 
-bool executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, lib::agent::OutputBuffer<lib::spkm::next_state_t> * outBuf)
+void swarmitfix::executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, IO_t & IO)
 {
 	// Goal pose
 	lib::Homog_matrix hm;
@@ -84,34 +85,73 @@ bool executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, lib::agent::Outp
 	}
 
 	// Setup command for the PKM
-	lib::spkm::next_state_t cmd(lib::spkm::POSE_LIST);
+	lib::spkm::next_state_t cmd_spkm(lib::spkm::GOAL_POSE);
 
-	cmd.segments.push_back(hm);
-//		cmd.segments.push_back(hm);
+	cmd_spkm.segment = lib::spkm::segment_t(hm);
 
-	std::cerr << "MP: spkm" << pkmCmd.agent() << " # of segments = " << cmd.segments.size() << std::endl;
-	for(lib::spkm::next_state_t::segment_sequence_t::const_iterator it = cmd.segments.begin();
-			it != cmd.segments.end();
-			++it) {
-		std::cerr << "pose\n" << it->goal_pose << std::endl;
-		std::cerr << "motion type " << it->motion_type << std::endl;
-		std::cerr << "duration " << it->duration << std::endl;
-		std::cerr << "guarded_motion " << it->guarded_motion << std::endl;
+	// Setup command for the HEAD
+	lib::shead::next_state cmd_shead;
+
+	switch(pkmCmd.ind() % 100) {
+		case 0:
+		case 20:
+		case 40:
+		case 60:
+		case 80:
+			cmd_shead.command = lib::shead::next_state::ROTATE;
+			cmd_shead.pose = pkmCmd.beta7();
+			break;
+		default:
+			throw std::runtime_error("Unexpected 'ind' in PKM plan item");
+			break;
 	}
 
-	// Send command if the output buffer is active
-	if(outBuf) {
-		outBuf->Send(cmd);
-		return true;
-	} else {
-		return false;
+	// Display PKM's command
+	std::cerr << "MP: spkm" << pkmCmd.agent() << std::endl;
+	std::cerr << "\tpose\n" << cmd_spkm.segment.goal_pose << std::endl;
+	std::cerr << "\tmotion type " << cmd_spkm.segment.motion_type << std::endl;
+	std::cerr << "\tduration " << cmd_spkm.segment.duration << std::endl;
+	std::cerr << "\tguarded_motion " << cmd_spkm.segment.guarded_motion << std::endl;
+
+	// Find output buffers
+	IO_t::transmitters_t::spkm_t::_outputs::command_t spkm_command_buffer;
+	IO_t::transmitters_t::shead_t::_outputs::command_t shead_command_buffer;
+	lib::robot_name_t spkm_name, shead_name;
+
+	switch((int) pkmCmd.agent()) {
+		case 1:
+			spkm_command_buffer = IO.transmitters.spkm1.outputs.command;
+			shead_command_buffer = IO.transmitters.shead1.outputs.command;
+			spkm_name = lib::spkm1::ROBOT_NAME;
+			shead_name = lib::shead1::ROBOT_NAME;
+			break;
+		case 2:
+			spkm_command_buffer = IO.transmitters.spkm2.outputs.command;
+			shead_command_buffer = IO.transmitters.shead2.outputs.command;
+			spkm_name = lib::spkm2::ROBOT_NAME;
+			shead_name = lib::shead2::ROBOT_NAME;
+			break;
+		default:
+			throw std::runtime_error("Unexpected 'agent' in PKM plan item");
+			break;
 	}
+
+	// Send command if the output buffers are active
+	if(spkm_command_buffer.get()) {
+		spkm_command_buffer->Send(cmd_spkm);
+		current_workers_status[spkm_name] = WorkersStatus::BUSY;
+	}
+	if(shead_command_buffer.get()) {
+		shead_command_buffer->Send(cmd_shead);
+		current_workers_status[shead_name] = WorkersStatus::BUSY;
+	}
+
 }
 
-bool executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, lib::agent::OutputBuffer<lib::smb::next_state_t> * outBuf)
+void swarmitfix::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, IO_t IO)
 {
 	// Setup command for the mobile base
-	lib::smb::next_state_t cmd(lib::smb::ACTION_LIST);
+	lib::smb::next_state_t cmd_smb(lib::smb::ACTION_LIST);
 
 	std::cerr << "MP: smb" << smbCmd.agent() << " # of SMB segments = " << smbCmd.actions().item().size() << std::endl;
 
@@ -128,22 +168,46 @@ bool executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, lib::agent::Ou
 			act.setRotationPin(it.pin());
 			act.setdThetaInd(it.dThetaInd());
 		}
-		// FIXME
-		double normalizedPkmTheta = smbCmd.pkmTheta();
-		while(normalizedPkmTheta > M_PI) normalizedPkmTheta -= 2*M_PI;
-		while(normalizedPkmTheta < -M_PI) normalizedPkmTheta += 2*M_PI;
-		act.setdPkmTheta(normalizedPkmTheta);
+		// FIXME: this should be not needed anymore
+//		double normalizedPkmTheta = smbCmd.pkmTheta();
+//		while(normalizedPkmTheta > M_PI) normalizedPkmTheta -= 2*M_PI;
+//		while(normalizedPkmTheta < -M_PI) normalizedPkmTheta += 2*M_PI;
+//		act.setdPkmTheta(normalizedPkmTheta);
 
 		// Append action to the command sequence
-		cmd.actions.push_back(act);
+		cmd_smb.actions.push_back(act);
 	}
 
-	// Send command if the output buffer is active
-	if(outBuf) {
-		outBuf->Send(cmd);
-		return true;
-	} else {
-		return false;
+	// Setup command for the bench
+	lib::sbench::pins_buffer cmd_sbench;
+
+	// Find output buffers
+	IO_t::transmitters_t::smb_t::_outputs::command_t smb_command_buffer;
+	lib::robot_name_t smb_name;
+
+	switch((int) smbCmd.agent()) {
+		case 1:
+			smb_command_buffer = IO.transmitters.smb1.outputs.command;
+			smb_name = lib::smb1::ROBOT_NAME;
+			break;
+		case 2:
+			smb_command_buffer = IO.transmitters.smb2.outputs.command;
+			smb_name = lib::smb2::ROBOT_NAME;
+			break;
+		default:
+			throw std::runtime_error("Unexpected 'agent' in MBASE plan item");
+			break;
+	}
+
+
+	// Send command if the output buffers are active
+	if(smb_command_buffer.get()) {
+		smb_command_buffer->Send(cmd_smb);
+		current_workers_status[smb_name] = WorkersStatus::BUSY;
+	}
+	if(IO.transmitters.sbench.outputs.command.get()) {
+		IO.transmitters.sbench.outputs.command->Send(cmd_sbench);
+		current_workers_status[lib::sbench::ROBOT_NAME] = WorkersStatus::BUSY;
 	}
 }
 
@@ -163,6 +227,18 @@ public:
 
 };
 #endif
+
+void swarmitfix::handleNotification(const lib::robot_name_t & robot_name, IO_t::transmitters_t::inputs_t & inputs)
+{
+	if(inputs.notification.get() && inputs.notification->isFresh()) {
+		inputs.notification->markAsUsed();
+		current_workers_status[robot_name] = WorkersStatus::IDLE;
+
+		if(inputs.notification->Get() == lib::NACK) {
+			current_plan_status = FAILURE;
+		}
+	}
+}
 
 void swarmitfix::main_test_algorithm(void)
 {
@@ -218,8 +294,7 @@ void swarmitfix::main_test_algorithm(void)
 		if(indexMatches(spkm1_it, ind, *p)) {
 			currentActionState = (State *) &(*spkm1_it);
 
-			if(executeCommandItem(*spkm1_it++, IO.transmitters.spkm1.outputs.command.get()))
-				current_workers_status[lib::spkm1::ROBOT_NAME] = WorkersStatus::BUSY;
+			executeCommandItem(*spkm1_it++, IO);
 
 			// Fast-forward upto next command
 			fastForward(spkm1_it, 1, *p);
@@ -229,8 +304,7 @@ void swarmitfix::main_test_algorithm(void)
 		if(indexMatches(spkm2_it, ind, *p)) {
 			currentActionState = (State *) &(*spkm2_it);
 
-			if (executeCommandItem(*spkm2_it++, IO.transmitters.spkm2.outputs.command.get()))
-				current_workers_status[lib::spkm2::ROBOT_NAME] = WorkersStatus::BUSY;
+			executeCommandItem(*spkm2_it++, IO);
 
 			// Fast-forward upto next command
 			fastForward(spkm2_it, 2, *p);
@@ -240,8 +314,7 @@ void swarmitfix::main_test_algorithm(void)
 		if(indexMatches(smb1_it, ind, *p)) {
 			currentActionState = (State *) &(*smb1_it);
 
-			if(executeCommandItem(*smb1_it++, IO.transmitters.smb1.outputs.command.get()))
-				current_workers_status[lib::smb1::ROBOT_NAME] = WorkersStatus::BUSY;
+			executeCommandItem(*smb1_it++, IO);
 
 			// Fast-forward upto next command
 			fastForward(smb1_it, 1, *p);
@@ -251,37 +324,12 @@ void swarmitfix::main_test_algorithm(void)
 		if(indexMatches(smb2_it, ind, *p)) {
 			currentActionState = (State *) &(*smb2_it);
 
-			if(executeCommandItem(*smb2_it++, IO.transmitters.smb2.outputs.command.get()))
-				current_workers_status[lib::smb2::ROBOT_NAME] = WorkersStatus::BUSY;
+			executeCommandItem(*smb2_it++, IO);
 
 			// Fast-forward upto next command
 			fastForward(smb2_it, 2, *p);
 		}
-#if 0
-		// Execute command for shead1
-		if(indexMatches(shead1_it, ind, *p)) {
-			currentActionState = (State *) &(*shead1_it);
 
-			// TODO
-			if(executeCommandItem(*shead1_it++))
-				current_workers_status[lib::shead1::ROBOT_NAME] = WorkersStatus::BUSY;
-
-			// Fast-forward upto next command
-			fastForward(shead1_it, 1, *p);
-		}
-
-		// Execute command for shead2
-		if(indexMatches(shead2_it, ind, *p)) {
-			currentActionState = (State *) &(*shead2_it);
-
-			// TODO
-			if(executeCommandItem(*shead2_it++))
-				current_workers_status[lib::shead2::ROBOT_NAME] = WorkersStatus::BUSY;
-
-			// Fast-forward upto next command
-			fastForward(shead2_it, 2, *p);
-		}
-#endif
 		const bool record_timestamp = !current_workers_status.allIdle();
 
 		while(!current_workers_status.allIdle()) {
@@ -299,41 +347,13 @@ void swarmitfix::main_test_algorithm(void)
 				}
 			}
 
-			if(IO.transmitters.smb1.inputs.notification.get() && IO.transmitters.smb1.inputs.notification->isFresh()) {
-				IO.transmitters.smb1.inputs.notification->markAsUsed();
-				current_workers_status[lib::smb1::ROBOT_NAME] = WorkersStatus::IDLE;
-
-				if(IO.transmitters.smb1.inputs.notification->Get() == lib::NACK) {
-					current_plan_status = FAILURE;
-				}
-			}
-
-			if(IO.transmitters.smb2.inputs.notification.get() && IO.transmitters.smb2.inputs.notification->isFresh()) {
-				IO.transmitters.smb2.inputs.notification->markAsUsed();
-				current_workers_status[lib::smb2::ROBOT_NAME] = WorkersStatus::IDLE;
-
-				if(IO.transmitters.smb2.inputs.notification->Get() == lib::NACK) {
-					current_plan_status = FAILURE;
-				}
-			}
-
-			if(IO.transmitters.spkm1.inputs.notification.get() && IO.transmitters.spkm1.inputs.notification->isFresh()) {
-				IO.transmitters.spkm1.inputs.notification->markAsUsed();
-				current_workers_status[lib::spkm1::ROBOT_NAME] = WorkersStatus::IDLE;
-
-				if(IO.transmitters.spkm1.inputs.notification->Get() == lib::NACK) {
-					current_plan_status = FAILURE;
-				}
-			}
-
-			if(IO.transmitters.spkm2.inputs.notification.get() && IO.transmitters.spkm2.inputs.notification->isFresh()) {
-				IO.transmitters.spkm2.inputs.notification->markAsUsed();
-				current_workers_status[lib::spkm2::ROBOT_NAME] = WorkersStatus::IDLE;
-
-				if(IO.transmitters.spkm2.inputs.notification->Get() == lib::NACK) {
-					current_plan_status = FAILURE;
-				}
-			}
+			handleNotification(lib::sbench::ROBOT_NAME, IO.transmitters.sbench.inputs);
+			handleNotification(lib::shead1::ROBOT_NAME, IO.transmitters.shead1.inputs);
+			handleNotification(lib::shead2::ROBOT_NAME, IO.transmitters.shead2.inputs);
+			handleNotification(lib::spkm1::ROBOT_NAME, IO.transmitters.spkm1.inputs);
+			handleNotification(lib::spkm2::ROBOT_NAME, IO.transmitters.spkm2.inputs);
+			handleNotification(lib::smb1::ROBOT_NAME, IO.transmitters.smb2.inputs);
+			handleNotification(lib::smb2::ROBOT_NAME, IO.transmitters.smb2.inputs);
 		}
 
 		// Diagnostic timestamp
@@ -386,7 +406,7 @@ void swarmitfix::main_test_algorithm(void)
 			}
 		}
 
-		// If all iterators are at the end
+		// If all iterators are at the end...
 		if(
 				isFinished(spkm1_it, *p) &&
 				isFinished(spkm2_it, *p) &&
@@ -394,13 +414,10 @@ void swarmitfix::main_test_algorithm(void)
 				isFinished(smb2_it, *p)
 				)
 		{
-			// Then finish
+			// ...then finish
 			break;
 		}
 	}
-
-//	xml_schema::namespace_infomap map;
-//	map[""].schema = "people.xsd";
 
 	// Serialize to a file.
 	//
@@ -409,146 +426,6 @@ void swarmitfix::main_test_algorithm(void)
 		std::ofstream ofs ("result.xml");
 		plan(ofs, *p);
 	}
-
-
-#if 0
-	for(Plan::PkmType::ItemConstIterator it = p->pkm().item().begin();
-			it != p->pkm().item().end();
-			++it) {
-
-
-		// Test only 1st agent
-		if(pkmCmd.agent() != 1)
-			continue;
-
-
-
-		while(!IO.transmitters.spkm2.inputs.notification->isFresh()) {
-			std::cout << "MP blocking for SPKM2 notification" << std::endl;
-			ReceiveSingleMessage(true);
-		}
-
-		IO.transmitters.spkm2.inputs.notification->markAsUsed();
-
-		if(IO.transmitters.spkm2.inputs.notification->Get() == lib::NACK) {
-			BOOST_THROW_EXCEPTION(exception::nfe());
-		}
-
-		//sleep(1);
-	}
-#endif
-	return;
-
-
-
-	do {
-		if (b1_initial_condition() == true) {
-			do {
-				if(b1_terminal_condition() == true)
-					break;
-					
-				if(ReceiveSingleMessage(false)) {
-					if(b1_terminal_condition() == true)					
-						break;
-				}
-
-				// Check if right set of data is available
-				if(IO.sensors.planner.inputs.trigger->isFresh())
-				{
-					// Mark data in buffers as used 
-					IO.sensors.planner.inputs.trigger->markAsUsed();
-
-					// Call the transition function routine
-					b1_plan_progress();
-					
-					continue;
-				}
-				
-				// Check if right set of data is available
-				if(IO.transmitters.spkm1.inputs.notification->isFresh())
-				{
-					// Mark data in buffers as used 
-					IO.transmitters.spkm1.inputs.notification->markAsUsed();
-
-					// Call the transition function routine
-					b1_handle_spkm1_notification();
-					
-					continue;
-				}
-				
-				// Check if right set of data is available
-				if(IO.transmitters.spkm2.inputs.notification->isFresh())
-				{
-					// Mark data in buffers as used 
-					IO.transmitters.spkm2.inputs.notification->markAsUsed();
-
-					// Call the transition function routine
-					b1_handle_spkm2_notification();
-					
-					continue;
-				}
-				
-				// Check if right set of data is available
-				if(IO.transmitters.smb1.inputs.notification->isFresh())
-				{
-					// Mark data in buffers as used 
-					IO.transmitters.smb1.inputs.notification->markAsUsed();
-
-					// Call the transition function routine
-					b1_handle_smb1_notification();
-					
-					continue;
-				}
-				
-				// Check if right set of data is available
-				if(IO.transmitters.smb2.inputs.notification->isFresh())
-				{
-					// Mark data in buffers as used 
-					IO.transmitters.smb2.inputs.notification->markAsUsed();
-
-					// Call the transition function routine
-					b1_handle_smb2_notification();
-					
-					continue;
-				}
-				
-				// Blocking for a new message has the lowest priority 
-				ReceiveSingleMessage(true);
-			} while (true);
-
-			// ...
-			continue;
-		}
-		if (b2_initial_condition() == true) {
-			do {
-				if(b2_terminal_condition() == true)
-					break;
-					
-				if(ReceiveSingleMessage(false)) {
-					if(b2_terminal_condition() == true)					
-						break;
-				}
-
-				// There is no data dependency for this transition function				
-				{
-
-					// Call the transition function routine
-					b2_stop_all();
-					
-					continue;
-				}
-				
-				// Blocking for a new message has the lowest priority 
-				ReceiveSingleMessage(true);
-			} while (true);
-
-			// ...
-			continue;
-		}
-
-		// Fallback to wait for change in the agent state
-		ReceiveSingleMessage(true);
-	} while(true);
 
 	sr_ecp_msg->message("END");
 }
