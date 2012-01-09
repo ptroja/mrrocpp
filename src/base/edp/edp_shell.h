@@ -1,7 +1,5 @@
 /*!
  * \file edp_shell.h
- * \brief File containing the declaration of edp::common::effector class.
- *
  * \author yoyek
  * \date 2011
  *

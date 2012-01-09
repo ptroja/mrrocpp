@@ -9,7 +9,6 @@
 // Data:		17.01.2007
 // ------------------------------------------------------------------------
 
-
 #ifndef __EDP_IRP6P_M_H
 #define __EDP_IRP6P_M_H
 
@@ -26,7 +25,6 @@ const int IRP6P_GRIPPER_TURN_AXE = 5;
 
 const double AXIS_0_TO_5_INC_PER_REVOLUTION = 4000; // Liczba impulsow enkodera na obrot walu - musi byc float
 const double AXIS_6_INC_PER_REVOLUTION = 2000; // Liczba impulsow enkodera na obrot walu - musi byc float
-
 
 // Klasa reprezentujaca robota IRp-6 na postumencie.
 class effector : public common::manip_effector
@@ -46,7 +44,14 @@ public:
 
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
 	lib::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
 	lib::r_buffer reply;
 
 };

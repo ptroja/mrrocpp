@@ -126,10 +126,24 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
+	/*!
+	 * \brief method to receive instruction from ecp of particular type
+	 */
 	lib::INSTRUCTION_TYPE variant_receive_instruction();
+
+	/*!
+	 * \brief method to reply to ecp with class of particular type
+	 */
 	void variant_reply_to_instruction();
 
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
 	lib::shead::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
 	lib::shead::r_buffer reply;
 
 };

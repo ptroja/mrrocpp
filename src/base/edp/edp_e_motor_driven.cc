@@ -216,10 +216,9 @@ motor_driven_effector::motor_driven_effector(shell &_shell, const lib::robot_nam
 
 	// is_get_arm_read_hardware=false;
 
-	//#ifdef DOCENT_SENSOR
 	startedCallbackRegistered_ = false;
 	stoppedCallbackRegistered_ = false;
-	//#endif
+
 	float _velocity_limit_global_factor;
 
 	if (config.exists("velocity_limit_global_factor")) {
@@ -1368,8 +1367,6 @@ void motor_driven_effector::variant_reply_to_instruction()
 	reply_to_instruction(reply);
 }
 
-//#ifdef DOCENT_SENSOR
-
 void motor_driven_effector::registerReaderStartedCallback(boost::function <void()> startedCallback)
 {
 	startedCallback_ = startedCallback;
@@ -1394,8 +1391,7 @@ void motor_driven_effector::onReaderStopped()
 		stoppedCallback_();
 	}
 }
-//#endif
 
-}// namespace common
+} // namespace common
 } // namespace edp
 } // namespace mrrocpp
