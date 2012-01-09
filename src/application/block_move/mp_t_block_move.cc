@@ -32,6 +32,7 @@
 #include "../visual_servoing/visual_servoing.h"
 #include "../visual_servoing_demo/ecp_mp_g_visual_servo_tester.h"
 
+#define WIDTH 4
 #define BOARD_COLOR 5
 #define BLOCK_SIZE 4
 #define COORD_N 3
@@ -132,10 +133,6 @@ block_position_list block_move::get_list_from_file(const char* file_name)
 			}
 		}
 
-		/*for(int j = 0; j < number_of_coordinates; ++j) {
-			cout << positions[j] << " ";
-		}*/
-
 		block_pos = new BlockPosition(col, positions);
 		pb_lst.push_back(*block_pos);
 
@@ -149,49 +146,32 @@ block_position_list block_move::create_plan(block_position_list l)
 {
 	sr_ecp_msg->message("Creating plan");
 
-	vector <int> pos_it(3);
-	block_position_list plan;
-
+/*
 	l.sort();
 
 	cout << "Plan:" << endl;
 	for(block_position_list::iterator it = l.begin(); it != l.end(); ++it) {
 		(*it).print();
 	}
+*/
 
-	sr_ecp_msg->message("After sorting");
-/*
-	int t_map[4][4];
-	for(int i = 0; i < BLOCK_SIZE; ++i) {
-		for(int j = 0; j < BLOCK_SIZE; ++j) {
-			t_map[i][j] = 0;
-		}
-	}
+	block_position_list plan;
 
-	sr_ecp_msg->message("After t_map");
+	BlockPlanner* bp = new BlockPlanner(WIDTH, l.size(), l);
 
-	for(block_position_list::iterator it = l.begin(); it != l.end(); ++it) {
+	sr_ecp_msg->message("Building tree");
 
-		cout << "now take" << endl;
-		(*it).print();
+	DFS<BlockPlanner> e(bp);
 
-		pos_it = (*it).getPosition();
+	sr_ecp_msg->message("Printing solution");
 
-		//check if range matches and if block is stable
-		if(pos_it[0] >= 0 && pos_it[0] < BLOCK_SIZE && pos_it[1] >= 0 && pos_it[1] < BLOCK_SIZE && pos_it[2] > 0 &&
-		   t_map[pos_it[0]][pos_it[1]] == pos_it[2] - 1) {
-				t_map[pos_it[0]][pos_it[1]] += 1;
-				cout << "choice" << endl;
-				(*it).print();
-		}
-		else {
-			plan.push_back(*it);
-		}
-	}
+	bp->print();
+	plan = bp->getPlan();
+	delete bp;
 
 	sr_ecp_msg->message("Creating plan end");
-*/
-	return l;
+
+	return plan;
 }
 
 void block_move::main_task_algorithm(void)
@@ -200,31 +180,35 @@ void block_move::main_task_algorithm(void)
 
 	block_position_list list_from_file = get_list_from_file("../../src/application/block_move/con/structure.con");
 	planned_list = create_plan(list_from_file);
-/*
+
+	int board_localization = config.value <int> ("board_localization", "[mp_block_move]");
 	int count_servo_try_1 = config.value <int> ("count_servo_try_1", "[mp_block_move]");
 
-	for(int h = 0; h < count_servo_try_1; ++h) {
+	if(board_localization == 1) {
 
-		sr_ecp_msg->message("Reaching building place...");
+		for(int h = 0; h < count_servo_try_1; ++h) {
 
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
-		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+			sr_ecp_msg->message("Reaching building place...");
 
-		wait_ms(4000);
+			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
+			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-		sr_ecp_msg->message("Board localization - servovision");
+			wait_ms(4000);
 
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, BOARD_COLOR, "", 0, lib::irp6p_m::ROBOT_NAME);
-		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+			sr_ecp_msg->message("Board localization - servovision");
 
-		if(robot_m[lib::irp6p_m::ROBOT_NAME]->ecp_reply_package.recognized_command[0] == 'Y') {
-			sr_ecp_msg->message("Board localized");
-			break;
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, BOARD_COLOR, "", 0, lib::irp6p_m::ROBOT_NAME);
+			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+			if(robot_m[lib::irp6p_m::ROBOT_NAME]->ecp_reply_package.recognized_command[0] == 'Y') {
+				sr_ecp_msg->message("Board localized");
+				break;
+			}
+
+			sr_ecp_msg->message("Board not localized!!!");
 		}
-
-		sr_ecp_msg->message("Board not localized!!!");
 	}
-*/
+
 	for(block_position_list::iterator i = planned_list.begin(); i != planned_list.end(); ++i) {
 
 		sr_ecp_msg->message("Inside main loop");
@@ -239,42 +223,46 @@ void block_move::main_task_algorithm(void)
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", 0, lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
+		int block_localization = config.value <int> ("block_localization", "[mp_block_move]");
 		int count_servo_try_2 = config.value <int> ("count_servo_try_2", "[mp_block_move]");
 
-		for(int h = 0; h < count_servo_try_2; ++h) {
+		if(block_localization == 1) {
 
-			sr_ecp_msg->message("Start position");
-			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
+			for(int h = 0; h < count_servo_try_2; ++h) {
+
+				sr_ecp_msg->message("Start position");
+				set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", 0, lib::irp6p_m::ROBOT_NAME);
+				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+				wait_ms(4000);
+
+				sr_ecp_msg->message("Block localization - servovision");
+
+				set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, present_color, "", 0, lib::irp6p_m::ROBOT_NAME);
+				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+				if(robot_m[lib::irp6p_m::ROBOT_NAME]->ecp_reply_package.recognized_command[0] == 'Y') {
+					sr_ecp_msg->message("Block localized");
+					break;
+				}
+
+				sr_ecp_msg->message("Block not localized!!!");
+			}
+
+			wait_ms(4000);
+
+			sr_ecp_msg->message("Force approach");
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, BLOCK_REACHING, "", 0, lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 			wait_ms(4000);
 
-			sr_ecp_msg->message("Block localization - servovision");
-
-			set_next_ecp_state(ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, present_color, "", 0, lib::irp6p_m::ROBOT_NAME);
+			sr_ecp_msg->message("Go up");
+			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_to_p0.trj", 0, lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-			if(robot_m[lib::irp6p_m::ROBOT_NAME]->ecp_reply_package.recognized_command[0] == 'Y') {
-				sr_ecp_msg->message("Block localized");
-				break;
-			}
-
-			sr_ecp_msg->message("Block not localized!!!");
+			wait_ms(4000);
 		}
-
-		wait_ms(4000);
-
-		sr_ecp_msg->message("Force approach");
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, BLOCK_REACHING, "", 0, lib::irp6p_m::ROBOT_NAME);
-		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-
-		wait_ms(4000);
-
-		sr_ecp_msg->message("Go up");
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_to_p0.trj", 0, lib::irp6p_m::ROBOT_NAME);
-		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-
-		wait_ms(4000);
 
 		sr_ecp_msg->message("Reaching building place...");
 		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", 0, lib::irp6p_m::ROBOT_NAME);

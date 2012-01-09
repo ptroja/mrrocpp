@@ -72,46 +72,36 @@ block_move::block_move(lib::configurator &_config) :
 	ds_rpc = shared_ptr <discode_sensor> (new discode_sensor(config, ds_config_section_name));
 	ds_rpc->configure_sensor();
 
-	//int tm1 = config.value <int> ("sm1_timeout", "[ecp_block_move]");
-
 	//get position compute parameters
 	ecp_bm_config_section_name = "[ecp_block_move]";
 	offset = config.value <6, 1> ("offset", ecp_bm_config_section_name);
 	block_size = config.value <6, 1> ("block_size", ecp_bm_config_section_name);
 	correction = config.value <6, 1> ("correction", ecp_bm_config_section_name);
 	position = config.value <6, 1> ("position", ecp_bm_config_section_name);
-	int tm2 = config.value <int> ("sm2_timeout", ecp_bm_config_section_name);
+	int tm = config.value <int> ("sm_timeout", ecp_bm_config_section_name);
+	int block_localization = config.value <int> ("block_localization", ecp_bm_config_section_name);
+	int board_localization = config.value <int> ("board_localization", ecp_bm_config_section_name);
 
-/*
-	//board localization servovision
-	sr_ecp_msg->message("Creating visual servo 1...");
-	vs_config_section_name1 = "[board_localization_servovision]";
-	shared_ptr <position_constraint> cube1(new cubic_constraint(config, vs_config_section_name1));
-	reg1 = shared_ptr <visual_servo_regulator> (new regulator_p(config, vs_config_section_name1));
-	ds1 = shared_ptr <discode_sensor> (new discode_sensor(config, vs_config_section_name1));
-	vs1 = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg1, ds1, vs_config_section_name1, config));
-	object_reached_term_cond1 = shared_ptr <termination_condition> (new object_reached_termination_condition(config, vs_config_section_name1));
-	timeout_term_cond1 = shared_ptr <termination_condition> (new timeout_termination_condition(tm1));
+	//defining a type of servovision
+	sr_ecp_msg->message("Creating visual servo...");
+	if(block_localization == 1) {
+		vs_config_section_name = "[block_reaching_servovision]";
+	}
+	else if(board_localization == 1) {
+		vs_config_section_name = "[board_localization_servovision]";
+	}
 
-	//utworzenie generatora ruchu
-	sm1 = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, vs_config_section_name1.c_str(), vs1));
-	sm1->add_position_constraint(cube1);
-	sm1->configure();
-*/
-	//block reaching servovision
-	sr_ecp_msg->message("Creating visual servo 2...");
-	vs_config_section_name2 = "[block_reaching_servovision]";
-	shared_ptr <position_constraint> cube2(new cubic_constraint(config, vs_config_section_name2));
-	reg2 = shared_ptr <visual_servo_regulator> (new regulator_p(config, vs_config_section_name2));
-	ds2 = shared_ptr <discode_sensor> (new discode_sensor(config, vs_config_section_name2));
-	vs2 = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg2, ds2, vs_config_section_name2, config));
-	object_reached_term_cond2 = shared_ptr <termination_condition> (new object_reached_termination_condition(config, vs_config_section_name2));
-	timeout_term_cond2 = shared_ptr <termination_condition> (new timeout_termination_condition(tm2));
+	shared_ptr <position_constraint> cube(new cubic_constraint(config, vs_config_section_name));
+	reg = shared_ptr <visual_servo_regulator> (new regulator_p(config, vs_config_section_name));
+	ds = shared_ptr <discode_sensor> (new discode_sensor(config, vs_config_section_name));
+	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, ds, vs_config_section_name, config));
+	object_reached_term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(config, vs_config_section_name));
+	timeout_term_cond = shared_ptr <termination_condition> (new timeout_termination_condition(tm));
 
 	//utworzenie generatora ruchu
-	sm2 = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, vs_config_section_name2.c_str(), vs2));
-	sm2->add_position_constraint(cube2);
-	sm2->configure();
+	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, vs_config_section_name.c_str(), vs));
+	sm->add_position_constraint(cube);
+	sm->configure();
 
 	sr_ecp_msg->message("ecp BLOCK MOVE loaded");
 }
@@ -159,14 +149,16 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 		sr_ecp_msg->message("configurate servovision...");
 
-/*		if(param == BOARD_COLOR) {
+		sm->add_termination_condition(object_reached_term_cond);
+		sm->add_termination_condition(timeout_term_cond);
+		sm->Move();
 
-			sm1_move();
+		//obsługa warunku zakończenia pracy - warunek stopu
+		if(object_reached_term_cond->is_condition_met()) {
+			sr_ecp_msg->message("object_reached_term_cond is met");
+			ecp_reply.recognized_command[0] = 'Y';
 
-			//obsługa warunku zakończenia pracy - warunek stopu
-			if(object_reached_term_cond1->is_condition_met()) {
-				sr_ecp_msg->message("object_reached_term_cond is met");
-				ecp_reply.recognized_command[0] = 'Y';
+			if(param == BOARD_COLOR) {
 
 				//odczyt pozycji w ANGLE_AXIS
 				gp->Move();
@@ -182,46 +174,23 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 				}
 				std::cout << std::endl;
 			}
-			else {
-				sr_ecp_msg->message("object_reached_term_cond IS NOT MET");
-			}
-
-			//obsługa warunku zakończenia pracy - timeout
-			if(timeout_term_cond1->is_condition_met()) {
-				sr_ecp_msg->message("timeout_term_cond is met");
-				ecp_reply.recognized_command[0] = 'N';
-			}
-			else {
-				sr_ecp_msg->message("timeout_term_cond IS NOT MET");
-			}
 		}
 		else {
-*/
-			sm2->add_termination_condition(object_reached_term_cond2);
-			sm2->add_termination_condition(timeout_term_cond2);
-			sm2->Move();
+			sr_ecp_msg->message("object_reached_term_cond IS NOT MET");
+		}
 
-			//obsługa warunku zakończenia pracy - warunek stopu
-			if(object_reached_term_cond2->is_condition_met()) {
-				sr_ecp_msg->message("object_reached_term_cond is met");
-				ecp_reply.recognized_command[0] = 'Y';
-			}
-			else {
-				sr_ecp_msg->message("object_reached_term_cond IS NOT MET");
-			}
-
-			//obsługa warunku zakończenia pracy - timeout
-			if(timeout_term_cond2->is_condition_met()) {
-				sr_ecp_msg->message("timeout_term_cond is met");
-				ecp_reply.recognized_command[0] = 'N';
-			}
-			else {
-				sr_ecp_msg->message("timeout_term_cond IS NOT MET");
-			}
-//		}
+		//obsługa warunku zakończenia pracy - timeout
+		if(timeout_term_cond->is_condition_met()) {
+			sr_ecp_msg->message("timeout_term_cond is met");
+			ecp_reply.recognized_command[0] = 'N';
+		}
+		else {
+			sr_ecp_msg->message("timeout_term_cond IS NOT MET");
+		}
 
 		sr_ecp_msg->message("servovision end");
 	}
+
 	else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 
 		sr_ecp_msg->message("configurate Smooth Generator...");
@@ -320,12 +289,6 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 	}
 
-}
-
-void block_move::sm1_move(void) {
-	//sm1->add_termination_condition(object_reached_term_cond1);
-	//sm1->add_termination_condition(timeout_term_cond1);
-	//sm1->Move();
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)
