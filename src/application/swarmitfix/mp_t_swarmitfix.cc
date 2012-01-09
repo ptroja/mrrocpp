@@ -60,7 +60,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 		IO.transmitters.smb1.outputs.command.Create(robot_m[lib::smb1::ROBOT_NAME]->ecp, "command");
 	}
 	if(is_robot_activated(lib::sbench::ROBOT_NAME)) {
-		IO.transmitters.smb1.outputs.command.Create(robot_m[lib::sbench::ROBOT_NAME]->ecp, "command");
+		IO.transmitters.sbench.outputs.command.Create(robot_m[lib::sbench::ROBOT_NAME]->ecp, "command");
 	}
 	
 	// Start of user code Initialize internal memory variables
