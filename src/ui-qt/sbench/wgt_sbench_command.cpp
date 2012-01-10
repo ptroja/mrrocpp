@@ -69,7 +69,7 @@ wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::commo
 			 */
 
 			ui.gridLayout->addWidget(tmp_checkbox, i, (2 * j) + k);
-		//	checkBox_Vector.append(tmp_checkbox);
+			//	checkBox_Vector.append(tmp_checkbox);
 
 			docks[i][j] = tmp_checkbox;
 
@@ -161,12 +161,12 @@ void wgt_sbench_command::on_pushButton_execute_clicked()
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			robot->ui_ecp_robot->the_robot->sbench_command_data_port.data.set_value(i, j, docks[i][j]->isChecked());
+			robot->ui_ecp_robot->the_robot->sbench_command_voltage_data_port.data.set_value(i, j, docks[i][j]->isChecked());
 			//	sum++;
 		}
 	}
 
-	robot->ui_ecp_robot->the_robot->sbench_command_data_port.set();
+	robot->ui_ecp_robot->the_robot->sbench_command_voltage_data_port.set();
 
 	robot->ui_ecp_robot->execute_motion();
 

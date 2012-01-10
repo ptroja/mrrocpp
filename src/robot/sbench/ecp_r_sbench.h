@@ -36,7 +36,12 @@ public:
 	/**
 	 * @brief head soldification command data port
 	 */
-	lib::single_thread_port <lib::sbench::pins_buffer> sbench_command_data_port;
+	lib::single_thread_port <lib::sbench::pins_buffer> sbench_command_voltage_data_port;
+
+	/**
+	 * @brief head soldification command data port
+	 */
+	lib::single_thread_port <lib::sbench::pins_buffer> sbench_command_preasure_data_port;
 
 	/**
 	 * @brief Head state reply data request port

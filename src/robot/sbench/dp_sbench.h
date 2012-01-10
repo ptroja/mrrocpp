@@ -25,10 +25,16 @@ namespace lib {
 namespace sbench {
 
 /*!
- * @brief SwarmItFix bench pins activation command data port
+ * @brief SwarmItFix bench pins voltage activation command data port
  * @ingroup sbench
  */
-const std::string COMMAND_DATA_PORT = "SBENCH_COMMAND_DATA_PORT";
+const std::string COMMAND_DATA_VOLTAGE_PORT = "SBENCH_COMMAND_VOLTAGE_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix bench pins preasure activation command data port
+ * @ingroup sbench
+ */
+const std::string COMMAND_DATA_PREASURE_PORT = "SBENCH_COMMAND_PREASURE_DATA_PORT";
 
 /*!
  * @brief SwarmItFix sbench status data request port
