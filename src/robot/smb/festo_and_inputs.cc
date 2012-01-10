@@ -363,6 +363,9 @@ void festo_and_inputs::command()
 
 void festo_and_inputs::move_one_or_two_out()
 {
+#ifdef COMMAND_ONE_OR_TWO_OUT_SIMULTANEOUS
+	// HIGH PRESSURE VERSION WITH SIMULATNOUS LEG MOTION
+
 	// detach all legs that are up to prepare them to go down
 
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -438,6 +441,69 @@ void festo_and_inputs::move_one_or_two_out()
 		}
 	}
 
+	// wait a while in case the legs are still in motion
+	delay(500);
+
+	// attach legs
+	execute_command();
+
+#endif
+
+	// detach legs that are up to prepare them to go down
+//	master.msg->message(lib::NON_FATAL_ERROR, "move_one_or_two_out");
+
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+
+		if (!is_lower_halotron_active(i + 1)) {
+			set_detach(i + 1, true);
+			set_clean(i + 1, true);
+		}
+		// for safety reasons
+		if (is_lower_halotron_active(i + 1)) {
+
+			set_detach(i + 1, false);
+			set_clean(i + 1, false);
+			execute_command();
+			continue;
+		}
+
+		execute_command();
+		delay(500);
+
+		// move the legs down
+
+		set_move_out(i + 1, true);
+		set_move_in(i + 1, false);
+
+		execute_command();
+
+		// waits until leg go down
+		for (int iteration = 0; true; iteration++) {
+
+			delay(FAI_SINGLE_DELAY);
+
+			if (iteration > FAI_DELAY_MAX_ITERATION) {
+				master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
+
+				break;
+			}
+			//	master.msg->message("iteration");
+			read_state();
+
+			if ((is_lower_halotron_active(i + 1))) {
+				// attach leg
+				set_detach(i + 1, false);
+				// stop cleaning
+				set_clean(i + 1, false);
+				execute_command();
+				//	master.msg->message(lib::NON_FATAL_ERROR, "iteration end");
+
+				break;
+			}
+
+		}
+
+	}
 	// wait a while in case the legs are still in motion
 	delay(500);
 
