@@ -36,13 +36,13 @@ public:
 	~wgt_sbench_command();
 
 	QCheckBox* docks[SBENCH_MAX_ROW][SBENCH_MAX_COL];
-
-private:
 	Ui::wgt_sbench_commandClass ui;
 	mrrocpp::ui::sbench::UiRobot* robot;
 
+private:
+
 	void showEvent(QShowEvent * event);
-	void init();
+	virtual void init();
 
 private slots:
 
