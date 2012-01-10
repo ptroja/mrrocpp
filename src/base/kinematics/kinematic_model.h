@@ -15,8 +15,9 @@
 #include <vector>
 #include "base/lib/mrmath/mrmath.h"
 
-#include "base/lib/exception.h"
+#include "base/edp/edp_exceptions.h"
 
+using namespace mrrocpp::edp::exception;
 using namespace mrrocpp::lib::exception;
 
 namespace mrrocpp {
@@ -67,7 +68,10 @@ public:
 	 * @brief Checks whether given Cartesian pose is valid.
 	 * @param h_ Cartesian pose to be validated.
 	 */
-	virtual void check_cartesian_pose(const lib::Homog_matrix& H_) const { };
+	virtual void check_cartesian_pose(const lib::Homog_matrix& H_) const
+	{
+	}
+	;
 
 	/**
 	 * @brief Computes internal coordinates for given the motor increments (position) values.
@@ -75,7 +79,7 @@ public:
 	 * @param[out] local_current_joints Computed joints.
 	 */
 	virtual void
-			mp2i_transform(const lib::MotorArray &local_current_motor_pos, lib::JointArray & local_current_joints) = 0;
+	mp2i_transform(const lib::MotorArray &local_current_motor_pos, lib::JointArray & local_current_joints) = 0;
 
 	/**
 	 * @brief Computes motor increments from internal coordinates.
@@ -83,7 +87,7 @@ public:
 	 * @param[in] local_desired_joints Current joints settings.
 	 */
 	virtual void
-			i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints) = 0;
+	i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints) = 0;
 
 	/**
 	 * @brief Computes external coordinates on the base of internal coordinates (i2e - internal to external).
@@ -92,7 +96,7 @@ public:
 	 * @param[out] local_current_end_effector_frame Homogeneous matrix with computed end effector frame.
 	 */
 	virtual void
-			i2e_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
+	i2e_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
 	/**
 	 * @brief Computes internal coordinates basing on external coordinates (e2i - external to internal).
@@ -102,7 +106,7 @@ public:
 	 * @param[in] local_desired_end_effector_frame Given end-effector frame.
 	 */
 	virtual void
-			e2i_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
+	e2i_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame);
 
 	/**
 	 * @brief Solves direct kinematics. Should be reimplemented by every robot/kinematic model.
@@ -110,7 +114,7 @@ public:
 	 * @param[out] local_current_end_effector_frame Computed end-effector frame (a homogeneous matrix).
 	 */
 	virtual void
-			direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
+	direct_kinematics_transform(const lib::JointArray & local_current_joints, lib::Homog_matrix& local_current_end_effector_frame);
 
 	/**
 	 * @brief Solves inverse kinematics. Should be reimplemented by every robot/kinematic model.
@@ -119,7 +123,7 @@ public:
 	 * @param[in] local_desired_end_effector_frame Given end-effector frame.
 	 */
 	virtual void
-			inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix & local_desired_end_effector_frame);
+	inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix & local_desired_end_effector_frame);
 
 	/**
 	 * @brief Sets kinematics description.

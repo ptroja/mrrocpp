@@ -31,6 +31,8 @@ public:
 	virtual ~ib_eih_visual_servo();
 
 	virtual Types::Mrrocpp_Proxy::IBReading* get_reading();
+
+	virtual void reset();
 protected:
 	virtual lib::Homog_matrix compute_position_change(const lib::Homog_matrix& current_position, double dt);
 	virtual bool is_object_visible_in_latest_reading();

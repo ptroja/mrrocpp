@@ -108,7 +108,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	manip_effector(shell &_shell, lib::robot_name_t l_robot_name);
+	manip_effector(shell &_shell, const lib::robot_name_t & l_robot_name, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref);
 
 	/*!
 	 * \brief methods returns servo_current_frame_wo_tool

@@ -34,7 +34,6 @@
 #include "robot/sarkofag/ecp_r_sarkofag.h"
 #include "robot/conveyor/ecp_r_conv.h"
 #include "robot/shead/ecp_r_shead.h"
-#include "robot/polycrank/ecp_r_polycrank.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -42,7 +41,7 @@ namespace common {
 
 // ---------------------------------------------------------------
 EcpRobot::EcpRobot(UiRobot& _ui_robot) :
-	ui_robot(_ui_robot), ecp(NULL)
+		ui_robot(_ui_robot), ecp(NULL)
 {
 
 	if (ui_robot.robot_name == lib::irp6ot_m::ROBOT_NAME) {
@@ -112,13 +111,6 @@ EcpRobot::EcpRobot(UiRobot& _ui_robot) :
 
 		ecp = new ecp::conveyor::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.04;
-			JOINT_STEP[j] = 0.00004;
-		}
-	} else if (ui_robot.robot_name == lib::polycrank::ROBOT_NAME) {
-
-		ecp = new ecp::polycrank::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 		for (int j = 0; j < ecp->number_of_servos; j++) {
 			MOTOR_STEP[j] = 0.04;
 			JOINT_STEP[j] = 0.00004;
@@ -258,7 +250,6 @@ void EcpRobot::move_joints(const double final_position[])
 }
 // ---------------------------------------------------------------
 
-
 void EcpRobot::execute_motion(void)
 {
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
@@ -352,7 +343,6 @@ void EcpRobot::set_kinematic(uint8_t kinematic_model_no)
 }
 // ---------------------------------------------------------------
 
-
 // ---------------------------------------------------------------
 void EcpRobot::set_servo_algorithm(uint8_t algorithm_no[], uint8_t parameters_no[])
 {
@@ -392,7 +382,6 @@ void EcpRobot::read_motors(double current_position[])
 }
 // ---------------------------------------------------------------
 
-
 // ---------------------------------------------------------------
 void EcpRobot::read_joints(double current_position[])
 {
@@ -411,7 +400,6 @@ void EcpRobot::read_joints(double current_position[])
 }
 // ---------------------------------------------------------------
 
-
 // ZADANIE NARZEDZIA
 // ---------------------------------------------------------------
 void EcpRobot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_vector)
@@ -427,7 +415,6 @@ void EcpRobot::set_tool_xyz_angle_axis(const lib::Xyz_Angle_Axis_vector &tool_ve
 }
 // ---------------------------------------------------------------
 
-
 // ZADANIE NARZEDZIA
 // ---------------------------------------------------------------
 void EcpRobot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vector)
@@ -442,7 +429,6 @@ void EcpRobot::set_tool_xyz_euler_zyz(const lib::Xyz_Euler_Zyz_vector &tool_vect
 	execute_motion();
 }
 // ---------------------------------------------------------------
-
 
 // ODCZYT NARZEDZIA
 // ---------------------------------------------------------------
@@ -460,7 +446,6 @@ void EcpRobot::read_tool_xyz_angle_axis(lib::Xyz_Angle_Axis_vector & tool_vector
 }
 // ---------------------------------------------------------------
 
-
 // ODCZYT NARZEDZIA
 // ---------------------------------------------------------------
 void EcpRobot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector)
@@ -476,7 +461,6 @@ void EcpRobot::read_tool_xyz_euler_zyz(lib::Xyz_Euler_Zyz_vector &tool_vector)
 	ecp->reply_package.robot_model.tool_frame_def.tool_frame.get_xyz_euler_zyz(tool_vector);
 }
 // ---------------------------------------------------------------
-
 
 // ---------------------------------------------------------------
 void EcpRobot::move_xyz_euler_zyz(const double final_position[7])
@@ -521,7 +505,6 @@ void EcpRobot::move_xyz_euler_zyz(const double final_position[7])
 }
 // ---------------------------------------------------------------
 
-
 void EcpRobot::move_xyz_angle_axis(const double final_position[7])
 {
 	lib::Xyz_Euler_Zyz_vector aa_eul; // tablica przechowujaca polecenie przetransformowane
@@ -537,7 +520,6 @@ void EcpRobot::move_xyz_angle_axis(const double final_position[7])
 
 	int nr_of_steps = 0, nr_tmp = 0; // Liczba krokow
 	double temp = 0.0; // Zmienne pomocnicze
-
 
 	for (int j = 0; j < 6; j++) {
 		temp = fabs(aa_eul[j] - current_position[j]);
@@ -573,7 +555,6 @@ void EcpRobot::move_xyz_angle_axis_relative(const double position_increment[7])
 {
 	int nr_of_steps = 0, nr_tmp = 0; // Liczba krokow
 	double temp = 0.0; // Zmienne pomocnicze
-
 
 	for (int j = 0; j < 6; j++) {
 
@@ -623,7 +604,6 @@ void EcpRobot::read_xyz_euler_zyz(double current_position[])
 
 }
 // ---------------------------------------------------------------
-
 
 void EcpRobot::read_xyz_angle_axis(double current_position[])
 {

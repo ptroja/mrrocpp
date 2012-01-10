@@ -19,7 +19,7 @@ head_soldify::head_soldify(common::task::task& _ecp_task) :
 {
 
 	shead_head_soldification_data_port
-			= the_robot->port_manager.get_port <lib::shead::HEAD_SOLIDIFICATION> (lib::shead::HEAD_SOLIDIFICATION_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::shead::SOLIDIFICATION_ACTIVATION> (lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT);
 	shead_reply_data_request_port
 			= the_robot->port_manager.get_request_port <lib::shead::reply> (lib::shead::REPLY_DATA_REQUEST_PORT);
 
@@ -42,7 +42,7 @@ bool head_soldify::next_step()
 
 	shead_reply_data_request_port->get();
 
-	lib::shead::STATE_OF_THE_HEAD motion_in_progress = shead_reply_data_request_port->data.head_state;
+	lib::shead::STATE_OF_THE_SOLDIFICATION motion_in_progress = shead_reply_data_request_port->data.head_state;
 
 	if (motion_in_progress == lib::shead::HEAD_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();
@@ -59,7 +59,7 @@ void head_soldify::create_ecp_mp_reply()
 
 void head_soldify::get_mp_ecp_command()
 {
-	memcpy(&mp_ecp_shead_head_soldification_structure, ecp_t.mp_command.ecp_next_state.data, sizeof(mp_ecp_shead_head_soldification_structure));
+	memcpy(&mp_ecp_shead_head_soldification_structure, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(mp_ecp_shead_head_soldification_structure));
 
 }
 
@@ -68,7 +68,7 @@ head_desoldify::head_desoldify(common::task::task& _ecp_task) :
 	common::generator::generator(_ecp_task)
 {
 	shead_head_soldification_data_port
-			= the_robot->port_manager.get_port <lib::shead::HEAD_SOLIDIFICATION> (lib::shead::HEAD_SOLIDIFICATION_DATA_PORT);
+			= the_robot->port_manager.get_port <lib::shead::SOLIDIFICATION_ACTIVATION> (lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT);
 	shead_reply_data_request_port
 			= the_robot->port_manager.get_request_port <lib::shead::reply> (lib::shead::REPLY_DATA_REQUEST_PORT);
 }
@@ -90,7 +90,7 @@ bool head_desoldify::next_step()
 
 	shead_reply_data_request_port->get();
 
-	lib::shead::STATE_OF_THE_HEAD motion_in_progress = shead_reply_data_request_port->data.head_state;
+	lib::shead::STATE_OF_THE_SOLDIFICATION motion_in_progress = shead_reply_data_request_port->data.head_state;
 
 	if (motion_in_progress == lib::shead::HEAD_STATE_INTERMEDIATE) {
 		shead_reply_data_request_port->set_request();
@@ -107,7 +107,7 @@ void head_desoldify::create_ecp_mp_reply()
 
 void head_desoldify::get_mp_ecp_command()
 {
-	memcpy(&mp_ecp_shead_head_soldification_structure, ecp_t.mp_command.ecp_next_state.data, sizeof(mp_ecp_shead_head_soldification_structure));
+	memcpy(&mp_ecp_shead_head_soldification_structure, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(mp_ecp_shead_head_soldification_structure));
 }
 
 //constructor with parameters: task and time to sleep [s]
@@ -154,7 +154,7 @@ void head_vacuum_on::create_ecp_mp_reply()
 
 void head_vacuum_on::get_mp_ecp_command()
 {
-	memcpy(&mp_ecp_shead_vacuum_activation_structure, ecp_t.mp_command.ecp_next_state.data, sizeof(mp_ecp_shead_vacuum_activation_structure));
+	memcpy(&mp_ecp_shead_vacuum_activation_structure, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(mp_ecp_shead_vacuum_activation_structure));
 }
 
 //constructor with parameters: task and time to sleep [s]
@@ -200,7 +200,7 @@ void head_vacuum_off::create_ecp_mp_reply()
 
 void head_vacuum_off::get_mp_ecp_command()
 {
-	memcpy(&mp_ecp_shead_vacuum_activation_structure, ecp_t.mp_command.ecp_next_state.data, sizeof(mp_ecp_shead_vacuum_activation_structure));
+	memcpy(&mp_ecp_shead_vacuum_activation_structure, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(mp_ecp_shead_vacuum_activation_structure));
 }
 
 } // namespace generator

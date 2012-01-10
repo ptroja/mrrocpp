@@ -93,14 +93,14 @@ using namespace canopen;
 /************************************************************/
 
 // FIXME: this value should be 60, but it has to be tested
-const unsigned epos::SECONDS_PER_MINUTE = 60 * 60;
+const unsigned epos::SECONDS_PER_MINUTE = 60;
 
 /************************************************************/
 /*          high-level read functions */
 /************************************************************/
 
-epos::epos(gateway & _device, uint8_t _nodeId) :
-		device(_device), nodeId(_nodeId)
+epos::epos(gateway & _device, uint8_t _nodeId, const std::string & _deviceName) :
+		device(_device), nodeId(_nodeId), deviceName(_deviceName)
 {
 	// Read the cached parameters
 	OpMode = getActualOperationMode();
@@ -108,7 +108,21 @@ epos::epos(gateway & _device, uint8_t _nodeId) :
 	ProfileVelocity = getProfileVelocity();
 	ProfileAcceleration = getProfileAcceleration();
 	ProfileDeceleration = getProfileDeceleration();
+	TargetVelocity = getTargetVelocity();
 	remote = isRemoteOperationEnabled(getStatusWord());
+
+	{
+		UNSIGNED16 outputs = getDigitalOutputs();
+
+		DigitalOutputs[0] = (outputs & (1 << 15)) ? true : false;
+		DigitalOutputs[1] = (outputs & (1 << 14)) ? true : false;
+		DigitalOutputs[2] = (outputs & (1 << 13)) ? true : false;
+		DigitalOutputs[3] = (outputs & (1 << 12)) ? true : false;
+		DigitalOutputs[4] = (outputs & (1 << 11)) ? true : false;
+		DigitalOutputs[5] = (outputs & (1 << 10)) ? true : false;
+		DigitalOutputs[6] = (outputs & (1 << 9)) ? true : false;
+		DigitalOutputs[7] = (outputs & (1 << 8)) ? true : false;
+	}
 
 #if 0
 	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
@@ -128,6 +142,11 @@ epos::epos(gateway & _device, uint8_t _nodeId) :
 #endif
 }
 
+const std::string & epos::getDeviceName() const
+{
+	return deviceName;
+}
+
 /* read EPOS status word */
 UNSIGNED16 epos::getStatusWord()
 {
@@ -137,21 +156,21 @@ UNSIGNED16 epos::getStatusWord()
 void epos::printErrorRegister(UNSIGNED8 reg)
 {
 	if (E_BIT07 & reg)
-		printf("\tMotion error\n");
+		std::cout << "\tMotion error\n";
 	if (E_BIT06 & reg)
-		printf("\treserved (always 0)\n");
+		std::cout << "\treserved (always 0)\n";
 	if (E_BIT05 & reg)
-		printf("\tDevice profile-specific\n");
+		std::cout << "\tDevice profile-specific\n";
 	if (E_BIT04 & reg)
-		printf("\tCommunication error\n");
+		std::cout << "\tCommunication error\n";
 	if (E_BIT03 & reg)
-		printf("\tTemperature error\n");
+		std::cout << "\tTemperature error\n";
 	if (E_BIT02 & reg)
-		printf("\tVoltage error\n");
+		std::cout << "\tVoltage error\n";
 	if (E_BIT01 & reg)
-		printf("\tCurrent error\n");
+		std::cout << "\tCurrent error\n";
 	if (E_BIT00 & reg)
-		printf("\tGeneric error\n");
+		std::cout << "\tGeneric error\n";
 }
 
 const char * epos::ErrorCodeMessage(UNSIGNED32 code)
@@ -467,7 +486,7 @@ void epos::setRemoteOperation(bool enable)
 		remote = isRemoteOperationEnabled(getStatusWord());
 
 		if (remote != enable) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Failed to change REMOTE state of the device"));
+			BOOST_THROW_EXCEPTION(fe() << reason("Failed to change REMOTE state of the device"));
 		}
 	}
 }
@@ -520,126 +539,189 @@ const char * epos::stateDescription(int state)
 /* pretty-print EPOS state */
 int epos::printState()
 {
-	int state = getState();
+	actual_state_t state = getState();
 
-	printf("\nEPOS is in state: ");
+	std::cout << "EPOS node " << (unsigned int) nodeId << ": is in state: ";
 
 	switch (state)
 	{
 		case START:
-			printf("Start\n");
-			printf("\tBootup\n");
+			std::cout << "Start\n";
+			std::cout << "\tBootup\n";
 			break;
 		case NOT_READY_TO_SWITCH_ON:
-			printf("Not Ready to Switch On\n");
-			printf("\tCurrent offset will be measured\n");
-			printf("\tDrive function is disabled\n");
+			std::cout << "Not Ready to Switch On\n";
+			std::cout << "\tCurrent offset will be measured\n";
+			std::cout << "\tDrive function is disabled\n";
 			break;
 		case SWITCH_ON_DISABLED:
-			printf("Switch On Disabled\n");
-			printf("\tDrive initialization is complete\n");
-			printf("\tDrive parameters may be changed\n");
-			printf("\tDrive function is disabled\n");
+			std::cout << "Switch On Disabled\n";
+			std::cout << "\tDrive initialization is complete\n";
+			std::cout << "\tDrive parameters may be changed\n";
+			std::cout << "\tDrive function is disabled\n";
 			break;
 		case READY_TO_SWITCH_ON:
-			printf("Ready to Switch On\n");
-			printf("\tDrive parameters may be changed\n");
-			printf("\tDrive function is disabled\n");
+			std::cout << "Ready to Switch On\n";
+			std::cout << "\tDrive parameters may be changed\n";
+			std::cout << "\tDrive function is disabled\n";
 			break;
 		case SWITCHED_ON:
-			printf("Switched On\n");
-			printf("\tDrive function is disabled\n");
+			std::cout << "Switched On\n";
+			std::cout << "\tDrive function is disabled\n";
 			break;
 		case REFRESH:
-			printf("Refresh\n");
-			printf("\tRefresh of power stage\n");
+			std::cout << "Refresh\n";
+			std::cout << "\tRefresh of power stage\n";
 			break;
 		case MEASURE_INIT:
-			printf("Measure Init\n");
-			printf("\tPower is applied to the motor\n");
-			printf("\tMotor resistance or commutation delay is measured\n");
+			std::cout << "Measure Init\n";
+			std::cout << "\tPower is applied to the motor\n";
+			std::cout << "\tMotor resistance or commutation delay is measured\n";
 			break;
 		case OPERATION_ENABLE:
-			printf("Operation Enable\n");
-			printf("\tNo faults have been detected\n");
-			printf("\tDrive function is enabled and power is applied to the motor\n");
+			std::cout << "Operation Enable\n";
+			std::cout << "\tNo faults have been detected\n";
+			std::cout << "\tDrive function is enabled and power is applied to the motor\n";
 			break;
 		case QUICK_STOP_ACTIVE:
-			printf("Quickstop Active\n");
-			printf("\tQuickstop function is being executed\n");
-			printf("\tDrive function is enabled and power is applied to the motor\n");
+			std::cout << "Quickstop Active\n";
+			std::cout << "\tQuickstop function is being executed\n";
+			std::cout << "\tDrive function is enabled and power is applied to the motor\n";
 			break;
 		case FAULT_REACTION_ACTIVE_DISABLED:
-			printf("Fault Reaction Active (disabled)\n");
-			printf("\tA fault has occurred in the drive\n");
-			printf("\tDrive function is disabled\n");
+			std::cout << "Fault Reaction Active (disabled)\n";
+			std::cout << "\tA fault has occurred in the drive\n";
+			std::cout << "\tDrive function is disabled\n";
 			break;
 		case FAULT_REACTION_ACTIVE_ENABLED:
-			printf("Fault Reaction Active (enabled)\n");
-			printf("\tA fault has occurred in the drive\n");
-			printf("\tSelected fault reaction is being executed\n");
+			std::cout << "Fault Reaction Active (enabled)\n";
+			std::cout << "\tA fault has occurred in the drive\n";
+			std::cout << "\tSelected fault reaction is being executed\n";
 			break;
 		case FAULT:
-			printf("FAULT\n");
-			printf("\tA fault has occurred in the drive\n");
-			printf("\tDrive parameters may be changed\n");
-			printf("\tDrive function is disabled\n");
+			std::cout << "FAULT\n";
+			std::cout << "\tA fault has occurred in the drive\n";
+			std::cout << "\tDrive parameters may be changed\n";
+			std::cout << "\tDrive function is disabled\n";
 			break;
 
 		default:
-			printf("UNKNOWN!\n");
+			std::cout << "UNKNOWN!\n";
 			return (-1);
 	}
 	return (0);
 }
 
+void epos::clearFault(void)
+{
+	// Print state.
+	printState();
+	// Check if node is in a FAULT state.
+	if (getState() == FAULT) {
+		UNSIGNED8 errNum = getNumberOfErrors();
+		std::cout << "getNumberOfErrors() = " << (unsigned int) errNum << std::endl;
+		// Print list of errors.
+		for (UNSIGNED8 i = 1; i <= errNum; ++i) {
+			UNSIGNED32 errCode = getErrorHistory(i);
+			std::cout << "\t" << ErrorCodeMessage(errCode) << std::endl;
+		}
+		// Clear errors.
+		if (errNum > 0) {
+			clearNumberOfErrors();
+		}
+
+		// Reset errors.
+		setState(maxon::epos::FAULT_RESET);
+
+		// Wakeup timer
+		boost::system_time wakeup = boost::get_system_time();
+
+		// Recovery retry counter
+		unsigned int retry = 0;
+
+		// Recovery status flag
+		bool recovered = false;
+
+		// It takes some time to recovery from FAULT state
+		while(retry++ < 5) {
+			if(getState() == FAULT) {
+				// Increment the wakeup time
+				wakeup += boost::posix_time::milliseconds(5);
+
+				// Wait for device state to change
+				boost::thread::sleep(wakeup);
+			} else {
+				recovered = true;
+				break;
+			}
+		}
+
+		if(recovered) {
+			std::cout << "EPOS node " << (unsigned int) nodeId <<
+					": recovering in " << retry << " retries" << std::endl;
+		} else {
+			// We are not supposed to clear faults here
+			BOOST_THROW_EXCEPTION(fe() << reason("Failed to recovery from FAULT state"));
+		}
+	}
+
+	// Reset node.
+	reset();
+}
+
 void epos::reset()
 {
-	// Local variables
-	int state, timeout;
-
 	// Wakeup time
 	boost::system_time wakeup;
 
 	// TODO: handle initial error conditions
-	state = getState();
+	actual_state_t state = getState();
+
+	std::cout << "EPOS node " << (unsigned int) nodeId
+			<< ": resetting from state '" << stateDescription(state) << "'"
+			<< std::endl;
 
 	// FAULT
-	if (state == 11) {
+	if (state == FAULT) {
 		UNSIGNED8 errReg = getErrorRegister();
 		if (errReg) {
-			printf("printErrorRegister() = 0x%02x\n", errReg);
+			std::cout << "printErrorRegister() = 0x" << std::hex << (int) errReg << std::endl;
 			printErrorRegister(errReg);
 
 			UNSIGNED8 errNum = getNumberOfErrors();
-			printf("Number of Errors = %d\n", errNum);
+			std::cout << "Number of Errors = " << (unsigned int) errNum << std::endl;
 
 			for (int i = 1; i < errNum + 1; ++i) {
 				UNSIGNED32 errCode = getErrorHistory(i);
-				printf("Error at index %d is 0x%08x: %s\n", i, errCode, ErrorCodeMessage(errCode));
+				std::cout << "Error at index " << i << " is " <<
+						std::hex << (int) errCode << ": " <<
+						ErrorCodeMessage(errCode) << std::endl;
 			}
 		}
 
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Device is in the fault state"));
+		// We are not supposed to clear faults here
+		BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
 	}
 
 	// Shutdown
-	setControlword(0x0006);
+	setState(SHUTDOWN);
 
 	// Setup the wakeup time
 	wakeup = boost::get_system_time();
 
 	// TODO: handle error conditions
-	timeout = 5;
+	int retry = 5;
 	do {
 		state = getState();
 
-		if (state == READY_TO_SWITCH_ON) { // Operation enable
+		if (state == READY_TO_SWITCH_ON) {
+			break;
+		} else if (state == QUICK_STOP_ACTIVE) {
 			break;
 		} else if (state == FAULT) {
-			throw se_canopen_error() << reason("Device is in the fault state");
+			BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
 		} else {
-			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state)
+			std::cout << "EPOS node " << (unsigned int) nodeId << ": transited to state '" << stateDescription(state)
 					<< "' during shutdown" << std::endl;
 			// Continue;
 		}
@@ -650,41 +732,52 @@ void epos::reset()
 		// Wait for device state to change
 		boost::thread::sleep(wakeup);
 
-	} while (timeout--);
+	} while (--retry);
 
-	if (timeout == 0) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Timeout shutting device down"));
+	if (retry == 0) {
+		BOOST_THROW_EXCEPTION(fe() << reason("Timeout shutting device down"));
 	}
 
 	// Ready-to-switch-On expected
-	if (state != 3) {
-		std::cout << "XXX state = " << state << std::endl;
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Ready-to-switch-On expected"));
+	if (state != READY_TO_SWITCH_ON && state != QUICK_STOP_ACTIVE) {
+		BOOST_THROW_EXCEPTION(fe() << reason("Ready-to-switch-On or Quick-Stop-Active expected"));
 	}
 
 	// Enable
-	setControlword(0x000f);
+	setState(ENABLE_OPERATION);
 
 	// Setup the wakeup time
 	wakeup = boost::get_system_time();
 
-	timeout = 5;
+	// Setup retry counter
+	retry = 25;
 	do {
 		state = getState();
 
-		//std::cerr << "state " << state << " timeout " << timeout << std::endl;
+		// Condition to monitor for
+		bool in_operation_enable = false;
 
-		if (state == MEASURE_INIT) { // Measure in progress...
-			// Continue
-		} else if (state == OPERATION_ENABLE) { // Operation enable
-			break;
-		} else if (state == FAULT) {
-			throw se_canopen_error() << reason("Device is in the fault state");
-		} else {
-			std::cerr << "Node " << (int) nodeId << ": unexpected state '" << stateDescription(state)
-					<< "' during initialization" << std::endl;
-			// Continue;
+		switch (state) {
+			// These are expected transition states
+			case SWITCHED_ON:
+			case MEASURE_INIT:
+			case REFRESH:
+				break;
+			case OPERATION_ENABLE:
+				in_operation_enable = true;
+				break;
+			case FAULT:
+				BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
+				break;
+			default:
+				std::cout << "EPOS node " << (unsigned int) nodeId << ": transited to state '" << stateDescription(state)
+									<< "' during initialization" << std::endl;
+				break;
 		}
+
+		// Exit loop if condition holds
+		if(in_operation_enable)
+			break;
 
 		// Increment the wakeup time
 		wakeup += boost::posix_time::milliseconds(5);
@@ -692,10 +785,10 @@ void epos::reset()
 		// Wait for device state to change
 		boost::thread::sleep(wakeup);
 
-	} while (timeout--);
+	} while (--retry);
 
-	if (timeout == 0) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Timeout enabling device"));
+	if (retry == 0) {
+		BOOST_THROW_EXCEPTION(fe() << reason("Timeout enabling device"));
 	}
 
 	// Enable+Halt
@@ -704,9 +797,11 @@ void epos::reset()
 	state = getState();
 
 	// Operation Enabled expected
-	if (state != 7) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Ready-to-switch-On expected"));
+	if (state != OPERATION_ENABLE) {
+		BOOST_THROW_EXCEPTION(fe() << reason("Operation Enable expected"));
 	}
+
+	std::cout << "EPOS node " << (unsigned int) nodeId << ": reset OK" << std::endl;
 }
 
 /* change EPOS state according to firmware spec 8.1.3 */
@@ -771,16 +866,16 @@ void epos::setState(desired_state_t state)
 			break;
 		case FAULT_RESET: // Fault Reset 0xxx xxxx -> 1xxx xxxx
 			cw |= E_BIT07;
+			setControlword(0x0000);
 			setControlword(cw);
 			break;
 		default:
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("ERROR: demanded state is UNKNOWN!"));
+			BOOST_THROW_EXCEPTION(fe() << reason("ERROR: demanded state is UNKNOWN!"));
 			// TODO: state
 			break;
 	}
 }
 
-/* returns software version as HEX  --  14.1.33*/
 UNSIGNED8 epos::getNodeID()
 {
 	return ReadObjectValue <UNSIGNED8>(0x2000, 0x00);
@@ -808,7 +903,7 @@ UNSIGNED16 epos::getDInput()
 void epos::setHomePolarity(int pol)
 {
 	if (pol != 0 && pol != 1) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("polarity must be 0 (height active) or 1 (low active)"));
+		BOOST_THROW_EXCEPTION(fe() << reason("polarity must be 0 (height active) or 1 (low active)"));
 	}
 
 	// read present functionalities polarity mask
@@ -838,76 +933,68 @@ void epos::setControlword(UNSIGNED16 val)
 /* pretty-print Controlword */
 void epos::printControlWord(WORD s)
 {
-	printf("\nmeaning of EPOS controlword %#06x is:\n", s);
+	std::cout << "\nmeaning of EPOS controlword " <<
+			std::hex << "0x" << (int) s << " is:\n";
 	// bit 15..11 not in use
 	// bit 10, 9 reserved
-	printf("  HALT:                                 ");
-	if ((s & E_BIT08) == E_BIT08
-	)
-		printf("true\n");
+	std::cout << "  HALT:                                 ";
+	if ((s & E_BIT08) == E_BIT08)
+		std::cout << "true\n";
 	else
-		printf("false\n");
+		std::cout << "false\n";
 
-	printf("  fault reset                           ");
-	if ((s & E_BIT07) == E_BIT07
-	)
-		printf("true\n");
+	std::cout << "  fault reset                           ";
+	if ((s & E_BIT07) == E_BIT07)
+		std::cout << "true\n";
 	else
-		printf("false\n");
+		std::cout << "false\n";
 
-	printf("  Op mode specific                      ");
-	if ((s & E_BIT06) == E_BIT06
-	)
-		printf("true\n");
+	std::cout << "  Op mode specific                      ";
+	if ((s & E_BIT06) == E_BIT06)
+		std::cout << "true\n";
 	else
-		printf("false\n");
+		std::cout << "false\n";
 
-	printf("  Op mode specific                      ");
-	if ((s & E_BIT05) == E_BIT05
-	)
-		printf("true\n");
+	std::cout << "  Op mode specific                      ";
+	if ((s & E_BIT05) == E_BIT05)
+		std::cout << "true\n";
 	else
-		printf("false\n");
+		std::cout << "false\n";
 
-	printf("  Op mode specific                      ");
-	if ((s & E_BIT04) == E_BIT04
-	)
-		printf("true\n");
+	std::cout << "  Op mode specific                      ";
+	if ((s & E_BIT04) == E_BIT04)
+		std::cout << "true\n";
 	else
-		printf("false\n");
+		std::cout << "false\n";
 
-	printf("  enable operation                      ");
-	if ((s & E_BIT03) == E_BIT03
-	)
-		printf("true\n");
+	std::cout << "  enable operation                      ";
+	if ((s & E_BIT03) == E_BIT03)
+		std::cout << "true\n";
 	else
-		printf("false\n");
+		std::cout << "false\n";
 
-	printf("  quick stop                            ");
-	if ((s & E_BIT02) == E_BIT02
-	)
-		printf("true\n");
+	std::cout << "  quick stop                            ";
+	if ((s & E_BIT02) == E_BIT02)
+		std::cout << "true\n";
 	else
-		printf("false\n");
+		std::cout << "false\n";
 
-	printf("  enable voltage                        ");
-	if ((s & E_BIT01) == E_BIT01
-	)
-		printf("true\n");
+	std::cout << "  enable voltage                        ";
+	if ((s & E_BIT01) == E_BIT01)
+		std::cout << "true\n";
 	else
-		printf("false\n");
+		std::cout << "false\n";
 
-	printf("  switch on                             ");
-	if ((s & E_BIT00) == E_BIT00
-	)
-		printf("true\n");
+	std::cout << "  switch on                             ";
+	if ((s & E_BIT00) == E_BIT00)
+		std::cout << "true\n";
 	else
-		printf("false\n");
+		std::cout << "false\n";
 }
 
 void epos::startAbsoluteMotion()
 {
-	setControlword(0x3f);
+	setControlword(0x003f);
 }
 
 void epos::startRelativeMotion()
@@ -919,7 +1006,7 @@ void epos::startRelativeMotion()
 void epos::setOperationMode(operational_mode_t m)
 {
 	if (OpMode != m) {
-		WriteObjectValue(0x6060, 0x00, (int8_t) m);
+		WriteObjectValue<INTEGER8>(0x6060, 0x00, (int8_t) m);
 
 		OpMode = m;
 	}
@@ -956,13 +1043,26 @@ void epos::setPositionWindow(UNSIGNED32 val)
 	WriteObjectValue(0x6067, 0x00, val);
 }
 
+INTEGER32 epos::getTargetVelocity()
+{
+	return ReadObjectValue <INTEGER32>(0x60FF, 0x00);
+}
+
+void epos::setTargetVelocity(INTEGER32 val)
+{
+	if(val != TargetVelocity) {
+		WriteObjectValue(0x60FF, 0x00, val);
+		TargetVelocity = val;
+	}
+}
+
 void epos::setProfileVelocity(UNSIGNED32 val)
 {
 	if (ProfileVelocity != val) {
-		std::cerr << "ProfileVelocity[" << (int) nodeId << "] <= " << val << std::endl;
+		std::cout << "ProfileVelocity[" << (int) nodeId << "] <= " << val << std::endl;
 		WriteObjectValue(0x6081, 0x00, val);
 		ProfileVelocity = val;
-		std::cerr << "ProfileVelocity[" << (int) nodeId << "] <= " << getProfileVelocity() << std::endl;
+		std::cout << "ProfileVelocity[" << (int) nodeId << "] <= " << getProfileVelocity() << std::endl;
 	}
 }
 
@@ -970,9 +1070,9 @@ void epos::setProfileAcceleration(UNSIGNED32 val)
 {
 	if (ProfileAcceleration != val) {
 		WriteObjectValue(0x6083, 0x00, val);
-		std::cerr << "ProfileAcceleration[" << (int) nodeId << "] <= " << val << std::endl;
+		std::cout << "ProfileAcceleration[" << (int) nodeId << "] <= " << val << std::endl;
 		ProfileAcceleration = val;
-		std::cerr << "ProfileAcceleration[" << (int) nodeId << "] <= " << getProfileAcceleration() << std::endl;
+		std::cout << "ProfileAcceleration[" << (int) nodeId << "] <= " << getProfileAcceleration() << std::endl;
 	}
 }
 
@@ -980,9 +1080,9 @@ void epos::setProfileDeceleration(UNSIGNED32 val)
 {
 	if (ProfileDeceleration != val) {
 		WriteObjectValue(0x6084, 0x00, val);
-		std::cerr << "ProfileDeceleration[" << (int) nodeId << "] <= " << val << std::endl;
+		std::cout << "ProfileDeceleration[" << (int) nodeId << "] <= " << val << std::endl;
 		ProfileDeceleration = val;
-		std::cerr << "ProfileDeceleration[" << (int) nodeId << "] <= " << getProfileDeceleration() << std::endl;
+		std::cout << "ProfileDeceleration[" << (int) nodeId << "] <= " << getProfileDeceleration() << std::endl;
 	}
 }
 
@@ -1484,7 +1584,7 @@ void epos::setInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UN
 {
 	// only 24 bits allowed for velocity
 	if (velocity > (int) 0x00ffffff || velocity < (int) 0xff000000) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Only 24 bits allowed for velocity"));
+		BOOST_THROW_EXCEPTION(fe() << reason("Only 24 bits allowed for velocity"));
 	}
 
 	// This array holds a manufacturer-specific 64 bit data record
@@ -1522,6 +1622,11 @@ void epos::setInterpolationDataRecord(INTEGER32 position, INTEGER32 velocity, UN
 UNSIGNED16 epos::getInterpolationBufferStatus()
 {
 	return ReadObjectValue <UNSIGNED16>(0x20C4, 0x01);
+}
+
+UNSIGNED16 epos::getInterpolationBufferPosition()
+{
+	return ReadObjectValue <UNSIGNED16>(0x60C4, 0x04);
 }
 
 bool epos::checkInterpolationBufferWarning(UNSIGNED16 status)
@@ -1624,7 +1729,7 @@ UNSIGNED8 epos::getNumberOfErrors()
 UNSIGNED32 epos::getErrorHistory(unsigned int num)
 {
 	if (num < 1 || num > 5) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Error History index out of range <1..5>"));
+		BOOST_THROW_EXCEPTION(fe() << reason("Error History index out of range <1..5>"));
 	}
 	return ReadObjectValue <UNSIGNED32>(0x1003, num);
 }
@@ -1665,7 +1770,7 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 
 	// Set homing parameters
 	setHomeOffset(offset);
-	setSpeedForZeroSearch(100);
+	setSpeedForZeroSearch(10);
 	setCurrentThresholdForHomingMode(1500);
 
 	// Display current homing parameters
@@ -1698,16 +1803,16 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 
 	WORD w = getStatusWord();
 	if ((w & E_BIT13) == E_BIT13) {
-		fprintf(stderr, "\a *** got a HomingError! ***\n");
+		std::cout << "\a *** got a HomingError! ***\n";
 		return (-1);
 	}
 
 	if ((w & E_BIT12) == E_BIT12) {
 		// Just to be sure (this should be OK according to specification)
 		if ((w & E_BIT15) != E_BIT15) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("Not referenced after homing(!?)") << canId(nodeId));
+			BOOST_THROW_EXCEPTION(fe() << reason("Not referenced after homing(!?)") << canId(nodeId));
 		}
-		printf("homing finished!\n");
+		std::cout << "homing finished!\n";
 		return (0);
 	} else {
 		//  can this be reached? position finished, no homing error but
@@ -1835,18 +1940,35 @@ void epos::Restore()
 	WriteObjectValue(0x1011, 0x01, load);
 }
 
+
 bool epos::isReferenced()
 {
-	UNSIGNED16 status = getStatusWord();
+	return isReferenced(getStatusWord());
+}
 
+bool epos::isReferenced(UNSIGNED16 status)
+{
 	return (E_BIT15 & status);
 }
 
 bool epos::isTargetReached()
 {
-	UNSIGNED16 status = getStatusWord();
+	return isTargetReached(getStatusWord());
+}
 
+bool epos::isTargetReached(UNSIGNED16 status)
+{
 	return (E_BIT10 & status);
+}
+
+bool epos::isFaultState()
+{
+	return isFaultState(getStatusWord());
+}
+
+bool epos::isFaultState(UNSIGNED16 status)
+{
+	return (E_BIT03 & status);
 }
 
 void epos::startHoming()
@@ -1859,7 +1981,7 @@ bool epos::isHomingFinished()
 	UNSIGNED16 status = getStatusWord();
 
 	if ((status & E_BIT13) == E_BIT13) {
-		BOOST_THROW_EXCEPTION(se_canopen_error() << reason("HOMING ERROR!") << canId(nodeId));
+		BOOST_THROW_EXCEPTION(fe() << reason("HOMING ERROR!") << canId(nodeId));
 	}
 
 	// bit 10 says: target reached!, bit 12: homing attained
@@ -1871,10 +1993,30 @@ void epos::monitorHomingStatus()
 	INTEGER32 posactual, velactual;
 	INTEGER16 curactual;
 	UNSIGNED16 status;
+#if 0
+	// Recovery retry counter
+	unsigned int retry = 0;
 
+	// Recovery status flag
+	bool recovered = false;
+
+	// It takes some time to recovery from FAULT state
+	while(retry++ < 5) {
+		if(getState() == FAULT) {
+
+
+
+#endif
 	printf("\nEPOS operating figures (note: update here is done AS FAST AS POSSIBLE!):\n");
 	int i = 0;
+
+	// Periodic timer
+	boost::system_time wakeup = boost::get_system_time();
+
 	do {
+		// Wait for device state to change
+		boost::thread::sleep(wakeup);
+
 		i++;
 		posactual = getActualPosition();
 		velactual = getActualVelocity();
@@ -1882,13 +2024,16 @@ void epos::monitorHomingStatus()
 
 		status = getStatusWord();
 
-		printf("\r%d EPOS: pos=%+10d; v =  %+4drpm I=%+4dmA status = %#06x ", i, posactual, velactual, curactual, status);
+		printf("\r%d EPOS: pos=%+10d; v =%+4drpm I=%+5dmA status = %#06x ", i, posactual, velactual, curactual, status);
 
 		fflush(stdout);
 
 		if ((status & E_BIT13) == E_BIT13) {
-			BOOST_THROW_EXCEPTION(se_canopen_error() << reason("HOMING ERROR!"));
+			BOOST_THROW_EXCEPTION(fe() << reason("HOMING ERROR!"));
 		}
+
+		// Increment the wakeup time
+		wakeup += boost::posix_time::milliseconds(5);
 
 	} while (((status & E_BIT10) != E_BIT10) && ((status & E_BIT12) != E_BIT12));
 	// bit 10 says: target reached!, bit 12: homing attained
@@ -1929,10 +2074,104 @@ INTEGER16 epos::getAnalogInput1() {
 	return ReadObjectValue <INTEGER16>(0x207C, 0x01);
 }
 
-/*INTEGER32 epos::writeTMP(INTEGER32 value) {
-	WriteObjectValue(canopen::WORD index, canopen::BYTE subindex, T data) <>(0x2303, 0x04);
-}*/
+void epos::configureAnalogInput(int input, analog_input_mode_t mode)
+{
+	if(input < 0 || input > 2) {
+		BOOST_THROW_EXCEPTION(fe() << reason("Analog input line number out of range"));
+	}
+	WriteObjectValue(0x207B, input, mode);
+}
 
+void epos::setAnalogInputFunctionalitiesExecutionMask(bool PositionSetpoint, bool VelocitySetpoint, bool CurrentSetpoint)
+{
+	UNSIGNED16 mask = 0x0000;
+
+	if(PositionSetpoint) {
+		mask |= 0x04;
+	}
+	if(VelocitySetpoint) {
+		mask |= 0x02;
+	}
+	if(CurrentSetpoint) {
+		mask |= 0x01;
+	}
+
+	WriteObjectValue(0x207D, 0x00, mask);
+}
+
+void epos::setPositionModeSettingValue(INTEGER32 val)
+{
+	WriteObjectValue(0x2062, 0x00, val);
+}
+
+INTEGER32 epos::getPositionModeSettingValue()
+{
+	return ReadObjectValue <INTEGER32>(0x2062, 0x00);
+}
+
+void epos::setAnalogVelocitySetpointScaling(INTEGER16 val)
+{
+	WriteObjectValue(0x2302, 0x01, val);
+}
+
+INTEGER16 epos::getAnalogVelocitySetpointScaling(INTEGER16 val)
+{
+	return ReadObjectValue <INTEGER16>(0x2302, 0x01);
+}
+
+void epos::setAnalogVelocitySetpointOffset(INTEGER32 val)
+{
+	WriteObjectValue(0x2302, 0x02, val);
+}
+
+INTEGER32 epos::getAnalogVelocitySetpointOffset()
+{
+	return ReadObjectValue <INTEGER32>(0x2302, 0x02);
+}
+
+void epos::setAnalogVelocitySetpointNotationIndex(INTEGER8 val)
+{
+	WriteObjectValue(0x2302, 0x03, val);
+}
+
+INTEGER8 epos::getAnalogVelocitySetpointNotationIndex()
+{
+	return ReadObjectValue <INTEGER8>(0x2302, 0x03);
+}
+
+INTEGER32 epos::getAnalogVelocitySetpoint()
+{
+	return ReadObjectValue <INTEGER32>(0x2302, 0x04);
+}
+
+void epos::setDigitalOutputs(digital_outputs_t cmd)
+{
+	UNSIGNED16 val = 0x0000;
+
+	// Map consecutive bits into general outputs
+	if(cmd[0]) val |= (1 << 15);
+	if(cmd[1]) val |= (1 << 14);
+	if(cmd[2]) val |= (1 << 13);
+	if(cmd[3]) val |= (1 << 12);
+	if(cmd[4]) val |= (1 << 11);
+	if(cmd[5]) val |= (1 << 10);
+	if(cmd[6]) val |= (1 << 9);
+	if(cmd[7]) val |= (1 << 8);
+
+	WriteObjectValue(0x2078, 0x01, val);
+
+	DigitalOutputs = cmd;
+}
+
+UNSIGNED16 epos::getDigitalOutputs()
+{
+	return ReadObjectValue <UNSIGNED16>(0x2078, 0x01);
+}
+
+const epos::digital_outputs_t & epos::getCommandedDigitalOutputs()
+{
+	return DigitalOutputs;
+}
 
 void epos::InitiateSegmentedWrite(WORD index, BYTE subindex, DWORD ObjectLength)
 {

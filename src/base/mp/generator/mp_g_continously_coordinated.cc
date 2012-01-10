@@ -10,10 +10,10 @@
 
 #include <boost/foreach.hpp>
 
-#include "base/mp/MP_main_error.h"
+
 #include "base/mp/mp_robot.h"
 
-#include "robot/player/ecp_mp_t_player.h"
+
 #include "base/mp/generator/mp_g_continously_coordinated.h"
 
 namespace mrrocpp {
@@ -27,7 +27,7 @@ namespace generator {
 continously_coordinated::continously_coordinated(task::task& _mp_task) :
 	generator(_mp_task), cycle_counter(0)
 {
-	wait_for_ECP_pulse = true;
+	wait_for_ECP_message = true;
 }
 
 // ----------------------------------------------------------------------------------------------

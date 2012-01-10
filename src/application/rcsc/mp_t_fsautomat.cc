@@ -29,7 +29,7 @@
 #include "base/ecp_mp/ecp_mp_sensor.h"
 
 #include "base/mp/mp_task.h"
-#include "base/mp/MP_main_error.h"
+
 #include "mp_t_fsautomat.h"
 
 #include "ecp_mp_tr_rc_windows.h"
@@ -46,7 +46,6 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-#include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
@@ -58,7 +57,6 @@
 #include "robot/smb/mp_r_smb2.h"
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
-#include "robot/player/const_player.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -74,28 +72,31 @@ void fsautomat::create_robots()
 {
 	ACTIVATE_MP_ROBOT(conveyor);
 
-	ACTIVATE_MP_ROBOT(polycrank);
+#if (R_BIRD_HAND == 1)
 	ACTIVATE_MP_ROBOT(bird_hand);
+#endif
+
+#if (R_SWARMITFIX == 1)
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
 	ACTIVATE_MP_ROBOT(smb1);
 	ACTIVATE_MP_ROBOT(smb2);
 	ACTIVATE_MP_ROBOT(shead1);
 	ACTIVATE_MP_ROBOT(shead2);
+#endif
+
 	ACTIVATE_MP_ROBOT(irp6ot_tfg);
 	ACTIVATE_MP_ROBOT(irp6ot_m);
 	ACTIVATE_MP_ROBOT(irp6p_tfg);
 	ACTIVATE_MP_ROBOT(irp6p_m);
 	ACTIVATE_MP_ROBOT(sarkofag);
 
-	ACTIVATE_MP_DEFAULT_ROBOT(electron);
-	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
 	ACTIVATE_MP_DEFAULT_ROBOT(festival);
 
 }
 
 fsautomat::fsautomat(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {/*
 
  int size;
@@ -177,15 +178,15 @@ fsautomat::fsautomat(lib::configurator &_config) :
  xmlCleanupParser();
  //*/
 
-	if (config.value <int> ("vis_servoing")) {
+	if (config.value <int>("vis_servoing")) {
 
 	}
 
 	// Konfiguracja wszystkich czujnikow
 	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m)
-				{
-					sensor_item.second->configure_sensor();
-				}
+			{
+				sensor_item.second->configure_sensor();
+			}
 
 	/*// dodanie transmitter'a
 	 transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]
@@ -225,8 +226,8 @@ common::State fsautomat::createState(xmlNodePtr stateNode)
 				xmlFree(robot);
 			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "SetOfRobots")) {
 				actState.robotSet = common::State::RobotSets();
-				for (xmlNodePtr cchild_node = child_node->children; cchild_node != NULL; cchild_node
-						= cchild_node->next) {
+				for (xmlNodePtr cchild_node = child_node->children; cchild_node != NULL;
+						cchild_node = cchild_node->next) {
 					if (cchild_node->type == XML_ELEMENT_NODE
 							&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "FirstSet")) {
 						//actState.robotSet->firstSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
@@ -237,14 +238,14 @@ common::State fsautomat::createState(xmlNodePtr stateNode)
 								actState.robotSet->firstSet.push_back(lib::returnProperRobot((char *) xmlNodeGetContent(set_node)));
 					}
 					/*if (cchild_node->type == XML_ELEMENT_NODE
-							&& !xmlStrcmp(cchild_node->name, (const xmlChar *) "SecSet")) {
-						//actState.robotSet->secondSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
-						//actState.robotSet->secondSet = new lib::robot_name_t[actState.robotSet->secondSetCount];
-						for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
-							if (set_node->type == XML_ELEMENT_NODE
-									&& !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
-								actState.robotSet->secondSet.push_back(lib::returnProperRobot((char *) xmlNodeGetContent(set_node)));
-					}*/
+					 && !xmlStrcmp(cchild_node->name, (const xmlChar *) "SecSet")) {
+					 //actState.robotSet->secondSetCount = ((xmlLsCountNode(cchild_node)) - 1) / 2;
+					 //actState.robotSet->secondSet = new lib::robot_name_t[actState.robotSet->secondSetCount];
+					 for (xmlNodePtr set_node = cchild_node->children; set_node != NULL; set_node = set_node->next)
+					 if (set_node->type == XML_ELEMENT_NODE
+					 && !xmlStrcmp(set_node->name, (const xmlChar *) "ROBOT"))
+					 actState.robotSet->secondSet.push_back(lib::returnProperRobot((char *) xmlNodeGetContent(set_node)));
+					 }*/
 				}
 			} else if (!xmlStrcmp(child_node->name, (const xmlChar *) "TrajectoryFilePath")
 					|| !xmlStrcmp(child_node->name, (const xmlChar *) "GeneratorParameters")
@@ -283,7 +284,7 @@ fsautomat::stateMap_t fsautomat::takeStatesMap()
 {
 	stateMap_t statesMap;
 
-	std::string fileName(config.value <std::string> ("xml_file", "[xml_settings]"));
+	std::string fileName(config.value <std::string>("xml_file", "[xml_settings]"));
 	std::string filePath("../");
 	filePath += fileName;
 
@@ -334,22 +335,22 @@ void fsautomat::configureProperSensor(const char *propSensor)
 {
 	// Powolanie czujnikow
 
-	if (config.value <int> ("vis_servoing")) {
+	if (config.value <int>("vis_servoing")) {
 
 	}
 
 	// Konfiguracja wszystkich czujnikow
 	BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m)
-				{
-					sensor_item.second->configure_sensor();
-				}
+			{
+				sensor_item.second->configure_sensor();
+			}
 }
 
 void fsautomat::configureProperTransmitter(const char *propTrans)
 {
 	// dodanie transmitter'a
-	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS]
-			= new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
+	transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS] =
+			new ecp_mp::transmitter::rc_windows(ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS, "[transmitter_rc_windows]", *this);
 }
 
 void fsautomat::stopProperGen(const common::State &state)
@@ -371,24 +372,24 @@ void fsautomat::runEmptyGen(const common::State &state)
 	//run_extended_empty_gen_base(state.getNumArgument(), 1, (state.getRobot()).c_str());
 	std::vector <lib::robot_name_t> myvector;
 	myvector.push_back(state.getRobot());
-	wait_for_task_termination(true, 1, myvector);
+	wait_for_task_termination(true, myvector);
 }
 
 void fsautomat::runEmptyGenForSet(const common::State &state)
 {
 	//TODO
 	//run_extended_empty_gen_and_wait(state.robotSet->firstSetCount, state.robotSet->secondSetCount, state.robotSet->firstSet, state.robotSet->secondSet);
-	wait_for_task_termination(true, state.robotSet->firstSet.size(), state.robotSet->firstSet);
+	wait_for_task_termination(true, state.robotSet->firstSet);
 }
 
 void fsautomat::executeMotion(const common::State &state)
 {
 	std::cout << "STATE STRING w executeMotion:  " << state.getStringArgument() << std::endl;
-	int trjConf = config.value <int> ("trajectory_from_xml", "[xml_settings]");
+	int trjConf = config.value <int>("trajectory_from_xml", "[xml_settings]");
 	if (trjConf && state.getGeneratorType() == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
-		set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), 0, state.getRobot());
+		//	set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStateID(), state.getRobot());
 	} else {
-		set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument().c_str(), 0, state.getRobot());
+		//	set_next_ecp_state(state.getGeneratorType(), state.getNumArgument(), state.getStringArgument().c_str(), state.getRobot());
 	}
 }
 
@@ -465,7 +466,7 @@ void fsautomat::writeCubeState(common::State &state)
 	int index = state.getNumArgument();
 
 	ecp_mp::sensor::sensor <mrrocpp::mp::task::cube_face_t> * cube_recognition = dynamic_cast <ecp_mp::sensor::sensor <
-			mrrocpp::mp::task::cube_face_t> *> (sensor_m[mrrocpp::ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
+			mrrocpp::mp::task::cube_face_t> *>(sensor_m[mrrocpp::ecp_mp::sensor::SENSOR_CAMERA_ON_TRACK]);
 
 	cube_recognition->initiate_reading();
 	wait_ms(1000);
@@ -601,12 +602,10 @@ void fsautomat::communicate_with_windows_solver(common::State &state)
 	// czyszczenie listy
 	manipulation_list.clear();
 
-	ecp_mp::transmitter::transmitter_base * transmitter_ptr =
-			transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS];
+	ecp_mp::transmitter::transmitter_base * transmitter_ptr = transmitter_m[ecp_mp::transmitter::TRANSMITTER_RC_WINDOWS];
 	assert(transmitter_ptr);
 
-	ecp_mp::transmitter::rc_windows * rc_solver_ptr =
-			dynamic_cast <ecp_mp::transmitter::rc_windows *> (transmitter_ptr);
+	ecp_mp::transmitter::rc_windows * rc_solver_ptr = dynamic_cast <ecp_mp::transmitter::rc_windows *>(transmitter_ptr);
 	assert(rc_solver_ptr);
 
 	ecp_mp::transmitter::rc_windows & rc_solver = *rc_solver_ptr;
@@ -711,56 +710,56 @@ void fsautomat::translateManipulationSequence(common::StateHeap &sh)
 	std::list <const char *> scenario;
 
 	BOOST_FOREACH(const common::SingleManipulation & manipulation, manipulation_list)
-				{
-					if (manipulation.face_to_turn == cube_state.getUp()) {
-						scenario.push_back("fco_CL_90_1");
-						changeCubeState(90);
-					} else if (manipulation.face_to_turn == cube_state.getDown()) {
-						scenario.push_back("fco_CCL_90_1");
-						changeCubeState(270);
-					} else if (manipulation.face_to_turn == cube_state.getFront()) {
-						scenario.push_back("fco_CL_0_1");
-						changeCubeState(0);
-						scenario.push_back("fto_CL_0_1");
-						scenario.push_back("fco_CL_90_1");
-						changeCubeState(90);
-					} else if (manipulation.face_to_turn == cube_state.getRear()) {
-						scenario.push_back("fco_CL_0_1");
-						changeCubeState(0);
-						scenario.push_back("fto_CL_0_1");
-						scenario.push_back("fco_CCL_90_1");
-						changeCubeState(270);
-					} else if (manipulation.face_to_turn == cube_state.getLeft()) {
-						scenario.push_back("fco_CL_0_1");
-						changeCubeState(0);
-					} else if (manipulation.face_to_turn == cube_state.getRight()) {
-						scenario.push_back("fco_CL_180_1");
-						changeCubeState(180);
-					}
-					switch (manipulation.turn_angle)
-					{
-						case common::CL_90:
-							scenario.push_back("fto_CL_90_1");
-							break;
-						case common::CL_0:
-							scenario.push_back("fto_CL_0_1");
-							break;
-						case common::CCL_90:
-							scenario.push_back("fto_CCL_90_1");
-							break;
-						case common::CL_180:
-							scenario.push_back("fto_CL_180_1");
-							break;
-						default:
-							break;
-					}
+			{
+				if (manipulation.face_to_turn == cube_state.getUp()) {
+					scenario.push_back("fco_CL_90_1");
+					changeCubeState(90);
+				} else if (manipulation.face_to_turn == cube_state.getDown()) {
+					scenario.push_back("fco_CCL_90_1");
+					changeCubeState(270);
+				} else if (manipulation.face_to_turn == cube_state.getFront()) {
+					scenario.push_back("fco_CL_0_1");
+					changeCubeState(0);
+					scenario.push_back("fto_CL_0_1");
+					scenario.push_back("fco_CL_90_1");
+					changeCubeState(90);
+				} else if (manipulation.face_to_turn == cube_state.getRear()) {
+					scenario.push_back("fco_CL_0_1");
+					changeCubeState(0);
+					scenario.push_back("fto_CL_0_1");
+					scenario.push_back("fco_CCL_90_1");
+					changeCubeState(270);
+				} else if (manipulation.face_to_turn == cube_state.getLeft()) {
+					scenario.push_back("fco_CL_0_1");
+					changeCubeState(0);
+				} else if (manipulation.face_to_turn == cube_state.getRight()) {
+					scenario.push_back("fco_CL_180_1");
+					changeCubeState(180);
 				}
+				switch (manipulation.turn_angle)
+				{
+					case common::CL_90:
+						scenario.push_back("fto_CL_90_1");
+						break;
+					case common::CL_0:
+						scenario.push_back("fto_CL_0_1");
+						break;
+					case common::CCL_90:
+						scenario.push_back("fto_CCL_90_1");
+						break;
+					case common::CL_180:
+						scenario.push_back("fto_CL_180_1");
+						break;
+					default:
+						break;
+				}
+			}
 
 	scenario.reverse();
 	BOOST_FOREACH(const char * ptr, scenario)
-				{
-					sh.pushTargetName(ptr);
-				}
+			{
+				sh.pushTargetName(ptr);
+			}
 	sh.showHeapContent();
 }
 
@@ -783,9 +782,9 @@ void fsautomat::main_task_algorithm(void)
 
 	// temporary sensor config in this place
 	BOOST_FOREACH(ecp_mp::sensor_item_t & s, sensor_m)
-				{
-					s.second->configure_sensor();
-				}
+			{
+				s.second->configure_sensor();
+			}
 
 	for (; nextState != "_STOP_"; nextState = stateMap[nextState].returnNextStateID(sh)) {
 		if (nextState == "_END_") {
@@ -793,8 +792,7 @@ void fsautomat::main_task_algorithm(void)
 		}
 
 		// protection from wrong targetID specyfication
-		if (stateMap.count(nextState) == 0)
-		{
+		if (stateMap.count(nextState) == 0) {
 			//std::cout<<"ASKUBIS error, state not found: "<<nextState<<std::endl;
 			break;
 		}

@@ -131,7 +131,7 @@ void linear_interpolate_motor_poses(Eigen::Matrix <double, N_POINTS, N_MOTORS> &
 	cout<<"Operational space: " << model->get_kinematic_model_label() << "\n";
 #endif
 
-	// Variable containing computed transformation from current end-effector post to the desired one.
+	// Variable containing computed transformation from current end-effector pose to the desired one.
 	lib::Homog_matrix desired_relative_end_effector_frame;
 
 	// Compute transformation from current to desired pose.
@@ -256,7 +256,7 @@ void cubic_polynomial_interpolate_motor_poses(Eigen::Matrix <double, N_POINTS, N
 	// Check model.
 	assert (model_);
 
-	// Variable containing computed transformation from current end-effector post to the desired one.
+	// Variable containing computed transformation from current end-effector pose to the desired one.
 	lib::Homog_matrix desired_relative_end_effector_frame;
 
 	// Compute transformation from current to desired pose.
@@ -352,6 +352,140 @@ void cubic_polynomial_interpolate_motor_poses(Eigen::Matrix <double, N_POINTS, N
 	 }
 #endif
 }
+
+
+
+/**
+ * @brief Computes interpolation motor positions for the cartesian trajectory generation in the tool frame -
+ * a parabolic velocity profile is obtained, thus translation between segments is cubic.
+ *
+ * The interpolation points are coputed due to the (1.10-1.17) formula from the "Cartesian Trajectory generation for the PKM of the Swarm ItFIX system".
+ *
+ * Method consideres also the different motion time for different segments!
+ * Number of interpolated points is equal to number of segments (thus time slices) + 1 (the starting point).
+ *
+ * @author tkornuta
+ *
+ * @tparam N_POINTS Number of interpolation points.
+ * @tparam N_MOTORS Number of manipulator motors.
+ *
+ * @param [out] motor_interpolations_ Matrix containing interpolated motor poses.
+ * @param [in] motion_time_ Total motion time.
+ * @param [in] time_deltas_ Times of motion for one segment (may be different for each segment!).
+ * @param [in] model_ Kinematic model required for inverse kinematics computations.
+ * @param [in] desired_joints_old_ Desired joint values that were required by previously received SET command (treated as current position of joints). Required by the SW inverse kinematics.
+ * @param [in] current_tool_frame_ Homogeneous matrix containing current tool pose.
+ * @param [in] desired_tool_frame_ Homogeneous matrix containing desired tool pose.
+ * @param [in] tool_transformation_ Homogeneous matrix representing the tool transformation (position of tool tip in relation to the end-effector reference frame).
+ */
+template <unsigned int N_POINTS, unsigned int N_MOTORS>
+void cubic_polynomial_interpolate_motor_poses_in_tool_frame(Eigen::Matrix <double, N_POINTS, N_MOTORS> & motor_interpolations_, const double motion_time_, const Eigen::Matrix <
+		double, N_POINTS - 1, 1> time_deltas_, mrrocpp::kinematics::common::kinematic_model* model_, const lib::JointArray desired_joints_old_, const mrrocpp::lib::Homog_matrix& current_tool_frame_, const mrrocpp::lib::Homog_matrix& desired_tool_frame_, const mrrocpp::lib::Homog_matrix& tool_transformation_)
+{
+	// Manipulator has got to have some axes.
+	assert (N_MOTORS>0);
+	// There must be some segments (besides we cannot divide by zero).
+	assert (N_POINTS>1);
+	// Check model.
+	assert (model_);
+
+	// Variable containing computed transformation from current tool pose to the desired one.
+	lib::Homog_matrix desired_relative_tool_frame;
+
+	// Compute transformation from current to desired pose.
+	desired_relative_tool_frame = !current_tool_frame_ * desired_tool_frame_;
+
+	// Extract translation and rotation (second one in the form of angle, axis and gamma).
+	Xyz_Angle_Axis_Gamma_vector relative_xyz_aa_gamma;
+	desired_relative_tool_frame.get_xyz_angle_axis_gamma(relative_xyz_aa_gamma);
+
+#if 0
+	cout<<"Operational space: " << model->get_kinematic_model_label() << "\n";
+	cout << "Relative ee frame" << desired_relative_tool_frame << endl;
+	cout << "Relative xyz aa gamma" << relative_xyz_aa_gamma << endl;
+#endif
+
+	// Delta variables.
+	Xyz_Angle_Axis_Gamma_vector delta_xyz_aa_gamma;
+	lib::Homog_matrix delta_ee_frame;
+	// Interpolation variables.
+	lib::Homog_matrix int_ee_frame;
+	lib::JointArray int_joints(N_MOTORS);
+	lib::MotorArray int_motors(N_MOTORS);
+	// Set last joint settings.
+	lib::JointArray int_joints_old = desired_joints_old_;
+
+	// Add current position as first one, thus there will be n+1 interpolation points.
+	// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
+	model_->inverse_kinematics_transform(int_joints, desired_joints_old_, current_tool_frame_*!tool_transformation_);
+	// Transform joints to motors (and check motors/joints values).
+	model_->i2mp_transform(int_motors, int_joints);
+	// Add motors to vector - first interpolation point.
+	motor_interpolations_.row(0) = int_motors.transpose();
+
+	// Temporary variables containing motion time from start to current position (sum of time slices).
+	double last_summed = time_deltas_(0);
+	// Compute polynomial coefficients - the (1.16) formula.
+	Xyz_Angle_Axis_Gamma_vector w3 = -(2.0 * relative_xyz_aa_gamma) / (motion_time_ * motion_time_ * motion_time_);
+	Xyz_Angle_Axis_Gamma_vector w2 = (3.0 * relative_xyz_aa_gamma) / (motion_time_ * motion_time_);
+
+#if 0
+	cout << "w3 "<< w3 << endl;
+	cout << "w2 "<< w2 << endl;
+#endif
+
+	// Compute interpolation points in motor positions.
+	for (int i = 0; i < N_POINTS - 1; ++i) {
+		// Compute delta in the angle axis gamma representation.
+		delta_xyz_aa_gamma
+		// Px, Py, Pz.
+				<< w3(0) * last_summed * last_summed * last_summed + w2(0) * last_summed * last_summed, w3(1)
+				* last_summed * last_summed * last_summed + w2(1) * last_summed * last_summed, w3(2) * last_summed
+				* last_summed * last_summed + w2(2) * last_summed * last_summed,
+		// vx, vy, vz (constant).
+		relative_xyz_aa_gamma(3), relative_xyz_aa_gamma(4), relative_xyz_aa_gamma(5),
+		// Gamma.
+		w3(6) * last_summed * last_summed * last_summed + w2(6) * last_summed * last_summed,
+
+		// Compute delta frame.
+		delta_ee_frame.set_from_xyz_angle_axis_gamma(delta_xyz_aa_gamma);
+
+		// Compute desired interpolation end effector frame.
+		int_ee_frame = current_tool_frame_ * delta_ee_frame *!tool_transformation_;
+
+		// Compute inverse kinematics for desired pose. Pass previously desired joint position as current in order to receive continuous move.
+		model_->inverse_kinematics_transform(int_joints, int_joints_old, int_ee_frame);
+
+		// Transform joints to motors (and check motors/joints values).
+		model_->i2mp_transform(int_motors, int_joints);
+
+#if 0
+		cout << "delta xyz aa gamma "<< delta_xyz_aa_gamma << endl;
+		cout << "delta ee frame "<< delta_ee_frame << endl;
+		cout << "interpolation ee frame "<< int_ee_frame << endl;
+		cout << int_joints << endl;
+		cout << int_motors << endl;
+#endif
+
+		// Add motors to vector.
+		motor_interpolations_.row(i + 1) = int_motors.transpose();
+
+		// Set last joint settings.
+		int_joints_old = int_joints;
+		// Add time slice related to this segment.
+		if (i < N_POINTS - 2) {
+			last_summed += time_deltas_(i + 1);
+		}
+	}
+
+#if 0
+	// Display all motor interpolation poses.
+	for (unsigned int l = 0; l < N_POINTS; ++l) {
+	 cout << "Motor interpolation point no " << l << ": " << motor_interpolations_.row(l) << endl;
+	 }
+#endif
+}
+
 
 /**
  * @brief Compute motor_deltas for segments.
@@ -812,9 +946,6 @@ void check_pvt_translocation(
 		}
 	}
 
-#if 1
-	cout<<"change "<<change_;
-#endif
 }
 
 

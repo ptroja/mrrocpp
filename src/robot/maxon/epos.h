@@ -39,11 +39,11 @@
 #include <stdint.h>  /* int types with given size */
 
 #include <string>
-#include <exception>
-#include <vector>
+#include <bitset>
 
 // Include for BYTE/WORD/DWORD typedefs
 #include "robot/canopen/gateway.h"
+#include "base/lib/exception.h"
 
 /* added oct06 for openTCPEPOS() */
 /*
@@ -138,13 +138,25 @@ private:
 	//! remote operation enable bit
 	bool remote;
 
+	//! name of the axis for debug informations
+	const std::string deviceName;
+
 public:
+	/*!
+	 * \brief All high-level methods throws this exception in case of error.
+	 * \author ptrojane/tkornuta
+	 */
+	REGISTER_FATAL_ERROR(fe, "EPOS error");
+
 	/*! \brief create new EPOS object
 	 *
 	 * @param _device object to access the device
 	 * @param _nodeId ID of the EPOS device on the CAN bus
 	 */
-	epos(canopen::gateway & _device, uint8_t _nodeId);
+	epos(canopen::gateway & _device, uint8_t _nodeId, const std::string & _deviceName = std::string());
+
+	//! Get device/axis name
+	const std::string & getDeviceName() const;
 
 	//! Actual state of the device
 	typedef enum _actual_state_t {
@@ -207,6 +219,9 @@ public:
 
 	//! \brief Reset the device by issuing a shutdown command followed by power-on and halt
 	void reset();
+
+	//! \brief High-level command to clear fault
+	void clearFault();
 
 	/*! \brief change EPOS state */
 	void setState(desired_state_t state);
@@ -296,6 +311,12 @@ public:
 	//		int writePositionWindowTime(unsigned int val);
 
 	//		int writePositionSoftwareLimits(long val, long val2);
+
+	//! read velocity for velocity profile mode
+	INTEGER32 getTargetVelocity();
+
+	//! write velocity for velocity profile mode
+	void setTargetVelocity(INTEGER32 val);
 
 	//! write velocity normally attained at the end of the acceleration ramp during a profiled move
 	void setProfileVelocity(UNSIGNED32 vel);
@@ -626,6 +647,9 @@ public:
 	//! \brief read Interpolation buffer status
 	UNSIGNED16 getInterpolationBufferStatus();
 
+	//! \brief read Interpolation buffer position (numer of records used)
+	UNSIGNED16 getInterpolationBufferPosition();
+
 	//! \brief check Interpolation Buffer warning
 	static bool checkInterpolationBufferWarning(UNSIGNED16 status);
 
@@ -682,16 +706,28 @@ public:
 		HM_INDEX_NEGATIVE_SPEED = 33
 	} homing_method_t;
 
-	//! \brief rIs the actual position referenced to home position?
+	//! \brief Is the actual position referenced to home position?
 	bool isReferenced();
 
-	//! \brief rIs the movement target reached?
+	//! \brief Is the actual position referenced to home position?
+	static bool isReferenced(UNSIGNED16 status);
+
+	//! \brief Is the movement target reached?
 	bool isTargetReached();
 
-	//! \brief rStart homing according to preset parameters
+	//! \brief Is the movement target reached?
+	static bool isTargetReached(UNSIGNED16 status);
+
+	//! \brief Is the device in fault state?
+	bool isFaultState();
+
+	//! \brief Is the device in fault state?
+	static bool isFaultState(UNSIGNED16 status);
+
+	//! \brief Start homing according to preset parameters
 	void startHoming();
 
-	//! \brief rCheck if both homing target is reached and homing is attained
+	//! \brief Check if both homing target is reached and homing is attained
 	bool isHomingFinished();
 
 	/*! \brief read Homing Method */
@@ -720,8 +756,54 @@ public:
 	 seconds. give timeout==0 to disable timeout */
 	int waitForTarget(unsigned int t);
 
-	//! \brief Read analog input 1.
+	//! \brief Read analog input 1 [mV].
 	INTEGER16 getAnalogInput1();
+
+	//! Analog input mode
+	typedef enum _analog_input_mode_t {
+		CURRENT_SETPOINT = 0,
+		VELOCITY_SETPOINT = 1,
+		POSITION_SETPOINT = 2,
+		GENERAL_PURPOSE_A = 8,
+		GENERAL_PURPOSE_B = 9,
+		GENERAL_PURPOSE_C = 10,
+		GENERAL_PURPOSE_D = 11,
+		GENERAL_PURPOSE_E = 12,
+		GENERAL_PURPOSE_F = 13,
+		GENERAL_PURPOSE_G = 14,
+		GENERAL_PURPOSE_H = 15
+	} analog_input_mode_t;
+
+	void configureAnalogInput(int input, analog_input_mode_t mode);
+
+	//!\ brief Analog velocity setpoint configuration
+	void setAnalogVelocitySetpointScaling(INTEGER16 val);
+
+	INTEGER16 getAnalogVelocitySetpointScaling(INTEGER16 val);
+
+	void setAnalogVelocitySetpointOffset(INTEGER32 val);
+
+	INTEGER32 getAnalogVelocitySetpointOffset();
+
+	void setAnalogVelocitySetpointNotationIndex(INTEGER8 val);
+
+	INTEGER8 getAnalogVelocitySetpointNotationIndex();
+
+	INTEGER32 getAnalogVelocitySetpoint();
+
+	void setAnalogInputFunctionalitiesExecutionMask(bool PositionSetpoint, bool VelocitySetpoint, bool CurrentSetpoint);
+
+	void setPositionModeSettingValue(INTEGER32 val);
+
+	INTEGER32 getPositionModeSettingValue();
+
+	typedef std::bitset<8> digital_outputs_t;
+
+	void setDigitalOutputs(digital_outputs_t cmd);
+
+	UNSIGNED16 getDigitalOutputs();
+
+	const digital_outputs_t & getCommandedDigitalOutputs();
 
 	//! @}
 
@@ -733,6 +815,8 @@ private:
 	UNSIGNED32 ProfileVelocity;
 	UNSIGNED32 ProfileAcceleration;
 	UNSIGNED32 ProfileDeceleration;
+	INTEGER32 TargetVelocity;
+	digital_outputs_t DigitalOutputs;
 };
 
 } /* namespace maxon */

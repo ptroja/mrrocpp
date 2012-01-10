@@ -60,6 +60,9 @@ public:
 	 */
 	using BaseClass::operator=;
 
+	//! Access to type of a single element
+	typedef BaseClass::Scalar value_type;
+
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 

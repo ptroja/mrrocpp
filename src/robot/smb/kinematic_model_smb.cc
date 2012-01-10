@@ -21,16 +21,19 @@ namespace smb {
 //! Parameters for conversion for rotational DOFs are:
 //! * The encoder has 2400 CPT (Counts per turn).
 //! * The gear ratio is 50.
-//! * Motor to motor radio is ??? // TODO: CHECK!!
-const double rotational_legs_mp2i_ratio = M_PI / (2400 * 50 * 2.5);
+//! * Motor to second gear (rotating leg) (through the central gear) is 2.5 (numbers of tooth are 22,76,55 respectively).
+const double rotational_legs_mp2i_ratio = 2*M_PI / (2400 * 50 * 2.5);
 
 //! Parameters for conversion for rotational DOFs are:
 //! * The encoder has 2400 CPT (Counts per turn).
 //! * The gear ratio is 50.
-const double rotational_spkm_mp2i_ratio = M_PI / (2400 * 50);
+const double rotational_spkm_mp2i_ratio = 2*M_PI / (2400 * 50);
 
 //! Initialization of motor to internal ratios.
 const double model::mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS] = { rotational_legs_mp2i_ratio, rotational_spkm_mp2i_ratio };
+
+//! Initialization of parameters describing the synchronisation position  (in motor increments).
+const int32_t model::synchro_motor_positions[mrrocpp::lib::smb::NUM_OF_SERVOS] = { 0, 0 };
 
 //! Initialization of upper motors limits for PKM.
 const int32_t model::upper_pkm_motor_pos_limits = { 120000 };
@@ -72,7 +75,8 @@ void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib:
 {
 	// Compute desired motor positions for both axes.
 	for (int i = 0; i < 2; ++i) {
-		local_current_joints[i] = local_current_motor_pos[i] * mp2i_ratios[i];
+		local_current_joints[i] = (local_current_motor_pos[i] - synchro_motor_positions[i]) * mp2i_ratios[i];
+
 	}
 }
 
@@ -81,7 +85,10 @@ void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const 
 
 	// Compute desired motor positions for both axes.
 	for (int i = 0; i < 2; ++i) {
-		local_desired_motor_pos_new[i] = local_desired_joints[i] / mp2i_ratios[i];
+		local_desired_motor_pos_new[i] = (local_desired_joints[i] / mp2i_ratios[i]) + synchro_motor_positions[i];
+
+		// Round to integer, which is the default motor encoder precision.
+		local_desired_motor_pos_new[i] = rint(local_desired_motor_pos_new[i]);
 	}
 
 }

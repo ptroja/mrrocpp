@@ -7,6 +7,11 @@
 #include "ui_wgt_sbench_command.h"
 #include "../base/wgt_base.h"
 #include <QTimer>
+#include <QCheckBox>
+
+#define SBENCH_MAX_ROW 8
+#define SBENCH_MAX_COL 8
+#define SBENCH_MAX_EL 64
 
 namespace mrrocpp {
 namespace ui {
@@ -33,6 +38,17 @@ public:
 private:
 	Ui::wgt_sbench_commandClass ui;
 	mrrocpp::ui::sbench::UiRobot* robot;
+
+	QCheckBox* docks[SBENCH_MAX_ROW][SBENCH_MAX_COL];
+
+//	QVector <QCheckBox*> checkBox_Vector;
+
+private slots:
+
+	void on_pushButton_read_clicked();
+	void on_pushButton_read_and_copy_clicked();
+	void on_pushButton_clear_clicked();
+	void on_pushButton_execute_clicked();
 
 };
 

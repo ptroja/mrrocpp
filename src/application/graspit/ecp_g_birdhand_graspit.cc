@@ -16,20 +16,20 @@ namespace common {
 namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
-bird_hand::bird_hand(common::task::task& _ecp_task) :
-	common::generator::generator(_ecp_task), MAX_V(8000.0 / (275.0 * (11.3/3.1 * 10.95/5.1) /2.0/M_PI) / 2.0), STEP_NO(1000)
+bird_hand::bird_hand(task_t & _ecp_task) :
+		generator_t(_ecp_task), MAX_V(8000.0 / (275.0 * (11.3 / 3.1 * 10.95 / 5.1) / 2.0 / M_PI) / 2.0), STEP_NO(1000)
 {
-	bird_hand_command_data_port
-			= the_robot->port_manager.get_port <lib::bird_hand::command> (lib::bird_hand::COMMAND_DATA_PORT);
+	bird_hand_command_data_port =
+			the_robot->port_manager.get_port <lib::bird_hand::command>(lib::bird_hand::COMMAND_DATA_PORT);
 
-	bird_hand_configuration_command_data_port
-			= the_robot->port_manager.get_port <lib::bird_hand::configuration> (lib::bird_hand::CONFIGURATION_DATA_PORT);
+	bird_hand_configuration_command_data_port =
+			the_robot->port_manager.get_port <lib::bird_hand::configuration>(lib::bird_hand::CONFIGURATION_DATA_PORT);
 
-	bird_hand_status_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::bird_hand::status> (lib::bird_hand::STATUS_DATA_REQUEST_PORT);
+	bird_hand_status_reply_data_request_port =
+			the_robot->port_manager.get_request_port <lib::bird_hand::status>(lib::bird_hand::STATUS_DATA_REQUEST_PORT);
 
-	bird_hand_configuration_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::bird_hand::configuration> (lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT);
+	bird_hand_configuration_reply_data_request_port = the_robot->port_manager.get_request_port <
+			lib::bird_hand::configuration>(lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT);
 }
 
 void bird_hand::create_ecp_mp_reply()
@@ -38,7 +38,7 @@ void bird_hand::create_ecp_mp_reply()
 
 void bird_hand::get_mp_ecp_command()
 {
-	memcpy(&bird_hand_command_data_port->data, ecp_t.mp_command.ecp_next_state.data, sizeof(bird_hand_command_data_port->data));
+	memcpy(&bird_hand_command_data_port->data, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(bird_hand_command_data_port->data));
 }
 
 bool bird_hand::first_step()
@@ -94,7 +94,7 @@ bool bird_hand::first_step()
 //		std::cout << "\n des_ring_f[i]: " << des_ring_f[i];
 //	fflush(stdout);
 
-	//pierwszy next_step pusty
+//pierwszy next_step pusty
 	bird_hand_command_data_port->data.thumb_f[0].desired_position = 0.5;
 	bird_hand_command_data_port->data.thumb_f[1].desired_position = 0.4;
 	bird_hand_command_data_port->data.index_f[0].desired_position = 0.0;
@@ -116,7 +116,7 @@ bool bird_hand::first_step()
 bool bird_hand::next_step()
 {
 
-	if (bird_hand_status_reply_data_request_port->get() == mrrocpp::lib::NewData) {
+	if (bird_hand_status_reply_data_request_port->get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 
 		std::cout << "\n node_counter: " << node_counter;
 

@@ -68,18 +68,16 @@ void model::set_kinematic_parameters(void)
 
 } // end: set_kinematic_parameters
 
-
 /* ------------------------------------------------------------------------
  Sprawdzenie ograniczen na polozenia katowe walow silnikow.
  ------------------------------------------------------------------------ */
 void model::check_motor_position(const lib::MotorArray & motor_position) const
 {
 	if (motor_position[0] < lower_limit_axis) // Kat f8 mniejszy od minimalnego
-		throw NonFatal_error_2(BEYOND_LOWER_LIMIT_AXIS_0);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_LIMIT_AXIS_0));
 	else if (motor_position[0] > upper_limit_axis) // Kat f8 wiekszy od maksymalnego
-		throw NonFatal_error_2(BEYOND_UPPER_LIMIT_AXIS_0);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_LIMIT_AXIS_0));
 } // end: kinematic_model_conveyor::check_motor_position(const )
-
 
 /* ------------------------------------------------------------------------
  Sprawdzenie ograniczen na wspolrzedne wewnetrzne.
@@ -87,15 +85,14 @@ void model::check_motor_position(const lib::MotorArray & motor_position) const
 void model::check_joints(const lib::JointArray & q) const
 {
 	if (isnan(q[0]))
-		throw NonFatal_error_2(NOT_A_NUMBER_JOINT_VALUE_THETA7);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(NOT_A_NUMBER_JOINT_VALUE_THETA7));
 	if (q[0] < lower_limit_joint) // 7 st. swobody
-		throw NonFatal_error_2(BEYOND_LOWER_THETA1_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_LOWER_THETA1_LIMIT));
 
 	if (q[0] > upper_limit_joint) // 7 st. swobody
-		throw NonFatal_error_2(BEYOND_UPPER_THETA1_LIMIT);
+		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(BEYOND_UPPER_THETA1_LIMIT));
 
 } // end: kinematic_model_conveyor::check_joints(const )
-
 
 /* ------------------------------------------------------------------------
  Przeliczenie polozenia walow silnikow na wspolrzedne wewnetrzne
@@ -112,8 +109,7 @@ void model::mp2i_transform(const lib::MotorArray & local_current_motor_pos, lib:
 	// Sprawdzenie obliczonych wartosci wspolrzednych wewnetrznych.
 	check_joints(local_current_joints);
 
-}//: mp2i_transform
-
+} //: mp2i_transform
 
 /* ------------------------------------------------------------------------
  Przeliczenie wspolrzednych wewnetrznych na polozenia walow silnikow
@@ -132,7 +128,6 @@ void model::i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const 
 	check_motor_position(local_desired_motor_pos_new);
 
 } //: i2mp_transform
-
 
 } // namespace sarkofag
 } // namespace kinematic

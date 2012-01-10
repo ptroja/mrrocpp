@@ -21,6 +21,13 @@
 #define FAI_SINGLE_DELAY 20
 #define FAI_DELAY_MAX_ITERATION 250
 
+#define EPOS_L1_HAL_UP 11
+#define EPOS_L3_HAL_UP 13
+#define EPOS_L2_HAL_UP 15
+#define EPOS_L1_HAL_DOWN 10
+#define EPOS_L3_HAL_DOWN 12
+#define EPOS_L2_HAL_DOWN 14
+
 namespace mrrocpp {
 namespace edp {
 namespace smb {
@@ -71,9 +78,8 @@ private:
 
 	/*!
 	 * \brief robot_test_mode taken from effector class
-	 * it does not change during task executon
 	 */
-	bool robot_test_mode;
+	const bool robot_test_mode;
 
 	/*!
 	 * \brief current festo command
@@ -86,11 +92,6 @@ public:
 	 * \brief festo_and_inputs constructor
 	 */
 	festo_and_inputs(effector &_master);
-
-	/*!
-	 * \brief festo_and_inputs destructor
-	 */
-	~festo_and_inputs();
 
 	/*!
 	 * \brief checks the current legs state
@@ -125,28 +126,34 @@ public:
 	/*!
 	 * \brief festo command all_down variant in move_arm
 	 */
-	void command_all_down();
+	void command_all_out();
 
 	/*!
-	 * \brief moves all legs that are in the upper position down and detach them
+	 * \brief moves one or two legs out
 	 */
 
-	void move_one_or_two_down();
+	void move_one_or_two_out();
+
+	/*!
+	 * \brief moves one or two legs in
+	 */
+
+	void move_one_or_two_in();
 
 	/*!
 	 * \brief festo command one_up_two_down variant in move_arm
 	 */
-	void command_one_up_two_down();
+	void command_one_in_two_out();
 
 	/*!
 	 * \brief festo command two_up_one_down variant in move_arm
 	 */
-	void command_two_up_one_down();
+	void command_two_in_one_out();
 
 	/*!
-	 * \brief festo command two_up_one_down variant in move_arm
+	 * \brief festo command command_all_in variant in move_arm
 	 */
-	void command_all_up();
+	void command_all_in();
 
 	/*!
 	 * \brief festo reply in test_mode
@@ -184,14 +191,14 @@ public:
 	 * \param leg_number counter from 1
 	 * \param value true or false
 	 */
-	void set_move_up(int leg_number, bool value);
+	void set_move_in(int leg_number, bool value);
 
 	/*!
 	 * \brief set the command to move down particular leg
 	 * \param leg_number counter from 1
 	 * \param value true or false
 	 */
-	void set_move_down(int leg_number, bool value);
+	void set_move_out(int leg_number, bool value);
 
 	/*!
 	 * \brief set the command to clean particular leg

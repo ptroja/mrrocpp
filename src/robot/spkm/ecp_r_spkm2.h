@@ -25,9 +25,11 @@ namespace spkm2 {
  */
 class robot : public spkm::robot
 {
+private:
+	//! Creates manipulator kinematic model.
+	void create_kinematic_models_for_given_robot(void);
 
 public:
-
 	/**
 	 * @brief constructor called from UI
 	 * @param _config configuration object reference
@@ -40,7 +42,6 @@ public:
 	 * @param _ecp_object ecp tak object reference
 	 */
 	robot(common::task::task_base& _ecp_object);
-
 };
 } // namespace spkm
 } // namespace ecp

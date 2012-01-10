@@ -10,9 +10,9 @@
 #define __HOMOG_MATRIX_H
 
 #include <ostream>
-#include <cstring>
 #include <cassert>
-#include <cmath>
+
+#include <string>
 
 #include <Eigen/Core>
 
@@ -102,11 +102,18 @@ public:
 	Homog_matrix(const Xyz_Angle_Axis_vector & l_vector);
 
 	/*!
-	 * Constructor from Eigen matrix
+	 * Constructor from Eigen matrix (reduced 3x4 matrix).
 	 *
-	 * @param[in] eigen_matrix matrix for initialization
+	 * @param[in] Eigen-based matrix for initialization.
 	 */
 	Homog_matrix(const Eigen::Matrix <double, 3, 4> & eigen_matrix);
+
+	/*!
+	 * Constructor from Eigen matrix (full 4x4 matrix).
+	 *
+	 * @param[in] Eigen-based matrix for initialization.
+	 */
+	Homog_matrix(const Eigen::Matrix <double, 4, 4> & eigen_matrix);
 
 	/*!
 	 * Constructor from rotation and translation C-style arrays
@@ -122,6 +129,23 @@ public:
 	 * @param[in] r??,t? rotation and translation matrix elements
 	 */
 	Homog_matrix(double r11, double r12, double r13, double t1, double r21, double r22, double r23, double t2, double r31, double r32, double r33, double t3);
+
+	/*!
+	 * Constructor from values given as Matlab-style matrix string
+	 *
+	 * @param[in] s string in the form "[ r11 r12 r13 t1; r21 r22 r23 t2; r31 r32 r33 t3; 0 0 0 1 ]"
+	 */
+	Homog_matrix(const std::string & s);
+
+	/*!
+	 * Sets identity matrix.
+	 */
+	void setIdentity();
+
+	/*!
+	 * Sets values basing on passed string.
+	 */
+	void set(const std::string & str);
 
 	/*!
 	 * Get the matrix with removed translation
@@ -143,6 +167,16 @@ public:
 	 * @param[out] l_vector requested representation.
 	 */
 	void get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const;
+
+	/**
+	 * Get the XYZ_EULER_ZYZ representation without limits for beta (it can vary from <-PI, PI)).
+	 *
+	 * @param[out] l_vector requested representation.
+	 * @param [in] alpha_old - previous value used for solution selection.
+	 * @param [in] beta_old - previous value used for solution selection.
+	 * @param [in] gamma_old - previous value used for solution selection.
+	 */
+	void get_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector & l_vector, const double alfa, const double beta, const double gamma) const;
 
 	/*!
 	 * Set from the XYZ_EULER_ZYZ representation. Takes into consideration limits for beta <0, PI).

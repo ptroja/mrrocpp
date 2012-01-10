@@ -15,6 +15,7 @@
 #include "wgt_process_control.h"
 #include "wgt_robot_process_control.h"
 #include "ui_ecp_dialogs/wgt_yes_no.h"
+#include "ui_ecp_dialogs/wgt_swarm.h"
 #include "ui_ecp_dialogs/wgt_message.h"
 #include "ui_ecp_dialogs/wgt_input_integer.h"
 #include "ui_ecp_dialogs/wgt_input_double.h"
@@ -32,12 +33,9 @@
 
 #include "base/lib/messip/messip_dataport.h"
 
-
-
 //namespace Ui{
 class MainWindow;
 //}
-
 
 namespace mrrocpp {
 namespace ui {
@@ -45,8 +43,6 @@ namespace common {
 
 class AllRobots;
 class Mp;
-
-
 
 #define ADD_UI_ROBOT(__robot_name) \
 		{\
@@ -69,9 +65,8 @@ class Interface : public QObject
 Q_OBJECT
 private:
 
-
 	void create_robots();
-	boost::shared_ptr<QTimer> timer;
+	boost::shared_ptr <QTimer> timer;
 
 	bool html_it(std::string &_input, std::string &_output);
 
@@ -99,7 +94,7 @@ public:
 	void raise_ui_ecp_window();
 	void start_on_timer();
 
-	boost::shared_ptr<MainWindow> mw;
+	boost::shared_ptr <MainWindow> mw;
 
 	//static Interface * get_instance();
 	MainWindow* get_main_window() const;
@@ -134,22 +129,26 @@ public:
 
 	boost::mutex process_creation_mtx;
 	boost::mutex ui_notification_state_mutex;
-	boost::shared_ptr<lib::configurator> config;
+	boost::shared_ptr <lib::configurator> config;
 	boost::shared_ptr <lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
-
 
 	// bool is_any_edp_active;
 	bool is_mp_and_ecps_active;
 
 	const int position_refresh_interval;
 
-	int set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
+	void set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion);
 	void UI_close(void);
 	void init();
-	int wait_for_child_termiantion(pid_t pid);
-	int manage_interface(void);
-	void manage_pc(void);
 
+	bool check_sigchld_handling();
+	void block_sigchld();
+	void unblock_sigchld();
+	void mask_signals_for_thread();
+	int wait_for_child_termination(pid_t pid, bool hang);
+	int sigchld_handling;
+	void manage_interface(void);
+	void manage_pc(void);
 
 	void reload_whole_configuration();
 
@@ -158,18 +157,16 @@ public:
 	//! automatically when a container object is deleted.
 	void abort_threads();
 	void fill_node_list(void);
-	int fill_section_list(const char *file_name_and_path);
-	int initiate_configuration(void);
-	int clear_all_configuration_lists(void);
-	int fill_program_node_list(void);
+	void fill_section_list(const char *file_name_and_path);
+	void initiate_configuration(void);
+	void clear_all_configuration_lists(void);
+	void fill_program_node_list(void);
 	int get_default_configuration_file_name(void);
-	int set_default_configuration_file_name(void);
-	int check_edps_state_and_modify_mp_state(void);
-	int check_gns(void);
+	void set_default_configuration_file_name(void);
+	void check_edps_state_and_modify_mp_state(void);
 	bool check_node_existence(const std::string & _node, const std::string & beginnig_of_message);
 
 	//! TODO: throw an exception (assumed inheritance from std::exception)
-
 
 	std::string config_file_relativepath; // sciezka lokalana do konfiguracji wraz z plikiem konfiguracyjnym
 	std::string binaries_network_path; // sieciowa sciezka binariow mrrocpp
@@ -177,12 +174,10 @@ public:
 	std::string mrrocpp_local_path; // lokalna sciezka mrrocpp: np. "/home/yoyek/mrrocpp/build". W niej katalogi bin, configs etc.
 	std::string mrrocpp_root_local_path; // lokalna sciezka (bez build) mrrocpp: np. "/home/yoyek/mrrocpp". W niej katalogi bin, configs etc.
 
-
 	std::string teach_filesel_fullpath; // sciezka domyslana dla fileselect dla generatora uczacego
-	std::string config_file;// nazwa pliku konfiguracyjnego dla UI
+	std::string config_file; // nazwa pliku konfiguracyjnego dla UI
 	std::string session_name; // nazwa sesji
 	std::string config_file_fullpath; // sciezka globalna do konfiguracji
-
 
 	std::string ui_attach_point;
 	std::string network_sr_attach_point;
@@ -203,9 +198,8 @@ public:
 
 	void create_threads();
 
-	int unload_all();
-	int slay_all();
-
+	void unload_all();
+	void slay_all();
 
 	Mp *mp;
 	AllRobots *all_robots;
@@ -221,6 +215,7 @@ public:
 
 	wgt_process_control* wgt_pc;
 	wgt_yes_no* wgt_yes_no_obj;
+	wgt_swarm* wgt_swarm_obj;
 	wgt_message* wgt_message_obj;
 	wgt_input_integer* wgt_input_integer_obj;
 	wgt_input_double* wgt_input_double_obj;

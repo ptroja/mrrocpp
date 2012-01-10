@@ -5,13 +5,14 @@
 //
 // -------------------------------------------------------------------------
 
+#include <boost/assign/list_of.hpp>
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
 #include "base/lib/sr/srlib.h"
 
-#include "base/mp/MP_main_error.h"
 #include "base/mp/mp_task.h"
 #include "application/ball/mp_g_ball.h"
 #include "application/ball/mp_t_ball.h"
@@ -26,7 +27,6 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-#include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
@@ -35,7 +35,6 @@
 #include "robot/smb/mp_r_smb.h"
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
-#include "robot/player/const_player.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -58,18 +57,19 @@ void ball::create_robots()
 }
 
 ball::ball(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
 }
 
 void ball::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 {
 	if (configure_track) {
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
+
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", lib::irp6ot_m::ROBOT_NAME);
 	}
 
 	if (configure_postument) {
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", lib::irp6p_m::ROBOT_NAME);
 	}
 
 	if ((configure_track) && (!configure_postument)) {
@@ -97,8 +97,8 @@ void ball::main_task_algorithm(void)
 	configure_edp_force_sensor(true, true);
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, 0, "", lib::irp6p_m::ROBOT_NAME);
 
 	mp_h_gen.configure(1, 0);
 	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");

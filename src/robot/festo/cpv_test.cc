@@ -20,8 +20,6 @@ using namespace mrrocpp::edp::maxon;
 
 using namespace std;
 
-
-
 const uint8_t nodeId = 10;
 
 int main(int argc, char *argv[])
@@ -59,7 +57,7 @@ int main(int argc, char *argv[])
 			cpv10.setOutputs(2, 0x00);
 			sleep(2);
 			// Move the pistons up
-			cpv10.setOutputs(FESTO_CY21_GROUP, FESTO_CY21_BIT);
+			cpv10.setOutputs(FESTO_A3_GROUP, FESTO_A3_BIT);
 			sleep(3);
 			epos_digits = node.getDInput();
 			std::cout << "epos digital inputs 1= " << epos_digits << std::endl;
@@ -67,16 +65,36 @@ int main(int argc, char *argv[])
 			cpv10.setOutputs(1, 0x00);
 			cpv10.setOutputs(2, 0x00);
 			sleep(2);
-			cpv10.setOutputs(FESTO_CY22_GROUP, FESTO_CY22_BIT);
-			sleep(5);
-			epos_digits = node.getDInput();
-			std::cout << "epos digital inputs 2= " << epos_digits << std::endl;
-			cpv10.setOutputs(1, 0x00);
-			cpv10.setOutputs(2, 0x00);
+			/*
+			 // Move the pistons up
+			 cpv10.setOutputs(FESTO_CY21_GROUP, FESTO_CY21_BIT);
+			 sleep(3);
+			 epos_digits = node.getDInput();
+			 std::cout << "epos digital inputs 1= " << epos_digits << std::endl;
+
+			 cpv10.setOutputs(1, 0x00);
+			 cpv10.setOutputs(2, 0x00);
+			 sleep(2);
+			 // Move the pistons up
+			 cpv10.setOutputs(FESTO_CY31_GROUP, FESTO_CY31_BIT);
+			 sleep(3);
+			 epos_digits = node.getDInput();
+			 std::cout << "epos digital inputs 1= " << epos_digits << std::endl;
+
+			 cpv10.setOutputs(1, 0x00);
+			 cpv10.setOutputs(2, 0x00);
+			 sleep(2);
+			 cpv10.setOutputs(FESTO_CY32_GROUP, FESTO_CY32_BIT);
+			 sleep(5);
+			 epos_digits = node.getDInput();
+			 std::cout << "epos digital inputs 2= " << epos_digits << std::endl;
+			 cpv10.setOutputs(1, 0x00);
+			 cpv10.setOutputs(2, 0x00);
+			 */
 		}
 
 		gateway.close();
-	} catch (se_canopen_error & error) {
+	} catch (fe_canopen_error & error) {
 		std::cerr << "CANopen Error." << std::endl;
 
 		if ( std::string const * r = boost::get_error_info<reason>(error))

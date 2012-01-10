@@ -17,51 +17,14 @@
 #include "visual_servo_regulator.h"
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "Reading.h"
+#include "base/lib/logger_client/logger_client.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace servovision {
 
-struct visual_servo_log_sample
-{
-	/**
-	 * Timestamp when processing in Discode starts (taken just after camera source).
-	 */
-	uint32_t processingStartSeconds;
-	uint32_t processingStartNanoseconds;
-
-	/**
-	 * Timestamp when processing in Discode ends (taken just before sending to mrroc proxy).
-	 */
-	uint32_t processingEndSeconds;
-	uint32_t processingEndNanoseconds;
-
-	/** Time, when request for reading was sent from mrrocpp to discode. */
-	uint32_t requestSentTimeSeconds;
-	uint32_t requestSentTimeNanoseconds;
-
-	/** Time, when reading was sent to mrrocpp. */
-	uint32_t sendTimeSeconds;
-	uint32_t sendTimeNanoseconds;
-
-	/** Time, when reading was received in mrrocpp. */
-	uint32_t receiveTimeSeconds;
-	uint32_t receiveTimeNanoseconds;
-
-	/** Time, when sample was taken. */
-	uint32_t sampleTimeSeconds;
-	uint32_t sampleTimeNanoseconds;
-
-	double mrroc_discode_time_offset;
-
-	/** Is object visible in latest reading. */
-	bool is_object_visible;
-
-	bool is_reading_repreated;
-
-	static void printHeader(std::ostream& os);
-	void print(std::ostream& os, uint64_t t0);
-};
+using logger::logger_client;
+using logger::log_message;
 
 /** @addtogroup servovision
  *  @{
@@ -98,10 +61,18 @@ public:
 	bool is_object_visible();
 
 	/**
+	 * Reset visual servo state.
+	 * This method should be called when visual servo motion generator is starting.
+	 */
+	virtual void reset();
+
+	/**
 	 *
 	 * @return Error
 	 */
 	const Eigen::Matrix <double, 6, 1> & get_error();
+
+	boost::shared_ptr<logger_client> log_client;
 protected:
 			visual_servo(boost::shared_ptr <visual_servo_regulator> regulator, boost::shared_ptr <
 					mrrocpp::ecp_mp::sensor::discode::discode_sensor> sensor, const std::string& section_name, mrrocpp::lib::configurator& configurator);
@@ -150,17 +121,13 @@ protected:
 
 	Eigen::Matrix <double, 6, 1> error;
 private:
+	log_message msg;
+
 	bool object_visible;
 
 	int max_steps_without_reading;
 	int steps_without_reading;
 
-	boost::circular_buffer <visual_servo_log_sample> log_buffer;
-	static const int log_buffer_default_capacity = 500;
-
-	void write_log();
-
-	bool log_enabled;
 }; // class visual_servo
 
 /** @} */

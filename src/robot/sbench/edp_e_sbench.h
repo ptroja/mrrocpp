@@ -12,6 +12,7 @@
 
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_sbench.h"
+#include <comedilib.h>
 
 namespace mrrocpp {
 namespace edp {
@@ -28,8 +29,8 @@ class effector : public common::motor_driven_effector
 {
 protected:
 
-	lib::sbench::cbuffer ecp_edp_cbuffer;
-	lib::sbench::rbuffer edp_ecp_rbuffer;
+	// lib::sbench::cbuffer ecp_edp_cbuffer;
+	//lib::sbench::rbuffer edp_ecp_rbuffer;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!
@@ -38,6 +39,13 @@ protected:
 	 * It will be used if any motor will be commanded to move. Then motor to joint transform will be implemented in kinematics.
 	 */
 	virtual void create_kinematic_models_for_given_robot(void);
+
+	/*!
+	 * \brief current pins state
+	 *
+	 * it is cipied from desired in test_mode or read in hardware_mode
+	 */
+	lib::sbench::pins_buffer current_pins_buf;
 
 public:
 
@@ -80,18 +88,28 @@ public:
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
 	/*!
-	 * \brief method to deserialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
+	 * \brief method to receive instruction from ecp of particular type
 	 */
-	void instruction_deserialization();
+	lib::INSTRUCTION_TYPE variant_receive_instruction();
 
 	/*!
-	 * \brief method to serialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
+	 * \brief method to reply to ecp with class of particular type
 	 */
-	void reply_serialization();
+	void variant_reply_to_instruction();
+
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
+	lib::sbench::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
+	lib::sbench::r_buffer reply;
+
+private:
+	const std::string dev_name;
+	comedi_t *device; // device descriptor
 
 };
 

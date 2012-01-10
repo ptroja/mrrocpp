@@ -9,7 +9,6 @@
 // Data:		17.01.2007
 // ------------------------------------------------------------------------
 
-
 #ifndef __EDP_IRP6OT_M_H
 #define __EDP_IRP6OT_M_H
 
@@ -44,11 +43,20 @@ public:
 	common::servo_buffer *return_created_servo_buffer();
 
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
+
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
+	lib::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
+	lib::r_buffer reply;
 };
 
 } // namespace irp6ot
 } // namespace edp
 } // namespace mrrocpp
-
 
 #endif

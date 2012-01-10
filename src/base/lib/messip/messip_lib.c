@@ -180,6 +180,10 @@ messip_writev( int sockfd,
 			if ( errno == EPIPE )
 				return dcount;
 
+			// Endpoint is closed
+			if (errno == ECONNRESET)
+				return -1;
+
 			// Another errors are not expected
 			assert(0);
 		}
@@ -205,6 +209,8 @@ messip_readv( int sockfd,
 		if(dcount == -1) {
 			if(errno == EINTR)
 				continue;
+
+			// Endpoint is closed
 			if (errno == ECONNRESET)
 				return -1;
 
@@ -1048,6 +1054,11 @@ messip_channel_connect0( messip_cnx_t * cnx,
 	if ( msgreply.ok == MESSIP_NOK )
 	{
 //		fprintf(stderr, "Locate channel has failed: %s\n", name);
+
+		// set the errno for reasonable error message
+		errno = ENOENT;
+
+		// failure exit status
 		return NULL;
 	}
 

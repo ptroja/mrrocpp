@@ -58,9 +58,8 @@ void UiRobot::create_ui_ecp_robot()
 //	return 1;
 }
 
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 {
-	return 1;
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
@@ -72,7 +71,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 //	wndbase_m[WGT_BIRD_HAND_COMMAND] = wgts[WGT_COMMAND_AND_STATUS]->dwgt;
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	common::UiRobot::manage_interface();
@@ -101,7 +100,6 @@ int UiRobot::manage_interface()
 						actionbirdhand_Command->setEnabled(true);
 						break;
 					case common::UI_MP_TASK_RUNNING:
-						unblock_ecp_trigger();
 						break;
 					case common::UI_MP_TASK_PAUSED:
 						actionbirdhand_Command->setEnabled(false);
@@ -120,7 +118,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()

@@ -6,7 +6,8 @@
 #include <boost/thread/xtime.hpp>
 
 #include "RemoteAgent.h"
-#include "DataBuffer.h"
+#include "InputBuffer.h"
+#include "OutputBuffer.h"
 
 class DoubleWriter : public Agent
 {

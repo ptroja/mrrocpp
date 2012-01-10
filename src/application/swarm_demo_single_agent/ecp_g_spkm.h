@@ -23,7 +23,7 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup generators
  */
-class joint_epos_command : public common::generator::generator
+class joint_epos_command : public common::generator::_generator <ecp::spkm::robot>
 {
 private:
 
@@ -45,7 +45,44 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	joint_epos_command(common::task::task& _ecp_task);
+	joint_epos_command(task_t & _ecp_task);
+
+	bool first_step();
+	bool next_step();
+
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
+};
+
+/*!
+ * @brief generator to send the command prepared by MP to EDP spkm motors
+ * it waits for the command execution finish
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup generators
+ */
+class external_epos_command : public common::generator::_generator <ecp::spkm::robot>
+{
+private:
+
+	lib::spkm::spkm_epos_simple_command mp_ecp_epos_simple_command;
+
+	/**
+	 * @brief epos external motion command data port
+	 */
+	lib::single_thread_port <lib::spkm::spkm_epos_simple_command> *epos_external_command_data_port;
+
+	/**
+	 * @brief epos motion status with external reply data request port
+	 */
+	lib::single_thread_request_port <lib::spkm::spkm_ext_epos_reply, lib::spkm::POSE_SPECIFICATION> *epos_external_reply_data_request_port;
+
+public:
+
+	/**
+	 * @brief Constructor
+	 * @param _ecp_task ecp task object reference.
+	 */
+	external_epos_command(task_t & _ecp_task);
 
 	bool first_step();
 	bool next_step();

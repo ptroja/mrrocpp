@@ -49,14 +49,14 @@ public:
 
 	void setup_menubar();
 
-	int manage_interface();
+	void manage_interface();
 
 	void delete_ui_ecp_robot();
 	void null_ui_ecp_robot();
 	int synchronise_int();
-	virtual int move_to_preset_position(int variant);
+	virtual void move_to_preset_position(int variant);
 
-	virtual int synchronise();
+	virtual void synchronise();
 
 	int execute_motor_motion();
 	int execute_joint_motion();

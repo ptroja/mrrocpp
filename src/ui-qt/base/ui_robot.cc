@@ -106,18 +106,6 @@ void UiRobot::indicate_process_control_window_creation()
 	process_control_window_created = true;
 }
 
-void UiRobot::block_ecp_trigger()
-{
-	if (wgt_robot_pc)
-		wgt_robot_pc->block_all_ecp_trigger_widgets();
-}
-
-void UiRobot::unblock_ecp_trigger()
-{
-	if (wgt_robot_pc)
-		wgt_robot_pc->unblock_all_ecp_trigger_widgets();
-}
-
 void UiRobot::open_robot_process_control_window()
 {
 	if (wgt_robot_pc)
@@ -155,10 +143,12 @@ int UiRobot::edp_create_int()
 						create_ui_ecp_robot();
 					}
 
-					catch (ecp::common::robot::ECP_main_error & e) {
+					catch (ecp::exception::se_r & error) {
 						/* Obsluga bledow ECP */
+
 						null_ui_ecp_robot();
-						throw ecp::common::robot::ECP_main_error(e.error_class, e.error_no);
+
+						throw error;
 
 					} /*end: catch */
 				}
@@ -182,15 +172,18 @@ int UiRobot::edp_create_int()
 
 						ui_get_controler_state(robot_controller_initial_state_tmp);
 
+						if (robot_controller_initial_state_tmp.robot_in_fault_state) {
+							msg->message(lib::FATAL_ERROR, "Robot in fault state");
+						}
+
 						state.edp.is_synchronised = robot_controller_initial_state_tmp.is_synchronised;
 					}
 				}
 
-				catch (ecp::common::robot::ECP_main_error & e) {
+				catch (ecp::exception::se_r & error) {
 					/* Obsluga bledow ECP */
 					close_edp_connections();
 					null_ui_ecp_robot();
-
 				} /*end: catch */
 
 			}
@@ -198,15 +191,20 @@ int UiRobot::edp_create_int()
 
 	} // end try
 
-	catch (ecp::common::robot::ECP_main_error & e) {
+	catch (ecp::exception::fe_r & error) {
 		/* Obsluga bledow ECP */
-
+		catch_ecp_robot_fe(error);
 	} /*end: catch */
 
-	catch (ecp::common::robot::ECP_error & er) {
-		/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */
-		catch_ecp_error(er);
-	} /* end: catch */
+	catch (ecp::exception::se_r & error) {
+		/* Obsluga bledow ECP */
+		catch_ecp_robot_se(error);
+	} /*end: catch */
+
+	catch (ecp::exception::nfe_r & error) {
+		/* Obsluga bledow ECP */
+		catch_ecp_robot_nfe(error);
+	} /*end: catch */
 
 	catch (const std::exception & e) {
 		catch_std_exception(e);
@@ -346,9 +344,8 @@ void UiRobot::edp_create()
 	}
 }
 
-int UiRobot::edp_create_int_extra_operations()
+void UiRobot::edp_create_int_extra_operations()
 {
-	return 1;
 }
 
 void UiRobot::pulse_ecp()
@@ -412,10 +409,12 @@ void UiRobot::EDP_slay_int()
 	// dla robota bird_hand
 	if (is_edp_loaded()) { // jesli istnieje EDP
 
+		interface.block_sigchld();
+
 		close_edp_connections();
 
-		interface.wait_for_child_termiantion((pid_t) state.edp.pid);
-
+		interface.wait_for_child_termination((pid_t) state.edp.pid, true);
+		interface.unblock_sigchld();
 		abort_thread();
 	}
 
@@ -432,20 +431,39 @@ bool UiRobot::check_synchronised_and_loaded()
 
 }
 
-int UiRobot::move_to_synchro_position()
+void UiRobot::move_to_synchro_position()
 {
-	return 1;
+
 }
 
-int UiRobot::move_to_front_position()
+void UiRobot::move_to_front_position()
 {
-	return 1;
+
 }
 
-int UiRobot::move_to_preset_position(int variant)
+void UiRobot::move_to_preset_position(int variant)
 {
 
-	return 1;
+}
+
+void UiRobot::open_c_xyz_angle_axis_window()
+{
+	msg->message(lib::NON_FATAL_ERROR, "open_c_xyz_angle_axis_window not implemented for that robot");
+}
+
+void UiRobot::open_c_xyz_euler_zyz_window()
+{
+	msg->message(lib::NON_FATAL_ERROR, "open_c_xyz_euler_zyz_window not implemented for that robot");
+}
+
+void UiRobot::open_c_joint_window()
+{
+	msg->message(lib::NON_FATAL_ERROR, "open_c_joint_window not implemented for that robot");
+}
+
+void UiRobot::open_c_motor_window()
+{
+	msg->message(lib::NON_FATAL_ERROR, "open_c_motor_window not implemented for that robot");
 }
 
 bool UiRobot::is_edp_loaded()
@@ -453,7 +471,7 @@ bool UiRobot::is_edp_loaded()
 	return ((state.edp.state == UI_EDP_WAITING_TO_START_READER) || (state.edp.state == UI_EDP_WAITING_TO_STOP_READER));
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
 	Ui::MenuBar *menuBar = mw->getMenuBar();
@@ -476,7 +494,7 @@ int UiRobot::manage_interface()
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
-				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+				mw->menuall_Preset_Positions_setEnabled(true);
 
 				switch (interface.mp->mp_state.state)
 				{
@@ -484,18 +502,18 @@ int UiRobot::manage_interface()
 					case common::UI_MP_PERMITED_TO_RUN:
 						EDP_Load->setEnabled(false);
 						EDP_Unload->setEnabled(true);
-						block_ecp_trigger();
+
 						break;
 					case common::UI_MP_WAITING_FOR_START_PULSE:
 						EDP_Load->setEnabled(false);
 						EDP_Unload->setEnabled(false);
-						block_ecp_trigger();
+
 						break;
 					case common::UI_MP_TASK_RUNNING:
-						unblock_ecp_trigger();
+
 						break;
 					case common::UI_MP_TASK_PAUSED:
-						block_ecp_trigger();
+
 						break;
 					default:
 						break;
@@ -510,10 +528,9 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
-int UiRobot::reload_configuration()
+void UiRobot::reload_configuration()
 {
 
 	//	printf("final_position: %lf, %lf, %lf, %lf, %lf, %lf\n ", final_position[0], final_position[1], final_position[2], final_position[3], final_position[4], final_position[5]);
@@ -627,39 +644,50 @@ int UiRobot::reload_configuration()
 		}
 	}
 
-	return 1;
 }
 
-void UiRobot::catch_ecp_main_error(ecp::common::robot::ECP_main_error & e)
+void UiRobot::catch_ecp_robot_fe(ecp::exception::fe_r & error)
 
 {
-	if (e.error_class == lib::SYSTEM_ERROR)
-		printf("ecp lib::SYSTEM_ERROR error in UI\n");
+	uint64_t error0 = 0;
+
+	if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+		error0 = *tmp;
+	}
+
+	msg->message(lib::FATAL_ERROR, error0);
 	interface.ui_state = 2;
 }
 
-void UiRobot::catch_ecp_error(ecp::common::robot::ECP_error & er)
-
+void UiRobot::catch_ecp_robot_se(ecp::exception::se_r & error)
 {
-	if (er.error_class == lib::SYSTEM_ERROR) { /* blad systemowy juz wyslano komunikat do SR */
-		perror("ecp lib::SYSTEM_ERROR in UI");
-		/* PtExit( EXIT_SUCCESS ); */
-	} else {
-		switch (er.error_no)
-		{
-			case INVALID_POSE_SPECIFICATION:
-			case INVALID_COMMAND_TO_EDP:
-			case EDP_ERROR:
-			case INVALID_ROBOT_MODEL_TYPE:
-				/* Komunikat o bledzie wysylamy do SR */
-				msg->message(lib::NON_FATAL_ERROR, er.error_no);
-				break;
-			default:
-				msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
-				perror("Unidentified exception");
-				break;
-		} /* end: switch */
+	perror("ecp lib::SYSTEM_ERROR in UI");
+	//interface.ui_state = 2;
+}
+
+void UiRobot::catch_ecp_robot_nfe(ecp::exception::nfe_r & error)
+{
+
+	uint64_t error0 = 0;
+
+	if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+		error0 = *tmp;
 	}
+	switch (error0)
+	{
+		case INVALID_POSE_SPECIFICATION:
+		case INVALID_COMMAND_TO_EDP:
+		case EDP_ERROR:
+		case INVALID_ROBOT_MODEL_TYPE:
+			/* Komunikat o bledzie wysylamy do SR */
+			msg->message(lib::NON_FATAL_ERROR, error0);
+			break;
+		default:
+			msg->message(lib::NON_FATAL_ERROR, 0, "ecp: Unidentified exception");
+			perror("Unidentified exception");
+			break;
+	} /* end: switch */
+
 }
 
 void UiRobot::catch_std_exception(const std::exception & e)

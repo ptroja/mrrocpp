@@ -15,13 +15,13 @@ namespace task {
 
 // KONSTRUKTORY
 task::task(lib::configurator &_config) :
-	common::task::task(_config), fg(*this)
+		common::task::task(_config), fg(*this)
 {
 }
 
 void task::main_task_algorithm(void)
 {
-	int isTest = config.value <int> ("test_mode");
+	int isTest = config.value <int>("test_mode");
 
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
@@ -33,10 +33,10 @@ void task::main_task_algorithm(void)
 		if (mp_2_ecp_next_state_string == ecp_mp::task::ECP_GEN_FESTIVAL) {
 
 			if (isTest)
-				sr_ecp_msg->message(reinterpret_cast<const char*>(mp_command.ecp_next_state.data));
+				sr_ecp_msg->message(reinterpret_cast <const char*>(mp_command.ecp_next_state.sg_buf.data));
 			else {
 				fg.set_voice((generator::generator::VOICE) mp_command.ecp_next_state.variant);
-				fg.set_phrase(mp_command.ecp_next_state.get_mp_2_ecp_next_state_string());
+				fg.set_phrase(mp_command.ecp_next_state.sg_buf.get <std::string>());
 				fg.Move();
 			}
 

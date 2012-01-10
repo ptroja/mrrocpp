@@ -30,6 +30,28 @@ namespace generator {
 template <typename ECP_ROBOT_T>
 class _generator : public ecp_mp::generator::generator
 {
+private:
+	/**
+	 * @brief initiates Move method
+	 */
+	void move_init(void)
+	{
+		// domyslnie komunikujemy sie z robotem o ile on jest
+		if (the_robot) {
+			// default communication mode
+			the_robot->communicate_with_edp = true;
+			// clear data ports in case there is old data there;
+			the_robot->port_manager.clear_data_ports();
+		}
+		// domyslny tryb koordynacji
+		ecp_t.continuous_coordination = false;
+
+		// generacja pierwszego kroku ruchu
+		node_counter = 0;
+
+		ecp_t.set_ecp_reply(lib::ECP_ACKNOWLEDGE);
+	}
+
 protected:
 	/**
 	 * @brief ECP task object type
@@ -39,7 +61,7 @@ protected:
 	/**
 	 * @brief ECP task object type
 	 */
-	typedef common::task::_task <ECP_ROBOT_T> task_t;
+	typedef common::task::task_base task_t;
 
 	/**
 	 * @brief ECP generator itself object type
@@ -50,6 +72,14 @@ protected:
 	 * @brief ECP task object reference
 	 */
 	task_t & ecp_t;
+
+	/**
+	 * @brief communicates with EDP
+	 */
+	virtual void execute_motion(void)
+	{
+		the_robot->execute_motion();
+	}
 
 public:
 	/**
@@ -96,7 +126,7 @@ public:
 
 			node_counter++;
 			if (ecp_t.pulse_check()) {
-				trigger = true;
+				set_trigger();
 			}
 
 		} while (next_step());
@@ -104,59 +134,28 @@ public:
 	}
 
 	/**
-	 * @brief communicates with EDP
-	 */
-	virtual void execute_motion(void)
-	{
-		the_robot->execute_motion();
-	}
-
-	/**
-	 * @brief initiates Move method
-	 */
-	void move_init(void)
-	{
-		// domyslnie komunikujemy sie z robotem o ile on jest
-		if (the_robot) {
-			// default communication mode
-			the_robot->communicate_with_edp = true;
-			// clear data ports in case there is old data there;
-			the_robot->port_manager.clear_data_ports();
-		}
-		// domyslny tryb koordynacji
-		ecp_t.continuous_coordination = false;
-
-		// generacja pierwszego kroku ruchu
-		node_counter = 0;
-
-		ecp_t.set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-	}
-
-	/**
 	 * @brief associated ecp_robot object pointer
 	 */
-	//boost::shared_ptr<ECP_ROBOT_T> the_robot;
-	ECP_ROBOT_T * the_robot;
+	const boost::shared_ptr<ECP_ROBOT_T> the_robot;
 
 	/**
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	_generator(common::task::_task <ECP_ROBOT_T> & _ecp_task) :
-			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), ecp_t(_ecp_task) //, the_robot(ecp_t.ecp_m_robot)
+	_generator(task_t & _ecp_task) :
+			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), ecp_t(_ecp_task),
+			the_robot(boost::shared_dynamic_cast<ECP_ROBOT_T>(ecp_t.ecp_m_robot))
 	{
-		if (ecp_t.ecp_m_robot.get()) {
-			the_robot = dynamic_cast <ECP_ROBOT_T *>(ecp_t.ecp_m_robot.get());}
-		}
+	}
 
-		/**
-		 * @brief Desstructor
-		 */
-		virtual ~_generator()
-		{
-		}
+	/**
+	 * @brief Desstructor
+	 */
+	virtual ~_generator()
+	{
+	}
 
-	};
+};
 
 typedef _generator <robot::ecp_robot> generator;
 

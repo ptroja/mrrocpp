@@ -60,7 +60,7 @@ ecp_st_position_move::~ecp_st_position_move() {
 void ecp_st_position_move::conditional_execution(){
 
 	std::vector<double>vec;
-	vec = msg.stringToRobotPosition(ecp_t.mp_command.ecp_next_state.data);
+	vec = msg.stringToRobotPosition(ecp_t.mp_command.ecp_next_state.sg_buf.data);
 
 	smooth->reset();
 	smooth->set_absolute();

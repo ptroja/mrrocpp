@@ -3,31 +3,28 @@
 
 #include "ui.h"
 
-
-
 namespace mrrocpp {
 namespace ui {
 namespace common {
 class UiRobot;
 class Interface;
 
-
 class Mp
 {
 public:
 	Mp(Interface *iface);
 
-	int MPup();
+	void MPup();
 	int MPup_int();
-	int MPslay();
+	void MPslay();
 	// MP pulse
-	int pulse_start_mp();
-	int pulse_stop_mp();
-	int pulse_pause_mp();
-	int pulse_resume_mp();
-	int pulse_trigger_mp();
+	void pulse_start_mp();
+	void pulse_stop_mp();
+	void pulse_pause_mp();
+	void pulse_resume_mp();
+	void pulse_trigger_mp();
 
-	int execute_mp_pulse(char pulse_code);
+	void execute_mp_pulse(char pulse_code);
 	void set_mp_state();
 	void manage_interface();
 

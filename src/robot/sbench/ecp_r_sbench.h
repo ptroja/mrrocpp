@@ -23,19 +23,11 @@ namespace sbench {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup sbench
  */
-class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
+
+class robot : public common::robot::_ecp_robot <lib::sbench::c_buffer, lib::sbench::r_buffer>
+		, public kinematics::common::kinematics_manager
 {
 protected:
-
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::sbench::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::sbench::rbuffer edp_ecp_rbuffer;
 
 	void create_kinematic_models_for_given_robot(void);
 
@@ -44,12 +36,12 @@ public:
 	/**
 	 * @brief head soldification command data port
 	 */
-	lib::single_thread_port <lib::sbench::pins_state_td> sbench_command_data_port;
+	lib::single_thread_port <lib::sbench::pins_buffer> sbench_command_data_port;
 
 	/**
 	 * @brief Head state reply data request port
 	 */
-	lib::single_thread_request_port <lib::sbench::pins_state_td> sbench_reply_data_request_port;
+	lib::single_thread_request_port <lib::sbench::pins_buffer> sbench_reply_data_request_port;
 
 	/**
 	 * @brief constructor called from UI

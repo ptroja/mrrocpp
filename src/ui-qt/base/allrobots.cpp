@@ -12,12 +12,16 @@ namespace ui {
 namespace common {
 
 AllRobots::AllRobots(Interface *iface) :
-		all_edps(UI_ALL_EDPS_NONE_LOADED), all_edps_last_manage_interface_state(UI_ALL_EDPS_STATE_NOT_KNOWN), all_edps_synchro(UI_ALL_EDPS_NONE_SYNCHRONISED), all_edps_synchro_last_manage_interface_state(UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN), interface(iface)
+		all_edps(UI_ALL_EDPS_NONE_LOADED),
+		all_edps_last_manage_interface_state(UI_ALL_EDPS_STATE_NOT_KNOWN),
+		all_edps_synchro(UI_ALL_EDPS_NONE_SYNCHRONISED),
+		all_edps_synchro_last_manage_interface_state(UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN),
+		interface(iface)
 {
 	mw = interface->mw;
 }
 
-int AllRobots::EDP_all_robots_create()
+void AllRobots::EDP_all_robots_create()
 {
 	BOOST_FOREACH(const robot_pair_t & robot_node, interface->robot_m)
 			{
@@ -26,8 +30,6 @@ int AllRobots::EDP_all_robots_create()
 
 				robot_node.second->edp_create();
 			}
-
-	return 1;
 
 }
 
@@ -68,18 +70,18 @@ void AllRobots::manage_interface()
 						|| (interface->mp->mp_state.state == UI_MP_PERMITED_TO_RUN)))
 				|| (all_edps == UI_ALL_EDPS_NONE_LOADED)) {
 
-			mw->getMenuBar()->actionConfiguration->setEnabled(true);
-
+			mw->getMenuBar()->actionOpen_Configuration->setEnabled(true);
+			mw->getMenuBar()->actionReload_Configuration->setEnabled(true);
 		} else {
-			mw->getMenuBar()->actionConfiguration->setEnabled(false);
-
+			mw->getMenuBar()->actionOpen_Configuration->setEnabled(false);
+			mw->getMenuBar()->actionReload_Configuration->setEnabled(false);
 		}
 
 		switch (all_edps)
 		{
 			case UI_ALL_EDPS_NONE_ACTIVATED:
 				mw->get_ui()->label_all_edps_notification->setText("NONE_ACTIVATED");
-				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+				mw->menuall_Preset_Positions_setEnabled(false);
 				mw->getMenuBar()->menuRobot->setEnabled(false);
 				mw->getMenuBar()->menuAll_Robots->setEnabled(false);
 				mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
@@ -91,7 +93,7 @@ void AllRobots::manage_interface()
 				mw->getMenuBar()->menuRobot->setEnabled(true);
 				mw->getMenuBar()->menuAll_Robots->setEnabled(true);
 				mw->getMenuBar()->actionall_EDP_Load->setEnabled(true);
-				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+				mw->menuall_Preset_Positions_setEnabled(false);
 				mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
 
 				break;
@@ -106,17 +108,17 @@ void AllRobots::manage_interface()
 				{
 					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
 					case UI_ALL_EDPS_NONE_SYNCHRONISED:
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+						mw->menuall_Preset_Positions_setEnabled(false);
 						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_SOME_SYNCHRONISED:
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+						mw->menuall_Preset_Positions_setEnabled(true);
 						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_ALL_SYNCHRONISED:
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+						mw->menuall_Preset_Positions_setEnabled(true);
 
 						break;
 					default:
@@ -136,40 +138,40 @@ void AllRobots::manage_interface()
 					case UI_ALL_EDPS_SYNCHRO_STATE_NOT_KNOWN:
 					case UI_ALL_EDPS_NONE_SYNCHRONISED:
 						mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+						mw->menuall_Preset_Positions_setEnabled(false);
 						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_SOME_SYNCHRONISED:
 						mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+						mw->menuall_Preset_Positions_setEnabled(true);
 						mw->getMenuBar()->actionall_Synchronisation->setEnabled(true);
 
 						break;
 					case UI_ALL_EDPS_ALL_SYNCHRONISED:
-						mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+						mw->menuall_Preset_Positions_setEnabled(true);
 
 						switch (interface->mp->mp_state.state)
 						{
 							case common::UI_MP_NOT_PERMITED_TO_RUN:
 								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
-								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+								mw->menuall_Preset_Positions_setEnabled(true);
 
 								break;
 							case common::UI_MP_PERMITED_TO_RUN:
 								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(true);
-								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+								mw->menuall_Preset_Positions_setEnabled(true);
 
 								break;
 							case common::UI_MP_WAITING_FOR_START_PULSE:
 								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
-								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+								mw->menuall_Preset_Positions_setEnabled(true);
 
 								break;
 							case common::UI_MP_TASK_RUNNING:
 							case common::UI_MP_TASK_PAUSED:
 								mw->getMenuBar()->actionall_EDP_Unload->setEnabled(false);
-								mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+								mw->menuall_Preset_Positions_setEnabled(false);
 
 								break;
 							default:
@@ -215,7 +217,7 @@ void AllRobots::set_edp_state()
 	}
 }
 
-int AllRobots::EDP_all_robots_slay()
+void AllRobots::EDP_all_robots_slay()
 {
 	BOOST_FOREACH(const robot_pair_t & robot_node, interface->robot_m)
 			{
@@ -223,11 +225,9 @@ int AllRobots::EDP_all_robots_slay()
 				robot_node.second->EDP_slay_int();
 			}
 
-	return 1;
-
 }
 
-int AllRobots::EDP_all_robots_synchronise()
+void AllRobots::EDP_all_robots_synchronise()
 
 {
 
@@ -236,12 +236,10 @@ int AllRobots::EDP_all_robots_synchronise()
 				robot_node.second->synchronise();
 			}
 
-	return 1;
-
 }
 
 //Reader pulse
-int AllRobots::pulse_start_all_reader()
+void AllRobots::pulse_start_all_reader()
 {
 	BOOST_FOREACH(const robot_pair_t & robot_node, interface->robot_m)
 			{
@@ -250,52 +248,48 @@ int AllRobots::pulse_start_all_reader()
 
 	interface->manage_pc();
 
-	return 1;
 }
 
-int AllRobots::pulse_stop_all_reader()
+void AllRobots::pulse_stop_all_reader()
 {
 	BOOST_FOREACH(const robot_pair_t & robot_node, interface->robot_m)
 			{
 				robot_node.second->pulse_reader_stop_exec_pulse();
 			}
 	interface->manage_pc();
-	return 1;
+
 }
 
-int AllRobots::pulse_trigger_all_reader()
+void AllRobots::pulse_trigger_all_reader()
 {
 	BOOST_FOREACH(const robot_pair_t & robot_node, interface->robot_m)
 			{
 				robot_node.second->pulse_reader_trigger_exec_pulse();
 			}
 
-	return 1;
 }
 
-int AllRobots::pulse_start_reader(UiRobot *robot)
+void AllRobots::pulse_start_reader(UiRobot *robot)
 {
 	robot->pulse_reader_start_exec_pulse();
 	interface->manage_pc();
 
-	return 1;
 }
 
-int AllRobots::pulse_stop_reader(UiRobot *robot)
+void AllRobots::pulse_stop_reader(UiRobot *robot)
 {
 	robot->pulse_reader_stop_exec_pulse();
 	interface->manage_pc();
-	return 1;
 }
 
-int AllRobots::pulse_trigger_reader(UiRobot *robot)
+void AllRobots::pulse_trigger_reader(UiRobot *robot)
 {
 	robot->pulse_reader_trigger_exec_pulse();
-	return 1;
+
 }
 
 //ECP pulse
-int AllRobots::pulse_trigger_ecp()
+void AllRobots::pulse_trigger_ecp()
 {
 
 	BOOST_FOREACH(const robot_pair_t & robot_node, interface->robot_m)
@@ -303,21 +297,17 @@ int AllRobots::pulse_trigger_ecp()
 				robot_node.second->pulse_ecp();
 			}
 
-	return 1;
 }
 
 //ECP pulse
-int AllRobots::pulse_trigger_ecp(UiRobot *robot)
+void AllRobots::pulse_trigger_ecp(UiRobot *robot)
 {
 
 	robot->pulse_ecp();
-	return 1;
 }
 
-int AllRobots::all_robots_move_to_synchro_position()
-
+void AllRobots::move_to_synchro_position()
 {
-
 	// jesli MP nie pracuje (choc moze byc wlaczone)
 	if ((interface->mp->mp_state.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN)
 			|| (interface->mp->mp_state.state == ui::common::UI_MP_PERMITED_TO_RUN)
@@ -329,17 +319,11 @@ int AllRobots::all_robots_move_to_synchro_position()
 						robot_node.second->move_to_synchro_position();
 					}
 				}
-
 	}
-
-	return 1;
-
 }
 
-int AllRobots::all_robots_move_to_preset_position_1()
-
+void AllRobots::move_to_preset_position(int variant)
 {
-
 	// jesli MP nie pracuje (choc moze byc wlaczone)
 	if ((interface->mp->mp_state.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN)
 			|| (interface->mp->mp_state.state == ui::common::UI_MP_PERMITED_TO_RUN)
@@ -348,63 +332,15 @@ int AllRobots::all_robots_move_to_preset_position_1()
 		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface->robot_m)
 				{
 					if (robot_node.second->check_synchronised_and_loaded()) {
-						robot_node.second->move_to_preset_position(1);
+						robot_node.second->move_to_preset_position(variant);
 					}
 				}
 
 	}
-
-	return 1;
-
 }
 
-int AllRobots::all_robots_move_to_preset_position_2()
-
+void AllRobots::move_to_front_position()
 {
-
-	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((interface->mp->mp_state.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN)
-			|| (interface->mp->mp_state.state == ui::common::UI_MP_PERMITED_TO_RUN)
-			|| (interface->mp->mp_state.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
-
-		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface->robot_m)
-				{
-					if (robot_node.second->check_synchronised_and_loaded()) {
-						robot_node.second->move_to_preset_position(2);
-					}
-				}
-
-	}
-	return 1;
-
-}
-
-int AllRobots::all_robots_move_to_preset_position_0()
-
-{
-
-	// jesli MP nie pracuje (choc moze byc wlaczone)
-	if ((interface->mp->mp_state.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN)
-			|| (interface->mp->mp_state.state == ui::common::UI_MP_PERMITED_TO_RUN)
-			|| (interface->mp->mp_state.state == ui::common::UI_MP_WAITING_FOR_START_PULSE)) {
-
-		BOOST_FOREACH(const ui::common::robot_pair_t & robot_node, interface->robot_m)
-				{
-					if (robot_node.second->check_synchronised_and_loaded()) {
-						robot_node.second->move_to_preset_position(0);
-					}
-				}
-
-	}
-
-	return 1;
-
-}
-
-int AllRobots::all_robots_move_to_front_position()
-
-{
-
 	// jesli MP nie pracuje (choc moze byc wlaczone)
 	if ((interface->mp->mp_state.state == ui::common::UI_MP_NOT_PERMITED_TO_RUN)
 			|| (interface->mp->mp_state.state == ui::common::UI_MP_PERMITED_TO_RUN)
@@ -416,10 +352,7 @@ int AllRobots::all_robots_move_to_front_position()
 						robot_node.second->move_to_front_position();
 					}
 				}
-
 	}
-	return 1;
-
 }
 
 bool AllRobots::is_any_robot_active()

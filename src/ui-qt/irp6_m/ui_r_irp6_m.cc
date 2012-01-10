@@ -32,9 +32,8 @@ const std::string UiRobot::WGT_TOOL_EULER = "WGT_TOOL_EULER";
 // KLASA UiRobot
 //
 //
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 {
-	return 1;
 }
 
 int UiRobot::execute_motor_motion()
@@ -106,7 +105,7 @@ void UiRobot::null_ui_ecp_robot()
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	common::UiRobot::manage_interface();
@@ -168,13 +167,11 @@ int UiRobot::manage_interface()
 
 	}
 
-	return 1;
 }
 
-int UiRobot::move_to_preset_position(int variant)
+void UiRobot::move_to_preset_position(int variant)
 {
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()

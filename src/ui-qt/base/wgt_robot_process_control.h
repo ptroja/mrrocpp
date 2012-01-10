@@ -33,8 +33,8 @@ public:
 	void my_open(bool set_on_top=false);
 
 	Ui::wgt_robot_process_controlClass * get_ui();
-	int block_all_ecp_trigger_widgets();
-	int unblock_all_ecp_trigger_widgets();
+	int block_ecp_trigger_widgets();
+	int unblock_ecp_trigger_widgets();
 	virtual void add_button(QPushButton *button, int row, int space){};
 	virtual void setup_ui(){};
 

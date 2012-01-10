@@ -23,10 +23,8 @@ public:
 	wgt_yes_no(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_yes_no();
 
-	Ui::wgt_yes_noClass * get_ui();
-
 	void hideEvent(QHideEvent * event);
-
+	void my_open(bool set_on_top = false);
 private:
 	Ui::wgt_yes_noClass* ui;
 

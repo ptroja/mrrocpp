@@ -12,7 +12,7 @@ namespace ecp {
 namespace spkm {
 namespace task {
 
-class swarmitfix : public common::task::task
+class swarmitfix : public common::task::_task <ecp::spkm::robot>
 {
 protected:
 	//! Move the robot the the specified pose
@@ -22,6 +22,7 @@ protected:
 //	boost::shared_ptr <generator::spkm_quickstop> g_quickstop;
 
 	generator::joint_epos_command* g_joint_epos_command;
+	generator::external_epos_command* g_external_epos_command;
 
 public:
 	//! Constructor

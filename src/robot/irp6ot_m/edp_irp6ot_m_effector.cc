@@ -68,7 +68,7 @@ void effector::create_threads()
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
-	manip_effector(_shell, lib::irp6ot_m::ROBOT_NAME)
+	manip_effector(_shell, lib::irp6ot_m::ROBOT_NAME, instruction, reply)
 {
 	number_of_servos = lib::irp6ot_m::NUM_OF_SERVOS;
 

@@ -23,21 +23,12 @@ namespace smb {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup smb
  */
-class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
+class robot : public common::robot::_ecp_robot <lib::smb::c_buffer, lib::smb::r_buffer>
+		, public kinematics::common::kinematics_manager
 {
 
 protected:
 	void create_kinematic_models_for_given_robot(void);
-
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::smb::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::smb::rbuffer edp_ecp_rbuffer;
 
 public:
 
@@ -54,17 +45,17 @@ public:
 	/**
 	 * @brief epos external motion command data port
 	 */
-	lib::single_thread_port <lib::epos::epos_simple_command> epos_external_command_data_port;
+	lib::single_thread_port <lib::smb::smb_epos_simple_command> epos_external_command_data_port;
 
 	/**
 	 * @brief epos brake command data port
 	 */
-	lib::single_thread_port <bool> epos_brake_command_data_port;
+	lib::single_thread_port <lib::empty_t> epos_brake_command_data_port;
 
 	/**
-	 * @brief epos brake command data port
+	 * @brief epos clear fault command data port
 	 */
-	lib::single_thread_port <bool> epos_clear_fault_data_port;
+	lib::single_thread_port <lib::empty_t> epos_clear_fault_data_port;
 
 	/**
 	 * @brief pin insertion command data port
@@ -84,7 +75,7 @@ public:
 	/**
 	 * @brief epos motion status with external reply data request port
 	 */
-	lib::single_thread_request_port <lib::epos::epos_reply> epos_external_reply_data_request_port;
+	lib::single_thread_request_port <lib::smb::smb_ext_epos_reply> epos_external_reply_data_request_port;
 
 	/**
 	 * @brief leg status reply data request port

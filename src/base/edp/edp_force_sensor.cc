@@ -1,12 +1,12 @@
 #include <iostream>
 #include <exception>
 
-#include "base/edp/edp_typedefs.h"
-#include "base/edp/edp_e_manip.h"
+#include "edp_typedefs.h"
+#include "edp_e_manip.h"
 #include "base/lib/mis_fun.h"
-#include "base/edp/reader.h"
+#include "reader.h"
 #include "base/kinematics/kinematic_model_with_tool.h"
-#include "base/edp/edp_force_sensor.h"
+#include "edp_force_sensor.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -35,10 +35,16 @@ void force::operator()()
 		_exit(EXIT_SUCCESS);
 	}
 
-	catch (lib::sensor::sensor_error & e) {
+	catch (lib::exception::se_sensor & error) {
 		std::cerr << "sensor_error w force thread EDP" << std::endl;
 
-		switch (e.error_no)
+		uint64_t error0 = 0;
+
+		if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+			error0 = *tmp;
+		}
+
+		switch (error0)
 		{
 			case SENSOR_NOT_CONFIGURED:
 				from_vsp.vsp_report = lib::sensor::VSP_SENSOR_NOT_CONFIGURED;
@@ -47,7 +53,7 @@ void force::operator()()
 				from_vsp.vsp_report = lib::sensor::VSP_READING_NOT_READY;
 				break;
 		}
-		sr_msg->message(lib::FATAL_ERROR, e.error_no);
+		sr_msg->message(lib::FATAL_ERROR, error0);
 
 	}
 
@@ -113,10 +119,16 @@ void force::operator()()
 
 		} //!< koniec TRY
 
-		catch (lib::sensor::sensor_error & e) {
-			std::cerr << "sensor_error in EDP force thread" << std::endl;
+		catch (lib::exception::se_sensor & error) {
+			std::cerr << "sensor_error w force thread EDP" << std::endl;
 
-			switch (e.error_no)
+			uint64_t error0 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
+			switch (error0)
 			{
 				case SENSOR_NOT_CONFIGURED:
 					from_vsp.vsp_report = lib::sensor::VSP_SENSOR_NOT_CONFIGURED;
@@ -125,8 +137,9 @@ void force::operator()()
 					from_vsp.vsp_report = lib::sensor::VSP_READING_NOT_READY;
 					break;
 			}
-			sr_msg->message(lib::FATAL_ERROR, e.error_no);
-		} //!< end CATCH
+			sr_msg->message(lib::FATAL_ERROR, error0);
+
+		}
 
 		catch (...) {
 			std::cerr << "unidentified error in EDP force thread" << std::endl;
@@ -196,7 +209,7 @@ void force::wait_for_event()
 void force::get_reading(void)
 {
 	if (!is_sensor_configured) {
-		throw lib::sensor::sensor_error(lib::FATAL_ERROR, SENSOR_NOT_CONFIGURED);
+		BOOST_THROW_EXCEPTION(lib::exception::fe_sensor() << lib::exception::mrrocpp_error0(SENSOR_NOT_CONFIGURED));
 	}
 
 	is_reading_ready = true;

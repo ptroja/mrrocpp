@@ -58,7 +58,7 @@ public:
 	/*!
 	 * @brief decides if MP should wait for ECP_pulse
 	 */
-	bool wait_for_ECP_pulse;
+	bool wait_for_ECP_message;
 
 	/*!
 	 * @brief stl map of all mp robots
@@ -70,33 +70,6 @@ public:
 	 * @param _mp_task mp task object reference.
 	 */
 	generator(task::task& _mp_task);
-};
-
-/*!
- * @brief MP generator error handling class
- *
- * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
- * @ingroup mp
- */
-class MP_error
-{
-public:
-	/**
-	 * @brief error class (type)
-	 */
-	const lib::error_class_t error_class;
-
-	/**
-	 * @brief error number
-	 */
-	const uint64_t error_no;
-
-	/**
-	 * @brief constructor
-	 * @param err0 error class
-	 * @param err1 error number
-	 */
-	MP_error(lib::error_class_t err0, uint64_t err1);
 };
 
 } // namespace common

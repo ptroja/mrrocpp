@@ -16,7 +16,6 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm2 {
 
-// Klasa reprezentujaca robota IRp-6 na postumencie.
 /*!
  * @brief class of EDP SwarmItFix parallel kinematic manipulator
  *
@@ -28,12 +27,18 @@ private:
 
 protected:
 
+	/*!
+	 * @brief method,  creates a list of available kinematic models for spkm effector.
+	 *
+	 * Here it is parallel manipulator direct and inverse kinematic transform
+	 * and motor to joint transform
+	 */
+	virtual void create_kinematic_models_for_given_robot(void);
+
 public:
 
 	/*!
-	 * @brief class constructor
-	 *
-	 * The attributes are initialized here.
+	 * @brief Initializes EPOS objects, basing on motor mappings.
 	 */
 	effector(common::shell &_shell);
 

@@ -33,8 +33,6 @@ const uint64_t STEP_TIME_IN_NS = 2000000;
 class effector : public common::manip_effector
 {
 protected:
-	lib::bird_hand::cbuffer ecp_edp_cbuffer;
-	lib::bird_hand::rbuffer edp_ecp_rbuffer;
 
 	uint64_t macrostep_end_time;
 	uint64_t query_time;
@@ -97,28 +95,34 @@ public:
 	/*!
 	 * \brief method to choose master_order variant
 	 *
-	 * IHere the single thread variant is chosen
+	 * Here the single thread variant is chosen
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
+
+	/*!
+	 * \brief method to receive instruction from ecp of particular type
+	 */
+	lib::INSTRUCTION_TYPE variant_receive_instruction();
+
+	/*!
+	 * \brief method to reply to ecp with class of particular type
+	 */
+	void variant_reply_to_instruction();
+
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
+	lib::bird_hand::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
+	lib::bird_hand::r_buffer reply;
 
 private:
 	Bird_hand device;
 
 	lib::MotorArray synchro_position_motor;
-
-	/*!
-	 * \brief method to deserialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void instruction_deserialization();
-
-	/*!
-	 * \brief method to serialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
-	 */
-	void reply_serialization();
 
 };
 

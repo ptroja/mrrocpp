@@ -3,7 +3,6 @@
  * \brief File containing the declaration of edp::common::motor_driven_effector class.
  *
  * \author yoyek
- * \date 2009
  *
  */
 
@@ -21,10 +20,7 @@
 #include "base/edp/in_out.h"
 #include "base/edp/edp_effector.h"
 
-//#ifdef DOCENT_SENSOR
 #include <boost/function.hpp>
-//#endif
-
 
 static const float VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT = 0.2;
 
@@ -76,13 +72,11 @@ protected:
 	 */
 	uint16_t value_in_step_no;
 
-	//#ifdef DOCENT_SENSOR
+	// TODO comment it
 	boost::function <void()> startedCallback_;
 	bool startedCallbackRegistered_;
 	boost::function <void()> stoppedCallback_;
 	bool stoppedCallbackRegistered_;
-	//#endif
-
 
 	/*!
 	 * \brief friend class of servo thread to handle the motion controllers
@@ -197,12 +191,12 @@ public:
 	 * It is used for the purpose of the visualisation thread
 	 */
 	void master_joints_read(double[]);
-	//#ifdef DOCENT_SENSOR
+
+	// TODO comment it
 	void registerReaderStartedCallback(boost::function <void()> startedCallback);
 	void registerReaderStoppedCallback(boost::function <void()> stoppedCallback);
 	void onReaderStarted();
 	void onReaderStopped();
-	//#endif
 
 	/*!
 	 * \brief The velocity limit global factor
@@ -264,7 +258,7 @@ public:
 	 *
 	 * The attributes are initialized here.
 	 */
-	motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name);
+	motor_driven_effector(shell &_shell, const lib::robot_name_t & l_robot_name, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref);
 
 	/*!
 	 * \brief class destructor
@@ -493,8 +487,36 @@ public:
 	 */
 	void single_thread_master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	lib::c_buffer instruction;
-	lib::r_buffer reply;
+	/*!
+	 * \brief method to receive instruction from ecp of particular type
+	 *
+	 * It is reimplemented in derived classes to call the template class specialized with particular class type
+	 */
+	virtual lib::INSTRUCTION_TYPE variant_receive_instruction();
+
+	/*!
+	 * \brief method to reply to ecp with class of particular type
+	 *
+	 * It is reimplemented in derived classes to call the template class specialized with particular class type
+	 */
+	virtual void variant_reply_to_instruction();
+
+	/*!
+	 * \brief Reference to base types of instruction
+	 *
+	 * The particular type is the field of derived classes
+	 */
+	lib::c_buffer & instruction;
+
+	/*!
+	 * \brief Reference to base types of reply
+	 *
+	 * The particular type is the field of derived classes
+	 */
+	lib::r_buffer & reply;
+
+	// for the force variant of move arm and transformation thread error handling
+	bool move_arm_second_phase;
 
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

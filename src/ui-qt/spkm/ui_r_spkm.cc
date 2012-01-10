@@ -50,19 +50,16 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 }
 
-int UiRobot::edp_create_int_extra_operations()
+void UiRobot::edp_create_int_extra_operations()
 {
-	wgts[WGT_SPKM_INC]->synchro_depended_init();
-	return 1;
+	//wgts[WGT_SPKM_INC]->synchro_depended_init();
 }
 
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 
 {
 
 	eb.command(boost::bind(&ui::spkm::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
 
 }
 
@@ -94,7 +91,7 @@ int UiRobot::synchronise_int()
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 	MainWindow *mw = interface.get_main_window();
 	common::UiRobot::manage_interface();
@@ -119,7 +116,7 @@ int UiRobot::manage_interface()
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
 				menuspkm_Pre_synchro_moves->setEnabled(false);
-				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(true);
+				mw->menuall_Preset_Positions_setEnabled(true);
 
 				switch (interface.mp->mp_state.state)
 				{
@@ -145,7 +142,7 @@ int UiRobot::manage_interface()
 			{
 				menuspkm_Pre_synchro_moves->setEnabled(true);
 				menuspkm_Post_synchro_moves->setEnabled(false);
-				mw->getMenuBar()->menuall_Preset_Positions->setEnabled(false);
+				mw->menuall_Preset_Positions_setEnabled(false);
 
 			}
 			break;
@@ -153,7 +150,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()
@@ -165,7 +161,7 @@ void UiRobot::setup_menubar()
 	actionspkm_Synchronisation = new Ui::MenuBarAction(QString("&Synchronisation"), this, menuBar);
 	actionspkm_Motors = new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_SPKM_INC], signalDispatcher, menuBar);
 	actionspkm_Motors_post = new Ui::MenuBarAction(QString("&Motors"), wgts[WGT_SPKM_INC], signalDispatcher, menuBar);
-	actionspkm_Joints = new Ui::MenuBarAction(QString("&JOINTS"), wgts[WGT_SPKM_INT], signalDispatcher, menuBar);
+	actionspkm_Joints = new Ui::MenuBarAction(QString("&Joints"), wgts[WGT_SPKM_INT], signalDispatcher, menuBar);
 	actionspkm_External = new Ui::MenuBarAction(QString("&External"), wgts[WGT_SPKM_EXT], signalDispatcher, menuBar);
 	actionspkm_Synchro_Position = new Ui::MenuBarAction(QString("&Synchro Position"), this, menuBar);
 	actionspkm_Front_Position = new Ui::MenuBarAction(QString("&Front Position"), this, menuBar);
@@ -216,7 +212,7 @@ void UiRobot::delete_ui_ecp_robot()
 	delete ui_ecp_robot;
 }
 
-int UiRobot::move_to_synchro_position()
+void UiRobot::move_to_synchro_position()
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -224,10 +220,9 @@ int UiRobot::move_to_synchro_position()
 	}
 	eb.command(boost::bind(&ui::spkm::UiRobot::execute_motor_motion, &(*this)));
 
-	return 1;
 }
 
-int UiRobot::move_to_front_position()
+void UiRobot::move_to_front_position()
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -235,10 +230,9 @@ int UiRobot::move_to_front_position()
 	}
 	eb.command(boost::bind(&ui::spkm::UiRobot::execute_joint_motion, &(*this)));
 
-	return 1;
 }
 
-int UiRobot::move_to_preset_position(int variant)
+void UiRobot::move_to_preset_position(int variant)
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -246,14 +240,13 @@ int UiRobot::move_to_preset_position(int variant)
 	}
 	eb.command(boost::bind(&ui::spkm::UiRobot::execute_joint_motion, &(*this)));
 
-	return 1;
 }
 
 int UiRobot::execute_motor_motion()
 {
 	try {
 
-		ui_ecp_robot->move_motors(desired_pos, lib::epos::NON_SYNC_TRAPEZOIDAL);
+		ui_ecp_robot->move_motors(desired_pos, lib::epos::SYNC_TRAPEZOIDAL);
 
 	} // end try
 	CATCH_SECTION_IN_ROBOT
@@ -265,7 +258,7 @@ int UiRobot::execute_joint_motion()
 {
 	try {
 
-		ui_ecp_robot->move_joints(desired_pos, lib::epos::NON_SYNC_TRAPEZOIDAL);
+		ui_ecp_robot->move_joints(desired_pos, lib::epos::SYNC_TRAPEZOIDAL);
 
 	} // end try
 	CATCH_SECTION_IN_ROBOT

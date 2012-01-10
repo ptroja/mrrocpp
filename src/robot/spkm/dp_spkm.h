@@ -9,19 +9,35 @@
  * @ingroup spkm
  */
 
+#include <vector>
+
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include "base/lib/mrmath/homog_matrix.h"
 #include "robot/maxon/dp_epos.h"
 
 #include "const_spkm.h"
+#include "../../base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
 namespace spkm {
 
 /*!
- * @brief SwarmItFix Parallel Kinematic Machine mp to ecp command
+ * @brief SwarmItFix Epos simple external command data port
+ * @ingroup spkm
+ */
+const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix Epos status data request port
+ * @ingroup spkm
+ */
+const std::string EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT = "EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT";
+
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine mp to ecp variant
  * @ingroup spkm
  */
 typedef struct _segment
@@ -44,6 +60,9 @@ typedef struct _segment
 	//! - OR the contact was NOT expected and did happened.
 	bool guarded_motion;
 
+	//! Constructor with reasonable defaults
+	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix());
+
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
@@ -55,8 +74,55 @@ typedef struct _segment
 	}
 } segment_t;
 
+/**
+ * ECP variant variant
+ */
+typedef enum _command_variant
+{
+	POSE_LIST, STOP
+} command_variant;
+
 /*!
- * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer variant enum
+ *  Command for ECP agent
+ */
+typedef struct _next_state_t
+{
+	command_variant variant;
+
+	//! Type for sequence of motions of SPKM robot
+	typedef std::vector <spkm::segment_t> segment_sequence_t;
+
+	//! Sequence of motion segments for SPKM robot
+	segment_sequence_t segments;
+
+	//! Constructor with safe defaults
+	_next_state_t(command_variant _variant = STOP) :
+			variant(_variant)
+	{
+	}
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & variant;
+		switch (variant)
+		{
+			case POSE_LIST:
+				ar & segments;
+				break;
+			default:
+				break;
+		}
+	}
+} next_state_t;
+
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine EDP variant buffer variant enum
  * @ingroup spkm
  */
 enum CBUFFER_VARIANT
@@ -70,16 +136,71 @@ enum CBUFFER_VARIANT
  */
 typedef enum _POSE_SPECIFICATION
 {
-	FRAME, JOINT, MOTOR
+	WRIST_XYZ_EULER_ZYZ, TOOL_XYZ_EULER_ZYZ, JOINT, MOTOR
 } POSE_SPECIFICATION;
 
 /*!
- * @brief SwarmItFix Parallel Kinematic Machine EDP command buffer
+ * @brief SwarmItFix Epos external mode controllers status
+ * @ingroup spkm
+ */
+struct spkm_ext_epos_reply
+{
+//	POSE_SPECIFICATION pose_specification;
+
+	//! SPKM current pose - in XYZ Euler ZYZ form.
+	double current_pose[6];
+
+	lib::epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
+
+	bool contact;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		//ar & pose_specification;
+		ar & current_pose;
+		ar & epos_controller;
+		ar & contact;
+	}
+};
+
+/*!
+ * @brief SwarmItFix Epos external command
+ * @ingroup spkm
+ */
+struct spkm_epos_simple_command
+{
+	lib::epos::EPOS_MOTION_VARIANT motion_variant;
+	POSE_SPECIFICATION pose_specification;
+	double desired_position[NUM_OF_SERVOS];
+
+	double estimated_time;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & pose_specification;
+		ar & motion_variant;
+		ar & desired_position;
+		ar & estimated_time;
+	}
+};
+
+/*!
+ * @brief SwarmItFix Parallel Kinematic Machine EDP variant buffer
  * @ingroup spkm
  */
 struct cbuffer
 {
-	//! Variant of the command
+	//! Variant of the variant
 	CBUFFER_VARIANT variant;
 
 	//! Pose specification type
@@ -94,10 +215,13 @@ struct cbuffer
 	//! Motion time - used in the Interpolated Position Mode.
 	double estimated_time;
 
+	//! SPKM desired motor positions.
 	int32_t motor_pos[NUM_OF_SERVOS];
 
+	//! SPKM desired joint positions.
 	double joint_pos[NUM_OF_SERVOS];
 
+	//! SPKM desired cartesian pose - in XYZ Euler ZYZ form.
 	double goal_pos[6];
 
 	//! Allowed time for the motion in seconds.
@@ -128,7 +252,8 @@ struct cbuffer
 				ar & set_pose_specification;
 				switch (set_pose_specification)
 				{
-					case FRAME:
+					case TOOL_XYZ_EULER_ZYZ:
+					case WRIST_XYZ_EULER_ZYZ:
 						ar & goal_pos;
 						break;
 					case JOINT:
@@ -145,7 +270,28 @@ struct cbuffer
 				break;
 		};
 	}
-}__attribute__((__packed__));
+};
+
+/*!
+ * @brief SwarmItFix Head EDP command buffer
+ * @ingroup spkm
+ */
+struct c_buffer : lib::c_buffer
+{
+	cbuffer spkm;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & spkm;
+	}
+
+};
 
 /*!
  * @brief SwarmItFix Parallel Kinematic Machine EDP reply buffer
@@ -153,7 +299,8 @@ struct cbuffer
  */
 struct rbuffer
 {
-	lib::Homog_matrix current_pose;
+	//! SPKM current pose - in XYZ Euler ZYZ form.
+	double current_pose[6];
 
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 
@@ -170,6 +317,24 @@ struct rbuffer
 		ar & epos_controller;
 		ar & contact;
 	}
+};
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer spkm;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & spkm;
+	}
+
 };
 
 } // namespace spkm

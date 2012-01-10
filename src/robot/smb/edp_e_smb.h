@@ -34,7 +34,7 @@ class effector : public common::motor_driven_effector
 
 	friend class festo_and_inputs;
 
-private:
+protected:
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
 
@@ -56,12 +56,9 @@ private:
 	//! festo shared ptr
 	boost::shared_ptr <festo::cpv> cpv10;
 
-	// state of the legs rotation
-	bool is_base_positioned_to_move_legs;
-
-	/*
+	/*!
 	 * \brief Variable storing the relative zero position of the motor rotating legs.
-	 * Set when all legs are down.
+	 * Set when all legs are out.
 	 */
 	int32_t legs_relative_zero_position;
 
@@ -86,7 +83,6 @@ private:
 	 */
 	void execute_motor_motion();
 
-
 	/*!
 	 * \brief pointer to festo_and_inputs class
 	 */
@@ -94,11 +90,6 @@ private:
 
 	//! Method checks the state of EPOS controllers.
 	void check_controller_state();
-
-protected:
-
-	lib::smb::cbuffer ecp_edp_cbuffer;
-	lib::smb::rbuffer edp_ecp_rbuffer;
 
 	/*!
 	 * \brief method,  creates a list of available kinematic models for smb effector.
@@ -108,12 +99,6 @@ protected:
 	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
-
-	/*!
-	 * @brief Method sets initial values of motor and joint positions.
-	 * @note The number_of_servos should be previously set.
-	 */
-	void reset_variables();
 
 	/*!
 	 * \brief class constructor
@@ -155,22 +140,11 @@ public:
 	 */
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction);
 
-
-
+	/*!
+	 * \brief Method initializes SMB variables (including motors, joints and frames), depending on working mode (robot_test_mode) and robot state.
+	 * Called only once after process creation.
+	 */
 	void get_controller_state(lib::c_buffer &instruction);
-
-	/*!
-	 * @brief motors synchronization
-	 *
-	 * This method synchronizes motors of the robots.
-	 */
-	void synchronise();
-
-
-	/*!
-	 * @brief Method responsible for computation of relative PKM axis position on the base of potentiometer reading.
-	 */
-	int relativeSynchroPosition(maxon::epos & node);
 
 	/*!
 	 * \brief method to choose master_order variant
@@ -180,18 +154,24 @@ public:
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
 	/*!
-	 * \brief method to deserialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
+	 * \brief method to receive instruction from ecp of particular type
 	 */
-	void instruction_deserialization();
+	lib::INSTRUCTION_TYPE variant_receive_instruction();
 
 	/*!
-	 * \brief method to serialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
+	 * \brief method to reply to ecp with class of particular type
 	 */
-	void reply_serialization();
+	void variant_reply_to_instruction();
+
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
+	lib::smb::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
+	lib::smb::r_buffer reply;
 
 };
 

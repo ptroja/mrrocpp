@@ -41,16 +41,16 @@ wgt_spkm_inc::wgt_spkm_inc(QString _widget_label, mrrocpp::ui::common::Interface
 	radioButton_mip_Vector.append(ui.radioButton_mip_4);
 	radioButton_mip_Vector.append(ui.radioButton_mip_5);
 
-	timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(timer_slot()));
+	timer = (boost::shared_ptr <QTimer>) new QTimer(this);
+	connect(timer.get(), SIGNAL(timeout()), this, SLOT(timer_slot()));
 	timer->start(interface.position_refresh_interval);
 	ui.radioButton_non_sync_trapezoidal->setChecked(true);
 
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 
 	for (int i = 0; i < robot->number_of_servos; i++) {
-		doubleSpinBox_des_Vector[i]->setMaximum(robot->kinematic_params.upper_motor_pos_limits[i]);
-		doubleSpinBox_des_Vector[i]->setMinimum(robot->kinematic_params.lower_motor_pos_limits[i]);
+		doubleSpinBox_des_Vector[i]->setMaximum(robot->kinematic_params->upper_motor_pos_limits[i]);
+		doubleSpinBox_des_Vector[i]->setMinimum(robot->kinematic_params->lower_motor_pos_limits[i]);
 	}
 
 }

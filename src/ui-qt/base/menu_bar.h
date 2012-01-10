@@ -7,8 +7,7 @@
 #include <QMenuBar>
 #include <QMainWindow>
 #include <QSignalMapper>
-#include "mainwindow.h"
-
+//#include "mainwindow.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -22,12 +21,11 @@ class Mp;
 }
 
 namespace Ui {
-class MainWindow;
+//class MainWindow;
 class MenuBarAction;
 }
 
-namespace Ui
-{
+namespace Ui {
 
 class MenuBar : public QMenuBar
 {
@@ -40,24 +38,25 @@ public:
 
 	void makeConnections();
 
-    QAction *actionQuit;
-    QAction *actionClear_Console;
-    QAction *actionEDP_load_smb;
-    QAction *actionUnload_All;
-    QAction *actionSlay_All;
-    QAction *actionAbout;
-    QAction *actionall_EDP_Load;
-    QAction *actionall_EDP_Unload;
-    QAction *actionall_Synchronisation;
-    QAction *actionall_Synchro_Position;
-    QAction *actionall_Front_Position;
-    QAction *actionall_Position_0;
-    QAction *actionall_Position_1;
-    QAction *actionall_Position_2;
-    QAction *actionMP_Load;
-    QAction *actionMP_Unload;
-    QAction *actionProcess_Control;
-    QAction *actionConfiguration;
+	QAction *actionQuit;
+	QAction *actionClear_Console;
+	QAction *actionEDP_load_smb;
+	QAction *actionUnload_All;
+	QAction *actionSlay_All;
+	QAction *actionAbout;
+	QAction *actionall_EDP_Load;
+	QAction *actionall_EDP_Unload;
+	QAction *actionall_Synchronisation;
+	QAction *actionall_Synchro_Position;
+	QAction *actionall_Front_Position;
+	QAction *actionall_Position_0;
+	QAction *actionall_Position_1;
+	QAction *actionall_Position_2;
+	QAction *actionMP_Load;
+	QAction *actionMP_Unload;
+	QAction *actionProcess_Control;
+	QAction *actionOpen_Configuration;
+	QAction *actionReload_Configuration;
 //
 //    QAction *actionspeaker_EDP_Load;
 //    QAction *actionspeaker_EDP_Unload;
@@ -80,13 +79,13 @@ public:
 //    QAction *actionirp6_Mechatronika_Tool_Xyz_Euler_Zyz;
 //    QAction *actionirp6_Mechatronika_Tool_Xyz_Angle_Axis;
 
-    QMenu *menuRobot;
-    QMenu *menuFile;
-    QMenu *menuSpecial;
-    QMenu *menuAll_Robots;
-    QMenu *menuall_Preset_Positions;
-    QMenu *menuTask;
-    QMenu *menuHelp;
+	QMenu *menuRobot;
+	QMenu *menuFile;
+	QMenu *menuSpecial;
+	QMenu *menuAll_Robots;
+	QMenu *menuall_Preset_Positions;
+	QMenu *menuTask;
+	QMenu *menuHelp;
 
 public slots:
 	// all robots menu
@@ -103,7 +102,8 @@ public slots:
 	void on_actionMP_Load_triggered();
 	void on_actionMP_Unload_triggered();
 	void on_actionProcess_Control_triggered();
-	void on_actionConfiguration_triggered();
+	void on_actionOpen_Configuration_triggered();
+	void on_actionReload_Configuration_triggered();
 
 	// special menu
 	void on_actionClear_Console_triggered();
@@ -113,10 +113,8 @@ public slots:
 	void on_actionQuit_triggered();
 
 private:
-	void retranslateMenuBar();//(QMainWindow *mainWindow);
+	void retranslateMenuBar(); //(QMainWindow *mainWindow);
 	mrrocpp::ui::common::Interface *interface;
-
-
 
 };
 

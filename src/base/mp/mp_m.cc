@@ -14,14 +14,15 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "base/ecp_mp/ecp_mp_exceptions.h"
 #include "base/ecp_mp/transmitter.h"
 
 #include "base/lib/mis_fun.h"
 
-#include "base/mp/mp_task.h"
-#include "base/mp/generator/mp_generator.h"
-#include "base/mp/mp_robot.h"
-#include "base/mp/MP_main_error.h"
+#include "mp_task.h"
+#include "generator/mp_generator.h"
+#include "mp_robot.h"
+#include "mp_exceptions.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -82,7 +83,6 @@ void catch_signal_in_mp(int sig)
 } // namespace mp
 } // namespace mrrocpp
 
-
 int main(int argc, char *argv[], char **arge)
 {
 	if (argc < 4) {
@@ -114,31 +114,39 @@ int main(int argc, char *argv[], char **arge)
 			// ignore Ctrl-C signal, which comes from UI console
 			signal(SIGINT, SIG_IGN);
 
-		} catch (ecp_mp::task::ECP_MP_main_error & e) {
-			/* Obsluga bledow ECP_MP_main_error */
-			if (e.error_class == lib::SYSTEM_ERROR)
-				exit(EXIT_FAILURE);
 		}
 
-		catch (mp::common::MP_main_error & e) {
+		catch (ecp_mp::exception::se & error) {
+			exit(EXIT_FAILURE);
+		}
 
-			perror("initialize incorrect");
-			if (e.error_class == lib::SYSTEM_ERROR)
-				exit(EXIT_FAILURE);
+		catch (mp::exception::se & error) {
+			exit(EXIT_FAILURE);
+
+		}
+
+		catch (mp::exception::nfe & error) {
+
+			uint64_t error0 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
 
 			/* Obsluga lib::NON_FATAL_ERROR*/
-			switch (e.error_no)
+			switch (error0)
 			{
 				case ECP_ERRORS:
 				case INVALID_ECP_PULSE_IN_MP_START_ALL:
 				case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
 				case INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL:
 					if (mp::common::mp_t) {
-						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, error0);
 					}
 					break;
 				default:
 					perror("Message to SR has been already sent");
+					break;
 			}/* end:switch */
 			if (mp::common::mp_t) {
 				mp::common::mp_t->sr_ecp_msg->message("To terminate MP click STOP icon");
@@ -146,29 +154,40 @@ int main(int argc, char *argv[], char **arge)
 			exit(EXIT_FAILURE);
 		}
 
-		catch (lib::sensor::sensor_error & e) {
+		catch (lib::exception::se_sensor & error) {
+
+			uint64_t error0 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
 			/* Wyswietlenie komunikatu. */
 			if (mp::common::mp_t) {
-				mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
+				mp::common::mp_t->sr_ecp_msg->message(lib::SYSTEM_ERROR, error0);
 			}
 			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 			exit(EXIT_FAILURE);
 		}
 
-		catch (mp::generator::MP_error & e) {
+		catch (lib::exception::fe_sensor & error) {
+
+			uint64_t error0 = 0;
+
+			if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+				error0 = *tmp;
+			}
+
 			/* Wyswietlenie komunikatu. */
 			if (mp::common::mp_t) {
-				mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+				mp::common::mp_t->sr_ecp_msg->message(lib::FATAL_ERROR, error0);
 			}
-			printf("Mam blad mp_generator section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
 			exit(EXIT_FAILURE);
 		}
 
-		catch (ecp_mp::transmitter::transmitter_error & e) {
+		catch (ecp_mp::exception::se_tr & error) {
 			/* Wyswietlenie komunikatu. */
-			if (mp::common::mp_t) {
-				mp::common::mp_t->sr_ecp_msg->message(e.error_class, 0);
-			}
 			printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
 			exit(EXIT_FAILURE);
 		}
@@ -212,24 +231,31 @@ int main(int argc, char *argv[], char **arge)
 				mp::common::mp_t->terminate_all();
 			} // end: try
 
-			catch (ecp_mp::task::ECP_MP_main_error & e) {
-				/* Obsluga bledow ECP_MP_main_error */
-				if (e.error_class == lib::SYSTEM_ERROR)
-					exit(EXIT_FAILURE);
-			} /*end: catch */
-			catch (mp::common::MP_main_error & e) {
+			catch (ecp_mp::exception::se & error) {
+				exit(EXIT_FAILURE);
+			}
 
-				if (e.error_class == lib::SYSTEM_ERROR)
-					exit(EXIT_FAILURE);
+			catch (mp::exception::se & error) {
+				exit(EXIT_FAILURE);
+
+			}
+
+			catch (mp::exception::nfe & error) {
+
+				uint64_t error0 = 0;
+
+				if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+					error0 = *tmp;
+				}
 
 				/* Obsluga lib::NON_FATAL_ERROR */
-				switch (e.error_no)
+				switch (error0)
 				{
 					case ECP_ERRORS:
 					case INVALID_ECP_PULSE_IN_MP_START_ALL:
 					case INVALID_ECP_PULSE_IN_MP_EXECUTE_ALL:
 					case INVALID_ECP_PULSE_IN_MP_TERMINATE_ALL:
-						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, error0);
 						mp::common::mp_t->stop_and_terminate();
 						break;
 					case ECP_STOP_ACCEPTED:
@@ -238,38 +264,42 @@ int main(int argc, char *argv[], char **arge)
 					default:
 						perror("Unidentified mp error");
 						mp::common::mp_t->stop_and_terminate();
+						break;
 				}/*end:switch*/
+			}
 
-			} /*end: catch */
-			catch (mp::robot::MP_error & e) {
-				if (e.error_class == lib::SYSTEM_ERROR) {
-					exit(EXIT_FAILURE);
+			catch (mp::exception::nfe_r & error) {
+				uint64_t error0 = 0;
+
+				if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+					error0 = *tmp;
 				}
-
 				/* Obsluga lib::NON_FATAL_ERROR */
-				switch (e.error_no)
+				switch (error0)
 				{
 					case ECP_ERRORS:
 					case INVALID_POSE_SPECIFICATION:
 					case INVALID_COMMAND_TO_EDP:
 					case EDP_ERROR:
 					case INVALID_ROBOT_MODEL_TYPE:
-						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, error0);
 						break;
 					default:
 						perror("Unidentified mp error");
+						break;
 				}/*end:switch */
 				mp::common::mp_t->stop_and_terminate();
 
 			} /*end: catch*/
 
-			catch (mp::generator::MP_error & e) {
+			catch (mp::exception::nfe_g & error) {
+				uint64_t error0 = 0;
 
-				if (e.error_class == lib::SYSTEM_ERROR)
-					exit(EXIT_FAILURE);
-
+				if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+					error0 = *tmp;
+				}
 				/* Obsluga lib::NON_FATAL_ERROR*/
-				switch (e.error_no)
+				switch (error0)
 				{
 					case ECP_ERRORS:
 					case INVALID_POSE_SPECIFICATION:
@@ -280,7 +310,7 @@ int main(int argc, char *argv[], char **arge)
 					case NON_COMPATIBLE_LISTS:
 					case MAX_ACCELERATION_EXCEEDED:
 					case MAX_VELOCITY_EXCEEDED:
-						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, e.error_no);
+						mp::common::mp_t->sr_ecp_msg->message(lib::NON_FATAL_ERROR, error0);
 						break;
 					default:
 						perror("Unidentified mp error");
@@ -289,16 +319,41 @@ int main(int argc, char *argv[], char **arge)
 
 			} /*end: catch*/
 
-			catch (lib::sensor::sensor_error & e) {
+			catch (lib::exception::se_sensor & error) {
+
+				uint64_t error0 = 0;
+
+				if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+					error0 = *tmp;
+				}
+
 				/* Wyswietlenie komunikatu. */
-				mp::common::mp_t->sr_ecp_msg->message(e.error_class, e.error_no);
-				printf("Mam blad czujnika section 2 (@%s:%d)\n", __FILE__, __LINE__);
-			} /* end: catch sensor_error  */
-			catch (ecp_mp::transmitter::transmitter_error & e) {
+				if (mp::common::mp_t) {
+					mp::common::mp_t->sr_ecp_msg->message(lib::SYSTEM_ERROR, error0);
+				}
+				printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			}
+
+			catch (lib::exception::fe_sensor & error) {
+
+				uint64_t error0 = 0;
+
+				if (uint64_t const * tmp = boost::get_error_info <lib::exception::mrrocpp_error0>(error)) {
+					error0 = *tmp;
+				}
+
 				/* Wyswietlenie komunikatu. */
-				mp::common::mp_t->sr_ecp_msg->message(e.error_class, 0);
-				printf("Mam blad trasnmittera section 2 (@%s:%d)\n", __FILE__, __LINE__);
-			} /* end: catch sensor_error  */
+				if (mp::common::mp_t) {
+					mp::common::mp_t->sr_ecp_msg->message(lib::FATAL_ERROR, error0);
+				}
+				printf("Mam blad czujnika section 1 (@%s:%d)\n", __FILE__, __LINE__);
+			}
+
+			catch (ecp_mp::exception::se_tr & error) {
+				/* Wyswietlenie komunikatu. */
+				printf("Mam blad trasnmittera section 1 (@%s:%d)\n", __FILE__, __LINE__);
+
+			}
 
 			catch (const std::exception& e) {
 				std::string tmp_string(" The following error has been detected: ");

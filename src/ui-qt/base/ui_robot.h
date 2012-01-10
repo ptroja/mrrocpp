@@ -29,15 +29,20 @@ namespace common {
 
 const std::string WGT_ROBOT_PC = "WGT_ROBOT_PC";
 
-#define CATCH_SECTION_IN_ROBOT catch (ecp::common::robot::ECP_main_error & e) { \
+#define CATCH_SECTION_IN_ROBOT catch (ecp::exception::se_r & error) { \
 	/* Obsluga bledow ECP */ \
-		catch_ecp_main_error(e); \
+		catch_ecp_robot_se(error); \
   } /*end: catch */ \
 \
-catch (ecp::common::robot::ECP_error & er) { \
-	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
-		catch_ecp_error(er); \
-} /* end: catch */ \
+catch (ecp::exception::nfe_r & error) { \
+	/* Obsluga bledow ECP */ \
+		catch_ecp_robot_nfe(error); \
+ } /*end: catch */ \
+\
+catch (ecp::exception::fe_r & error) { \
+	/* Obsluga bledow ECP */ \
+		catch_ecp_robot_fe(error); \
+ } /*end: catch */ \
 \
 catch(const std::exception & e){\
 	catch_std_exception(e); \
@@ -49,35 +54,20 @@ catch (...) {  /* Dla zewnetrznej petli try*/ \
 } /*end: catch */\
 
 
-#define CATCH_SECTION_UI catch (ecp::common::robot::ECP_main_error & e) { \
+#define CATCH_SECTION_UI_PTR catch (ecp::exception::se_r & error) { \
 	/* Obsluga bledow ECP */ \
-		robot.catch_ecp_main_error(e); \
+		robot->catch_ecp_robot_se(error); \
   } /*end: catch */ \
 \
-catch (ecp::common::robot::ECP_error & er) { \
-	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
-		robot.catch_ecp_error(er); \
-} /* end: catch */ \
-\
-catch(const std::exception & e){\
-	robot.catch_std_exception(e); \
-}\
-\
-catch (...) {  /* Dla zewnetrznej petli try*/ \
-	/* Wylapywanie niezdefiniowanych bledow*/ \
-		robot.catch_tridot(); \
-} /*end: catch */\
-
-
-#define CATCH_SECTION_UI_PTR catch (ecp::common::robot::ECP_main_error & e) { \
+catch (ecp::exception::fe_r & error) { \
 	/* Obsluga bledow ECP */ \
-		robot->catch_ecp_main_error(e); \
-  } /*end: catch */ \
+		robot->catch_ecp_robot_fe(error); \
+ } /*end: catch */ \
 \
-catch (ecp::common::robot::ECP_error & er) { \
-	/* Wylapywanie bledow generowanych przez modul transmisji danych do EDP */ \
-		robot->catch_ecp_error(er); \
-} /* end: catch */ \
+catch (ecp::exception::nfe_r & error) { \
+	/* Obsluga bledow ECP */ \
+		robot->catch_ecp_robot_nfe(error); \
+ } /*end: catch */ \
 \
 catch(const std::exception & e){\
 	robot->catch_std_exception(e); \
@@ -127,6 +117,34 @@ public:
 	UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
 	~UiRobot();
 
+	/*
+	 * opens move window on mp or ecp request
+	 * C_XYZ_ANGLE_AXIS variant
+	 */
+
+	virtual void open_c_xyz_angle_axis_window();
+
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_XYZ_EULER_ZYZ variant
+	 */
+
+	virtual void open_c_xyz_euler_zyz_window();
+
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_JOINT variant
+	 */
+
+	virtual void open_c_joint_window();
+
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_MOTOR variant
+	 */
+
+	virtual void open_c_motor_window();
+
 	bool is_edp_loaded();
 
 	void create_thread();
@@ -151,7 +169,7 @@ public:
 	virtual void null_ui_ecp_robot() = 0;
 	virtual int ui_get_edp_pid() = 0;
 	virtual void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l) = 0;
-	virtual int manage_interface();
+	virtual void manage_interface();
 	virtual void setup_menubar();
 	virtual int execute_clear_fault()
 	{
@@ -167,7 +185,7 @@ public:
 		return NULL;
 	}
 
-	virtual int synchronise() = 0;
+	virtual void synchronise() = 0;
 	virtual void edp_create();
 	virtual int edp_create_int();
 	virtual void create_ui_ecp_robot() = 0;
@@ -179,19 +197,20 @@ public:
 	void block_ecp_trigger();
 	void unblock_ecp_trigger();
 
-	virtual int edp_create_int_extra_operations();
+	virtual void edp_create_int_extra_operations();
 
 	bool check_synchronised_and_loaded();
 	bool deactivate_ecp_trigger();
-	int reload_configuration();
+	void reload_configuration();
 
-	virtual int move_to_synchro_position();
-	virtual int move_to_front_position();
-	virtual int move_to_preset_position(int variant);
+	virtual void move_to_synchro_position();
+	virtual void move_to_front_position();
+	virtual void move_to_preset_position(int variant);
 
 	// default try catch handlers
-	void catch_ecp_main_error(ecp::common::robot::ECP_main_error & e);
-	void catch_ecp_error(ecp::common::robot::ECP_error & er);
+	void catch_ecp_robot_fe(ecp::exception::fe_r & error);
+	void catch_ecp_robot_se(ecp::exception::se_r & error);
+	void catch_ecp_robot_nfe(ecp::exception::nfe_r & error);
 	void catch_std_exception(const std::exception & e);
 	void catch_tridot();
 

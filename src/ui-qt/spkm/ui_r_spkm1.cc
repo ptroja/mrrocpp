@@ -4,6 +4,7 @@
 
 #include "ui_r_spkm1.h"
 #include "ui_ecp_r_spkm1.h"
+#include "robot/spkm/kinematic_parameters_spkm1.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -12,6 +13,7 @@ namespace spkm1 {
 UiRobot::UiRobot(common::Interface& _interface) :
 		spkm::UiRobot(_interface, lib::spkm1::ROBOT_NAME)
 {
+	kinematic_params = new kinematics::spkm1::kinematic_parameters_spkm1();
 	add_wgt <wgt_spkm_inc>(spkm::WGT_SPKM_INC, "Spkm1 inc");
 	add_wgt <wgt_spkm_int>(spkm::WGT_SPKM_INT, "Spkm1 int");
 	add_wgt <wgt_spkm_ext>(spkm::WGT_SPKM_EXT, "Spkm1 ext");

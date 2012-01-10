@@ -14,8 +14,9 @@
 #include "base/lib/agent/Agent.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 #include "base/ecp/ecp_robot.h"
-#include "base/lib/agent/DataBuffer.h"
 #include "base/lib/agent/RemoteAgent.h"
+#include "base/lib/agent/InputBuffer.h"
+#include "base/lib/agent/OutputBuffer.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -60,11 +61,6 @@ private:
 	lib::fd_server_t trigger_attach;
 
 	/**
-	 * @brief MP server communication channel descriptor to send pulses
-	 */
-	RemoteAgent MP;
-
-	/**
 	 * @brief Returns MP command type
 	 * @return mp command variant
 	 */
@@ -74,8 +70,8 @@ private:
 	 * @brief Initializes communication channels
 	 */
 	void initialize_communication(void);
-protected:
 
+protected:
 	/**
 	 * @brief Gets next state from MP
 	 */
@@ -88,7 +84,15 @@ protected:
 	typedef lib::MP_COMMAND_PACKAGE mp_command_t;
 
 public:
+	const boost::shared_ptr<robot::ecp_robot_base> & ecp_m_robot;
+
+public:
 	// TODO: following packages should be 'protected'
+	/**
+	 * @brief MP server proxy
+	 */
+	RemoteAgent MP;
+
 	/**
 	 * @brief Reply to MP
 	 * @note This data type is task dependent, so it should be a parameter of a template class
@@ -114,7 +118,7 @@ public:
 	/**
 	 * @brief buffered next state label sent by MP
 	 */
-	std::string mp_2_ecp_next_state_string;
+	const std::string & mp_2_ecp_next_state_string;
 
 	/**
 	 * @brief ECP subtasks container
@@ -137,7 +141,7 @@ public:
 	 * @brief Constructor
 	 * @param _config configurator object reference.
 	 */
-	task_base(lib::configurator &_config);
+	task_base(lib::configurator &_config, boost::shared_ptr<robot::ecp_robot_base> & robot_ref);
 
 	/**
 	 * @brief Destructor
@@ -163,7 +167,7 @@ public:
 	virtual void ecp_stop_accepted_handler(void);
 
 	/**
-	 * @brief sends the message to MP after task execution is finished
+	 * @brief sends the message to MP after task execution is completed
 	 */
 	void termination_notice(void);
 
@@ -212,7 +216,7 @@ public:
 	 * @param _config configurator object reference.
 	 */
 	_task(lib::configurator &_config) :
-		task_base(_config)
+		task_base(_config, (boost::shared_ptr<robot::ecp_robot_base> &) ecp_m_robot)
 	{
 	}
 
@@ -234,9 +238,9 @@ public:
 	typedef _task <ECP_ROBOT_T> task_t;
 
 	/**
-	 * @brief Associated single robot object shared pointer
+	 * @brief Associated robot object shared pointer
 	 */
-	boost::shared_ptr <ECP_ROBOT_T> ecp_m_robot;
+	boost::shared_ptr<ECP_ROBOT_T> ecp_m_robot;
 };
 
 typedef _task <robot::ecp_robot> task;

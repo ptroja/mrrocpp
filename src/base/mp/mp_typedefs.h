@@ -25,7 +25,7 @@ namespace common {
 // Note: this type is shared between task (owner of the items) and
 // generator (who do not own the robot items), thus it can not be
 // boost::ptr container.
-typedef std::map <lib::robot_name_t, robot::robot *> robots_t;
+typedef std::map <const lib::robot_name_t, robot::robot *> robots_t;
 typedef robots_t::value_type robot_pair_t;
 
 } // namespace common

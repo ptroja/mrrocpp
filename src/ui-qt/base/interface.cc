@@ -26,6 +26,9 @@
 #include "ui_ecp.h"
 #include "base/lib/ping.h"
 
+#include "config.h"
+
+#if (R_SWARMITFIX == 1)
 #include "../spkm/ui_r_spkm1.h"
 #include "../spkm/ui_r_spkm2.h"
 #include "../smb/ui_r_smb1.h"
@@ -33,12 +36,18 @@
 #include "../shead/ui_r_shead1.h"
 #include "../shead/ui_r_shead2.h"
 #include "../sbench/ui_r_sbench.h"
+#endif
+
+#if (R_BIRD_HAND == 1)
+#include "../bird_hand/ui_r_bird_hand.h"
+#endif
+
+#if (R_012 == 1)
 #include "../irp6ot_m/ui_r_irp6ot_m.h"
 #include "../irp6p_m/ui_r_irp6p_m.h"
 #include "../irp6p_tfg/ui_r_irp6p_tfg.h"
 #include "../irp6ot_tfg/ui_r_irp6ot_tfg.h"
-#include "../polycrank/ui_r_polycrank.h"
-#include "../bird_hand/ui_r_bird_hand.h"
+
 #include "../sarkofag/ui_r_sarkofag.h"
 #include "../conveyor/ui_r_conveyor.h"
 
@@ -49,6 +58,9 @@
 #include "../irp6_m/wgt_irp6_m_relative_angle_axis.h"
 #include "../irp6_m/wgt_irp6_m_tool_angle_axis.h"
 #include "../irp6_m/wgt_irp6_m_tool_euler.h"
+#endif
+
+#include "base/lib/exception.h"
 
 #include "wgt_robot_process_control.h"
 #include "mp.h"
@@ -61,7 +73,10 @@ namespace ui {
 namespace common {
 
 Interface::Interface() :
-		is_mp_and_ecps_active(false), position_refresh_interval(200), mrrocpp_bin_to_root_path("../../")
+		is_mp_and_ecps_active(false),
+		position_refresh_interval(200),
+		sigchld_handling(1),
+		mrrocpp_bin_to_root_path("../../")
 {
 
 	mw = (boost::shared_ptr <MainWindow>) new MainWindow(*this);
@@ -198,8 +213,8 @@ void Interface::timer_slot()
 			// FIXME: ?
 			sr_msg.process_type = lib::UNKNOWN_PROCESS_TYPE;
 
-			char process_name_buffer[NAME_LENGTH + 1];
-			snprintf(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
+			char process_name_buffer[NAME_LENGTH + 1];snprintf
+			(process_name_buffer, sizeof(process_name_buffer), "%-15s", sr_msg.process_name);
 
 			strcat(current_line, process_name_buffer);
 
@@ -378,156 +393,87 @@ void Interface::raise_ui_ecp_window_slot()
 {
 	ui_msg->message("raise_ui_ecp_window_slot");
 
-	lib::ECP_message &ecp_to_ui_msg = ui_ecp_obj->ecp_to_ui_msg;
+	const lib::ECP_message &ecp_to_ui_msg = ui_ecp_obj->ecp_to_ui_msg;
 	lib::UI_reply &ui_rep = ui_ecp_obj->ui_rep;
 
 	switch (ecp_to_ui_msg.ecp_message)
 	{ // rodzaj polecenia z ECP
-		case lib::C_XYZ_ANGLE_AXIS: {
+
+		case lib::PLAN_STEP_MODE:
+
+			wgt_swarm_obj->my_open();
+
+			break;
+		case lib::C_XYZ_ANGLE_AXIS:
 			if (teachingstate == ui::common::MP_RUNNING) {
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+			wgt_teaching_obj->my_open("C_XYZ_ANGLE_AXIS");
 
-			ui->label_message->setText("C_XYZ_ANGLE_AXIS");
+			robot_m[ui_ecp_obj->ecp_to_ui_msg.robot_name]->open_c_xyz_angle_axis_window();
 
-			wgt_teaching_obj->my_open();
-
-			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_on_track_xyz_angle_axis(widget, apinfo, cbinfo);
-				 */
-			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_postument_xyz_angle_axis(widget, apinfo, cbinfo);
-				 */
-			}
-
-		}
 			break;
-		case lib::C_XYZ_EULER_ZYZ: {
+		case lib::C_XYZ_EULER_ZYZ:
 			if (teachingstate == ui::common::MP_RUNNING) {
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+			wgt_teaching_obj->my_open("C_XYZ_EULER_ZYZ");
 
-			ui->label_message->setText("C_XYZ_EULER_ZYZ");
+			robot_m[ui_ecp_obj->ecp_to_ui_msg.robot_name]->open_c_xyz_euler_zyz_window();
 
-			wgt_teaching_obj->my_open();
-
-			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_on_track_xyz_euler_zyz(widget, apinfo, cbinfo);
-				 */
-			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				/* TR
-				 start_wnd_irp6_postument_xyz_euler_zyz(widget, apinfo, cbinfo);
-				 */
-			}
-
-		}
 			break;
-		case lib::C_JOINT: {
+		case lib::C_JOINT:
 			if (teachingstate == ui::common::MP_RUNNING) {
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+			wgt_teaching_obj->my_open("C_JOINT");
 
-			ui->label_message->setText("C_JOINT");
+			robot_m[ui_ecp_obj->ecp_to_ui_msg.robot_name]->open_c_joint_window();
 
-			wgt_teaching_obj->my_open();
-
-			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_JOINTS]->my_open();
-			} else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME) {
-				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_JOINTS]->my_open();
-			}
-
-		}
 			break;
-		case lib::C_MOTOR: {
+		case lib::C_MOTOR:
 			//  printf("C_MOTOR\n");
 
 			if (teachingstate == ui::common::MP_RUNNING) {
 				teachingstate = ui::common::ECP_TEACHING;
 			}
 
-			Ui::wgt_teachingClass* ui = wgt_teaching_obj->get_ui();
+			wgt_teaching_obj->my_open("C_MOTOR");
 
-			ui->label_message->setText("C_MOTOR");
+			robot_m[ui_ecp_obj->ecp_to_ui_msg.robot_name]->open_c_motor_window();
 
-			wgt_teaching_obj->my_open();
-
-			if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6ot_m::ROBOT_NAME)
-				robot_m[lib::irp6ot_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
-			else if (ui_ecp_obj->ecp_to_ui_msg.robot_name == lib::irp6p_m::ROBOT_NAME)
-				robot_m[lib::irp6p_m::ROBOT_NAME]->wgts[irp6p_m::UiRobot::WGT_MOTORS]->my_open();
-
-		}
 			break;
-		case lib::YES_NO: {
-			Ui::wgt_yes_noClass* ui = wgt_yes_no_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
+		case lib::YES_NO:
 
 			wgt_yes_no_obj->my_open();
 
-		}
 			break;
-		case lib::MESSAGE: {
-			Ui::wgt_messageClass* ui = wgt_message_obj->get_ui();
-			ui->label_message->setText(ecp_to_ui_msg.string);
+		case lib::MESSAGE:
 			wgt_message_obj->my_open();
 
 			ui_rep.reply = lib::ANSWER_YES;
 			ui_ecp_obj->synchroniser.command();
-		}
+
 			break;
-		case lib::DOUBLE_NUMBER: {
-
-			Ui::wgt_input_doubleClass* ui = wgt_input_double_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
+		case lib::DOUBLE_NUMBER:
 
 			wgt_input_double_obj->my_open();
-		}
+
 			break;
-		case lib::INTEGER_NUMBER: {
-
-			Ui::wgt_input_integerClass* ui = wgt_input_integer_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
+		case lib::INTEGER_NUMBER:
 
 			wgt_input_integer_obj->my_open();
 
-		}
 			break;
-		case lib::CHOOSE_OPTION: {
-
-			Ui::wgt_choose_optionClass* ui = wgt_choose_option_obj->get_ui();
-
-			ui->label_message->setText(ecp_to_ui_msg.string);
-
-			// wybor ilosci dostepnych opcji w zaleznosci od wartosci ecp_to_ui_msg.nr_of_options
-
-			if (ecp_to_ui_msg.nr_of_options == 2) {
-				ui->pushButton_3->hide();
-				ui->pushButton_4->hide();
-			} else if (ecp_to_ui_msg.nr_of_options == 3) {
-				ui->pushButton_3->show();
-				ui->pushButton_4->hide();
-			} else if (ecp_to_ui_msg.nr_of_options == 4) {
-				ui->pushButton_3->show();
-				ui->pushButton_4->show();
-			}
+		case lib::CHOOSE_OPTION:
 
 			wgt_choose_option_obj->my_open();
-		}
+
 			break;
-		case lib::LOAD_FILE: {
+		case lib::LOAD_FILE:
 			// Zaladowanie pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 
 			//    printf("lib::LOAD_FILE\n");
@@ -564,9 +510,8 @@ void Interface::raise_ui_ecp_window_slot()
 
 			ui_ecp_obj->synchroniser.command();
 
-		}
 			break;
-		case lib::SAVE_FILE: {
+		case lib::SAVE_FILE:
 
 			// Zapisanie do pliku - do ECP przekazywana jest nazwa pliku ze sciezka
 			//    printf("lib::SAVE_FILE\n");
@@ -603,13 +548,12 @@ void Interface::raise_ui_ecp_window_slot()
 
 			ui_ecp_obj->synchroniser.command();
 
-		}
 			break;
 
-		default: {
+		default:
 			perror("Strange ECP message");
 			ui_ecp_obj->synchroniser.command();
-		}
+
 			break;
 	}
 
@@ -628,7 +572,7 @@ MainWindow* Interface::get_main_window() const
 	return mw.get();
 }
 
-int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
+void Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifacion)
 {
 	{
 		boost::unique_lock <boost::mutex> lock(ui_notification_state_mutex);
@@ -638,14 +582,17 @@ int Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifaci
 
 	mw->ui_notification();
 
-	return 1;
 }
 
-int Interface::wait_for_child_termiantion(pid_t pid)
+int Interface::wait_for_child_termination(pid_t pid, bool hang)
 {
 	int status;
 	pid_t child_pid;
-	child_pid = waitpid(pid, &status, 0);
+	if (hang) {
+		child_pid = waitpid(pid, &status, 0);
+	} else {
+		child_pid = waitpid(pid, &status, WNOHANG);
+	}
 
 	if (child_pid == -1) {
 		//	int e = errno;
@@ -685,6 +632,7 @@ common::robots_t Interface::getRobots() const
 
 void Interface::create_robots()
 {
+#if (R_SWARMITFIX == 1)
 	ADD_UI_ROBOT(spkm1);
 	ADD_UI_ROBOT(spkm2);
 	ADD_UI_ROBOT(smb1);
@@ -692,16 +640,56 @@ void Interface::create_robots()
 	ADD_UI_ROBOT(shead1);
 	ADD_UI_ROBOT(shead2);
 	ADD_UI_ROBOT(sbench);
+#endif
+
+#if (R_BIRD_HAND == 1)
+	ADD_UI_ROBOT(bird_hand);
+#endif
+
+#if (R_012 == 1)
 	ADD_UI_ROBOT(irp6ot_m);
 	ADD_UI_ROBOT(irp6p_m);
-	ADD_UI_ROBOT(polycrank);
-	ADD_UI_ROBOT(bird_hand);
 	ADD_UI_ROBOT(sarkofag);
 	ADD_UI_ROBOT(irp6p_tfg);
 	ADD_UI_ROBOT(conveyor);
 	ADD_UI_ROBOT(irp6ot_tfg);
+#endif
 
 	setRobotsMenu();
+}
+
+bool Interface::check_sigchld_handling()
+{
+	if (sigchld_handling > 0) {
+		return true;
+	}
+	return false;
+}
+
+void Interface::block_sigchld()
+{
+	//signal(SIGCHLD, SIG_IGN);
+	sigchld_handling--;
+}
+
+void Interface::unblock_sigchld()
+{
+	//signal(SIGCHLD, &catch_signal);
+	sigchld_handling++;
+}
+
+void Interface::mask_signals_for_thread()
+{
+	static sigset_t signal_mask; /* signals to block         */
+
+	sigemptyset(&signal_mask);
+	//sigaddset(&signal_mask, SIGINT);
+	//sigaddset(&signal_mask, SIGTERM);
+	sigaddset(&signal_mask, SIGCHLD);
+	int rc = pthread_sigmask(SIG_BLOCK, &signal_mask, NULL);
+	if (rc != 0) {
+
+	}
 }
 
 void Interface::init()
@@ -710,6 +698,7 @@ void Interface::init()
 	// dodanie innych okien w dock widgetach
 	wgt_pc = new wgt_process_control(*this);
 	wgt_yes_no_obj = new wgt_yes_no(*this);
+	wgt_swarm_obj = new wgt_swarm(*this);
 	wgt_message_obj = new wgt_message(*this);
 	wgt_input_integer_obj = new wgt_input_integer(*this);
 	wgt_input_double_obj = new wgt_input_double(*this);
@@ -737,7 +726,7 @@ void Interface::init()
 	char* cwd;
 	char buff[PATH_MAX + 1];
 
-	if (uname(&sysinfo) == -1) {
+if(	uname(&sysinfo) == -1) {
 		perror("uname");
 	}
 
@@ -780,8 +769,12 @@ void Interface::init()
 	signal(SIGINT, &catch_signal); // by y aby uniemozliwic niekontrolowane zakonczenie aplikacji ctrl-c z kalwiatury
 	signal(SIGALRM, &catch_signal);
 	signal(SIGSEGV, &catch_signal);
+	signal(SIGCHLD, &catch_signal);
 
-	// signal(SIGCHLD, &catch_signal);
+	// Ignore SIGPIPE, which comes from communication errors and should be handled approriately
+	if (signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
+		BOOST_THROW_EXCEPTION(lib::exception::system_error());
+	}
 	/* TR
 	 lib::set_thread_priority(pthread_self(), lib::QNX_MAX_PRIORITY - 6);
 	 */
@@ -790,9 +783,7 @@ void Interface::init()
 			{
 
 		initiate_configuration();
-		// sprawdza czy sa postawione gns's i ew. stawia je
-		// uwaga serwer musi byc wczesniej postawiony
-		check_gns();
+
 	} else {
 		printf("Blad manage_default_configuration_file\n");
 		/* TR
@@ -820,7 +811,6 @@ void Interface::init()
 	}
 
 	// inicjacja pliku z logami sr
-	check_gns();
 
 	time_t time_of_day;
 	char file_date[50];
@@ -886,12 +876,11 @@ void Interface::manage_pc(void)
 
 // funkcja odpowiedzialna za wyglad aplikacji na podstawie jej stanu
 
-int Interface::manage_interface(void)
+void Interface::manage_interface(void)
 {
 	emit
 	manage_interface_signal();
 
-	return 1;
 }
 
 void Interface::manage_interface_slot()
@@ -1047,11 +1036,14 @@ void Interface::abort_threads()
 
 bool Interface::check_node_existence(const std::string & _node, const std::string & beginnig_of_message)
 {
+
 	bool r_val;
 
 	{
 		boost::unique_lock <boost::mutex> lock(process_creation_mtx);
+		block_sigchld();
 		r_val = lib::ping(_node);
+		unblock_sigchld();
 	}
 
 	std::cout << "ping returned " << r_val << std::endl;
@@ -1069,24 +1061,14 @@ bool Interface::check_node_existence(const std::string & _node, const std::strin
 
 }
 
-// sprawdza czy sa postawione gns's i ew. stawia je
-// uwaga serwer powinien byc wczesniej postawiony (dokladnie jeden w sieci)
-// jesli dziala messip (np. pod linux) nieaktywne
-
-int Interface::check_gns()
-{
-	return 1;
-}
-
 // ustala stan wszytkich EDP
-int Interface::check_edps_state_and_modify_mp_state()
+void Interface::check_edps_state_and_modify_mp_state()
 {
 	all_robots->set_edp_state();
 	// modyfikacja stanu MP przez stan wszystkich EDP
 
 	mp->set_mp_state();
 
-	return 1;
 }
 
 // odczytuje nazwe domyslengo pliku konfiguracyjnego, w razie braku ustawia common.ini
@@ -1130,7 +1112,7 @@ int Interface::get_default_configuration_file_name()
 }
 
 // zapisuje nazwe domyslengo pliku konfiguracyjnego
-int Interface::set_default_configuration_file_name()
+void Interface::set_default_configuration_file_name()
 {
 
 	config_file_relativepath = mrrocpp_bin_to_root_path;
@@ -1143,11 +1125,10 @@ int Interface::set_default_configuration_file_name()
 	} else
 		outfile << config_file;
 
-	return 1;
 }
 
 // fills program_node list
-int Interface::fill_program_node_list()
+void Interface::fill_program_node_list()
 {
 	//	printf("fill_program_node_list\n");
 
@@ -1185,10 +1166,9 @@ int Interface::fill_program_node_list()
 		}
 	}
 
-	return 1;
 }
 
-int Interface::clear_all_configuration_lists()
+void Interface::clear_all_configuration_lists()
 {
 	// clearing of lists
 	section_list.clear();
@@ -1196,10 +1176,9 @@ int Interface::clear_all_configuration_lists()
 	all_node_list.clear();
 	program_node_user_list.clear();
 
-	return 1;
 }
 
-int Interface::initiate_configuration()
+void Interface::initiate_configuration()
 {
 
 	if (access(config_file_relativepath.c_str(), R_OK) != 0) {
@@ -1228,7 +1207,8 @@ int Interface::initiate_configuration()
 		if (dirp != NULL) {
 			for (;;) {
 				struct dirent* direntp = readdir(dirp);
-				if (direntp == NULL)
+				if (direntp == NULL
+				)
 					break;
 
 				// printf( "%s\n", direntp->d_name );
@@ -1254,11 +1234,10 @@ int Interface::initiate_configuration()
 	fill_node_list();
 	fill_program_node_list();
 
-	return 1;
 }
 
 // fills section list of configuration files
-int Interface::fill_section_list(const char* file_name_and_path)
+void Interface::fill_section_list(const char* file_name_and_path)
 {
 	static char line[256];
 
@@ -1304,8 +1283,6 @@ int Interface::fill_section_list(const char* file_name_and_path)
 
 	// zamknij plik
 	fclose(file);
-
-	return 1;
 }
 
 // fills node list
@@ -1317,7 +1294,8 @@ void Interface::fill_node_list()
 	if (dirp != NULL) {
 		for (;;) {
 			struct dirent *direntp = readdir(dirp);
-			if (direntp == NULL)
+			if (direntp == NULL
+			)
 				break;
 			all_node_list.push_back(std::string(direntp->d_name));
 		}
@@ -1361,7 +1339,7 @@ void Interface::create_threads()
 }
 
 // zatrzymuje zadanie, zabija procesy
-int Interface::unload_all()
+void Interface::unload_all()
 {
 	mp->MPslay();
 
@@ -1371,13 +1349,12 @@ int Interface::unload_all()
 	/* TR
 	 close_process_control_window(widget, apinfo, cbinfo);
 	 */
-	return 1;
 
 }
 
 // najpierw unload_all zabija wszystkie procesy wzmiankowane w pliku konfiguracyjnym
 
-int Interface::slay_all()
+void Interface::slay_all()
 {
 
 	// program unload
@@ -1416,9 +1393,6 @@ int Interface::slay_all()
 	}
 	printf("slay_all end\n");
 	manage_interface();
-
-	return 1;
-
 }
 
 }

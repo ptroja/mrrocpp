@@ -11,17 +11,28 @@
 
 #include <string>
 
+#include "robot/maxon/dp_epos.h"
 #include "const_shead.h"
+#include "../../base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
 namespace shead {
 
 /*!
- * @brief SwarmItFix Head head soldification command data port
+ * Pose specification variants
  * @ingroup shead
  */
-const std::string HEAD_SOLIDIFICATION_DATA_PORT = "SHEAD_HEAD_SOLIDIFICATION_DATA_PORT";
+typedef enum _POSE_SPECIFICATION
+{
+	MOTOR, JOINT
+} POSE_SPECIFICATION;
+
+/*!
+ * @brief SwarmItFix Head head solidification command data port
+ * @ingroup shead
+ */
+const std::string SOLIDIFICATION_ACTIVATION_DATA_PORT = "SHEAD_SOLIDIFICATION_ACTIVATION_DATA_PORT";
 
 /*!
  * @brief SwarmItFix Head head vacuum activation command data port
@@ -36,42 +47,40 @@ const std::string VACUUM_ACTIVATION_DATA_PORT = "SHEAD_VACUUM_ACTIVATION_DATA_PO
 const std::string REPLY_DATA_REQUEST_PORT = "SHEAD_REPLY_DATA_REQUEST_PORT";
 
 /*!
- * @brief SwarmItFix Head EDP state of the head soldification enum
+ * @brief SwarmItFix Head EDP state of the head solidification
  * @ingroup shead
  */
-enum STATE_OF_THE_HEAD
+typedef enum _STATE_OF_THE_SOLIDIFICATION
 {
-	HEAD_STATE_SOLDIFIED, HEAD_STATE_DESOLDIFIED, HEAD_STATE_INTERMEDIATE
-};
+	SOLIDIFICATION_STATE_ON, SOLIDIFICATION_STATE_OFF, SOLIDIFICATION_STATE_INTERMEDIATE
+} solidification_state_t;
 
 /*!
- * @brief SwarmItFix Head EDP state of the vacuum enum
+ * @brief SwarmItFix Head EDP state of the vacuum
  * @ingroup shead
  */
-enum STATE_OF_THE_VACUUM
+typedef enum _STATE_OF_THE_VACUUM
 {
 	VACUUM_STATE_ON, VACUUM_STATE_OFF, VACUUM_STATE_INTERMEDIATE
-};
+} vacuum_state_t;
 
 /*!
- * @brief SwarmItFix Head EDP head soldification command enum
+ * @brief SwarmItFix Head EDP head solidification command
  * @ingroup shead
  */
-enum HEAD_SOLIDIFICATION
+enum SOLIDIFICATION_ACTIVATION
 {
-	SOLIDIFY, DESOLIDIFY, HEAD_SOLIDIFICATION_NO_ACTION
+	SOLIDIFICATION_ON, SOLIDIFICATION_OFF
 };
-// namespace mrrocpp
 
 /*!
- * @brief SwarmItFix Head EDP vacuum activation command enum
+ * @brief SwarmItFix Head EDP vacuum activation command
  * @ingroup shead
  */
 enum VACUUM_ACTIVATION
 {
-	VACUUM_ON, VACUUM_OFF, VACUUM_ACTIVATION_NO_ACTION
+	VACUUM_ON, VACUUM_OFF
 };
-// namespace mrrocpp
 
 /*!
  * @brief SwarmItFix Head reply buffer
@@ -79,17 +88,34 @@ enum VACUUM_ACTIVATION
  */
 struct reply
 {
-	STATE_OF_THE_HEAD head_state;
-	STATE_OF_THE_VACUUM vacuum_state;
-}__attribute__((__packed__));
+	//! Constructor with default values
+	reply();
+
+	solidification_state_t solidification_state;
+
+	vacuum_state_t vacuum_state;
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & solidification_state;
+		ar & vacuum_state;
+	}
+
+};
 
 /*!
- * @brief SwarmItFix Head EDP command buffer variant enum
+ * @brief SwarmItFix Head EDP command buffer variant
  * @ingroup shead
  */
 enum CBUFFER_VARIANT
 {
-	CBUFFER_HEAD_SOLIDIFICATION, CBUFFER_VACUUM_ACTIVATION
+	POSE, QUICKSTOP, CLEAR_FAULT, SOLIDIFICATION, VACUUM
 };
 
 /*!
@@ -98,13 +124,78 @@ enum CBUFFER_VARIANT
  */
 struct cbuffer
 {
+	//! Variant of the command
 	CBUFFER_VARIANT variant;
-	union
+
+	lib::shead::SOLIDIFICATION_ACTIVATION head_solidification;
+
+	lib::shead::VACUUM_ACTIVATION vacuum_activation;
+
+	//! Pose specification type
+	POSE_SPECIFICATION set_pose_specification;
+
+	//! Pose specification type
+	POSE_SPECIFICATION get_pose_specification;
+
+	int32_t motor_pos[NUM_OF_SERVOS];
+
+	double joint_pos[NUM_OF_SERVOS];
+
+	//! Allowed time for the motion in seconds.
+	//! If 0, then the motion time will be limited by the motor parameters.
+	//! If > 0 and greater than a limit imposed by the motors, then the motion will be slowed down.
+	//! In another case, the NACK will be replied.
+	double duration;
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
 	{
-		lib::shead::HEAD_SOLIDIFICATION head_solidification;
-		lib::shead::VACUUM_ACTIVATION vacuum_activation;
-	};
-}__attribute__((__packed__));
+		ar & variant;
+		ar & head_solidification;
+		ar & vacuum_activation;
+		ar & get_pose_specification;
+		switch (variant)
+		{
+			case POSE:
+				ar & set_pose_specification;
+				switch (set_pose_specification)
+				{
+					case JOINT:
+						ar & joint_pos;
+						break;
+					case MOTOR:
+						ar & motor_pos;
+						break;
+				}
+				break;
+			default:
+				break;
+		};
+	}
+
+};
+
+struct c_buffer : lib::c_buffer
+{
+	cbuffer shead;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & shead;
+	}
+
+};
 
 /*!
  * @brief SwarmItFix Head EDP reply buffer
@@ -113,7 +204,40 @@ struct cbuffer
 struct rbuffer
 {
 	reply shead_reply;
-}__attribute__((__packed__));
+
+	epos::single_controller_epos_reply epos_controller;
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & shead_reply;
+		ar & epos_controller;
+	}
+
+};
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer shead;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & shead;
+	}
+
+};
 
 } // namespace shead
 }

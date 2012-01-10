@@ -11,6 +11,7 @@
 
 #include "robot/maxon/dp_epos.h"
 #include "const_smb.h"
+#include "../../base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -29,6 +30,18 @@ const std::string FESTO_COMMAND_DATA_PORT = "FESTO_COMMAND_DATA_PORT";
 const std::string MULTI_LEG_REPLY_DATA_REQUEST_PORT = "MULTI_LEG_REPLY_DATA_REQUEST_PORT";
 
 /*!
+ * @brief SwarmItFix Epos simple external command data port
+ * @ingroup smb
+ */
+const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix Epos status data request port
+ * @ingroup smb
+ */
+const std::string EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT = "EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT";
+
+/*!
  * @brief SwarmItFix Mobile Base mp to ecp command
  * @ingroup smb
  */
@@ -45,8 +58,8 @@ struct mp_to_ecp_parameters
  */
 struct leg_reply
 {
-	bool is_up;
-	bool is_down;
+	bool is_in;
+	bool is_out;
 	bool is_attached;
 
 	//! Give access to boost::serialization framework
@@ -56,12 +69,12 @@ struct leg_reply
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & is_up;
-		ar & is_down;
+		ar & is_in;
+		ar & is_out;
 		ar & is_attached;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base single leg festo command
@@ -69,7 +82,7 @@ struct leg_reply
  */
 enum FESTO_LEG
 {
-	UP, DOWN
+	IN, OUT
 };
 // namespace mrrocpp
 
@@ -95,7 +108,7 @@ struct festo_command_td
 		ar & undetachable;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base multi leg reply
@@ -103,6 +116,7 @@ struct festo_command_td
  */
 struct multi_leg_reply_td
 {
+
 	leg_reply leg[LEG_CLAMP_NUMBER];
 
 	//! Give access to boost::serialization framework
@@ -115,7 +129,56 @@ struct multi_leg_reply_td
 		ar & leg;
 	}
 
-}__attribute__((__packed__));
+};
+
+/*!
+ * @brief SwarmItFix Epos all controllers status
+ * @ingroup epos
+ */
+struct smb_ext_epos_reply
+{
+	lib::Homog_matrix current_frame;
+	lib::epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & current_frame;
+		ar & epos_controller;
+	}
+};
+
+/*!
+ * @brief SwarmItFix Epos motor and joint and external command, called from UI
+ * @ingroup smb
+ */
+struct smb_epos_simple_command
+{
+	lib::epos::EPOS_MOTION_VARIANT motion_variant;
+
+	// external
+	int base_vs_bench_rotation;
+	double pkm_vs_base_rotation;
+
+	double estimated_time;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & motion_variant;
+		ar & base_vs_bench_rotation;
+		ar & pkm_vs_base_rotation;
+		ar & estimated_time;
+	}
+};
 
 /*!
  * @brief SwarmItFix Mobile Base EDP command buffer
@@ -144,7 +207,9 @@ struct cbuffer
 
 	double joint_pos[NUM_OF_SERVOS];
 
-	double goal_pos[6];
+	// external
+	int base_vs_bench_rotation;
+	double pkm_vs_base_rotation;
 
 	//! Allowed time for the motion in seconds.
 	//! If 0, then the motion time will be limited by the motor parameters.
@@ -174,8 +239,9 @@ struct cbuffer
 				ar & set_pose_specification;
 				switch (set_pose_specification)
 				{
-					case FRAME:
-						ar & goal_pos;
+					case EXTERNAL:
+						ar & base_vs_bench_rotation;
+						ar & pkm_vs_base_rotation;
 						break;
 					case JOINT:
 						ar & joint_pos;
@@ -192,7 +258,24 @@ struct cbuffer
 		};
 	}
 
-}__attribute__((__packed__));
+};
+
+struct c_buffer : lib::c_buffer
+{
+	cbuffer smb;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & smb;
+	}
+
+};
 
 /*!
  * @brief SwarmItFix Mobile Base EDP reply buffer
@@ -210,7 +293,26 @@ struct rbuffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
+		ar & multi_leg_reply;
 		ar & epos_controller;
+	}
+
+};
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer smb;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & smb;
 	}
 
 };

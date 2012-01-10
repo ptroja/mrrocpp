@@ -17,7 +17,7 @@ namespace mp {
 namespace generator {
 
 generator::generator(task::task& _mp_task) :
-	ecp_mp::generator::generator(*_mp_task.sr_ecp_msg), mp_t(_mp_task), wait_for_ECP_pulse(false)
+	ecp_mp::generator::generator(*_mp_task.sr_ecp_msg), mp_t(_mp_task), wait_for_ECP_message(false)
 {
 }
 
@@ -32,45 +32,44 @@ void generator::Move()
 		return;
 
 	do { // realizacja ruchu
-
+                flushall();
 		// zadanie przygotowania danych od czujnikow
 		mp_t.all_sensors_initiate_reading(sensor_m);
 
+                flushall();
 		// wykonanie kroku ruchu przez wybrane roboty (z flaga 'communicate_with_ecp')
 		execute_all();
 
+                flushall();
 		// odczytanie danych z wszystkich czujnikow
 		mp_t.all_sensors_get_reading(sensor_m);
 
+                flushall();
 		// oczekiwanie na puls z ECP lub UI
 		mp_t.receive_ui_or_ecp_message(*this);
 
+                flushall();
 		node_counter++;
 	} while (next_step());
 
 	// kasujemy znacznik swiezosci buforow
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, mp_t.robot_m)
-	{
-		if (robot_node.second->reply.isFresh()) {
-			robot_node.second->reply.markAsUsed();
-		}
-	}
+			{
+				if (robot_node.second->reply.isFresh()) {
+					robot_node.second->reply.markAsUsed();
+				}
+			}
 }
 // ------------------------------------------------------------------------
 
 void generator::execute_all()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-	{
-		if (robot_node.second->communicate_with_ecp) {
-			robot_node.second->execute_motion();
-		}
-	}
-}
-
-MP_error::MP_error(lib::error_class_t err0, uint64_t err1) :
-	error_class(err0), error_no(err1)
-{
+			{
+				if (robot_node.second->communicate_with_ecp) {
+					robot_node.second->execute_motion();
+				}
+			}
 }
 
 } // namespace generator

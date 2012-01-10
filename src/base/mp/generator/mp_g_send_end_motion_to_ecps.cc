@@ -10,10 +10,10 @@
 
 #include <boost/foreach.hpp>
 
-#include "base/mp/MP_main_error.h"
+
 #include "base/mp/mp_robot.h"
 
-#include "robot/player/ecp_mp_t_player.h"
+
 #include "base/mp/generator/mp_g_send_end_motion_to_ecps.h"
 
 namespace mrrocpp {

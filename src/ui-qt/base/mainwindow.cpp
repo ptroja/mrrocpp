@@ -34,6 +34,8 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 
 	menuBar = new Ui::MenuBar(&interface, this);
 	menuBar->setupMenuBar(this);
+	toolBar = new Ui::ToolBar(menuBar, this);
+	addToolBar(Qt::TopToolBarArea, toolBar);
 
 	signalDispatcher = new Ui::SignalDispatcher(interface);
 	//signalDispatcher = new mrrocpp::ui::common::SignalDispatcher();
@@ -48,10 +50,10 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 
 }
 
-void MainWindow::setMenu()
-{
-	menuBar->setupMenuBar(this);
-}
+//void MainWindow::setMenu()
+//{
+//	menuBar->setupMenuBar(this);
+//}
 
 Ui::SignalDispatcher* MainWindow::getSignalDispatcher()
 {
@@ -84,6 +86,17 @@ MainWindow::~MainWindow()
 Ui::MenuBar* MainWindow::getMenuBar()
 {
 	return menuBar;
+}
+
+void MainWindow::menuall_Preset_Positions_setEnabled(bool value)
+{
+	getMenuBar()->menuall_Preset_Positions->setEnabled(value);
+	getMenuBar()->actionall_Synchro_Position->setEnabled(value);
+	getMenuBar()->actionall_Front_Position->setEnabled(value);
+	getMenuBar()->actionall_Position_0->setEnabled(value);
+	getMenuBar()->actionall_Position_1->setEnabled(value);
+	getMenuBar()->actionall_Position_2->setEnabled(value);
+
 }
 
 Ui::MainWindow * MainWindow::get_ui()
@@ -211,24 +224,34 @@ void MainWindow::ui_notification()
 void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 {
 
-// TODO dodac obsluge wyjatku
-	std::string text((ui->lineEdit_position->text()).toStdString());
+	try {
 
-	boost::char_separator <char> sep(" ");
-	boost::tokenizer <boost::char_separator <char> > tokens(text, sep);
+		std::string text((ui->lineEdit_position->text()).toStdString());
 
-	int j = 0;
-	BOOST_FOREACH(std::string t, tokens)
-			{
+		boost::char_separator <char> sep(", ");
 
-				val[j] = boost::lexical_cast <double>(t);
+		boost::tokenizer <boost::char_separator <char> > tokens(text, sep);
 
-				if (j == number_of_servos) {
-					break;
+		int j = 0;
+		BOOST_FOREACH(std::string t, tokens)
+				{
+
+					val[j] = boost::lexical_cast <double>(t);
+
+					if (j == number_of_servos) {
+						break;
+					}
+					j++;
 				}
-				j++;
-			}
+	} catch (...) {
+		interface.ui_msg->message(lib::NON_FATAL_ERROR, "position import failed");
+	}
 
+}
+
+QString MainWindow::get_lineEdit_qstring()
+{
+	return ui->lineEdit_position->text();
 }
 
 void MainWindow::ui_notification_slot()

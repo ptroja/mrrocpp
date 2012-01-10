@@ -33,11 +33,11 @@ namespace common {
 
 /*--------------------------------------------------------------------------*/
 shell::shell(lib::configurator &_config) :
-	config(_config), hardware_busy_file_fullpath(""), my_pid(0)
+		config(_config), hardware_busy_file_fullpath(""), my_pid(0)
 {
 	/* Lokalizacja procesu wywietlania komunikatow SR */
-	msg
-			= (boost::shared_ptr <lib::sr_edp>) new lib::sr_edp(lib::EDP, config.robot_name, config.get_sr_attach_point().c_str());
+	msg =
+			(boost::shared_ptr <lib::sr_edp>) new lib::sr_edp(lib::EDP, config.robot_name, config.get_sr_attach_point().c_str());
 
 	my_pid = getpid();
 }
@@ -58,35 +58,14 @@ bool shell::detect_hardware_busy()
 
 	hardware_busy_file_fullpath += hardware_busy_attach_point + ".pid";
 
-	FILE * fp;
-
 	if (access(hardware_busy_file_fullpath.c_str(), R_OK) != 0) {
 
 		std::cerr << "initialize_communication nie moglem odczytac: " << hardware_busy_file_fullpath << std::endl;
 
 		// utworz plik i wstaw do niego pid
-
-		fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
-		if (fp) {
-			fclose(fp);
-		} else {
+		if (!create_hardware_busy_file()) {
 			return false;
 		}
-
-		if (chmod(hardware_busy_file_fullpath.c_str(), S_IRGRP | S_IROTH | S_IRUSR | S_IWGRP | S_IWOTH | S_IWUSR) != 0) {
-			perror("chmod() error");
-			return false;
-		}
-
-		std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
-		if (!outfile.good()) {
-			std::cerr << hardware_busy_file_fullpath << std::endl;
-			perror("because of");
-			return false;
-		} else {
-			outfile << my_pid;
-		}
-		outfile.close();
 
 	} else {
 		pid_t file_pid;
@@ -105,7 +84,6 @@ bool shell::detect_hardware_busy()
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
 		ss << "/proc/" << file_pid;
-		ss.str().c_str();
 
 		std::cerr << ss.str() << std::endl;
 		// jesli nie ma procesu
@@ -117,23 +95,12 @@ bool shell::detect_hardware_busy()
 			} else {
 				puts("File successfully deleted");
 			}
-			// utworz plik
-			fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
-			if (fp) {
-				fclose(fp);
-			} else {
+
+			// utworz plik i wstaw do niego pid
+			if (!create_hardware_busy_file()) {
 				return false;
 			}
-			// wypelnij plik pidem edp
-			std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
-			if (!outfile.good()) {
-				std::cerr << hardware_busy_file_fullpath << std::endl;
-				perror("because of");
-				return false;
-			} else {
-				outfile << my_pid;
-			}
-			outfile.close();
+
 		} else {
 			// juz jest EDP
 			fprintf(stderr, "edp: hardware busy\n");
@@ -142,6 +109,33 @@ bool shell::detect_hardware_busy()
 
 	}
 
+	return true;
+}
+
+bool shell::create_hardware_busy_file()
+{
+	FILE * fp;
+	fp = fopen(hardware_busy_file_fullpath.c_str(), "w");
+	if (fp) {
+		fclose(fp);
+	} else {
+		return false;
+	}
+
+	if (chmod(hardware_busy_file_fullpath.c_str(), S_IRGRP | S_IROTH | S_IRUSR | S_IWGRP | S_IWOTH | S_IWUSR) != 0) {
+		perror("chmod() error");
+		return false;
+	}
+
+	std::ofstream outfile(hardware_busy_file_fullpath.c_str(), std::ios::out);
+	if (!outfile.good()) {
+		std::cerr << hardware_busy_file_fullpath << std::endl;
+		perror("because of");
+		return false;
+	} else {
+		outfile << my_pid;
+	}
+	outfile.close();
 	return true;
 }
 

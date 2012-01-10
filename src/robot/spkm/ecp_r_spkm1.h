@@ -24,6 +24,9 @@ namespace spkm1 {
  */
 class robot : public spkm::robot
 {
+private:
+	//! Creates manipulator kinematic model.
+	void create_kinematic_models_for_given_robot(void);
 
 public:
 

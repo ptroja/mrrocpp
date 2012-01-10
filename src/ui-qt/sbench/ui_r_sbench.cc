@@ -34,15 +34,10 @@ int UiRobot::ui_get_edp_pid()
 void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
 {
 	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
-
 }
 
-int UiRobot::synchronise()
-
+void UiRobot::synchronise()
 {
-
-	return 1;
-
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
@@ -51,7 +46,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 	add_wgt <wgt_sbench_command>(sbench::WGT_SBENCH_COMMAND, "Sbench command");
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 //	MainWindow *mw = interface.get_main_window();
 	common::UiRobot::manage_interface();
@@ -93,7 +88,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()

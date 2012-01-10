@@ -39,7 +39,7 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	common::UiRobot::manage_interface();
@@ -57,9 +57,6 @@ int UiRobot::manage_interface()
 			break;
 		case common::UI_EDP_WAITING_TO_START_READER:
 		case common::UI_EDP_WAITING_TO_STOP_READER:
-
-
-
 
 			action_Clear_Fault->setEnabled(true);
 			action_command->setEnabled(true);
@@ -92,7 +89,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()
@@ -119,13 +115,11 @@ void UiRobot::setup_menubar()
 
 }
 
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 
 {
 
 	eb.command(boost::bind(&ui::smb::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
 
 }
 
@@ -137,7 +131,6 @@ int UiRobot::synchronise_int()
 
 	// wychwytania ew. bledow ECP::robot
 	try {
-		// dla robota spkm
 
 		if ((is_edp_loaded()) && (state.edp.is_synchronised == false)) {
 			ui_ecp_robot->the_robot->synchronise();

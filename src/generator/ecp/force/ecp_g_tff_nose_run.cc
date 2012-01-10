@@ -26,7 +26,7 @@ namespace common {
 namespace generator {
 
 tff_nose_run::tff_nose_run(common::task::task& _ecp_task, int step) :
-		common::generator::generator(_ecp_task), step_no(step)
+		common::generator::generator(_ecp_task), pulse_check_activated(false), force_meassure(false), step_no(step)
 {
 	// domyslnie wszytkie osie podatne a pulse_check nieaktywne
 	configure_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT);
@@ -36,7 +36,6 @@ tff_nose_run::tff_nose_run(common::task::task& _ecp_task, int step) :
 	configure_reciprocal_damping(lib::FORCE_RECIPROCAL_DAMPING, lib::FORCE_RECIPROCAL_DAMPING, lib::FORCE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING);
 	configure_inertia(lib::FORCE_INERTIA, lib::FORCE_INERTIA, lib::FORCE_INERTIA, lib::TORQUE_INERTIA, lib::TORQUE_INERTIA, lib::TORQUE_INERTIA);
 
-	set_force_meassure(false);
 }
 
 void tff_nose_run::set_force_meassure(bool fm)
@@ -189,7 +188,7 @@ void tff_nose_run::execute_motion(void)
 	if (the_robot->reply_package.reply_type == lib::ERROR) {
 
 		the_robot->query();
-		throw common::robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+		BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(EDP_ERROR));
 
 	}
 	the_robot->query();
@@ -215,7 +214,7 @@ void tff_nose_run::execute_motion(void)
 			case BEYOND_LOWER_THETA7_LIMIT:
 				break;
 			default:
-				throw common::robot::ECP_error(lib::NON_FATAL_ERROR, EDP_ERROR);
+				BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(EDP_ERROR));
 				break;
 
 		} /* end: switch */

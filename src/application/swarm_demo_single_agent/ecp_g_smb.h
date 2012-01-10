@@ -6,7 +6,7 @@
 
 #ifndef ECP_G_SMB_SWARM_DEMO_SINGLE_AGENT_H_
 #define ECP_G_SMB_SWARM_DEMO_SINGLE_AGENT_H_
-
+#include "robot/smb/ecp_r_smb.h"
 #include "base/ecp/ecp_generator.h"
 #include "robot/smb/dp_smb.h"
 
@@ -21,7 +21,7 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup generators
  */
-class legs_command : public common::generator::generator
+class legs_command : public common::generator::_generator <ecp::smb::robot>
 {
 
 private:
@@ -43,7 +43,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	legs_command(common::task::task& _ecp_task);
+	legs_command(task_t & _ecp_task);
 
 	bool first_step();
 	bool next_step();
@@ -59,21 +59,21 @@ public:
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup generators
  */
-class external_epos_command : public common::generator::generator
+class external_epos_command : public common::generator::_generator <ecp::smb::robot>
 {
 private:
 
-	lib::epos::epos_simple_command mp_ecp_epos_simple_command;
+	lib::smb::smb_epos_simple_command mp_ecp_epos_simple_command;
 
 	/**
 	 * @brief epos external motion command data port
 	 */
-	lib::single_thread_port <lib::epos::epos_simple_command> *epos_external_command_data_port;
+	lib::single_thread_port <lib::smb::smb_epos_simple_command> *epos_external_command_data_port;
 
 	/**
 	 * @brief epos motion status with external reply data request port
 	 */
-	lib::single_thread_request_port <lib::epos::epos_reply> *epos_external_reply_data_request_port;
+	lib::single_thread_request_port <lib::smb::smb_ext_epos_reply> *epos_external_reply_data_request_port;
 
 public:
 
@@ -81,7 +81,7 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	external_epos_command(common::task::task& _ecp_task);
+	external_epos_command(task_t & _ecp_task);
 
 	bool first_step();
 	bool next_step();

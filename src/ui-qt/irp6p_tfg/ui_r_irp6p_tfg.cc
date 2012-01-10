@@ -45,23 +45,17 @@ void UiRobot::create_ui_ecp_robot()
 
 }
 
-int UiRobot::edp_create_int_extra_operations()
+void UiRobot::edp_create_int_extra_operations()
 {
 	wgts[WGT_IRP6P_TFG_MOVE]->synchro_depended_init();
-	return 1;
 }
 
-int UiRobot::synchronise()
-
+void UiRobot::synchronise()
 {
-
 	eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
-
 }
 
-int UiRobot::move_to_preset_position(int variant)
+void UiRobot::move_to_preset_position(int variant)
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -69,10 +63,9 @@ int UiRobot::move_to_preset_position(int variant)
 	}
 	eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_joint_motion, &(*this)));
 
-	return 1;
 }
 
-int UiRobot::move_to_synchro_position()
+void UiRobot::move_to_synchro_position()
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -80,7 +73,6 @@ int UiRobot::move_to_synchro_position()
 	}
 	eb.command(boost::bind(&ui::irp6p_tfg::UiRobot::execute_motor_motion, &(*this)));
 
-	return 1;
 }
 
 int UiRobot::execute_motor_motion()
@@ -143,7 +135,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	single_motor::UiRobot::manage_interface();
@@ -159,8 +151,6 @@ int UiRobot::manage_interface()
 			break;
 		case common::UI_EDP_WAITING_TO_START_READER:
 		case common::UI_EDP_WAITING_TO_STOP_READER:
-
-
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
@@ -190,7 +180,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()
