@@ -5,11 +5,9 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-// Klasa edp_irp6ot_effector.
 #include "edp_e_smb2.h"
 #include "const_smb2.h"
 #include "base/edp/reader.h"
-// Kinematyki.
 #include "robot/smb/kinematic_model_smb.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
