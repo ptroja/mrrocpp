@@ -42,6 +42,8 @@ private:
 
 	void showEvent(QShowEvent * event);
 	virtual void init() = 0;
+	virtual void execute() = 0;
+	virtual void read_and_copy() = 0;
 
 private slots:
 

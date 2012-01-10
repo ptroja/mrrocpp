@@ -24,10 +24,8 @@ public:
 	~wgt_sbench_voltage_command();
 
 	void init();
-
-private slots:
-	void on_pushButton_read_and_copy_clicked();
-	void on_pushButton_execute_clicked();
+	void execute();
+	void read_and_copy();
 
 };
 

@@ -49,7 +49,7 @@ void wgt_sbench_voltage_command::init()
 	}
 }
 
-void wgt_sbench_voltage_command::on_pushButton_read_and_copy_clicked()
+void wgt_sbench_voltage_command::read_and_copy()
 {
 	init();
 
@@ -61,7 +61,7 @@ void wgt_sbench_voltage_command::on_pushButton_read_and_copy_clicked()
 
 }
 
-void wgt_sbench_voltage_command::on_pushButton_execute_clicked()
+void wgt_sbench_voltage_command::execute()
 {
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {

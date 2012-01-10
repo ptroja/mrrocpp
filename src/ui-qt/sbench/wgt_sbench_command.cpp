@@ -93,14 +93,7 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 
 void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
 {
-	init();
-
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			docks[i][j]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.voltage_buf.get_value(i, j));
-		}
-	}
-
+	read_and_copy();
 }
 
 void wgt_sbench_command::on_pushButton_clear_clicked()
@@ -116,17 +109,7 @@ void wgt_sbench_command::on_pushButton_clear_clicked()
 
 void wgt_sbench_command::on_pushButton_execute_clicked()
 {
-
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			robot->ui_ecp_robot->the_robot->sbench_command_voltage_data_port.data.set_value(i, j, docks[i][j]->isChecked());
-		}
-	}
-
-	robot->ui_ecp_robot->the_robot->sbench_command_voltage_data_port.set();
-	robot->ui_ecp_robot->execute_motion();
-
-	init();
+	execute();
 }
 
 void wgt_sbench_command::showEvent(QShowEvent * event)
