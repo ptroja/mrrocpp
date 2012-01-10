@@ -186,26 +186,21 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		desired_end_effector_frame.setIdentity();
 		is_current_cartesian_pose_known = false;
 
-		// Read tool (SHEAD) transformation from the configuration file.
-		if (config.exists("spkm_frame")) {
-			// Try to read the spkm_frame from file.
-			try {
-				spkm_frame.set(config.value <std::string>("spkm_frame"));
-			} catch (std::exception& e_) {
-				// Print failure reason.
-				std::cerr << e_.what() << endl;
-				// Set identity.
-				spkm_frame.setIdentity();
-			}
-		} else
-			// set identity by default.
-			spkm_frame.setIdentity();
+		// Try to read tool (SHEAD) transformation from the configuration file.
+		try {
+			shead_frame.set(config.value <std::string>("shead_frame"));
+		} catch (std::exception& e_) {
+			// Print failure reason.
+			std::cerr << e_.what() << endl;
+			// Set identity.
+			shead_frame.setIdentity();
+		}
 
 #if(DEBUG_FRAMES)
 		std::cerr.precision(8);
-		std::cerr << "spkm_frame: " << spkm_frame << endl;
+		std::cerr << "shead_frame: " << shead_frame << endl;
 		std::cerr.precision(8);
-		std::cerr << "spkm_frame * !spkm_frame: " << spkm_frame * !spkm_frame << endl;
+		std::cerr << "shead_frame * !shead_frame: " << shead_frame * !shead_frame << endl;
 #endif
 
 		// Lock data structure during update.
@@ -384,7 +379,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		if (local_instruction.spkm.set_pose_specification == lib::spkm::WRIST_XYZ_EULER_ZYZ) {
 			// Command was given in the wrist frame.
 			current_end_effector_frame = desired_end_effector_frame;
-			current_spkm_frame = current_end_effector_frame * spkm_frame;
+			current_spkm_frame = current_end_effector_frame * shead_frame;
 			is_current_cartesian_pose_known = true;
 #if(DEBUG_FRAMES)
 			std::cerr.precision(8);
@@ -394,7 +389,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		} else if (local_instruction.spkm.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
 			// Command was given in the tool (SHEAD) frame.
 			current_spkm_frame = desired_spkm_frame;
-			current_end_effector_frame = desired_spkm_frame * !spkm_frame;
+			current_end_effector_frame = desired_spkm_frame * !shead_frame;
 			is_current_cartesian_pose_known = true;
 #if(DEBUG_FRAMES)
 			std::cerr.precision(8);
@@ -541,7 +536,7 @@ void effector::parse_motor_command()
 #endif
 
 				// Transform to the wrist frame.
-				desired_end_effector_frame = desired_spkm_frame * !spkm_frame;
+				desired_end_effector_frame = desired_spkm_frame * !shead_frame;
 #if(DEBUG_FRAMES)
 				std::cerr.precision(8);
 				std::cerr << "Wrist frame: " << desired_end_effector_frame << endl;
@@ -768,7 +763,7 @@ void effector::interpolated_motion_in_operational_space()
 		desired_spkm_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(instruction.spkm.goal_pos));
 //		desired_spkm_frame.set_from_xyz_rpy(lib::Xyz_Rpy_vector(instruction.spkm.goal_pos));
 		// Transform to the wrist frame.
-		desired_end_effector_frame = desired_spkm_frame * !spkm_frame;
+		desired_end_effector_frame = desired_spkm_frame * !shead_frame;
 #if(DEBUG_FRAMES)
 		std::cerr << "desired_spkm_frame: " << desired_spkm_frame << endl;
 #endif
@@ -823,7 +818,7 @@ void effector::interpolated_motion_in_operational_space()
 	} else if (instruction.spkm.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
 		// Perform motion in tool frame.
 		cubic_polynomial_interpolate_motor_poses_in_tool_frame <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1,
-				lib::spkm::NUM_OF_SERVOS>(motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_spkm_frame, desired_spkm_frame, spkm_frame);
+				lib::spkm::NUM_OF_SERVOS>(motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_spkm_frame, desired_spkm_frame, shead_frame);
 	} else
 		// Other pose specifications aren't valid in this type of movement.
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
