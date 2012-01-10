@@ -1,4 +1,3 @@
-
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
@@ -21,7 +20,7 @@ namespace smb1 {
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
-	smb::effector(_shell, lib::smb1::ROBOT_NAME)
+		smb::effector(_shell, lib::smb1::ROBOT_NAME)
 {
 
 }
@@ -33,6 +32,12 @@ void effector::synchronise(void)
 	cout.flush();
 #endif
 	try {
+		/*
+		 // TEMPORARY EMPTY SYNCHRO
+		 controller_state_edp_buf.is_synchronised = true;
+		 return;
+		 // END OF // TEMPORARY EMPTY SYNCHRO
+		 */
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
 			return;
@@ -62,11 +67,10 @@ void effector::synchronise(void)
 		boost::system_time wakeup = boost::get_system_time();
 
 		// Loop until reaching zero offset.
-		while(pkm_rotation_node->getAnalogInput1() != offset) {
-			std::cout << std::dec <<
-					"AnalogVelocitySetpoint = " << (int) pkm_rotation_node->getAnalogVelocitySetpoint() <<
-					" AnalogInput = " << (int) pkm_rotation_node->getAnalogInput1() <<
-					" offset " << ((int) offset) << std::endl;
+		while (pkm_rotation_node->getAnalogInput1() != offset) {
+			std::cout << std::dec << "AnalogVelocitySetpoint = " << (int) pkm_rotation_node->getAnalogVelocitySetpoint()
+					<< " AnalogInput = " << (int) pkm_rotation_node->getAnalogInput1() << " offset " << ((int) offset)
+					<< std::endl;
 
 			// Sleep for a constant period of time
 			wakeup += boost::posix_time::milliseconds(5);
@@ -85,10 +89,10 @@ void effector::synchronise(void)
 		// Activate homing mode.
 		pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, 9850);
 		// Step-by-step homing in order to omit the offset setting (the value will be stored in the EPOS for every agent separatelly).
-/*		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-		pkm_rotation_node->reset();
-		pkm_rotation_node->startHoming();
-		pkm_rotation_node->monitorHomingStatus();*/
+		/*		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		 pkm_rotation_node->reset();
+		 pkm_rotation_node->startHoming();
+		 pkm_rotation_node->monitorHomingStatus();*/
 
 		// Compute joints positions in the home position
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
@@ -125,7 +129,6 @@ void effector::synchronise(void)
 
 }
 // namespace smb
-
 
 namespace common {
 

@@ -819,7 +819,7 @@ void festo_and_inputs::create_reply()
 			master.reply.smb.multi_leg_reply.leg[i].is_in = is_upper_halotron_active(i + 1);
 			master.reply.smb.multi_leg_reply.leg[i].is_attached = is_attached(i + 1);
 		}
-		//std::cout << "epos digital inputs = " << epos_digits << std::endl;
+		//	std::cout << "epos digital inputs = " << epos_inputs << std::endl;
 	}
 }
 
