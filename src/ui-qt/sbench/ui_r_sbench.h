@@ -13,7 +13,7 @@
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
 
-#include "wgt_sbench_command.h"
+#include "wgt_sbench_voltage_command.h"
 
 namespace Ui {
 class MenuBar;

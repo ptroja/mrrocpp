@@ -86,36 +86,6 @@ wgt_sbench_command::~wgt_sbench_command()
 
 }
 
-void wgt_sbench_command::init()
-{
-	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.set_request();
-	robot->ui_ecp_robot->execute_motion();
-	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.get();
-
-	QFont font;
-	QPalette pal;
-
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			if (robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.voltage_buf.get_value(i, j)) {
-
-				font.setUnderline(true);
-
-				pal.setColor(QPalette::WindowText, Qt::blue);
-				pal.setColor(QPalette::Background, Qt::blue);
-			} else {
-
-				font.setUnderline(false);
-
-				pal.setColor(QPalette::WindowText, Qt::black);
-				pal.setColor(QPalette::Background, Qt::black);
-			}
-			docks[i][j]->setFont(font);
-			docks[i][j]->setPalette(pal);
-		}
-	}
-}
-
 void wgt_sbench_command::on_pushButton_read_clicked()
 {
 	init();

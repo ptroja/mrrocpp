@@ -43,7 +43,7 @@ void UiRobot::synchronise()
 UiRobot::UiRobot(common::Interface& _interface) :
 		common::UiRobot(_interface, lib::sbench::ROBOT_NAME, lib::sbench::NUM_OF_SERVOS), ui_ecp_robot(NULL)
 {
-	add_wgt <wgt_sbench_command>(sbench::WGT_SBENCH_COMMAND, "Sbench command");
+	add_wgt <wgt_sbench_voltage_command>(sbench::WGT_SBENCH_VOLTAGE_COMMAND, "Sbench voltage command");
 }
 
 void UiRobot::manage_interface()
@@ -98,7 +98,8 @@ void UiRobot::setup_menubar()
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "S&bench", 0, QApplication::UnicodeUTF8));
 
-	action_command = new Ui::MenuBarAction(QString("&Command"), wgts[WGT_SBENCH_COMMAND], signalDispatcher, menuBar);
+	action_command =
+			new Ui::MenuBarAction(QString("&Voltage command"), wgts[WGT_SBENCH_VOLTAGE_COMMAND], signalDispatcher, menuBar);
 
 	robot_menu->addAction(action_command);
 

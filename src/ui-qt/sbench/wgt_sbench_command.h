@@ -21,7 +21,6 @@ class UiRobot;
 }
 namespace sbench {
 class UiRobot;
-const std::string WGT_SBENCH_COMMAND = "WGT_SBENCH_COMMAND";
 }
 }
 }
@@ -42,7 +41,7 @@ public:
 private:
 
 	void showEvent(QShowEvent * event);
-	virtual void init();
+	virtual void init() = 0;
 
 private slots:
 
