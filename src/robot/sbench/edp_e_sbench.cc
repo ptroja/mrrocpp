@@ -98,34 +98,32 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	lib::sbench::pins_buffer pins_buf;
-
-	memcpy(&pins_buf, &(local_instruction.sbench.pins_buf), sizeof(pins_buf));
+	lib::sbench::pins_buffer voltage_buf = local_instruction.sbench.voltage_buf;
 
 	if (robot_test_mode) {
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			if (pins_buf.pins_state[i]) {
+			if (voltage_buf.pins_state[i]) {
 				ss << "1";
 			} else {
 				ss << "0";
 			}
 		}
-		current_pins_buf = pins_buf;
+		current_pins_buf = voltage_buf;
 		ss << std::endl;
 		msg->message(ss.str());
 	} else {
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			comedi_dio_write(device, (int) (i / 32), (i%32), pins_buf.pins_state[i]);
+			comedi_dio_write(device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
 			//	current_pins_state[i] = pins_state[i];
 		} // send command to hardware
 	}
 
 }
 
-			/*--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/
 
-			/*--------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
 	msg->message("get_arm");
@@ -146,12 +144,12 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			unsigned int current_read;
-			comedi_dio_read(device, (int) (i / 32), (i%32), &current_read);
+			comedi_dio_read(device, (int) (i / 32), (i % 32), &current_read);
 			current_pins_buf.pins_state[i] = current_read;
 		} // send command to hardware
 
 	}
-	reply.sbench.pins_buf = current_pins_buf;
+	reply.sbench.voltage_buf = current_pins_buf;
 
 	reply.servo_step = step_counter;
 }

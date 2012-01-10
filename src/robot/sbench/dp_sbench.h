@@ -37,6 +37,15 @@ const std::string COMMAND_DATA_PORT = "SBENCH_COMMAND_DATA_PORT";
 const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
 
 /*!
+ * @brief SwarmItFix Head EDP command buffer variant
+ * @ingroup shead
+ */
+enum CBUFFER_VARIANT
+{
+	VOLTAGE, PREASURE
+};
+
+/*!
  * @brief SwarmItFix bench pins state typedef
  * @ingroup sbench
  */
@@ -75,7 +84,11 @@ public:
  */
 struct cbuffer
 {
-	pins_buffer pins_buf;
+	//! Variant of the command
+	CBUFFER_VARIANT variant;
+
+	pins_buffer voltage_buf;
+	pins_buffer preasure_buf;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -84,7 +97,9 @@ struct cbuffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & pins_buf;
+		ar & variant;
+		ar & voltage_buf;
+		ar & preasure_buf;
 	}
 
 };
@@ -116,7 +131,8 @@ struct c_buffer : lib::c_buffer
  */
 struct rbuffer : lib::r_buffer
 {
-	pins_buffer pins_buf;
+	pins_buffer voltage_buf;
+	pins_buffer preasure_buf;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -125,8 +141,8 @@ struct rbuffer : lib::r_buffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		// serialize base class informationZ
-		ar & pins_buf;
+		ar & voltage_buf;
+		ar & preasure_buf;
 	}
 
 };

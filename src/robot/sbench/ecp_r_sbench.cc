@@ -61,7 +61,7 @@ void robot::create_command()
 		ecp_command.set_type = ARM_DEFINITION;
 		// generator command interpretation
 
-		ecp_command.sbench.pins_buf = sbench_command_data_port.data;
+		ecp_command.sbench.voltage_buf = sbench_command_data_port.data;
 
 		if (is_new_data) {
 			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
@@ -93,7 +93,7 @@ void robot::create_command()
 void robot::get_reply()
 {
 	if (sbench_reply_data_request_port.is_new_request()) {
-		sbench_reply_data_request_port.data = reply_package.sbench.pins_buf;
+		sbench_reply_data_request_port.data = reply_package.sbench.voltage_buf;
 		sbench_reply_data_request_port.set();
 	}
 }
