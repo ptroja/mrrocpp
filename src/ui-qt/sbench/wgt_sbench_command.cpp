@@ -88,7 +88,7 @@ wgt_sbench_command::~wgt_sbench_command()
 
 }
 
-void wgt_sbench_command::on_pushButton_read_clicked()
+void wgt_sbench_command::init()
 {
 	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.set_request();
 	robot->ui_ecp_robot->execute_motion();
@@ -117,7 +117,11 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 
 		}
 	}
+}
 
+void wgt_sbench_command::on_pushButton_read_clicked()
+{
+	init();
 }
 
 void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
@@ -162,3 +166,7 @@ void wgt_sbench_command::on_pushButton_execute_clicked()
 	on_pushButton_read_clicked();
 }
 
+void wgt_sbench_command::showEvent(QShowEvent * event)
+{
+	init();
+}

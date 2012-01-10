@@ -41,7 +41,8 @@ private:
 
 	QCheckBox* docks[SBENCH_MAX_ROW][SBENCH_MAX_COL];
 
-//	QVector <QCheckBox*> checkBox_Vector;
+	void showEvent(QShowEvent * event);
+	void init();
 
 private slots:
 
