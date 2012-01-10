@@ -28,7 +28,7 @@ add_library(kinematicssmb
 )
 
 # Test utilities
-add_executable(cpv_test_smb cpv_test.cc)
+add_executable(cpv_test_smb cpv_test_smb.cc)
 target_link_libraries (cpv_test_smb epos festo rt)
 
 target_link_libraries(kinematicssmb kinematics)

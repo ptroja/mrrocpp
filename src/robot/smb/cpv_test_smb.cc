@@ -1,5 +1,5 @@
 /*
- * cpv_test.cc for smb
+ * cpv_test_smb.cc for smb
  *
  *  Created on: Sep 17, 2011
  *      Author: ptroja and yoyek
