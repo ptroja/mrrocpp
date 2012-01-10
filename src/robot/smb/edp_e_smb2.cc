@@ -26,7 +26,7 @@ namespace smb2 {
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
-	smb::effector(_shell, lib::smb2::ROBOT_NAME)
+		smb::effector(_shell, lib::smb2::ROBOT_NAME)
 {
 
 }
@@ -74,10 +74,13 @@ void effector::synchronise(void)
 	std::cout.flush();
 #endif
 	try {
-		// TEMPORARY
-		controller_state_edp_buf.is_synchronised = true;
-		return;
-		// END OF TEMPORARY
+		/*
+		 // TEMPORARY EMPTY SYNCHRO
+		 controller_state_edp_buf.is_synchronised = true;
+		 return;
+		 // END OF // TEMPORARY EMPTY SYNCHRO
+		 */
+
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
 			return;
@@ -163,7 +166,6 @@ void effector::synchronise(void)
 
 }
 // namespace smb
-
 
 namespace common {
 
