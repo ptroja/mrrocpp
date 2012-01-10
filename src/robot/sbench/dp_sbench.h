@@ -65,12 +65,15 @@ private:
 
 public:
 
+	int translation_table[8][8];
 	pins_buffer();
 
 	void set_zeros();
 
 	void set_value(int row, int column, int value);
 	bool get_value(int row, int column);
+
+	bool is_any_doubled_value();
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -85,6 +88,54 @@ public:
 };
 
 /*!
+ * @brief SwarmItFix bench pins state typedef
+ * @ingroup sbench
+ */
+
+class voltage_buffer : public pins_buffer
+{
+
+public:
+
+	voltage_buffer();
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <pins_buffer>(*this);
+	}
+
+};
+
+/*!
+ * @brief SwarmItFix bench pins state typedef
+ * @ingroup sbench
+ */
+
+class preasure_buffer : public pins_buffer
+{
+
+public:
+
+	preasure_buffer();
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <pins_buffer>(*this);
+	}
+
+};
+
+/*!
  * @brief SwarmItFix Bench EDP command buffer
  * @ingroup sbench
  */
@@ -93,8 +144,8 @@ struct cbuffer
 	//! Variant of the command
 	CBUFFER_VARIANT variant;
 
-	pins_buffer voltage_buf;
-	pins_buffer preasure_buf;
+	voltage_buffer voltage_buf;
+	preasure_buffer preasure_buf;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -137,8 +188,8 @@ struct c_buffer : lib::c_buffer
  */
 struct rbuffer : lib::r_buffer
 {
-	pins_buffer voltage_buf;
-	pins_buffer preasure_buf;
+	voltage_buffer voltage_buf;
+	preasure_buffer preasure_buf;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;

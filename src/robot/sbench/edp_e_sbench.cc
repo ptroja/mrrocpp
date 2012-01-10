@@ -98,7 +98,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	lib::sbench::pins_buffer voltage_buf = local_instruction.sbench.voltage_buf;
+	lib::sbench::voltage_buffer voltage_buf = local_instruction.sbench.voltage_buf;
 
 	if (robot_test_mode) {
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {

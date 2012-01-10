@@ -45,7 +45,7 @@ protected:
 	 *
 	 * it is copied from desired in test_mode or read in hardware_mode
 	 */
-	lib::sbench::pins_buffer current_pins_buf;
+	lib::sbench::voltage_buffer current_pins_buf;
 
 public:
 
