@@ -46,7 +46,7 @@ public:
 	/**
 	 * @brief Head state reply data request port
 	 */
-	lib::single_thread_request_port <lib::sbench::pins_buffer> sbench_reply_data_request_port;
+	lib::single_thread_request_port <lib::sbench::rbuffer> sbench_reply_data_request_port;
 
 	/**
 	 * @brief constructor called from UI

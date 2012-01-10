@@ -115,7 +115,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			comedi_dio_write(device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
-			//	current_pins_state[i] = pins_state[i];
 		} // send command to hardware
 	}
 

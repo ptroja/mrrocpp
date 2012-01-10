@@ -86,7 +86,7 @@ void robot::create_command()
 	// checks if any data_port is set
 	bool is_new_data = false;
 
-	// cheks if any data_request_posrt is set
+	// cheks if any data_request_port is set
 	bool is_new_request = false;
 
 	sr_ecp_msg.message("create_command");
@@ -180,11 +180,7 @@ void robot::create_command()
 
 		ecp_command.smb.festo_command = smb_festo_command_data_port.data;
 
-		if (is_new_data) {
-			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
-		} else {
-			is_new_data = true;
-		}
+		check_then_set_command_flag(is_new_data);
 	}
 
 	if (epos_motor_reply_data_request_port.is_new_request()) {

@@ -97,11 +97,9 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 	QFont font;
 	QPalette pal;
 
-//	int sum = 0;
-
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			if (robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j)) {
+			if (robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.voltage_buf.get_value(i, j)) {
 
 				font.setUnderline(true);
 
@@ -116,9 +114,7 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 			}
 			docks[i][j]->setFont(font);
 			docks[i][j]->setPalette(pal);
-			//	checkBox_Vector[sum]->setFont(font);
-			//	checkBox_Vector[sum]->setPalette(pal);
-			//	sum++;
+
 		}
 	}
 
@@ -127,13 +123,11 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
 {
 	on_pushButton_read_clicked();
-//	int sum = 0;
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			docks[i][j]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j));
-			//checkBox_Vector[sum]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j));
-			//sum++;
+			docks[i][j]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.voltage_buf.get_value(i, j));
+
 		}
 	}
 
@@ -148,21 +142,16 @@ void wgt_sbench_command::on_pushButton_clear_clicked()
 
 		}
 	}
-	/*
-	 for (int i; i < SBENCH_MAX_EL; i++) {
-	 checkBox_Vector[i]->setChecked(false);
-	 }
-	 */
+
 }
 
 void wgt_sbench_command::on_pushButton_execute_clicked()
 {
-//	int sum = 0;
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
 			robot->ui_ecp_robot->the_robot->sbench_command_voltage_data_port.data.set_value(i, j, docks[i][j]->isChecked());
-			//	sum++;
+
 		}
 	}
 
