@@ -1,5 +1,5 @@
 /*
- * cpv_test.cc
+ * cpv_test.cc for smb
  *
  *  Created on: Sep 17, 2011
  *      Author: ptroja and yoyek
@@ -13,6 +13,7 @@
 
 #include "../festo/cpv.h"
 #include "../maxon/epos.h"
+#include "const_smb.h"
 
 using namespace mrrocpp::edp::canopen;
 using namespace mrrocpp::edp::festo;
