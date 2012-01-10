@@ -62,6 +62,16 @@ protected:
 	 */
 	int32_t legs_relative_zero_position;
 
+	/*!
+	 * \brief Variable storing the voltage adequate for zero position (in milivolts).
+	 */
+	int32_t pkm_zero_position_voltage;
+
+	/*!
+	 * \brief Variable storing synchronization offset (offset from *voltage* zero position).
+	 */
+	int32_t pkm_zero_position_offset;
+
 	//! Default axis velocity [rpm]
 	static const uint32_t Vdefault[mrrocpp::lib::smb::NUM_OF_SERVOS];
 
@@ -113,6 +123,13 @@ public:
 	 * Here there is only one extra thread - reader_thread.
 	 */
 	void create_threads();
+
+	/*!
+	 * @brief Motors synchronization - utilizes velocity motion based on the reading of potentiometer.
+	 *
+	 * This method synchronizes motor rotating the SMB.
+	 */
+	void synchronise();
 
 	/*!
 	 * \brief method to move robot motors
