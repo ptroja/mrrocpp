@@ -49,7 +49,7 @@ private:
 	 * \brief Tool transformation (SHEAD).
 	 * \author tkornuta
 	 */
-	lib::Homog_matrix spkm_frame;
+	lib::Homog_matrix shead_frame;
 
 	/*!
 	 * \brief Desired tool frame (pose of the SHEAD tip in the PKM base reference frame).
