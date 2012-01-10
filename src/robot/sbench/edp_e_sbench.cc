@@ -35,57 +35,42 @@ effector::effector(common::shell &_shell) :
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
+	voltage_init();
+	preasure_init();
+}
 
+void effector::voltage_init()
+{
 	if (!robot_test_mode) {
 
 		// initiate hardware
-		device = comedi_open(dev_name.c_str());
+		voltage_device = comedi_open(dev_name.c_str());
 
-		if (!device) {
+		if (!voltage_device) {
 
-			throw std::runtime_error("Could not open device");
+			throw std::runtime_error("Could not open voltage_device");
 		}
 
 	} else {
-		current_pins_buf.set_zeros();
-	}
+		current_pins_buf.voltage_buf.set_zeros();
 
+	}
+}
+
+void effector::preasure_init()
+{
+	if (!robot_test_mode) {
+
+	} else {
+
+		current_pins_buf.preasure_buf.set_zeros();
+	}
 }
 
 void effector::get_controller_state(lib::c_buffer &instruction)
 {
-
-	if (robot_test_mode) {
-		controller_state_edp_buf.is_synchronised = true;
-	} else {
-		controller_state_edp_buf.is_synchronised = true;
-	}
-
-	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
+	controller_state_edp_buf.is_synchronised = true;
 	reply.controller_state = controller_state_edp_buf;
-
-	/*
-	 // aktualizacja pozycji robota
-	 // Uformowanie rozkazu odczytu dla SERVO_GROUP
-	 sb->servo_command.instruction_code = lib::READ;
-	 // Wyslanie rozkazu do SERVO_GROUP
-	 // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
-	 //	printf("get_arm_position read_hardware\n");
-
-	 sb->send_to_SERVO_GROUP();
-	 */
-	// dla pierwszego wypelnienia current_joints
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-
-	{
-		boost::mutex::scoped_lock lock(effector_mutex);
-
-		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
-		for (int i = 0; i < number_of_servos; i++) {
-			servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
-			desired_joints[i] = current_joints[i];
-		}
-	}
 }
 
 /*--------------------------------------------------------------------------*/
@@ -96,11 +81,31 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 	msg->message("move_arm");
 
+	switch (local_instruction.sbench.variant)
+	{
+
+		case lib::sbench::VOLTAGE:
+			voltage_command(local_instruction);
+			break;
+		case lib::sbench::PREASURE:
+			preasure_command(local_instruction);
+			break;
+
+	}
+
+}
+
+/*--------------------------------------------------------------------------*/
+
+void effector::voltage_command(lib::sbench::c_buffer &instruction)
+{
+	msg->message("voltage_command");
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	lib::sbench::voltage_buffer voltage_buf = local_instruction.sbench.voltage_buf;
+	lib::sbench::voltage_buffer voltage_buf = instruction.sbench.voltage_buf;
 
 	if (robot_test_mode) {
+
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			if (voltage_buf.pins_state[i]) {
 				ss << "1";
@@ -108,19 +113,22 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				ss << "0";
 			}
 		}
-		current_pins_buf = voltage_buf;
+		current_pins_buf.voltage_buf = voltage_buf;
 		ss << std::endl;
 		msg->message(ss.str());
 	} else {
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			comedi_dio_write(device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
+			comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
 		} // send command to hardware
 	}
 
 }
 
-/*--------------------------------------------------------------------------*/
+void effector::preasure_command(lib::sbench::c_buffer &instruction)
+{
+	msg->message("preasure_command");
+}
 
 /*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
@@ -137,22 +145,33 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 	msg->message(ss.str().c_str());
 	//	printf("%s\n", ss.str().c_str());
 
+	voltage_reply();
+	preasure_reply();
+
+	reply.servo_step = step_counter;
+}
+/*--------------------------------------------------------------------------*/
+
+void effector::voltage_reply()
+{
 	if (!robot_test_mode) {
 
 		// read pin_state from hardware
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			unsigned int current_read;
-			comedi_dio_read(device, (int) (i / 32), (i % 32), &current_read);
-			current_pins_buf.pins_state[i] = current_read;
+			comedi_dio_read(voltage_device, (int) (i / 32), (i % 32), &current_read);
+			current_pins_buf.voltage_buf.pins_state[i] = current_read;
 		} // send command to hardware
 
 	}
-	reply.sbench.voltage_buf = current_pins_buf;
-
-	reply.servo_step = step_counter;
+	reply.sbench.voltage_buf = current_pins_buf.voltage_buf;
 }
-/*--------------------------------------------------------------------------*/
+
+void effector::preasure_reply()
+{
+
+}
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
 void effector::create_kinematic_models_for_given_robot(void)

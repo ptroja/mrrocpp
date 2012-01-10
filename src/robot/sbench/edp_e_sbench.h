@@ -45,7 +45,7 @@ protected:
 	 *
 	 * it is copied from desired in test_mode or read in hardware_mode
 	 */
-	lib::sbench::voltage_buffer current_pins_buf;
+	lib::sbench::rbuffer current_pins_buf;
 
 public:
 
@@ -55,6 +55,16 @@ public:
 	 * The attributes are initialized here.
 	 */
 	effector(common::shell &_shell);
+
+	/*!
+	 * \brief method to init voltage hardware
+	 */
+	void voltage_init();
+
+	/*!
+	 * \brief method to init preasure hardware
+	 */
+	void preasure_init();
 
 	/*!
 	 * \brief method to create threads other then EDP master thread.
@@ -73,12 +83,31 @@ public:
 	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
 
 	/*!
+	 * \brief method to command voltage of pins
+	 */
+	void voltage_command(lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+
+	/*!
+	 * \brief method to command preasure in pins
+	 */
+	void preasure_command(lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+
+	/*!
 	 * \brief method to get position of the motors or joints
 	 *
 	 * It will be used if there will be any motor used.
 	 */
-
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+
+	/*!
+	 * \brief method to command reply of pins
+	 */
+	void voltage_reply();
+
+	/*!
+	 * \brief method to reply preasure in pins
+	 */
+	void preasure_reply();
 
 	/*!
 	 * \brief method to choose master_order variant
@@ -109,7 +138,7 @@ public:
 
 private:
 	const std::string dev_name;
-	comedi_t *device; // device descriptor
+	comedi_t *voltage_device; // device descriptor
 
 };
 
