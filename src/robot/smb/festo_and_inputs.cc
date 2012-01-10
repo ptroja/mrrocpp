@@ -21,7 +21,7 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-//#define CLEANING_ACTIVE 1
+#define CLEANING_ACTIVE 1
 
 using namespace std;
 
@@ -224,28 +224,30 @@ void festo_and_inputs::set_move_out(int leg_number, bool value)
 
 void festo_and_inputs::set_clean(int leg_number, bool value)
 {
-#ifdef CLEANING_ACTIVE
-	switch (leg_number)
-	{
-		case 1:
-		desired_output[FESTO_CH1_GROUP][FESTO_CH1_BIT_TO_SET] = value;
 
-		break;
-		case 2:
-		desired_output[FESTO_CH2_GROUP][FESTO_CH2_BIT_TO_SET] = value;
+	if (master.cleaning_active) {
 
-		break;
-		case 3:
-		desired_output[FESTO_CH3_GROUP][FESTO_CH3_BIT_TO_SET] = value;
+		switch (leg_number)
+		{
+			case 1:
+				desired_output[FESTO_CH1_GROUP][FESTO_CH1_BIT_TO_SET] = value;
 
-		break;
+				break;
+			case 2:
+				desired_output[FESTO_CH2_GROUP][FESTO_CH2_BIT_TO_SET] = value;
 
-		default:
-		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
-		break;
+				break;
+			case 3:
+				desired_output[FESTO_CH3_GROUP][FESTO_CH3_BIT_TO_SET] = value;
 
+				break;
+
+			default:
+				BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
+				break;
+
+		}
 	}
-#endif
 }
 
 void festo_and_inputs::determine_legs_state()
@@ -447,7 +449,8 @@ void festo_and_inputs::move_one_or_two_out()
 	// attach legs
 	execute_command();
 
-#endif
+#else
+	// LOW PRESSURE VERSION WITH SERIAL LEG MOTION
 
 	// detach legs that are up to prepare them to go down
 //	master.msg->message(lib::NON_FATAL_ERROR, "move_one_or_two_out");
@@ -456,7 +459,11 @@ void festo_and_inputs::move_one_or_two_out()
 
 		if (!is_lower_halotron_active(i + 1)) {
 			set_detach(i + 1, true);
+			execute_command();
+			delay(500);
 			set_clean(i + 1, true);
+			execute_command();
+			//	delay(500);
 		}
 		// for safety reasons
 		if (is_lower_halotron_active(i + 1)) {
@@ -466,9 +473,6 @@ void festo_and_inputs::move_one_or_two_out()
 			execute_command();
 			continue;
 		}
-
-		execute_command();
-		delay(500);
 
 		// move the legs down
 
@@ -491,11 +495,13 @@ void festo_and_inputs::move_one_or_two_out()
 			read_state();
 
 			if ((is_lower_halotron_active(i + 1))) {
+				// delay(2000);
 				// attach leg
 				set_detach(i + 1, false);
 				// stop cleaning
 				set_clean(i + 1, false);
 				execute_command();
+
 				//	master.msg->message(lib::NON_FATAL_ERROR, "iteration end");
 
 				break;
@@ -509,6 +515,7 @@ void festo_and_inputs::move_one_or_two_out()
 
 	// attach legs
 	execute_command();
+#endif
 }
 
 void festo_and_inputs::command_all_out()

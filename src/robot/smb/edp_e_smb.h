@@ -173,6 +173,13 @@ public:
 	 */
 	lib::smb::r_buffer reply;
 
+	/*!
+	 * \brief bool value if the cleaning is activated
+	 *
+	 * It is taken from configuration data.
+	 */
+	bool cleaning_active;
+
 };
 
 } // namespace smb

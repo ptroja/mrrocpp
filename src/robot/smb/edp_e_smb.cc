@@ -174,11 +174,13 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 }
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-		motor_driven_effector(_shell, l_robot_name, instruction, reply)
+		motor_driven_effector(_shell, l_robot_name, instruction, reply), cleaning_active(false)
 {
 	DEBUG_METHOD;
 
 	number_of_servos = lib::smb::NUM_OF_SERVOS;
+
+	cleaning_active = config.exists_and_true("cleaning_active");
 
 	// Create manipulator kinematic model.
 	create_kinematic_models_for_given_robot();
