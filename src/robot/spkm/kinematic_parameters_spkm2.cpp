@@ -18,7 +18,7 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 {
 	// Initialization of parameters describing the synchronisation positions (in joints).
 	synchro_positions[0] = 0.242;
-	synchro_positions[1] = 0.237;
+	synchro_positions[1] = 0.242;
 	synchro_positions[2] = 0.242;
 	synchro_positions[3] = 0.0;
 	synchro_positions[4] = 0.0;
@@ -58,7 +58,7 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	upper_motor_pos_limits[1] = 8000;
 	upper_motor_pos_limits[2] = 8000;
 	// Lower wrist rotation.
-	upper_motor_pos_limits[3] = 380000;
+	upper_motor_pos_limits[3] = 375000;
 	upper_motor_pos_limits[4] = 190000;
 	// Upper wrist rotation.
 	upper_motor_pos_limits[5] = 260000;
@@ -70,7 +70,7 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	lower_motor_pos_limits[2] = -500000;
 	// Lower wrist rotation.
 	lower_motor_pos_limits[3] = -399000;
-	lower_motor_pos_limits[4] = -380000;
+	lower_motor_pos_limits[4] = -385000;
 	// Upper wrist rotation.
 	lower_motor_pos_limits[5] = -270000;
 
@@ -86,7 +86,7 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	// Initialization of lower joints limits vector.
 	// The lower values are related to positions of synchronization sensors.
 	lower_joints_limits[0] = 0.242;
-	lower_joints_limits[1] = 0.237;
+	lower_joints_limits[1] = 0.242;
 	lower_joints_limits[2] = 0.242;
 	lower_joints_limits[3] = -2.2777;
 	lower_joints_limits[4] = -1.5708;
