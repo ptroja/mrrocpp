@@ -33,6 +33,8 @@ class effector : public common::motor_driven_effector
 {
 protected:
 
+	const static int FESTO_ADRESS = 1;
+
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
 

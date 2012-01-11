@@ -48,7 +48,7 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 		uint8_t Outputs07 = cpv10->getOutputs(1);
 		printf("Status of outputs 0..7 = 0x%02x\n", Outputs07);
 
-		master.gateway->SendNMTService(10, canopen::gateway::Start_Remote_Node);
+		master.gateway->SendNMTService(effector::FESTO_ADRESS, canopen::gateway::Start_Remote_Node);
 
 		determine_legs_state();
 		desired_output[1] = current_output[1];

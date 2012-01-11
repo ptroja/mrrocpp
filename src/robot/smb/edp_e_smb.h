@@ -35,6 +35,9 @@ class effector : public common::motor_driven_effector
 	friend class festo_and_inputs;
 
 protected:
+
+	const static int FESTO_ADRESS = 10;
+
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
 

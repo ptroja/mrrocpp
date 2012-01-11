@@ -68,8 +68,30 @@ void effector::preasure_init()
 			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
 		}
 
+		// Connect to the gateway.
+		gateway->open();
+
 		// Create festo node.
-		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, 10);
+		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, FESTO_ADRESS);
+
+		festo::U32 DeviceType = cpv10->getDeviceType();
+		printf("Device type = 0x%08X\n", DeviceType);
+
+		festo::U8 ErrorRegister = cpv10->getErrorRegister();
+		printf("Error register = 0x%02X\n", ErrorRegister);
+
+		festo::U32 ManufacturerStatusRegister = cpv10->getManufacturerStatusRegister();
+		printf("Manufacturer status register = 0x%08X\n", ManufacturerStatusRegister);
+
+		uint8_t NumberOfOutputGroups = cpv10->getNumberOf8OutputGroups();
+		printf("Number of 8-output groups = %d\n", NumberOfOutputGroups);
+
+		uint8_t Outputs07 = cpv10->getOutputs(1);
+		printf("Status of outputs 0..7 = 0x%02x\n", Outputs07);
+
+		gateway->SendNMTService(FESTO_ADRESS, canopen::gateway::Start_Remote_Node);
+
+		current_pins_buf.preasure_buf.set_zeros();
 
 	} else {
 
@@ -127,10 +149,23 @@ void effector::voltage_command(lib::sbench::c_buffer &instruction)
 		ss << std::endl;
 		msg->message(ss.str());
 	} else {
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (voltage_buf.pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+		current_pins_buf.voltage_buf = voltage_buf;
+		ss << std::endl;
+		msg->message(ss.str());
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
+			//	comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), 0);
 		} // send command to hardware
+		  //	comedi_dio_write(voltage_device, 0, 0, 1);
+
 	}
 
 }
@@ -152,10 +187,12 @@ void effector::preasure_command(lib::sbench::c_buffer &instruction)
 				ss << "0";
 			}
 		}
-		current_pins_buf.preasure_buf = preasure_buf;
+
 		ss << std::endl;
 		msg->message(ss.str());
 	} else {
+
+		current_pins_buf.preasure_buf = preasure_buf;
 
 	}
 
