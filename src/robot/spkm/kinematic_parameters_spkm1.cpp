@@ -20,9 +20,9 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	synchro_positions[0] = 0.242;
 	synchro_positions[1] = 0.2435;
 	synchro_positions[2] = 0.242;
-	synchro_positions[3] = 0;
+	synchro_positions[3] = 0.0;
 	synchro_positions[4] = 0.0;
-	synchro_positions[5] = 0;
+	synchro_positions[5] = 0.0;
 
 	// Initialization of the encoder resolution. Equals to the Counts Per Turn (CPT) x 4.
 	encoder_resolution[0] = 500*4;
@@ -66,9 +66,9 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 
 	// Initialization of lower motors limits vector.
 	// Those are the "unsafe" (in terms that robot can hit its "shell" from inside) values.;
-	lower_motor_pos_limits[0] = -350000;
-	lower_motor_pos_limits[1] = -350000;
-	lower_motor_pos_limits[2] = -350000;
+	lower_motor_pos_limits[0] = -500000;
+	lower_motor_pos_limits[1] = -500000;
+	lower_motor_pos_limits[2] = -500000;
 	// Lower wrist rotation.
 	lower_motor_pos_limits[3] = -399000;
 	lower_motor_pos_limits[4] = -380000;

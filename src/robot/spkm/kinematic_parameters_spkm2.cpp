@@ -40,7 +40,8 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	mp2i_ratios[1] = linear_mp2i_ratio;
 	mp2i_ratios[2] = linear_mp2i_ratio;
 	mp2i_ratios[3] = rotational_mp2i_ratio;
-	mp2i_ratios[4] = rotational_mp2i_ratio;
+	// Moog motor.
+	mp2i_ratios[4] = -2*M_PI / (4 * 4096 * 100);
 	mp2i_ratios[5] = rotational_mp2i_ratio;
 
 	// Initialization of the encoder resolution. Equals to the Counts Per Turn (CPT) x 4.
@@ -48,7 +49,8 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	encoder_resolution[1] = 500*4;
 	encoder_resolution[2] = 500*4;
 	encoder_resolution[3] = 2000*4;
-	encoder_resolution[4] = 2000*4;
+	// Moog motor.
+	encoder_resolution[4] = 4096*4;
 	encoder_resolution[5] = 2000*4;
 
 	// Initialization of upper motors limits vector.
@@ -63,9 +65,9 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 
 	// Initialization of lower motors limits vector.
 	// Those are the "unsafe" (in terms that robot can hit its "shell" from inside) values.;
-	lower_motor_pos_limits[0] = -350000;
-	lower_motor_pos_limits[1] = -350000;
-	lower_motor_pos_limits[2] = -350000;
+	lower_motor_pos_limits[0] = -500000;
+	lower_motor_pos_limits[1] = -500000;
+	lower_motor_pos_limits[2] = -500000;
 	// Lower wrist rotation.
 	lower_motor_pos_limits[3] = -399000;
 	lower_motor_pos_limits[4] = -380000;
