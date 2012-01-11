@@ -138,6 +138,27 @@ void effector::voltage_command(lib::sbench::c_buffer &instruction)
 void effector::preasure_command(lib::sbench::c_buffer &instruction)
 {
 	msg->message("preasure_command");
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	lib::sbench::preasure_buffer preasure_buf = instruction.sbench.preasure_buf;
+
+	if (robot_test_mode) {
+
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (preasure_buf.pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+		current_pins_buf.preasure_buf = preasure_buf;
+		ss << std::endl;
+		msg->message(ss.str());
+	} else {
+
+	}
+
 }
 
 /*--------------------------------------------------------------------------*/
@@ -180,7 +201,10 @@ void effector::voltage_reply()
 
 void effector::preasure_reply()
 {
+	if (!robot_test_mode) {
 
+	}
+	reply.sbench.preasure_buf = current_pins_buf.preasure_buf;
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
