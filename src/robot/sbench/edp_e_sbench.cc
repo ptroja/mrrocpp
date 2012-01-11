@@ -137,9 +137,6 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 }
 
-			/*--------------------------------------------------------------------------*/
-
-			/*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 {
 	msg->message("get_arm");
