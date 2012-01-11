@@ -190,9 +190,20 @@ void effector::preasure_command(lib::sbench::c_buffer &instruction)
 
 		ss << std::endl;
 		msg->message(ss.str());
-	} else {
-
 		current_pins_buf.preasure_buf = preasure_buf;
+	} else {
+		msg->message("preasure_command hardware mode");
+		// prepare the desired output
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			for (int j = 0; j < 8; j++) {
+				desired_output[i + 1][j] = preasure_buf.pins_state[i * 8 + j];
+			}
+		}
+		// send the command
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+		}
+		//current_pins_buf.preasure_buf = preasure_buf;
 
 	}
 
@@ -237,6 +248,15 @@ void effector::voltage_reply()
 void effector::preasure_reply()
 {
 	if (!robot_test_mode) {
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			current_output[i + 1] = cpv10->getOutputs(i + 1);
+		}
+
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			for (int j = 0; j < 8; j++) {
+				current_pins_buf.preasure_buf.pins_state[i * 8 + j] = current_output[i + 1][j];
+			}
+		}
 
 	}
 }

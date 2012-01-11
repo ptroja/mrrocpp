@@ -35,6 +35,8 @@ protected:
 
 	const static int FESTO_ADRESS = 1;
 
+	const static int NUMBER_OF_FESTO_GROUPS = 7;
+
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
 
@@ -148,6 +150,11 @@ public:
 private:
 	const std::string dev_name;
 	comedi_t *voltage_device; // device descriptor
+
+	/*!
+	 * \brief current and desired output data of festo controller
+	 */
+	std::bitset <8> current_output[NUMBER_OF_FESTO_GROUPS + 1], desired_output[NUMBER_OF_FESTO_GROUPS + 1];
 
 };
 
