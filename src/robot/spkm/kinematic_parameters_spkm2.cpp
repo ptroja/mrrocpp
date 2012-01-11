@@ -58,8 +58,8 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	upper_motor_pos_limits[1] = 8000;
 	upper_motor_pos_limits[2] = 8000;
 	// Lower wrist rotation.
-	upper_motor_pos_limits[3] = 375000;
-	upper_motor_pos_limits[4] = 190000;
+	upper_motor_pos_limits[3] = 380000;
+	upper_motor_pos_limits[4] = 185000;
 	// Upper wrist rotation.
 	upper_motor_pos_limits[5] = 260000;
 
