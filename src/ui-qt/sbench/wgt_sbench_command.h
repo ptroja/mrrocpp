@@ -21,7 +21,6 @@ class UiRobot;
 }
 namespace sbench {
 class UiRobot;
-const std::string WGT_SBENCH_COMMAND = "WGT_SBENCH_COMMAND";
 }
 }
 }
@@ -35,13 +34,16 @@ public:
 			0);
 	~wgt_sbench_command();
 
-private:
+	QCheckBox* docks[SBENCH_MAX_ROW][SBENCH_MAX_COL];
 	Ui::wgt_sbench_commandClass ui;
 	mrrocpp::ui::sbench::UiRobot* robot;
 
-	QCheckBox* docks[SBENCH_MAX_ROW][SBENCH_MAX_COL];
+private:
 
-//	QVector <QCheckBox*> checkBox_Vector;
+	void showEvent(QShowEvent * event);
+	virtual void init() = 0;
+	virtual void execute() = 0;
+	virtual void read_and_copy() = 0;
 
 private slots:
 

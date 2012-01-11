@@ -96,6 +96,8 @@ ${GUI_CXX_SRCS}
     smb/wgt_smb_command.cpp
     shead/wgt_shead_command.cpp
    	sbench/wgt_sbench_command.cpp
+   	sbench/wgt_sbench_voltage_command.cpp
+   	sbench/wgt_sbench_preasure_command.cpp
 	spkm/ui_ecp_r_spkm.cc
 	spkm/ui_ecp_r_spkm1.cc
 	spkm/ui_ecp_r_spkm2.cc
@@ -188,6 +190,8 @@ ${GUI_MOC_SRCS}
 	shead/ui_r_shead2.h
 	sbench/ui_r_sbench.h
 	sbench/wgt_sbench_command.h
+	sbench/wgt_sbench_voltage_command.h
+	sbench/wgt_sbench_preasure_command.h
     spkm/wgt_spkm_inc.h
     spkm/wgt_spkm_int.h
     spkm/wgt_spkm_ext.h
