@@ -13,6 +13,10 @@
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_sbench.h"
 #include <comedilib.h>
+#include "../canopen/gateway_epos_usb.h"
+#include "../canopen/gateway_socketcan.h"
+#include "../festo/cpv.h"
+#include "../maxon/epos.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -29,8 +33,17 @@ class effector : public common::motor_driven_effector
 {
 protected:
 
-	// lib::sbench::cbuffer ecp_edp_cbuffer;
-	//lib::sbench::rbuffer edp_ecp_rbuffer;
+	const static int FESTO_ADRESS = 1;
+
+	const static int NUMBER_OF_FESTO_GROUPS = 7;
+
+	const static int TOTAL_NUMBER_OF_PINS_ACTIVATED_LIMIT = 3;
+
+	//! Access to the CAN gateway unit
+	boost::shared_ptr <canopen::gateway> gateway;
+
+	//! festo shared ptr
+	boost::shared_ptr <festo::cpv> cpv10;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!
@@ -43,9 +56,9 @@ protected:
 	/*!
 	 * \brief current pins state
 	 *
-	 * it is cipied from desired in test_mode or read in hardware_mode
+	 * it is copied from desired in test_mode or read in hardware_mode
 	 */
-	lib::sbench::pins_buffer current_pins_buf;
+	lib::sbench::rbuffer current_pins_buf;
 
 public:
 
@@ -55,6 +68,16 @@ public:
 	 * The attributes are initialized here.
 	 */
 	effector(common::shell &_shell);
+
+	/*!
+	 * \brief method to init voltage hardware
+	 */
+	void voltage_init();
+
+	/*!
+	 * \brief method to init preasure hardware
+	 */
+	void preasure_init();
 
 	/*!
 	 * \brief method to create threads other then EDP master thread.
@@ -73,12 +96,31 @@ public:
 	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
 
 	/*!
+	 * \brief method to command voltage of pins
+	 */
+	void voltage_command(lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+
+	/*!
+	 * \brief method to command preasure in pins
+	 */
+	void preasure_command(lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+
+	/*!
 	 * \brief method to get position of the motors or joints
 	 *
 	 * It will be used if there will be any motor used.
 	 */
-
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+
+	/*!
+	 * \brief method to command reply of pins
+	 */
+	void voltage_reply();
+
+	/*!
+	 * \brief method to reply preasure in pins
+	 */
+	void preasure_reply();
 
 	/*!
 	 * \brief method to choose master_order variant
@@ -109,7 +151,12 @@ public:
 
 private:
 	const std::string dev_name;
-	comedi_t *device; // device descriptor
+	comedi_t *voltage_device; // device descriptor
+
+	/*!
+	 * \brief current and desired output data of festo controller
+	 */
+	std::bitset <8> current_output[NUMBER_OF_FESTO_GROUPS + 1], desired_output[NUMBER_OF_FESTO_GROUPS + 1];
 
 };
 

@@ -48,11 +48,13 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 		uint8_t Outputs07 = cpv10->getOutputs(1);
 		printf("Status of outputs 0..7 = 0x%02x\n", Outputs07);
 
-		master.gateway->SendNMTService(10, canopen::gateway::Start_Remote_Node);
+		master.gateway->SendNMTService(effector::FESTO_ADRESS, canopen::gateway::Start_Remote_Node);
 
 		determine_legs_state();
-		desired_output[1] = current_output[1];
-		desired_output[2] = current_output[2];
+
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			desired_output[i + 1] = current_output[i + 1];
+		}
 
 		// stan poczatkowy wyspy
 
@@ -874,9 +876,9 @@ void festo_and_inputs::read_state()
 	if (!(robot_test_mode)) {
 		epos_inputs = epos_di_node->getDInput();
 		cout << "epos_inputs: " << hex << epos_inputs << endl;
-
-		current_output[1] = cpv10->getOutputs(1);
-		current_output[2] = cpv10->getOutputs(2);
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			current_output[i + 1] = cpv10->getOutputs(i + 1);
+		}
 	}
 }
 
@@ -899,12 +901,14 @@ void festo_and_inputs::create_reply()
 void festo_and_inputs::execute_command()
 {
 	if (!robot_test_mode) {
-		cpv10->setOutputs(1, (uint8_t) desired_output[1].to_ulong());
-		cpv10->setOutputs(2, (uint8_t) desired_output[2].to_ulong());
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+		}
 		//	std::cout << "desired_output = " << desired_output[2] << std::endl;
 		read_state();
-		desired_output[1] = current_output[1];
-		desired_output[2] = current_output[2];
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			desired_output[i + 1] = current_output[i + 1];
+		}
 
 	}
 }

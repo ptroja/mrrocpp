@@ -25,16 +25,31 @@ namespace lib {
 namespace sbench {
 
 /*!
- * @brief SwarmItFix bench pins activation command data port
+ * @brief SwarmItFix bench pins voltage activation command data port
  * @ingroup sbench
  */
-const std::string COMMAND_DATA_PORT = "SBENCH_COMMAND_DATA_PORT";
+const std::string COMMAND_DATA_VOLTAGE_PORT = "SBENCH_COMMAND_VOLTAGE_DATA_PORT";
+
+/*!
+ * @brief SwarmItFix bench pins preasure activation command data port
+ * @ingroup sbench
+ */
+const std::string COMMAND_DATA_PREASURE_PORT = "SBENCH_COMMAND_PREASURE_DATA_PORT";
 
 /*!
  * @brief SwarmItFix sbench status data request port
  * @ingroup sbench
  */
 const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
+
+/*!
+ * @brief SwarmItFix Head EDP command buffer variant
+ * @ingroup shead
+ */
+enum CBUFFER_VARIANT
+{
+	VOLTAGE, PREASURE
+};
 
 /*!
  * @brief SwarmItFix bench pins state typedef
@@ -48,14 +63,19 @@ class pins_buffer
 private:
 	bool pins_state[NUM_OF_PINS];
 
+protected:
+	int translation_table[8][8];
+
 public:
 
 	pins_buffer();
 
 	void set_zeros();
 
-	void set_value(int row, int column, int value);
+	void set_value(int row, int column, bool value);
 	bool get_value(int row, int column);
+
+	bool is_any_doubled_value();
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -70,12 +90,16 @@ public:
 };
 
 /*!
- * @brief SwarmItFix Bench EDP command buffer
+ * @brief SwarmItFix bench pins state typedef
  * @ingroup sbench
  */
-struct cbuffer
+
+class voltage_buffer : public pins_buffer
 {
-	pins_buffer pins_buf;
+
+public:
+
+	voltage_buffer();
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -84,7 +108,57 @@ struct cbuffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & pins_buf;
+		ar & boost::serialization::base_object <pins_buffer>(*this);
+	}
+
+};
+
+/*!
+ * @brief SwarmItFix bench pins state typedef
+ * @ingroup sbench
+ */
+
+class preasure_buffer : public pins_buffer
+{
+
+public:
+
+	preasure_buffer();
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <pins_buffer>(*this);
+	}
+
+};
+
+/*!
+ * @brief SwarmItFix Bench EDP command buffer
+ * @ingroup sbench
+ */
+struct cbuffer
+{
+	//! Variant of the command
+	CBUFFER_VARIANT variant;
+
+	voltage_buffer voltage_buf;
+	preasure_buffer preasure_buf;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & variant;
+		ar & voltage_buf;
+		ar & preasure_buf;
 	}
 
 };
@@ -116,7 +190,8 @@ struct c_buffer : lib::c_buffer
  */
 struct rbuffer : lib::r_buffer
 {
-	pins_buffer pins_buf;
+	voltage_buffer voltage_buf;
+	preasure_buffer preasure_buf;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -125,8 +200,8 @@ struct rbuffer : lib::r_buffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		// serialize base class informationZ
-		ar & pins_buf;
+		ar & voltage_buf;
+		ar & preasure_buf;
 	}
 
 };

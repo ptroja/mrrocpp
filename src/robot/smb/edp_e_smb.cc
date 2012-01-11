@@ -307,7 +307,7 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		axesNames[1] = "pkm";
 
 		// Create festo node.
-		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, 10);
+		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, FESTO_ADRESS);
 	}
 
 }
