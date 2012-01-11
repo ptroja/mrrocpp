@@ -178,7 +178,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 	voltage_reply();
 	preasure_reply();
-
+	reply.sbench = current_pins_buf;
 	reply.servo_step = step_counter;
 }
 /*--------------------------------------------------------------------------*/
@@ -194,9 +194,7 @@ void effector::voltage_reply()
 			comedi_dio_read(voltage_device, (int) (i / 32), (i % 32), &current_read);
 			current_pins_buf.voltage_buf.pins_state[i] = current_read;
 		} // send command to hardware
-
 	}
-	reply.sbench.voltage_buf = current_pins_buf.voltage_buf;
 }
 
 void effector::preasure_reply()
@@ -204,7 +202,6 @@ void effector::preasure_reply()
 	if (!robot_test_mode) {
 
 	}
-	reply.sbench.preasure_buf = current_pins_buf.preasure_buf;
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
