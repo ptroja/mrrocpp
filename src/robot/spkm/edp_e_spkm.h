@@ -122,11 +122,13 @@ public:
 	void create_threads();
 
 	/*!
-	 * @brief method to move robot arm
+	 * \brief Executes the *move_arm* command.
 	 *
-	 * it chooses the single thread variant from the manip_effector
+	 * It chooses the single thread variant from the motor_driven_effector.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void move_arm(const lib::c_buffer &instruction);
+	void move_arm(const lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief Method responsible for parsing of the command for motors controlling the legs and SPKM rotation.
@@ -149,15 +151,17 @@ public:
 	/*!
 	 * \brief Method initializes all SPKM variables (including motors, joints and frames), depending on working mode (robot_test_mode) and robot state.
 	 * Called only once after process creation.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void get_controller_state(lib::c_buffer &instruction);
+	void get_controller_state(lib::c_buffer &instruction_);
 
 	/*!
 	 * @brief method to get position of the arm
 	 *
-	 * Here it calls common::manip_effector::get_arm_position_get_arm_type_switch
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void get_arm_position(bool read_hardware, lib::c_buffer &instruction);
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction_);
 
 	/*!
 	 * @brief method to choose master_order variant
