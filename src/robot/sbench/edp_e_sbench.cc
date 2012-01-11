@@ -83,6 +83,14 @@ void effector::preasure_init()
 		festo::U32 ManufacturerStatusRegister = cpv10->getManufacturerStatusRegister();
 		printf("Manufacturer status register = 0x%08X\n", ManufacturerStatusRegister);
 
+		festo::U8 NumberOfErrorsInDiagnosticMemeory = cpv10->getNumberOfErrorsInDiagnosticMemeory();
+		printf("Number of errors in diagnostic memory = %d\n", NumberOfErrorsInDiagnosticMemeory);
+		if (NumberOfErrorsInDiagnosticMemeory > 0) {
+			cpv10->clearErrorsInDiagnosticMemeory();
+		}
+
+		printf("Status byte = 0x%02x\n", cpv10->getStatusByte());
+
 		uint8_t NumberOfOutputGroups = cpv10->getNumberOf8OutputGroups();
 		printf("Number of 8-output groups = %d\n", NumberOfOutputGroups);
 
@@ -90,6 +98,7 @@ void effector::preasure_init()
 		printf("Status of outputs 0..7 = 0x%02x\n", Outputs07);
 
 		gateway->SendNMTService(FESTO_ADRESS, canopen::gateway::Start_Remote_Node);
+		//gateway->SendNMTService(FESTO_ADRESS, canopen::gateway::Reset_Node);
 
 		current_pins_buf.preasure_buf.set_zeros();
 
@@ -193,16 +202,61 @@ void effector::preasure_command(lib::sbench::c_buffer &instruction)
 		current_pins_buf.preasure_buf = preasure_buf;
 	} else {
 		msg->message("preasure_command hardware mode");
+
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (preasure_buf.pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+
+		ss << std::endl;
+		msg->message(ss.str());
+
+		int total_number_of_pins_activated = 0;
+
 		// prepare the desired output
 		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
 			for (int j = 0; j < 8; j++) {
 				desired_output[i + 1][j] = preasure_buf.pins_state[i * 8 + j];
+				if (preasure_buf.pins_state[i * 8 + j]) {
+					total_number_of_pins_activated++;
+				}
 			}
 		}
-		// send the command
-		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
-			cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+
+		// checks if the limit was exceded
+		if (total_number_of_pins_activated <= TOTAL_NUMBER_OF_PINS_ACTIVATED_LIMIT) {
+			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+				cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+			}
+		} else {
+			// TODO throw
+			msg->message(lib::NON_FATAL_ERROR, "preasure_command total_number_of_pins_activated exceeded");
 		}
+
+//		for (int k = 0; k < 20; k++) {
+//			// send the command
+//			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+//				//	cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+//				cpv10->setOutputs(i + 1, (uint8_t) 0xAA);
+//			}delay(1000);
+//
+//			// send the command
+//			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+//				//	cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+//				cpv10->setOutputs(i + 1, (uint8_t) 0x55);
+//			}delay(1000);
+//
+//			// send the command
+//			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+//				//	cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+//				cpv10->setOutputs(i + 1, (uint8_t) 0x00);
+//			}
+//			delay(1000);
+//		}
+
 		//current_pins_buf.preasure_buf = preasure_buf;
 
 	}

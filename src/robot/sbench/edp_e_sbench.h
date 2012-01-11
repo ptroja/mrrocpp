@@ -37,6 +37,8 @@ protected:
 
 	const static int NUMBER_OF_FESTO_GROUPS = 7;
 
+	const static int TOTAL_NUMBER_OF_PINS_ACTIVATED_LIMIT = 3;
+
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
 

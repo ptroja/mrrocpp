@@ -6,34 +6,54 @@ namespace mrrocpp {
 namespace edp {
 namespace festo {
 
-cpv::cpv(canopen::gateway & _device, uint8_t _nodeId)
-	: device(_device), nodeId(_nodeId)
+cpv::cpv(canopen::gateway & _device, uint8_t _nodeId) :
+		device(_device), nodeId(_nodeId)
 {
 }
 
 U32 cpv::getDeviceType()
 {
-	return ReadObjectValue<U32>(0x1000, 0x00);
+	return ReadObjectValue <U32>(0x1000, 0x00);
 }
 
 U8 cpv::getErrorRegister()
 {
-	return ReadObjectValue<U8>(0x1001, 0x00);
+	return ReadObjectValue <U8>(0x1001, 0x00);
 }
 
 U32 cpv::getManufacturerStatusRegister()
 {
-	return ReadObjectValue<U32>(0x1002, 0x00);
+	return ReadObjectValue <U32>(0x1002, 0x00);
 }
 
 U8 cpv::getNumberOfCurrentFaults()
 {
-	return ReadObjectValue<U8>(0x1003, 0x00);
+	return ReadObjectValue <U8>(0x1003, 0x00);
 }
 
 U32 cpv::getMostRecentFault(uint8_t field)
 {
-	return ReadObjectValue<U32>(0x1003, field);
+	return ReadObjectValue <U32>(0x1003, field);
+}
+
+U8 cpv::getStatusByte()
+{
+	return ReadObjectValue <U32>(0x2200, 0x01);
+}
+
+U8 cpv::getNumberOfErrorsInDiagnosticMemeory()
+{
+	return ReadObjectValue <U8>(0x2300, 0x03);
+}
+
+void cpv::clearErrorsInDiagnosticMemeory()
+{
+	return WriteObjectValue(0x2300, 0x03, 0x00);
+}
+
+U32 cpv::getDiagnosticMemoryEntry(U8 entry)
+{
+	return ReadObjectValue <U32>(0x2310, entry);
 }
 
 std::string cpv::getDeviceName()
@@ -56,42 +76,42 @@ std::string cpv::getSoftwareVersion()
 
 U32 cpv::getVendorID()
 {
-	return ReadObjectValue<U32>(0x1018, 0x01);
+	return ReadObjectValue <U32>(0x1018, 0x01);
 }
 
 U32 cpv::getProductCode()
 {
-	return ReadObjectValue<U32>(0x1018, 0x02);
+	return ReadObjectValue <U32>(0x1018, 0x02);
 }
 
 U32 cpv::getRevisionNumber()
 {
-	return ReadObjectValue<U32>(0x1018, 0x03);
+	return ReadObjectValue <U32>(0x1018, 0x03);
 }
 
 U32 cpv::getSerialNumber()
 {
-	return ReadObjectValue<U32>(0x1018, 0x04);
+	return ReadObjectValue <U32>(0x1018, 0x04);
 }
 
 U8 cpv::readNumberOfCPModulesConnected()
 {
-	return ReadObjectValue<U8>(0x1027, 0x00);
+	return ReadObjectValue <U8>(0x1027, 0x00);
 }
 
 U16 cpv::getModuleType(uint8_t module)
 {
-	return ReadObjectValue<U16>(0x1027, module);
+	return ReadObjectValue <U16>(0x1027, module);
 }
 
 U8 cpv::getNumberOf8OutputGroups()
 {
-	return ReadObjectValue<U16>(0x6200, 0x00);
+	return ReadObjectValue <U16>(0x6200, 0x00);
 }
 
 U8 cpv::getOutputs(uint8_t group)
 {
-	return ReadObjectValue<U8>(0x6200, group);
+	return ReadObjectValue <U8>(0x6200, group);
 }
 
 void cpv::setOutputs(uint8_t group, uint8_t value)
@@ -101,12 +121,12 @@ void cpv::setOutputs(uint8_t group, uint8_t value)
 
 U8 cpv::getNumberOf8OutputGroupsErrorMode()
 {
-	return ReadObjectValue<U16>(0x6206, 0x00);
+	return ReadObjectValue <U16>(0x6206, 0x00);
 }
 
 U8 cpv::getOutputsErrorMode(uint8_t group)
 {
-	return ReadObjectValue<U8>(0x6206, group);
+	return ReadObjectValue <U8>(0x6206, group);
 }
 
 void cpv::setOutputsErrorMode(uint8_t group, uint8_t value)
@@ -116,12 +136,12 @@ void cpv::setOutputsErrorMode(uint8_t group, uint8_t value)
 
 U8 cpv::getNumberOf8OutputGroupsErrorValue()
 {
-	return ReadObjectValue<U16>(0x6207, 0x00);
+	return ReadObjectValue <U16>(0x6207, 0x00);
 }
 
 U8 cpv::getOutputsErrorValue(uint8_t group)
 {
-	return ReadObjectValue<U8>(0x6207, group);
+	return ReadObjectValue <U8>(0x6207, group);
 }
 
 void cpv::setOutputsErrorValue(uint8_t group, uint8_t value)
@@ -134,7 +154,7 @@ void cpv::setOutputsErrorValue(uint8_t group, uint8_t value)
 struct RPDO3 {
 	uint16_t controlWord;
 	int32_t targetPosition;
-} __attribute__((packed));
+}__attribute__((packed));
 
 const uint8_t nodeId = 10;
 
@@ -183,7 +203,6 @@ int main(int argc, char *argv[])
 		uint32_t ManufacturerStatusRegister = ReadObjectValue<uint32_t>(gateway, 0x1002, 0x00);
 		printf("Manufacturer status register = 0x%08X\n", ManufacturerStatusRegister);
 
-
 		// Get the 'Identity Object', see P.BE-CP-CO2-EN manual, p. 2-15.
 
 		uint8_t NumberOfEntries = ReadObjectValue<uint8_t>(gateway, 0x1018, 0x00);
@@ -210,15 +229,15 @@ int main(int argc, char *argv[])
 		gateway.SendNMTService(nodeId, gateway::Start_Remote_Node);
 
 		while(1) {
-		gateway.WriteObject(nodeId, 0x6200, 0x01, 0);
-		sleep(1);
-		gateway.WriteObject(nodeId, 0x6200, 0x01, 0x08+0x20+0x80);
-		sleep(5);
-		gateway.WriteObject(nodeId, 0x6200, 0x01, 0);
-		sleep(1);
-		gateway.WriteObject(nodeId, 0x6200, 0x01, 0x04+0x10+0x40);
-		sleep(5);
-		gateway.WriteObject(nodeId, 0x6200, 0x01, 0);
+			gateway.WriteObject(nodeId, 0x6200, 0x01, 0);
+			sleep(1);
+			gateway.WriteObject(nodeId, 0x6200, 0x01, 0x08+0x20+0x80);
+			sleep(5);
+			gateway.WriteObject(nodeId, 0x6200, 0x01, 0);
+			sleep(1);
+			gateway.WriteObject(nodeId, 0x6200, 0x01, 0x04+0x10+0x40);
+			sleep(5);
+			gateway.WriteObject(nodeId, 0x6200, 0x01, 0);
 		}
 
 //		gateway.SendNMTService(0, gateway::Start_Remote_Node);
@@ -229,13 +248,13 @@ int main(int argc, char *argv[])
 		std::cerr << "EPOS Error." << std::endl;
 
 		if ( std::string const * r = boost::get_error_info<reason>(error) )
-			std::cerr << " Reason: " << *r << std::endl;
+		std::cerr << " Reason: " << *r << std::endl;
 
 		if ( std::string const * call = boost::get_error_info<errno_call>(error) )
-			std::cerr << " Errno call: " << *call << std::endl;
+		std::cerr << " Errno call: " << *call << std::endl;
 
 		if ( int const * errno_value = boost::get_error_info<errno_code>(error) )
-			std::cerr << "Errno value: " << *errno_value << std::endl;
+		std::cerr << "Errno value: " << *errno_value << std::endl;
 	} catch (...) {
 		std::cerr << "Unhandled exception" << std::endl;
 	}

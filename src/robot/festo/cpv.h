@@ -92,6 +92,13 @@ public:
 
 	U8 getNumberOfCurrentFaults();
 
+	U8 getNumberOfErrorsInDiagnosticMemeory();
+	void clearErrorsInDiagnosticMemeory();
+
+	U8 getStatusByte();
+
+	U32 getDiagnosticMemoryEntry(U8 entry);
+
 	/*! \brief read most recent fault table
 	 *
 	 * @param field field id (0..10)
