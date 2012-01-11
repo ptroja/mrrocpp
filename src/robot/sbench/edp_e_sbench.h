@@ -13,6 +13,10 @@
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_sbench.h"
 #include <comedilib.h>
+#include "../canopen/gateway_epos_usb.h"
+#include "../canopen/gateway_socketcan.h"
+#include "../festo/cpv.h"
+#include "../maxon/epos.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -29,8 +33,11 @@ class effector : public common::motor_driven_effector
 {
 protected:
 
-	// lib::sbench::cbuffer ecp_edp_cbuffer;
-	//lib::sbench::rbuffer edp_ecp_rbuffer;
+	//! Access to the CAN gateway unit
+	boost::shared_ptr <canopen::gateway> gateway;
+
+	//! festo shared ptr
+	boost::shared_ptr <festo::cpv> cpv10;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!

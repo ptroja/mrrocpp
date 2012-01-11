@@ -36,7 +36,7 @@ void pins_buffer::set_zeros()
 	}
 }
 
-void pins_buffer::set_value(int row, int column, int value)
+void pins_buffer::set_value(int row, int column, bool value)
 {
 	pins_state[translation_table[row][column]] = value;
 }

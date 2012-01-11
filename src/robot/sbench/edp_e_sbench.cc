@@ -61,6 +61,16 @@ void effector::preasure_init()
 {
 	if (!robot_test_mode) {
 
+		if (this->config.exists_and_true("can_iface")) {
+			gateway =
+					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
+		} else {
+			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
+		}
+
+		// Create festo node.
+		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, 10);
+
 	} else {
 
 		current_pins_buf.preasure_buf.set_zeros();

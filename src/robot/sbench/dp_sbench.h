@@ -63,14 +63,16 @@ class pins_buffer
 private:
 	bool pins_state[NUM_OF_PINS];
 
+protected:
+	int translation_table[8][8];
+
 public:
 
-	int translation_table[8][8];
 	pins_buffer();
 
 	void set_zeros();
 
-	void set_value(int row, int column, int value);
+	void set_value(int row, int column, bool value);
 	bool get_value(int row, int column);
 
 	bool is_any_doubled_value();
