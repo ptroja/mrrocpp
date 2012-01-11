@@ -56,7 +56,9 @@ void effector::synchronise(void)
 			return;
 		}
 
-		controller_state_edp_buf.is_synchronised = false;
+		// Check state of the robot.
+		if (controller_state_edp_buf.robot_in_fault_state)
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
 		// Step 1: Setup velocity control with analog setpoint.
 		pkm_rotation_node->setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
@@ -77,16 +79,17 @@ void effector::synchronise(void)
 		boost::system_time wakeup = boost::get_system_time();
 
 		// Loop until reaching zero offset.
+		printf("\n");
 		while (pkm_rotation_node->getAnalogInput1() != pkm_zero_position_voltage) {
-			std::cout << std::dec << "AnalogVelocitySetpoint = " << (int) pkm_rotation_node->getAnalogVelocitySetpoint()
-					<< " AnalogInput = " << (int) pkm_rotation_node->getAnalogInput1() << " offset " << ((int) pkm_zero_position_voltage)
-					<< std::endl;
+			printf("\rSMB calibration: Desired =%+10d[mv] | Actual  =%+10d[mv] | Offset  =%+10d[mv]", (int) pkm_zero_position_voltage, (int) pkm_rotation_node->getAnalogInput1(), (int) pkm_rotation_node->getAnalogVelocitySetpoint());
+			fflush(stdout);
 
 			// Sleep for a constant period of time
 			wakeup += boost::posix_time::milliseconds(5);
 
 			boost::thread::sleep(wakeup);
 		};
+		printf("\n");
 
 		// Disable analog velocity setpoint.
 		pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, false, false);
@@ -193,7 +196,7 @@ void effector::check_controller_state()
 	controller_state_edp_buf.robot_in_fault_state = (enabled != axes.size());
 }
 
-void effector::get_controller_state(lib::c_buffer &instruction)
+void effector::get_controller_state(lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
 
@@ -320,13 +323,12 @@ lib::smb::ALL_LEGS_VARIANT effector::next_legs_state(void)
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(const lib::c_buffer &instruction)
+void effector::move_arm(const lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
-	lib::smb::c_buffer & local_instruction = (lib::smb::c_buffer&) instruction;
 
 	try {
-		switch (local_instruction.smb.variant)
+		switch (instruction.smb.variant)
 		{
 			case lib::smb::POSE:
 				DEBUG_COMMAND("POSE");
@@ -372,6 +374,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			case lib::smb::FESTO:
 				DEBUG_COMMAND("FESTO");
 
+				// Check state of the robot.
+				if (controller_state_edp_buf.robot_in_fault_state)
+					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
+
 				//if (is_base_positioned_to_move_legs)
 				fai->command();
 				// If all legs are currently OUT then reset legs rotation.
@@ -409,6 +415,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 void effector::parse_motor_command()
 {
 	DEBUG_METHOD;
+
+	// Check state of the robot.
+	if (controller_state_edp_buf.robot_in_fault_state)
+		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
 	// The TWO_UP_ONE_DOWN is the only state in which control of both motors (legs and SPKM rotations) is possible.
 	// In other states control of the motor rotating the legs (lower SMB motor) is prohibited!
@@ -565,10 +575,9 @@ void effector::execute_motor_motion()
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
-	lib::smb::c_buffer & local_instruction = (lib::smb::c_buffer&) instruction;
 
 	try {
 		// Check controller state.
@@ -576,7 +585,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 		// Handle only GET and SETGET instructions.
 		if (instruction.instruction_type != lib::SET) {
-			switch (local_instruction.smb.get_pose_specification)
+			switch (instruction.smb.get_pose_specification)
 			{
 
 				case lib::smb::MOTOR:
@@ -664,8 +673,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					reply.smb.epos_controller[1].position = current_joints[1];
 					break;
 				default:
-					// Throw non-fatal error - motion type not supported.
-					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_motion_type());
+					// Throw non-fatal error - command not supported.
+					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
 					break;
 			}
 		}

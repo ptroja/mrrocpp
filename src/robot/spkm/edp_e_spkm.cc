@@ -145,7 +145,7 @@ void effector::check_controller_state()
 	}
 }
 
-void effector::get_controller_state(lib::c_buffer &instruction)
+void effector::get_controller_state(lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
 
@@ -234,12 +234,14 @@ void effector::synchronise(void)
 	DEBUG_METHOD;
 
 	try {
-
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
-
 			return;
 		}
+
+		// Check state of the robot.
+		if (controller_state_edp_buf.robot_in_fault_state)
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
 		// switch to homing mode
 		BOOST_FOREACH(maxon::epos * node, axes)
@@ -308,14 +310,13 @@ void effector::synchronise(void)
 	}
 }
 
-void effector::move_arm(const lib::c_buffer &instruction)
+void effector::move_arm(const lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
-	lib::spkm::c_buffer & local_instruction = (lib::spkm::c_buffer&) instruction;
 
 	try {
 		// Check command type.
-		switch (local_instruction.spkm.variant)
+		switch (instruction.spkm.variant)
 		{
 			case lib::spkm::POSE:
 				DEBUG_COMMAND("POSE");
@@ -324,7 +325,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				}
 
 				// Special case: operational motion.
-				if (local_instruction.spkm.motion_variant == lib::epos::OPERATIONAL) {
+				if (instruction.spkm.motion_variant == lib::epos::OPERATIONAL) {
 					DEBUG_COMMAND("OPERATIONAL");
 
 					interpolated_motion_in_operational_space();
@@ -376,7 +377,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		desired_motor_pos_old = desired_motor_pos_new;
 
 		// Check whether the motion was performed in the cartesian space - then we know where manipulator will be when the next command arrives:).
-		if (local_instruction.spkm.set_pose_specification == lib::spkm::WRIST_XYZ_EULER_ZYZ) {
+		if (instruction.spkm.set_pose_specification == lib::spkm::WRIST_XYZ_EULER_ZYZ) {
 			// Command was given in the wrist frame.
 			current_end_effector_frame = desired_end_effector_frame;
 			current_spkm_frame = current_end_effector_frame * shead_frame;
@@ -386,7 +387,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			std::cerr << "current_spkm_frame:\n" << current_spkm_frame << endl;
 			std::cerr << "current_end_effector_frame:\n" << current_end_effector_frame << endl;
 #endif
-		} else if (local_instruction.spkm.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
+		} else if (instruction.spkm.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
 			// Command was given in the tool (SHEAD) frame.
 			current_spkm_frame = desired_spkm_frame;
 			current_end_effector_frame = desired_spkm_frame * !shead_frame;
@@ -419,6 +420,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 void effector::parse_motor_command()
 {
 	DEBUG_METHOD;
+
+	// Check state of the robot.
+	if (controller_state_edp_buf.robot_in_fault_state)
+		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
 	try {
 		switch (instruction.spkm.set_pose_specification)
@@ -747,6 +752,10 @@ void effector::interpolated_motion_in_operational_space()
 	if (!is_synchronised())
 		// Throw non-fatal error - this mode requires synchronization.
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
+
+	// Check state of the robot.
+	if (controller_state_edp_buf.robot_in_fault_state)
+		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
 	// Check whether current cartesian pose (in fact the one where the previous motion ended) is known.
 	if (!is_current_cartesian_pose_known)
@@ -1102,10 +1111,9 @@ void effector::interpolated_motion_in_operational_space()
 	desired_joints_old = desired_joints;
 }
 
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
-	lib::spkm::c_buffer & local_instruction = (lib::spkm::c_buffer&) instruction;
 
 	try {
 		// Check controller state.
@@ -1113,7 +1121,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 		// we do not check the arm position when only lib::SET is set
 		if (instruction.instruction_type != lib::SET) {
-			switch (local_instruction.spkm.get_pose_specification)
+			switch (instruction.spkm.get_pose_specification)
 			{
 				case lib::spkm::MOTOR: {
 					DEBUG_COMMAND("MOTOR");
@@ -1208,6 +1216,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				}
 					break;
 				default:
+					// Throw non-fatal error - command not supported.
+					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
 					break;
 
 			}

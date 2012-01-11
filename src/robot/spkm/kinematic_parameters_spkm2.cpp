@@ -55,18 +55,22 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	upper_motor_pos_limits[0] = 8000;
 	upper_motor_pos_limits[1] = 8000;
 	upper_motor_pos_limits[2] = 8000;
-	upper_motor_pos_limits[3] = 320000;
-	upper_motor_pos_limits[4] = 90000;
-	upper_motor_pos_limits[5] = 310000;
+	// Lower wrist rotation.
+	upper_motor_pos_limits[3] = 380000;
+	upper_motor_pos_limits[4] = 190000;
+	// Upper wrist rotation.
+	upper_motor_pos_limits[5] = 260000;
 
 	// Initialization of lower motors limits vector.
 	// Those are the "unsafe" (in terms that robot can hit its "shell" from inside) values.;
 	lower_motor_pos_limits[0] = -350000;
 	lower_motor_pos_limits[1] = -350000;
 	lower_motor_pos_limits[2] = -350000;
-	lower_motor_pos_limits[3] = -320000;
-	lower_motor_pos_limits[4] = -200000;
-	lower_motor_pos_limits[5] = -310000;
+	// Lower wrist rotation.
+	lower_motor_pos_limits[3] = -399000;
+	lower_motor_pos_limits[4] = -380000;
+	// Upper wrist rotation.
+	lower_motor_pos_limits[5] = -270000;
 
 	// Initialization of upper joints vector.
 	// Those are the "safe" limits, not related to synchronization sensors positions.;
