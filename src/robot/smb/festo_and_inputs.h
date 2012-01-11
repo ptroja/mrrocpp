@@ -41,6 +41,8 @@ class festo_and_inputs
 
 private:
 
+	const static int NUMBER_OF_FESTO_GROUPS = 2;
+
 	/*!
 	 * \brief reference to master object of effector class
 	 */
@@ -74,7 +76,7 @@ private:
 	/*!
 	 * \brief current and desired output data of festo controller
 	 */
-	std::bitset <8> current_output[3], desired_output[3];
+	std::bitset <8> current_output[NUMBER_OF_FESTO_GROUPS + 1], desired_output[NUMBER_OF_FESTO_GROUPS + 1];
 
 	/*!
 	 * \brief robot_test_mode taken from effector class
