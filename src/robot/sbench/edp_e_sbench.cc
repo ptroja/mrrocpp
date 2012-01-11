@@ -169,11 +169,22 @@ void effector::voltage_command(lib::sbench::c_buffer &instruction)
 		ss << std::endl;
 		msg->message(ss.str());
 
+		int total_number_of_pins_activated = 0;
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
-			//	comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), 0);
-		} // send command to hardware
-		  //	comedi_dio_write(voltage_device, 0, 0, 1);
+			if (voltage_buf.pins_state[i]) {
+				total_number_of_pins_activated++;
+			}
+		}
+
+		if (total_number_of_pins_activated <= VOLTAGE_PINS_ACTIVATED_LIMIT) {
+			for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+				comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
+				//	comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), 0);
+			} // send command to hardware
+		} else {
+			// TODO throw
+			msg->message(lib::NON_FATAL_ERROR, "voltage_command total_number_of_pins_activated exceeded");
+		}
 
 	}
 
@@ -227,7 +238,7 @@ void effector::preasure_command(lib::sbench::c_buffer &instruction)
 		}
 
 		// checks if the limit was exceded
-		if (total_number_of_pins_activated <= TOTAL_NUMBER_OF_PINS_ACTIVATED_LIMIT) {
+		if (total_number_of_pins_activated <= CLEANING_PINS_ACTIVATED_LIMIT) {
 			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
 				cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
 			}
