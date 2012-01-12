@@ -28,10 +28,8 @@
 #include "ui_ecp_r_common.h"
 
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
 #include "robot/sarkofag/ecp_r_sarkofag.h"
-#include "robot/shead/ecp_r_shead.h"
 
 namespace mrrocpp {
 namespace ui {
@@ -58,16 +56,7 @@ EcpRobot::EcpRobot(UiRobot& _ui_robot) :
 			END_EFFECTOR_STEP[j] = 0.0002;
 		}
 
-	} else if (ui_robot.robot_name == lib::irp6ot_tfg::ROBOT_NAME) {
-
-		ecp = new ecp::irp6ot_tfg::robot(*(ui_robot.interface.config), *(ui_robot.msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.4;
-			JOINT_STEP[j] = 0.00001;
-		}
-
-	} else if (ui_robot.robot_name == lib::irp6p_tfg::ROBOT_NAME) {
+	}  else if (ui_robot.robot_name == lib::irp6p_tfg::ROBOT_NAME) {
 
 		ecp = new ecp::irp6p_tfg::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 

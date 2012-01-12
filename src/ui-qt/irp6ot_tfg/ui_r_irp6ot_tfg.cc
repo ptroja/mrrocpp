@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_irp6ot_tfg.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+#include "ui_ecp_r_irp6ot_tfg.h"
 #include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 #include "../base/interface.h"
 
@@ -38,8 +38,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 void UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::common::EcpRobot(*this);
-//	return 1;
+	ui_ecp_robot = new ui::irp6ot_tfg::EcpRobot(*this);
 }
 
 void UiRobot::edp_create_int_extra_operations()
