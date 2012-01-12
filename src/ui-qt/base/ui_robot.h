@@ -170,7 +170,6 @@ public:
 	void connect_to_ecp_pulse_chanell(void); //TODO: channel, nie chanell
 	void pulse_ecp_execute(int code, int value);
 	virtual void delete_ui_ecp_robot();
-	virtual void null_ui_ecp_robot() = 0;
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 	virtual void manage_interface();

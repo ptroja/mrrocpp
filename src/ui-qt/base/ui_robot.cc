@@ -159,8 +159,6 @@ int UiRobot::edp_create_int()
 					catch (ecp::exception::se_r & error) {
 						/* Obsluga bledow ECP */
 
-						null_ui_ecp_robot();
-
 						throw error;
 
 					} /*end: catch */
@@ -196,7 +194,6 @@ int UiRobot::edp_create_int()
 				catch (ecp::exception::se_r & error) {
 					/* Obsluga bledow ECP */
 					close_edp_connections();
-					null_ui_ecp_robot();
 				} /*end: catch */
 
 			}

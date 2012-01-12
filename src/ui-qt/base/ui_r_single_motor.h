@@ -42,7 +42,6 @@ public:
 	common012::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
-	void null_ui_ecp_robot();
 
 	void setup_menubar();
 	void manage_interface();

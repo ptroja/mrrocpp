@@ -95,12 +95,6 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, i
 }
 
 
-void UiRobot::null_ui_ecp_robot()
-{
-	ui_ecp_robot = NULL;
-
-}
-
 void UiRobot::manage_interface()
 {
 

@@ -53,8 +53,6 @@ public:
 
 	void manage_interface();
 
-
-	void null_ui_ecp_robot();
 	int synchronise_int();
 	virtual void move_to_preset_position(int variant);
 

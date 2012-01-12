@@ -274,12 +274,6 @@ int UiRobot::execute_stop_motor()
 	return 1;
 }
 
-void UiRobot::null_ui_ecp_robot()
-{
-	ui_ecp_robot = NULL;
-
-}
-
 }
 } //namespace ui
 } //namespace mrrocpp

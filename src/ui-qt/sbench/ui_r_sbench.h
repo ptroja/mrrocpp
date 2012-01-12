@@ -69,11 +69,6 @@ public:
 	void manage_interface();
 
 	/**
-	 * @brief zeros ui_ecp_robot pointer
-	 */
-	void null_ui_ecp_robot();
-
-	/**
 	 * @brief synchronizes robot
 	 */
 	void synchronise();

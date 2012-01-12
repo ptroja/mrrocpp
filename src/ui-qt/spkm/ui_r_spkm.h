@@ -58,7 +58,6 @@ public:
 
 	void manage_interface();
 
-	void null_ui_ecp_robot();
 	void synchronise();
 	int synchronise_int();
 

@@ -105,13 +105,6 @@ void UiRobot::setup_menubar()
 }
 
 
-
-void UiRobot::null_ui_ecp_robot()
-{
-	ui_ecp_robot = NULL;
-
-}
-
 void UiRobot::create_ui_ecp_robot()
 {
 	common::UiRobot::ui_ecp_robot = ui_ecp_robot = new EcpRobot(*this);

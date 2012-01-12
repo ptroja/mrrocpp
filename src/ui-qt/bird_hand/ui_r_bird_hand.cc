@@ -125,12 +125,6 @@ void UiRobot::setup_menubar()
 	robot_menu->setTitle(QApplication::translate("MainWindow", "&Birdhand", 0, QApplication::UnicodeUTF8));
 }
 
-
-void UiRobot::null_ui_ecp_robot()
-{
-	ui_ecp_robot = NULL;
-}
-
 }
 } //namespace ui
 } //namespace mrrocpp

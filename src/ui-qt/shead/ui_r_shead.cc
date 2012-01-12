@@ -158,12 +158,6 @@ connect(action_Clear_Fault, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), si
 }
 
 
-void UiRobot::null_ui_ecp_robot()
-{
-	ui_ecp_robot = NULL;
-
-}
-
 }
 } //namespace ui
 } //namespace mrrocpp
