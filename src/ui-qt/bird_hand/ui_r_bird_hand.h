@@ -17,8 +17,7 @@
 class wgt_bird_hand_command;
 class WndConfiguration;
 
-
-namespace Ui{
+namespace Ui {
 class MenuBar;
 class MenuBarAction;
 }
@@ -37,18 +36,16 @@ namespace bird_hand {
 //
 //
 
-
 // super klasa agregujaca porozrzucane struktury
 
 class EcpRobot;
 
 class UiRobot : public common::UiRobot
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	EcpRobot *ui_ecp_robot;
-
 
 	UiRobot(common::Interface& _interface);
 
@@ -58,7 +55,6 @@ public:
 	void synchronise();
 	void edp_create();
 	void create_ui_ecp_robot();
-	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 
 	void setup_menubar();
 

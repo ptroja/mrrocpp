@@ -28,11 +28,6 @@ const std::string WGT_SARKOFAG_MOVE = "WGT_SARKOFAG_MOVE";
 //
 //
 
-void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
-{
-	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
-
-}
 
 void UiRobot::create_ui_ecp_robot()
 {

@@ -83,10 +83,6 @@ public:
 	 */
 	void synchronise();
 
-	/**
-	 * @brief gets_controller_state (edp controller)
-	 */
-	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 
 	/**
 	 * @brief buils menu bar

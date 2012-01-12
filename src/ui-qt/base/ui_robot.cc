@@ -126,6 +126,11 @@ wgt_robot_process_control * UiRobot::get_wgt_robot_pc()
 	return wgt_robot_pc;
 }
 
+void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
+{
+	common_ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
+}
+
 int UiRobot::edp_create_int()
 {
 	interface.set_ui_state_notification(UI_N_PROCESS_CREATION);

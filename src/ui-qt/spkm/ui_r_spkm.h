@@ -73,8 +73,6 @@ public:
 	int execute_stop_motor();
 	void edp_create_int_extra_operations();
 
-	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
-
 	void setup_menubar();
 
 private:

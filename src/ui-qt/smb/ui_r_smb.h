@@ -59,8 +59,6 @@ public:
 	int execute_clear_fault();
 	int execute_stop_motor();
 
-	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
-
 	void setup_menubar();
 
 private:

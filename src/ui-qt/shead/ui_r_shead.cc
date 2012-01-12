@@ -20,18 +20,10 @@ namespace mrrocpp {
 namespace ui {
 namespace shead {
 
-void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
-{
-	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
-
-}
 
 void UiRobot::synchronise()
-
 {
-
 	eb.command(boost::bind(&ui::shead::UiRobot::synchronise_int, &(*this)));
-
 }
 
 int UiRobot::synchronise_int()
