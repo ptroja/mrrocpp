@@ -40,6 +40,7 @@ class wgt_sbench_command : public wgt_base
 public:
 	wgt_sbench_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
 			0);
+
 	~wgt_sbench_command();
 
 	QCheckBox* docks[SBENCH_MAX_ROW][SBENCH_MAX_COL];
