@@ -27,7 +27,6 @@
 
 #include "ui_ecp_r_common012.h"
 
-
 namespace mrrocpp {
 namespace ui {
 namespace common012 {
@@ -169,19 +168,6 @@ void EcpRobot::move_joints(const double final_position[])
 }
 // ---------------------------------------------------------------
 
-void EcpRobot::execute_motion(void)
-{
-	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
-
-	ui_robot.interface.set_ui_state_notification(UI_N_COMMUNICATION);
-
-	// TODO: in QNX/Photon exceptions are handled at the main loop
-	// in GTK exceptions triggered signals cannot be handled in main loop
-
-	ecp->execute_motion();
-}
-// ---------------------------------------------------------------
-
 // ---------------------------------------------------------------
 void EcpRobot::set_desired_position(const double d_position[])
 {
@@ -229,19 +215,6 @@ void EcpRobot::get_servo_algorithm(uint8_t algorithm_no[], uint8_t parameters_no
 			* sizeof(uint8_t));
 	memcpy(parameters_no, ecp->reply_package.robot_model.servo_algorithm.servo_parameters_no, ecp->number_of_servos
 			* sizeof(uint8_t));
-}
-
-// do odczytu stanu poczatkowego robota
-void EcpRobot::get_controller_state(lib::controller_state_t & robot_controller_initial_state_l)
-{
-	// Zlecenie odczytu numeru modelu i korektora kinematyki
-	ecp->ecp_command.instruction_type = lib::GET;
-	ecp->ecp_command.get_type = CONTROLLER_STATE_DEFINITION;
-
-	execute_motion();
-
-	robot_controller_initial_state_l = ecp->reply_package.controller_state;
-	ecp->synchronised = robot_controller_initial_state_l.is_synchronised;
 }
 
 // ---------------------------------------------------------------

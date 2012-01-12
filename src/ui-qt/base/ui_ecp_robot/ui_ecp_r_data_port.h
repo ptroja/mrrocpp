@@ -26,18 +26,6 @@ public:
 
 	boost::shared_ptr <ECP_ROBOT_T> the_robot;
 
-	// do odczytu stanu poczatkowego robota
-	void get_controller_state(lib::controller_state_t & robot_controller_initial_state_l)
-	{
-		the_robot->ecp_command.instruction_type = lib::GET;
-		the_robot->ecp_command.get_type = CONTROLLER_STATE_DEFINITION;
-
-		the_robot->execute_motion();
-
-		robot_controller_initial_state_l = the_robot->reply_package.controller_state;
-		the_robot->synchronised = robot_controller_initial_state_l.is_synchronised;
-	}
-
 	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
 	virtual void execute_motion(void)
 	{

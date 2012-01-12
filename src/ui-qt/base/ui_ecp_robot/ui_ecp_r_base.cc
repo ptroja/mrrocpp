@@ -44,6 +44,32 @@ EcpRobot::~EcpRobot()
 
 }
 
+// do odczytu stanu poczatkowego robota
+void EcpRobot::get_controller_state(lib::controller_state_t & robot_controller_initial_state_l)
+{
+	// Zlecenie odczytu numeru modelu i korektora kinematyki
+	ecp->ecp_command.instruction_type = lib::GET;
+	ecp->ecp_command.get_type = CONTROLLER_STATE_DEFINITION;
+
+	execute_motion();
+
+	robot_controller_initial_state_l = ecp->reply_package.controller_state;
+	ecp->synchronised = robot_controller_initial_state_l.is_synchronised;
+}
+
+void EcpRobot::execute_motion(void)
+{
+	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
+
+	ui_robot.interface.set_ui_state_notification(UI_N_COMMUNICATION);
+
+	// TODO: in QNX/Photon exceptions are handled at the main loop
+	// in GTK exceptions triggered signals cannot be handled in main loop
+
+	ecp->execute_motion();
+}
+// ---------------------------------------------------------------
+
 }
 } //namespace ui
 } //namespace mrrocpp

@@ -46,7 +46,6 @@ public:
 
 	virtual ~EcpRobot();
 
-	virtual void execute_motion(void);
 	// virtual void set_edp_master_pid ( pid_t edppid ) {EDP_Pid = edppid;};
 	// Przekazanie identyfikatora procesu EDP
 	// virtual void synchronise ( void ); // Zlecenie synchronizacji robota
@@ -56,9 +55,6 @@ public:
 	// Przepisanie polozen zadanych
 	// do tablicy desired_position[]
 	virtual void get_current_position(double c_position[lib::MAX_SERVOS_NR]); // Pobranie aktualnych polozen
-
-	// by Y - do odczytu stanu poczatkowego robota
-	void get_controller_state(lib::controller_state_t & robot_controller_initial_state_l);
 
 	// Zlecenie ruchu
 	void set_kinematic(uint8_t kinematic_model_no);
