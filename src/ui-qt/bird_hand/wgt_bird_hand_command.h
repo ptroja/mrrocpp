@@ -36,15 +36,15 @@ public:
 			0);
 	~wgt_bird_hand_command();
 
-	int get_command();
-	int set_status();
-	int copy_command();
+	void get_command();
+	void set_status();
+	void copy_command();
 
-	int get_variant_finger_command(int fingerId);
-	int get_finger_command(int fingerId);
-	int set_finger_status(int fingerId);
+	void get_variant_finger_command(int fingerId);
+	void get_finger_command(int fingerId);
+	void set_finger_status(int fingerId);
 
-	int copy_finger_command(int fingerId);
+	void copy_finger_command(int fingerId);
 
 	void my_open(bool set_on_top = false);
 

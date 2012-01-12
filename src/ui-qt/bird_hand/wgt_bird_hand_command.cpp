@@ -201,7 +201,7 @@ void wgt_bird_hand_command::on_pushButton_change_command_type_all_clicked()
 	}
 }
 
-int wgt_bird_hand_command::get_command()
+void wgt_bird_hand_command::get_command()
 {
 	try {
 
@@ -236,11 +236,9 @@ int wgt_bird_hand_command::get_command()
 
 	} // end try
 	CATCH_SECTION_UI_PTR
-
-	return 1;
 }
 
-int wgt_bird_hand_command::set_status()
+void wgt_bird_hand_command::set_status()
 {
 
 	joint_status.clear();
@@ -284,11 +282,9 @@ int wgt_bird_hand_command::set_status()
 		}
 	} // end try
 	CATCH_SECTION_UI_PTR
-
-	return 1;
 }
 
-int wgt_bird_hand_command::copy_command()
+void wgt_bird_hand_command::copy_command()
 {
 	if (robot->state.edp.pid != -1) {
 		if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -306,17 +302,14 @@ int wgt_bird_hand_command::copy_command()
 		}
 
 	}
-
-	return 1;
 }
 
 void wgt_bird_hand_command::on_pushButton_execute_clicked()
 {
-
 	get_command();
 }
 
-int wgt_bird_hand_command::get_variant_finger_command(int fingerId)
+void wgt_bird_hand_command::get_variant_finger_command(int fingerId)
 {
 	QList <QAbstractButton*> buttons_in_group = buttonGroup_Vector[fingerId]->buttons();
 
@@ -336,22 +329,20 @@ int wgt_bird_hand_command::get_variant_finger_command(int fingerId)
 				default:
 					break;
 			}
-			return 1;
+			return;
 		}
 	}
-	return 1;
 }
 
-int wgt_bird_hand_command::get_finger_command(int fingerId)
+void wgt_bird_hand_command::get_finger_command(int fingerId)
 {
 	joint_command[fingerId]->desired_position = desired_pos_spin_box[fingerId]->value();
 	joint_command[fingerId]->desired_torque = doubleSpinBox_destor_Vector[fingerId]->value();
 	joint_command[fingerId]->reciprocal_of_damping = doubleSpinBox_rdamp_Vector[fingerId]->value();
 
-	return 1;
 }
 
-int wgt_bird_hand_command::set_finger_status(int fingerId)
+void wgt_bird_hand_command::set_finger_status(int fingerId)
 {
 	QList <QAbstractButton*> chboxes = checkboxButtonGroup_Vector[fingerId]->buttons();
 
@@ -407,15 +398,12 @@ int wgt_bird_hand_command::set_finger_status(int fingerId)
 		chboxes[7]->setChecked(false);
 	}
 
-	return 1;
 }
 
-int wgt_bird_hand_command::copy_finger_command(int fingerId)
+void wgt_bird_hand_command::copy_finger_command(int fingerId)
 {
 
 	if (joint_command[fingerId]->profile_type == lib::bird_hand::MACROSTEP_ABSOLUTE_POSITION)
 		desired_pos_spin_box[fingerId]->setValue(doubleSpinBox_curpos_Vector[fingerId]->value());
-
-	return 1;
 }
 
