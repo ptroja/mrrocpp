@@ -29,7 +29,7 @@ class wgt_bird_hand_commandClass;
 
 class wgt_bird_hand_command : public wgt_base
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit wgt_bird_hand_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
@@ -70,7 +70,7 @@ private:
 
 	lib::bird_hand::MOTION_VARIANT current_profile_type;
 
-signals:
+	signals:
 	void synchro_depended_init_signal();
 	void init_and_copy_signal();
 

@@ -22,18 +22,24 @@ class UiRobot;
 
 class wgt_single_motor_move : public wgt_base
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	wgt_single_motor_move(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot* _robot, QWidget *parent =
-					0);
+			0);
 	~wgt_single_motor_move();
 
 	void synchro_depended_init();
 	void init_and_copy();
-	void my_open(bool set_on_top=false);
-	virtual void add_button(QPushButton *button, int row, int space){};
-	virtual void setup_ui(){};
+	void my_open(bool set_on_top = false);
+	virtual void add_button(QPushButton *button, int row, int space)
+	{
+	}
+	;
+	virtual void setup_ui()
+	{
+	}
+	;
 
 private:
 	Ui::wgt_single_motor_moveClass ui;
@@ -42,21 +48,21 @@ private:
 	void init_mr_and_si();
 	void copy_mr_and_si();
 
-	int synchro_depended_widgets_disable(bool _set_disabled);
+	void synchro_depended_widgets_disable(bool _set_disabled);
 
-	int init_mr();
-	int copy_mr();
+	void init_mr();
+	void copy_mr();
 
-	int get_desired_position_mr();
-	int move_it_mr();
+	void get_desired_position_mr();
+	void move_it_mr();
 
-	int init_si();
-	int copy_si();
+	void init_si();
+	void copy_si();
 
-	int get_desired_position_si();
-	int move_it_si();
+	void get_desired_position_si();
+	void move_it_si();
 
-signals:
+	signals:
 	void synchro_depended_init_signal();
 	void init_and_copy_signal();
 

@@ -62,7 +62,7 @@ void wgt_shead_command::synchro_depended_init_slot()
 
 }
 
-int wgt_shead_command::init()
+void wgt_shead_command::init()
 {
 	interface.ui_msg->message("init");
 
@@ -152,11 +152,9 @@ int wgt_shead_command::init()
 
 	} // end try
 	CATCH_SECTION_UI_PTR
-
-	return 1;
 }
 
-int wgt_shead_command::synchro_depended_widgets_disable(bool _set_disabled)
+void wgt_shead_command::synchro_depended_widgets_disable(bool _set_disabled)
 {
 	ui.pushButton_m_execute->setDisabled(_set_disabled);
 	ui.pushButton_ml_copy->setDisabled(_set_disabled);
@@ -165,7 +163,6 @@ int wgt_shead_command::synchro_depended_widgets_disable(bool _set_disabled)
 		doubleSpinBox_m_absolute_Vector[i]->setDisabled(_set_disabled);
 	}
 
-	return 1;
 }
 
 void wgt_shead_command::timer_slot()
@@ -175,7 +172,7 @@ void wgt_shead_command::timer_slot()
 	}
 }
 
-int wgt_shead_command::get_desired_position()
+void wgt_shead_command::get_desired_position()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -192,11 +189,9 @@ int wgt_shead_command::get_desired_position()
 			}
 		}
 	}
-
-	return 1;
 }
 
-int wgt_shead_command::move_it()
+void wgt_shead_command::move_it()
 {
 
 	// wychwytania ew. bledow ECP::robot
@@ -222,8 +217,6 @@ int wgt_shead_command::move_it()
 	} // end try
 
 	CATCH_SECTION_UI_PTR
-
-	return 1;
 }
 
 // buttons callbacks
@@ -343,13 +336,15 @@ void wgt_shead_command::on_radioButton_m_joint_toggled()
 
 		ui.doubleSpinBox_ml_absolute->setSingleStep(0.1);
 		ui.doubleSpinBox_ml_absolute->setDecimals(3);
-		ui.doubleSpinBox_ml_absolute->setMinimum(kinematics::shead::model::getLowerJointLimit()+pow(10,-ui.doubleSpinBox_ml_absolute->decimals()));
-		ui.doubleSpinBox_ml_absolute->setMaximum(kinematics::shead::model::getUpperJointLimit()-pow(10,-ui.doubleSpinBox_ml_absolute->decimals()));
+		ui.doubleSpinBox_ml_absolute->setMinimum(kinematics::shead::model::getLowerJointLimit()
+				+ pow(10, -ui.doubleSpinBox_ml_absolute->decimals()));
+		ui.doubleSpinBox_ml_absolute->setMaximum(kinematics::shead::model::getUpperJointLimit()
+				- pow(10, -ui.doubleSpinBox_ml_absolute->decimals()));
 
 		ui.doubleSpinBox_ml_relative->setSingleStep(0.1);
 		ui.doubleSpinBox_ml_relative->setDecimals(3);
-		ui.doubleSpinBox_ml_relative->setMinimum(-2*M_PI/3);
-		ui.doubleSpinBox_ml_relative->setMaximum(+2*M_PI/3);
+		ui.doubleSpinBox_ml_relative->setMinimum(-2 * M_PI / 3);
+		ui.doubleSpinBox_ml_relative->setMaximum(+2 * M_PI / 3);
 
 		// Set precision of widgets with current positions.
 		ui.doubleSpinBox_ml_current_position->setDecimals(3);
