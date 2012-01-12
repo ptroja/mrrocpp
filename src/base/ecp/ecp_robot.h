@@ -205,6 +205,47 @@ public:
 
 };
 
+class common_buffers_ecp_robot : public ecp_robot_base
+{
+
+public:
+	friend class ecp::common::generator::transparent;
+
+	/**
+	 * @brief constructor called from UI
+	 * @param _robot_name robot label
+	 * @param _number_of_servos number of robot servos (joints)
+	 * @param _edp_section associated EDP configuration file section
+	 * @param _config configuration object reference
+	 * @param _sr_ecp sr_ecp communication object reference
+	 */
+	common_buffers_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref);
+
+	/**
+	 * @brief constructor called from ECP
+	 * @param _robot_name robot label
+	 * @param _number_of_servos number of robot servos (joints)
+	 * @param _edp_section associated EDP configuration file section
+	 * @param _ecp_object ecp tak object reference
+	 */
+	common_buffers_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref);
+
+	/*!
+	 * \brief Reference to base types of instruction
+	 *
+	 * The particular type is the field of derived classes
+	 */
+	lib::c_buffer & ecp_command;
+
+	/*!
+	 * \brief Reference to base types of reply
+	 *
+	 * The particular type is the field of derived classes
+	 */
+	lib::r_buffer & reply_package;
+
+};
+
 template <typename ROBOT_COMMAND_T = lib::c_buffer, typename ROBOT_REPLY_T = lib::r_buffer>
 class _ecp_robot : public ecp_robot_base
 {

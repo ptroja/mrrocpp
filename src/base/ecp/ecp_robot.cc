@@ -34,6 +34,23 @@ namespace ecp {
 namespace common {
 namespace robot {
 
+common_buffers_ecp_robot::common_buffers_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref) :
+		ecp_robot_base(_robot_name, _number_of_servos, _config, _sr_ecp_msg),
+		ecp_command(c_buffer_ref),
+		reply_package(r_buffer_ref)
+{
+
+}
+
+// konstruktor wywolywany z ECP
+common_buffers_ecp_robot::common_buffers_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref) :
+		ecp_robot_base(_robot_name, _number_of_servos, _ecp_object),
+		ecp_command(c_buffer_ref),
+		reply_package(r_buffer_ref)
+{
+
+}
+
 // konstruktor wywolywany z UI
 ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 		robot(_robot_name),
