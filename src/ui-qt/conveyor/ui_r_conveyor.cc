@@ -36,10 +36,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 void UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::conveyor::EcpRobot(*this);
-
-	common::UiRobot::common_ui_ecp_robot = ui_ecp_robot;
-
+	common::UiRobot::common_ui_ecp_robot = ui_ecp_robot = new ui::conveyor::EcpRobot(*this);
 }
 
 void UiRobot::edp_create_int_extra_operations()

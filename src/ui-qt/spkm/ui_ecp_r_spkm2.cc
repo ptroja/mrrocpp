@@ -31,9 +31,10 @@ namespace spkm2 {
 
 // ---------------------------------------------------------------
 EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
-	spkm::EcpRobot(_ui_robot)
+		spkm::EcpRobot(_ui_robot)
 {
 	the_robot = (boost::shared_ptr <robot_t>) new ecp::spkm2::robot(*(ui_robot.interface.config), *(ui_robot.msg));
+	common::EcpRobot::ecp = (ecp::common::robot::ecp_robot*) (the_robot.get());
 }
 
 }
