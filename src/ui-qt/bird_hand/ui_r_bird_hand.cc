@@ -43,7 +43,7 @@ void UiRobot::edp_create()
 
 void UiRobot::create_ui_ecp_robot()
 {
-	common::UiRobot::common_ui_ecp_robot = ui_ecp_robot = new ui::bird_hand::EcpRobot(*this);
+	common::UiRobot::ui_ecp_robot = ui_ecp_robot = new ui::bird_hand::EcpRobot(*this);
 }
 
 void UiRobot::synchronise()
@@ -125,10 +125,6 @@ void UiRobot::setup_menubar()
 	robot_menu->setTitle(QApplication::translate("MainWindow", "&Birdhand", 0, QApplication::UnicodeUTF8));
 }
 
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
-}
 
 void UiRobot::null_ui_ecp_robot()
 {

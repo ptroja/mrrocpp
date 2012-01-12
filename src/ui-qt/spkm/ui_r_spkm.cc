@@ -196,11 +196,6 @@ connect(actionspkm_Clear_Fault, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*))
 
 }
 
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
-}
-
 void UiRobot::move_to_synchro_position()
 {
 

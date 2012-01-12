@@ -97,7 +97,7 @@ class UiRobot : public QObject
 
 public:
 
-	EcpRobot *common_ui_ecp_robot;
+	EcpRobot *ui_ecp_robot;
 	Interface& interface;
 
 	const lib::robot_name_t getName();
@@ -169,7 +169,7 @@ public:
 	void connect_to_reader(void);
 	void connect_to_ecp_pulse_chanell(void); //TODO: channel, nie chanell
 	void pulse_ecp_execute(int code, int value);
-	virtual void delete_ui_ecp_robot() = 0;
+	virtual void delete_ui_ecp_robot();
 	virtual void null_ui_ecp_robot() = 0;
 	int ui_get_edp_pid();
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);

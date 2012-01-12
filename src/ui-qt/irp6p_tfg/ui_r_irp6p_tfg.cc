@@ -30,7 +30,7 @@ const std::string WGT_IRP6P_TFG_MOVE = "WGT_IRP6P_TFG_MOVE";
 
 void UiRobot::create_ui_ecp_robot()
 {
-	common::UiRobot::common_ui_ecp_robot = ui_ecp_robot = new ui::irp6p_tfg::EcpRobot(*this);
+	common::UiRobot::ui_ecp_robot = ui_ecp_robot = new ui::irp6p_tfg::EcpRobot(*this);
 }
 
 void UiRobot::edp_create_int_extra_operations()

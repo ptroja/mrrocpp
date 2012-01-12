@@ -31,7 +31,7 @@ const std::string WGT_SARKOFAG_MOVE = "WGT_SARKOFAG_MOVE";
 
 void UiRobot::create_ui_ecp_robot()
 {
-	common::UiRobot::common_ui_ecp_robot = ui_ecp_robot = new ui::sarkofag::EcpRobot(*this);
+	common::UiRobot::ui_ecp_robot = ui_ecp_robot = new ui::sarkofag::EcpRobot(*this);
 }
 
 void UiRobot::edp_create_int_extra_operations()

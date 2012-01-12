@@ -69,11 +69,6 @@ public:
 	void manage_interface();
 
 	/**
-	 * @brief deletes ui_ecp_robot onbject
-	 */
-	void delete_ui_ecp_robot();
-
-	/**
 	 * @brief zeros ui_ecp_robot pointer
 	 */
 	void null_ui_ecp_robot();

@@ -33,6 +33,12 @@ namespace common {
 //
 //
 
+void UiRobot::delete_ui_ecp_robot()
+{
+	delete ui_ecp_robot;
+
+}
+
 UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
 		interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
 {
@@ -128,7 +134,7 @@ wgt_robot_process_control * UiRobot::get_wgt_robot_pc()
 
 void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
 {
-	common_ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
+	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
 }
 
 int UiRobot::edp_create_int()
@@ -482,7 +488,7 @@ bool UiRobot::is_edp_loaded()
 
 int UiRobot::ui_get_edp_pid()
 {
-	return common_ui_ecp_robot->ecp->get_EDP_pid();
+	return ui_ecp_robot->ecp->get_EDP_pid();
 }
 
 void UiRobot::manage_interface()

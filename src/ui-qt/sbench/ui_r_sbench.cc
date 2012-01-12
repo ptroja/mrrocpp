@@ -104,10 +104,7 @@ void UiRobot::setup_menubar()
 
 }
 
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
-}
+
 
 void UiRobot::null_ui_ecp_robot()
 {
@@ -117,7 +114,7 @@ void UiRobot::null_ui_ecp_robot()
 
 void UiRobot::create_ui_ecp_robot()
 {
-	common::UiRobot::common_ui_ecp_robot = ui_ecp_robot = new EcpRobot(*this);
+	common::UiRobot::ui_ecp_robot = ui_ecp_robot = new EcpRobot(*this);
 }
 
 }

@@ -157,10 +157,6 @@ connect(action_Clear_Fault, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), si
 
 }
 
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
-}
 
 void UiRobot::null_ui_ecp_robot()
 {

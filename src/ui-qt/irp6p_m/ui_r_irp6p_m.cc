@@ -48,7 +48,7 @@ void UiRobot::open_c_joint_window()
 
 void UiRobot::create_ui_ecp_robot()
 {
-	common::UiRobot::common_ui_ecp_robot = ui_ecp_robot = new ui::irp6p_m::EcpRobot(*this);
+	common::UiRobot::ui_ecp_robot = ui_ecp_robot = new ui::irp6p_m::EcpRobot(*this);
 }
 
 void UiRobot::edp_create_int_extra_operations()
