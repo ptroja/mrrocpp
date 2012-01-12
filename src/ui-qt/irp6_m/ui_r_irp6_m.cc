@@ -6,7 +6,7 @@
 #include "../irp6_m/wgt_irp6_m_joints.h"
 
 #include "ui_r_irp6_m.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common012.h"
 
 #include "../base/interface.h"
 

@@ -2,7 +2,7 @@
 #include "ui_r_irp6_m.h"
 
 //#include "ui/src/ui_ecp_r_single_motor.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common012.h"
 #include "wgt_irp6_m_tool_euler.h"
 #include "../base/interface.h"
 #include "../base/mainwindow.h"

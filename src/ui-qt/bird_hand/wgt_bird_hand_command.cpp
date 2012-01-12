@@ -6,7 +6,7 @@
 #include "../../robot/bird_hand/const_bird_hand.h"
 
 //#include "ui/src/ui_ecp_r_single_motor.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common012.h"
 
 #include "../base/interface.h"
 #include "../base/mainwindow.h"

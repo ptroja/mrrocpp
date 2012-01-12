@@ -5,7 +5,7 @@
 #include "base/lib/configurator.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common012.h"
 namespace mrrocpp {
 namespace ui {
 namespace common {
