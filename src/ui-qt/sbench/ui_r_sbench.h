@@ -84,12 +84,6 @@ public:
 	void synchronise();
 
 	/**
-	 * @brief gets edp_pid
-	 * @return edp_pid
-	 */
-	int ui_get_edp_pid();
-
-	/**
 	 * @brief gets_controller_state (edp controller)
 	 */
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);

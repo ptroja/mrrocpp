@@ -46,11 +46,6 @@ void UiRobot::open_c_joint_window()
 	wgts[WGT_JOINTS]->my_open();
 }
 
-int UiRobot::ui_get_edp_pid()
-{
-	return ui_ecp_robot->ecp->get_EDP_pid();
-}
-
 void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
 {
 	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);

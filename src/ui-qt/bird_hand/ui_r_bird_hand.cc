@@ -32,11 +32,6 @@ namespace bird_hand {
 const std::string UiRobot::WGT_COMMAND_AND_STATUS = "WGT_COMMAND_AND_STATUS";
 const std::string UiRobot::WGT_CONFIGURATION = "WGT_CONFIGURATION";
 
-int UiRobot::ui_get_edp_pid()
-{
-	return ui_ecp_robot->the_robot->get_EDP_pid();
-}
-
 void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
 {
 	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
