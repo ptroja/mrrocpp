@@ -124,6 +124,7 @@ endif(ROBOTS_SWARMITFIX)
 if(ROBOTS_012)
 SET(GUI_CXX_SRCS
 ${GUI_CXX_SRCS}
+   	conveyor/ui_ecp_r_conveyor.cc
   irp6_m/wgt_irp6_m_joints.cpp
     irp6_m/wgt_irp6_m_motors.cpp
     irp6_m/wgt_irp6_m_angle_axis.cpp

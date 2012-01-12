@@ -32,7 +32,6 @@
 #include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
 #include "robot/sarkofag/ecp_r_sarkofag.h"
-#include "robot/conveyor/ecp_r_conv.h"
 #include "robot/shead/ecp_r_shead.h"
 
 namespace mrrocpp {
@@ -107,17 +106,9 @@ EcpRobot::EcpRobot(UiRobot& _ui_robot) :
 			MOTOR_STEP[j] = 0.4;
 			JOINT_STEP[j] = 0.0001;
 		}
-	} else if (ui_robot.robot_name == lib::conveyor::ROBOT_NAME) {
-
-		ecp = new ecp::conveyor::robot(*(ui_robot.interface.config), *(ui_robot.msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.04;
-			JOINT_STEP[j] = 0.00004;
-		}
 	}
 
-	init();
+//	init();
 }
 // ---------------------------------------------------------------
 
