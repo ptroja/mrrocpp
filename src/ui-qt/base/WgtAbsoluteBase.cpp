@@ -68,7 +68,7 @@ void WgtAbsoluteBase::create_buttons()
 	connect(copy_button, SIGNAL(clicked()), this, SLOT(copy_button_clicked()), Qt::QueuedConnection);
 }
 
-int WgtAbsoluteBase::synchro_depended_widgets_disable(bool set_disabled)
+void WgtAbsoluteBase::synchro_depended_widgets_disable(bool set_disabled)
 {
 	execute_button->setDisabled(set_disabled);
 	copy_button->setDisabled(set_disabled);
@@ -81,7 +81,6 @@ int WgtAbsoluteBase::synchro_depended_widgets_disable(bool set_disabled)
 		desired_pos_spin_boxes[i]->setDisabled(set_disabled);
 	}
 
-	return 1;
 }
 
 void WgtAbsoluteBase::inc_move_left_button_clicked(int button)

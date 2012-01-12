@@ -75,6 +75,7 @@ SET(GUI_CXX_SRCS
 	base/ui_robot.cc
 	base/ui_r_single_motor.cc
 	base/signal_dispatcher.cpp
+	base/ui_ecp_robot/ui_ecp_r_base.cc
 )
 
 
@@ -124,7 +125,13 @@ endif(ROBOTS_SWARMITFIX)
 if(ROBOTS_012)
 SET(GUI_CXX_SRCS
 ${GUI_CXX_SRCS}
-  irp6_m/wgt_irp6_m_joints.cpp
+   	conveyor/ui_ecp_r_conveyor.cc
+  	irp6ot_m/ui_ecp_r_irp6ot_m.cc
+  	irp6ot_tfg/ui_ecp_r_irp6ot_tfg.cc
+  	irp6p_m/ui_ecp_r_irp6p_m.cc
+  	irp6p_tfg/ui_ecp_r_irp6p_tfg.cc
+  	sarkofag/ui_ecp_r_sarkofag.cc
+    irp6_m/wgt_irp6_m_joints.cpp
     irp6_m/wgt_irp6_m_motors.cpp
     irp6_m/wgt_irp6_m_angle_axis.cpp
     irp6_m/wgt_irp6_m_euler.cpp
@@ -138,7 +145,7 @@ ${GUI_CXX_SRCS}
 	irp6ot_tfg/ui_r_irp6ot_tfg.cc
 	sarkofag/ui_r_sarkofag.cc
 	conveyor/ui_r_conveyor.cc
-	base/ui_ecp_robot/ui_ecp_r_common.cc
+	base/ui_ecp_robot/ui_ecp_r_common012.cc
     base/wgt_single_motor_move.cpp
 )
 endif(ROBOTS_012)

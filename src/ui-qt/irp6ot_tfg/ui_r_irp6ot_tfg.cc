@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_irp6ot_tfg.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+#include "ui_ecp_r_irp6ot_tfg.h"
 #include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
 #include "../base/interface.h"
 
@@ -26,20 +26,12 @@ const std::string WGT_IRP6OT_TFG_MOVE = "WGT_IRP6OT_TFG_MOVE";
 //
 //
 
-int UiRobot::ui_get_edp_pid()
-{
-	return ui_ecp_robot->ecp->get_EDP_pid();
-}
 
-void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
-{
-	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
-}
+
 
 void UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::common::EcpRobot(*this);
-//	return 1;
+	common::UiRobot::ui_ecp_robot = ui_ecp_robot = new ui::irp6ot_tfg::EcpRobot(*this);
 }
 
 void UiRobot::edp_create_int_extra_operations()

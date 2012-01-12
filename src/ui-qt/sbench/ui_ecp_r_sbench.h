@@ -1,6 +1,14 @@
 #ifndef _UI_ECP_R_SMB_H
 #define _UI_ECP_R_SMB_H
 
+/*!
+ * @file
+ * @brief File contains ui EcpRobot class declaration for SwarmItFix Bench
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sbench
+ */
+
 #include "../base/ui.h"
 
 #include "base/lib/configurator.h"
@@ -16,14 +24,24 @@ class Interface;
 }
 namespace sbench {
 
-// ---------------------------------------------------------------
+/*!
+ * @class
+ * @brief sbench EcpRobot class
+ * it specializes and derives from _EcpRobotDataPort
+ * @author yoyek
+ *
+ *  @ingroup sbench
+ */
 class EcpRobot : public common::_EcpRobotDataPort <ecp::sbench::robot>
 {
 
 public:
 
-	// ecp_buffer ui_edp_package; // by Y
-	EcpRobot(common::UiRobot& _ui_robot); // Konstruktor
+	/**
+	 * @brief constructor
+	 * @param _ui_robot UiRobot object pointer
+	 */
+	EcpRobot(common::UiRobot& _ui_robot);
 
 };
 
