@@ -30,7 +30,7 @@ void swarmitfix::main_task_algorithm(void)
 
 	if (0) {
 		// Setup initial pin state
-		lib::sbench::pins_buffer pins;
+		lib::sbench::voltage_buffer pins;
 
 		// Generator to execute the command
 		generator::pin_config g_pin_setup(*this, pins);

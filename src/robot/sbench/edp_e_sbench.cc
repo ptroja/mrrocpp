@@ -1,6 +1,8 @@
 #include <cstdio>
 #include <boost/static_assert.hpp>
 
+#include <comedilib.h>
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
@@ -54,7 +56,7 @@ void effector::voltage_init()
 
 	} else {
 		// Set pointer just for safety
-		device = NULL;
+		voltage_device = NULL;
 
 		current_pins_buf.voltage_buf.set_zeros();
 	}
@@ -64,8 +66,8 @@ effector::~effector()
 {
 	if(!robot_test_mode) {
 		// Detach from hardware
-		if (device) {
-			if(comedi_close(device) == -1) {
+		if (voltage_device) {
+			if(comedi_close(voltage_device) == -1) {
 				throw std::runtime_error("comedi_close() failed");
 			}
 		}
@@ -110,7 +112,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 }
 
-void effector::voltage_command(lib::sbench::c_buffer &instruction)
+void effector::voltage_command(const lib::sbench::c_buffer &instruction)
 {
 	msg->message("voltage_command");
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
@@ -138,7 +140,7 @@ void effector::voltage_command(lib::sbench::c_buffer &instruction)
 
 }
 
-void effector::preasure_command(lib::sbench::c_buffer &instruction)
+void effector::preasure_command(const lib::sbench::c_buffer &instruction)
 {
 	msg->message("preasure_command");
 }

@@ -10,8 +10,6 @@
 #ifndef __EDP_E_SBENCH_H
 #define __EDP_E_SBENCH_H
 
-#include <comedilib.h>
-
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_sbench.h"
 
@@ -92,12 +90,12 @@ public:
 	/*!
 	 * \brief method to command voltage of pins
 	 */
-	void voltage_command(lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+	void voltage_command(const lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
 
 	/*!
 	 * \brief method to command preasure in pins
 	 */
-	void preasure_command(lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+	void preasure_command(const lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
 
 	/*!
 	 * \brief method to get position of the motors or joints
