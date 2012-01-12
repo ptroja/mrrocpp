@@ -42,6 +42,7 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object) :
@@ -70,6 +71,7 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
@@ -83,7 +85,7 @@ void robot::create_kinematic_models_for_given_robot(void)
 
 void robot::create_command()
 {
-	data_ports_used = true;
+
 	if (epos_motor_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		if (!is_synchronised()) {

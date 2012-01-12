@@ -112,7 +112,6 @@ public:
 					// for data ports purpose
 					the_robot->is_new_data = false;
 					the_robot->is_new_request = false;
-					the_robot->data_ports_used = false;
 
 					the_robot->create_command();
 

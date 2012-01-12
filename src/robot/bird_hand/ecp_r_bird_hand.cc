@@ -25,6 +25,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
@@ -40,11 +41,11 @@ robot::robot(common::task::task_base& _ecp_object) :
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 void robot::create_command()
 {
-	data_ports_used = true;
 	// NOWE PORTY
 	ecp_command.get_type = NOTHING_DEFINITION;
 

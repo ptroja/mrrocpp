@@ -35,6 +35,7 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 		,
 		epos_external_reply_data_request_port(lib::spkm::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
 {
+	data_ports_used = true;
 }
 
 robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object) :
@@ -56,11 +57,12 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 		,
 		epos_external_reply_data_request_port(lib::spkm::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
 {
+	data_ports_used = true;
 }
 
 void robot::create_command()
 {
-	data_ports_used = true;
+
 	// Set default variant to error in order to help tracking errors in communication
 	// TODO: the following should be if-then-elseif-elseif-elseif...-else branch tree
 	ecp_command.spkm.variant = (lib::spkm::CBUFFER_VARIANT) -1;
