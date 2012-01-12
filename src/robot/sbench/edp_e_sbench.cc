@@ -8,7 +8,6 @@
 #include "edp_e_sbench.h"
 #include "base/edp/reader.h"
 
-#include "robot/sbench/kinematic_model_sbench.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
 
@@ -328,10 +327,7 @@ void effector::preasure_reply()
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
 void effector::create_kinematic_models_for_given_robot(void)
 {
-	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::sbench::model());
-	// Ustawienie aktywnego modelu.
-	set_kinematic_model(0);
+	// no kinematics in sbench
 }
 
 /*--------------------------------------------------------------------------*/

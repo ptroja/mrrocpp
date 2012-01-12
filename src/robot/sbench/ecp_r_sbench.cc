@@ -10,7 +10,6 @@
 #include "base/lib/sr/sr_ecp.h"
 
 #include "ecp_r_sbench.h"
-#include "kinematic_model_sbench.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -47,15 +46,11 @@ robot::robot(common::task::task_base& _ecp_object) :
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
 void robot::create_kinematic_models_for_given_robot(void)
 {
-	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::sbench::model());
-	// Ustawienie aktywnego modelu.
-	set_kinematic_model(0);
+// no kinematics in sbench
 }
 
 void robot::create_command()
 {
-
 
 	sr_ecp_msg.message("create_command");
 
