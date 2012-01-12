@@ -13,7 +13,7 @@ namespace conveyor {
 
 // ---------------------------------------------------------------
 EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
-		common::EcpRobot(_ui_robot)
+		common012::EcpRobot(_ui_robot)
 {
 	ecp = new ecp::conveyor::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 	for (int j = 0; j < ecp->number_of_servos; j++) {

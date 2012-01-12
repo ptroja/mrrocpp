@@ -13,7 +13,7 @@ namespace sarkofag {
 
 // ---------------------------------------------------------------
 EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
-		common::EcpRobot(_ui_robot)
+		common012::EcpRobot(_ui_robot)
 {
 	ecp = new ecp::sarkofag::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 

@@ -23,8 +23,12 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
+}
+namespace common012 {
 class EcpRobot;
 }
+
+
 namespace single_motor {
 
 class UiRobot : public common::UiRobot
@@ -37,7 +41,7 @@ public:
 //	double desired_pos[1]; // pozycja zadana
 
 
-	common::EcpRobot *ui_ecp_robot;
+	common012::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
 	void delete_ui_ecp_robot();

@@ -14,7 +14,7 @@ class Interface;
 namespace conveyor {
 
 // ---------------------------------------------------------------
-class EcpRobot : public common::EcpRobot
+class EcpRobot : public common012::EcpRobot
 {
 
 public:

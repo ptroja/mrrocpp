@@ -20,6 +20,11 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class UiRobot;
+
+}
+
+namespace common012 {
+
 // ---------------------------------------------------------------
 class EcpRobot
 {
@@ -37,11 +42,11 @@ protected:
 	double current_position[lib::MAX_SERVOS_NR]; // polozenie aktualne
 
 public:
-	UiRobot& ui_robot;
+	common::UiRobot& ui_robot;
 	ecp::common::robot::ecp_robot *ecp;
 
 	// ecp_buffer ui_edp_package; // by Y
-	EcpRobot(UiRobot& _ui_robot); // Konstruktor
+	EcpRobot(common::UiRobot& _ui_robot); // Konstruktor
 
 	void init();
 

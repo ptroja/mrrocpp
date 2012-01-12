@@ -13,7 +13,7 @@ namespace irp6ot_m {
 
 // ---------------------------------------------------------------
 EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
-		common::EcpRobot(_ui_robot)
+		common012::EcpRobot(_ui_robot)
 {
 	ecp = new ecp::irp6ot_m::robot(*(ui_robot.interface.config), *(ui_robot.msg));
 

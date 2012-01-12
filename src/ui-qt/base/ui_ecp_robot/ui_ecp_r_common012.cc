@@ -29,10 +29,10 @@
 
 namespace mrrocpp {
 namespace ui {
-namespace common {
+namespace common012 {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(UiRobot& _ui_robot) :
+EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
 		ui_robot(_ui_robot), ecp(NULL)
 {
 
