@@ -1,6 +1,6 @@
 /*!
  * @file
- * @brief File contains ecp robot class definition for SwarmItFix Head
+ * @brief File contains ecp robot class definition for SwarmItFix Bench
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup sbench
@@ -53,15 +53,9 @@ void robot::create_kinematic_models_for_given_robot(void)
 
 void robot::create_command()
 {
-	// checks if any data_port is set
-	bool is_new_data = false;
 
-	// cheks if any data_request_port is set
-	bool is_new_request = false;
-
+	data_ports_used = true;
 	sr_ecp_msg.message("create_command");
-
-	is_new_data = false;
 
 	if (sbench_command_voltage_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
@@ -86,22 +80,6 @@ void robot::create_command()
 	}
 
 	is_new_request = sbench_reply_data_request_port.is_new_request();
-
-	communicate_with_edp = true;
-
-	if (is_new_data && is_new_request) {
-		ecp_command.instruction_type = lib::SET_GET;
-	} else if (is_new_data) {
-		ecp_command.instruction_type = lib::SET;
-	} else if (is_new_request) {
-		ecp_command.instruction_type = lib::GET;
-	} else {
-		communicate_with_edp = false;
-	}
-
-	if (is_new_request) {
-		ecp_command.get_type = ARM_DEFINITION;
-	}
 
 }
 

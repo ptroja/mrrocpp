@@ -133,6 +133,21 @@ public:
 	lib::fd_client_t EDP_fd;
 
 	/**
+	 * @brief states if any data_port is set
+	 */
+	bool is_new_data;
+
+	/**
+	 * @brief states if any data_request_port is set
+	 */
+	bool is_new_request;
+
+	/**
+	 * @brief states if any data_ports_are_used
+	 */
+	bool data_ports_used;
+
+	/**
 	 * @brief executed the communication sequence with EDP: set and query with error handling
 	 *
 	 * it can be reimplemented to maintain new error handling e.g.: in nose_run force generator
@@ -187,6 +202,7 @@ public:
 	 * @brief returns synchronised flag - synchronisation status
 	 */
 	bool is_synchronised(void) const;
+
 };
 
 template <typename ROBOT_COMMAND_T = lib::c_buffer, typename ROBOT_REPLY_T = lib::r_buffer>
@@ -351,6 +367,29 @@ public:
 			return false;
 		}
 	}
+
+	/**
+	 * @brief finalizes the robot command in data port variant
+	 */
+	void finalize_data_port_command()
+	{
+		communicate_with_edp = true;
+
+		if (is_new_data && is_new_request) {
+			ecp_command.instruction_type = lib::SET_GET;
+		} else if (is_new_data) {
+			ecp_command.instruction_type = lib::SET;
+		} else if (is_new_request) {
+			ecp_command.instruction_type = lib::GET;
+		} else {
+			communicate_with_edp = false;
+		}
+
+		if (is_new_request) {
+			ecp_command.get_type = ARM_DEFINITION;
+		}
+	}
+
 };
 
 typedef _ecp_robot <> ecp_robot;

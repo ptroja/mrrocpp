@@ -36,7 +36,14 @@ namespace robot {
 
 // konstruktor wywolywany z UI
 ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
-		robot(_robot_name), is_created_by_ui(true), communicate_with_edp(true), sr_ecp_msg(_sr_ecp_msg), number_of_servos(_number_of_servos)
+		robot(_robot_name),
+		is_created_by_ui(true),
+		communicate_with_edp(true),
+		sr_ecp_msg(_sr_ecp_msg),
+		number_of_servos(_number_of_servos),
+		is_new_data(false),
+		is_new_request(false),
+		data_ports_used(false)
 {
 	edp_section = _config.get_edp_section(robot_name);
 	connect_to_edp(_config);
@@ -44,7 +51,14 @@ ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _numbe
 
 // konstruktor wywolywany z ECP
 ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object) :
-		robot(_robot_name), is_created_by_ui(false), communicate_with_edp(true), sr_ecp_msg(*_ecp_object.sr_ecp_msg), number_of_servos(_number_of_servos)
+		robot(_robot_name),
+		is_created_by_ui(false),
+		communicate_with_edp(true),
+		sr_ecp_msg(*_ecp_object.sr_ecp_msg),
+		number_of_servos(_number_of_servos),
+		is_new_data(false),
+		is_new_request(false),
+		data_ports_used(false)
 {
 	edp_section = _ecp_object.config.get_edp_section(robot_name);
 	connect_to_edp(_ecp_object.config);

@@ -109,7 +109,17 @@ public:
 
 				// zlecenie ruchu SET oraz odczyt stanu robota GET
 				if (!(ecp_t.continuous_coordination)) {
+					// for data ports purpose
+					the_robot->is_new_data = false;
+					the_robot->is_new_request = false;
+					the_robot->data_ports_used = false;
+
 					the_robot->create_command();
+
+					if (the_robot->data_ports_used) {
+						the_robot->finalize_data_port_command();
+					}
+
 				}
 
 				// wykonanie kroku ruchu
@@ -136,15 +146,16 @@ public:
 	/**
 	 * @brief associated ecp_robot object pointer
 	 */
-	const boost::shared_ptr<ECP_ROBOT_T> the_robot;
+	const boost::shared_ptr <ECP_ROBOT_T> the_robot;
 
 	/**
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
 	_generator(task_t & _ecp_task) :
-			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), ecp_t(_ecp_task),
-			the_robot(boost::shared_dynamic_cast<ECP_ROBOT_T>(ecp_t.ecp_m_robot))
+			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)),
+			ecp_t(_ecp_task),
+			the_robot(boost::shared_dynamic_cast <ECP_ROBOT_T>(ecp_t.ecp_m_robot))
 	{
 	}
 

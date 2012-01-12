@@ -16,7 +16,7 @@ namespace mrrocpp {
 namespace lib {
 namespace sbench {
 
-// translation table of bench docks to io card ports
+// translation table of bench docks to advantech io card ports
 static int voltage_translation_table[8][8] = {
 // bench row 1
 { 0, 1, 2, 3, 4, 5, 6, 61 },
@@ -35,6 +35,7 @@ static int voltage_translation_table[8][8] = {
 // not used
 { 53, 54, 55, 56, 57, 58, 59, 60 } };
 
+// translation table of bench docks for festo valve block
 static int preasure_translation_table[8][8] = {
 // bench row 1
 { 55, 54, 53, 52, 51, 50, 49, 61 },

@@ -60,12 +60,7 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 
 void robot::create_command()
 {
-	// checks if any data_port is set
-	bool is_new_data = false;
-
-	// cheks if any data_request_posrt is set
-	bool is_new_request = false;
-
+	data_ports_used = true;
 	// Set default variant to error in order to help tracking errors in communication
 	// TODO: the following should be if-then-elseif-elseif-elseif...-else branch tree
 	ecp_command.spkm.variant = (lib::spkm::CBUFFER_VARIANT) -1;
@@ -172,24 +167,6 @@ void robot::create_command()
 		//ecp_command.get_arm_type = lib::FRAME;
 		//sr_ecp_msg.message("epos_external_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
-	}
-
-	communicate_with_edp = true;
-	if (is_new_data && is_new_request) {
-		ecp_command.instruction_type = lib::SET_GET;
-		//sr_ecp_msg.message("is_new_data is_new_request");
-	} else if (is_new_data) {
-		ecp_command.instruction_type = lib::SET;
-		//sr_ecp_msg.message("is_new_data");
-	} else if (is_new_request) {
-		ecp_command.instruction_type = lib::GET;
-		//sr_ecp_msg.message("is_new_request");
-	} else {
-		communicate_with_edp = false;
-	}
-
-	if (is_new_request) {
-		ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	}
 
 }
