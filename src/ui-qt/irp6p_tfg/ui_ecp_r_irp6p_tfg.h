@@ -1,17 +1,18 @@
-#ifndef _UI_ECP_R_CONVEYOR_H
-#define _UI_ECP_R_CONVEYOR_H
+#ifndef _UI_ECP_R_IRP6P_TFG_H
+#define _UI_ECP_R_IRP6P_TFG_H
 
 #include "../base/ui.h"
 #include "base/lib/configurator.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "robot/conveyor/ecp_r_conv.h"
+#include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
 }
-namespace conveyor {
+namespace irp6p_tfg {
 
 // ---------------------------------------------------------------
 class EcpRobot : public common::EcpRobot

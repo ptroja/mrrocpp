@@ -127,6 +127,9 @@ ${GUI_CXX_SRCS}
    	conveyor/ui_ecp_r_conveyor.cc
   	irp6ot_m/ui_ecp_r_irp6ot_m.cc
   	irp6ot_tfg/ui_ecp_r_irp6ot_tfg.cc
+  	irp6p_m/ui_ecp_r_irp6p_m.cc
+  	irp6p_tfg/ui_ecp_r_irp6p_tfg.cc
+  	sarkofag/ui_ecp_r_sarkofag.cc
     irp6_m/wgt_irp6_m_joints.cpp
     irp6_m/wgt_irp6_m_motors.cpp
     irp6_m/wgt_irp6_m_angle_axis.cpp
