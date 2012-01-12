@@ -1,6 +1,14 @@
 #ifndef WGT_SBENCH_COMMAND_H
 #define WGT_SBENCH_COMMAND_H
 
+/*!
+ * @file
+ * @brief File contains wgt_sbench_command class declaration for SwarmItFix Bench
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sbench
+ */
+
 #include <QtGui/QWidget>
 #include <QVBoxLayout>
 #include <QDockWidget>
@@ -27,7 +35,7 @@ class UiRobot;
 
 class wgt_sbench_command : public wgt_base
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	wgt_sbench_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =

@@ -1,12 +1,13 @@
-// -------------------------------------------------------------------------
-//                            ui_class.h
-// Definicje klasy Ui
-//
-// Ostatnia modyfikacja: 2010
-// -------------------------------------------------------------------------
-
 #ifndef __UI_R_SBENCH_H
 #define __UI_R_SBENCH_H
+
+/*!
+ * @file
+ * @brief File contains UiRobot class declaration for SwarmItFix Bench
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sbench
+ */
 
 #include <QObject>
 #include <QMenu>
@@ -38,7 +39,7 @@ class EcpRobot;
 
 class UiRobot : public common::UiRobot
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 

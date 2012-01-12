@@ -1,6 +1,15 @@
 #ifndef WGT_SBENCH_PREASURE_COMMAND_H
 #define WGT_SBENCH_PREASURE_COMMAND_H
 
+/*!
+ * @file
+ * @brief File contains wgt_sbench_preasure_command class declaration for SwarmItFix Bench
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sbench
+ */
+
+
 #include <QtGui/QWidget>
 #include <QVBoxLayout>
 #include <QDockWidget>

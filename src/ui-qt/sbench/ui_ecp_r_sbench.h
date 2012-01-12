@@ -1,6 +1,15 @@
 #ifndef _UI_ECP_R_SMB_H
 #define _UI_ECP_R_SMB_H
 
+/*!
+ * @file
+ * @brief File contains ui EcpRobot class declaration for SwarmItFix Bench
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sbench
+ */
+
+
 #include "../base/ui.h"
 
 #include "base/lib/configurator.h"

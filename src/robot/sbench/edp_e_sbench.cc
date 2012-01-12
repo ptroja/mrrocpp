@@ -1,3 +1,12 @@
+/*!
+ * @file
+ * @brief File containing the definition of edp::sbench::effector class.
+ *
+ * @author yoyek
+ *
+ * @ingroup sbench
+ */
+
 #include <cstdio>
 
 #include "base/lib/typedefs.h"

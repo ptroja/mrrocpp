@@ -1,6 +1,10 @@
-/* Y o u r   D e s c r i p t i o n                       */
-/*                            AppBuilder Photon Code Lib */
-/*                                         Version 2.01  */
+/*!
+ * @file
+ * @brief File contains UiRobot class definition for SwarmItFix Bench
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sbench
+ */
 
 #include "ui_r_sbench.h"
 #include "ui_ecp_r_sbench.h"
@@ -20,11 +24,6 @@ namespace mrrocpp {
 namespace ui {
 namespace sbench {
 
-//
-//
-// KLASA UiRobotIrp6ot_m
-//
-//
 
 int UiRobot::ui_get_edp_pid()
 {
@@ -129,7 +128,6 @@ void UiRobot::null_ui_ecp_robot()
 void UiRobot::create_ui_ecp_robot()
 {
 	ui_ecp_robot = new EcpRobot(*this);
-	//	return 1;
 }
 
 }

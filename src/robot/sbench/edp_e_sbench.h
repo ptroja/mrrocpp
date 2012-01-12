@@ -1,9 +1,10 @@
 /*!
- * \file edp_e_sbench.h
- * \brief File containing the declaration of edp::sbench::effector class.
+ * @file
+ * @brief File containing the declaration of edp::sbench::effector class.
  *
- * \author yoyek
+ * @author yoyek
  *
+ * @ingroup sbench
  */
 
 #ifndef __EDP_E_SBENCH_H
