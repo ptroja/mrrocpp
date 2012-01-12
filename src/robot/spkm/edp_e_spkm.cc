@@ -101,20 +101,22 @@ void effector::check_controller_state()
 			if (axes[i] == axis2.get()) {
 				switch (state)
 				{
-					case maxon::epos::SWITCH_ON_DISABLED:
-					case maxon::epos::OPERATION_ENABLE:
+					//case maxon::epos::SWITCH_ON_DISABLED:
 					case maxon::epos::SWITCHED_ON:
-						// We are happy with these states
+					case maxon::epos::REFRESH:
+					case maxon::epos::MEASURE_INIT:
+					case maxon::epos::OPERATION_ENABLE:
+						// We are happy with these states.
 						enabled++;
 						break;
 					case maxon::epos::FAULT:
 						// Print state.
 						axes[i]->printState();
 						{
-							// Read number of errors
+							// Read number of errors.
 							int errNum = axes[i]->getNumberOfErrors();
 							for (size_t j = 1; j <= errNum; ++j) {
-								// Get the detailed error
+								// Get the detailed error.
 								uint32_t errCode = axes[i]->getErrorHistory(j);
 								// Send message to SR.
 								msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axes[i]->getDeviceName() + ": "
@@ -658,8 +660,15 @@ void effector::execute_motor_motion()
 	DEBUG_METHOD;
 
 	if(!robot_test_mode) {
-		// Reset the Moog motor to disable brake.
-		axis2->reset();
+#if(DEBUG_MOTORS)
+					std::cerr << "MOTOR:\t desired_motor_pos_new[moog] = " << (int) desired_motor_pos_new[4] << endl
+							<< "\t desired_motor_pos_old[moog] = " << (int) desired_motor_pos_old[4] << endl
+							<< "\t current_motor_pos[moog] = " << (int) current_motor_pos[4] << endl;
+#endif
+		// Reset the Moog motor to disable brake if we are going to execute a motion.
+		if(fabs(desired_motor_pos_new[4] - desired_motor_pos_old[4]) > 1.0) {
+			axis2->reset();
+		}
 	}
 
 	// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
@@ -675,6 +684,9 @@ void effector::execute_motor_motion()
 					std::cerr << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
 #endif
 					if (!robot_test_mode) {
+						// Skip commanding motor if target and last positions and equal.
+						if(desired_motor_pos_new[i] == desired_motor_pos_old[i])
+							continue;
 						axes[i]->setProfileVelocity(Vdefault[i]);
 						axes[i]->setProfileAcceleration(Adefault[i]);
 						axes[i]->setProfileDeceleration(Ddefault[i]);
