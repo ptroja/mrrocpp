@@ -35,6 +35,9 @@ class effector : public common::motor_driven_effector
 	friend class festo_and_inputs;
 
 protected:
+
+	const static int FESTO_ADRESS = 10;
+
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
 
@@ -61,6 +64,16 @@ protected:
 	 * Set when all legs are out.
 	 */
 	int32_t legs_relative_zero_position;
+
+	/*!
+	 * \brief Variable storing the voltage adequate for zero position (in milivolts).
+	 */
+	int32_t pkm_zero_position_voltage;
+
+	/*!
+	 * \brief Variable storing synchronization offset (offset from *voltage* zero position).
+	 */
+	int32_t pkm_zero_position_offset;
 
 	//! Default axis velocity [rpm]
 	static const uint32_t Vdefault[mrrocpp::lib::smb::NUM_OF_SERVOS];
@@ -115,11 +128,11 @@ public:
 	void create_threads();
 
 	/*!
-	 * \brief method to move robot motors
+	 * @brief Motors synchronization - utilizes velocity motion based on the reading of potentiometer.
 	 *
-	 * it chooses the single thread variant from the motor_driven_effector
+	 * This method synchronizes motor rotating the SMB.
 	 */
-	void move_arm(const lib::c_buffer &instruction);
+	void synchronise();
 
 	/*!
 	 * \brief returns current legs state from festo_and_inputs class
@@ -134,17 +147,29 @@ public:
 	lib::smb::ALL_LEGS_VARIANT next_legs_state(void);
 
 	/*!
-	 * \brief method to get position of the motors or joints
+	 * \brief Executes the *move_arm* command.
 	 *
-	 * Here it calls common::motor_driven_effector::get_arm_position_get_arm_type_switch
+	 * It chooses the single thread variant from the motor_driven_effector.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void get_arm_position(bool read_hardware, lib::c_buffer &instruction);
+	void move_arm(const lib::c_buffer &instruction_);
+
+	/*
+	 * \brief Initializes the controller.
+	 * Called only once after process creation.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
+	 */
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief Method initializes SMB variables (including motors, joints and frames), depending on working mode (robot_test_mode) and robot state.
 	 * Called only once after process creation.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void get_controller_state(lib::c_buffer &instruction);
+	void get_controller_state(lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief method to choose master_order variant
@@ -153,11 +178,32 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
+	/*!
+	 * \brief method to receive instruction from ecp of particular type
+	 */
 	lib::INSTRUCTION_TYPE receive_instruction();
+
+	/*!
+	 * \brief method to reply to ecp with class of particular type
+	 */
 	void variant_reply_to_instruction();
 
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
 	lib::smb::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
 	lib::smb::r_buffer reply;
+
+	/*!
+	 * \brief bool value if the cleaning is activated
+	 *
+	 * It is taken from configuration data.
+	 */
+	bool cleaning_active;
 
 };
 

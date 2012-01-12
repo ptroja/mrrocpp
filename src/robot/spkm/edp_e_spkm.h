@@ -49,7 +49,7 @@ private:
 	 * \brief Tool transformation (SHEAD).
 	 * \author tkornuta
 	 */
-	lib::Homog_matrix spkm_frame;
+	lib::Homog_matrix shead_frame;
 
 	/*!
 	 * \brief Desired tool frame (pose of the SHEAD tip in the PKM base reference frame).
@@ -119,11 +119,13 @@ public:
 	void create_threads();
 
 	/*!
-	 * @brief method to move robot arm
+	 * \brief Executes the *move_arm* command.
 	 *
-	 * it chooses the single thread variant from the manip_effector
+	 * It chooses the single thread variant from the motor_driven_effector.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void move_arm(const lib::c_buffer &instruction);
+	void move_arm(const lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief Method responsible for parsing of the command for motors controlling the legs and SPKM rotation.
@@ -146,15 +148,17 @@ public:
 	/*!
 	 * \brief Method initializes all SPKM variables (including motors, joints and frames), depending on working mode (robot_test_mode) and robot state.
 	 * Called only once after process creation.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void get_controller_state(lib::c_buffer &instruction);
+	void get_controller_state(lib::c_buffer &instruction_);
 
 	/*!
 	 * @brief method to get position of the arm
 	 *
-	 * Here it calls common::manip_effector::get_arm_position_get_arm_type_switch
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void get_arm_position(bool read_hardware, lib::c_buffer &instruction);
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction_);
 
 	/*!
 	 * @brief method to choose master_order variant
@@ -163,10 +167,24 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
+	/*!
+	 * \brief method to receive instruction from ecp of particular type
+	 */
 	lib::INSTRUCTION_TYPE receive_instruction();
+
+	/*!
+	 * \brief method to reply to ecp with class of particular type
+	 */
 	void variant_reply_to_instruction();
 
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
 	lib::spkm::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
 	lib::spkm::r_buffer reply;
 };
 

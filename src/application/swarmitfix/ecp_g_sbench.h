@@ -21,7 +21,7 @@ class pin_config : public common::generator::_generator<ecp::sbench::robot>
 {
 public:
 	//! Constructor
-	pin_config(task_t & _ecp_task, const lib::sbench::pins_buffer & _pins_buffer);
+	pin_config(task_t & _ecp_task, const lib::sbench::voltage_buffer & _pins_buffer);
 
 	//! first step generation
 	bool first_step();
@@ -31,7 +31,7 @@ public:
 
 private:
 	//! Pin configuration
-	const lib::sbench::pins_buffer & pin_configuration;
+	const lib::sbench::voltage_buffer & pin_configuration;
 };
 
 } // namespace generator

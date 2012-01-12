@@ -102,22 +102,31 @@ public:
 	 */
 	void synchronise();
 
-	void get_controller_state(lib::c_buffer &instruction);
+	/*
+	 * \brief Initializes the controller.
+	 * Called only once after process creation.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
+	 */
+	void get_controller_state(lib::c_buffer &instruction_);
 
 	/*!
-	 * \brief method to set position of the motors or joints
+	 * \brief Executes the *move_arm* command.
 	 *
-	 * It will be used if there will be any motor used.
+	 * It chooses the single thread variant from the motor_driven_effector.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
+	void move_arm(const lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief method to get position of the motors or joints
 	 *
 	 * It will be used if there will be any motor used.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-
-	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief method to choose master_order variant
@@ -126,10 +135,24 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
+	/*!
+	 * \brief method to receive instruction from ecp of particular type
+	 */
 	lib::INSTRUCTION_TYPE receive_instruction();
+
+	/*!
+	 * \brief method to reply to ecp with class of particular type
+	 */
 	void variant_reply_to_instruction();
 
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
 	lib::shead::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
 	lib::shead::r_buffer reply;
 
 };

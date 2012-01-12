@@ -1,22 +1,21 @@
 /** 
 
-@namespace mrrocpp::lib::shead
-@brief Namespace for SwarmItFIX agent's head libraries etc.
+@namespace mrrocpp::lib::sbench
+@brief Namespace for SwarmItFIX agent's Bench libraries etc.
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
-@ingroup shead
+@ingroup sbench
 
-@namespace mrrocpp::ecp::shead
-@brief Namespace for ECP SwarmItFIX agent's head classes etc.
+@namespace mrrocpp::ecp::sbench
+@brief Namespace for ECP SwarmItFIX agent's Bench classes etc.
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
-@ingroup shead
+@ingroup sbench
 
-@namespace mrrocpp::kinematics::shead
-@brief Contains classes related to the kinematics of the SwarmItFIX agent's head.
-@date 2010.02.01 
+@namespace mrrocpp::kinematics::sbench
+@brief Contains classes related to the kinematics of the SwarmItFIX agent's Bench.
 @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
-@ingroup KINEMATICS SIF_KINEMATICS shead
+@ingroup KINEMATICS SIF_KINEMATICS sbench
 
-   @defgroup shead SwarmItFix Head
+   @defgroup sbench SwarmItFix Bench
    @ingroup swarm_robots grippers
 
 

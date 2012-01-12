@@ -83,6 +83,12 @@ void effector::check_controller_state()
 	unsigned int powerOn = 0;
 	unsigned int enabled = 0;
 
+	// Disable operation of the Moog motor if it is stopped to activate brake.
+	if(axis2->isTargetReached() && axis2->getState() == maxon::epos::OPERATION_ENABLE) {
+		msg->message("Disabling Moog motor");
+		axis2->setState(maxon::epos::DISABLE_OPERATION);
+	}
+
 	boost::array <canopen::WORD, lib::spkm::NUM_OF_SERVOS> cachedStatusWords;
 
 	// Check axes.
@@ -92,29 +98,65 @@ void effector::check_controller_state()
 			cachedStatusWords[i] = axes[i]->getStatusWord();
 			// Get current epos state.
 			maxon::epos::actual_state_t state = maxon::epos::status2state(cachedStatusWords[i]);
-			if (state != maxon::epos::OPERATION_ENABLE) {
-				std::cerr << string("Axis ") << axes[i]->getDeviceName() << endl;
-				// Print state.
-				axes[i]->printState();
-				// Check if in the FAULT state
-				if (state == maxon::epos::FAULT) {
-					// Read number of errors
-					int errNum = axes[i]->getNumberOfErrors();
-					for (size_t j = 1; j <= errNum; ++j) {
-						// Get the detailed error
-						uint32_t errCode = axes[i]->getErrorHistory(j);
-						// Send message to SR.
-						msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axes[i]->getDeviceName() + ": "
-								+ axes[i]->ErrorCodeMessage(errCode));
-					}
-				} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
-					// Send message to SR.
-					msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axes[i]->getDeviceName()
-							+ " rotation is disabled");
-				} //: if fault || disabled
+			if (axes[i] == axis2.get()) {
+				switch (state)
+				{
+					case maxon::epos::SWITCH_ON_DISABLED:
+					case maxon::epos::OPERATION_ENABLE:
+					case maxon::epos::SWITCHED_ON:
+						// We are happy with these states
+						enabled++;
+						break;
+					case maxon::epos::FAULT:
+						// Print state.
+						axes[i]->printState();
+						{
+							// Read number of errors
+							int errNum = axes[i]->getNumberOfErrors();
+							for (size_t j = 1; j <= errNum; ++j) {
+								// Get the detailed error
+								uint32_t errCode = axes[i]->getErrorHistory(j);
+								// Send message to SR.
+								msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axes[i]->getDeviceName() + ": "
+										+ axes[i]->ErrorCodeMessage(errCode));
+							}
+						}
+						break;
+					default:
+						// Print state.
+						axes[i]->printState();
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axes[i]->getDeviceName()
+								+ " is not disabled & braked");
+						break;
+				}
 			} else {
-				// EPOS in enabled state.
-				enabled++;
+				if (state != maxon::epos::OPERATION_ENABLE) {
+					// Print state.
+					axes[i]->printState();
+					// Check if in the FAULT state
+					if (state == maxon::epos::FAULT) {
+						// Read number of errors
+						int errNum = axes[i]->getNumberOfErrors();
+						for (size_t j = 1; j <= errNum; ++j) {
+							// Get the detailed error
+							uint32_t errCode = axes[i]->getErrorHistory(j);
+							// Send message to SR.
+							msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axes[i]->getDeviceName() + ": "
+									+ axes[i]->ErrorCodeMessage(errCode));
+						}
+					} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
+						// Send message to SR.
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axes[i]->getDeviceName()
+								+ " is disabled");
+					} else {
+						// Send message to SR.
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axes[i]->getDeviceName()
+								+ " is not enabled");
+					}
+				} else {
+					// EPOS in enabled state.
+					enabled++;
+				}
 			}
 			if (maxon::epos::isReferenced(cachedStatusWords[i])) {
 				// Do not break from this loop so this is a also a preliminary axis error check
@@ -137,7 +179,7 @@ void effector::check_controller_state()
 		// Stop only motors which are moving at the moment.
 		for (size_t i = 0; i < axes.size(); ++i) {
 			if (maxon::epos::isTargetReached(cachedStatusWords[i])) {
-				// Brake with Quickstop command.
+				// Stop the motion.
 				axes[i]->setState(maxon::epos::DISABLE_VOLTAGE);
 			}
 		}
@@ -145,7 +187,7 @@ void effector::check_controller_state()
 	}
 }
 
-void effector::get_controller_state(lib::c_buffer &instruction)
+void effector::get_controller_state(lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
 
@@ -157,6 +199,9 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 		// Check controller state.
 		check_controller_state();
+
+		// FIXME: uncomment the following line to allow multiple synchronization without resetting.
+		// controller_state_edp_buf.is_synchronised = false;
 
 		// Copy data to reply buffer
 		reply.controller_state = controller_state_edp_buf;
@@ -186,26 +231,21 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 		desired_end_effector_frame.setIdentity();
 		is_current_cartesian_pose_known = false;
 
-		// Read tool (SHEAD) transformation from the configuration file.
-		if (config.exists("spkm_frame")) {
-			// Try to read the spkm_frame from file.
-			try {
-				spkm_frame.set(config.value <std::string>("spkm_frame"));
-			} catch (std::exception& e_) {
-				// Print failure reason.
-				std::cerr << e_.what() << endl;
-				// Set identity.
-				spkm_frame.setIdentity();
-			}
-		} else
-			// set identity by default.
-			spkm_frame.setIdentity();
+		// Try to read tool (SHEAD) transformation from the configuration file.
+		try {
+			shead_frame.set(config.value <std::string>("shead_frame"));
+		} catch (std::exception& e_) {
+			// Print failure reason.
+			std::cerr << e_.what() << endl;
+			// Set identity.
+			shead_frame.setIdentity();
+		}
 
 #if(DEBUG_FRAMES)
 		std::cerr.precision(8);
-		std::cerr << "spkm_frame: " << spkm_frame << endl;
+		std::cerr << "shead_frame: " << shead_frame << endl;
 		std::cerr.precision(8);
-		std::cerr << "spkm_frame * !spkm_frame: " << spkm_frame * !spkm_frame << endl;
+		std::cerr << "shead_frame * !shead_frame: " << shead_frame * !shead_frame << endl;
 #endif
 
 		// Lock data structure during update.
@@ -239,42 +279,69 @@ void effector::synchronise(void)
 	DEBUG_METHOD;
 
 	try {
-
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
-
 			return;
 		}
 
-		// switch to homing mode
-		BOOST_FOREACH(maxon::epos * node, axes)
-				{
-					node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-				}
+		// Check state of the robot.
+		if (controller_state_edp_buf.robot_in_fault_state)
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
-		// reset controller
+		// Switch to homing mode.
 		BOOST_FOREACH(maxon::epos * node, axes)
-				{
-					node->reset();
-				}
+		{
+			node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		}
 
-		// Do homing with preconfigured parameters
+		// Reset controller to ENABLED state.
 		BOOST_FOREACH(maxon::epos * node, axes)
-				{
-					node->startHoming();
-				}
+		{
+			node->reset();
+		}
+
+		// Do homing of linear axes with preconfigured parameters.
+		axisA->startHoming();
+		axisB->startHoming();
+		axisC->startHoming();
 
 		// Loop until homing is finished
 		bool finished;
 		do {
 			finished = true;
-			BOOST_FOREACH(maxon::epos * node, axes)
-					{
-						if (!node->isHomingFinished()) {
-							finished = false;
-						}
-					}
+			if (!axisA->isHomingFinished()) finished = false;
+			if (!axisB->isHomingFinished()) finished = false;
+			if (!axisC->isHomingFinished()) finished = false;
+			// Delay between queries
+			usleep(20000);
 		} while (!finished);
+
+		// Do homing for Moog motor.
+		axis2->startHoming();
+
+		// Wait until second homing is finished.
+		while(!axis2->isHomingFinished()) {
+			// Delay between queries.
+			usleep(20000);
+		}
+
+		// Do homing for another motor.
+		axis1->startHoming();
+
+		// Wait until second homing is finished.
+		while(!axis1->isHomingFinished()) {
+			// Delay between queries.
+			usleep(20000);
+		}
+
+		// Do homing for another motor.
+		axis3->startHoming();
+
+		// Wait until second homing is finished.
+		while(!axis3->isHomingFinished()) {
+			// Delay between queries.
+			usleep(20000);
+		}
 
 		// Reset internal state of the motor positions
 		for (size_t i = 0; i < number_of_servos; ++i) {
@@ -313,14 +380,13 @@ void effector::synchronise(void)
 	}
 }
 
-void effector::move_arm(const lib::c_buffer &instruction)
+void effector::move_arm(const lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
-	lib::spkm::c_buffer & local_instruction = (lib::spkm::c_buffer&) instruction;
 
 	try {
 		// Check command type.
-		switch (local_instruction.spkm.variant)
+		switch (instruction.spkm.variant)
 		{
 			case lib::spkm::POSE:
 				DEBUG_COMMAND("POSE");
@@ -329,7 +395,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				}
 
 				// Special case: operational motion.
-				if (local_instruction.spkm.motion_variant == lib::epos::OPERATIONAL) {
+				if (instruction.spkm.motion_variant == lib::epos::OPERATIONAL) {
 					DEBUG_COMMAND("OPERATIONAL");
 
 					interpolated_motion_in_operational_space();
@@ -381,20 +447,20 @@ void effector::move_arm(const lib::c_buffer &instruction)
 		desired_motor_pos_old = desired_motor_pos_new;
 
 		// Check whether the motion was performed in the cartesian space - then we know where manipulator will be when the next command arrives:).
-		if (local_instruction.spkm.set_pose_specification == lib::spkm::WRIST_XYZ_EULER_ZYZ) {
+		if (instruction.spkm.set_pose_specification == lib::spkm::WRIST_XYZ_EULER_ZYZ) {
 			// Command was given in the wrist frame.
 			current_end_effector_frame = desired_end_effector_frame;
-			current_spkm_frame = current_end_effector_frame * spkm_frame;
+			current_spkm_frame = current_end_effector_frame * shead_frame;
 			is_current_cartesian_pose_known = true;
 #if(DEBUG_FRAMES)
 			std::cerr.precision(8);
 			std::cerr << "current_spkm_frame:\n" << current_spkm_frame << endl;
 			std::cerr << "current_end_effector_frame:\n" << current_end_effector_frame << endl;
 #endif
-		} else if (local_instruction.spkm.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
+		} else if (instruction.spkm.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
 			// Command was given in the tool (SHEAD) frame.
 			current_spkm_frame = desired_spkm_frame;
-			current_end_effector_frame = desired_spkm_frame * !spkm_frame;
+			current_end_effector_frame = desired_spkm_frame * !shead_frame;
 			is_current_cartesian_pose_known = true;
 #if(DEBUG_FRAMES)
 			std::cerr.precision(8);
@@ -424,6 +490,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 void effector::parse_motor_command()
 {
 	DEBUG_METHOD;
+
+	// Check state of the robot.
+	if (controller_state_edp_buf.robot_in_fault_state)
+		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
 	try {
 		switch (instruction.spkm.set_pose_specification)
@@ -541,7 +611,7 @@ void effector::parse_motor_command()
 #endif
 
 				// Transform to the wrist frame.
-				desired_end_effector_frame = desired_spkm_frame * !spkm_frame;
+				desired_end_effector_frame = desired_spkm_frame * !shead_frame;
 #if(DEBUG_FRAMES)
 				std::cerr.precision(8);
 				std::cerr << "Wrist frame: " << desired_end_effector_frame << endl;
@@ -586,6 +656,11 @@ void effector::parse_motor_command()
 void effector::execute_motor_motion()
 {
 	DEBUG_METHOD;
+
+	if(!robot_test_mode) {
+		// Reset the Moog motor to disable brake.
+		axis2->reset();
+	}
 
 	// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
 	switch (instruction.spkm.motion_variant)
@@ -753,6 +828,10 @@ void effector::interpolated_motion_in_operational_space()
 		// Throw non-fatal error - this mode requires synchronization.
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
 
+	// Check state of the robot.
+	if (controller_state_edp_buf.robot_in_fault_state)
+		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
+
 	// Check whether current cartesian pose (in fact the one where the previous motion ended) is known.
 	if (!is_current_cartesian_pose_known)
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_current_cartesian_pose_unknown());
@@ -768,7 +847,7 @@ void effector::interpolated_motion_in_operational_space()
 		desired_spkm_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(instruction.spkm.goal_pos));
 //		desired_spkm_frame.set_from_xyz_rpy(lib::Xyz_Rpy_vector(instruction.spkm.goal_pos));
 		// Transform to the wrist frame.
-		desired_end_effector_frame = desired_spkm_frame * !spkm_frame;
+		desired_end_effector_frame = desired_spkm_frame * !shead_frame;
 #if(DEBUG_FRAMES)
 		std::cerr << "desired_spkm_frame: " << desired_spkm_frame << endl;
 #endif
@@ -823,7 +902,7 @@ void effector::interpolated_motion_in_operational_space()
 	} else if (instruction.spkm.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
 		// Perform motion in tool frame.
 		cubic_polynomial_interpolate_motor_poses_in_tool_frame <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1,
-				lib::spkm::NUM_OF_SERVOS>(motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_spkm_frame, desired_spkm_frame, spkm_frame);
+				lib::spkm::NUM_OF_SERVOS>(motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_spkm_frame, desired_spkm_frame, shead_frame);
 	} else
 		// Other pose specifications aren't valid in this type of movement.
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
@@ -1031,6 +1110,9 @@ void effector::interpolated_motion_in_operational_space()
 
 	// Execute motion
 	if (!robot_test_mode) {
+		// Reset the Moog motor to disable brake.
+		axis2->reset();
+
 		// Setup motion parameters
 		for (size_t i = 0; i < axes.size(); ++i) {
 
@@ -1107,10 +1189,9 @@ void effector::interpolated_motion_in_operational_space()
 	desired_joints_old = desired_joints;
 }
 
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
-	lib::spkm::c_buffer & local_instruction = (lib::spkm::c_buffer&) instruction;
 
 	try {
 		// Check controller state.
@@ -1118,7 +1199,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 		// we do not check the arm position when only lib::SET is set
 		if (instruction.instruction_type != lib::SET) {
-			switch (local_instruction.spkm.get_pose_specification)
+			switch (instruction.spkm.get_pose_specification)
 			{
 				case lib::spkm::MOTOR: {
 					DEBUG_COMMAND("MOTOR");
@@ -1213,6 +1294,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 				}
 					break;
 				default:
+					// Throw non-fatal error - command not supported.
+					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
 					break;
 
 			}

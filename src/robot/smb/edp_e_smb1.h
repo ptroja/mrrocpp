@@ -34,12 +34,6 @@ public:
 	 */
 	effector(common::shell &_shell);
 
-	/*!
-	 * @brief Motors synchronization - utilizes velocity motion besed on the reading of potentiometer.
-	 *
-	 * This method synchronizes motor rotating the SMB.
-	 */
-	void synchronise();
 };
 
 } // namespace smb1

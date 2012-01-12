@@ -20,7 +20,7 @@ namespace generator {
 //
 //
 
-pin_config::pin_config(task_t & _ecp_task, const lib::sbench::pins_buffer & _pins) :
+pin_config::pin_config(task_t & _ecp_task, const lib::sbench::voltage_buffer & _pins) :
 		generator_t(_ecp_task),
 		pin_configuration(_pins)
 {
@@ -32,8 +32,8 @@ bool pin_config::first_step()
 	sr_ecp_msg.message("pin_config: first_step");
 
 	// Forward coordinator's command
-	the_robot->sbench_command_data_port.data = pin_configuration;
-	the_robot->sbench_command_data_port.set();
+	the_robot->sbench_command_voltage_data_port.data = pin_configuration;
+	the_robot->sbench_command_voltage_data_port.set();
 
 	// Request status report
 	the_robot->sbench_reply_data_request_port.set_request();

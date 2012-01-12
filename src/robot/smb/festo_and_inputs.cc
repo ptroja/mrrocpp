@@ -21,7 +21,7 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-//#define CLEANING_ACTIVE 1
+#define CLEANING_ACTIVE 1
 
 using namespace std;
 
@@ -48,11 +48,13 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 		uint8_t Outputs07 = cpv10->getOutputs(1);
 		printf("Status of outputs 0..7 = 0x%02x\n", Outputs07);
 
-		master.gateway->SendNMTService(10, canopen::gateway::Start_Remote_Node);
+		master.gateway->SendNMTService(effector::FESTO_ADRESS, canopen::gateway::Start_Remote_Node);
 
 		determine_legs_state();
-		desired_output[1] = current_output[1];
-		desired_output[2] = current_output[2];
+
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			desired_output[i + 1] = current_output[i + 1];
+		}
 
 		// stan poczatkowy wyspy
 
@@ -220,27 +222,30 @@ void festo_and_inputs::set_move_out(int leg_number, bool value)
 
 void festo_and_inputs::set_clean(int leg_number, bool value)
 {
-#ifdef CLEANING_ACTIVE
-	switch (leg_number)
-	{
-		case 1:
-		desired_output[FESTO_CH1_GROUP][FESTO_CH1_BIT_TO_SET] = value;
 
-		break;
-		case 2:
-		desired_output[FESTO_CH2_GROUP][FESTO_CH2_BIT_TO_SET] = value;
+	if (master.cleaning_active) {
 
-		break;
-		case 3:
-		desired_output[FESTO_CH3_GROUP][FESTO_CH3_BIT_TO_SET] = value;
+		switch (leg_number)
+		{
+			case 1:
+				desired_output[FESTO_CH1_GROUP][FESTO_CH1_BIT_TO_SET] = value;
 
-		break;
+				break;
+			case 2:
+				desired_output[FESTO_CH2_GROUP][FESTO_CH2_BIT_TO_SET] = value;
 
-		default:
-			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
-			break;
+				break;
+			case 3:
+				desired_output[FESTO_CH3_GROUP][FESTO_CH3_BIT_TO_SET] = value;
+
+				break;
+
+			default:
+				BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
+				break;
+
+		}
 	}
-#endif
 }
 
 void festo_and_inputs::determine_legs_state()
@@ -356,6 +361,9 @@ void festo_and_inputs::command()
 
 void festo_and_inputs::move_one_or_two_out()
 {
+#ifdef COMMAND_ONE_OR_TWO_OUT_SIMULTANEOUS
+	// HIGH PRESSURE VERSION WITH SIMULATNOUS LEG MOTION
+
 	// detach all legs that are up to prepare them to go down
 
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -436,6 +444,74 @@ void festo_and_inputs::move_one_or_two_out()
 
 	// attach legs
 	execute_command();
+
+#else
+	// LOW PRESSURE VERSION WITH SERIAL LEG MOTION
+
+	// detach legs that are up to prepare them to go down
+//	master.msg->message(lib::NON_FATAL_ERROR, "move_one_or_two_out");
+
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+
+		if (!is_lower_halotron_active(i + 1)) {
+			set_detach(i + 1, true);
+			execute_command();
+			delay(500);
+			set_clean(i + 1, true);
+			execute_command();
+			//	delay(500);
+		}
+		// for safety reasons
+		if (is_lower_halotron_active(i + 1)) {
+
+			set_detach(i + 1, false);
+			set_clean(i + 1, false);
+			execute_command();
+			continue;
+		}
+
+		// move the legs down
+
+		set_move_out(i + 1, true);
+		set_move_in(i + 1, false);
+
+		execute_command();
+
+		// waits until leg go down
+		for (int iteration = 0; true; iteration++) {
+
+			delay(FAI_SINGLE_DELAY);
+
+			if (iteration > FAI_DELAY_MAX_ITERATION) {
+				master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
+
+				break;
+			}
+			//	master.msg->message("iteration");
+			read_state();
+
+			if ((is_lower_halotron_active(i + 1))) {
+				// delay(2000);
+				// attach leg
+				set_detach(i + 1, false);
+				// stop cleaning
+				set_clean(i + 1, false);
+				execute_command();
+
+				//	master.msg->message(lib::NON_FATAL_ERROR, "iteration end");
+
+				break;
+			}
+
+		}
+
+	}
+	// wait a while in case the legs are still in motion
+	delay(500);
+
+	// attach legs
+	execute_command();
+#endif
 }
 
 void festo_and_inputs::command_all_out()
@@ -787,9 +863,9 @@ void festo_and_inputs::read_state()
 	if (!(robot_test_mode)) {
 		epos_inputs = epos_di_node->getDInput();
 		cout << "epos_inputs: " << hex << epos_inputs << endl;
-
-		current_output[1] = cpv10->getOutputs(1);
-		current_output[2] = cpv10->getOutputs(2);
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			current_output[i + 1] = cpv10->getOutputs(i + 1);
+		}
 	}
 }
 
@@ -805,19 +881,21 @@ void festo_and_inputs::create_reply()
 			master.reply.smb.multi_leg_reply.leg[i].is_in = is_upper_halotron_active(i + 1);
 			master.reply.smb.multi_leg_reply.leg[i].is_attached = is_attached(i + 1);
 		}
-		//std::cout << "epos digital inputs = " << epos_digits << std::endl;
+		//	std::cout << "epos digital inputs = " << epos_inputs << std::endl;
 	}
 }
 
 void festo_and_inputs::execute_command()
 {
 	if (!robot_test_mode) {
-		cpv10->setOutputs(1, (uint8_t) desired_output[1].to_ulong());
-		cpv10->setOutputs(2, (uint8_t) desired_output[2].to_ulong());
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+		}
 		//	std::cout << "desired_output = " << desired_output[2] << std::endl;
 		read_state();
-		desired_output[1] = current_output[1];
-		desired_output[2] = current_output[2];
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			desired_output[i + 1] = current_output[i + 1];
+		}
 
 	}
 }

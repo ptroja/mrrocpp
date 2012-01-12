@@ -13,7 +13,8 @@
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
 
-#include "wgt_sbench_command.h"
+#include "wgt_sbench_voltage_command.h"
+#include "wgt_sbench_preasure_command.h"
 
 namespace Ui {
 class MenuBar;
@@ -56,7 +57,8 @@ public:
 	void setup_menubar();
 
 private:
-	QAction *action_command;
+	QAction *action_voltage_command;
+	QAction *action_preasure_command;
 
 };
 
