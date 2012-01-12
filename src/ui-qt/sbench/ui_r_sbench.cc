@@ -127,7 +127,7 @@ void UiRobot::null_ui_ecp_robot()
 
 void UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new EcpRobot(*this);
+	common::UiRobot::common_ui_ecp_robot = ui_ecp_robot = new EcpRobot(*this);
 }
 
 }

@@ -20,7 +20,7 @@ class EcpRobot
 
 public:
 	common::UiRobot& ui_robot;
-	ecp::common::robot::ecp_robot *ecp;
+	ecp::common::robot::common_buffers_ecp_robot *ecp;
 
 	EcpRobot(common::UiRobot& _ui_robot); // Konstruktor
 

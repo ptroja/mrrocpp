@@ -59,7 +59,7 @@ void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_
 
 void UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::irp6ot_m::EcpRobot(*this);
+	common::UiRobot::common_ui_ecp_robot = ui_ecp_robot = new ui::irp6ot_m::EcpRobot(*this);
 
 }
 

@@ -54,8 +54,7 @@ void UiRobot::edp_create()
 
 void UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::bird_hand::EcpRobot(*this);
-//	return 1;
+	common::UiRobot::common_ui_ecp_robot = ui_ecp_robot = new ui::bird_hand::EcpRobot(*this);
 }
 
 void UiRobot::synchronise()

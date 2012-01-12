@@ -34,7 +34,7 @@ EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
 	smb::EcpRobot(_ui_robot)
 {
 	the_robot = (boost::shared_ptr <robot_t>) new ecp::smb2::robot(*(ui_robot.interface.config), *(ui_robot.msg));
-	common::EcpRobot::ecp = (ecp::common::robot::ecp_robot*) (the_robot.get());
+	common::EcpRobot::ecp = (ecp::common::robot::common_buffers_ecp_robot*) (the_robot.get());
 }
 
 }
