@@ -27,6 +27,8 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
+class EcpRobot;
+
 const std::string WGT_ROBOT_PC = "WGT_ROBOT_PC";
 
 #define CATCH_SECTION_IN_ROBOT catch (ecp::exception::se_r & error) { \
@@ -91,9 +93,11 @@ class Interface;
 
 class UiRobot : public QObject
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
+
+	EcpRobot *common_ui_ecp_robot;
 	Interface& interface;
 
 	const lib::robot_name_t getName();

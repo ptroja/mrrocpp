@@ -38,6 +38,8 @@ void UiRobot::create_ui_ecp_robot()
 {
 	ui_ecp_robot = new ui::conveyor::EcpRobot(*this);
 
+	common::UiRobot::common_ui_ecp_robot = ui_ecp_robot;
+
 }
 
 void UiRobot::edp_create_int_extra_operations()
