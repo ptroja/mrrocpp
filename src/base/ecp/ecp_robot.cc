@@ -51,6 +51,12 @@ common_buffers_ecp_robot::common_buffers_ecp_robot(const lib::robot_name_t & _ro
 
 }
 
+// -------------------------------------------------------------------
+common_buffers_ecp_robot::~common_buffers_ecp_robot()
+{
+
+}
+
 // konstruktor wywolywany z UI
 ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
 		robot(_robot_name),

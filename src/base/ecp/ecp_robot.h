@@ -230,6 +230,11 @@ public:
 	 */
 	common_buffers_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref);
 
+	/**
+	 * @brief desctructor
+	 */
+	virtual ~common_buffers_ecp_robot();
+
 	/*!
 	 * \brief Reference to base types of instruction
 	 *
