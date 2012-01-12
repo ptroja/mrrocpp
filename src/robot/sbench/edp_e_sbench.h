@@ -49,7 +49,7 @@ protected:
 	 *
 	 * it is copied from desired in test_mode or read in hardware_mode
 	 */
-	lib::sbench::pins_buffer current_pins_buf;
+	lib::sbench::rbuffer current_pins_buf;
 
 public:
 
@@ -62,6 +62,16 @@ public:
 
 	//! Destructor
 	~effector();
+
+	/*!
+	 * \brief method to init voltage hardware
+	 */
+	void voltage_init();
+
+	/*!
+	 * \brief method to init preasure hardware
+	 */
+	void preasure_init();
 
 	/*!
 	 * \brief method to create threads other then EDP master thread.
@@ -80,12 +90,31 @@ public:
 	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
 
 	/*!
+	 * \brief method to command voltage of pins
+	 */
+	void voltage_command(lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+
+	/*!
+	 * \brief method to command preasure in pins
+	 */
+	void preasure_command(lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+
+	/*!
 	 * \brief method to get position of the motors or joints
 	 *
 	 * It will be used if there will be any motor used.
 	 */
-
 	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+
+	/*!
+	 * \brief method to command reply of pins
+	 */
+	void voltage_reply();
+
+	/*!
+	 * \brief method to reply preasure in pins
+	 */
+	void preasure_reply();
 
 	/*!
 	 * \brief method to choose master_order variant
@@ -94,15 +123,29 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
+	/*!
+	 * \brief method to receive instruction from ecp of particular type
+	 */
 	lib::INSTRUCTION_TYPE receive_instruction();
+
+	/*!
+	 * \brief method to reply to ecp with class of particular type
+	 */
 	void variant_reply_to_instruction();
 
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
 	lib::sbench::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
 	lib::sbench::r_buffer reply;
 
 private:
 	const std::string dev_name;
-	comedi_t *device; // device descriptor
+	comedi_t *voltage_device; // device descriptor
 
 };
 

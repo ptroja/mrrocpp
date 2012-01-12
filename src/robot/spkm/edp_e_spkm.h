@@ -49,7 +49,7 @@ private:
 	 * \brief Tool transformation (SHEAD).
 	 * \author tkornuta
 	 */
-	lib::Homog_matrix spkm_frame;
+	lib::Homog_matrix shead_frame;
 
 	/*!
 	 * \brief Desired tool frame (pose of the SHEAD tip in the PKM base reference frame).
@@ -163,10 +163,24 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
+	/*!
+	 * \brief method to receive instruction from ecp of particular type
+	 */
 	lib::INSTRUCTION_TYPE receive_instruction();
+
+	/*!
+	 * \brief method to reply to ecp with class of particular type
+	 */
 	void variant_reply_to_instruction();
 
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
 	lib::spkm::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
 	lib::spkm::r_buffer reply;
 };
 

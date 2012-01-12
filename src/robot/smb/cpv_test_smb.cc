@@ -1,5 +1,5 @@
 /*
- * cpv_test.cc
+ * cpv_test_smb.cc for smb
  *
  *  Created on: Sep 17, 2011
  *      Author: ptroja and yoyek
@@ -13,6 +13,7 @@
 
 #include "../festo/cpv.h"
 #include "../maxon/epos.h"
+#include "const_smb.h"
 
 using namespace mrrocpp::edp::canopen;
 using namespace mrrocpp::edp::festo;
@@ -56,16 +57,19 @@ int main(int argc, char *argv[])
 			cpv10.setOutputs(1, 0x00);
 			cpv10.setOutputs(2, 0x00);
 			sleep(2);
-			// Move the pistons up
-			cpv10.setOutputs(FESTO_A3_GROUP, FESTO_A3_BIT);
-			sleep(3);
-			epos_digits = node.getDInput();
-			std::cout << "epos digital inputs 1= " << epos_digits << std::endl;
 
-			cpv10.setOutputs(1, 0x00);
-			cpv10.setOutputs(2, 0x00);
-			sleep(2);
 			/*
+			 // Move the pistons up
+			 cpv10.setOutputs(FESTO_A3_GROUP, FESTO_A3_BIT);
+			 sleep(3);
+			 epos_digits = node.getDInput();
+			 std::cout << "epos digital inputs 1= " << epos_digits << std::endl;
+
+			 cpv10.setOutputs(1, 0x00);
+			 cpv10.setOutputs(2, 0x00);
+			 sleep(2);
+
+
 			 // Move the pistons up
 			 cpv10.setOutputs(FESTO_CY21_GROUP, FESTO_CY21_BIT);
 			 sleep(3);
@@ -75,22 +79,23 @@ int main(int argc, char *argv[])
 			 cpv10.setOutputs(1, 0x00);
 			 cpv10.setOutputs(2, 0x00);
 			 sleep(2);
-			 // Move the pistons up
-			 cpv10.setOutputs(FESTO_CY31_GROUP, FESTO_CY31_BIT);
-			 sleep(3);
-			 epos_digits = node.getDInput();
-			 std::cout << "epos digital inputs 1= " << epos_digits << std::endl;
-
-			 cpv10.setOutputs(1, 0x00);
-			 cpv10.setOutputs(2, 0x00);
-			 sleep(2);
-			 cpv10.setOutputs(FESTO_CY32_GROUP, FESTO_CY32_BIT);
-			 sleep(5);
-			 epos_digits = node.getDInput();
-			 std::cout << "epos digital inputs 2= " << epos_digits << std::endl;
-			 cpv10.setOutputs(1, 0x00);
-			 cpv10.setOutputs(2, 0x00);
 			 */
+			// Move the pistons up
+			cpv10.setOutputs(FESTO_CY11_GROUP, FESTO_CY11_BIT);
+			sleep(3);
+			epos_digits = node.getDInput();
+			std::cout << "epos digital inputs 1= " << epos_digits << std::endl;
+
+			cpv10.setOutputs(1, 0x00);
+			cpv10.setOutputs(2, 0x00);
+			sleep(2);
+			cpv10.setOutputs(FESTO_CY12_GROUP, FESTO_CY12_BIT);
+			sleep(5);
+			epos_digits = node.getDInput();
+			std::cout << "epos digital inputs 2= " << epos_digits << std::endl;
+			cpv10.setOutputs(1, 0x00);
+			cpv10.setOutputs(2, 0x00);
+
 		}
 
 		gateway.close();

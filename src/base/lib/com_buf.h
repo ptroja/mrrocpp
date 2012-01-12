@@ -1,22 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-/*! \file     src/lib/com_buf.h
- *
+/*
  *  Data structures for IPC.
- *
- *  \author   tkornuta
- *  \date     2006-11-29
- *  \URL: https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/include/lib/com_buf.h $
- *  $LastChangedRevision$
- *  $LastChangedDate$
- *  $LastChangedBy$
- *
- *  \todo <ul>
- *          <li>Translate to English where necessary.</li>
- *          <li>Write detailed comments.</li>
- *          <li>Suplement comments for those consts, variables and structures
- *              that are not commented at all.</li>
- *          <li>Clean up the commented fragments of code.</li>
- *        </ul>
  */
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef __COM_BUF_H
@@ -823,16 +807,21 @@ private:
 
 //------------------------------------------------------------------------------
 /*!
- *  Wariantowy buffor do serialziacja
- *  obecna implementacja allokuje staly obszar pamieci
- *  @todo Translate to English.
+ *\brief Buffer to store data for communication between processes with
+ *\brief various data types and serialization
  */
 class seter_geter_buffer_t
 {
 public:
 
+	/*!
+	 * \brief memory to store data
+	 */
 	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
+	/*!
+	 * \brief template method to put data into the memory (serialize)
+	 */
 	template <typename BUFFER_TYPE>
 	void set(const BUFFER_TYPE & buffer)
 	{
@@ -845,6 +834,9 @@ public:
 		memcpy(data, oa.get_buffer(), oa.getArchiveSize());
 	}
 
+	/*!
+	 * \brief template method to get data data from the memory (deserialize)
+	 */
 	template <typename BUFFER_TYPE>
 	void get(BUFFER_TYPE & buffer) const
 	{
@@ -857,6 +849,9 @@ public:
 		ia >> buffer;
 	}
 
+	/*!
+	 * \brief template method to get data data from the memory (deserialize)
+	 */
 	template <typename BUFFER_TYPE>
 	BUFFER_TYPE get() const
 	{
@@ -876,7 +871,6 @@ private:
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & data;
-		// ar & playerpos_goal; // this is not used at this moment
 	}
 };
 

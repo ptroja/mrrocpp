@@ -69,7 +69,7 @@ wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::commo
 			 */
 
 			ui.gridLayout->addWidget(tmp_checkbox, i, (2 * j) + k);
-		//	checkBox_Vector.append(tmp_checkbox);
+			//	checkBox_Vector.append(tmp_checkbox);
 
 			docks[i][j] = tmp_checkbox;
 
@@ -77,10 +77,8 @@ wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::commo
 			if (((k == 0) && (i > 6)) || ((k == 1) && (j > 6))) {
 				tmp_checkbox->setDisabled(true);
 			}
-
 		}
 	}
-
 }
 
 wgt_sbench_command::~wgt_sbench_command()
@@ -90,53 +88,12 @@ wgt_sbench_command::~wgt_sbench_command()
 
 void wgt_sbench_command::on_pushButton_read_clicked()
 {
-	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.set_request();
-	robot->ui_ecp_robot->execute_motion();
-	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.get();
-
-	QFont font;
-	QPalette pal;
-
-//	int sum = 0;
-
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			if (robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j)) {
-
-				font.setUnderline(true);
-
-				pal.setColor(QPalette::WindowText, Qt::blue);
-				pal.setColor(QPalette::Background, Qt::blue);
-			} else {
-
-				font.setUnderline(false);
-
-				pal.setColor(QPalette::WindowText, Qt::black);
-				pal.setColor(QPalette::Background, Qt::black);
-			}
-			docks[i][j]->setFont(font);
-			docks[i][j]->setPalette(pal);
-			//	checkBox_Vector[sum]->setFont(font);
-			//	checkBox_Vector[sum]->setPalette(pal);
-			//	sum++;
-		}
-	}
-
+	init();
 }
 
 void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
 {
-	on_pushButton_read_clicked();
-//	int sum = 0;
-
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			docks[i][j]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j));
-			//checkBox_Vector[sum]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j));
-			//sum++;
-		}
-	}
-
+	read_and_copy();
 }
 
 void wgt_sbench_command::on_pushButton_clear_clicked()
@@ -145,31 +102,17 @@ void wgt_sbench_command::on_pushButton_clear_clicked()
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
 			docks[i][j]->setChecked(false);
-
 		}
 	}
-	/*
-	 for (int i; i < SBENCH_MAX_EL; i++) {
-	 checkBox_Vector[i]->setChecked(false);
-	 }
-	 */
+
 }
 
 void wgt_sbench_command::on_pushButton_execute_clicked()
 {
-//	int sum = 0;
-
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			robot->ui_ecp_robot->the_robot->sbench_command_data_port.data.set_value(i, j, docks[i][j]->isChecked());
-			//	sum++;
-		}
-	}
-
-	robot->ui_ecp_robot->the_robot->sbench_command_data_port.set();
-
-	robot->ui_ecp_robot->execute_motion();
-
-	on_pushButton_read_clicked();
+	execute();
 }
 
+void wgt_sbench_command::showEvent(QShowEvent * event)
+{
+	init();
+}

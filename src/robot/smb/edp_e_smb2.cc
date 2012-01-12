@@ -5,11 +5,9 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-// Klasa edp_irp6ot_effector.
 #include "edp_e_smb2.h"
 #include "const_smb2.h"
 #include "base/edp/reader.h"
-// Kinematyki.
 #include "robot/smb/kinematic_model_smb.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
@@ -26,7 +24,7 @@ namespace smb2 {
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
-	smb::effector(_shell, lib::smb2::ROBOT_NAME)
+		smb::effector(_shell, lib::smb2::ROBOT_NAME)
 {
 
 }
@@ -74,10 +72,13 @@ void effector::synchronise(void)
 	std::cout.flush();
 #endif
 	try {
-		// TEMPORARY
-		controller_state_edp_buf.is_synchronised = true;
-		return;
-		// END OF TEMPORARY
+		/*
+		 // TEMPORARY EMPTY SYNCHRO
+		 controller_state_edp_buf.is_synchronised = true;
+		 return;
+		 // END OF // TEMPORARY EMPTY SYNCHRO
+		 */
+
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
 			return;
@@ -163,7 +164,6 @@ void effector::synchronise(void)
 
 }
 // namespace smb
-
 
 namespace common {
 

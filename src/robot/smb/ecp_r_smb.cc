@@ -148,11 +148,7 @@ void robot::create_command()
 
 		ecp_command.smb.festo_command = smb_festo_command_data_port.data;
 
-		if (is_new_data) {
-			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
-		} else {
-			is_new_data = true;
-		}
+		check_then_set_command_flag(is_new_data);
 	}
 
 	if (epos_motor_reply_data_request_port.is_new_request()) {

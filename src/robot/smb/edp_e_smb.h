@@ -153,11 +153,32 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
+	/*!
+	 * \brief method to receive instruction from ecp of particular type
+	 */
 	lib::INSTRUCTION_TYPE receive_instruction();
+
+	/*!
+	 * \brief method to reply to ecp with class of particular type
+	 */
 	void variant_reply_to_instruction();
 
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
 	lib::smb::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
 	lib::smb::r_buffer reply;
+
+	/*!
+	 * \brief bool value if the cleaning is activated
+	 *
+	 * It is taken from configuration data.
+	 */
+	bool cleaning_active;
 
 };
 
