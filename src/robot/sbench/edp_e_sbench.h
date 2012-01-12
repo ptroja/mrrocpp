@@ -3,7 +3,6 @@
  * \brief File containing the declaration of edp::sbench::effector class.
  *
  * \author yoyek
- * \date 2009
  *
  */
 
@@ -22,23 +21,25 @@ namespace mrrocpp {
 namespace edp {
 namespace sbench {
 
-// Klasa reprezentujaca robota IRp-6 na postumencie.
-
 /*!
- * \brief class of EDP SwarmItFix head effector
+ * \brief class of EDP SwarmItFix sbench effector
  *
- * This head is built on top of the SPKM manipulator
+ * This sbench is built on top of the SPKM manipulator
  */
 class effector : public common::motor_driven_effector
 {
 protected:
 
+	//! address of the festo valve block
 	const static int FESTO_ADRESS = 1;
 
+	//! the number of logical adress blocks in the festo valve block
 	const static int NUMBER_OF_FESTO_GROUPS = 7;
 
+	//! the maximal number of pins that can be cleaned at once (due to the festo block properties)
 	const static int CLEANING_PINS_ACTIVATED_LIMIT = 4;
 
+	//! the maximal number of pins that can be activated (supplied with electricity) at once (due to the relays properties)
 	const static int VOLTAGE_PINS_ACTIVATED_LIMIT = 6;
 
 	//! Access to the CAN gateway unit
@@ -88,6 +89,11 @@ public:
 	 */
 	void create_threads();
 
+	/*!
+	 * \brief The method checks the initial state of the controller.
+	 *
+	 * This method typically communicates with hardware to check if the robot is synchronised etc.
+	 */
 	void get_controller_state(lib::c_buffer &instruction);
 
 	/*!
@@ -152,8 +158,16 @@ public:
 	lib::sbench::r_buffer reply;
 
 private:
+
+	/*!
+	 * \brief device name for advantech card
+	 */
 	const std::string dev_name;
-	comedi_t *voltage_device; // device descriptor
+
+	/*!
+	 * \brief  device descriptor for advantech card
+	 */
+	comedi_t *voltage_device;
 
 	/*!
 	 * \brief current and desired output data of festo controller
@@ -162,7 +176,7 @@ private:
 
 };
 
-} // namespace smb
+} // namespace sbench
 } // namespace edp
 } // namespace mrrocpp
 

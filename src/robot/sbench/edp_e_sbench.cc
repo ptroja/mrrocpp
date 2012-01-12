@@ -5,10 +5,9 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-// Klasa edp_irp6ot_effector.
 #include "edp_e_sbench.h"
 #include "base/edp/reader.h"
-// Kinematyki.
+
 #include "robot/sbench/kinematic_model_sbench.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
@@ -352,7 +351,7 @@ void effector::variant_reply_to_instruction()
 	reply_to_instruction(reply);
 }
 
-} // namespace smb
+} // namespace sbench
 
 namespace common {
 
