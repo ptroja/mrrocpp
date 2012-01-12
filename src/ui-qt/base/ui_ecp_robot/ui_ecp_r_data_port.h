@@ -1,10 +1,3 @@
-// -------------------------------------------------------------------------
-//                            robot.h
-// Definicje struktur danych i metod do komunikacji UI z EDP
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
 #ifndef _UI_ECP_R_DATA_PORT_H
 #define _UI_ECP_R_DATA_PORT_H
 
@@ -15,13 +8,14 @@
 #include "../ui.h"
 #include "../ui_robot.h"
 #include "../interface.h"
+#include "ui_ecp_r_base.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
 
 template <typename ECP_ROBOT_T>
-class _EcpRobotDataPort
+class _EcpRobotDataPort : public common::EcpRobot
 {
 public:
 	//! Type of the template instance itself
@@ -29,8 +23,6 @@ public:
 
 	//! Type of the robot class
 	typedef ECP_ROBOT_T robot_t;
-
-	UiRobot& ui_robot;
 
 	boost::shared_ptr <ECP_ROBOT_T> the_robot;
 
@@ -66,7 +58,7 @@ public:
 	}
 
 	_EcpRobotDataPort(UiRobot& _ui_robot) :
-			ui_robot(_ui_robot)
+			common::EcpRobot(_ui_robot)
 	{
 	}
 
