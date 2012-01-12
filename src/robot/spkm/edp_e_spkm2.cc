@@ -59,12 +59,12 @@ effector::effector(common::shell &_shell) :
 
 	if (!robot_test_mode) {
 		// Create epos objects according to CAN ID-mapping.
-		axisA = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 5, "axis A");
-		axisB = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 4, "axis B");
-		axisC = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 6, "axis C");
-		axis1 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 3, "axis 1");
-		axis2 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 2, "axis 2");
-		axis3 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 1, "axis 3");
+		axisA = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 5, "A");
+		axisB = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 4, "B");
+		axisC = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 6, "C");
+		axis1 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 3, "1");
+		axis2 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 2, "2");
+		axis3 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 1, "3");
 
 		// Collect axes into common array container.
 		axes[0] = &(*axisA);
