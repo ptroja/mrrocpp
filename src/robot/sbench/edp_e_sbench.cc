@@ -3,6 +3,9 @@
 
 #include <comedilib.h>
 
+#include "robot/canopen/gateway_epos_usb.h"
+#include "robot/canopen/gateway_socketcan.h"
+
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"

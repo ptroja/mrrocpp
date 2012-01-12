@@ -10,8 +10,14 @@
 #ifndef __EDP_E_SBENCH_H
 #define __EDP_E_SBENCH_H
 
+#include <string>
+#include <bitset>
+
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_sbench.h"
+
+#include "../canopen/gateway.h"
+#include "../festo/cpv.h"
 
 namespace mrrocpp {
 namespace edp {
