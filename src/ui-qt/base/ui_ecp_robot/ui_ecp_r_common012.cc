@@ -27,13 +27,14 @@
 
 #include "ui_ecp_r_common012.h"
 
+
 namespace mrrocpp {
 namespace ui {
 namespace common012 {
 
 // ---------------------------------------------------------------
 EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
-		ui_robot(_ui_robot), ecp(NULL)
+		common::EcpRobot(_ui_robot)
 {
 
 }

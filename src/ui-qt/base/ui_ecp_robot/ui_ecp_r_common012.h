@@ -1,12 +1,5 @@
-// -------------------------------------------------------------------------
-//                            robot.h
-// Definicje struktur danych i metod do komunikacji UI z EDP
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
-#ifndef _UI_ECP_R_COMMON_H
-#define _UI_ECP_R_COMMON_H
+#ifndef _UI_ECP_R_COMMON012_H
+#define _UI_ECP_R_COMMON012_H
 
 #include "../ui.h"
 #include "../ui_robot.h"
@@ -15,18 +8,18 @@
 #include "base/lib/mrmath/mrmath.h"
 
 #include "base/ecp/ecp_robot.h"
+#include "ui_ecp_r_base.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
 class UiRobot;
-
 }
 
 namespace common012 {
 
 // ---------------------------------------------------------------
-class EcpRobot
+class EcpRobot : public common::EcpRobot
 {
 protected:
 
@@ -42,8 +35,6 @@ protected:
 	double current_position[lib::MAX_SERVOS_NR]; // polozenie aktualne
 
 public:
-	common::UiRobot& ui_robot;
-	ecp::common::robot::ecp_robot *ecp;
 
 	// ecp_buffer ui_edp_package; // by Y
 	EcpRobot(common::UiRobot& _ui_robot); // Konstruktor
