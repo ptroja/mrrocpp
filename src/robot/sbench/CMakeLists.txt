@@ -7,7 +7,7 @@ add_executable(edp_sbench
 	edp_e_sbench.cc
 )
 
-target_link_libraries(edp_sbench kinematicssbench dp_sbench edp
+target_link_libraries(edp_sbench epos festo kinematicssbench dp_sbench edp
 	${COMMON_LIBRARIES} ${COMEDI_LIBRARY})
 
 		

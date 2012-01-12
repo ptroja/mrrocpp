@@ -63,9 +63,11 @@ private:
 
 	bool pins_state[NUM_OF_PINS];
 
+protected:
+	int translation_table[8][8];
+
 public:
 
-	int translation_table[8][8];
 	pins_buffer();
 
 	void set_zeros();

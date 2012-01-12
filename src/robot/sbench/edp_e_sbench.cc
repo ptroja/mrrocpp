@@ -78,6 +78,47 @@ void effector::preasure_init()
 {
 	if (!robot_test_mode) {
 
+		if (this->config.exists_and_true("can_iface")) {
+			gateway =
+					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
+		} else {
+			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
+		}
+
+		// Connect to the gateway.
+		gateway->open();
+
+		// Create festo node.
+		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, FESTO_ADRESS);
+
+		festo::U32 DeviceType = cpv10->getDeviceType();
+		printf("Device type = 0x%08X\n", DeviceType);
+
+		festo::U8 ErrorRegister = cpv10->getErrorRegister();
+		printf("Error register = 0x%02X\n", ErrorRegister);
+
+		festo::U32 ManufacturerStatusRegister = cpv10->getManufacturerStatusRegister();
+		printf("Manufacturer status register = 0x%08X\n", ManufacturerStatusRegister);
+
+		festo::U8 NumberOfErrorsInDiagnosticMemeory = cpv10->getNumberOfErrorsInDiagnosticMemeory();
+		printf("Number of errors in diagnostic memory = %d\n", NumberOfErrorsInDiagnosticMemeory);
+		if (NumberOfErrorsInDiagnosticMemeory > 0) {
+			cpv10->clearErrorsInDiagnosticMemeory();
+		}
+
+		printf("Status byte = 0x%02x\n", cpv10->getStatusByte());
+
+		uint8_t NumberOfOutputGroups = cpv10->getNumberOf8OutputGroups();
+		printf("Number of 8-output groups = %d\n", NumberOfOutputGroups);
+
+		uint8_t Outputs07 = cpv10->getOutputs(1);
+		printf("Status of outputs 0..7 = 0x%02x\n", Outputs07);
+
+		gateway->SendNMTService(FESTO_ADRESS, canopen::gateway::Start_Remote_Node);
+		//gateway->SendNMTService(FESTO_ADRESS, canopen::gateway::Reset_Node);
+
+		current_pins_buf.preasure_buf.set_zeros();
+
 	} else {
 
 		current_pins_buf.preasure_buf.set_zeros();
@@ -132,10 +173,23 @@ void effector::voltage_command(const lib::sbench::c_buffer &instruction)
 		ss << std::endl;
 		msg->message(ss.str());
 	} else {
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (voltage_buf.pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+		current_pins_buf.voltage_buf = voltage_buf;
+		ss << std::endl;
+		msg->message(ss.str());
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
+			//	comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), 0);
 		} // send command to hardware
+		  //	comedi_dio_write(voltage_device, 0, 0, 1);
+
 	}
 
 }
@@ -143,6 +197,85 @@ void effector::voltage_command(const lib::sbench::c_buffer &instruction)
 void effector::preasure_command(const lib::sbench::c_buffer &instruction)
 {
 	msg->message("preasure_command");
+
+	std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
+	lib::sbench::preasure_buffer preasure_buf = instruction.sbench.preasure_buf;
+
+	if (robot_test_mode) {
+
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (preasure_buf.pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+
+		ss << std::endl;
+		msg->message(ss.str());
+		current_pins_buf.preasure_buf = preasure_buf;
+	} else {
+		msg->message("preasure_command hardware mode");
+
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (preasure_buf.pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+
+		ss << std::endl;
+		msg->message(ss.str());
+
+		int total_number_of_pins_activated = 0;
+
+		// prepare the desired output
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			for (int j = 0; j < 8; j++) {
+				desired_output[i + 1][j] = preasure_buf.pins_state[i * 8 + j];
+				if (preasure_buf.pins_state[i * 8 + j]) {
+					total_number_of_pins_activated++;
+				}
+			}
+		}
+
+		// checks if the limit was exceded
+		if (total_number_of_pins_activated <= TOTAL_NUMBER_OF_PINS_ACTIVATED_LIMIT) {
+			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+				cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+			}
+		} else {
+			// TODO throw
+			msg->message(lib::NON_FATAL_ERROR, "preasure_command total_number_of_pins_activated exceeded");
+		}
+
+//		for (int k = 0; k < 20; k++) {
+//			// send the command
+//			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+//				//	cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+//				cpv10->setOutputs(i + 1, (uint8_t) 0xAA);
+//			}delay(1000);
+//
+//			// send the command
+//			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+//				//	cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+//				cpv10->setOutputs(i + 1, (uint8_t) 0x55);
+//			}delay(1000);
+//
+//			// send the command
+//			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+//				//	cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+//				cpv10->setOutputs(i + 1, (uint8_t) 0x00);
+//			}
+//			delay(1000);
+//		}
+
+		//current_pins_buf.preasure_buf = preasure_buf;
+
+	}
+
 }
 
 /*--------------------------------------------------------------------------*/
@@ -162,7 +295,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 	voltage_reply();
 	preasure_reply();
-
+	reply.sbench = current_pins_buf;
 	reply.servo_step = step_counter;
 }
 /*--------------------------------------------------------------------------*/
@@ -178,14 +311,23 @@ void effector::voltage_reply()
 			comedi_dio_read(voltage_device, (int) (i / 32), (i % 32), &current_read);
 			current_pins_buf.voltage_buf.pins_state[i] = current_read;
 		} // send command to hardware
-
 	}
-	reply.sbench.voltage_buf = current_pins_buf.voltage_buf;
 }
 
 void effector::preasure_reply()
 {
+	if (!robot_test_mode) {
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			current_output[i + 1] = cpv10->getOutputs(i + 1);
+		}
 
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			for (int j = 0; j < 8; j++) {
+				current_pins_buf.preasure_buf.pins_state[i * 8 + j] = current_output[i + 1][j];
+			}
+		}
+
+	}
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.

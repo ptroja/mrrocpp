@@ -412,8 +412,11 @@ void UiRobot::EDP_slay_int()
 
 		close_edp_connections();
 
-		interface.wait_for_child_termination((pid_t) state.edp.pid, true);
+		// Changed to false - the waitpid won't hang during execution.
+		interface.wait_for_child_termination((pid_t) state.edp.pid, false);
+
 		interface.unblock_sigchld();
+
 		abort_thread();
 	}
 

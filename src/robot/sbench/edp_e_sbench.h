@@ -31,8 +31,17 @@ class effector : public common::motor_driven_effector
 {
 protected:
 
-	// lib::sbench::cbuffer ecp_edp_cbuffer;
-	//lib::sbench::rbuffer edp_ecp_rbuffer;
+	const static int FESTO_ADRESS = 1;
+
+	const static int NUMBER_OF_FESTO_GROUPS = 7;
+
+	const static int TOTAL_NUMBER_OF_PINS_ACTIVATED_LIMIT = 3;
+
+	//! Access to the CAN gateway unit
+	boost::shared_ptr <canopen::gateway> gateway;
+
+	//! festo shared ptr
+	boost::shared_ptr <festo::cpv> cpv10;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!
@@ -144,6 +153,11 @@ public:
 private:
 	const std::string dev_name;
 	comedi_t *voltage_device; // device descriptor
+
+	/*!
+	 * \brief current and desired output data of festo controller
+	 */
+	std::bitset <8> current_output[NUMBER_OF_FESTO_GROUPS + 1], desired_output[NUMBER_OF_FESTO_GROUPS + 1];
 
 };
 
