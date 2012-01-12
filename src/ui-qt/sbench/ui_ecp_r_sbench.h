@@ -9,7 +9,6 @@
  * @ingroup sbench
  */
 
-
 #include "../base/ui.h"
 
 #include "base/lib/configurator.h"
@@ -25,14 +24,24 @@ class Interface;
 }
 namespace sbench {
 
-// ---------------------------------------------------------------
+/*!
+ * @class
+ * @brief sbench EcpRobot class
+ * it specializes and derives from _EcpRobotDataPort
+ * @author yoyek
+ *
+ *  @ingroup sbench
+ */
 class EcpRobot : public common::_EcpRobotDataPort <ecp::sbench::robot>
 {
 
 public:
 
-	// ecp_buffer ui_edp_package; // by Y
-	EcpRobot(common::UiRobot& _ui_robot); // Konstruktor
+	/**
+	 * @brief constructor
+	 * @param _ui_robot UiRobot object pointer
+	 */
+	EcpRobot(common::UiRobot& _ui_robot);
 
 };
 

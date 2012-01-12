@@ -34,6 +34,7 @@ class UiRobot;
  * @class
  * @brief Base class of sbench windows
  * @author yoyek
+ * @ingroup sbench
  */
 class wgt_sbench_command : public wgt_base
 {
