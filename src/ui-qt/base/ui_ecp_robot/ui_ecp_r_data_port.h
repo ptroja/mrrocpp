@@ -53,7 +53,12 @@ public:
 
 		ui_robot.interface.set_ui_state_notification(UI_N_COMMUNICATION);
 
+		the_robot->is_new_data = false;
+		the_robot->is_new_request = false;
+
 		the_robot->create_command();
+		the_robot->finalize_data_port_command();
+
 		//	printf("data port execute_motion\n");
 		the_robot->execute_motion();
 
