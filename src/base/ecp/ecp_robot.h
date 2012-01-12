@@ -247,7 +247,7 @@ public:
 };
 
 template <typename ROBOT_COMMAND_T = lib::c_buffer, typename ROBOT_REPLY_T = lib::r_buffer>
-class _ecp_robot : public ecp_robot_base
+class _ecp_robot : public common_buffers_ecp_robot
 {
 public:
 	friend class ecp::common::generator::transparent;
@@ -285,7 +285,7 @@ public:
 	 * @param _sr_ecp sr_ecp communication object reference
 	 */
 	_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-			ecp_robot_base(_robot_name, _number_of_servos, _config, _sr_ecp)
+			common_buffers_ecp_robot(_robot_name, _number_of_servos, _config, _sr_ecp, ecp_command, reply_package)
 	{
 	}
 
@@ -297,7 +297,7 @@ public:
 	 * @param _ecp_object ecp tak object reference
 	 */
 	_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object) :
-			ecp_robot_base(_robot_name, _number_of_servos, _ecp_object)
+			common_buffers_ecp_robot(_robot_name, _number_of_servos, _ecp_object, ecp_command, reply_package)
 	{
 	}
 
