@@ -1394,7 +1394,7 @@ void epos::setTargetPosition(INTEGER32 val)
 }
 
 /* read manufacturer device name string firmware */
-std::string epos::getDeviceName()
+std::string epos::getCanDeviceName()
 {
 	WORD answer[8];
 	unsigned int r = device.ReadObject(answer, 8, nodeId, 0x1008, 0x00);

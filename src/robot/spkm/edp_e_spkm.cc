@@ -83,6 +83,12 @@ void effector::check_controller_state()
 	unsigned int powerOn = 0;
 	unsigned int enabled = 0;
 
+	// Disable operation of the Moog motor if it is stopped to activate brake.
+	if(axis2->isTargetReached() && axis2->getState() == maxon::epos::OPERATION_ENABLE) {
+		msg->message("Disabling Moog motor");
+		axis2->setState(maxon::epos::DISABLE_OPERATION);
+	}
+
 	boost::array <canopen::WORD, lib::spkm::NUM_OF_SERVOS> cachedStatusWords;
 
 	// Check axes.
@@ -92,29 +98,65 @@ void effector::check_controller_state()
 			cachedStatusWords[i] = axes[i]->getStatusWord();
 			// Get current epos state.
 			maxon::epos::actual_state_t state = maxon::epos::status2state(cachedStatusWords[i]);
-			if (state != maxon::epos::OPERATION_ENABLE) {
-				std::cerr << string("Axis ") << axes[i]->getDeviceName() << endl;
-				// Print state.
-				axes[i]->printState();
-				// Check if in the FAULT state
-				if (state == maxon::epos::FAULT) {
-					// Read number of errors
-					int errNum = axes[i]->getNumberOfErrors();
-					for (size_t j = 1; j <= errNum; ++j) {
-						// Get the detailed error
-						uint32_t errCode = axes[i]->getErrorHistory(j);
-						// Send message to SR.
-						msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axes[i]->getDeviceName() + ": "
-								+ axes[i]->ErrorCodeMessage(errCode));
-					}
-				} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
-					// Send message to SR.
-					msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axes[i]->getDeviceName()
-							+ " rotation is disabled");
-				} //: if fault || disabled
+			if (axes[i] == axis2.get()) {
+				switch (state)
+				{
+					case maxon::epos::SWITCH_ON_DISABLED:
+					case maxon::epos::OPERATION_ENABLE:
+					case maxon::epos::SWITCHED_ON:
+						// We are happy with these states
+						enabled++;
+						break;
+					case maxon::epos::FAULT:
+						// Print state.
+						axes[i]->printState();
+						{
+							// Read number of errors
+							int errNum = axes[i]->getNumberOfErrors();
+							for (size_t j = 1; j <= errNum; ++j) {
+								// Get the detailed error
+								uint32_t errCode = axes[i]->getErrorHistory(j);
+								// Send message to SR.
+								msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axes[i]->getDeviceName() + ": "
+										+ axes[i]->ErrorCodeMessage(errCode));
+							}
+						}
+						break;
+					default:
+						// Print state.
+						axes[i]->printState();
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axes[i]->getDeviceName()
+								+ " is not disabled & braked");
+						break;
+				}
 			} else {
-				// EPOS in enabled state.
-				enabled++;
+				if (state != maxon::epos::OPERATION_ENABLE) {
+					// Print state.
+					axes[i]->printState();
+					// Check if in the FAULT state
+					if (state == maxon::epos::FAULT) {
+						// Read number of errors
+						int errNum = axes[i]->getNumberOfErrors();
+						for (size_t j = 1; j <= errNum; ++j) {
+							// Get the detailed error
+							uint32_t errCode = axes[i]->getErrorHistory(j);
+							// Send message to SR.
+							msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axes[i]->getDeviceName() + ": "
+									+ axes[i]->ErrorCodeMessage(errCode));
+						}
+					} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
+						// Send message to SR.
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axes[i]->getDeviceName()
+								+ " is disabled");
+					} else {
+						// Send message to SR.
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axes[i]->getDeviceName()
+								+ " is not enabled");
+					}
+				} else {
+					// EPOS in enabled state.
+					enabled++;
+				}
 			}
 			if (maxon::epos::isReferenced(cachedStatusWords[i])) {
 				// Do not break from this loop so this is a also a preliminary axis error check
@@ -137,7 +179,7 @@ void effector::check_controller_state()
 		// Stop only motors which are moving at the moment.
 		for (size_t i = 0; i < axes.size(); ++i) {
 			if (maxon::epos::isTargetReached(cachedStatusWords[i])) {
-				// Brake with Quickstop command.
+				// Stop the motion.
 				axes[i]->setState(maxon::epos::DISABLE_VOLTAGE);
 			}
 		}
@@ -615,6 +657,11 @@ void effector::execute_motor_motion()
 {
 	DEBUG_METHOD;
 
+	if(!robot_test_mode) {
+		// Reset the Moog motor to disable brake.
+		axis2->reset();
+	}
+
 	// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
 	switch (instruction.spkm.motion_variant)
 	{
@@ -1063,6 +1110,9 @@ void effector::interpolated_motion_in_operational_space()
 
 	// Execute motion
 	if (!robot_test_mode) {
+		// Reset the Moog motor to disable brake.
+		axis2->reset();
+
 		// Setup motion parameters
 		for (size_t i = 0; i < axes.size(); ++i) {
 
