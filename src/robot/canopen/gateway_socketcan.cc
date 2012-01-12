@@ -22,7 +22,8 @@ namespace edp {
 namespace canopen {
 
 gateway_socketcan::gateway_socketcan(const std::string & _iface) :
-	iface(_iface), sock(-1)
+	iface(_iface), sock(-1),
+	sdo_timeout(boost::posix_time::milliseconds(500))
 {
 	if(iface.length() >= IFNAMSIZ) {
 		throw fe_canopen_error() << reason("name of CAN device too long");
@@ -181,9 +182,17 @@ unsigned int gateway_socketcan::ReadObject(WORD *ans, unsigned int ans_len, uint
 
 		writeToWire(frame);
 
+		// Setup timeout timer
+		const boost::system_time timeout = boost::get_system_time() + sdo_timeout;
+
 		// wait for reply
 		while(readFromWire(frame) != (0x580 + nodeId)) {
 			handleCanOpenMgmt(frame);
+
+			// Check for timeout
+			if(boost::get_system_time() > timeout) {
+				BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Timeout while waiting for reply"));
+			}
 		}
 
 		/*
@@ -307,9 +316,17 @@ void gateway_socketcan::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, u
 
 		writeToWire(frame);
 
+		// Setup timeout timer
+		const boost::system_time timeout = boost::get_system_time() + sdo_timeout;
+
 		// wait for reply
 		while(readFromWire(frame) != (0x580 + nodeId)) {
 			handleCanOpenMgmt(frame);
+
+			// Check for timeout
+			if(boost::get_system_time() > timeout) {
+				BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Timeout while waiting for reply"));
+			}
 		}
 
 		/*
@@ -370,9 +387,17 @@ void gateway_socketcan::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE s
 
 		writeToWire(frame);
 
+		// Setup timeout timer
+		const boost::system_time timeout = boost::get_system_time() + sdo_timeout;
+
 		// wait for reply
 		while(readFromWire(frame) != (0x580 + nodeId)) {
 			handleCanOpenMgmt(frame);
+
+			// Check for timeout
+			if(boost::get_system_time() > timeout) {
+				BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Timeout while waiting for reply"));
+			}
 		}
 
 		/*
@@ -446,9 +471,17 @@ void gateway_socketcan::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t l
 
 		writeToWire(frame);
 
+		// Setup timeout timer
+		const boost::system_time timeout = boost::get_system_time() + sdo_timeout;
+
 		// wait for reply
 		while(readFromWire(frame) != (0x580 + nodeId)) {
 			handleCanOpenMgmt(frame);
+
+			// Check for timeout
+			if(boost::get_system_time() > timeout) {
+				BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Timeout while waiting for reply"));
+			}
 		}
 
 		/*
@@ -489,14 +522,14 @@ void gateway_socketcan::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t l
 void gateway_socketcan::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier)
 {
 	try {
-	struct can_frame frame;
+		struct can_frame frame;
 
-	frame.can_id = 0x0000;
-	frame.can_dlc = 2;
-	frame.data[0] = (uint8_t) CmdSpecifier;
-	frame.data[1] = nodeId;
+		frame.can_id = 0x0000;
+		frame.can_dlc = 2;
+		frame.data[0] = (uint8_t) CmdSpecifier;
+		frame.data[1] = nodeId;
 
-	writeToWire(frame);
+		writeToWire(frame);
 	} catch (fe_canopen_error & e) {
 		e << canId(nodeId);
 		throw;
@@ -518,6 +551,10 @@ void gateway_socketcan::SendCANFrame(WORD Identifier, WORD Length, const BYTE Da
 	writeToWire(frame);
 }
 
+BYTE gateway_socketcan::getCanID()
+{
+	return 0;
+}
 
 } /* namespace canopen */
 } /* namespace edp */
