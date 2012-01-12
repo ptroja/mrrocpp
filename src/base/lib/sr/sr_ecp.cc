@@ -45,6 +45,7 @@ void sr_ecp::interpret(char * description, error_class_t message_type, uint64_t 
 					break;
 				default:
 					sprintf(description, "%s", strerror(error_code0));
+					break;
 			}
 			break; // SYSTEM_ERROR
 		case FATAL_ERROR:
@@ -55,6 +56,7 @@ void sr_ecp::interpret(char * description, error_class_t message_type, uint64_t 
 					break;
 				default:
 					sprintf(description, "%s", strerror(error_code0));
+					break;
 			}
 			break; // FATAL_ERROR
 		case NON_FATAL_ERROR: // interpretacja do funkcji:
@@ -121,10 +123,12 @@ void sr_ecp::interpret(char * description, error_class_t message_type, uint64_t 
 					break;
 				default:
 					sprintf(description, "UNIDENTIFIED ECP or MP ERROR");
+					break;
 			} // end: switch (error_code0)
 			break;
 		default:
 			sprintf(description, "UNIDENTIFIED ECP or MP ERROR");
+			break;
 	} // end: switch (message_type)
 }
 

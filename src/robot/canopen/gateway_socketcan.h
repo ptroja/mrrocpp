@@ -11,6 +11,8 @@
 #include <sys/socket.h>
 #include <linux/can.h>
 
+#include <boost/thread/thread_time.hpp>
+
 #include "gateway.h"
 
 namespace mrrocpp {
@@ -40,6 +42,9 @@ private:
 
 	//! Number of bytes to transfer in segmented write
 	std::size_t bytesToWrite;
+
+	//! Timeout for SDO protocol reply
+	const boost::posix_time::time_duration sdo_timeout;
 
 public:
 	/*! \brief Read Object from the CANopen device, firmware definition 6.3.1.1
@@ -99,6 +104,9 @@ public:
 
 	//! Close device
 	void close();
+
+	//! Get CAN-ID of the gateway itself (returns 0)
+	BYTE getCanID();
 };
 
 } /* namespace canopen */

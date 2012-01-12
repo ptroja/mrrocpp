@@ -568,6 +568,11 @@ void gateway_epos_rs232::SendCANFrame(WORD Identifier, WORD Length, const BYTE D
 	// no response with RS232
 }
 
+BYTE gateway_epos_rs232::getCanID()
+{
+	return ReadObjectValue <WORD>(0, 0x2000, 0x00);
+}
+
 } /* namespace canopen */
 } /* namespace edp */
 } /* namespace mrrocpp */
