@@ -48,6 +48,14 @@ effector::effector(common::shell &_shell) :
 		relays_test_mode = config.exists_and_true(RELAYS_TEST_MODE);
 	}
 
+	if (!festo_active()) {
+		msg->message("festo hardware not used (test mode activated)");
+	}
+
+	if (!relays_active()) {
+		msg->message("power syupply relays not used (test mode activated)");
+	}
+
 	number_of_servos = lib::sbench::NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
