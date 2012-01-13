@@ -49,11 +49,11 @@ effector::effector(common::shell &_shell) :
 	}
 
 	if (!festo_active()) {
-		msg->message("festo hardware not used (test mode activated)");
+		msg->message(lib::NON_FATAL_ERROR, "festo hardware not used (test mode activated)");
 	}
 
 	if (!relays_active()) {
-		msg->message("power syupply relays not used (test mode activated)");
+		msg->message(lib::NON_FATAL_ERROR, "power supply relays not used (test mode activated)");
 	}
 
 	number_of_servos = lib::sbench::NUM_OF_SERVOS;
