@@ -43,11 +43,11 @@ effector::effector(common::shell &_shell) :
 	MotorAmax[3] = 10000UL;
 
 	// Set default motor velocities, accelerations and decelerations for axis 4 - (wrist rotation - "axis 2") - the MOOG motor.
-	Vdefault[4] = 4000UL;
-	MotorVmax[4] = 4000UL;
-	Adefault[4] = 9000UL;
-	Ddefault[4] = 9000UL;
-	MotorAmax[4] = 9000UL;
+	Vdefault[4] = 3000UL;
+	MotorVmax[4] = 3000UL;
+	Adefault[4] = 6000UL;
+	Ddefault[4] = 6000UL;
+	MotorAmax[4] = 6000UL;
 
 	// Set default motor velocities, accelerations and decelerations for axis 5 - (upper wrist rotation - "axis 3").
 	Vdefault[5] = 5000UL;

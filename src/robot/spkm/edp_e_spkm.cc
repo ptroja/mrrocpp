@@ -44,6 +44,10 @@ using namespace std;
 // Access to kinematic parameters.
 #define PARAMS ((mrrocpp::kinematics::spkm::kinematic_model_spkm*)this->get_current_kinematic_model())->get_kinematic_parameters()
 
+// Initialize the limit extension.
+const uint32_t effector::limit_extension = 1000;
+
+
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		manip_effector(_shell, l_robot_name, instruction, reply)
 {
@@ -203,7 +207,7 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		check_controller_state();
 
 		// FIXME: uncomment the following line to allow multiple synchronization without resetting.
-		// controller_state_edp_buf.is_synchronised = false;
+		controller_state_edp_buf.is_synchronised = false;
 
 		// Copy data to reply buffer
 		reply.controller_state = controller_state_edp_buf;
@@ -280,6 +284,9 @@ void effector::synchronise(void)
 {
 	DEBUG_METHOD;
 
+	synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
+	return;
+
 	try {
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
@@ -319,6 +326,9 @@ void effector::synchronise(void)
 		} while (!finished);
 
 		// Do homing for Moog motor.
+#if 1
+		synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
+#else
 		axis2->startHoming();
 
 		// Wait until second homing is finished.
@@ -326,7 +336,7 @@ void effector::synchronise(void)
 			// Delay between queries.
 			usleep(20000);
 		}
-
+#endif
 		// Do homing for another motor.
 		axis1->startHoming();
 
@@ -352,8 +362,8 @@ void effector::synchronise(void)
 
 		// Set *extended* limits.
 		for (size_t i = 0; i < axes.size(); ++i) {
-			axes[i]->setMinimalPositionLimit(PARAMS.lower_motor_pos_limits[i] - 1000);
-			axes[i]->setMaximalPositionLimit(PARAMS.upper_motor_pos_limits[i] + 1000);
+			axes[i]->setMinimalPositionLimit(PARAMS.lower_motor_pos_limits[i] - limit_extension);
+			axes[i]->setMaximalPositionLimit(PARAMS.upper_motor_pos_limits[i] + limit_extension);
 		}
 
 		// Move the longest linear axis to the 'zero' position with a fast motion command
@@ -381,6 +391,71 @@ void effector::synchronise(void)
 		HANDLE_EDP_UNKNOWN_ERROR()
 	}
 }
+
+
+void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_limit_, int32_t  positive_limit_, int32_t homing_offset)
+{
+	try{
+		// Extend both limits.
+		epos_.setMinimalPositionLimit(-0x80000000);
+		epos_.setMaximalPositionLimit(+0x7FFFFFFF);
+
+		// Velocity mode in the direction of negative limit.
+		epos_.setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
+		epos_.reset();
+		// TODO: set max ac/deceleration?
+		epos_.setTargetVelocity(-100);
+		epos_.setControlword(0x000f);
+
+		// Wait for the motor to reach the desired velocity.
+		boost::thread::sleep(boost::get_system_time() + boost::posix_time::milliseconds(20));
+
+		// Monitor the velocity.
+		boost::system_time wakeup = boost::get_system_time();
+		do {
+			// Increment the wakeup time.
+			wakeup += boost::posix_time::milliseconds(5);
+
+			// Wait for device state to change.
+			boost::thread::sleep(wakeup);
+		} while(epos_.getActualVelocity() < -10);
+
+		// Halt.
+		epos_.reset();
+
+		try {
+			// Homing: move to the index, followed by an offset.
+			epos_.doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, homing_offset);
+			epos_.monitorHomingStatus();
+		} catch (boost::exception &e_) {
+			// Motor jam!
+			BOOST_THROW_EXCEPTION(fe_motor_jam_detected() << device_name(epos_.getCanDeviceName()));
+		}
+
+		// Profile position mode - reach the zero position.
+		epos_.setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
+		epos_.setPositionProfileType(0); // Trapezoidal velocity profile.
+	/*	epos_.setProfileVelocity(100);
+		epos_.setProfileAcceleration(1000);
+		epos_.setProfileDeceleration(1000);*/
+		epos_.setTargetPosition(homing_offset);
+		epos_.startRelativeMotion();
+		// Monitor the execution in order to detect the motor clash.
+		// TODO: ?
+
+		// Revert to the original limits.
+		epos_.setMinimalPositionLimit(negative_limit_ - limit_extension);
+		epos_.setMaximalPositionLimit(positive_limit_ + limit_extension);
+	} catch (...) {
+		// Revert to the original limits anyway.
+		epos_.setMinimalPositionLimit(negative_limit_ - limit_extension);
+		epos_.setMaximalPositionLimit(positive_limit_ + limit_extension);
+		// Rethrow the exception.
+		throw;
+	}
+}
+
+
 
 void effector::move_arm(const lib::c_buffer &instruction_)
 {

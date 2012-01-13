@@ -67,6 +67,8 @@ private:
 	void check_controller_state();
 
 protected:
+	//! Extension added to both positive and negative limits of every epos controller.
+	static const uint32_t limit_extension;
 
 	//! Default axis velocity [rpm]
 	uint32_t Vdefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
@@ -110,6 +112,13 @@ public:
 	 * This method synchronizes motors of the robots.
 	 */
 	void synchronise();
+
+	/*!
+	 * @brief Method responsible for synchronization of the MOOG motor.
+	 *
+	 * Uses velocity and profile position modes instead of the EPOS homing.
+	 */
+	void synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_limit_, int32_t  positive_limit_, int32_t homing_offset);
 
 	/*!
 	 * @brief method to create threads other then EDP master thread.

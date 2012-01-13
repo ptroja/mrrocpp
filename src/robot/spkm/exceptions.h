@@ -44,6 +44,9 @@ inline std::string to_string(pose_specification const & e)
 //! Number of angle that caused the exception.
 typedef boost::error_info <struct angle_number_, int> angle_number;
 
+//! Number of angle that caused the exception.
+typedef boost::error_info <struct device_name_, std::string> device_name;
+
 /*!
  * \brief Exception thrown when cartesian pose is required, but unknown.
  * \author Tomasz Kornuta
@@ -67,6 +70,12 @@ REGISTER_NON_FATAL_ERROR(nfe_thyk_alpha_limit_exceeded, "Thyk alpha limit is exc
  * \author Tomasz Kornuta
  */
 REGISTER_NON_FATAL_ERROR(nfe_thyk_beta_limit_exceeded, "Thyk beta limit is exceeded")
+
+/*!
+ * \brief Exception thrown when the motor jam is detected.
+ * \author Tomasz Kornuta
+ */
+REGISTER_FATAL_ERROR(fe_motor_jam_detected, "Motor jam detected")
 
 
 
