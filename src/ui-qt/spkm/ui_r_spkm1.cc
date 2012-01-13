@@ -21,8 +21,7 @@ UiRobot::UiRobot(common::Interface& _interface) :
 
 void UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new EcpRobot(*this);
-//	return 1;
+	common::UiRobot::ui_ecp_robot = ui_ecp_robot = new EcpRobot(*this);
 }
 
 void UiRobot::setup_menubar()

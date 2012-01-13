@@ -1,3 +1,12 @@
+/*!
+ * @file
+ * @brief File containing the definition of edp::sbench::effector class.
+ *
+ * @author yoyek
+ *
+ * @ingroup sbench
+ */
+
 #include <cstdio>
 
 #include "base/lib/typedefs.h"
@@ -5,11 +14,9 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-// Klasa edp_irp6ot_effector.
 #include "edp_e_sbench.h"
 #include "base/edp/reader.h"
-// Kinematyki.
-#include "robot/sbench/kinematic_model_sbench.h"
+
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
 
@@ -169,11 +176,22 @@ void effector::voltage_command(lib::sbench::c_buffer &instruction)
 		ss << std::endl;
 		msg->message(ss.str());
 
+		int total_number_of_pins_activated = 0;
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
-			//	comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), 0);
-		} // send command to hardware
-		  //	comedi_dio_write(voltage_device, 0, 0, 1);
+			if (voltage_buf.pins_state[i]) {
+				total_number_of_pins_activated++;
+			}
+		}
+
+		if (total_number_of_pins_activated <= VOLTAGE_PINS_ACTIVATED_LIMIT) {
+			for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+				comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
+				//	comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), 0);
+			} // send command to hardware
+		} else {
+			// TODO throw
+			msg->message(lib::NON_FATAL_ERROR, "voltage_command total_number_of_pins_activated exceeded");
+		}
 
 	}
 
@@ -227,7 +245,7 @@ void effector::preasure_command(lib::sbench::c_buffer &instruction)
 		}
 
 		// checks if the limit was exceded
-		if (total_number_of_pins_activated <= TOTAL_NUMBER_OF_PINS_ACTIVATED_LIMIT) {
+		if (total_number_of_pins_activated <= CLEANING_PINS_ACTIVATED_LIMIT) {
 			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
 				cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
 			}
@@ -318,10 +336,7 @@ void effector::preasure_reply()
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
 void effector::create_kinematic_models_for_given_robot(void)
 {
-	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::sbench::model());
-	// Ustawienie aktywnego modelu.
-	set_kinematic_model(0);
+	// no kinematics in sbench
 }
 
 /*--------------------------------------------------------------------------*/
@@ -341,7 +356,7 @@ void effector::variant_reply_to_instruction()
 	reply_to_instruction(reply);
 }
 
-} // namespace smb
+} // namespace sbench
 
 namespace common {
 

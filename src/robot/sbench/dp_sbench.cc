@@ -16,31 +16,43 @@ namespace mrrocpp {
 namespace lib {
 namespace sbench {
 
-// translation table of bench docks to io card ports
-static int voltage_translation_table[8][8] =
-		{ { 0, 1, 2, 3, 4, 5, 6, 7 },
-		//
-		{ 8, 9, 10, 11, 12, 13, 14, 15 },
-		//
-		{ 16, 17, 18, 19, 20, 21, 22, 23 }, { 24, 25, 26, 27, 28, 29, 30, 31 }, { 32, 33, 34, 35, 36, 37, 38, 39 }, { 40, 41, 42, 43, 44, 45, 46, 47 }, { 48, 49, 50, 51, 52, 53, 54, 55 }, { 56, 57, 58, 59, 60, 61, 62, 63 } };
-
-static int preasure_translation_table[8][8] = {
-// bench raw 1
-{ 55, 54, 53, 52, 51, 50, 49, 48 },
-//  bench raw  2
-{ 47, 46, 45, 44, 43, 42, 41, 40 },
-//  bench raw  3
-{ 39, 38, 37, 36, 35, 34, 33, 32 },
-//  bench raw  4
-{ 31, 30, 29, 28, 27, 26, 25, 24 },
-//  bench raw  5
-{ 23, 22, 21, 20, 19, 18, 17, 16 },
-//  bench raw  6
-{ 15, 14, 13, 12, 11, 10, 9, 8 },
-//  bench raw  7
-{ 7, 6, 5, 4, 3, 2, 1, 0 },
+// translation table of bench docks to advantech io card ports
+static int voltage_translation_table[8][8] = {
+// bench row 1
+{ 0, 1, 2, 3, 4, 5, 6, 61 },
+// bench row 2
+{ 7, 8, 9, 10, 11, 12, 13, 14 },
+// bench row 3
+{ 15, 16, 17, 18, 19, 20, 21, 62 },
+// bench row 4
+{ 22, 23, 24, 25, 26, 27, 28, 29 },
+// bench row 5
+{ 30, 31, 32, 33, 34, 35, 36, 63 },
+// bench row 6
+{ 37, 38, 39, 40, 41, 42, 43, 44 },
+// bench row 7
+{ 45, 46, 47, 48, 49, 50, 51, 52 },
 // not used
-{ 56, 57, 58, 59, 60, 61, 62, 63 } };
+{ 53, 54, 55, 56, 57, 58, 59, 60 } };
+
+// translation table of bench docks for festo valve block
+static int preasure_translation_table[8][8] = {
+// bench row 1
+{ 55, 54, 53, 52, 51, 50, 49, 61 },
+//  bench row  2
+{ 48, 47, 46, 45, 44, 43, 42, 41 },
+//  bench row  3
+{ 40, 39, 38, 37, 36, 35, 34, 62 },
+//  bench row  4
+{ 33, 32, 31, 30, 29, 28, 27, 26 },
+//  bench row  5
+{ 25, 24, 23, 22, 21, 20, 19, 63 },
+//  bench row  6
+{ 18, 17, 16, 15, 14, 13, 12, 11 },
+//  bench row  7
+{ 10, 9, 8, 7, 6, 5, 4, 3 },
+// not used
+{ 2, 1, 0, 56, 57, 58, 59, 60 } };
 
 pins_buffer::pins_buffer()
 {

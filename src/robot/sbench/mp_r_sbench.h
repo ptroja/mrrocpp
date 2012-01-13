@@ -3,7 +3,7 @@
 
 /*!
  * @file
- * @brief File contains mp robot class declaration for SwarmItFix Head
+ * @brief File contains mp robot class declaration for SwarmItFix Bench
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup sbench
@@ -17,7 +17,7 @@ namespace mp {
 namespace robot {
 
 /*!
- * @brief SwarmItFix Head mp robot class
+ * @brief SwarmItFix Bench mp robot class
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup sbench
