@@ -9,8 +9,9 @@
 #include <stdint.h>  /* int types with given size */
 #include <string>
 
-#include "canopen_exceptions.hpp"
 #include <boost/type_traits/is_same.hpp>
+
+#include "canopen_exceptions.hpp"
 
 namespace mrrocpp {
 namespace edp {
@@ -202,6 +203,9 @@ public:
 
 	//! Close device
 	virtual void close() = 0;
+
+	//! Get CAN-ID of the gateway itself (0 if gateway gives direct access)
+	virtual BYTE getCanID() = 0;
 
 	/*! \brief check for EPOS error code
 	 *
