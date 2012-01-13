@@ -671,9 +671,6 @@ void epos::clearFault(void)
 
 void epos::reset()
 {
-	// Wakeup time
-	boost::system_time wakeup;
-
 	// TODO: handle initial error conditions
 	actual_state_t state = getState();
 
@@ -701,94 +698,93 @@ void epos::reset()
 
 		// We are not supposed to clear faults here
 		BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
-	}
+	} else if (state != OPERATION_ENABLE) {
+		// Shutdown
+		setState(SHUTDOWN);
 
-	// Shutdown
-	setState(SHUTDOWN);
+		// Setup the wakeup time
+		boost::system_time wakeup = boost::get_system_time();
 
-	// Setup the wakeup time
-	wakeup = boost::get_system_time();
+		int retry = 5;
+		do {
+			state = getState();
 
-	// TODO: handle error conditions
-	int retry = 5;
-	do {
-		state = getState();
-
-		if (state == READY_TO_SWITCH_ON) {
-			break;
-		} else if (state == QUICK_STOP_ACTIVE) {
-			break;
-		} else if (state == FAULT) {
-			BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
-		} else {
-			std::cout << "EPOS node " << (unsigned int) nodeId << ": transited to state '" << stateDescription(state)
-					<< "' during shutdown" << std::endl;
-			// Continue;
-		}
-
-		// Increment the wakeup time
-		wakeup += boost::posix_time::milliseconds(5);
-
-		// Wait for device state to change
-		boost::thread::sleep(wakeup);
-
-	} while (--retry);
-
-	if (retry == 0) {
-		BOOST_THROW_EXCEPTION(fe() << reason("Timeout shutting device down"));
-	}
-
-	// Ready-to-switch-On expected
-	if (state != READY_TO_SWITCH_ON && state != QUICK_STOP_ACTIVE) {
-		BOOST_THROW_EXCEPTION(fe() << reason("Ready-to-switch-On or Quick-Stop-Active expected"));
-	}
-
-	// Enable
-	setState(ENABLE_OPERATION);
-
-	// Setup the wakeup time
-	wakeup = boost::get_system_time();
-
-	// Setup retry counter
-	retry = 25;
-	do {
-		state = getState();
-
-		// Condition to monitor for
-		bool in_operation_enable = false;
-
-		switch (state) {
-			// These are expected transition states
-			case SWITCHED_ON:
-			case MEASURE_INIT:
-			case REFRESH:
+			if (state == READY_TO_SWITCH_ON) {
 				break;
-			case OPERATION_ENABLE:
-				in_operation_enable = true;
+			} else if (state == QUICK_STOP_ACTIVE) {
 				break;
-			case FAULT:
+			} else if (state == FAULT) {
 				BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
-				break;
-			default:
+			} else {
 				std::cout << "EPOS node " << (unsigned int) nodeId << ": transited to state '" << stateDescription(state)
-									<< "' during initialization" << std::endl;
-				break;
+						<< "' during shutdown" << std::endl;
+				// Continue;
+			}
+
+			// Increment the wakeup time
+			wakeup += boost::posix_time::milliseconds(5);
+
+			// Wait for device state to change
+			boost::thread::sleep(wakeup);
+
+		} while (--retry);
+
+		if (retry == 0) {
+			BOOST_THROW_EXCEPTION(fe() << reason("Timeout shutting device down"));
 		}
 
-		// Exit loop if condition holds
-		if(in_operation_enable)
-			break;
+		// Ready-to-switch-On expected
+		if (state != READY_TO_SWITCH_ON && state != QUICK_STOP_ACTIVE) {
+			BOOST_THROW_EXCEPTION(fe() << reason("Ready-to-switch-On or Quick-Stop-Active expected"));
+		}
 
-		// Increment the wakeup time
-		wakeup += boost::posix_time::milliseconds(5);
+		// Enable
+		setState(ENABLE_OPERATION);
 
-		// Wait for device state to change
-		boost::thread::sleep(wakeup);
+		// Setup the wakeup time
+		wakeup = boost::get_system_time();
 
-	} while (--retry);
+		// Setup retry counter
+		retry = 25;
+		do {
+			state = getState();
 
-	if (retry == 0) {
-		BOOST_THROW_EXCEPTION(fe() << reason("Timeout enabling device"));
+			// Condition to monitor for
+			bool in_operation_enable = false;
+
+			switch (state) {
+				// These are expected transition states
+				case SWITCHED_ON:
+				case MEASURE_INIT:
+				case REFRESH:
+					break;
+				case OPERATION_ENABLE:
+					in_operation_enable = true;
+					break;
+				case FAULT:
+					BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
+					break;
+				default:
+					std::cout << "EPOS node " << (unsigned int) nodeId << ": transited to state '" << stateDescription(state)
+										<< "' during initialization" << std::endl;
+					break;
+			}
+
+			// Exit loop if condition holds
+			if(in_operation_enable)
+				break;
+
+			// Increment the wakeup time
+			wakeup += boost::posix_time::milliseconds(5);
+
+			// Wait for device state to change
+			boost::thread::sleep(wakeup);
+
+		} while (--retry);
+
+		if (retry == 0) {
+			BOOST_THROW_EXCEPTION(fe() << reason("Timeout enabling device"));
+		}
 	}
 
 	// Enable+Halt
@@ -1398,7 +1394,7 @@ void epos::setTargetPosition(INTEGER32 val)
 }
 
 /* read manufacturer device name string firmware */
-std::string epos::getDeviceName()
+std::string epos::getCanDeviceName()
 {
 	WORD answer[8];
 	unsigned int r = device.ReadObject(answer, 8, nodeId, 0x1008, 0x00);
