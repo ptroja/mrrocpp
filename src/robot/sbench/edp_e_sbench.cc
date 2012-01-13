@@ -181,7 +181,7 @@ void effector::voltage_command(lib::sbench::c_buffer &instruction)
 
 	lib::sbench::voltage_buffer voltage_buf = instruction.sbench.voltage_buf;
 
-	if (relays_active()) {
+	if (!relays_active()) {
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			if (voltage_buf.pins_state[i]) {
@@ -234,7 +234,7 @@ void effector::preasure_command(lib::sbench::c_buffer &instruction)
 
 	lib::sbench::preasure_buffer preasure_buf = instruction.sbench.preasure_buf;
 
-	if (festo_active()) {
+	if (!festo_active()) {
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			if (preasure_buf.pins_state[i]) {
