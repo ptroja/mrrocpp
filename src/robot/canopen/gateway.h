@@ -88,7 +88,7 @@ public:
 
 		std::string str;
 
-		for (int i = 0; i < r; ++i) {
+		for (unsigned int i = 0; i < r; ++i) {
 			char c = (answer[3 + i] & 0x00FF);
 
 			if (c == 0x00) {
