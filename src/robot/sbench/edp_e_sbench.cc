@@ -34,8 +34,27 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(common::shell &_shell) :
-		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME, instruction, reply), dev_name("/dev/comedi0")
+		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME, instruction, reply),
+		festo_test_mode(1),
+		relays_test_mode(1),
+		dev_name("/dev/comedi0")
 {
+
+	if (config.exists(FESTO_TEST_MODE)) {
+		festo_test_mode = config.exists_and_true(FESTO_TEST_MODE);
+	}
+
+	if (config.exists(RELAYS_TEST_MODE)) {
+		relays_test_mode = config.exists_and_true(RELAYS_TEST_MODE);
+	}
+
+	if (!festo_active()) {
+		msg->message(lib::NON_FATAL_ERROR, "festo hardware not used (test mode activated)");
+	}
+
+	if (!relays_active()) {
+		msg->message(lib::NON_FATAL_ERROR, "power supply relays not used (test mode activated)");
+	}
 
 	number_of_servos = lib::sbench::NUM_OF_SERVOS;
 	//  Stworzenie listy dostepnych kinematyk.
@@ -46,9 +65,19 @@ effector::effector(common::shell &_shell) :
 	preasure_init();
 }
 
+bool effector::festo_active()
+{
+	return (!((robot_test_mode) || (festo_test_mode)));
+}
+
+bool effector::relays_active()
+{
+	return (!((robot_test_mode) || (relays_test_mode)));
+}
+
 void effector::voltage_init()
 {
-	if (!robot_test_mode) {
+	if (relays_active()) {
 
 		// initiate hardware
 		voltage_device = comedi_open(dev_name.c_str());
@@ -66,7 +95,7 @@ void effector::voltage_init()
 
 void effector::preasure_init()
 {
-	if (!robot_test_mode) {
+	if (festo_active()) {
 
 		if (this->config.exists_and_true("can_iface")) {
 			gateway =
@@ -152,7 +181,7 @@ void effector::voltage_command(lib::sbench::c_buffer &instruction)
 
 	lib::sbench::voltage_buffer voltage_buf = instruction.sbench.voltage_buf;
 
-	if (robot_test_mode) {
+	if (!relays_active()) {
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			if (voltage_buf.pins_state[i]) {
@@ -205,7 +234,7 @@ void effector::preasure_command(lib::sbench::c_buffer &instruction)
 
 	lib::sbench::preasure_buffer preasure_buf = instruction.sbench.preasure_buf;
 
-	if (robot_test_mode) {
+	if (!festo_active()) {
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			if (preasure_buf.pins_state[i]) {
@@ -305,7 +334,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 void effector::voltage_reply()
 {
-	if (!robot_test_mode) {
+	if (relays_active()) {
 
 		// read pin_state from hardware
 
@@ -319,7 +348,7 @@ void effector::voltage_reply()
 
 void effector::preasure_reply()
 {
-	if (!robot_test_mode) {
+	if (festo_active()) {
 		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
 			current_output[i + 1] = cpv10->getOutputs(i + 1);
 		}

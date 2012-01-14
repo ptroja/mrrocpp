@@ -22,6 +22,12 @@ namespace mrrocpp {
 namespace edp {
 namespace sbench {
 
+//! festo hardware activation field name
+const static std::string FESTO_TEST_MODE = "festo_test_mode";
+
+//! relays activation field name
+const static std::string RELAYS_TEST_MODE = "relays_test_mode";
+
 /*!
  * \brief class of EDP SwarmItFix sbench effector
  *
@@ -42,6 +48,12 @@ protected:
 
 	//! the maximal number of pins that can be activated (supplied with electricity) at once (due to the relays properties)
 	const static int VOLTAGE_PINS_ACTIVATED_LIMIT = 6;
+
+	//! the festo hardware active flag set by the same labeled configuration field
+	bool festo_test_mode;
+
+	//! the relays hardware activation flag set by the same labeled configuration field
+	bool relays_test_mode;
 
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
@@ -147,6 +159,22 @@ public:
 	 * \brief method to reply to ecp with class of particular type
 	 */
 	void variant_reply_to_instruction();
+
+
+	/*!
+	 * @brief checks if the configuration file let the festo hardware to run
+	 * or it is in test mode
+	 * @return hardware_active
+	 */
+	bool festo_active();
+
+	/*!
+	 * @brief checks if the configuration file let the relays hardware to run
+	 * or it is in test mode
+	 * @return hardware_active
+	 */
+	bool relays_active();
+
 
 	/*!
 	 * \brief The particular type of instruction send form ECP to EDP
