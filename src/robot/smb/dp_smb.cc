@@ -68,7 +68,7 @@ void action::setdPkmTheta(double dPkmTheta)
 //! Set PIN to rotate about
 void action::setRotationPin(unsigned int rotationPin)
 {
-	if (rotationPin < 0 || rotationPin > 3) {
+	if (rotationPin > 3) {
 		BOOST_THROW_EXCEPTION(action_parameter_error());
 	}
 
