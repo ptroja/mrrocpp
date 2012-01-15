@@ -779,7 +779,7 @@ public:
 	//!\ brief Analog velocity setpoint configuration
 	void setAnalogVelocitySetpointScaling(INTEGER16 val);
 
-	INTEGER16 getAnalogVelocitySetpointScaling(INTEGER16 val);
+	INTEGER16 getAnalogVelocitySetpointScaling();
 
 	void setAnalogVelocitySetpointOffset(INTEGER32 val);
 
