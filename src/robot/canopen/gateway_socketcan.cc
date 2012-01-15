@@ -161,7 +161,7 @@ void gateway_socketcan::writeToWire(const struct can_frame & frame)
 
 void gateway_socketcan::handleCanOpenMgmt(const struct can_frame & frame)
 {
-
+	// TODO: handle general CanOpen management messages
 }
 
 unsigned int gateway_socketcan::ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex)
