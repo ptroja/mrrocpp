@@ -461,6 +461,7 @@ void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_lim
 		// Velocity mode in the direction of negative limit.
 		epos_.setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
 		epos_.reset();
+
 		// TODO: set max acceleration?
 		epos_.setTargetVelocity(-100);
 		epos_.setControlword(0x000f);

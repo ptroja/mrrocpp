@@ -1364,16 +1364,19 @@ void epos::setMotorThermalConstant(UNSIGNED16 val)
 
 //------------- fi martí
 
-/* read demand position; 14.1.67 */
 INTEGER32 epos::setDemandVelocity()
 {
 	return ReadObjectValue <INTEGER32>(0x606b, 0x00);
 }
 
-/* read actual position; 14.1.68 */
 INTEGER32 epos::getActualVelocity()
 {
 	return ReadObjectValue <INTEGER32>(0x606c, 0x00);
+}
+
+INTEGER32 epos::getActualVelocityAveraged()
+{
+	return ReadObjectValue <INTEGER32>(0x2028, 0x00);
 }
 
 /* read actual motor current, see firmware description 14.1.69 */

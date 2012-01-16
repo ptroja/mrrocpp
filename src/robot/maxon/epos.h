@@ -499,11 +499,14 @@ public:
 	//! \brief write motor thermal constant
 	void setMotorThermalConstant(UNSIGNED16 val);
 
-	/*! \brief read actual position */
+	/*! \brief read actual velocity */
 	INTEGER32 setDemandVelocity();
 
-	/*! \brief read actual position */
+	/*! \brief read actual velocity */
 	INTEGER32 getActualVelocity();
+
+	/*! \brief read actual velocity averaged over low-pass filter */
+	INTEGER32 getActualVelocityAveraged();
 
 	/*! \brief read actual current */
 	INTEGER16 getActualCurrent();
