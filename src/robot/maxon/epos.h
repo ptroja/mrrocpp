@@ -587,6 +587,9 @@ public:
 	/*! \brief write the Maximal Position Limit */
 	void setMaximalPositionLimit(INTEGER32 val);
 
+	/*! \brief disable position limits */
+	void disablePositionLimits();
+
 	//! @}
 
 	//! \ingroup libEPOS

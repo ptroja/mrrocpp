@@ -1531,6 +1531,12 @@ void epos::setMaximalPositionLimit(INTEGER32 val)
 	WriteObjectValue(0x607D, 0x02, val);
 }
 
+void epos::disablePositionLimits()
+{
+	this->setMinimalPositionLimit(-0x80000000);
+	this->setMaximalPositionLimit(+0x7FFFFFFF);
+}
+
 UNSIGNED32 epos::getActualBufferSize()
 {
 	return ReadObjectValue <UNSIGNED32>(0x60C4, 0x02);

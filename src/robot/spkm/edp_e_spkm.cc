@@ -270,10 +270,9 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 
 				// Reset limits.
 				if(!robot_test_mode) {
-					for (size_t i = 0; i < axes.size(); ++i) {
+					BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes) {
 						// Disable both limits.
-						axes[i]->setMinimalPositionLimit(-0x80000000);
-						axes[i]->setMaximalPositionLimit(+0x7FFFFFFF);
+						node->disablePositionLimits();
 					}
 				}
 			} else {
@@ -457,13 +456,12 @@ void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_lim
 {
 	try{
 		// Disable both limits.
-		epos_.setMinimalPositionLimit(-0x80000000);
-		epos_.setMaximalPositionLimit(+0x7FFFFFFF);
+		epos_.disablePositionLimits();
 
 		// Velocity mode in the direction of negative limit.
 		epos_.setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
 		epos_.reset();
-		// TODO: set max ac/deceleration?
+		// TODO: set max acceleration?
 		epos_.setTargetVelocity(-100);
 		epos_.setControlword(0x000f);
 
