@@ -1,21 +1,3 @@
-// -------------------------------------------------------------------------
-//                            ui_ecp->cc
-// Metody sluzace do komunikacji UI z EDP - zlecenia dla driver'a
-//
-// Ostatnio modyfikowany: 2005
-// -------------------------------------------------------------------------
-
-/* Standard headers */
-#include <iostream>
-
-#include <cstdio>
-#include <cstdlib>
-#include <unistd.h>
-#include <cstring>
-#include <fcntl.h>
-#include <cerrno>
-#include <cmath>
-
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"

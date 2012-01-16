@@ -121,6 +121,11 @@ public:
 	void synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_limit_, int32_t  positive_limit_, int32_t homing_offset);
 
 	/*!
+	 * @brief Disable (thus apply brake) the MOOG motor.
+	 */
+	void disable_moog_motor();
+
+	/*!
 	 * @brief method to create threads other then EDP master thread.
 	 *
 	 * Here there is only one extra thread - reader_thread.

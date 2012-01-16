@@ -25,7 +25,7 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 		,
 		epos_external_command_data_port(lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager)
 		,
-		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager)
+		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager)
 		,
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
 		,
@@ -54,7 +54,7 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 		,
 		epos_external_command_data_port(lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager)
 		,
-		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager)
+		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager)
 		,
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
 		,

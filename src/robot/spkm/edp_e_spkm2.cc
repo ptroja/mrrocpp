@@ -50,7 +50,7 @@ effector::effector(common::shell &_shell) :
 	Ddefault[4] = 6000UL;
 	MotorAmax[4] = 6000UL;
 
-	// Set default motor velocities, accelerations and decelerations for axis 5 - (uuper wrist rotation - "axis 3").
+	// Set default motor velocities, accelerations and decelerations for axis 5 - (upper wrist rotation - "axis 3").
 	Vdefault[5] = 5000UL;
 	MotorVmax[5] = 5000UL;
 	Adefault[5] = 30000UL;
@@ -61,7 +61,10 @@ effector::effector(common::shell &_shell) :
 		// Create epos objects according to CAN ID-mapping.
 		axisA = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 5, "A");
 		axisB = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 4, "B");
-		axisC = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 6, "C");
+// FIXME FOR SURE!!
+		axisC = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 4, "B");
+//		axisC = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 6, "C");
+
 		axis1 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 3, "1");
 		axis2 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 2, "2");
 		axis3 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 1, "3");

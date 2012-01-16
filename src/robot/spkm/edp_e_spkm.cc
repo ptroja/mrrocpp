@@ -72,6 +72,59 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	}
 }
 
+void effector::disable_moog_motor()
+{
+	// Disable operation of the Moog motor if it is stopped to activate brake.
+	if(!axis2->isTargetReached()) {
+		msg->message("Disabling the Moog motor not allowed during motion.");
+		BOOST_THROW_EXCEPTION(exception::fe());
+	}
+
+	msg->message("Disabling Moog motor");
+	axis2->setState(maxon::epos::DISABLE_OPERATION);
+
+	// Setup the wakeup time
+	boost::system_time wakeup = boost::get_system_time();
+	const boost::system_time timeout = wakeup + boost::posix_time::milliseconds(1000);
+
+	// Condition to monitor for
+	bool in_switched_on = false;
+
+	// Monitor until state change.
+	while(!in_switched_on) {
+		// Increment the wakeup time.
+		wakeup += boost::posix_time::milliseconds(10);
+
+		// Check time clock.
+		if(wakeup > timeout) {
+			msg->message("Timeout waiting to brake the moog motor.");
+			BOOST_THROW_EXCEPTION(exception::fe());
+		}
+
+		// Wait for device state to change
+		boost::thread::sleep(wakeup);
+
+		maxon::epos::actual_state_t state = axis2->getState();
+
+		switch (state) {
+			// These are expected transition states
+			case maxon::epos::OPERATION_ENABLE:
+				// Still disabling, do nothing.
+				break;
+			case maxon::epos::SWITCHED_ON:
+				in_switched_on = true;
+				break;
+			case maxon::epos::FAULT:
+				BOOST_THROW_EXCEPTION(exception::fe_robot_in_fault_state());
+				break;
+			default:
+				std::cout << "Moog node transited to state '" << maxon::epos::stateDescription(state)
+									<< "' during braking" << std::endl;
+				break;
+		}
+	}
+}
+
 void effector::check_controller_state()
 {
 	DEBUG_METHOD;
@@ -86,12 +139,6 @@ void effector::check_controller_state()
 	unsigned int referenced = 0;
 	unsigned int powerOn = 0;
 	unsigned int enabled = 0;
-
-	// Disable operation of the Moog motor if it is stopped to activate brake.
-	if(axis2->isTargetReached() && axis2->getState() == maxon::epos::OPERATION_ENABLE) {
-		msg->message("Disabling Moog motor");
-		axis2->setState(maxon::epos::DISABLE_OPERATION);
-	}
 
 	boost::array <canopen::WORD, lib::spkm::NUM_OF_SERVOS> cachedStatusWords;
 
@@ -215,12 +262,19 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		// Initiate motor positions.
 		for (size_t i = 0; i < axes.size(); ++i) {
 			// If this is a test mode or robot isn't synchronized.
-			if (robot_test_mode || !is_synchronised())
+			if (robot_test_mode || !is_synchronised()) {
 				// Zero all motor positions.
 				current_motor_pos[i] = 0;
-			else
+				// Reset limits.
+				for (size_t i = 0; i < axes.size(); ++i) {
+					// Disable both limits.
+					axes[i]->setMinimalPositionLimit(-0x80000000);
+					axes[i]->setMaximalPositionLimit(+0x7FFFFFFF);
+				}
+			} else {
 				// Get actual motor positions.
 				current_motor_pos[i] = axes[i]->getActualPosition();
+			}
 		}
 #if(DEBUG_MOTORS)
 		std::cerr << "current_motor_pos: " << current_motor_pos.transpose() << "\n";
@@ -284,10 +338,11 @@ void effector::synchronise(void)
 {
 	DEBUG_METHOD;
 
-	synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
-	return;
-
 	try {
+		// WORKAROUND: remove those two lines!
+		synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
+		return;
+
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
 			return;
@@ -396,7 +451,7 @@ void effector::synchronise(void)
 void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_limit_, int32_t  positive_limit_, int32_t homing_offset)
 {
 	try{
-		// Extend both limits.
+		// Disable both limits.
 		epos_.setMinimalPositionLimit(-0x80000000);
 		epos_.setMaximalPositionLimit(+0x7FFFFFFF);
 
@@ -424,24 +479,27 @@ void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_lim
 		epos_.reset();
 
 		try {
+#if 1
 			// Homing: move to the index, followed by an offset.
 			epos_.doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, homing_offset);
 			epos_.monitorHomingStatus();
+#else
+			// Profile position mode - reach the zero position.
+			epos_.setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
+			epos_.setPositionProfileType(0); // Trapezoidal velocity profile.
+		/*	epos_.setProfileVelocity(100);
+			epos_.setProfileAcceleration(1000);
+			epos_.setProfileDeceleration(1000);*/
+			epos_.setTargetPosition(homing_offset);
+			epos_.startRelativeMotion();
+			// Monitor the execution in order to detect the motor clash.
+			// TODO: ?
+#endif
 		} catch (boost::exception &e_) {
 			// Motor jam!
 			BOOST_THROW_EXCEPTION(fe_motor_jam_detected() << device_name(epos_.getCanDeviceName()));
 		}
 
-		// Profile position mode - reach the zero position.
-		epos_.setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
-		epos_.setPositionProfileType(0); // Trapezoidal velocity profile.
-	/*	epos_.setProfileVelocity(100);
-		epos_.setProfileAcceleration(1000);
-		epos_.setProfileDeceleration(1000);*/
-		epos_.setTargetPosition(homing_offset);
-		epos_.startRelativeMotion();
-		// Monitor the execution in order to detect the motor clash.
-		// TODO: ?
 
 		// Revert to the original limits.
 		epos_.setMinimalPositionLimit(negative_limit_ - limit_extension);
@@ -503,6 +561,16 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 								node->reset();
 							}
 				}
+				// Internal position counters need not be updated.
+				return;
+			case lib::spkm::BRAKE:
+				DEBUG_COMMAND("BRAKE");
+
+				// Execute brake command.
+				if(!robot_test_mode) {
+					disable_moog_motor();
+				}
+
 				// Internal position counters need not be updated.
 				return;
 			case lib::spkm::CLEAR_FAULT:
@@ -741,8 +809,20 @@ void effector::execute_motor_motion()
 							<< "\t current_motor_pos[moog] = " << (int) current_motor_pos[4] << endl;
 #endif
 		// Reset the Moog motor to disable brake if we are going to execute a motion.
-		if(fabs(desired_motor_pos_new[4] - desired_motor_pos_old[4]) > 1.0) {
-			axis2->reset();
+		if (is_synchronised()) {
+			std::cerr << " dupa1\n";
+			// Robot synchronized - absolute motion.
+			if (fabs(desired_motor_pos_new[4] - desired_motor_pos_old[4]) > 1.0) {
+				std::cerr << " dupa2\n";
+				//axis2->reset();
+			}
+		} else {
+			std::cerr << " dupa3\n";
+			// Robot not synchronized - relative motion.
+			if (fabs(desired_motor_pos_new[4]) > 1.0) {
+				std::cerr << " dupa4\n";
+				axis2->reset();
+			}
 		}
 	}
 
@@ -760,7 +840,7 @@ void effector::execute_motor_motion()
 #endif
 					if (!robot_test_mode) {
 						// Skip commanding motor if target and last positions and equal.
-						if(desired_motor_pos_new[i] == desired_motor_pos_old[i])
+						if (fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i]) > 1.0)
 							continue;
 						axes[i]->setProfileVelocity(Vdefault[i]);
 						axes[i]->setProfileAcceleration(Adefault[i]);
@@ -775,6 +855,9 @@ void effector::execute_motor_motion()
 					std::cerr << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
 #endif
 					if (!robot_test_mode) {
+						if (fabs(desired_motor_pos_new[i]) < 1.0)
+							continue;
+						std::cerr << " dupa5\n";
 						axes[i]->setProfileVelocity(Vdefault[i]);
 						axes[i]->setProfileAcceleration(Adefault[i]);
 						axes[i]->setProfileDeceleration(Ddefault[i]);
