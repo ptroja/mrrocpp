@@ -12,7 +12,7 @@
 
 
 #include "base/mp/mp_task.h"
-#include "base/mp/MP_main_error.h"
+//#include "base/mp/MP_main_error.h"
 //#include "../edge_follow/mp_t_edge_follow_mr.h"
 #include "base/lib/mrmath/mrmath.h"
 
@@ -81,69 +81,91 @@ void mp_en_labyrinth::main_task_algorithm(void)
 	reading = discode->call_remote_procedure<Types::Mrrocpp_Proxy::EN_Labyrinth_Reading>(double(29.0386));
 	sr_ecp_msg->message("reading received");
 
-
-	cout << "Reading info: " << endl;
-	cout << "Solved: " << reading.labyrinth_solved << endl;
-	cout << "Path Size: " << reading.path_size << endl;
-	cout << "Start_pt: (" << reading.start_point_x << "," << reading.start_point_y << ")" << endl;
-	cout << "End_pt ("  << reading.start_point_x << "," << reading.start_point_y << ")" << endl;
-
-
-	// TODO better read the data then make up...
-	reading.labyrinth_solved = true;
-	reading.path_size = 10;
-	reading.start_point_x = 1;
-	reading.start_point_y = 1;
-	reading.end_point_x = 8;
-	reading.end_point_y = 8;
-	int path[10] = {2, 2, 2, 0, 2, 0, 2, 0, 2, 0};
-
-	lib::robot_name_t manipulator_name;
-	lib::robot_name_t gripper_name;
-
-	manipulator_name = lib::irp6p_m::ROBOT_NAME;
-	gripper_name = lib::irp6p_tfg::ROBOT_NAME;
-
-
-	sr_ecp_msg->message("Moving to the starting position");
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/en_labyrinth/poz_pocz.trj", 0,lib::irp6p_m::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-
-//	if(reading.start_point_x != 0 && reading.start_point_y != 0)
+//	while(1)
 //	{
-//		sr_ecp_msg->message("Moving to the starting point");
-//		cout << "Starting point: (" << reading.start_point_x << "," << reading.start_point_y << ")" << endl;
-//		for(int i=0; i<reading.start_point_x; ++i)
-//		{
-//			char data[64];
-//			sprintf (data, "%i %lf", RIGHT, K_MAX);
-//			set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_EN_LAB, (int) 5, data, 0, lib::irp6p_m::ROBOT_NAME);
-//			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-//		}
-//		for(int i=0; i<reading.start_point_y; ++i)
-//		{
-//			char data[64];
-//			sprintf (data, "%i %lf", UP, K_MAX);
-//			set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_EN_LAB, (int) 5, data, 0, lib::irp6p_m::ROBOT_NAME);
-//			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-//		}
-//	}
 
-	sr_ecp_msg->message("Moving to the ending point");
-	cout << "Ending point: (" << reading.end_point_x << "," << reading.end_point_y << ")" << endl;
-	for(int i=0; i<reading.path_size; ++i)
-	{
-		cout << "Point " << i << " is " << path[i] << endl;
-		char data[64];
-		sprintf (data, "%i %lf", path[i], K_MAX);
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_EN_LAB, (int) 5, data, 0, lib::irp6p_m::ROBOT_NAME);
+//		if(!reading.labyrinth_solved)
+//			continue;
+
+		cout << "Reading info: " << endl;
+		cout << "Solved: " << reading.labyrinth_solved << endl;
+		cout << "Path Size: " << reading.path_size << endl;
+		cout << "Start_pt: (" << reading.start_point_x << "," << reading.start_point_y << ")" << endl;
+		cout << "End_pt ("  << reading.end_point_x << "," << reading.end_point_y << ")" << endl;
+		cout << "Path: ";
+		for(int i=0; i<reading.path_size; ++i)
+			cout << reading.path[i] << " ";
+		cout << endl;
+
+
+//		// TODO better read the data then make up...
+//		bool labyrinth_solved_static = true;
+//		int path_size_static = 10;
+//		int start_point_x_static = 1;
+//		int start_point_y_static = 1;
+//		int end_point_x_static = 8;
+//		int end_point_y_static = 8;
+//		int path_static[10] = {0, 1, 2, 3, 0, 1, 2, 3, 0, 1};
+//
+		lib::robot_name_t manipulator_name;
+		lib::robot_name_t gripper_name;
+
+		manipulator_name = lib::irp6p_m::ROBOT_NAME;
+		gripper_name = lib::irp6p_tfg::ROBOT_NAME;
+
+		sr_ecp_msg->message("Moving to first point");
+
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "ABSOLUTE_JOIN 0.407 -1.633 0.107 -0.036 4.67 -2.679", lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-	}
 
-	sr_ecp_msg->message("Returning from the labyrinth");
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", 0, lib::irp6p_m::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
+		sr_ecp_msg->message("Moving to the ending point");
+		cout << "Ending point: (" << reading.end_point_x << "," << reading.end_point_y << ")" << endl;
+		std::string relative_move;
+		bool error = false;
+		for(int i=0; i<reading.path_size && !error; ++i)
+		{
+			cout << "Point " << i << " is " << reading.path[i] << endl;
+			switch(reading.path[i])
+			{
+				case UP:
+					relative_move = "RELATIVE_EULER 0.02 0.0 0.0 0.0 0.0 0.0";
+				break;
+				case DOWN:
+					relative_move = "RELATIVE_EULER -0.02 0.0 0.0 0.0 0.0 0.0";
+				break;
+				case LEFT:
+					relative_move = "RELATIVE_EULER 0.0 0.02 0.0 0.0 0.0 0.0";
+				break;
+				case RIGHT:
+					relative_move = "RELATIVE_EULER 0.0 -0.02 0.0 0.0 0.0 0.0";
+				break;
+				default:
+					error = true;
+					sr_ecp_msg->message("Path reading from DisCODe contains error in direction description!");
+				break;
+			}
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, relative_move, lib::irp6p_m::ROBOT_NAME);
+			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+		}
+
+//		char data[64];
+//		sprintf (data, "%i %lf", 0, K_MAX);
+//		set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_EN_LAB, (int) 5, data, lib::irp6p_m::ROBOT_NAME);
+//		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+//
+//
+//
+//		sprintf (data, "%i %lf", 2, K_MAX);
+//		set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_EN_LAB, (int) 5, data, lib::irp6p_m::ROBOT_NAME);
+//		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+
+
+//		sr_ecp_msg->message("Returning from the labyrinth");
+//		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", 0, lib::irp6p_m::ROBOT_NAME);
+//		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+//	}
 
 	sr_ecp_msg->message("mp end");
 }

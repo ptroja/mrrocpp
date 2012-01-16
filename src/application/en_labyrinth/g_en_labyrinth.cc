@@ -49,7 +49,7 @@ bool g_en_lab::first_step()
 	log("g_en_lab::first_step()\n");
 
 	the_robot->ecp_command.instruction_type = lib::GET;
-	the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.set_arm_type = lib::FRAME;
@@ -67,15 +67,15 @@ bool g_en_lab::first_step()
 bool g_en_lab::next_step()
 {
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
-	the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
+	the_robot->ecp_command.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.set_type = ARM_DEFINITION;
-	the_robot->ecp_command.get_arm_type = lib::FRAME;//polozenie w xyz w macierzy 3na4
+	the_robot->ecp_command.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.set_arm_type = lib::FRAME;
 
 	the_robot->ecp_command.interpolation_type = lib::TCIM;
 	the_robot->ecp_command.motion_steps = MOTION_STEPS;
 	the_robot->ecp_command.value_in_step_no = MOTION_STEPS - 3;
-	the_robot->ecp_command.motion_type = lib::ABSOLUTE;//polozenie od srodka postumenta
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 
 
 	if (index == 0)
@@ -138,7 +138,6 @@ bool g_en_lab::next_step()
 
 	k += 0.001;
 	nextFrame.set_translation_vector(trans_vect);
-
 
 	the_robot->ecp_command.arm.pf_def.arm_frame = nextFrame;
 	currentFrame = nextFrame;

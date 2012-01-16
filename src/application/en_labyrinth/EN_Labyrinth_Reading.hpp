@@ -1,11 +1,9 @@
-
-
 #ifndef EN_LABYRINTH_READING_HPP_
 #define EN_LABYRINTH_READING_HPP_
 
-#include "application/visual_servoing/Reading.h"
+#define MAX_PATH_SIZE 64
 
-#define MAX_LAB_LENGTH 50
+#include "application/visual_servoing/Reading.h"
 
 namespace Types {
 namespace Mrrocpp_Proxy {
@@ -27,11 +25,11 @@ public:
 
 	EN_Labyrinth_Reading(const EN_Labyrinth_Reading& o)
 	{
-		std::cout << "EN_Labyrinth_Reading from DisCODe copy constructor: " << std::endl;
-		std::cout << "Solved: " << o.labyrinth_solved << std::endl;
-		std::cout << "Path Size: " << o.path_size << std::endl;
-		std::cout << "Start_pt: (" << o.start_point_x << "," << o.start_point_y << ")" << std::endl;
-		std::cout << "End_pt ("  << o.start_point_x << "," << o.start_point_y << ")" << std::endl;
+//		std::cout << "EN_Labyrinth_Reading from MRROCPP copy constructor: " << std::endl;
+//		std::cout << "Solved: " << o.labyrinth_solved << std::endl;
+//		std::cout << "Path Size: " << o.path_size << std::endl;
+//		std::cout << "Start_pt: (" << o.start_point_x << "," << o.start_point_y << ")" << std::endl;
+//		std::cout << "End_pt ("  << o.end_point_x << "," << o.end_point_y << ")" << std::endl;
 
 		labyrinth_solved = o.labyrinth_solved;
 		path_size = o.path_size;
@@ -39,8 +37,8 @@ public:
 		start_point_y = o.start_point_y;
 		end_point_x = o.end_point_x;
 		end_point_y = o.end_point_y;
-//		for(int i=0; i<o.path_size; ++i)
-//			path[i] = o.path[i];
+		for(int i=0; i<o.path_size; ++i)
+			path[i] = o.path[i];
 	}
 
 	virtual ~EN_Labyrinth_Reading()
@@ -49,11 +47,11 @@ public:
 
 	virtual EN_Labyrinth_Reading* clone()
 	{
-		std::cout << "EN_Labyrinth_Reading from MRROCPP clone():" << std::endl;
-		std::cout << "Solved: " << labyrinth_solved << std::endl;
-		std::cout << "Path Size: " << path_size << std::endl;
-		std::cout << "Start_pt: (" << start_point_x << "," << start_point_y << ")" << std::endl;
-		std::cout << "End_pt ("  << end_point_x << "," << end_point_y << ")" << std::endl;
+//		std::cout << "EN_Labyrinth_Reading from MRROCPP clone():" << std::endl;
+//		std::cout << "Solved: " << labyrinth_solved << std::endl;
+//		std::cout << "Path Size: " << path_size << std::endl;
+//		std::cout << "Start_pt: (" << start_point_x << "," << start_point_y << ")" << std::endl;
+//		std::cout << "End_pt ("  << end_point_x << "," << end_point_y << ")" << std::endl;
 
 		return new EN_Labyrinth_Reading(*this);
 	}
@@ -64,7 +62,7 @@ public:
 	int start_point_y;
 	int end_point_x;
 	int end_point_y;
-//	int path[];
+	int path[MAX_PATH_SIZE];
 
 	virtual void send(boost::shared_ptr<xdr_oarchive<> > & ar)
 	{
@@ -77,11 +75,11 @@ private:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		std::cout << "EN_Labyrinth_Reading from MRROCPP serialize():" << std::endl;
-		std::cout << "Solved: " << labyrinth_solved << std::endl;
-		std::cout << "Path Size: " << path_size << std::endl;
-		std::cout << "Start_pt: (" << start_point_x << "," << start_point_y << ")" << std::endl;
-		std::cout << "End_pt ("  << end_point_x << "," << end_point_y << ")" << std::endl;
+//		std::cout << "EN_Labyrinth_Reading from MRROCPP serialize():" << std::endl;
+//		std::cout << "Solved: " << labyrinth_solved << std::endl;
+//		std::cout << "Path Size: " << path_size << std::endl;
+//		std::cout << "Start_pt: (" << start_point_x << "," << start_point_y << ")" << std::endl;
+//		std::cout << "End_pt ("  << end_point_x << "," << end_point_y << ")" << std::endl;
 
 		ar & boost::serialization::base_object <Reading>(*this);
 		ar & labyrinth_solved;
@@ -90,7 +88,7 @@ private:
 		ar & start_point_y;
 		ar & end_point_x;
 		ar & end_point_y;
-//		ar & path;
+		ar & path;
 	}
 };
 
