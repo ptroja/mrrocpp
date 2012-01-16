@@ -21,8 +21,6 @@ namespace mrrocpp {
 namespace edp {
 namespace smb {
 
-#define CLEANING_ACTIVE 1
-
 using namespace std;
 
 festo_and_inputs::festo_and_inputs(effector &_master) :
