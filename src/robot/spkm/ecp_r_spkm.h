@@ -59,6 +59,11 @@ public:
 	lib::single_thread_port <lib::empty_t> epos_quickstop_command_data_port;
 
 	/**
+	 * @brief epos brake command data port (for the Moog motor only)
+	 */
+	lib::single_thread_port <lib::empty_t> epos_brake_command_data_port;
+
+	/**
 	 * @brief epos clear fault command data port
 	 */
 	lib::single_thread_port <lib::empty_t> epos_clear_fault_data_port;

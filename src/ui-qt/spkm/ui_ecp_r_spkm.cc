@@ -72,6 +72,14 @@ void EcpRobot::stop_motors()
 	execute_motion();
 }
 
+
+void EcpRobot::brake_motors()
+{
+	the_robot->epos_brake_command_data_port.set();
+
+	execute_motion();
+}
+
 }
 } //namespace ui
 } //namespace mrrocpp

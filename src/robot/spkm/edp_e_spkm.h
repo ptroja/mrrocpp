@@ -92,7 +92,7 @@ protected:
 	boost::shared_ptr <maxon::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
 	//! Axes container.
-	boost::array <maxon::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
+	boost::array <boost::shared_ptr<maxon::epos>, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
 
 	//! Handler for the asynchronous execution of the interpolated profile motion
 	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;

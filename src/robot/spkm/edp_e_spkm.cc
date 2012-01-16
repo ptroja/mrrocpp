@@ -149,7 +149,7 @@ void effector::check_controller_state()
 			cachedStatusWords[i] = axes[i]->getStatusWord();
 			// Get current epos state.
 			maxon::epos::actual_state_t state = maxon::epos::status2state(cachedStatusWords[i]);
-			if (axes[i] == axis2.get()) {
+			if (axes[i] == axis2) {
 				switch (state)
 				{
 					//case maxon::epos::SWITCH_ON_DISABLED:
@@ -166,8 +166,10 @@ void effector::check_controller_state()
 						{
 							// Read number of errors.
 							int errNum = axes[i]->getNumberOfErrors();
+
+							// Iterate over error array.
 							for (size_t j = 1; j <= errNum; ++j) {
-								// Get the detailed error.
+								// Get the detailed error code.
 								uint32_t errCode = axes[i]->getErrorHistory(j);
 								// Send message to SR.
 								msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axes[i]->getDeviceName() + ": "
@@ -265,11 +267,14 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 			if (robot_test_mode || !is_synchronised()) {
 				// Zero all motor positions.
 				current_motor_pos[i] = 0;
+
 				// Reset limits.
-				for (size_t i = 0; i < axes.size(); ++i) {
-					// Disable both limits.
-					axes[i]->setMinimalPositionLimit(-0x80000000);
-					axes[i]->setMaximalPositionLimit(+0x7FFFFFFF);
+				if(!robot_test_mode) {
+					for (size_t i = 0; i < axes.size(); ++i) {
+						// Disable both limits.
+						axes[i]->setMinimalPositionLimit(-0x80000000);
+						axes[i]->setMaximalPositionLimit(+0x7FFFFFFF);
+					}
 				}
 			} else {
 				// Get actual motor positions.
@@ -353,13 +358,13 @@ void effector::synchronise(void)
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
 		// Switch to homing mode.
-		BOOST_FOREACH(maxon::epos * node, axes)
+		BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
 		{
 			node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
 		}
 
 		// reset controller
-		BOOST_FOREACH(maxon::epos * node, axes)
+		BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
 		{
 			node->reset();
 		}
@@ -548,14 +553,14 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 
 				if (!robot_test_mode) {
 					// Execute command
-					BOOST_FOREACH(maxon::epos * node, axes)
+					BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
 							{
 								// Brake with Quickstop command
 								node->setState(maxon::epos::QUICKSTOP);
 							}
 
 					// Reset node right after.
-					BOOST_FOREACH(maxon::epos * node, axes)
+					BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
 							{
 								// Brake with Quickstop command
 								node->reset();
@@ -576,7 +581,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 			case lib::spkm::CLEAR_FAULT:
 				DEBUG_COMMAND("CLEAR_FAULT");
 
-				BOOST_FOREACH(maxon::epos * node, axes)
+				BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
 						{
 							node->clearFault();
 						}

@@ -70,6 +70,7 @@ public:
 
 	int execute_clear_fault();
 	int execute_stop_motor();
+	int execute_brake_motor();
 	void edp_create_int_extra_operations();
 
 	void setup_menubar();

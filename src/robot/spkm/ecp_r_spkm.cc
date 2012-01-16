@@ -27,6 +27,8 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 		,
 		epos_quickstop_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager)
 		,
+		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager)
+		,
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
 		,
 		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager)
@@ -48,6 +50,8 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 		epos_external_command_data_port(lib::spkm::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager)
 		,
 		epos_quickstop_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager)
+		,
+		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager)
 		,
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
 		,
@@ -131,6 +135,20 @@ void robot::create_command()
 		// narazie proste przepisanie
 
 		ecp_command.spkm.variant = lib::spkm::QUICKSTOP;
+
+		check_then_set_command_flag(is_new_data);
+	}
+
+	if (epos_brake_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
+		ecp_command.set_type = ARM_DEFINITION;
+		if (!is_synchronised()) {
+			ecp_command.motion_type = lib::RELATIVE;
+			ecp_command.set_arm_type = lib::MOTOR;
+		}
+		// generator command interpretation
+		// narazie proste przepisanie
+
+		ecp_command.spkm.variant = lib::spkm::BRAKE;
 
 		check_then_set_command_flag(is_new_data);
 	}

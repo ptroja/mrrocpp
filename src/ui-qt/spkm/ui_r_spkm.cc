@@ -274,6 +274,18 @@ int UiRobot::execute_stop_motor()
 	return 1;
 }
 
+int UiRobot::execute_brake_motor()
+{
+	try {
+
+		ui_ecp_robot->brake_motors();
+
+	} // end try
+	CATCH_SECTION_IN_ROBOT
+
+	return 1;
+}
+
 }
 } //namespace ui
 } //namespace mrrocpp

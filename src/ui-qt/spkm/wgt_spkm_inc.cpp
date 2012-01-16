@@ -194,6 +194,11 @@ void wgt_spkm_inc::on_pushButton_stop_clicked()
 	robot->execute_stop_motor();
 }
 
+void wgt_spkm_inc::on_pushButton_brake_clicked()
+{
+	robot->execute_brake_motor();
+}
+
 int wgt_spkm_inc::copy()
 {
 
