@@ -1052,6 +1052,11 @@ void epos::setTargetVelocity(INTEGER32 val)
 	}
 }
 
+void epos::setVelocityModeSettingValue(INTEGER32 val)
+{
+	WriteObjectValue(0x206B, 0x00, val);
+}
+
 void epos::setProfileVelocity(UNSIGNED32 val)
 {
 	if (ProfileVelocity != val) {

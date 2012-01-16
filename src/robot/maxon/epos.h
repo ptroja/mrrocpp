@@ -318,6 +318,9 @@ public:
 	//! write velocity for velocity profile mode
 	void setTargetVelocity(INTEGER32 val);
 
+	//! write velocity for velocity mode
+	void setVelocityModeSettingValue(INTEGER32 val);
+
 	//! write velocity normally attained at the end of the acceleration ramp during a profiled move
 	void setProfileVelocity(UNSIGNED32 vel);
 
