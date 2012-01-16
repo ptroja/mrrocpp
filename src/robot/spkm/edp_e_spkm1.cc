@@ -43,11 +43,11 @@ effector::effector(common::shell &_shell) :
 	MotorAmax[3] = 10000UL;
 
 	// Set default motor velocities, accelerations and decelerations for axis 4 - (wrist rotation - "axis 2") - the MOOG motor.
-	Vdefault[4] = 4000UL;
-	MotorVmax[4] = 4000UL;
-	Adefault[4] = 9000UL;
-	Ddefault[4] = 9000UL;
-	MotorAmax[4] = 9000UL;
+	Vdefault[4] = 3000UL;
+	MotorVmax[4] = 3000UL;
+	Adefault[4] = 6000UL;
+	Ddefault[4] = 6000UL;
+	MotorAmax[4] = 6000UL;
 
 	// Set default motor velocities, accelerations and decelerations for axis 5 - (upper wrist rotation - "axis 3").
 	Vdefault[5] = 5000UL;
@@ -66,12 +66,12 @@ effector::effector(common::shell &_shell) :
 		axis3 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 1, "3");
 
 		// Collect axes into common array container.
-		axes[0] = &(*axisA);
-		axes[1] = &(*axisB);
-		axes[2] = &(*axisC);
-		axes[3] = &(*axis1);
-		axes[4] = &(*axis2);
-		axes[5] = &(*axis3);
+		axes[0] = axisA;
+		axes[1] = axisB;
+		axes[2] = axisC;
+		axes[3] = axis1;
+		axes[4] = axis2;
+		axes[5] = axis3;
 
 		// Setup the axis array for the IPM handler
 		{

@@ -64,6 +64,7 @@ private slots:
 	void on_pushButton_importxml_clicked();
 	void on_pushButton_copy_clicked();
 	void on_pushButton_stop_clicked();
+	void on_pushButton_brake_clicked();
 
 	void on_pushButton_execute_clicked();
 	void on_pushButton_0l_clicked();
