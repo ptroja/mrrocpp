@@ -463,11 +463,8 @@ void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_lim
 		epos_.reset();
 
 		// TODO: set max acceleration?
-		epos_.setTargetVelocity(-100);
-		epos_.setControlword(0x000f);
-
-		// Wait for the motor to reach the desired velocity.
-		boost::thread::sleep(boost::get_system_time() + boost::posix_time::milliseconds(20));
+		epos_.setControlword(0x010f);
+		epos_.setVelocityModeSettingValue(-100);
 
 		// Monitor the velocity.
 		boost::system_time wakeup = boost::get_system_time();
@@ -477,16 +474,18 @@ void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_lim
 
 			// Wait for device state to change.
 			boost::thread::sleep(wakeup);
-		} while(epos_.getActualVelocity() < -10);
+
+			std::cout << "Moog motor velocity: " << (int) epos_.getActualVelocityAveraged() << std::endl;
+		} while(epos_.getActualVelocityAveraged() < -10);
 
 		// Halt.
 		epos_.reset();
 
 		try {
 #if 1
-			// Homing: move to the index, followed by an offset.
-			epos_.doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, homing_offset);
-			epos_.monitorHomingStatus();
+//			// Homing: move to the index, followed by an offset.
+//			epos_.doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, homing_offset);
+//			epos_.monitorHomingStatus();
 #else
 			// Profile position mode - reach the zero position.
 			epos_.setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
