@@ -148,6 +148,12 @@ public:
 	 */
 	REGISTER_FATAL_ERROR(fe, "EPOS error");
 
+	/*!
+	 * \brief Exception thrown when the motor jam is detected.
+	 * \author Tomasz Kornuta
+	 */
+	REGISTER_FATAL_ERROR(fe_motor_jam_detected, "Motor jam detected");
+
 	/*! \brief create new EPOS object
 	 *
 	 * @param _device object to access the device
@@ -750,6 +756,9 @@ public:
 
 	/*! \brief does a homing move. Give homing mode (see firmware 9.3) and start position */
 	int doHoming(homing_method_t method, INTEGER32 offset = 0);
+
+	/*! \brief software-only homing to mechanical stop */
+	void doSoftwareHoming(int32_t velocity_, int32_t offset_);
 
 	/*! \brief set OpMode to ProfilePosition and make relative movement */
 	void moveRelative(INTEGER32 steps);

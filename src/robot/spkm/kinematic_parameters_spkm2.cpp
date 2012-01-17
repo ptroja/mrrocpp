@@ -27,6 +27,9 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	// Moog motor homing offset (in [qc]).
 	moog_motor_homing_offset = 376000;
 
+	// Moog motor homing velocity.
+	moog_motor_homing_velocity = -100;
+
 	// Initialization of parameters related to conversion from motor positions to joints.
 	// Parameters for conversion for linear DOFs are:
 	// * Lead roller screw is equal to 5mm.

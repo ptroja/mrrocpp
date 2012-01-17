@@ -120,8 +120,11 @@ public:
 	 * @brief Method responsible for synchronization of the MOOG motor.
 	 *
 	 * Uses velocity and profile position modes instead of the EPOS homing.
+	 * @param epos_ controller.
+	 * @param velocity_ velocity for seeking of the mechanical stop [rpm].
+	 * @param offset_ homing offset [qc].
 	 */
-	void synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_limit_, int32_t  positive_limit_, int32_t homing_offset);
+	void synchronise_moog_motor(maxon::epos & epos_, int32_t velocity_, int32_t offset_);
 
 	/*!
 	 * @brief Disable (thus apply brake) the MOOG motor.

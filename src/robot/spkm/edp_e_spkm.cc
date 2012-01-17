@@ -263,7 +263,7 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		check_controller_state();
 
 		// FIXME: uncomment the following line to allow multiple synchronization without resetting.
-		//controller_state_edp_buf.is_synchronised = false;
+//		controller_state_edp_buf.is_synchronised = false;
 
 		// Copy data to reply buffer
 		reply.controller_state = controller_state_edp_buf;
@@ -390,7 +390,7 @@ void effector::synchronise(void)
 		} while (!finished);
 
 		// Do homing for Moog motor.
-		synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
+		axis2->doSoftwareHoming(PARAMS.moog_motor_homing_velocity, PARAMS.moog_motor_homing_offset);
 
 		// Do homing for another motor.
 		axis1->setOperationMode(maxon::epos::OMD_HOMING_MODE);
@@ -446,62 +446,9 @@ void effector::synchronise(void)
 }
 
 
-void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t negative_limit_, int32_t positive_limit_, int32_t homing_offset)
+void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t velocity_, int32_t offset_)
 {
-	try{
-		// Disable both limits.
-		epos_.disablePositionLimits();
 
-		// Velocity mode in the direction of negative limit.
-		epos_.setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
-		epos_.reset();
-
-		// TODO: set max acceleration?
-		epos_.setControlword(0x010f);
-		epos_.setVelocityModeSettingValue(-100);
-
-		// Start monitoring after some interval for acceleration.
-		boost::system_time wakeup = boost::get_system_time() + boost::posix_time::milliseconds(25);
-
-		// Startup monitoring counter.
-		unsigned int monitor_counter = 0;
-
-		do {
-			// Wait for device state to change.
-			boost::thread::sleep(wakeup);
-
-			// Increment the next wakeup time.
-			wakeup += boost::posix_time::milliseconds(5);
-
-			if(++monitor_counter < 20) {
-				// FIXME: Uncomment the following to debug the wakup/startup timer.
-				// std::cout << "Moog motor velocity: " << (int) epos_.getActualVelocityAveraged() << std::endl;
-			}
-		} while(epos_.getActualVelocityAveraged() < -10);
-
-		// Halt.
-		epos_.reset();
-
-		try {
-			// Homing: move to the index, then continue with an offset.
-			epos_.doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, homing_offset);
-			epos_.monitorHomingStatus();
-		} catch (boost::exception &e_) {
-			// Motor jam!
-			BOOST_THROW_EXCEPTION(fe_motor_jam_detected() << device_name(epos_.getDeviceName()));
-		}
-
-
-		// Revert to the original limits.
-		epos_.setMinimalPositionLimit(negative_limit_ - limit_extension);
-		epos_.setMaximalPositionLimit(positive_limit_ + limit_extension);
-	} catch (...) {
-		// Revert to the original limits anyway.
-		epos_.setMinimalPositionLimit(negative_limit_ - limit_extension);
-		epos_.setMaximalPositionLimit(positive_limit_ + limit_extension);
-		// Rethrow the exception.
-		throw;
-	}
 }
 
 

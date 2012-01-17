@@ -1756,6 +1756,75 @@ UNSIGNED16 epos::getRS232timeout()
 	return ReadObjectValue <UNSIGNED16>(0x2005, 0x00);
 }
 
+void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_)
+{
+	// Get the original limits.
+	INTEGER32 originalMinPositionLimit = getMinimalPositionLimit();
+	INTEGER32 originalMaxPositionLimit = getMaximalPositionLimit();
+
+	try {
+		// Disable both limits.
+		disablePositionLimits();
+
+		// Velocity mode in the direction of negative limit.
+		setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
+		reset();
+
+		// TODO: set max acceleration?
+		setControlword(0x010f);
+		setVelocityModeSettingValue(velocity_);
+
+		// Start monitoring after some interval for acceleration.
+		boost::system_time wakeup = boost::get_system_time() + boost::posix_time::milliseconds(25);
+
+		// Startup monitoring counter.
+		unsigned int monitor_counter = 0;
+
+		do {
+			// Wait for device state to change.
+			boost::thread::sleep(wakeup);
+
+			// Increment the next wakeup time.
+			wakeup += boost::posix_time::milliseconds(5);
+
+			if(++monitor_counter < 20) {
+				// FIXME: Uncomment the following to debug the wakup/startup timer.
+				// std::cout << "Moog motor velocity: " << (int) epos_.getActualVelocityAveraged() << std::endl;
+			}
+		} while(getActualVelocityAveraged() < -10);
+
+		// Halt.
+		setVelocityModeSettingValue(0);
+		reset();
+
+		try {
+			// Homing: move to the index, then continue with an offset.
+			if (offset_ > 0) {
+				doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, offset_);
+			} else if (offset_ < 0) {
+				doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, offset_);
+			} else {
+				doHoming(maxon::epos::HM_ACTUAL_POSITION, 0);
+			}
+
+			monitorHomingStatus();
+		} catch (boost::exception &e_) {
+			// Motor jam!
+			BOOST_THROW_EXCEPTION(fe_motor_jam_detected() << canId(nodeId));
+		}
+
+		// Revert to the original limits.
+		setMinimalPositionLimit(originalMinPositionLimit);
+		setMaximalPositionLimit(originalMaxPositionLimit);
+	} catch (...) {
+		// Revert to the original limits anyway.
+		setMinimalPositionLimit(originalMinPositionLimit);
+		setMaximalPositionLimit(originalMaxPositionLimit);
+		// Rethrow the exception.
+		throw;
+	}
+}
+
 /* run the HomingMode, get the coordinate system zeropoint correct
 
  this is done as shown in "EPOS Application Note: device Programming,
