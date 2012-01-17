@@ -232,8 +232,11 @@ public:
 	/*! \brief ask EPOS for software version */
 	UNSIGNED16 getSWversion();
 
-	/*! \brief read manufactor device name string firmware */
-	std::string getCanDeviceName();
+	/**!
+	 * \brief read manufactor device name string firmware
+	 * \fixme does not work
+	 */
+//	std::string getCanDeviceName();
 
 	/*! \brief ask for RS232 timeout */
 	UNSIGNED16 getRS232timeout();
@@ -317,6 +320,9 @@ public:
 
 	//! write velocity for velocity profile mode
 	void setTargetVelocity(INTEGER32 val);
+
+	//! write velocity for velocity mode
+	void setVelocityModeSettingValue(INTEGER32 val);
 
 	//! write velocity normally attained at the end of the acceleration ramp during a profiled move
 	void setProfileVelocity(UNSIGNED32 vel);

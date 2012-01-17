@@ -65,7 +65,7 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	ui.doubleSpinBox_ml_absolute->setSingleStep(10000);
 	ui.doubleSpinBox_ml_absolute->setDecimals(0);
 
-	ui.doubleSpinBox_ml_relative->setMinimum(-1200000);
+	ui.doubleSpinBox_ml_relative->setMinimum(0);
 	ui.doubleSpinBox_ml_relative->setMaximum(1200000);
 	ui.doubleSpinBox_ml_relative->setSingleStep(10000);
 	ui.doubleSpinBox_ml_relative->setDecimals(0);
@@ -75,7 +75,7 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	ui.doubleSpinBox_ms_absolute->setSingleStep(1000);
 	ui.doubleSpinBox_ms_absolute->setDecimals(0);
 
-	ui.doubleSpinBox_ms_relative->setMinimum(-120000);
+	ui.doubleSpinBox_ms_relative->setMinimum(0);
 	ui.doubleSpinBox_ms_relative->setMaximum(120000);
 	ui.doubleSpinBox_ms_relative->setSingleStep(1000);
 	ui.doubleSpinBox_ms_relative->setDecimals(0);
@@ -392,7 +392,7 @@ void wgt_smb_command::on_radioButton_m_motor_toggled()
 		ui.doubleSpinBox_ml_absolute->setSingleStep(10000);
 		ui.doubleSpinBox_ml_absolute->setDecimals(0);
 
-		ui.doubleSpinBox_ml_relative->setMinimum(-1200000);
+		ui.doubleSpinBox_ml_relative->setMinimum(0);
 		ui.doubleSpinBox_ml_relative->setMaximum(1200000);
 		ui.doubleSpinBox_ml_relative->setSingleStep(10000);
 		ui.doubleSpinBox_ml_relative->setDecimals(0);
@@ -402,7 +402,7 @@ void wgt_smb_command::on_radioButton_m_motor_toggled()
 		ui.doubleSpinBox_ms_absolute->setSingleStep(1000);
 		ui.doubleSpinBox_ms_absolute->setDecimals(0);
 
-		ui.doubleSpinBox_ms_relative->setMinimum(-120000);
+		ui.doubleSpinBox_ms_relative->setMinimum(0);
 		ui.doubleSpinBox_ms_relative->setMaximum(120000);
 		ui.doubleSpinBox_ms_relative->setSingleStep(1000);
 		ui.doubleSpinBox_ms_relative->setDecimals(0);
@@ -424,23 +424,23 @@ void wgt_smb_command::on_radioButton_m_joint_toggled()
 		//	interface.ui_msg->message("on_radioButton_m_joint_clicked");
 
 		// Set decimal properties for the joint-based control.
-		ui.doubleSpinBox_ml_absolute->setMinimum(-6.2831);
-		ui.doubleSpinBox_ml_absolute->setMaximum(6.2831);
+		ui.doubleSpinBox_ml_absolute->setMinimum(-2*M_PI);
+		ui.doubleSpinBox_ml_absolute->setMaximum(2*M_PI);
 		ui.doubleSpinBox_ml_absolute->setSingleStep(0.1);
 		ui.doubleSpinBox_ml_absolute->setDecimals(4);
 
-		ui.doubleSpinBox_ml_relative->setMinimum(-6.2831);
-		ui.doubleSpinBox_ml_relative->setMaximum(6.2831);
+		ui.doubleSpinBox_ml_relative->setMinimum(0);
+		ui.doubleSpinBox_ml_relative->setMaximum(2*M_PI);
 		ui.doubleSpinBox_ml_relative->setSingleStep(0.1);
 		ui.doubleSpinBox_ml_relative->setDecimals(4);
 
-		ui.doubleSpinBox_ms_absolute->setMinimum(-3.1415);
-		ui.doubleSpinBox_ms_absolute->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_absolute->setMinimum(-M_PI);
+		ui.doubleSpinBox_ms_absolute->setMaximum(M_PI);
 		ui.doubleSpinBox_ms_absolute->setSingleStep(0.1);
 		ui.doubleSpinBox_ms_absolute->setDecimals(4);
 
-		ui.doubleSpinBox_ms_relative->setMinimum(-3.1415);
-		ui.doubleSpinBox_ms_relative->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_relative->setMinimum(0);
+		ui.doubleSpinBox_ms_relative->setMaximum(M_PI);
 		ui.doubleSpinBox_ms_relative->setSingleStep(0.1);
 		ui.doubleSpinBox_ms_relative->setDecimals(4);
 
@@ -466,18 +466,18 @@ void wgt_smb_command::on_radioButton_m_ext_toggled()
 		ui.doubleSpinBox_ml_absolute->setSingleStep(1);
 		ui.doubleSpinBox_ml_absolute->setDecimals(0);
 
-		ui.doubleSpinBox_ml_relative->setMinimum(-12);
+		ui.doubleSpinBox_ml_relative->setMinimum(0);
 		ui.doubleSpinBox_ml_relative->setMaximum(12);
 		ui.doubleSpinBox_ml_relative->setSingleStep(1);
 		ui.doubleSpinBox_ml_relative->setDecimals(0);
 
-		ui.doubleSpinBox_ms_absolute->setMinimum(-3.1415);
-		ui.doubleSpinBox_ms_absolute->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_absolute->setMinimum(-M_PI);
+		ui.doubleSpinBox_ms_absolute->setMaximum(M_PI);
 		ui.doubleSpinBox_ms_absolute->setSingleStep(0.1);
 		ui.doubleSpinBox_ms_absolute->setDecimals(4);
 
-		ui.doubleSpinBox_ms_relative->setMinimum(-3.1415);
-		ui.doubleSpinBox_ms_relative->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_relative->setMinimum(0);
+		ui.doubleSpinBox_ms_relative->setMaximum(M_PI);
 		ui.doubleSpinBox_ms_relative->setSingleStep(0.1);
 		ui.doubleSpinBox_ms_relative->setDecimals(4);
 

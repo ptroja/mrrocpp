@@ -287,7 +287,7 @@ unsigned int gateway_epos_usb::ReadObject(WORD *ans, unsigned int ans_len, uint8
 	unsigned int ret = readAnswer(ans, ans_len);
 
 	// check error code
-	checkEPOSerror(E_error);
+	checkCanOpenError(E_error);
 
 	return ret;
 }
@@ -350,9 +350,8 @@ void gateway_epos_usb::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, ui
 		WORD answer[8];
 		readAnswer(answer, 8);
 
-		checkEPOSerror(E_error);
-	}
-	catch (fe_canopen_error & e) {
+		checkCanOpenError(E_error);
+	} catch (boost::exception & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -379,11 +378,11 @@ void gateway_epos_usb::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE su
 		WORD answer[8];
 		readAnswer(answer, 8);
 
-		checkEPOSerror(E_error);
+		checkCanOpenError(E_error);
 
 		toggle = true;
 	}
-	catch (fe_canopen_error & e) {
+	catch (boost::exception & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -410,12 +409,11 @@ void gateway_epos_usb::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t le
 		WORD answer[8];
 		readAnswer(answer, 8);
 
-		checkEPOSerror(E_error);
+		checkCanOpenError(E_error);
 
 		// change the toggle flag value
 		toggle = (toggle) ? false : true;
-	}
-	catch (fe_canopen_error & e) {
+	} catch (boost::exception & e) {
 		e << canId(nodeId);
 		throw;
 	}
@@ -436,7 +434,7 @@ void gateway_epos_usb::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier
 	WORD answer[8];
 	readAnswer(answer, 8);
 
-	checkEPOSerror(E_error);
+	checkCanOpenError(E_error);
 }
 
 void gateway_epos_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8])
@@ -469,7 +467,7 @@ void gateway_epos_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Dat
 		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected answer"));
 	}
 
-	checkEPOSerror(E_error);
+	checkCanOpenError(E_error);
 }
 
 BYTE gateway_epos_usb::getCanID()

@@ -343,6 +343,10 @@ void effector::synchronise(void)
 	DEBUG_METHOD;
 
 	try {
+		// WORKAROUND: remove those two lines!
+//		synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
+//		return;
+
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
 			return;
@@ -352,19 +356,17 @@ void effector::synchronise(void)
 		if (controller_state_edp_buf.robot_in_fault_state)
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
-		// Switch to homing mode.
-		BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
-		{
-			node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-		}
+		// Switch linear axes to homing mode.
+		axisA->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		axisB->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		axisC->setOperationMode(maxon::epos::OMD_HOMING_MODE);
 
-		// reset controller
-		BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
-		{
-			node->reset();
-		}
+		// Enable controller.
+		axisA->reset();
+		axisB->reset();
+		axisC->reset();
 
-		// Do homing of linear axes with preconfigured parameters.
+		// Start homing.
 		axisA->startHoming();
 		axisB->startHoming();
 		axisC->startHoming();
@@ -381,18 +383,11 @@ void effector::synchronise(void)
 		} while (!finished);
 
 		// Do homing for Moog motor.
-#if 1
 		synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
-#else
-		axis2->startHoming();
 
-		// Wait until second homing is finished.
-		while(!axis2->isHomingFinished()) {
-			// Delay between queries.
-			usleep(20000);
-		}
-#endif
 		// Do homing for another motor.
+		axis1->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		axis1->reset();
 		axis1->startHoming();
 
 		// Wait until second homing is finished.
@@ -401,7 +396,9 @@ void effector::synchronise(void)
 			usleep(20000);
 		}
 
-		// Do homing for another motor.
+		// Do homing for yet another motor.
+		axis3->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		axis3->reset();
 		axis3->startHoming();
 
 		// Wait until second homing is finished.
@@ -420,12 +417,6 @@ void effector::synchronise(void)
 			axes[i]->setMinimalPositionLimit(PARAMS.lower_motor_pos_limits[i] - limit_extension);
 			axes[i]->setMaximalPositionLimit(PARAMS.upper_motor_pos_limits[i] + limit_extension);
 		}
-
-		// Move the longest linear axis to the 'zero' position with a fast motion command
-		/*	axisB->writeProfileVelocity(5000UL);
-		 axisB->writeProfileAcceleration(1000UL);
-		 axisB->writeProfileDeceleration(1000UL);
-		 axisB->moveAbsolute(-57500);*/
 
 		// Compute joints positions in the home position
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
@@ -459,45 +450,38 @@ void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_lim
 		epos_.reset();
 
 		// TODO: set max acceleration?
-		epos_.setTargetVelocity(-100);
-		epos_.setControlword(0x000f);
+		epos_.setControlword(0x010f);
+		epos_.setVelocityModeSettingValue(-100);
 
-		// Wait for the motor to reach the desired velocity.
-		boost::thread::sleep(boost::get_system_time() + boost::posix_time::milliseconds(20));
+		// Start monitoring after some interval for acceleration.
+		boost::system_time wakeup = boost::get_system_time() + boost::posix_time::milliseconds(25);
 
-		// Monitor the velocity.
-		boost::system_time wakeup = boost::get_system_time();
+		// Startup monitoring counter.
+		unsigned int monitor_counter = 0;
+
 		do {
-			// Increment the wakeup time.
-			wakeup += boost::posix_time::milliseconds(5);
-
 			// Wait for device state to change.
 			boost::thread::sleep(wakeup);
-		} while(epos_.getActualVelocity() < -10);
+
+			// Increment the next wakeup time.
+			wakeup += boost::posix_time::milliseconds(5);
+
+			if(++monitor_counter < 20) {
+				// FIXME: Uncomment the following to debug the wakup/startup timer.
+				// std::cout << "Moog motor velocity: " << (int) epos_.getActualVelocityAveraged() << std::endl;
+			}
+		} while(epos_.getActualVelocityAveraged() < -10);
 
 		// Halt.
 		epos_.reset();
 
 		try {
-#if 1
-			// Homing: move to the index, followed by an offset.
+			// Homing: move to the index, then continue with an offset.
 			epos_.doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, homing_offset);
 			epos_.monitorHomingStatus();
-#else
-			// Profile position mode - reach the zero position.
-			epos_.setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
-			epos_.setPositionProfileType(0); // Trapezoidal velocity profile.
-		/*	epos_.setProfileVelocity(100);
-			epos_.setProfileAcceleration(1000);
-			epos_.setProfileDeceleration(1000);*/
-			epos_.setTargetPosition(homing_offset);
-			epos_.startRelativeMotion();
-			// Monitor the execution in order to detect the motor clash.
-			// TODO: ?
-#endif
 		} catch (boost::exception &e_) {
 			// Motor jam!
-			BOOST_THROW_EXCEPTION(fe_motor_jam_detected() << device_name(epos_.getCanDeviceName()));
+			BOOST_THROW_EXCEPTION(fe_motor_jam_detected() << device_name(epos_.getDeviceName()));
 		}
 
 
@@ -540,7 +524,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 				// Parse command.
 				parse_motor_command();
 				// Execute motion.
-				execute_motor_motion();
+				execute_motion();
 				// Continue - update the robot state.
 				break;
 			case lib::spkm::QUICKSTOP:
@@ -798,33 +782,9 @@ void effector::parse_motor_command()
 	}
 }
 
-void effector::execute_motor_motion()
+void effector::execute_motion()
 {
 	DEBUG_METHOD;
-
-	if(!robot_test_mode) {
-#if(DEBUG_MOTORS)
-					std::cerr << "MOTOR:\t desired_motor_pos_new[moog] = " << (int) desired_motor_pos_new[4] << endl
-							<< "\t desired_motor_pos_old[moog] = " << (int) desired_motor_pos_old[4] << endl
-							<< "\t current_motor_pos[moog] = " << (int) current_motor_pos[4] << endl;
-#endif
-		// Reset the Moog motor to disable brake if we are going to execute a motion.
-		if (is_synchronised()) {
-			std::cerr << " dupa1\n";
-			// Robot synchronized - absolute motion.
-			if (fabs(desired_motor_pos_new[4] - desired_motor_pos_old[4]) > 1.0) {
-				std::cerr << " dupa2\n";
-				//axis2->reset();
-			}
-		} else {
-			std::cerr << " dupa3\n";
-			// Robot not synchronized - relative motion.
-			if (fabs(desired_motor_pos_new[4]) > 1.0) {
-				std::cerr << " dupa4\n";
-				axis2->reset();
-			}
-		}
-	}
 
 	// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
 	switch (instruction.spkm.motion_variant)
@@ -836,15 +796,19 @@ void effector::execute_motor_motion()
 			for (size_t i = 0; i < axes.size(); ++i) {
 				if (is_synchronised()) {
 #if(DEBUG_MOTORS)
-					std::cerr << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
+					std::cerr << "MOTOR: absolute[" << i << "] ( " << (int) desired_motor_pos_old[i] << "->" << (int) desired_motor_pos_new[i] << ")" << endl;
 #endif
 					if (!robot_test_mode) {
 						// Skip commanding motor if target and last positions and equal.
-						if (fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i]) > 1.0)
+						if (fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i]) < 1.0)
 							continue;
 						axes[i]->setProfileVelocity(Vdefault[i]);
 						axes[i]->setProfileAcceleration(Adefault[i]);
 						axes[i]->setProfileDeceleration(Ddefault[i]);
+
+						// Re-enable the moog motor;
+						if(axes[i] == axis2) axes[i]->reset();
+
 						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 					} else {
 						current_joints[i] = desired_joints[i];
@@ -852,7 +816,7 @@ void effector::execute_motor_motion()
 					}
 				} else {
 #if(DEBUG_MOTORS)
-					std::cerr << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
+					std::cerr << "MOTOR: relative[" << i << "] ( " << (int) desired_motor_pos_old[i] << "->" << (int) desired_motor_pos_new[i] << ")" << endl;
 #endif
 					if (!robot_test_mode) {
 						if (fabs(desired_motor_pos_new[i]) < 1.0)
@@ -861,6 +825,10 @@ void effector::execute_motor_motion()
 						axes[i]->setProfileVelocity(Vdefault[i]);
 						axes[i]->setProfileAcceleration(Adefault[i]);
 						axes[i]->setProfileDeceleration(Ddefault[i]);
+
+						// Re-enable the moog motor;
+						if(axes[i] == axis2) axes[i]->reset();
+
 						axes[i]->moveRelative(desired_motor_pos_new[i]);
 					} else {
 						current_joints[i] += desired_joints[i];
@@ -955,6 +923,9 @@ void effector::execute_motor_motion()
 
 						// Set new motion target
 						axes[i]->setTargetPosition(desired_motor_pos_new[i]);
+
+						// Re-enable the moog motor;
+						if(axes[i] == axis2) axes[i]->reset();
 					}
 				}
 
