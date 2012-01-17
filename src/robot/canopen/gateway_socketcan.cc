@@ -15,6 +15,8 @@
 #include <linux/can.h>
 #include <linux/can/raw.h>
 
+#include <boost/throw_exception.hpp>
+
 #include "gateway_socketcan.h"
 
 namespace mrrocpp {
@@ -26,7 +28,7 @@ gateway_socketcan::gateway_socketcan(const std::string & _iface) :
 	sdo_timeout(boost::posix_time::milliseconds(500))
 {
 	if(iface.length() >= IFNAMSIZ) {
-		throw fe_canopen_error() << reason("name of CAN device too long");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("name of CAN device too long"));
 	}
 }
 
@@ -42,7 +44,7 @@ void gateway_socketcan::open()
 
 	if (sock == -1) {
 		perror("socket()");
-		throw fe_canopen_error() << reason("failed to create a CAN socket");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("failed to create a CAN socket"));
 	}
 
 	/* Locate the interface you wish to use */
@@ -59,7 +61,7 @@ void gateway_socketcan::open()
 
 	if(::bind(sock, (struct sockaddr*) &addr, sizeof(addr)) == -1) {
 		perror("bind()");
-		throw fe_canopen_error() << reason("failed to bind to a CAN interface");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("failed to bind to a CAN interface"));
 	}
 
 	device_opened = true;
@@ -68,7 +70,7 @@ void gateway_socketcan::open()
 void gateway_socketcan::close()
 {
 	if(::close(sock) == -1) {
-		throw fe_canopen_error() << reason("failed to close CAN socket");;
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("failed to close CAN socket"));
 	}
 
 	device_opened = false;
@@ -91,14 +93,14 @@ canid_t gateway_socketcan::readFromWire(struct can_frame & frame)
 
 	// Check the result
 	if (ret == -1) {
-		 throw fe_canopen_error() << errno_call("select") << errno_code(errno);
+		 BOOST_THROW_EXCEPTION(fe_canopen_error() << errno_call("select") << errno_code(errno));
 	} else if (ret == 0) {
-		 throw fe_canopen_error() << reason("timeout reading from CAN interface");
+		 BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("timeout reading from CAN interface"));
 	}
 
 	// Assert, that data comes from the CAN interface
 	if (!FD_ISSET(sock, &rfds)) {
-		throw fe_canopen_error() << reason("CAN interface not ready to read");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("CAN interface not ready to read"));
 	}
 
     /* read frame */
@@ -127,14 +129,14 @@ void gateway_socketcan::writeToWire(const struct can_frame & frame)
 
 	// Check the result
 	if (ret == -1) {
-		 throw fe_canopen_error() << errno_call("select") << errno_code(errno);
+		 BOOST_THROW_EXCEPTION(fe_canopen_error() << errno_call("select") << errno_code(errno));
 	} else if (ret == 0) {
-		 throw fe_canopen_error() << reason("timeout writing to CAN interface");
+		 BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("timeout writing to CAN interface"));
 	}
 
 	// Assert, that data comes from the CAN interface
 	if (!FD_ISSET(sock, &wfds)) {
-		throw fe_canopen_error() << reason("CAN interface not ready to write");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("CAN interface not ready to write"));
 	}
 
     /* send frame */
