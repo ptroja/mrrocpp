@@ -61,9 +61,7 @@ effector::effector(common::shell &_shell) :
 		// Create epos objects according to CAN ID-mapping.
 		axisA = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 5, "A");
 		axisB = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 4, "B");
-// FIXME FOR SURE!!
-		axisC = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 4, "B");
-//		axisC = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 6, "C");
+		axisC = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 6, "C");
 
 		axis1 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 3, "1");
 		axis2 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 2, "2");
