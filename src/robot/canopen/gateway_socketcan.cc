@@ -16,6 +16,7 @@
 #include <linux/can/raw.h>
 
 #include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
 
 #include "gateway_socketcan.h"
 
@@ -43,8 +44,7 @@ void gateway_socketcan::open()
 	sock = ::socket(PF_CAN, SOCK_RAW, CAN_RAW);
 
 	if (sock == -1) {
-		perror("socket()");
-		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("failed to create a CAN socket"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("failed to create a CAN socket") << errno_call("socket") << errno_code(errno));
 	}
 
 	/* Locate the interface you wish to use */
@@ -60,8 +60,7 @@ void gateway_socketcan::open()
 	addr.can_ifindex = ifr.ifr_ifindex;
 
 	if(::bind(sock, (struct sockaddr*) &addr, sizeof(addr)) == -1) {
-		perror("bind()");
-		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("failed to bind to a CAN interface"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("failed to bind to a CAN interface") << errno_call("bind") << errno_code(errno));
 	}
 
 	device_opened = true;
@@ -70,7 +69,7 @@ void gateway_socketcan::open()
 void gateway_socketcan::close()
 {
 	if(::close(sock) == -1) {
-		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("failed to close CAN socket"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("failed to close CAN socket") << errno_call("close") << errno_code(errno));
 	}
 
 	device_opened = false;
@@ -105,8 +104,7 @@ canid_t gateway_socketcan::readFromWire(struct can_frame & frame)
 
     /* read frame */
     if (::read(sock, &frame, sizeof(frame)) != sizeof(frame)) {
-        perror("read()");
-        BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("read from CAN socket failed"));
+        BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("read from CAN socket failed") << errno_call("read") << errno_code(errno));
     }
 
     return (frame.can_id);
@@ -141,8 +139,7 @@ void gateway_socketcan::writeToWire(const struct can_frame & frame)
 
     /* send frame */
     if (::write(sock, &frame, sizeof(frame)) != sizeof(frame)) {
-        perror("write()");
-        BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("write to CAN socket failed"));
+        BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("write to CAN socket failed") << errno_call("write") << errno_code(errno));
     }
 }
 

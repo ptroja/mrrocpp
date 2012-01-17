@@ -12,6 +12,9 @@
 #include <termios.h> /* POSIX terminal control definitions */
 #include <sys/select.h>
 
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+
 #include "gateway_epos_rs232.h"
 
 /*! \brief try NTRY times to read one byte from EPOS, then give up */
@@ -54,8 +57,7 @@ void gateway_epos_rs232::open()
 	}
 
 	if (ep == -1) {
-		perror("open()");
-		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("open serial port"));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("open serial port") << errno_call("open") << errno_code(errno));
 	}
 
 	if (tcgetattr(ep, &options) < 0) {
@@ -86,8 +88,7 @@ void gateway_epos_rs232::close()
 {
 	if (ep >= 0) {
 		if (::close(ep) != 0) {
-			perror("close()");
-			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("serial port already opened"));
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("serial port close") << errno_call("close") << errno_code(errno));
 		}
 	}
 
