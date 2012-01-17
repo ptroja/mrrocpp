@@ -39,6 +39,49 @@ const uint32_t effector::Adefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
 // Maximum deceleration: legs (verified for 4000 rpm/s), pkm (verified for 4000 rpm/s).
 const uint32_t effector::Ddefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
 
+effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
+		motor_driven_effector(_shell, l_robot_name, instruction, reply), cleaning_active(false)
+{
+	DEBUG_METHOD;
+
+	number_of_servos = lib::smb::NUM_OF_SERVOS;
+
+	cleaning_active = config.exists_and_true("cleaning_active");
+
+	// Check whether rotation of the PKM (upper SMB platform) is disabled or enabled.
+	pkm_rotation_disabled = config.exists_and_true("disable_pkm_rotation");
+
+	// Create manipulator kinematic model.
+	create_kinematic_models_for_given_robot();
+
+	if (!robot_test_mode) {
+		// Create gateway object.
+		if (this->config.exists("can_iface")) {
+			gateway =
+					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
+		} else {
+			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
+		}
+
+		// Connect to the gateway.
+		gateway->open();
+
+		// Create epos objects according to CAN ID-mapping.
+		legs_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8, "legs rotation");
+		pkm_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 9, "PKM rotation");
+
+		// Collect axes into common array container.
+		axes[0] = &(*legs_rotation_node);
+		axesNames[0] = "legs";
+		axes[1] = &(*pkm_rotation_node);
+		axesNames[1] = "pkm";
+
+		// Create festo node.
+		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, FESTO_ADRESS);
+	}
+
+}
+
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
 	DEBUG_METHOD;
@@ -60,55 +103,61 @@ void effector::synchronise(void)
 		if (controller_state_edp_buf.robot_in_fault_state)
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
-		// Step 1: Setup velocity control with analog setpoint.
-		pkm_rotation_node->setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
+		// If PKM motor enabled, perform the synchronization.
+		if (!pkm_rotation_disabled) {
+			// Step 1: Setup velocity control with analog setpoint.
+			pkm_rotation_node->setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
 
-		// Velocity and acceleration limits.
-		pkm_rotation_node->setMaxProfileVelocity(50);
-		pkm_rotation_node->setMaxAcceleration(1000);
+			// Velocity and acceleration limits.
+			pkm_rotation_node->setMaxProfileVelocity(50);
+			pkm_rotation_node->setMaxAcceleration(1000);
 
-		// NOTE: We assume, that scaling and offset are already set in the EPOS2
+			// NOTE: We assume, that scaling and offset are already set in the EPOS2.
 
-		// Start motion.
-		pkm_rotation_node->setControlword(0x000F);
+			// Start motion.
+			pkm_rotation_node->setControlword(0x000F);
 
-		// Enable analog velocity setpoint.
-		pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, true, false);
+			// Enable analog velocity setpoint.
+			pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, true, false);
 
-		// Setup timer for monitoring.
-		boost::system_time wakeup = boost::get_system_time();
+			// Setup timer for monitoring.
+			boost::system_time wakeup = boost::get_system_time();
 
-		// Loop until reaching zero offset.
-		printf("\n");
-		while (pkm_rotation_node->getAnalogInput1() != pkm_zero_position_voltage) {
-			printf("\rSMB calibration: Desired =%+10d[mv] | Actual  =%+10d[mv] | Offset  =%+10d[mv]", (int) pkm_zero_position_voltage, (int) pkm_rotation_node->getAnalogInput1(), (int) pkm_rotation_node->getAnalogVelocitySetpoint());
-			fflush(stdout);
+			// Loop until reaching zero offset.
+			printf("\n");
+			while (pkm_rotation_node->getAnalogInput1() != pkm_zero_position_voltage) {
+				printf("\rSMB calibration: Desired =%+10d[mv] | Actual  =%+10d[mv] | Offset  =%+10d[mv]", (int) pkm_zero_position_voltage, (int) pkm_rotation_node->getAnalogInput1(), (int) pkm_rotation_node->getAnalogVelocitySetpoint());
+				fflush(stdout);
 
-			// Sleep for a constant period of time
-			wakeup += boost::posix_time::milliseconds(5);
+				// Sleep for a constant period of time
+				wakeup += boost::posix_time::milliseconds(5);
 
-			boost::thread::sleep(wakeup);
-		}
-		printf("\n");
+				boost::thread::sleep(wakeup);
+			}
+			printf("\n");
 
-		// Disable analog velocity setpoint.
-		pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, false, false);
+			// Disable analog velocity setpoint.
+			pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, false, false);
 
-		// Restore velocity and acceleration limits.
-		pkm_rotation_node->setMaxProfileVelocity(Vdefault[1]);
-		pkm_rotation_node->setMaxAcceleration(Adefault[1]);
+			// Restore velocity and acceleration limits.
+			pkm_rotation_node->setMaxProfileVelocity(Vdefault[1]);
+			pkm_rotation_node->setMaxAcceleration(Adefault[1]);
 
-		// Step 2: Homing.
-		// Activate homing mode.
-		pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, pkm_zero_position_offset);
-		// Step-by-step homing in order to omit the offset setting (the value will be stored in the EPOS for every agent separatelly).
-		/*		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-		 pkm_rotation_node->reset();
-		 pkm_rotation_node->startHoming();
-		 pkm_rotation_node->monitorHomingStatus();*/
+			// Step 2: Homing.
+			// Activate homing mode.
+			pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, pkm_zero_position_offset);
+			// Step-by-step homing in order to omit the offset setting (the value will be stored in the EPOS for every agent separatelly).
+			/*		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+			 pkm_rotation_node->reset();
+			 pkm_rotation_node->startHoming();
+			 pkm_rotation_node->monitorHomingStatus();*/
+		}/* else {
+		 // If disabled - get only the actual position
+		 current_motor_pos[1] = axes[1]->getActualPosition();
+		 }
 
-		// Compute joints positions in the home position
-		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+		 // Compute joints positions in the home position
+		 get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);*/
 
 		// Homing of the motor controlling the legs rotation - set current position as 0.
 		//legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
@@ -190,7 +239,11 @@ void effector::check_controller_state()
 		}
 	}
 	// Robot is synchronized if only one axis - the one controlling the PKM rotation - is referenced.
-	controller_state_edp_buf.is_synchronised = axes[1]->isReferenced();
+	if (pkm_rotation_disabled) {
+		controller_state_edp_buf.is_synchronised = true;
+	} else {
+		controller_state_edp_buf.is_synchronised = axes[1]->isReferenced();
+	}
 	// Check whether robot is powered.
 	controller_state_edp_buf.is_power_on = (powerOn == axes.size());
 	// Check fault state.
@@ -273,46 +326,6 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 	}
 }
 
-effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-		motor_driven_effector(_shell, l_robot_name, instruction, reply), cleaning_active(false)
-{
-	DEBUG_METHOD;
-
-	number_of_servos = lib::smb::NUM_OF_SERVOS;
-
-	cleaning_active = config.exists_and_true("cleaning_active");
-
-	// Create manipulator kinematic model.
-	create_kinematic_models_for_given_robot();
-
-	if (!robot_test_mode) {
-		// Create gateway object.
-		if (this->config.exists("can_iface")) {
-			gateway =
-					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
-		} else {
-			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
-		}
-
-		// Connect to the gateway.
-		gateway->open();
-
-		// Create epos objects according to CAN ID-mapping.
-		legs_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8, "legs rotation");
-		pkm_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 9, "PKM rotation");
-
-		// Collect axes into common array container.
-		axes[0] = &(*legs_rotation_node);
-		axesNames[0] = "legs";
-		axes[1] = &(*pkm_rotation_node);
-		axesNames[1] = "pkm";
-
-		// Create festo node.
-		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, FESTO_ADRESS);
-	}
-
-}
-
 lib::smb::ALL_LEGS_VARIANT effector::current_legs_state(void)
 {
 	return fai->current_legs_state;
@@ -333,7 +346,6 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 		{
 			case lib::smb::POSE:
 				DEBUG_COMMAND("POSE");
-
 				// Control the two SMB rotational motors.
 				// Parse command.
 				parse_motor_command();
@@ -383,10 +395,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 				fai->command();
 				// If all legs are currently OUT then reset legs rotation.
 				if (current_legs_state() == lib::smb::ALL_OUT) {
-					/*// Homing of the motor controlling the legs rotation - set current position as 0.
-					 legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
-					 legs_rotation_node->monitorHomingStatus();*/
-					// Instead of homing - set current position as zero.
+					// Set current position as zero.
 					if (!robot_test_mode) {
 						legs_relative_zero_position = legs_rotation_node->getActualPosition();
 					}
@@ -526,36 +535,53 @@ void effector::execute_motor_motion()
 		cout << "MOTOR: absolute:" << desired_motor_pos_new.transpose() << endl;
 #endif
 		// Robot is synchronized.
-		for (size_t i = 0; i < axes.size(); ++i) {
-			if (!robot_test_mode) {
-				// Set velocity and acceleration values.
-				axes[i]->setProfileVelocity(Vdefault[i]);
-				axes[i]->setProfileAcceleration(Adefault[i]);
-				axes[i]->setProfileDeceleration(Ddefault[i]);
-				// In case of legs rotation node...
-				if (i == 0)
-					// ... perform the relative move.
-					axes[i]->moveAbsolute(desired_motor_pos_new[i] + legs_relative_zero_position);
-				else
-					axes[i]->moveAbsolute(desired_motor_pos_new[i]);
-			} else {
+		if (!robot_test_mode) {
+			// Perform legs rotation.
+			// Set velocity and acceleration values.
+			legs_rotation_node->setProfileVelocity(Vdefault[0]);
+			legs_rotation_node->setProfileAcceleration(Adefault[0]);
+			legs_rotation_node->setProfileDeceleration(Ddefault[0]);
+			// In case of legs rotation node perform the relative move.
+			legs_rotation_node->moveAbsolute(desired_motor_pos_new[0] + legs_relative_zero_position);
+
+			// Perform pkm rotation.
+			// Set velocity and acceleration values.
+			if (!pkm_rotation_disabled) {
+				pkm_rotation_node->setProfileVelocity(Vdefault[1]);
+				pkm_rotation_node->setProfileAcceleration(Adefault[1]);
+				pkm_rotation_node->setProfileDeceleration(Ddefault[1]);
+				pkm_rotation_node->moveAbsolute(desired_motor_pos_new[1]);
+			}
+		} else {
+			for (size_t i = 0; i < axes.size(); ++i) {
 				// Virtually "move" to desired absolute position.
 				current_motor_pos[i] = desired_motor_pos_new[i];
-			}
-		} //: for
+			} //: for
+		}
 	} else {
 #if(DEBUG_MOTORS)
 		cout << "MOTOR: relative:" << desired_motor_pos_new.transpose() << endl;
 #endif
 		// Robot unsynchronized.
-		for (size_t i = 0; i < axes.size(); ++i) {
-			if (!robot_test_mode) {
-				// Set velocity and acceleration values.
-				axes[i]->setProfileVelocity(Vdefault[i]);
-				axes[i]->setProfileAcceleration(Adefault[i]);
-				axes[i]->setProfileDeceleration(Ddefault[i]);
-				axes[i]->moveRelative(desired_motor_pos_new[i]);
-			} else {
+		if (!robot_test_mode) {
+			// Perform legs rotation.
+			// Set velocity and acceleration values.
+			legs_rotation_node->setProfileVelocity(Vdefault[0]);
+			legs_rotation_node->setProfileAcceleration(Adefault[0]);
+			legs_rotation_node->setProfileDeceleration(Ddefault[0]);
+			// In case of legs rotation node perform the relative move.
+			legs_rotation_node->moveRelative(desired_motor_pos_new[0]);
+
+			// Perform pkm rotation.
+			// Set velocity and acceleration values.
+			if (!pkm_rotation_disabled) {
+				pkm_rotation_node->setProfileVelocity(Vdefault[1]);
+				pkm_rotation_node->setProfileAcceleration(Adefault[1]);
+				pkm_rotation_node->setProfileDeceleration(Ddefault[1]);
+				pkm_rotation_node->moveRelative(desired_motor_pos_new[1]);
+			}
+		} else {
+			for (size_t i = 0; i < axes.size(); ++i) {
 				// Virtually "move" to desired relative position.
 				current_motor_pos[i] += desired_motor_pos_new[i];
 			}
