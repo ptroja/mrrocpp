@@ -101,23 +101,20 @@ void festo_and_inputs::set_all_legs_unchecked()
 
 bool festo_and_inputs::is_upper_halotron_active(int leg_number)
 {
-
 	switch (leg_number)
 	{
 		case 1:
 			return epos_inputs[EPOS_L1_HAL_UP];
-			break;
 		case 2:
 			return epos_inputs[EPOS_L2_HAL_UP];
-			break;
 		case 3:
 			return epos_inputs[EPOS_L3_HAL_UP];
-			break;
 		default:
 			BOOST_THROW_EXCEPTION(unexpected_case_within_switch());
 			break;
 	}
-//	return epos_inputs[2 * leg_number + 9];
+
+	// Safe fallback value.
 	return false;
 }
 
@@ -127,10 +124,8 @@ bool festo_and_inputs::is_lower_halotron_active(int leg_number)
 	{
 		case 1:
 			return epos_inputs[EPOS_L1_HAL_DOWN];
-			break;
 		case 2:
 			return epos_inputs[EPOS_L2_HAL_DOWN];
-			break;
 		case 3:
 			return epos_inputs[EPOS_L3_HAL_DOWN];
 			break;
@@ -138,7 +133,8 @@ bool festo_and_inputs::is_lower_halotron_active(int leg_number)
 			BOOST_THROW_EXCEPTION(unexpected_case_within_switch());
 			break;
 	}
-	//return epos_inputs[2 * leg_number + 8];
+
+	// Safe fallback value.
 	return false;
 }
 
@@ -159,17 +155,13 @@ void festo_and_inputs::set_detach(int leg_number, bool value)
 	{
 		case 1:
 			desired_output[FESTO_C1_GROUP][FESTO_C1_BIT_TO_SET] = value;
-
 			break;
 		case 2:
 			desired_output[FESTO_C2_GROUP][FESTO_C2_BIT_TO_SET] = value;
-
 			break;
 		case 3:
 			desired_output[FESTO_C3_GROUP][FESTO_C3_BIT_TO_SET] = value;
-
 			break;
-
 		default:
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
@@ -182,21 +174,16 @@ void festo_and_inputs::set_move_in(int leg_number, bool value)
 	{
 		case 1:
 			desired_output[FESTO_CY11_GROUP][FESTO_CY11_BIT_TO_SET] = value;
-
 			break;
 		case 2:
 			desired_output[FESTO_CY21_GROUP][FESTO_CY21_BIT_TO_SET] = value;
-
 			break;
 		case 3:
 			desired_output[FESTO_CY31_GROUP][FESTO_CY31_BIT_TO_SET] = value;
-
 			break;
-
 		default:
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
-
 	}
 }
 
@@ -206,48 +193,37 @@ void festo_and_inputs::set_move_out(int leg_number, bool value)
 	{
 		case 1:
 			desired_output[FESTO_CY12_GROUP][FESTO_CY12_BIT_TO_SET] = value;
-
 			break;
 		case 2:
 			desired_output[FESTO_CY22_GROUP][FESTO_CY22_BIT_TO_SET] = value;
-
 			break;
 		case 3:
 			desired_output[FESTO_CY32_GROUP][FESTO_CY32_BIT_TO_SET] = value;
-
 			break;
-
 		default:
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
-
 	}
 }
 
 void festo_and_inputs::set_clean(int leg_number, bool value)
 {
-
 	if (master.cleaning_active) {
 
 		switch (leg_number)
 		{
 			case 1:
 				desired_output[FESTO_CH1_GROUP][FESTO_CH1_BIT_TO_SET] = value;
-
 				break;
 			case 2:
 				desired_output[FESTO_CH2_GROUP][FESTO_CH2_BIT_TO_SET] = value;
-
 				break;
 			case 3:
 				desired_output[FESTO_CH3_GROUP][FESTO_CH3_BIT_TO_SET] = value;
-
 				break;
-
 			default:
 				BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 				break;
-
 		}
 	}
 }
@@ -281,9 +257,7 @@ void festo_and_inputs::determine_legs_state()
 				break;
 			default:
 				break;
-
 		}
-
 	}
 }
 
