@@ -256,7 +256,7 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		check_controller_state();
 
 		// FIXME: uncomment the following line to allow multiple synchronization without resetting.
-		controller_state_edp_buf.is_synchronised = false;
+		//controller_state_edp_buf.is_synchronised = false;
 
 		// Copy data to reply buffer
 		reply.controller_state = controller_state_edp_buf;
@@ -344,8 +344,8 @@ void effector::synchronise(void)
 
 	try {
 		// WORKAROUND: remove those two lines!
-		synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
-		return;
+//		synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
+//		return;
 
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
@@ -356,19 +356,17 @@ void effector::synchronise(void)
 		if (controller_state_edp_buf.robot_in_fault_state)
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
-		// Switch to homing mode.
-		BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
-		{
-			node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-		}
+		// Switch linear axes to homing mode.
+		axisA->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		axisB->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		axisC->setOperationMode(maxon::epos::OMD_HOMING_MODE);
 
-		// reset controller
-		BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
-		{
-			node->reset();
-		}
+		// Enable controller.
+		axisA->reset();
+		axisB->reset();
+		axisC->reset();
 
-		// Do homing of linear axes with preconfigured parameters.
+		// Start homing.
 		axisA->startHoming();
 		axisB->startHoming();
 		axisC->startHoming();
@@ -385,18 +383,11 @@ void effector::synchronise(void)
 		} while (!finished);
 
 		// Do homing for Moog motor.
-#if 1
 		synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
-#else
-		axis2->startHoming();
 
-		// Wait until second homing is finished.
-		while(!axis2->isHomingFinished()) {
-			// Delay between queries.
-			usleep(20000);
-		}
-#endif
 		// Do homing for another motor.
+		axis1->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		axis1->reset();
 		axis1->startHoming();
 
 		// Wait until second homing is finished.
@@ -405,7 +396,9 @@ void effector::synchronise(void)
 			usleep(20000);
 		}
 
-		// Do homing for another motor.
+		// Do homing for yet another motor.
+		axis3->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		axis3->reset();
 		axis3->startHoming();
 
 		// Wait until second homing is finished.
@@ -424,12 +417,6 @@ void effector::synchronise(void)
 			axes[i]->setMinimalPositionLimit(PARAMS.lower_motor_pos_limits[i] - limit_extension);
 			axes[i]->setMaximalPositionLimit(PARAMS.upper_motor_pos_limits[i] + limit_extension);
 		}
-
-		// Move the longest linear axis to the 'zero' position with a fast motion command
-		/*	axisB->writeProfileVelocity(5000UL);
-		 axisB->writeProfileAcceleration(1000UL);
-		 axisB->writeProfileDeceleration(1000UL);
-		 axisB->moveAbsolute(-57500);*/
 
 		// Compute joints positions in the home position
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
