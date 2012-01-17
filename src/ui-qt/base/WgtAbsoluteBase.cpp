@@ -80,6 +80,7 @@ void WgtAbsoluteBase::synchro_depended_widgets_disable(bool set_disabled)
 		current_pos_spin_boxes[i]->setDisabled(set_disabled);
 		desired_pos_spin_boxes[i]->setDisabled(set_disabled);
 	}
+
 }
 
 void WgtAbsoluteBase::inc_move_left_button_clicked(int button)

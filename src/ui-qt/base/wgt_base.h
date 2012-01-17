@@ -22,7 +22,7 @@ class UiRobot;
 
 class wgt_base : public QWidget //TODO: zmienić dziedziczenie na QDockWidget!
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	wgt_base(const QString & _widget_label, mrrocpp::ui::common::Interface & _interface, QWidget *parent = 0);
@@ -68,7 +68,7 @@ protected:
 	QPushButton* create_button_to_vector(QVector <QPushButton *> &buttons, QString label);
 	QPushButton* add_button(QString label, int x, int y, int rowSpan, int columnSpan);
 
-signals:
+	signals:
 	void synchro_depended_init_signal();
 	void init_and_copy_signal();
 

@@ -10,6 +10,7 @@
 #include <bitset>
 
 #include "../canopen/gateway_epos_usb.h"
+#include "../canopen/gateway_socketcan.h"
 
 #include "../festo/cpv.h"
 #include "../maxon/epos.h"
@@ -25,7 +26,8 @@ const uint8_t nodeId = 10;
 
 int main(int argc, char *argv[])
 {
-	gateway_epos_usb gateway;
+	//gateway_epos_usb gateway;
+	gateway_socketcan gateway("can0");
 
 	cpv cpv10(gateway, nodeId);
 
@@ -81,7 +83,7 @@ int main(int argc, char *argv[])
 			 sleep(2);
 			 */
 			// Move the pistons up
-			cpv10.setOutputs(FESTO_CY11_GROUP, FESTO_CY11_BIT);
+			//		cpv10.setOutputs(FESTO_CY11_GROUP, FESTO_CY11_BIT);
 			sleep(3);
 			epos_digits = node.getDInput();
 			std::cout << "epos digital inputs 1= " << epos_digits << std::endl;
@@ -89,7 +91,8 @@ int main(int argc, char *argv[])
 			cpv10.setOutputs(1, 0x00);
 			cpv10.setOutputs(2, 0x00);
 			sleep(2);
-			cpv10.setOutputs(FESTO_CY12_GROUP, FESTO_CY12_BIT);
+			cpv10.setOutputs(FESTO_C1_GROUP, FESTO_C1_BIT);
+			cpv10.setOutputs(FESTO_C2_GROUP, FESTO_C2_BIT | FESTO_C3_BIT);
 			sleep(5);
 			epos_digits = node.getDInput();
 			std::cout << "epos digital inputs 2= " << epos_digits << std::endl;

@@ -38,7 +38,7 @@ class EcpRobot;
 
 class UiRobot : public common::UiRobot
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 
@@ -57,8 +57,7 @@ public:
 	UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name);
 
 	void manage_interface();
-	void delete_ui_ecp_robot();
-	void null_ui_ecp_robot();
+
 	void synchronise();
 	int synchronise_int();
 
@@ -71,9 +70,8 @@ public:
 
 	int execute_clear_fault();
 	int execute_stop_motor();
+	int execute_brake_motor();
 	void edp_create_int_extra_operations();
-	int ui_get_edp_pid();
-	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 
 	void setup_menubar();
 

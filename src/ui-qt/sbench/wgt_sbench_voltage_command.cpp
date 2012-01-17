@@ -1,3 +1,13 @@
+/*!
+ * @file
+ * @brief File contains wgt_sbench_voltage_command class definition for SwarmItFix Bench
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sbench
+ */
+
+
+
 #include "../sbench/ui_ecp_r_sbench.h"
 #include "../sbench/ui_r_sbench.h"
 #include "robot/sbench/const_sbench.h"

@@ -31,7 +31,7 @@ namespace sbench {
 const std::string COMMAND_DATA_VOLTAGE_PORT = "SBENCH_COMMAND_VOLTAGE_DATA_PORT";
 
 /*!
- * @brief SwarmItFix bench pins preasure activation command data port
+ * @brief SwarmItFix bench pins preasure (cleaning) activation command data port
  * @ingroup sbench
  */
 const std::string COMMAND_DATA_PREASURE_PORT = "SBENCH_COMMAND_PREASURE_DATA_PORT";
@@ -52,7 +52,7 @@ enum CBUFFER_VARIANT
 };
 
 /*!
- * @brief SwarmItFix bench pins state typedef
+ * @brief bench pins state typedef
  * @ingroup sbench
  */
 
@@ -70,11 +70,16 @@ public:
 
 	pins_buffer();
 
+	//! clears translation table
 	void set_zeros();
 
+	//! sets the value due to the translation table
 	void set_value(int row, int column, bool value);
-	bool get_value(int row, int column) const;
 
+	//! gets the value due to the translation table
+	bool get_value(int row, int column);
+
+	//! checks if any value in translation table is doubled
 	bool is_any_doubled_value();
 
 private:
@@ -91,7 +96,7 @@ private:
 };
 
 /*!
- * @brief SwarmItFix bench pins state typedef
+ * @brief voltage (power supply) typedef
  * @ingroup sbench
  */
 
@@ -114,7 +119,7 @@ private:
 };
 
 /*!
- * @brief SwarmItFix bench pins state typedef
+ * @brief SwarmItFix preasure (cleaning activation)  typedef
  * @ingroup sbench
  */
 
@@ -165,11 +170,12 @@ private:
 };
 
 /*!
- * @brief SwarmItFix Bench EDP command buffer
+ * @brief SwarmItFix Bench EDP command buffer derrived from c_buffer to be used in ecp edp communication
  * @ingroup sbench
  */
 struct c_buffer : lib::c_buffer
 {
+	//! sbench specific field
 	cbuffer sbench;
 
 private:
@@ -209,8 +215,14 @@ private:
 
 };
 
+/*!
+ * @brief SwarmItFix Bench EDP reply buffer derrived from r_buffer to be used in ecp edp communication
+ * @ingroup sbench
+ */
+
 struct r_buffer : lib::r_buffer
 {
+	//! sbench specific field
 	rbuffer sbench;
 
 private:

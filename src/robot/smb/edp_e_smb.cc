@@ -88,7 +88,7 @@ void effector::synchronise(void)
 			wakeup += boost::posix_time::milliseconds(5);
 
 			boost::thread::sleep(wakeup);
-		};
+		}
 		printf("\n");
 
 		// Disable analog velocity setpoint.
@@ -150,19 +150,20 @@ void effector::check_controller_state()
 		return;
 	}
 
-	// Try to get state of each axis
+	// Try to get state of each axis.
 	unsigned int powerOn = 0;
 	unsigned int enabled = 0;
+
 	// Check axes.
 	for (size_t i = 0; i < axes.size(); ++i) {
 		try {
-			// Get current epos state.
+			// Get current EPOS state.
 			maxon::epos::actual_state_t state = axes[i]->getState();
 			if (state != maxon::epos::OPERATION_ENABLE) {
 				cout << string("Axis ") << axesNames[i] << endl;
 				// Print state.
 				axes[i]->printState();
-				// Check if in the FAULT state
+				// Check if in the FAULT state.
 				if (state == maxon::epos::FAULT) {
 					// Read number of errors
 					int errNum = axes[i]->getNumberOfErrors();
@@ -201,7 +202,7 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 	DEBUG_METHOD;
 
 	try {
-		// False is the initial value
+		// False is the initial value.
 		controller_state_edp_buf.is_synchronised = false;
 		controller_state_edp_buf.is_power_on = false;
 		controller_state_edp_buf.robot_in_fault_state = false;
@@ -209,7 +210,7 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		// Check controller state.
 		check_controller_state();
 
-		// Copy data to reply buffer
+		// Copy data to the reply buffer.
 		reply.controller_state = controller_state_edp_buf;
 
 		// Initiate motor positions.
@@ -247,7 +248,7 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		cout << "legs_relative_zero_position: " << legs_relative_zero_position << "\n";
 #endif
 
-		// Lock data structure during update
+		// Lock data structure during update.
 		{
 			boost::mutex::scoped_lock lock(effector_mutex);
 
@@ -481,6 +482,8 @@ void effector::parse_motor_command()
 			break;
 		case lib::smb::EXTERNAL:
 			DEBUG_COMMAND("EXTERNAL");
+
+//			instruction.motion_type
 
 			// Leg rotational joint: Copy data directly from buffer and recalculate joint value.
 			desired_joints[0] = instruction.smb.base_vs_bench_rotation

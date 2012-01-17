@@ -90,6 +90,11 @@ REGISTER_NON_FATAL_ERROR(nfe_invalid_command_in_given_state, "Invalid command in
  */
 REGISTER_NON_FATAL_ERROR(nfe_clamps_rotation_prohibited_in_given_state, "Clamps rotation prohibited in given state")
 
+/*!
+ * \brief Unexpected case within a 'switch' statement with a 'default' handler.
+ * \author ptroja
+ */
+REGISTER_FATAL_ERROR(unexpected_case_within_switch, "Unexpected case within a 'switch' statement with a 'default' handler")
 
 } // namespace spkm
 } // namespace edp

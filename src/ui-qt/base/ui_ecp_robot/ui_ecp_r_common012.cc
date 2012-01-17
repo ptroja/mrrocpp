@@ -25,99 +25,17 @@
 
 #include "base/lib/sr/srlib.h"
 
-#include "ui_ecp_r_common.h"
-
-#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "robot/irp6ot_tfg/ecp_r_irp6ot_tfg.h"
-#include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
-#include "robot/sarkofag/ecp_r_sarkofag.h"
-#include "robot/conveyor/ecp_r_conv.h"
-#include "robot/shead/ecp_r_shead.h"
+#include "ui_ecp_r_common012.h"
 
 namespace mrrocpp {
 namespace ui {
-namespace common {
+namespace common012 {
 
 // ---------------------------------------------------------------
-EcpRobot::EcpRobot(UiRobot& _ui_robot) :
-		ui_robot(_ui_robot), ecp(NULL)
+EcpRobot::EcpRobot(common::UiRobot& _ui_robot) :
+		common::EcpRobot(_ui_robot)
 {
 
-	if (ui_robot.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-
-		ecp = new ecp::irp6ot_m::robot(*(ui_robot.interface.config), *(ui_robot.msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.05;
-		}
-
-		JOINT_STEP[0] = 0.00004;
-		for (int j = 1; j < ecp->number_of_servos; j++) {
-			JOINT_STEP[j] = 0.0004;
-		}
-
-		for (int j = 0; j < 3; j++) {
-			END_EFFECTOR_STEP[j] = 0.00002;
-		}
-
-		for (int j = 3; j < 6; j++) {
-			END_EFFECTOR_STEP[j] = 0.0002;
-		}
-
-	} else if (ui_robot.robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ecp = new ecp::irp6p_m::robot(*(ui_robot.interface.config), *(ui_robot.msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.05;
-			JOINT_STEP[j] = 0.0004;
-		}
-
-		for (int j = 0; j < 3; j++) {
-			END_EFFECTOR_STEP[j] = 0.00002;
-		}
-
-		for (int j = 3; j < 6; j++) {
-			END_EFFECTOR_STEP[j] = 0.0002;
-		}
-
-	} else if (ui_robot.robot_name == lib::irp6ot_tfg::ROBOT_NAME) {
-
-		ecp = new ecp::irp6ot_tfg::robot(*(ui_robot.interface.config), *(ui_robot.msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.4;
-			JOINT_STEP[j] = 0.00001;
-		}
-
-	} else if (ui_robot.robot_name == lib::irp6p_tfg::ROBOT_NAME) {
-
-		ecp = new ecp::irp6p_tfg::robot(*(ui_robot.interface.config), *(ui_robot.msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.4;
-			JOINT_STEP[j] = 0.00001;
-		}
-
-	} else if (ui_robot.robot_name == lib::sarkofag::ROBOT_NAME) {
-
-		ecp = new ecp::sarkofag::robot(*(ui_robot.interface.config), *(ui_robot.msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.4;
-			JOINT_STEP[j] = 0.0001;
-		}
-	} else if (ui_robot.robot_name == lib::conveyor::ROBOT_NAME) {
-
-		ecp = new ecp::conveyor::robot(*(ui_robot.interface.config), *(ui_robot.msg));
-
-		for (int j = 0; j < ecp->number_of_servos; j++) {
-			MOTOR_STEP[j] = 0.04;
-			JOINT_STEP[j] = 0.00004;
-		}
-	}
-
-	init();
 }
 // ---------------------------------------------------------------
 
@@ -250,19 +168,6 @@ void EcpRobot::move_joints(const double final_position[])
 }
 // ---------------------------------------------------------------
 
-void EcpRobot::execute_motion(void)
-{
-	// Zlecenie wykonania ruchu przez robota jest to polecenie dla EDP
-
-	ui_robot.interface.set_ui_state_notification(UI_N_COMMUNICATION);
-
-	// TODO: in QNX/Photon exceptions are handled at the main loop
-	// in GTK exceptions triggered signals cannot be handled in main loop
-
-	ecp->execute_motion();
-}
-// ---------------------------------------------------------------
-
 // ---------------------------------------------------------------
 void EcpRobot::set_desired_position(const double d_position[])
 {
@@ -310,19 +215,6 @@ void EcpRobot::get_servo_algorithm(uint8_t algorithm_no[], uint8_t parameters_no
 			* sizeof(uint8_t));
 	memcpy(parameters_no, ecp->reply_package.robot_model.servo_algorithm.servo_parameters_no, ecp->number_of_servos
 			* sizeof(uint8_t));
-}
-
-// do odczytu stanu poczatkowego robota
-void EcpRobot::get_controller_state(lib::controller_state_t & robot_controller_initial_state_l)
-{
-	// Zlecenie odczytu numeru modelu i korektora kinematyki
-	ecp->ecp_command.instruction_type = lib::GET;
-	ecp->ecp_command.get_type = CONTROLLER_STATE_DEFINITION;
-
-	execute_motion();
-
-	robot_controller_initial_state_l = ecp->reply_package.controller_state;
-	ecp->synchronised = robot_controller_initial_state_l.is_synchronised;
 }
 
 // ---------------------------------------------------------------

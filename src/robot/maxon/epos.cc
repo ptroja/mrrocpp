@@ -1052,6 +1052,11 @@ void epos::setTargetVelocity(INTEGER32 val)
 	}
 }
 
+void epos::setVelocityModeSettingValue(INTEGER32 val)
+{
+	WriteObjectValue(0x206B, 0x00, val);
+}
+
 void epos::setProfileVelocity(UNSIGNED32 val)
 {
 	if (ProfileVelocity != val) {
@@ -1364,16 +1369,19 @@ void epos::setMotorThermalConstant(UNSIGNED16 val)
 
 //------------- fi martí
 
-/* read demand position; 14.1.67 */
 INTEGER32 epos::setDemandVelocity()
 {
 	return ReadObjectValue <INTEGER32>(0x606b, 0x00);
 }
 
-/* read actual position; 14.1.68 */
 INTEGER32 epos::getActualVelocity()
 {
 	return ReadObjectValue <INTEGER32>(0x606c, 0x00);
+}
+
+INTEGER32 epos::getActualVelocityAveraged()
+{
+	return ReadObjectValue <INTEGER32>(0x2028, 0x00);
 }
 
 /* read actual motor current, see firmware description 14.1.69 */
@@ -1394,30 +1402,30 @@ void epos::setTargetPosition(INTEGER32 val)
 }
 
 /* read manufacturer device name string firmware */
-std::string epos::getCanDeviceName()
-{
-	WORD answer[8];
-	unsigned int r = device.ReadObject(answer, 8, nodeId, 0x1008, 0x00);
-
-	char name[16];
-
-	for (int i = 0; i < 4; ++i) {
-		name[i * 2] = (answer[3 + i] & 0xFF);
-		name[i * 2 + 1] = ((answer[3 + i] >> 8) & 0xFF);
-	}
-
-	printf("%d: %c%c%c%c%c%c%c%c\n", r, name[0], name[1], name[2], name[3], name[4], name[5], name[6], name[7]);
-
-	std::string str;
-
-	str += (char) (answer[3] & 0x00FF);
-	str += (char) ((answer[3] & 0xFF00) >> 8);
-	str += (char) (answer[4] & 0x00FF);
-	str += (char) ((answer[4] & 0xFF00) >> 8);
-	// TODO: iterate until end of string
-
-	return str;
-}
+//std::string epos::getCanDeviceName()
+//{
+//	WORD answer[8];
+//	unsigned int r = device.ReadObject(answer, 8, nodeId, 0x1008, 0x00);
+//
+//	char name[16];
+//
+//	for (int i = 0; i < 4; ++i) {
+//		name[i * 2] = (answer[3 + i] & 0xFF);
+//		name[i * 2 + 1] = ((answer[3 + i] >> 8) & 0xFF);
+//	}
+//
+//	printf("%d: %c%c%c%c%c%c%c%c\n", r, name[0], name[1], name[2], name[3], name[4], name[5], name[6], name[7]);
+//
+//	std::string str;
+//
+//	str += (char) (answer[3] & 0x00FF);
+//	str += (char) ((answer[3] & 0xFF00) >> 8);
+//	str += (char) (answer[4] & 0x00FF);
+//	str += (char) ((answer[4] & 0xFF00) >> 8);
+//	// TODO: iterate until end of string
+//
+//	return str;
+//}
 
 /*! read Maximal Following Error */
 UNSIGNED32 epos::getMaxFollowingError()
@@ -1529,6 +1537,12 @@ INTEGER32 epos::getMaximalPositionLimit()
 void epos::setMaximalPositionLimit(INTEGER32 val)
 {
 	WriteObjectValue(0x607D, 0x02, val);
+}
+
+void epos::disablePositionLimits()
+{
+	this->setMinimalPositionLimit(-0x80000000);
+	this->setMaximalPositionLimit(+0x7FFFFFFF);
 }
 
 UNSIGNED32 epos::getActualBufferSize()
@@ -2025,7 +2039,7 @@ void epos::monitorHomingStatus()
 		fflush(stdout);
 
 		if ((status & E_BIT13) == E_BIT13) {
-			BOOST_THROW_EXCEPTION(fe() << reason("HOMING ERROR!"));
+			BOOST_THROW_EXCEPTION(fe() << reason("HOMING ERROR") << canId(nodeId));
 		}
 
 		// Increment the wakeup time

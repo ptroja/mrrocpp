@@ -67,7 +67,7 @@ void wgt_robot_process_control::on_reader_trigger_pushButton_clicked()
 }
 
 // aktualizacja ustawien przyciskow
-int wgt_robot_process_control::init()
+void wgt_robot_process_control::init()
 
 {
 //	interface.ui_msg->message("wgt_robot_process_control::init()");
@@ -129,24 +129,15 @@ int wgt_robot_process_control::init()
 
 			break;
 	}
-
-	return 1;
-
 }
 
-int wgt_robot_process_control::block_ecp_trigger_widgets()
-
+void wgt_robot_process_control::block_ecp_trigger_widgets()
 {
-
 	ui->ecp_trigger_pushButton->setDisabled(true);
-
-	return 1;
 }
 
-int wgt_robot_process_control::unblock_ecp_trigger_widgets()
+void wgt_robot_process_control::unblock_ecp_trigger_widgets()
 
 {
-
 	ui->ecp_trigger_pushButton->setDisabled(false);
-	return 1;
 }

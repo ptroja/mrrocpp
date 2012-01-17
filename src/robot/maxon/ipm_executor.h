@@ -37,7 +37,7 @@ public:
 	typedef ipm_executor <NUM_OF_MOTION_SEGMENTS, NUM_OF_SERVOS> self_t;
 
 	//! Axes container
-	boost::array <epos *, NUM_OF_SERVOS> axes;
+	boost::array <boost::shared_ptr<epos>, NUM_OF_SERVOS> axes;
 
 	//! Check if there is a motion request for a given axis
 	Eigen::Matrix <bool, 1, NUM_OF_SERVOS> is_moving;

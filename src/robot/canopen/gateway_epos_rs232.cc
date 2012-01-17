@@ -25,14 +25,14 @@ namespace edp {
 namespace canopen {
 
 gateway_epos_rs232::gateway_epos_rs232(const std::string & _device) :
-	device(_device),
-	ep(-1), gMarker(0)
+		device(_device), ep(-1), gMarker(0)
 {
 }
 
 gateway_epos_rs232::~gateway_epos_rs232()
 {
-	if (device_opened) close();
+	if (device_opened)
+		close();
 }
 
 void gateway_epos_rs232::open()
@@ -84,7 +84,7 @@ void gateway_epos_rs232::open()
 
 void gateway_epos_rs232::close()
 {
-	if(ep >= 0) {
+	if (ep >= 0) {
 		if (::close(ep) != 0) {
 			perror("close()");
 			throw fe_canopen_error() << reason("serial port already opened");
@@ -99,14 +99,13 @@ void gateway_epos_rs232::close()
 #define E_OK      0x4f  ///< EPOS answer code for <em>all fine</em>
 #define E_FAIL    0x46  ///< EPOS answer code to indicate a <em>failure</em>
 #define E_ANS     0x00  ///< EPOS code to indicate an answer <em>frame</em>
-
 unsigned int gateway_epos_rs232::readAnswer(WORD *ans, unsigned int ans_len)
 {
 	E_error = 0x00;
 
 	BYTE c = readBYTE(); // this is op-code, discard.
 //	first = (0xFF00 & c) << 8;
-	//printf("first answer: %#04x; first: %#06x\n", c, first);
+			//printf("first answer: %#04x; first: %#06x\n", c, first);
 
 	if (c != E_ANS) {
 		throw fe_canopen_error() << reason("EPOS says: this is no answer frame!"); // TODO: , c);
@@ -181,7 +180,7 @@ unsigned int gateway_epos_rs232::readAnswer(WORD *ans, unsigned int ans_len)
 void gateway_epos_rs232::sendCommand(WORD *frame)
 {
 	// RS232 connection version
-	if (ep >=0) {
+	if (ep >= 0) {
 		// need LSB of header WORD, contains (len-1). Complete Frame is
 		// (len-1) +3 WORDS long
 		unsigned short len = ((frame[0] & 0x00FF)) + 3;
@@ -193,13 +192,13 @@ void gateway_epos_rs232::sendCommand(WORD *frame)
 		// add checksum to frame
 		frame[len - 1] = CalcFieldCRC(frame, len);
 
-	#ifdef DEBUG
+#ifdef DEBUG
 		printf(">> ");
 		for (int i=0; i<len; ++i) {
 			printf( "%#06x ", frame[i] );
 		}
 		printf("\n");
-	#endif
+#endif
 
 		/* sending to EPOS */
 		BYTE c;
@@ -280,14 +279,14 @@ BYTE gateway_epos_rs232::readBYTE()
 		tv.tv_sec = 0;
 		tv.tv_usec = TRYSLEEP;
 
-		int s = select(ep+1, &rfds, NULL, NULL, &tv);
-		if(s < 0) {
+		int s = select(ep + 1, &rfds, NULL, NULL, &tv);
+		if (s < 0) {
 			throw fe_canopen_error() << errno_call("select") << errno_code(errno);
 		} else if (s == 0) {
 			continue;
 		}
 
-		if(!FD_ISSET(ep, &rfds)) {
+		if (!FD_ISSET(ep, &rfds)) {
 			throw fe_canopen_error() << reason("EPOS filedescriptor not in read-ready set");
 		}
 
@@ -338,14 +337,14 @@ WORD gateway_epos_rs232::readWORD()
 		tv.tv_sec = 0;
 		tv.tv_usec = TRYSLEEP;
 
-		int s = select(ep+1, &rfds, NULL, NULL, &tv);
-		if(s < 0) {
+		int s = select(ep + 1, &rfds, NULL, NULL, &tv);
+		if (s < 0) {
 			throw fe_canopen_error() << errno_call("select") << errno_code(errno);
 		} else if (s == 0) {
 			continue;
 		}
 
-		if(!FD_ISSET(ep, &rfds)) {
+		if (!FD_ISSET(ep, &rfds)) {
 			throw fe_canopen_error() << reason("EPOS filedescriptor not in read-ready set");
 		}
 
@@ -387,7 +386,7 @@ unsigned int gateway_epos_rs232::ReadObject(WORD *ans, unsigned int ans_len, uin
 	 * high BYTE: 0x00(Node-ID == 0)
 	 * low BYTE: subindex
 	 */
-	frame[2] = ((nodeId << 8 ) | subindex);
+	frame[2] = ((nodeId << 8) | subindex);
 	frame[3] = 0x0000;
 
 	sendCommand(frame);
@@ -396,7 +395,7 @@ unsigned int gateway_epos_rs232::ReadObject(WORD *ans, unsigned int ans_len, uin
 	unsigned int ret = readAnswer(ans, ans_len);
 
 	// check error code
-	checkEPOSerror(E_error);
+	checkCanOpenError(E_error);
 
 	return ret;
 }
@@ -417,7 +416,7 @@ static int InitiateSegmentedRead(WORD index, BYTE subindex ) {
 	sendCommand(frame);
 
 	// read response
-	return( readAnswer(ptr) ); // answer contains only DWORD ErrorCode
+	return( readAnswer(ptr) );// answer contains only DWORD ErrorCode
 	// here...
 }
 
@@ -428,8 +427,8 @@ static int SegmentRead(WORD **ptr) {
 	int n;
 
 	frame[0] = 0x1400; // fixed, opCode==0x14, (len-1) == 0
-	frame[1] = 0x0000; // WHAT IS THE 'TOGGLE' BIT????
-	frame[2] = 0x0000; // ZERO word, will be filled with checksum
+	frame[1] = 0x0000;// WHAT IS THE 'TOGGLE' BIT????
+	frame[2] = 0x0000;// ZERO word, will be filled with checksum
 
 	sendCommand(frame);
 
@@ -447,7 +446,7 @@ void gateway_epos_rs232::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, 
 		// fixed: (Len << 8) | OpCode
 		frame[0] = (4 << 8) | (gateway::WriteObject_Op);
 		frame[1] = index;
-		frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
+		frame[2] = ((nodeId << 8) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
 		// data to transmit
 		frame[3] = (data & 0x0000FFFF);
 		frame[4] = (data >> 16);
@@ -459,9 +458,8 @@ void gateway_epos_rs232::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, 
 		WORD answer[8];
 		readAnswer(answer, 8);
 
-		checkEPOSerror(E_error);
-	}
-	catch (fe_canopen_error & e) {
+		checkCanOpenError(E_error);
+	} catch (boost::exception & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -476,7 +474,7 @@ void gateway_epos_rs232::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE 
 
 		frame[0] = (4 << 8) | (gateway::InitiateSegmentedWrite_Op); // fixed: (len-1) == 3, WriteObject
 		frame[1] = index;
-		frame[2] = ((nodeId << 8 ) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
+		frame[2] = ((nodeId << 8) | subindex); /* high BYTE: Node-ID, low BYTE: subindex */
 		// data to transmit
 		*((DWORD *) &frame[3]) = ObjectLength;
 		// frame[4] = << this is filled by the 32bit assignment above >>;
@@ -488,11 +486,10 @@ void gateway_epos_rs232::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE 
 		WORD answer[8];
 		readAnswer(answer, 8);
 
-		checkEPOSerror(E_error);
+		checkCanOpenError(E_error);
 
 		toggle = true;
-	}
-	catch (fe_canopen_error & e) {
+	} catch (boost::exception & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -506,12 +503,12 @@ void gateway_epos_rs232::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t 
 		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Segmented write of > 63 bytes not allowed"));
 	}
 	try {
-		WORD frame[32+2];
+		WORD frame[32 + 2];
 
 		memset(frame, 0, sizeof(frame));
-		frame[0] = ((1+len/2) << 8) | (gateway::SegmentedWrite_Op); // fixed: (len-1) == 3, WriteObject
+		frame[0] = ((1 + len / 2) << 8) | (gateway::SegmentedWrite_Op); // fixed: (len-1) == 3, WriteObject
 		frame[1] = len | (toggle ? (0x80) : 0x40);
-		memcpy(((char *)&frame[1]+1), ptr, len);
+		memcpy(((char *) &frame[1] + 1), ptr, len);
 
 		sendCommand(frame);
 
@@ -519,12 +516,11 @@ void gateway_epos_rs232::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t 
 		WORD answer[8];
 		readAnswer(answer, 8);
 
-		checkEPOSerror(E_error);
+		checkCanOpenError(E_error);
 
 		// change the toggle flag value
 		toggle = (toggle) ? false : true;
-	}
-	catch (fe_canopen_error & e) {
+	} catch (boost::exception & e) {
 		e << canId(nodeId);
 		throw;
 	}
@@ -552,14 +548,22 @@ void gateway_epos_rs232::SendCANFrame(WORD Identifier, WORD Length, const BYTE D
 	frame[1] = Identifier;
 	frame[2] = Length;
 
-	if(Length > 0) frame[3] = Data[0];
-	if(Length > 1) frame[3] |= (Data[1] << 8);
-	if(Length > 2) frame[4] = Data[2];
-	if(Length > 3) frame[4] |= (Data[3] << 8);
-	if(Length > 4) frame[5] = Data[4];
-	if(Length > 5) frame[5] |= (Data[5] << 8);
-	if(Length > 6) frame[6] = Data[6];
-	if(Length > 7) frame[6] |= (Data[7] << 8);
+	if (Length > 0)
+		frame[3] = Data[0];
+	if (Length > 1)
+		frame[3] |= (Data[1] << 8);
+	if (Length > 2)
+		frame[4] = Data[2];
+	if (Length > 3)
+		frame[4] |= (Data[3] << 8);
+	if (Length > 4)
+		frame[5] = Data[4];
+	if (Length > 5)
+		frame[5] |= (Data[5] << 8);
+	if (Length > 6)
+		frame[6] = Data[6];
+	if (Length > 7)
+		frame[6] |= (Data[7] << 8);
 
 	frame[7] = 0x00; // ZERO word, will be filled with checksum
 

@@ -67,6 +67,8 @@ private:
 	void check_controller_state();
 
 protected:
+	//! Extension added to both positive and negative limits of every epos controller.
+	static const uint32_t limit_extension;
 
 	//! Default axis velocity [rpm]
 	uint32_t Vdefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
@@ -90,7 +92,7 @@ protected:
 	boost::shared_ptr <maxon::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
 	//! Axes container.
-	boost::array <maxon::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
+	boost::array <boost::shared_ptr<maxon::epos>, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
 
 	//! Handler for the asynchronous execution of the interpolated profile motion
 	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
@@ -110,6 +112,18 @@ public:
 	 * This method synchronizes motors of the robots.
 	 */
 	void synchronise();
+
+	/*!
+	 * @brief Method responsible for synchronization of the MOOG motor.
+	 *
+	 * Uses velocity and profile position modes instead of the EPOS homing.
+	 */
+	void synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_limit_, int32_t  positive_limit_, int32_t homing_offset);
+
+	/*!
+	 * @brief Disable (thus apply brake) the MOOG motor.
+	 */
+	void disable_moog_motor();
 
 	/*!
 	 * @brief method to create threads other then EDP master thread.
@@ -137,7 +151,7 @@ public:
 	 * \brief Method responsible for motion of motors controlling the legs and SPKM rotation.
 	 * \author tkornuta
 	 */
-	void execute_motor_motion();
+	void execute_motion();
 
 	/*!
 	 * \brief Method responsible for interpolated motion in the operational space.

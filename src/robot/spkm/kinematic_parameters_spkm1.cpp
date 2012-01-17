@@ -24,6 +24,9 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	synchro_positions[4] = 0.0;
 	synchro_positions[5] = 0.0;
 
+	// Moog motor homing offset (in [qc]).
+	moog_motor_homing_offset = 383000;
+
 	// Initialization of the encoder resolution. Equals to the Counts Per Turn (CPT) x 4.
 	encoder_resolution[0] = 500*4;
 	encoder_resolution[1] = 500*4;
@@ -59,8 +62,8 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	upper_motor_pos_limits[1] = 8000;
 	upper_motor_pos_limits[2] = 8000;
 	// Lower wrist rotation.
-	upper_motor_pos_limits[3] = 366000;
-	upper_motor_pos_limits[4] = 190000;
+	upper_motor_pos_limits[3] = 383000;
+	upper_motor_pos_limits[4] =   2000;
 	// Upper wrist rotation.
 	upper_motor_pos_limits[5] = 260000;
 
@@ -70,7 +73,7 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	lower_motor_pos_limits[1] = -500000;
 	lower_motor_pos_limits[2] = -500000;
 	// Lower wrist rotation.
-	lower_motor_pos_limits[3] = -380000;
+	lower_motor_pos_limits[3] = -352000;
 	lower_motor_pos_limits[4] = -380000;
 	// Upper wrist rotation.
 	lower_motor_pos_limits[5] = -270000;

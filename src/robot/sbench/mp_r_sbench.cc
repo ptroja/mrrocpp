@@ -1,6 +1,6 @@
 /*!
  * @file
- * @brief File contains mp robot class definition for SwarmItFix Head
+ * @brief File contains mp robot class definition for SwarmItFix Bench
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup sbench

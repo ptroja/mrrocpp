@@ -25,7 +25,7 @@ const std::string WGT_SPKM_INT = "WGT_SPKM_INT";
 
 class wgt_spkm_int : public wgt_base
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	wgt_spkm_int(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
@@ -41,12 +41,12 @@ private:
 	Ui::wgt_spkm_intClass ui;
 	mrrocpp::ui::spkm::UiRobot* robot;
 
-	int init();
-	int copy();
+	void init();
+	void copy();
 
-	int set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip);
+	void set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip);
 	void get_desired_position();
-	int move_it();
+	void move_it();
 
 	boost::shared_ptr <QTimer> timer;
 	void showEvent(QShowEvent * event);
@@ -58,6 +58,7 @@ private slots:
 	void on_pushButton_import_clicked();
 	void on_pushButton_copy_clicked();
 	void on_pushButton_stop_clicked();
+	void on_pushButton_brake_clicked();
 
 	void on_pushButton_execute_clicked();
 	void on_pushButton_0l_clicked();

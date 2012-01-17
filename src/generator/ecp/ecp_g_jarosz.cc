@@ -489,12 +489,12 @@ bool linear_parabolic::next_step()
 				vel[i] = acc[i] * node_counter;
 
 				if (fabs(acc[i] * (1 / lib::EDP_STEP * lib::EDP_STEP)) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
+					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", (int)i, fabs(acc[i]), a_max_joint[i]);
 					sr_ecp_msg.message(messg);
 					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(MAX_ACCELERATION_EXCEEDED));
 				} // end : if
 				if (fabs(vel[i] * (1 / lib::EDP_STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
+					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", (int)i, fabs(vel[i]), v_max_joint[i]);
 					sr_ecp_msg.message(messg);
 					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(MAX_VELOCITY_EXCEEDED));
 				} // end : if
@@ -804,7 +804,7 @@ bool cubic::next_step()
 										* the_robot->ecp_command.motion_steps));
 
 				if (fabs(acc[i]) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
+					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", (int)i, fabs(acc[i]), a_max_motor[i]);
 					sr_ecp_msg.message(messg);
 					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(MAX_ACCELERATION_EXCEEDED));
 				} // end : if
@@ -813,7 +813,7 @@ bool cubic::next_step()
 						* (1.0 / (lib::EDP_STEP * the_robot->ecp_command.motion_steps));
 
 				if (fabs(vel[i]) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
+					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", (int)i, fabs(vel[i]), v_max_motor[i]);
 					sr_ecp_msg.message(messg);
 					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(MAX_VELOCITY_EXCEEDED));
 				} // end : if

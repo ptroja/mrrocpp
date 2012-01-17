@@ -76,7 +76,7 @@ void WgtToolBase::copy_button_clicked()
 	copy();
 }
 
-int WgtToolBase::copy()
+void WgtToolBase::copy()
 {
 	if (robot->state.edp.pid != -1) {
 		if (robot->state.edp.is_synchronised) // Czy robot jest zsynchronizowany?
@@ -88,7 +88,6 @@ int WgtToolBase::copy()
 		} else
 			set_button->setDisabled(true); // Wygaszanie elementow przy niezsynchronizowanym robocie
 	}
-	return 1;
 }
 
 void WgtToolBase::execute_button_clicked()

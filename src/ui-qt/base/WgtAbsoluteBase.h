@@ -8,7 +8,7 @@
 
 class WgtAbsoluteBase : public wgt_base
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	WgtAbsoluteBase(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent =
@@ -39,13 +39,11 @@ private:
 	void create_buttons();
 	void create_step_spinbox();
 	int copy();
-	virtual int move_it()
+	virtual void move_it()
 	{
-		return 0;
 	}
-	virtual int init()
+	virtual void init()
 	{
-		return 0;
 	}
 
 public slots:

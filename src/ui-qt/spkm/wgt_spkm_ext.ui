@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>784</width>
-    <height>402</height>
+    <height>429</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -204,6 +204,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="pushButton_brake">
+        <property name="text">
+         <string>Apply brake</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pushButton_read">
         <property name="text">
          <string>Read</string>
@@ -236,12 +243,6 @@
       </item>
       <item>
        <widget class="QLabel" name="label_2">
-        <property name="font">
-         <font>
-          <family>Bitstream Charter</family>
-          <pointsize>9</pointsize>
-         </font>
-        </property>
         <property name="text">
          <string>Estimated time [s]</string>
         </property>

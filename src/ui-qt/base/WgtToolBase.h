@@ -25,16 +25,14 @@ protected:
 private:
 
 	void create_buttons();
-	virtual int move_it()
+	virtual void move_it()
 	{
-		return 0;
 	}
-	virtual int init()
+	virtual void init()
 	{
-		return 0;
 	}
 	virtual void add_current_position_spin_box(QDoubleSpinBox *spin_box, int row);
-	int copy();
+	void copy();
 	const static int desired_pos_column = 5;
 	const static int inc_move_column = 9;
 
