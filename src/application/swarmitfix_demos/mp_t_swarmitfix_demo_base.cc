@@ -31,9 +31,6 @@ void swarmitfix_demo_base::rotate_smb(int leg_number_, int rotation_)
 {
 	sr_ecp_msg->message("swarmitfix_demo_base::rotate_smb");
 
-	// TODO: remove wait_ms?
-	wait_ms(3000);
-
 	// Pull all legs in except the one around which the rotation_ will be performed.
 	switch (leg_number_)
 	{
@@ -55,9 +52,6 @@ void swarmitfix_demo_base::rotate_smb(int leg_number_, int rotation_)
 
 	// Rotate around the leg - the SPKM rotation is set to zero.
 	move_smb_external(rotation_, 0);
-
-	// TODO: remove wait_ms?
-	wait_ms(3000);
 
 	// Pull all legs out.
 	sr_ecp_msg->message("swarmitfix_demo_base::rotate_smb: OUT, OUT, OUT");
