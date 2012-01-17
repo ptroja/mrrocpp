@@ -232,20 +232,23 @@ private:
  */
 struct motor_command
 {
-	// external
+	//! Rotation of the legs (in external values -6, -5, ..., 5, 6).
 	int base_vs_bench_rotation;
+
+	//! Desired rotation of the upper SMP by given angle [radians].
 	double pkm_vs_base_rotation;
 
+	//! FIXME: Estimated time of motion (UNUSED!).
 	double estimated_time;
 
-	//! Initialize "safe" command
+	//! Constructor to initialize "safe" command.
 	motor_command();
 
 private:
-	//! Give access to boost::serialization framework
+	//! Give access to boost::serialization framework.
 	friend class boost::serialization::access;
 
-	//! Serialization of the data structure
+	//! Serialization of the data structure.
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{

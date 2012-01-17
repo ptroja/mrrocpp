@@ -45,7 +45,7 @@ protected:
 	 * @param [in] legs_rotation_ Desired absolute rotation around leg (in external values -6, -5, ..., 5, 6).
 	 * @param [in] pkm_rotation_ Desired absolute rotation of the upper SMP by given angle [radians].
 	 */
-	void move_smb_joints(double legs_rotation_, double pkm_rotation_);
+	void move_smb_external(int legs_rotation_, double pkm_rotation_);
 
 	/*!
 	 * @brief Rotates agent around given leg, thus realizes the sequence: pull two legs in, rotate around the third one and pull all legs out.
@@ -57,7 +57,7 @@ protected:
 	 * @param [in] leg_number_ Leg around which the rotation will be performed.
 	 * @param [in] rotation_ Rotation of the legs (in external values -6, -5, ..., 5, 6).
 	 */
-	void rotate_smb(int leg_number_, double rotation_);
+	void rotate_smb(int leg_number_, int rotation_);
 
 	/*!
 	 * Controls the head rotation.
