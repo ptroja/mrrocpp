@@ -2124,7 +2124,7 @@ void epos::setAnalogVelocitySetpointScaling(INTEGER16 val)
 	WriteObjectValue(0x2302, 0x01, val);
 }
 
-INTEGER16 epos::getAnalogVelocitySetpointScaling(INTEGER16 val)
+INTEGER16 epos::getAnalogVelocitySetpointScaling()
 {
 	return ReadObjectValue <INTEGER16>(0x2302, 0x01);
 }

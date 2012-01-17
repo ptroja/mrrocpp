@@ -7,7 +7,7 @@
 #include "../base/mainwindow.h"
 #include "../base/ui_robot.h"
 
-wgt_spkm_int::wgt_spkm_int(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+wgt_spkm_int::wgt_spkm_int(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
 		wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);

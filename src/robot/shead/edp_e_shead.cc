@@ -321,7 +321,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 					// Brake with Quickstop command
 					epos_node->setState(maxon::epos::QUICKSTOP);
 
-					// Reset node.
+					// Switch back to ENABLE state.
 					epos_node->reset();
 				}
 				break;

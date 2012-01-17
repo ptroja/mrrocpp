@@ -21,8 +21,7 @@ add_executable(edp_smb2
 
 target_link_libraries(edp_smb2 edpsmb epos festo kinematicssmb dp_smb edp
 	${COMMON_LIBRARIES})
-	
-		
+			
 add_library(kinematicssmb
 	kinematic_model_smb.cc
 )

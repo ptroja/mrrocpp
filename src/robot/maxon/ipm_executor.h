@@ -28,7 +28,6 @@ namespace maxon {
 template <int NUM_OF_MOTION_SEGMENTS, int NUM_OF_SERVOS>
 struct ipm_executor
 {
-
 private:
 	//! Thread id
 	boost::thread tid;
@@ -63,7 +62,7 @@ public:
 
 	//! Constructor
 	ipm_executor() :
-		job_to_do(false)
+			job_to_do(false)
 	{
 		tid = boost::thread(boost::bind(&ipm_executor::operator(), this));
 	}

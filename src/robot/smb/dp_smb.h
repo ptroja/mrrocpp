@@ -97,6 +97,7 @@ struct festo_command_td
 	FESTO_LEG leg[LEG_CLAMP_NUMBER];
 	bool undetachable[LEG_CLAMP_NUMBER];
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -119,6 +120,7 @@ struct multi_leg_reply_td
 
 	leg_reply leg[LEG_CLAMP_NUMBER];
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -156,7 +158,7 @@ struct smb_ext_epos_reply
  * @brief SwarmItFix Epos motor and joint and external command, called from UI
  * @ingroup smb
  */
-struct smb_epos_simple_command
+struct motor_command
 {
 	//! Motion variant (UNUSED!).
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
@@ -200,9 +202,6 @@ struct cbuffer
 
 	//! Pose specification type
 	POSE_SPECIFICATION get_pose_specification;
-
-	//! Motion interpolation variant
-	lib::epos::EPOS_MOTION_VARIANT motion_variant;
 
 	//! Motion time - used in the Interpolated Position Mode.
 	double estimated_time;
@@ -254,7 +253,6 @@ struct cbuffer
 						ar & motor_pos;
 						break;
 				}
-				ar & motion_variant;
 				ar & estimated_time;
 				break;
 			default:
