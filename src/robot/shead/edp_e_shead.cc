@@ -71,7 +71,7 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 effector::~effector()
 {
 	// Disable servo for the motor.
-	if(epos_node.get()) epos_node->setState(maxon::epos::DISABLE_OPERATION);
+//	if(epos_node.get()) epos_node->setState(maxon::epos::DISABLE_OPERATION);
 }
 
 void effector::synchronise(void)
