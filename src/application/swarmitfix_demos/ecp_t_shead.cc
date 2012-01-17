@@ -12,12 +12,10 @@ namespace ecp {
 namespace shead {
 namespace task {
 
-// KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
 		common::task::_task <ecp::shead::robot>(_config)
 {
-
-	// the robot is choose dependendat on the section of configuration file sent as argv[4]
+	// Robot is choosen dependending on the section of configuration file sent as argv[4].
 	if (config.robot_name == lib::shead1::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new shead1::robot(*this);
 	} else if (config.robot_name == lib::shead2::ROBOT_NAME) {
@@ -30,7 +28,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 	g_joint_epos_command = new shead::generator::joint_epos_command(*this);
 
-	sr_ecp_msg->message("ecp shead swarm demo single agent loaded");
+	sr_ecp_msg->message("ecp shead transparent loaded");
 }
 
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)

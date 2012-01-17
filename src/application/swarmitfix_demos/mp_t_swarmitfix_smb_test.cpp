@@ -19,12 +19,23 @@ task* return_created_mp_task(lib::configurator &_config)
 swarmitfix_smb_test::swarmitfix_smb_test(lib::configurator &config_) :
 		swarmitfix_demo_base(config_)
 {
+	if (IS_MP_ROBOT_ACTIVE (smb1)){
+		smb_robot_name = lib::smb1::ROBOT_NAME;
+	} else {//if (IS_MP_ROBOT_ACTIVE (smb2)){
+		smb_robot_name = lib::smb2::ROBOT_NAME;
+	} // else ?
+
+
 }
 
 void swarmitfix_smb_test::create_robots()
 {
 	// Activate SMB robot (depending on the configuration settings).
-	ACTIVATE_MP_ROBOT(smb1);
+	if (smb_robot_name == lib::smb1::ROBOT_NAME) {
+		ACTIVATE_MP_ROBOT(smb1)
+	} else {
+		ACTIVATE_MP_ROBOT(smb2)
+	}
 }
 
 

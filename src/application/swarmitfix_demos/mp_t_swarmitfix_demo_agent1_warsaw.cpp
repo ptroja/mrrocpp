@@ -23,15 +23,55 @@ task* return_created_mp_task(lib::configurator &_config)
 swarmitfix_demo_agent1_warsaw::swarmitfix_demo_agent1_warsaw(lib::configurator &config_) :
 		swarmitfix_demo_base(config_)
 {
-
+	// SMB.
+	if (IS_MP_ROBOT_ACTIVE (smb1)){
+		smb_robot_name = lib::smb1::ROBOT_NAME;
+	} else if (IS_MP_ROBOT_ACTIVE (smb2)){
+		smb_robot_name = lib::smb2::ROBOT_NAME;
+	} else {
+		// TODO: throw - but what??
+	}
+	// SPKM.
+	if (IS_MP_ROBOT_ACTIVE (spkm1)){
+		spkm_robot_name = lib::spkm1::ROBOT_NAME;
+	} else if (IS_MP_ROBOT_ACTIVE (spkm2)){
+		spkm_robot_name = lib::spkm2::ROBOT_NAME;
+	} else {
+		// TODO: throw - but what??
+	}
+	// SHEAD.
+	if (IS_MP_ROBOT_ACTIVE (shead1)){
+		shead_robot_name = lib::shead1::ROBOT_NAME;
+	} else if (IS_MP_ROBOT_ACTIVE (smb2)){
+		shead_robot_name = lib::shead2::ROBOT_NAME;
+	} else {
+		// TODO: throw - but what??
+	}
 }
 
 void swarmitfix_demo_agent1_warsaw::create_robots()
 {
 	// Activate robots (depending on the configuration settings).
-	ACTIVATE_MP_ROBOT(spkm1);
-	ACTIVATE_MP_ROBOT(smb1);
-	ACTIVATE_MP_ROBOT(shead1);
+	// SMB.
+	if (smb_robot_name == lib::smb1::ROBOT_NAME) {
+		ACTIVATE_MP_ROBOT(smb1)
+	} else {
+		ACTIVATE_MP_ROBOT(smb2)
+	}
+	// SPKM.
+	if (spkm_robot_name == lib::spkm1::ROBOT_NAME) {
+		ACTIVATE_MP_ROBOT(spkm1)
+	} else {
+		ACTIVATE_MP_ROBOT(spkm2)
+	}
+	// SHEAD.
+	if (shead_robot_name == lib::shead1::ROBOT_NAME) {
+		ACTIVATE_MP_ROBOT(shead1)
+	} else {
+		ACTIVATE_MP_ROBOT(shead2)
+	}
+
+
 }
 
 

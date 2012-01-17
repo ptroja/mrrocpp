@@ -42,5 +42,4 @@ endif(ROBOT_BIRD_HAND)
 
 if(ROBOTS_SWARMITFIX)
 add_subdirectory (swarmitfix_demos)
-add_subdirectory (swarmitfix)
 endif(ROBOTS_SWARMITFIX)

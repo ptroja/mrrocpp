@@ -22,17 +22,16 @@ namespace ecp {
 namespace smb {
 namespace task {
 
-// KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
 		common::task::_task <ecp::smb::robot>(_config)
 {
-	// the robot is choose dependendat on the section of configuration file sent as argv[4]
+	// Robot is choosen dependending on the section of configuration file sent as argv[4].
 	if (config.robot_name == lib::smb1::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new smb1::robot(*this);
 	} else if (config.robot_name == lib::smb2::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new smb2::robot(*this);
 	} else {
-		// TODO: throw
+		// TODO: throw?
 	}
 
 //	gt = new common::generator::transparent(*this);
@@ -43,7 +42,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 	g_external_epos_command = new smb::generator::external_epos_command(*this);
 
-	sr_ecp_msg->message("ecp smb swarm demo single agent loaded");
+	sr_ecp_msg->message("ecp smb transparent loaded");
 }
 
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)

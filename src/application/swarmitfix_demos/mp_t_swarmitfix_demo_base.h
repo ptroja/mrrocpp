@@ -31,7 +31,17 @@ namespace task {
  */
 class swarmitfix_demo_base : public mrrocpp::mp::task::task
 {
+
 protected:
+	//! Name of the SMB robot utilized (SMB1 or SMB2).
+	lib::robot_name_t smb_robot_name;
+
+	//! Name of the SPKM robot utilized (SPKM1 or SPKM2).
+	lib::robot_name_t spkm_robot_name;
+
+	//! Name of the SHEAD robot utilized (SHEAD1 or SHEAD2).
+	lib::robot_name_t shead_robot_name;
+
 	/*!
 	 * Moves SMB legs in and out.
 	 * @param [in] l1_ Desired position of the leg one (in, out).
