@@ -77,10 +77,10 @@ public:
 	void set_value(int row, int column, bool value);
 
 	//! gets the value due to the translation table
-	bool get_value(int row, int column);
+	bool get_value(int row, int column) const;
 
 	//! checks if any value in translation table is doubled
-	bool is_any_doubled_value();
+	bool is_any_doubled_value() const;
 
 private:
 	//! Give access to boost::serialization framework
