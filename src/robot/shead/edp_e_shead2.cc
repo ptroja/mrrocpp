@@ -24,7 +24,9 @@ namespace shead2 {
 effector::effector(common::shell &_shell) :
 	shead::effector(_shell, lib::shead2::ROBOT_NAME)
 {
-
+	// FIXME: Set those values here to not bother with separate kinematics parameters class.
+	homing_velocity = +100;
+	homing_offset = -111500;
 }
 
 }// namespace shead2

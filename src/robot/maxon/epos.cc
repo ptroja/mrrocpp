@@ -1758,6 +1758,9 @@ UNSIGNED16 epos::getRS232timeout()
 
 void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_)
 {
+	// Prevent from offseting in the same direction as velocity.
+	assert((velocity_ > 0 && offset_ < 0) || (velocity_ < 0 && offset_ > 0));
+
 	// Get the original limits.
 	INTEGER32 originalMinPositionLimit = getMinimalPositionLimit();
 	INTEGER32 originalMaxPositionLimit = getMaximalPositionLimit();
@@ -1771,14 +1774,17 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_)
 		reset();
 
 		// TODO: set max acceleration?
-		setControlword(0x010f);
 		setVelocityModeSettingValue(velocity_);
+		setControlword(0x010f);
 
 		// Start monitoring after some interval for acceleration.
-		boost::system_time wakeup = boost::get_system_time() + boost::posix_time::milliseconds(25);
+		boost::system_time wakeup = boost::get_system_time() + boost::posix_time::milliseconds(45);
 
 		// Startup monitoring counter.
 		unsigned int monitor_counter = 0;
+
+		//! Actual velocity value.
+		int32_t velocity;
 
 		do {
 			// Wait for device state to change.
@@ -1787,11 +1793,13 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_)
 			// Increment the next wakeup time.
 			wakeup += boost::posix_time::milliseconds(5);
 
+			velocity = getActualVelocityAveraged();
+
 			if(++monitor_counter < 20) {
 				// FIXME: Uncomment the following to debug the wakup/startup timer.
-				// std::cout << "Moog motor velocity: " << (int) epos_.getActualVelocityAveraged() << std::endl;
+				 std::cout << "software homing velocity: " << velocity << std::endl;
 			}
-		} while(getActualVelocityAveraged() < -10);
+		} while(abs(velocity) > 10);
 
 		// Halt.
 		setVelocityModeSettingValue(0);
