@@ -151,7 +151,7 @@ public:
 	 * \brief Method responsible for motion of motors controlling the legs and SPKM rotation.
 	 * \author tkornuta
 	 */
-	void execute_motor_motion();
+	void execute_motion();
 
 	/*!
 	 * \brief Method responsible for interpolated motion in the operational space.

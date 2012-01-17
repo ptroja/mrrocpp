@@ -524,7 +524,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 				// Parse command.
 				parse_motor_command();
 				// Execute motion.
-				execute_motor_motion();
+				execute_motion();
 				// Continue - update the robot state.
 				break;
 			case lib::spkm::QUICKSTOP:
@@ -782,33 +782,9 @@ void effector::parse_motor_command()
 	}
 }
 
-void effector::execute_motor_motion()
+void effector::execute_motion()
 {
 	DEBUG_METHOD;
-
-	if(!robot_test_mode) {
-#if(DEBUG_MOTORS)
-					std::cerr << "MOTOR:\t desired_motor_pos_new[moog] = " << (int) desired_motor_pos_new[4] << endl
-							<< "\t desired_motor_pos_old[moog] = " << (int) desired_motor_pos_old[4] << endl
-							<< "\t current_motor_pos[moog] = " << (int) current_motor_pos[4] << endl;
-#endif
-		// Reset the Moog motor to disable brake if we are going to execute a motion.
-		if (is_synchronised()) {
-			std::cerr << " dupa1\n";
-			// Robot synchronized - absolute motion.
-			if (fabs(desired_motor_pos_new[4] - desired_motor_pos_old[4]) > 1.0) {
-				std::cerr << " dupa2\n";
-				//axis2->reset();
-			}
-		} else {
-			std::cerr << " dupa3\n";
-			// Robot not synchronized - relative motion.
-			if (fabs(desired_motor_pos_new[4]) > 1.0) {
-				std::cerr << " dupa4\n";
-				axis2->reset();
-			}
-		}
-	}
 
 	// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
 	switch (instruction.spkm.motion_variant)
@@ -820,15 +796,19 @@ void effector::execute_motor_motion()
 			for (size_t i = 0; i < axes.size(); ++i) {
 				if (is_synchronised()) {
 #if(DEBUG_MOTORS)
-					std::cerr << "MOTOR: moveAbsolute[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
+					std::cerr << "MOTOR: absolute[" << i << "] ( " << (int) desired_motor_pos_old[i] << "->" << (int) desired_motor_pos_new[i] << ")" << endl;
 #endif
 					if (!robot_test_mode) {
 						// Skip commanding motor if target and last positions and equal.
-						if (fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i]) > 1.0)
+						if (fabs(desired_motor_pos_new[i] - desired_motor_pos_old[i]) < 1.0)
 							continue;
 						axes[i]->setProfileVelocity(Vdefault[i]);
 						axes[i]->setProfileAcceleration(Adefault[i]);
 						axes[i]->setProfileDeceleration(Ddefault[i]);
+
+						// Re-enable the moog motor;
+						if(axes[i] == axis2) axes[i]->reset();
+
 						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 					} else {
 						current_joints[i] = desired_joints[i];
@@ -836,7 +816,7 @@ void effector::execute_motor_motion()
 					}
 				} else {
 #if(DEBUG_MOTORS)
-					std::cerr << "MOTOR: moveRelative[" << i << "] ( " << desired_motor_pos_new[i] << ")" << endl;
+					std::cerr << "MOTOR: relative[" << i << "] ( " << (int) desired_motor_pos_old[i] << "->" << (int) desired_motor_pos_new[i] << ")" << endl;
 #endif
 					if (!robot_test_mode) {
 						if (fabs(desired_motor_pos_new[i]) < 1.0)
@@ -845,6 +825,10 @@ void effector::execute_motor_motion()
 						axes[i]->setProfileVelocity(Vdefault[i]);
 						axes[i]->setProfileAcceleration(Adefault[i]);
 						axes[i]->setProfileDeceleration(Ddefault[i]);
+
+						// Re-enable the moog motor;
+						if(axes[i] == axis2) axes[i]->reset();
+
 						axes[i]->moveRelative(desired_motor_pos_new[i]);
 					} else {
 						current_joints[i] += desired_joints[i];
@@ -939,6 +923,9 @@ void effector::execute_motor_motion()
 
 						// Set new motion target
 						axes[i]->setTargetPosition(desired_motor_pos_new[i]);
+
+						// Re-enable the moog motor;
+						if(axes[i] == axis2) axes[i]->reset();
 					}
 				}
 
