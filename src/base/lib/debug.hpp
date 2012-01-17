@@ -8,6 +8,8 @@
 #ifndef DEBUG_HPP_
 #define DEBUG_HPP_
 
+#include <cstdio>
+
 // Debug executed methods.
 #ifndef DEBUG_METHODS
 	#define DEBUG_METHODS 1

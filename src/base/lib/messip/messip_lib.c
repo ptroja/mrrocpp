@@ -2713,8 +2713,7 @@ timer_t messip_timer_create( messip_channel_t * ch,
    int32_t type,
    int32_t subtype,
    int32_t msec_1st_shot,
-   int32_t msec_rep_shot,
-   int msec_timeout )
+   int32_t msec_rep_shot )
 {
 	messip_timer_t *timer_info;
 	struct sigevent event;
