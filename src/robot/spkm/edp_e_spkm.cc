@@ -466,41 +466,35 @@ void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_lim
 		epos_.setControlword(0x010f);
 		epos_.setVelocityModeSettingValue(-100);
 
-		// Monitor the velocity.
-		boost::system_time wakeup = boost::get_system_time();
-		do {
-			// Increment the wakeup time.
-			wakeup += boost::posix_time::milliseconds(5);
+		// Start monitoring after some interval for acceleration.
+		boost::system_time wakeup = boost::get_system_time() + boost::posix_time::milliseconds(25);
 
+		// Startup monitoring counter.
+		unsigned int monitor_counter = 0;
+
+		do {
 			// Wait for device state to change.
 			boost::thread::sleep(wakeup);
 
-			std::cout << "Moog motor velocity: " << (int) epos_.getActualVelocityAveraged() << std::endl;
+			// Increment the next wakeup time.
+			wakeup += boost::posix_time::milliseconds(5);
+
+			if(++monitor_counter < 20) {
+				// FIXME: Uncomment the following to debug the wakup/startup timer.
+				// std::cout << "Moog motor velocity: " << (int) epos_.getActualVelocityAveraged() << std::endl;
+			}
 		} while(epos_.getActualVelocityAveraged() < -10);
 
 		// Halt.
 		epos_.reset();
 
 		try {
-#if 1
-//			// Homing: move to the index, followed by an offset.
-//			epos_.doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, homing_offset);
-//			epos_.monitorHomingStatus();
-#else
-			// Profile position mode - reach the zero position.
-			epos_.setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
-			epos_.setPositionProfileType(0); // Trapezoidal velocity profile.
-		/*	epos_.setProfileVelocity(100);
-			epos_.setProfileAcceleration(1000);
-			epos_.setProfileDeceleration(1000);*/
-			epos_.setTargetPosition(homing_offset);
-			epos_.startRelativeMotion();
-			// Monitor the execution in order to detect the motor clash.
-			// TODO: ?
-#endif
+			// Homing: move to the index, then continue with an offset.
+			epos_.doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, homing_offset);
+			epos_.monitorHomingStatus();
 		} catch (boost::exception &e_) {
 			// Motor jam!
-			BOOST_THROW_EXCEPTION(fe_motor_jam_detected() << device_name(epos_.getCanDeviceName()));
+			BOOST_THROW_EXCEPTION(fe_motor_jam_detected() << device_name(epos_.getDeviceName()));
 		}
 
 

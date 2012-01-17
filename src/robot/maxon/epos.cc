@@ -1402,30 +1402,30 @@ void epos::setTargetPosition(INTEGER32 val)
 }
 
 /* read manufacturer device name string firmware */
-std::string epos::getCanDeviceName()
-{
-	WORD answer[8];
-	unsigned int r = device.ReadObject(answer, 8, nodeId, 0x1008, 0x00);
-
-	char name[16];
-
-	for (int i = 0; i < 4; ++i) {
-		name[i * 2] = (answer[3 + i] & 0xFF);
-		name[i * 2 + 1] = ((answer[3 + i] >> 8) & 0xFF);
-	}
-
-	printf("%d: %c%c%c%c%c%c%c%c\n", r, name[0], name[1], name[2], name[3], name[4], name[5], name[6], name[7]);
-
-	std::string str;
-
-	str += (char) (answer[3] & 0x00FF);
-	str += (char) ((answer[3] & 0xFF00) >> 8);
-	str += (char) (answer[4] & 0x00FF);
-	str += (char) ((answer[4] & 0xFF00) >> 8);
-	// TODO: iterate until end of string
-
-	return str;
-}
+//std::string epos::getCanDeviceName()
+//{
+//	WORD answer[8];
+//	unsigned int r = device.ReadObject(answer, 8, nodeId, 0x1008, 0x00);
+//
+//	char name[16];
+//
+//	for (int i = 0; i < 4; ++i) {
+//		name[i * 2] = (answer[3 + i] & 0xFF);
+//		name[i * 2 + 1] = ((answer[3 + i] >> 8) & 0xFF);
+//	}
+//
+//	printf("%d: %c%c%c%c%c%c%c%c\n", r, name[0], name[1], name[2], name[3], name[4], name[5], name[6], name[7]);
+//
+//	std::string str;
+//
+//	str += (char) (answer[3] & 0x00FF);
+//	str += (char) ((answer[3] & 0xFF00) >> 8);
+//	str += (char) (answer[4] & 0x00FF);
+//	str += (char) ((answer[4] & 0xFF00) >> 8);
+//	// TODO: iterate until end of string
+//
+//	return str;
+//}
 
 /*! read Maximal Following Error */
 UNSIGNED32 epos::getMaxFollowingError()
@@ -2039,7 +2039,7 @@ void epos::monitorHomingStatus()
 		fflush(stdout);
 
 		if ((status & E_BIT13) == E_BIT13) {
-			BOOST_THROW_EXCEPTION(fe() << reason("HOMING ERROR!"));
+			BOOST_THROW_EXCEPTION(fe() << reason("HOMING ERROR") << canId(nodeId));
 		}
 
 		// Increment the wakeup time

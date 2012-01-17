@@ -232,8 +232,11 @@ public:
 	/*! \brief ask EPOS for software version */
 	UNSIGNED16 getSWversion();
 
-	/*! \brief read manufactor device name string firmware */
-	std::string getCanDeviceName();
+	/**!
+	 * \brief read manufactor device name string firmware
+	 * \fixme does not work
+	 */
+//	std::string getCanDeviceName();
 
 	/*! \brief ask for RS232 timeout */
 	UNSIGNED16 getRS232timeout();
