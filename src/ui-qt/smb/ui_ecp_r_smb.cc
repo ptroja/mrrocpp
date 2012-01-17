@@ -43,7 +43,6 @@ void EcpRobot::move_joints(const double final_position[lib::smb::NUM_OF_SERVOS],
 
 void EcpRobot::move_external(const double final_position[6], lib::epos::EPOS_MOTION_VARIANT motion_variant, const double _estimated_time)
 {
-	the_robot->epos_external_command_data_port.data.motion_variant = motion_variant;
 	the_robot->epos_external_command_data_port.data.estimated_time = _estimated_time;
 
 	the_robot->epos_external_command_data_port.data.base_vs_bench_rotation = final_position[0];

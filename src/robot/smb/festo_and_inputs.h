@@ -36,7 +36,6 @@ class effector;
 
 class festo_and_inputs
 {
-
 	friend class effector;
 
 private:
@@ -89,7 +88,6 @@ private:
 	lib::smb::festo_command_td festo_command;
 
 public:
-
 	/*!
 	 * \brief festo_and_inputs constructor
 	 */
@@ -215,13 +213,13 @@ public:
 	void read_state();
 
 	/*!
-	 * \brief prepers the reply buffer for effector class
+	 * \brief prepares the reply buffer for effector class
 	 */
 	void create_reply();
 
 	/*!
 	 * \brief executes the desired command
-	 * it communicates with hardware
+	 * \note communicates with hardware
 	 */
 	void execute_command();
 };

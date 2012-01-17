@@ -10,13 +10,14 @@
 #ifndef __EDP_E_SBENCH_H
 #define __EDP_E_SBENCH_H
 
+#include <string>
+#include <bitset>
+
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_sbench.h"
-#include <comedilib.h>
-#include "../canopen/gateway_epos_usb.h"
-#include "../canopen/gateway_socketcan.h"
+
+#include "../canopen/gateway.h"
 #include "../festo/cpv.h"
-#include "../maxon/epos.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -32,6 +33,9 @@ const static std::string RELAYS_TEST_MODE = "relays_test_mode";
  * \brief class of EDP SwarmItFix sbench effector
  *
  * This sbench is built on top of the SPKM manipulator
+ *
+ * See http://www.festo.com/net/SupportPortal/Downloads/51705/526410g1.pdf
+ * for details about CAN communication.
  */
 class effector : public common::motor_driven_effector
 {
@@ -85,6 +89,9 @@ public:
 	 */
 	effector(common::shell &_shell);
 
+	//! Destructor
+	~effector();
+
 	/*!
 	 * \brief method to init voltage hardware
 	 */
@@ -119,12 +126,12 @@ public:
 	/*!
 	 * \brief method to command voltage of pins
 	 */
-	void voltage_command(lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+	void voltage_command(const lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
 
 	/*!
 	 * \brief method to command preasure in pins
 	 */
-	void preasure_command(lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+	void preasure_command(const lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
 
 	/*!
 	 * \brief method to get position of the motors or joints
@@ -153,7 +160,7 @@ public:
 	/*!
 	 * \brief method to receive instruction from ecp of particular type
 	 */
-	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	lib::INSTRUCTION_TYPE receive_instruction();
 
 	/*!
 	 * \brief method to reply to ecp with class of particular type

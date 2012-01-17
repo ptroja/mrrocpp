@@ -28,7 +28,7 @@ class wgt_smb_command : public wgt_base
 	Q_OBJECT
 
 public:
-	wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
+	wgt_smb_command(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
 			0);
 	~wgt_smb_command();
 

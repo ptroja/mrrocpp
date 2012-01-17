@@ -91,7 +91,7 @@ public:
 	/**
 	 * @brief MP server proxy
 	 */
-	RemoteAgent MP;
+	lib::agent::RemoteAgent MP;
 
 	/**
 	 * @brief Reply to MP
@@ -100,14 +100,14 @@ public:
 	ecp_reply_t ecp_reply;
 
 	//! Data buffer in the MP
-	OutputBuffer <ecp_reply_t> reply;
+	lib::agent::OutputBuffer <ecp_reply_t> reply;
 
 	/**
 	 * Data buffer with command from MP
 	 *
 	 * Buffer itself is a private object. Access to the data is provided with a 'const' access reference.
 	 */
-	InputBuffer <mp_command_t> command;
+	lib::agent::InputBuffer <mp_command_t> command;
 
 	/**
 	 * @brief buffered MP command

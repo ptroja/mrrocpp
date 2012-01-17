@@ -6,64 +6,64 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include <memory>
 #include <exception>
 
-#include <boost/thread/thread.hpp>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+
+#include "serialization.h"
 
 #include "planner.h"
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/lib/mrmath/mrmath.h"
 
-using namespace std;
-
 int main(int argc, char *argv[])
 {
 	// Check for input arguments
 	if(argc < 2) {
-		cerr << "Usage: " << argv[0] << " plan_file.xml" << endl;
+		std::cerr << "Usage: " << argv[0] << " plan_file.xml" << std::endl;
 		return -1;
 	}
 
 	try {
-		const Plan p = *plan(argv[1], xml_schema::Flags::dont_validate);
+		// XML validation settings
+		xml_schema::Properties props;
 
-		// cerr << p.hNum() << endl;
+		// Add XSD validation to parser's properties
+		props.no_namespace_schema_location ("plan.xsd");
 
-		for(Plan::PkmType::ItemConstIterator it = p.pkm().item().begin();
-				it != p.pkm().item().end();
-				++it) {
+		//const Plan p = *plan(argv[1], xml_schema::Flags::dont_validate);
+		Plan p = *plan(argv[1], 0, props);
 
-			const Plan::PkmType::ItemType & pkmCmd = *it;
+		std::cerr << "mbase item # " << p.mbase().item().size() << std::endl;
+		std::cerr << "pkm item # " << p.pkm().item().size() << std::endl;
 
-			// Test only 1st agent
-			if(pkmCmd.agent() != 1)
-				continue;
+		{
+			// make an archive
+			std::ofstream ofs("foo.xml");
+			assert(ofs.good());
+			boost::archive::xml_oarchive oa(ofs);
+			oa << boost::serialization::make_nvp("item", p.pkm().item().front());
+		}
 
-			using namespace mrrocpp;
+		{
+			// open the archive
+			std::ifstream ifs("foo.xml");
+			assert(ifs.good());
+			boost::archive::xml_iarchive ia(ifs);
 
-			// Goal pose
-			lib::Homog_matrix hm;
+			// restore the schedule from the archive
+			ia >> boost::serialization::make_nvp("item", p.pkm().item().front());
+		}
 
-			if(pkmCmd.pkmToWrist().present()) {
-				hm = lib::Homog_matrix(pkmCmd.pkmToWrist().get());
-			} else if (pkmCmd.Xyz_Euler_Zyz().present()) {
-				hm = lib::Xyz_Euler_Zyz_vector(
-						pkmCmd.Xyz_Euler_Zyz()->x(),
-						pkmCmd.Xyz_Euler_Zyz()->y(),
-						pkmCmd.Xyz_Euler_Zyz()->z(),
-						pkmCmd.Xyz_Euler_Zyz()->ox(),
-						pkmCmd.Xyz_Euler_Zyz()->oy(),
-						pkmCmd.Xyz_Euler_Zyz()->oz()
-						);
-			} else {
-				// This should be already checked by XML validation
-				throw std::runtime_error("Goal pose not defined");
-			}
-
-			std::cerr << pkmCmd.pkmToWrist() << std::endl;
-			std::cerr << hm << std::endl << std::endl;
-			//std::cerr << "[" << pkmCmd.l1() << "," << pkmCmd.l2() << "," << pkmCmd.l3() << "]" << std::endl;
+		{
+			// make an archive
+			std::ofstream ofs("foo2.xml");
+			assert(ofs.good());
+			boost::archive::xml_oarchive oa(ofs);
+			oa << boost::serialization::make_nvp("item", p.pkm().item().front());
 		}
 
 		// Create planner object
@@ -72,8 +72,8 @@ int main(int argc, char *argv[])
 		// Start execution
 		//pp.start();
 
-	} catch (const xml_schema::Exception& e) {
-		cerr << e << endl;
+	} catch (const xml_schema::Exception & e) {
+		std::cerr << "Exception::what(): " << e << std::endl;
 		return 1;
 	}
 

@@ -58,9 +58,9 @@ enum CBUFFER_VARIANT
 
 class pins_buffer
 {
+private:
 	friend class mrrocpp::edp::sbench::effector;
 
-private:
 	bool pins_state[NUM_OF_PINS];
 
 protected:
@@ -82,6 +82,7 @@ public:
 	//! checks if any value in translation table is doubled
 	bool is_any_doubled_value();
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -101,11 +102,10 @@ public:
 
 class voltage_buffer : public pins_buffer
 {
-
 public:
-
 	voltage_buffer();
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -125,11 +125,11 @@ public:
 
 class preasure_buffer : public pins_buffer
 {
-
 public:
 
 	preasure_buffer();
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -154,6 +154,7 @@ struct cbuffer
 	voltage_buffer voltage_buf;
 	preasure_buffer preasure_buf;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -177,6 +178,7 @@ struct c_buffer : lib::c_buffer
 	//! sbench specific field
 	cbuffer sbench;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -199,6 +201,7 @@ struct rbuffer : lib::r_buffer
 	voltage_buffer voltage_buf;
 	preasure_buffer preasure_buf;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -222,6 +225,7 @@ struct r_buffer : lib::r_buffer
 	//! sbench specific field
 	rbuffer sbench;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 

@@ -1,95 +1,88 @@
 /*
- * generator/ecp_g_smb.h
+ * ecp_g_smb.h
  *
- *Author: yoyek
+ * Author: ptroja
  */
 
 #ifndef ECP_G_SMB_H_
 #define ECP_G_SMB_H_
 
-#include "base/ecp/ecp_generator.h"
+#include <boost/thread/thread_time.hpp>
+
+#include "robot/smb/ecp_r_smb.h"
 #include "robot/smb/dp_smb.h"
+
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace smb {
 namespace generator {
 
-class pin_lock : public common::generator::generator
+class quickstop : public common::generator::_generator<ecp::smb::robot>
 {
-private:
-	lib::smb::multi_pin_locking_td mp_ecp_smb_multi_pin_locking_structure;
-
-	lib::single_thread_port <lib::smb::multi_pin_locking_td> * smb_multi_pin_locking_data_port;
-
-	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-
 public:
-	pin_lock(common::task::task& _ecp_task); //constructor
-	bool first_step(); //first step generation
-	bool next_step(); //next step generation
+	//! Constructor
+	quickstop(task_t & _ecp_task);
 
-	void create_ecp_mp_reply();
-	void get_mp_ecp_command();
+	//! first step generation
+	bool first_step();
 
+	//! next step generation
+	bool next_step();
 };
 
-class pin_unlock : public common::generator::generator
+/*!
+ * @brief generator to send the command prepared EDP SMB legs
+ * @note waits for the command execution is finished
+ * @ingroup generators
+ */
+class stand_up : public common::generator::_generator<ecp::smb::robot>
 {
-private:
-	lib::smb::multi_pin_locking_td mp_ecp_smb_multi_pin_locking_structure;
-
-	lib::single_thread_port <lib::smb::multi_pin_locking_td> * smb_multi_pin_locking_data_port;
-
-	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-
 public:
-	pin_unlock(common::task::task& _ecp_task); //constructor
-	bool first_step(); //first step generation
-	bool next_step(); //next step generation
+	/**
+	 * @brief Constructor
+	 * @param _ecp_task ecp task object reference
+	 * @cmd cmd command
+	 */
+	stand_up(task_t & _ecp_task, const lib::smb::festo_command_td & cmd = lib::smb::festo_command_td());
 
-	void create_ecp_mp_reply();
-	void get_mp_ecp_command();
+	bool first_step();
 
+	bool next_step();
+
+private:
+	lib::smb::festo_command_td festo_command;
 };
 
-class pin_rise : public common::generator::generator
+/*!
+ * @brief generator to send the command to EDP SMB motors
+ * @note waits for the command execution is finished
+ * @ingroup generators
+ */
+class rotate : public common::generator::_generator<ecp::smb::robot>
 {
-private:
-	lib::smb::multi_pin_insertion_td mp_ecp_smb_multi_pin_insertion_structure;
-
-	lib::single_thread_port <lib::smb::multi_pin_insertion_td> * smb_festo_command_data_port;
-
-	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-
 public:
-	pin_rise(common::task::task& _ecp_task); //constructor
-	bool first_step(); //first step generation
-	bool next_step(); //next step generation
+	/**
+	 * @brief Constructor
+	 * @param _ecp_task ecp task object reference.
+	 */
+	rotate(task_t & _ecp_task, const lib::smb::motor_command & cmd);
 
-	void create_ecp_mp_reply();
-	void get_mp_ecp_command();
+	bool first_step();
 
+	bool next_step();
+
+private:
+	lib::smb::motor_command simple_command;
+
+	//! Wakeup timer
+	boost::system_time wakeup;
+
+	//! Effector query interval
+	const boost::posix_time::time_duration query_interval;
 };
 
-class pin_lower : public common::generator::generator
-{
-private:
-	lib::smb::multi_pin_insertion_td mp_ecp_smb_multi_pin_insertion_structure;
-
-	lib::single_thread_port <lib::smb::multi_pin_insertion_td> * smb_festo_command_data_port;
-
-	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> * smb_multi_leg_reply_data_request_port;
-
-public:
-	pin_lower(common::task::task& _ecp_task); //constructor
-	bool first_step(); //first step generation
-	bool next_step(); //next step generation
-
-	void create_ecp_mp_reply();
-	void get_mp_ecp_command();
-
-};
 
 } // namespace generator
 } // namespace smb

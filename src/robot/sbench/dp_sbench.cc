@@ -72,7 +72,7 @@ void pins_buffer::set_value(int row, int column, bool value)
 	pins_state[translation_table[row][column]] = value;
 }
 
-bool pins_buffer::get_value(int row, int column)
+bool pins_buffer::get_value(int row, int column) const
 {
 	return pins_state[translation_table[row][column]];
 }

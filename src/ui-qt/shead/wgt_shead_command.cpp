@@ -232,7 +232,7 @@ void wgt_shead_command::on_pushButton_sol_execute_clicked()
 
 		if (ui.radioButton_sol_activate->isChecked()) {
 			sa = lib::shead::SOLIDIFICATION_ON;
-		} else if (ui.radioButton_sol_desactivate->isChecked()) {
+		} else if (ui.radioButton_sol_deactivate->isChecked()) {
 			sa = lib::shead::SOLIDIFICATION_OFF;
 		}
 
@@ -256,7 +256,7 @@ void wgt_shead_command::on_pushButton_vac_execute_clicked()
 
 		if (ui.radioButton_vac_activate->isChecked()) {
 			va = lib::shead::VACUUM_ON;
-		} else if (ui.radioButton_vac_desactivate->isChecked()) {
+		} else if (ui.radioButton_vac_deactivate->isChecked()) {
 			va = lib::shead::VACUUM_OFF;
 		}
 

@@ -47,7 +47,6 @@ teach_in::teach_in(common::task::task& _ecp_task) :
 // destruktor
 teach_in::~teach_in(void)
 {
-	flush_pose_list();
 }
 
 // --------------------------------------------------------------------------
@@ -86,7 +85,7 @@ void teach_in::teach(lib::ECP_POSE_SPECIFICATION ps, const char *msg)
 			// Wstaw do listy nowa pozycje
 			insert_pose_list_element(ps, ui_to_ecp_rep.double_number, ui_to_ecp_rep.coordinates);
 		}
-	}; // end: for(;;)
+	} // end: for(;;)
 	initiate_pose_list();
 } // end: teach()
 
@@ -97,11 +96,7 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
 	ecp_taught_in_pose tip; // Zapisywana pozycja
-	char *cwd; // Wsk. na nazwe biezacego katalogu
 	char coordinate_type[80]; // Opis wspolrzednych: "MOTOR", "JOINT", ...
-	uint64_t e; // Kod bledu systemowego
-	uint64_t number_of_poses; // Liczba pozycji do zapamietania
-	uint64_t i, j; // Liczniki petli
 
 	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
 	strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
@@ -110,7 +105,7 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
 
 	{ // by Y&W
-		e = errno;
+		int e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		BOOST_THROW_EXCEPTION(exception::se_g());
@@ -130,29 +125,30 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 		case lib::ECP_PF_VELOCITY:
 			strcpy(coordinate_type, "POSE_FORCE_TORQUE_AT_FRAME");
 			break;
-
 		default:
 			strcpy(coordinate_type, "MOTOR");
+			break;
 	}
-	cwd = getcwd(NULL, 0);
+
 	if (chdir(ui_to_ecp_rep.path) != 0) {
 		perror(ui_to_ecp_rep.path);
 		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_DIRECTORY));
 	}
+
 	std::ofstream to_file(ui_to_ecp_rep.filename); // otworz plik do zapisu
-	e = errno;
+
 	if (!to_file) {
 		perror(ui_to_ecp_rep.filename);
 		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
 	} else {
 		initiate_pose_list();
-		number_of_poses = pose_list_length();
+		std::size_t number_of_poses = pose_list_length();
 		to_file << coordinate_type << '\n';
 		to_file << number_of_poses << '\n';
-		for (i = 0; i < number_of_poses; i++) {
-			get_pose(tip);
+		for (int i = 0; i < number_of_poses; i++) {
+			tip = get_pose();
 			to_file << tip.motion_time << ' ';
-			for (j = 0; j < lib::MAX_SERVOS_NR; j++)
+			for (int j = 0; j < lib::MAX_SERVOS_NR; j++)
 				to_file << tip.coordinates[j] << ' ';
 			if (ps == lib::ECP_PF_VELOCITY) { // by Y
 				to_file << tip.extra_info << ' ';
@@ -162,7 +158,7 @@ void teach_in::save_file(lib::ECP_POSE_SPECIFICATION ps)
 		}
 		initiate_pose_list();
 	}
-} // end: irp6_on_track_save_file()
+}
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
@@ -174,20 +170,19 @@ bool teach_in::load_file_from_ui()
 	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
 
-	uint64_t e; // Kod bledu systemowego
-
 	ecp_to_ui_msg.ecp_message = lib::LOAD_FILE; // Polecenie wprowadzenia nazwy odczytywanego pliku
 
 	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
-
 	{ // by Y&W
-		e = errno;
+		int e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
 		BOOST_THROW_EXCEPTION(exception::se_g());
 	}
+
 	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
 		return false;
+
 	if (chdir(ui_to_ecp_rep.path) != 0) {
 		perror(ui_to_ecp_rep.path);
 		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_DIRECTORY));
@@ -198,7 +193,7 @@ bool teach_in::load_file_from_ui()
 } // end: load_file()
 // --------------------------------------------------------------------------
 
-bool teach_in::load_file_with_path(const char* file_name)
+bool teach_in::load_file_with_path(const std::string & file_name)
 {
 	// Funkcja zwraca true jesli wczytanie trajektorii powiodlo sie,
 
@@ -212,9 +207,9 @@ bool teach_in::load_file_with_path(const char* file_name)
 	int extra_info = 0; // by Y - dodatkowe info do dowolnego wykorzystania
 	double motion_time; // Czas dojscia do wspolrzednych
 
-	std::ifstream from_file(file_name); // otworz plik do odczytu
+	std::ifstream from_file(file_name.c_str()); // otworz plik do odczytu
 	if (!from_file.good()) {
-		perror(file_name);
+		perror(file_name.c_str());
 		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
 	}
 
@@ -303,9 +298,9 @@ void teach_in::next_pose_list_ptr(void)
 		pose_list_iterator++;
 }
 // -------------------------------------------------------
-void teach_in::get_pose(ecp_taught_in_pose& tip)
+const ecp_taught_in_pose & teach_in::get_pose(void) const
 { // by Y
-	tip = *pose_list_iterator;
+	return *pose_list_iterator;
 }
 // -------------------------------------------------------
 // Pobierz nastepna pozycje z listy
@@ -322,27 +317,20 @@ void teach_in::set_pose(lib::ECP_POSE_SPECIFICATION ps, double motion_time, doub
 	memcpy(pose_list_iterator->coordinates, coordinates, lib::MAX_SERVOS_NR * sizeof(double));
 }
 // -------------------------------------------------------
-bool teach_in::is_pose_list_element(void)
+bool teach_in::is_pose_list_element(void) const
 {
 	// sprawdza czy aktualnie wskazywany jest element listy, czy lista sie skonczyla
-	if (pose_list_iterator != pose_list.end())
-		return true;
-	else
-		return false;
+	return (pose_list_iterator != pose_list.end());
 }
 // -------------------------------------------------------
-bool teach_in::is_last_list_element(void)
+bool teach_in::is_last_list_element(void) const
 {
 	// sprawdza czy aktualnie wskazywany element listy ma nastepnik
 	// jesli <> nulla
 	if (pose_list_iterator != pose_list.end()) {
-		if ((++pose_list_iterator) != pose_list.end()) {
-			--pose_list_iterator;
-			return false;
-		} else {
-			--pose_list_iterator;
-			return true;
-		}; // end if
+		pose_list_t::const_iterator it = pose_list_iterator;
+		it++;
+		return (it == pose_list.end());
 	}
 	return false;
 }
@@ -361,7 +349,7 @@ void teach_in::insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, double m
 }
 
 // -------------------------------------------------------
-int teach_in::pose_list_length(void)
+std::size_t teach_in::pose_list_length(void) const
 {
 	return pose_list.size();
 }
@@ -407,7 +395,7 @@ bool teach_in::next_step()
 		return false;
 	}
 
-	get_pose(tip);
+	tip = get_pose();
 	// Przepisanie pozycji z listy
 	switch (tip.arm_type)
 	{

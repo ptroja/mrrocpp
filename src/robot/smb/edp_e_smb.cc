@@ -298,8 +298,8 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		gateway->open();
 
 		// Create epos objects according to CAN ID-mapping.
-		legs_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8);
-		pkm_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 9);
+		legs_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8, "legs rotation");
+		pkm_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 9, "PKM rotation");
 
 		// Collect axes into common array container.
 		axes[0] = &(*legs_rotation_node);
@@ -517,63 +517,45 @@ void effector::execute_motor_motion()
 {
 	DEBUG_METHOD;
 
-	// TODO: remove this line!
-	instruction.smb.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
+	// Execute command.
+	if (is_synchronised()) {
 
-	// Perform motion depending on its type.
-	// Note: at this point we assume, that desired_motor_pos_new holds a validated data.
-	switch (instruction.smb.motion_variant)
-	{
-		case lib::epos::NON_SYNC_TRAPEZOIDAL:
-			DEBUG_COMMAND("NON_SYNC_TRAPEZOIDAL");
-
-			// Execute command.
-			if (is_synchronised()) {
-#if(DEBUG_MOTORS)
-				cout << "MOTOR: absolute:" << desired_motor_pos_new.transpose() << endl;
-#endif
-				// Robot is synchronized.
-				for (size_t i = 0; i < axes.size(); ++i) {
-					if (!robot_test_mode) {
-						// Set velocity and acceleration values.
-						axes[i]->setProfileVelocity(Vdefault[i]);
-						axes[i]->setProfileAcceleration(Adefault[i]);
-						axes[i]->setProfileDeceleration(Ddefault[i]);
-						// In case of legs rotation node...
-						if (i == 0)
-							// ... perform the relative move.
-							axes[i]->moveAbsolute(desired_motor_pos_new[i] + legs_relative_zero_position);
-						else
-							axes[i]->moveAbsolute(desired_motor_pos_new[i]);
-					} else {
-						// Virtually "move" to desired absolute position.
-						current_motor_pos[i] = desired_motor_pos_new[i];
-					}
-				} //: for
+		// Robot is synchronized.
+		for (size_t i = 0; i < axes.size(); ++i) {
+			if (!robot_test_mode) {
+				// Set velocity and acceleration values.
+				axes[i]->setProfileVelocity(Vdefault[i]);
+				axes[i]->setProfileAcceleration(Adefault[i]);
+				axes[i]->setProfileDeceleration(Ddefault[i]);
+				// In case of legs rotation node...
+				if (i == 0)
+					// ... perform the relative move.
+					axes[i]->moveAbsolute(desired_motor_pos_new[i] + legs_relative_zero_position);
+				else
+					axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 			} else {
+				// Virtually "move" to desired absolute position.
+				current_motor_pos[i] = desired_motor_pos_new[i];
+			}
+		}//: for
+	} else {
 #if(DEBUG_MOTORS)
-				cout << "MOTOR: relative:" << desired_motor_pos_new.transpose() << endl;
+		cout << "MOTOR moveRelative:" << desired_motor_pos_new.transpose() << endl;
 #endif
-				// Robot unsynchronized.
-				for (size_t i = 0; i < axes.size(); ++i) {
-					if (!robot_test_mode) {
-						// Set velocity and acceleration values.
-						axes[i]->setProfileVelocity(Vdefault[i]);
-						axes[i]->setProfileAcceleration(Adefault[i]);
-						axes[i]->setProfileDeceleration(Ddefault[i]);
-						axes[i]->moveRelative(desired_motor_pos_new[i]);
-					} else {
-						// Virtually "move" to desired relative position.
-						current_motor_pos[i] += desired_motor_pos_new[i];
-					}
-				} //: for
-			} //: is_synchronised
-			break;
-		default:
-			// Throw non-fatal error - motion type not supported.
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_motion_type());
-			break;
-	} //: switch (instruction.smb.motion_variant)
+		// Robot unsynchronized.
+		for (size_t i = 0; i < axes.size(); ++i) {
+			if (!robot_test_mode) {
+				// Set velocity and acceleration values.
+				axes[i]->setProfileVelocity(Vdefault[i]);
+				axes[i]->setProfileAcceleration(Adefault[i]);
+				axes[i]->setProfileDeceleration(Ddefault[i]);
+				axes[i]->moveRelative(desired_motor_pos_new[i]);
+			} else {
+				// Virtually "move" to desired relative position.
+				current_motor_pos[i] += desired_motor_pos_new[i];
+			}
+		}//: for
+	}//: is_synchronised
 
 }
 
@@ -713,12 +695,12 @@ void effector::create_threads()
 {
 	fai = new festo_and_inputs(*this);
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
+	// vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
-lib::INSTRUCTION_TYPE effector::variant_receive_instruction()
+lib::INSTRUCTION_TYPE effector::receive_instruction()
 {
-	return receive_instruction(instruction);
+	return common::effector::receive_instruction(instruction);
 }
 
 void effector::variant_reply_to_instruction()

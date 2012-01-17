@@ -5,17 +5,12 @@
 #include "base/lib/com_buf.h"
 
 #include "base/lib/sr/srlib.h"
-#include "ecp_mp_t_swarmitfix.h"
 
 #include "robot/shead/ecp_r_shead.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
-#include "generator/ecp/ecp_g_sleep.h"
+#include "robot/shead/ecp_r_shead1.h"
+#include "robot/shead/ecp_r_shead2.h"
 #include "ecp_g_shead.h"
 #include "ecp_t_shead.h"
-#include "generator/ecp/ecp_mp_g_transparent.h"
-#include "generator/ecp/ecp_mp_g_newsmooth.h"
-#include "generator/ecp/ecp_mp_g_sleep.h"
-#include "ecp_mp_g_shead.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -24,59 +19,81 @@ namespace task {
 
 // KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
-	common::task::task(_config)
+	task_t(_config),
+	nextstateBuffer(*this, lib::commandBufferId)
 {
-	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
+	// Create the robot object
+	if (config.robot_name == lib::shead1::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new shead1::robot(*this);
+	} else if (config.robot_name == lib::shead2::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new shead2::robot(*this);
+	} else {
+		throw std::runtime_error(config.robot_name + ": unknown robot");
+	}
 
-	gt = new common::generator::transparent(*this);
-	//sg = new common::generator::smooth(*this, true);
-	g_sleep = new common::generator::sleep(*this);
-	g_head_soldify = new generator::head_soldify(*this);
-	g_head_desoldify = new generator::head_desoldify(*this);
-	g_head_vacuum_on = new generator::head_vacuum_on(*this);
-	g_head_vacuum_off = new generator::head_vacuum_off(*this);
+	// Create task-dependent IO buffers
+	notifyBuffer = (boost::shared_ptr<lib::agent::OutputBuffer<lib::notification_t> >)
+			new lib::agent::OutputBuffer<lib::notification_t>(MP, ecp_m_robot->robot_name+lib::notifyBufferId);
 
 	sr_ecp_msg->message("ecp shead loaded");
 }
 
-void swarmitfix::mp_2_ecp_next_state_string_handler(void)
+void swarmitfix::main_task_algorithm(void)
 {
+	std::cerr << "shead> swarmitfix::main_task_algorithm" << std::endl;
 
-	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
-		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
-		gt->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
-		std::string path(mrrocpp_network_path);
-		path += mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
+	if (0) {
+		// Setup initial off state
+		lib::shead::next_state::control_t cmd;
 
-		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.variant)
-		{
-			case ecp_mp::task::RELATIVE:
-				//sg->set_relative();
-				break;
-			case ecp_mp::task::ABSOLUTE:
-				//sg->set_absolute();
-				break;
-			default:
-				break;
-		}
+		cmd.solidify = lib::shead::SOLIDIFICATION_OFF;
+		cmd.vacuum = lib::shead::VACUUM_OFF;
 
-		//sg->load_file_with_path(path.c_str());
-		//sg->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SLEEP) {
-		g_sleep->init_time(mp_command.ecp_next_state.variant);
-		g_sleep->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_GEN_HEAD_SOLDIFY) {
-		g_head_soldify->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_GEN_HEAD_DESOLDIFY) {
-		g_head_desoldify->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_GEN_VACUUM_ON) {
-		g_head_vacuum_on->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_GEN_VACUUM_OFF) {
-		g_head_vacuum_off->Move();
+		// Generator to execute the command
+		generator::control g_control(*this, cmd);
+
+		// Command the robot
+		g_control.Move();
 	}
 
+	// Generators to execute coordinator's commands
+	generator::control g_control(*this, nextstateBuffer.access.control);
+	generator::rotate g_rotate(*this, nextstateBuffer.access.pose);
+
+	// Loop execution coordinator's commands
+	while(true) {
+		// Wait for new coordinator's command
+		while(!nextstateBuffer.isFresh()) {
+			ReceiveSingleMessage(true);
+		}
+
+		try {
+			switch(nextstateBuffer.access.command) {
+				case lib::shead::next_state::CONTROL:
+					g_control.Move();
+					break;
+				case lib::shead::next_state::ROTATE:
+					g_control.Move();
+					break;
+				default:
+					// TODO: execute quickstop command
+					throw std::runtime_error("Quickstop not implemented");
+					break;
+			}
+			// Mark command as used
+			nextstateBuffer.markAsUsed();
+
+		} catch (const std::exception & e) {
+			// Report problem...
+			notifyBuffer->Send(lib::NACK);
+
+			// And DO NOT re-throw exception to the process shell
+			// throw;
+		}
+
+		// Reply with acknowledgment
+		notifyBuffer->Send(lib::ACK);
+	}
 }
 
 }

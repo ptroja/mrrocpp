@@ -41,6 +41,21 @@ protected:
 	bool new_data;
 
 public:
+	/**
+	 * @brief Constructor
+	 * @param _name Unique port name.
+	 * @param _port_manager port manager reference.
+	 */
+	single_thread_port_interface(const std::string & _name, single_thread_port_manager & _port_manager);
+
+	/**
+	 * @brief Destructor
+	 * This is a base class, so virtual destructor is recommended
+	 * and it is also required for dynamic casting.
+	 */
+	virtual ~single_thread_port_interface()
+	{
+	}
 
 	/*!
 	 * @brief Data flow status
@@ -53,30 +68,14 @@ public:
 	};
 
 	/**
-	 * @brief Constructor
-	 * @param _name Unique port name.
-	 * @param _port_manager port manager reference.
-	 */
-	single_thread_port_interface(std::string _name, single_thread_port_manager & _port_manager);
-	/**
-	 * @brief Destructor
-	 * This is a base class, so virtual destructor is recommended
-	 * and it is also required for dynamic casting.
-	 */
-	virtual ~single_thread_port_interface()
-	{
-	}
-
-	/**
 	 * @brief returns port name
 	 */
-	std::string get_name();
+	const std::string & get_name() const;
 
 	/**
 	 * @brief clears all flags
 	 */
-	virtual void clear_all_flags()=0;
-
+	virtual void clear_all_flags() = 0;
 };
 
 /*!
@@ -120,14 +119,13 @@ public:
 	 * @param _name Unique port name.
 	 * @param _port_manager port manager reference.
 	 */
-	single_thread_port(std::string _name, single_thread_port_manager & _port_manager) :
+	single_thread_port(const std::string & _name, single_thread_port_manager & _port_manager) :
 			single_thread_port_interface(_name, _port_manager), no_data(true)
-
 	{
 	}
 
 	/**
-	 * @brief Sets the new_data flag and unset no_data flag
+	 * @brief Sets the new_data flag and unsets no_data flag
 	 */
 	virtual void set()
 	{
@@ -194,9 +192,8 @@ public:
 	 * @param _name Unique port name.
 	 * @param _port_manager port manager reference.
 	 */
-	single_thread_request_port(std::string _name, single_thread_port_manager & _port_manager) :
+	single_thread_request_port(const std::string & _name, single_thread_port_manager & _port_manager) :
 			single_thread_port <T>(_name, _port_manager), new_request(false)
-
 	{
 	}
 
@@ -245,20 +242,6 @@ public:
 };
 
 /*!
- * @brief single_thread_port_interface stl map typedef
- *
- * @ingroup lib
- */
-typedef std::map <std::string, single_thread_port_interface *> single_thread_port_interface_t;
-
-/*!
- * @brief single_thread_port_interface stl map value_type typedef
- *
- * @ingroup lib
- */
-typedef single_thread_port_interface_t::value_type single_thread_port_interface_pair_t;
-
-/*!
  * @brief class to manage single_thread_port classes
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
@@ -267,6 +250,20 @@ typedef single_thread_port_interface_t::value_type single_thread_port_interface_
 class single_thread_port_manager
 {
 private:
+	/*!
+	 * @brief single_thread_port_interface stl map typedef
+	 *
+	 * @ingroup lib
+	 */
+	typedef std::map <const std::string, single_thread_port_interface *> single_thread_port_interface_t;
+
+	/*!
+	 * @brief single_thread_port_interface stl map value_type typedef
+	 *
+	 * @ingroup lib
+	 */
+	typedef single_thread_port_interface_t::value_type single_thread_port_interface_pair_t;
+
 	/**
 	 * @brief single_thread_port map
 	 */
@@ -274,15 +271,10 @@ private:
 
 public:
 	/**
-	 * @brief Constructor
-	 */
-	single_thread_port_manager();
-
-	/**
 	 * @brief adds new port to port map
-	 * @param single_thread_port_inter port interface to add
+	 * @param port_iface port interface to add
 	 */
-	void add_port(single_thread_port_interface* single_thread_port_inter);
+	void add_port(single_thread_port_interface* port_iface);
 
 	/**
 	 * @brief clears all flags of stored ports

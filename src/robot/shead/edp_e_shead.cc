@@ -321,8 +321,8 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 					// Brake with Quickstop command
 					epos_node->setState(maxon::epos::QUICKSTOP);
 
-					// Reset node.
-					epos_node->reset();
+					// Switch back to ENABLE state.
+					epos_node->reset(); //(maxon::epos::ENABLE_OPERATION);
 				}
 				break;
 			case lib::shead::CLEAR_FAULT:
@@ -536,9 +536,9 @@ void effector::create_threads()
 	//vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
-lib::INSTRUCTION_TYPE effector::variant_receive_instruction()
+lib::INSTRUCTION_TYPE effector::receive_instruction()
 {
-	return receive_instruction(instruction);
+	return common::effector::receive_instruction(instruction);
 }
 
 void effector::variant_reply_to_instruction()

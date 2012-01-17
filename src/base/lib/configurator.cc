@@ -94,11 +94,6 @@ bool configurator::check_config(const std::string & key) const
 	return (exists(key.c_str()) && value <int> (key));
 }
 
-int configurator::return_node_number(const std::string & node_name_l)
-{
-	return ND_LOCAL_NODE;
-}
-
 std::string configurator::return_attach_point_name(const char* _key, const char* __section_name) const
 {
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();

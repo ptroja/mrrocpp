@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 	try {
 		gateway.open();
 
-		epos node0(gateway, 0);
+		epos node0(gateway, 0, "test");
 
 		gateway.SendNMTService(0, gateway::Start_Remote_Node);
 		gateway.SendNMTService(1, gateway::Start_Remote_Node);

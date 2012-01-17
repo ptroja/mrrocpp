@@ -8,6 +8,12 @@
  */
 
 #include <cstdio>
+#include <boost/static_assert.hpp>
+
+#include <comedilib.h>
+
+#include "robot/canopen/gateway_epos_usb.h"
+#include "robot/canopen/gateway_socketcan.h"
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
@@ -88,8 +94,22 @@ void effector::voltage_init()
 		}
 
 	} else {
-		current_pins_buf.voltage_buf.set_zeros();
+		// Set pointer just for safety
+		voltage_device = NULL;
 
+		current_pins_buf.voltage_buf.set_zeros();
+	}
+}
+
+effector::~effector()
+{
+	if(!robot_test_mode) {
+		// Detach from hardware
+		if (voltage_device) {
+			if(comedi_close(voltage_device) == -1) {
+				throw std::runtime_error("comedi_close() failed");
+			}
+		}
 	}
 }
 
@@ -154,7 +174,7 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 void effector::move_arm(const lib::c_buffer &instruction)
 {
 
-	lib::sbench::c_buffer & local_instruction = (lib::sbench::c_buffer&) instruction;
+	const lib::sbench::c_buffer & local_instruction = (lib::sbench::c_buffer &) instruction;
 
 	msg->message("move_arm");
 
@@ -172,9 +192,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 
 }
 
-/*--------------------------------------------------------------------------*/
-
-void effector::voltage_command(lib::sbench::c_buffer &instruction)
+void effector::voltage_command(const lib::sbench::c_buffer &instruction)
 {
 	msg->message("voltage_command");
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
@@ -226,7 +244,7 @@ void effector::voltage_command(lib::sbench::c_buffer &instruction)
 
 }
 
-void effector::preasure_command(lib::sbench::c_buffer &instruction)
+void effector::preasure_command(const lib::sbench::c_buffer &instruction)
 {
 	msg->message("preasure_command");
 
@@ -372,12 +390,12 @@ void effector::create_kinematic_models_for_given_robot(void)
 void effector::create_threads()
 {
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
+	//vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
-lib::INSTRUCTION_TYPE effector::variant_receive_instruction()
+lib::INSTRUCTION_TYPE effector::receive_instruction()
 {
-	return receive_instruction(instruction);
+	return common::effector::receive_instruction(instruction);
 }
 
 void effector::variant_reply_to_instruction()

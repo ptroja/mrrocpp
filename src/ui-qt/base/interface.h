@@ -109,7 +109,7 @@ public:
 	boost::shared_ptr <ecp_buffer> ui_ecp_obj;
 	boost::shared_ptr <feb_thread> meb_tid;
 
-	function_execution_buffer *main_eb;
+	boost::shared_ptr<function_execution_buffer> main_eb;
 
 	typedef std::string list_t;
 
@@ -125,7 +125,7 @@ public:
 	TEACHING_STATE_ENUM file_window_mode;
 	UI_NOTIFICATION_STATE_ENUM notification_state, next_notification;
 
-	std::ofstream *log_file_outfile;
+	boost::shared_ptr<std::ofstream> log_file_outfile;
 
 	boost::mutex process_creation_mtx;
 	boost::mutex ui_notification_state_mutex;
@@ -201,8 +201,8 @@ public:
 	void unload_all();
 	void slay_all();
 
-	Mp *mp;
-	AllRobots *all_robots;
+	boost::shared_ptr<Mp> mp;
+	boost::shared_ptr<AllRobots> all_robots;
 
 	void open_process_control_windows();
 

@@ -224,8 +224,7 @@ void servo_buffer::operator()()
 	catch (std::runtime_error & e) {
 		printf("servo group runtime error: %s \n", e.what());
 		master.msg->message(lib::FATAL_ERROR, e.what());
-		master.edp_shell.close_hardware_busy_file();
-		_exit(EXIT_SUCCESS);
+		exit(EXIT_SUCCESS);
 	}
 
 	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY + 10);
