@@ -47,7 +47,6 @@ using namespace std;
 // Initialize the limit extension.
 const uint32_t effector::limit_extension = 1000;
 
-
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		manip_effector(_shell, l_robot_name, instruction, reply)
 {
@@ -70,6 +69,14 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 		// Epos objects initialization moved to the SPKM1 and SPKM2 constructors.
 	}
+}
+
+effector::~effector()
+{
+	DEBUG_METHOD;
+
+	// Apply brake during shutdown.
+	if (axis2.get()) disable_moog_motor();
 }
 
 void effector::disable_moog_motor()
@@ -439,7 +446,7 @@ void effector::synchronise(void)
 }
 
 
-void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_limit_, int32_t  positive_limit_, int32_t homing_offset)
+void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t negative_limit_, int32_t positive_limit_, int32_t homing_offset)
 {
 	try{
 		// Disable both limits.

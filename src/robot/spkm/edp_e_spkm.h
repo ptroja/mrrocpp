@@ -33,7 +33,6 @@ namespace spkm {
 class effector : public common::manip_effector
 {
 private:
-
 	/*!
 	 * \brief "Desired" joint values that were required by previously received SET command.
 	 *
@@ -98,13 +97,17 @@ protected:
 	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
 public:
-
 	/*!
-	 * @brief class constructor
+	 * @brief Constructor.
 	 *
 	 * The attributes are initialized here.
 	 */
 	effector(common::shell &_shell, lib::robot_name_t l_robot_name);
+
+	/*!
+	 * @brief Destructor.
+	 */
+	~effector();
 
 	/*!
 	 * @brief motors synchronization
