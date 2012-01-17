@@ -559,12 +559,13 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 				return;
 			case lib::spkm::CLEAR_FAULT:
 				DEBUG_COMMAND("CLEAR_FAULT");
-
-				BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
-						{
-							node->clearFault();
-						}
-				// Internal position counters need not be updated.
+				if (!robot_test_mode) {
+					BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
+							{
+								node->clearFault();
+							}
+				} //: !test_mode
+				// Internal position counters need not to be updated.
 				return;
 			default:
 				// Throw non-fatal error - invalid command.
