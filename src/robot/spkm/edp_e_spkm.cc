@@ -1334,6 +1334,11 @@ void effector::interpolated_motion_in_operational_space()
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
+/*	std::cerr<<"\nisTargetReached: (";
+	BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes) {
+		std::cerr<<node->isTargetReached() << ",";
+	}
+	std::cerr<<")\n";*/
 
 	try {
 		// Check controller state.

@@ -79,11 +79,13 @@ void swarmitfix_demo_agent1_warsaw::main_task_algorithm(void)
 {
 	/*
 	 neutral pose OK
-	 tool:  -0.1412 -0.04 0.5718 3.1416 0.137 0
-	 wrist: 0.15 -0.04 0.4 0 -0.92 0
+	 tool:  -0.1412 -0.035 0.5768 3.1416 0.137 0
+	 wrist: 0.15 -0.035 0.405 0 -0.92 0
 	 */
 	// Move to the *neutral* PKM pose.
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, -0.04, 0.4, 0, -0.92, 0);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, -0.035, 0.405, 0, -0.92, 0);
+
+
 	// Move shead to synchro position.
 	move_shead_joints(0.0);
 
@@ -169,9 +171,6 @@ void swarmitfix_demo_agent1_warsaw::main_task_algorithm(void)
 #if(SMB_PULL_LEGS)
 	move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::IN);
 #endif
-// KONIEC
-//	sr_ecp_msg->message("END");
-
 }
 
 
