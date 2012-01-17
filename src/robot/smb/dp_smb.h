@@ -158,18 +158,22 @@ struct smb_ext_epos_reply
  */
 struct smb_epos_simple_command
 {
+	//! Motion variant (UNUSED!).
 	lib::epos::EPOS_MOTION_VARIANT motion_variant;
 
-	// external
+	//! Rotation of the legs (in external values -6, -5, ..., 5, 6).
 	int base_vs_bench_rotation;
+
+	//! Desired rotation of the upper SMP by given angle [radians].
 	double pkm_vs_base_rotation;
 
+	//! Estimated time of motion (UNUSED!).
 	double estimated_time;
 
-	//! Give access to boost::serialization framework
+	//! Give access to boost::serialization framework.
 	friend class boost::serialization::access;
 
-	//! Serialization of the data structure
+	//! Serialization of the data structure.
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{

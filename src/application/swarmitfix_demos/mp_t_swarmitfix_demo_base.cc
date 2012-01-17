@@ -27,7 +27,7 @@ swarmitfix_demo_base::swarmitfix_demo_base(lib::configurator &config_) :
 
 }
 
-void swarmitfix_demo_base::rotate_smb(int leg_number_, double rotation_)
+void swarmitfix_demo_base::rotate_smb(int leg_number_, int rotation_)
 {
 	sr_ecp_msg->message("swarmitfix_demo_base::rotate_smb");
 
@@ -54,7 +54,7 @@ void swarmitfix_demo_base::rotate_smb(int leg_number_, double rotation_)
 	}
 
 	// Rotate around the leg - the SPKM rotation is set to zero.
-	move_smb_joints(rotation_, 0);
+	move_smb_external(rotation_, 0);
 
 	// TODO: remove wait_ms?
 	wait_ms(3000);
@@ -68,7 +68,7 @@ void swarmitfix_demo_base::rotate_smb(int leg_number_, double rotation_)
 void swarmitfix_demo_base::move_to_pose_and_return(double support_pkm_x_, double support_pkm_y_, double support_pkm_z_, double support_pkm_alpha_, double support_pkm_beta_, double support_pkm_gamma_, double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_, double smb_joint_, double shead_joint_)
 {
 	// Move SMB and SPKM to pose.
-	move_smb_joints(0.0, smb_joint_);
+	move_smb_external(0.0, smb_joint_);
 	// Support interpose.
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, inter_pkm_x_, inter_pkm_y_, inter_pkm_z_, inter_pkm_alpha_, inter_pkm_beta_, inter_pkm_gamma_);
 	// Rotate shead.
@@ -103,7 +103,7 @@ void swarmitfix_demo_base::move_smb_legs(lib::smb::FESTO_LEG l1_, lib::smb::FEST
 
 }
 
-void swarmitfix_demo_base::move_smb_joints(double legs_rotation_, double pkm_rotation_)
+void swarmitfix_demo_base::move_smb_external(int legs_rotation_, double pkm_rotation_)
 {
 	sr_ecp_msg->message("swarmitfix_demo_base::move_smb_external");
 
