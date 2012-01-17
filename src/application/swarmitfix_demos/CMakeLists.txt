@@ -1,8 +1,9 @@
-add_executable(mp_swarm_demo_single_agent
-	mp_t_swarm_demo_single_agent.cc
+add_executable(mp_swarmitfix_demo_agent1_warsaw 
+	mp_t_swarmitfix_demo_base.cc
+	mp_t_swarmitfix_demo_agent1_warsaw.cpp
 )
 
-target_link_libraries(mp_swarm_demo_single_agent mp)
+target_link_libraries(mp_swarmitfix_demo_agent1_warsaw mp)
 
 add_executable(ecp_spkm_swarm_demo_single_agent
 	ecp_g_spkm.cc
@@ -38,5 +39,5 @@ install(TARGETS
 ecp_spkm_swarm_demo_single_agent 
 ecp_smb_swarm_demo_single_agent 
 ecp_shead_swarm_demo_single_agent
-mp_swarm_demo_single_agent 
+mp_swarmitfix_demo_agent1_warsaw 
 DESTINATION bin)

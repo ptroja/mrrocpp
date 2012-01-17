@@ -41,6 +41,6 @@ endif(ROBOTS_012)
 endif(ROBOT_BIRD_HAND)
 
 if(ROBOTS_SWARMITFIX)
-add_subdirectory (swarm_demo_single_agent)
+add_subdirectory (swarmitfix_demos)
 add_subdirectory (swarmitfix)
 endif(ROBOTS_SWARMITFIX)

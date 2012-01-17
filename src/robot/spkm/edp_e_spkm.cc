@@ -256,7 +256,7 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		check_controller_state();
 
 		// FIXME: uncomment the following line to allow multiple synchronization without resetting.
-		controller_state_edp_buf.is_synchronised = false;
+		//controller_state_edp_buf.is_synchronised = false;
 
 		// Copy data to reply buffer
 		reply.controller_state = controller_state_edp_buf;
@@ -343,10 +343,6 @@ void effector::synchronise(void)
 	DEBUG_METHOD;
 
 	try {
-		// WORKAROUND: remove those two lines!
-		synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
-		return;
-
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
 			return;

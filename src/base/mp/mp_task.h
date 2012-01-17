@@ -22,7 +22,7 @@
 namespace mrrocpp {
 namespace mp {
 
-// forward delcaration
+// Forward declaration.
 namespace generator {
 class generator;
 }
@@ -30,7 +30,7 @@ class generator;
 namespace task {
 
 /**
- * Two useful MP robot addition macros.
+ * MP robot utilities (macros and classes).
  * @note this is necessary to first create robot and then assign it to robot_m
  * the robot constructor can not be directly called with them associated robot_m field creation
  * because it uses robot_m
