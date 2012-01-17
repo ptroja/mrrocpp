@@ -38,7 +38,8 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 // Konstruktor.
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-		motor_driven_effector(_shell, l_robot_name, instruction, reply)
+		motor_driven_effector(_shell, l_robot_name, instruction, reply),
+		homing_velocity(0), homing_offset(0)
 {
 	DEBUG_METHOD;
 
@@ -67,6 +68,12 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	}
 }
 
+effector::~effector()
+{
+	// Disable servo for the motor.
+//	if(epos_node.get()) epos_node->setState(maxon::epos::DISABLE_OPERATION);
+}
+
 void effector::synchronise(void)
 {
 	DEBUG_METHOD;
@@ -82,10 +89,14 @@ void effector::synchronise(void)
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
 		// Common synchronization sequence
+#if 1
+		epos_node->doSoftwareHoming(homing_velocity, homing_offset);
+#else
 		epos_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
 		epos_node->reset();
 		epos_node->startHoming();
 		epos_node->monitorHomingStatus();
+#endif
 
 		controller_state_edp_buf.is_synchronised = true;
 
@@ -173,6 +184,9 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 
 		// Check controller state.
 		check_controller_state();
+
+		// FIXME: uncomment the following line to allow multiple synchronization without resetting.
+//		controller_state_edp_buf.is_synchronised = false;
 
 		// Copy data to reply buffer
 		reply.controller_state = controller_state_edp_buf;
@@ -321,7 +335,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 					// Brake with Quickstop command
 					epos_node->setState(maxon::epos::QUICKSTOP);
 
-					// Reset node.
+					// Switch back to ENABLE state.
 					epos_node->reset();
 				}
 				break;

@@ -86,7 +86,7 @@ effector::effector(common::shell &_shell) :
 
 void effector::create_kinematic_models_for_given_robot(void)
 {
-DEBUG_METHOD;
+	DEBUG_METHOD;
 
 	// Add SPKM kinematics.
 	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm(kinematics::spkm1::kinematic_parameters_spkm1()));

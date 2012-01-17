@@ -184,6 +184,7 @@ struct c_buffer : lib::c_buffer
 {
 	cbuffer shead;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -225,6 +226,7 @@ struct r_buffer : lib::r_buffer
 {
 	rbuffer shead;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -232,7 +234,7 @@ struct r_buffer : lib::r_buffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		// serialize base class informationZ
+		// serialize base class information
 		ar & boost::serialization::base_object <lib::r_buffer>(*this);
 		ar & shead;
 	}

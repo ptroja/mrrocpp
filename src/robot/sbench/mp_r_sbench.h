@@ -10,7 +10,6 @@
  */
 
 #include "base/mp/mp_robot.h"
-#include "robot/sbench/const_sbench.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -29,7 +28,7 @@ public:
 	 * @brief constructor
 	 * @param mp_object_l mp task object reference
 	 */
-	sbench(const lib::robot_name_t & l_robot_name, task::task &mp_object_l);
+	sbench(task::task &mp_object_l);
 };
 
 } // namespace robot

@@ -33,7 +33,6 @@ namespace spkm {
 class effector : public common::manip_effector
 {
 private:
-
 	/*!
 	 * \brief "Desired" joint values that were required by previously received SET command.
 	 *
@@ -98,13 +97,17 @@ protected:
 	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
 public:
-
 	/*!
-	 * @brief class constructor
+	 * @brief Constructor.
 	 *
 	 * The attributes are initialized here.
 	 */
 	effector(common::shell &_shell, lib::robot_name_t l_robot_name);
+
+	/*!
+	 * @brief Destructor.
+	 */
+	~effector();
 
 	/*!
 	 * @brief motors synchronization
@@ -117,8 +120,11 @@ public:
 	 * @brief Method responsible for synchronization of the MOOG motor.
 	 *
 	 * Uses velocity and profile position modes instead of the EPOS homing.
+	 * @param epos_ controller.
+	 * @param velocity_ velocity for seeking of the mechanical stop [rpm].
+	 * @param offset_ homing offset [qc].
 	 */
-	void synchronise_moog_motor(maxon::epos & epos_, int32_t  negative_limit_, int32_t  positive_limit_, int32_t homing_offset);
+	void synchronise_moog_motor(maxon::epos & epos_, int32_t velocity_, int32_t offset_);
 
 	/*!
 	 * @brief Disable (thus apply brake) the MOOG motor.

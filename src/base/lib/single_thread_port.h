@@ -57,7 +57,8 @@ public:
 	 * @param _name Unique port name.
 	 * @param _port_manager port manager reference.
 	 */
-	single_thread_port_interface(std::string _name, single_thread_port_manager & _port_manager);
+	single_thread_port_interface(const std::string & _name, single_thread_port_manager & _port_manager);
+
 	/**
 	 * @brief Destructor
 	 * This is a base class, so virtual destructor is recommended
@@ -70,7 +71,7 @@ public:
 	/**
 	 * @brief returns port name
 	 */
-	std::string get_name();
+	const std::string & get_name() const;
 
 	/**
 	 * @brief clears all flags

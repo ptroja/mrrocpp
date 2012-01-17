@@ -98,7 +98,6 @@ void robot::create_command()
 
 		ecp_command.smb.set_pose_specification = lib::smb::MOTOR;
 
-		ecp_command.smb.motion_variant = epos_motor_command_data_port.data.motion_variant;
 		ecp_command.smb.estimated_time = epos_motor_command_data_port.data.estimated_time;
 
 		for (int i = 0; i < lib::smb::NUM_OF_SERVOS; ++i) {
@@ -115,7 +114,6 @@ void robot::create_command()
 
 		ecp_command.smb.set_pose_specification = lib::smb::JOINT;
 
-		ecp_command.smb.motion_variant = epos_joint_command_data_port.data.motion_variant;
 		ecp_command.smb.estimated_time = epos_joint_command_data_port.data.estimated_time;
 		for (int i = 0; i < lib::smb::NUM_OF_SERVOS; ++i) {
 			ecp_command.smb.joint_pos[i] = epos_joint_command_data_port.data.desired_position[i];
@@ -131,7 +129,6 @@ void robot::create_command()
 
 		ecp_command.smb.set_pose_specification = lib::smb::EXTERNAL;
 
-		ecp_command.smb.motion_variant = epos_external_command_data_port.data.motion_variant;
 		ecp_command.smb.estimated_time = epos_external_command_data_port.data.estimated_time;
 
 		ecp_command.smb.base_vs_bench_rotation = epos_external_command_data_port.data.base_vs_bench_rotation;

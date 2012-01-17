@@ -180,7 +180,7 @@
                <item>
                 <widget class="QLabel" name="label_29">
                  <property name="text">
-                  <string>desactivate</string>
+                  <string>deactivate</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -378,7 +378,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_sol_desactivate">
+                <widget class="QRadioButton" name="radioButton_sol_deactivate">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -654,7 +654,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="radioButton_vac_desactivate">
+                <widget class="QRadioButton" name="radioButton_vac_deactivate">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>

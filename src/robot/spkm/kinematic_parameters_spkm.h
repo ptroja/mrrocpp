@@ -70,8 +70,11 @@ public:
 	//! Parameters describing the synchronization positions (in joints).
 	double synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! Homing offset of the moog motor [qc].
+	//! Homing offset of the Moog motor [qc].
 	int32_t moog_motor_homing_offset;
+
+	//! Homing velocity of the Moog motor [rpm].
+	int32_t moog_motor_homing_velocity;
 
 	//! Parameters related to conversion from motor positions to joints.
 	double mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_SERVOS];

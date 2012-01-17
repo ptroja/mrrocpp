@@ -71,13 +71,18 @@ protected:
 		;
 	} virtual_state;
 
-	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!
 	 * \brief method,  creates a list of available kinematic models for shead effector.
 	 *
 	 * It will be used if any motor will be commanded to move. Then motor to joint transform will be implemented in kinematics.
 	 */
 	virtual void create_kinematic_models_for_given_robot(void);
+
+	//! Homing velocity [rpm] (initialized to zero for safety reasons).
+	int32_t homing_velocity;
+
+	//! Homing offset [qc] (initialized to zero for safety reasons).
+	int32_t homing_offset;
 
 public:
 
@@ -87,6 +92,11 @@ public:
 	 * The attributes are initialized here.
 	 */
 	effector(common::shell &_shell, lib::robot_name_t l_robot_name);
+
+	/*!
+	 * @brief Destructor.
+	 */
+	~effector();
 
 	/*!
 	 * \brief method to create threads other then EDP master thread.

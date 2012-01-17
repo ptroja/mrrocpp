@@ -1,6 +1,5 @@
 //
 // READER - watek do buforowania danych pomiarowych i ich zapisu do pliku
-// Date: maj 2006
 //
 
 #include <cstdio>
@@ -17,6 +16,8 @@
 #include <sys/types.h>
 
 #include "base/lib/messip/messip_dataport.h"
+
+#include <boost/circular_buffer.hpp>
 
 #include <cerrno>
 #include <pthread.h>

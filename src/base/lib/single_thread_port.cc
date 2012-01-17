@@ -12,13 +12,13 @@
 namespace mrrocpp {
 namespace lib {
 
-single_thread_port_interface::single_thread_port_interface(std::string _name, single_thread_port_manager & _port_manager) :
+single_thread_port_interface::single_thread_port_interface(const std::string & _name, single_thread_port_manager & _port_manager) :
 		name(_name), new_data(false)
 {
 	_port_manager.add_port(this);
 }
 
-std::string single_thread_port_interface::get_name()
+const std::string & single_thread_port_interface::get_name() const
 {
 	return name;
 }

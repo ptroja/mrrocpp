@@ -17,6 +17,7 @@
 #include <sys/wait.h>
 
 #include <boost/exception/all.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "config.h"
 
@@ -38,9 +39,11 @@ namespace mrrocpp {
 namespace edp {
 namespace common {
 
-effector* master = NULL; // Bufor polecen i odpowiedzi EDP_MASTER
+// Bufor polecen i odpowiedzi EDP_MASTER
+boost::shared_ptr<effector> master;
 
-shell* edp_shell = NULL; // obiekt glownie do wykrywania obecnosci drugiego edp jeszcze przed powolaniem klasy efectora
+// obiekt do wykrywania obecnosci drugiego edp jeszcze przed powolaniem klasy efectora
+boost::shared_ptr<shell> edp_shell;
 
 /* Przechwycenie sygnalu */
 void catch_signal(int sig)
@@ -49,13 +52,12 @@ void catch_signal(int sig)
 	{
 		case SIGTERM:
 		case SIGHUP:
-
 			if (edp_shell) {
 				edp_shell->close_hardware_busy_file();
 
 				edp_shell->msg->message("edp terminated");
 			}
-			_exit(EXIT_SUCCESS);
+			exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
 			fprintf(stderr, "Segmentation fault in EDP process\n");
@@ -73,7 +75,6 @@ void catch_signal(int sig)
 
 int main(int argc, char *argv[])
 {
-
 	// delay(10000);
 
 	try {
@@ -89,13 +90,12 @@ int main(int argc, char *argv[])
 		signal(SIGSEGV, &edp::common::catch_signal);
 
 		// avoid transporting Ctrl-C signal from UI console
-
 		signal(SIGINT, SIG_IGN);
 
 		// create configuration object
 		lib::configurator _config(argv[1], argv[2], argv[3]);
 
-		edp::common::edp_shell = new edp::common::shell(_config);
+		edp::common::edp_shell = (boost::shared_ptr<edp::common::shell>) new edp::common::shell(_config);
 
 		if (!edp::common::edp_shell->detect_hardware_busy()) {
 			throw std::runtime_error("hardware busy while loading, closing automatically ...");
@@ -106,10 +106,11 @@ int main(int argc, char *argv[])
 		if (mlockall(MCL_CURRENT | MCL_FUTURE) == -1) {
 			perror("No real-time warrany: mlockall() failed");
 		}
-
 #endif /* HAVE_MLOCKALL */
+
 		lib::set_process_sched();
-		edp::common::master = edp::common::return_created_efector(*(edp::common::edp_shell));
+
+		edp::common::master = (boost::shared_ptr<edp::common::effector>) edp::common::return_created_efector(*(edp::common::edp_shell));
 
 		edp::common::master->create_threads();
 
@@ -129,7 +130,6 @@ int main(int argc, char *argv[])
 			edp::common::edp_shell->msg->message(lib::FATAL_ERROR, e.what());
 			edp::common::edp_shell->msg->message("edp terminated");
 		}
-		_exit(EXIT_SUCCESS);
 	}
 
 	catch (boost::exception & e) {
@@ -145,4 +145,6 @@ int main(int argc, char *argv[])
 		// Komunikat o bledzie wysylamy do SR
 		edp::common::master->msg->message(lib::FATAL_ERROR, EDP_UNIDENTIFIED_ERROR);
 	}
+
+	return -1;
 }

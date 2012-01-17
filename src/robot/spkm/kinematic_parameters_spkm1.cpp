@@ -27,6 +27,9 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	// Moog motor homing offset (in [qc]).
 	moog_motor_homing_offset = 383000;
 
+	// Moog motor homing velocity.
+	moog_motor_homing_velocity = -100;
+
 	// Initialization of the encoder resolution. Equals to the Counts Per Turn (CPT) x 4.
 	encoder_resolution[0] = 500*4;
 	encoder_resolution[1] = 500*4;
