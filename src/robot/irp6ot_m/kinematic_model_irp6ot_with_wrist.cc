@@ -246,7 +246,7 @@ void model_with_wrist::set_kinematic_parameters(void)
 	lower_limit_joint[0] = -0.125; // [m]
 	lower_limit_joint[1] = -170.0 * M_PI / 180.0;
 	lower_limit_joint[2] = -130.0 * M_PI / 180.0;
-	lower_limit_joint[3] = -25.0 * M_PI / 180.0;
+	lower_limit_joint[3] = -35.0 * M_PI / 180.0;
 	lower_limit_joint[4] = -90.0 * M_PI / 180.0;
 	lower_limit_joint[5] = -10.0; // -M_PI
 	lower_limit_joint[6] = -2.88;
