@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>807</width>
+    <width>833</width>
     <height>357</height>
    </rect>
   </property>
@@ -224,7 +224,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&lt;</string>
+      <string>-</string>
      </property>
      <property name="iconSize">
       <size>
@@ -249,7 +249,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&gt;</string>
+      <string>+</string>
      </property>
      <property name="iconSize">
       <size>
@@ -360,7 +360,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&lt;</string>
+      <string>-</string>
      </property>
      <property name="iconSize">
       <size>
@@ -385,7 +385,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&gt;</string>
+      <string>+</string>
      </property>
      <property name="iconSize">
       <size>
@@ -496,7 +496,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&lt;</string>
+      <string>-</string>
      </property>
      <property name="iconSize">
       <size>
@@ -521,7 +521,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&gt;</string>
+      <string>+</string>
      </property>
      <property name="iconSize">
       <size>
@@ -632,7 +632,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&lt;</string>
+      <string>-</string>
      </property>
      <property name="iconSize">
       <size>
@@ -657,7 +657,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&gt;</string>
+      <string>+</string>
      </property>
      <property name="iconSize">
       <size>
@@ -768,7 +768,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&lt;</string>
+      <string>-</string>
      </property>
      <property name="iconSize">
       <size>
@@ -793,7 +793,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&gt;</string>
+      <string>+</string>
      </property>
      <property name="iconSize">
       <size>
@@ -907,7 +907,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&lt;</string>
+      <string>-</string>
      </property>
      <property name="iconSize">
       <size>
@@ -932,7 +932,7 @@
       </size>
      </property>
      <property name="text">
-      <string>&gt;</string>
+      <string>+</string>
      </property>
      <property name="iconSize">
       <size>
