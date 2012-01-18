@@ -10,6 +10,7 @@
 #include <string>
 
 #include <boost/type_traits/is_same.hpp>
+#include <boost/throw_exception.hpp>
 
 #include "canopen_exceptions.hpp"
 
@@ -112,7 +113,7 @@ public:
 			T val = (T) (answer[3] | (answer[4] << 16));
 			return val;
 		} else {
-			throw canopen::fe_canopen_error() << canopen::reason("Unsupported ReadObjectValue conversion");
+			BOOST_THROW_EXCEPTION(canopen::fe_canopen_error() << canopen::reason("Unsupported ReadObjectValue conversion"));
 		}
 	}
 

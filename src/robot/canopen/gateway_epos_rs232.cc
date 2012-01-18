@@ -12,6 +12,9 @@
 #include <termios.h> /* POSIX terminal control definitions */
 #include <sys/select.h>
 
+#include <boost/throw_exception.hpp>
+#include <boost/exception/errinfo_errno.hpp>
+
 #include "gateway_epos_rs232.h"
 
 /*! \brief try NTRY times to read one byte from EPOS, then give up */
@@ -45,7 +48,7 @@ void gateway_epos_rs232::open()
 	 */
 
 	if (ep >= 0)
-		throw fe_canopen_error() << reason("serial port already opened");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("serial port already opened"));
 
 	for (int i = 0; i < 5; i++) {
 		if ((ep = ::open(device.c_str(), O_RDWR | O_NOCTTY | O_NDELAY)) >= 0)
@@ -54,8 +57,7 @@ void gateway_epos_rs232::open()
 	}
 
 	if (ep == -1) {
-		perror("open()");
-		throw fe_canopen_error() << reason("open serial port");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("open serial port") << errno_call("open") << errno_code(errno));
 	}
 
 	if (tcgetattr(ep, &options) < 0) {
@@ -86,8 +88,7 @@ void gateway_epos_rs232::close()
 {
 	if (ep >= 0) {
 		if (::close(ep) != 0) {
-			perror("close()");
-			throw fe_canopen_error() << reason("serial port already opened");
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("serial port close") << errno_call("close") << errno_code(errno));
 		}
 	}
 
@@ -108,7 +109,7 @@ unsigned int gateway_epos_rs232::readAnswer(WORD *ans, unsigned int ans_len)
 			//printf("first answer: %#04x; first: %#06x\n", c, first);
 
 	if (c != E_ANS) {
-		throw fe_canopen_error() << reason("EPOS says: this is no answer frame!"); // TODO: , c);
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("EPOS says: this is no answer frame!")); // TODO: , c);
 	}
 	c = E_OK;
 	writeBYTE(c);
@@ -122,7 +123,7 @@ unsigned int gateway_epos_rs232::readAnswer(WORD *ans, unsigned int ans_len)
 	WORD framelen = c + 3;
 
 	if (ans_len < framelen) {
-		throw fe_canopen_error() << reason("output buffer to short for a message");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("output buffer to short for a message"));
 	}
 
 	ans[0] = first;
@@ -160,7 +161,7 @@ unsigned int gateway_epos_rs232::readAnswer(WORD *ans, unsigned int ans_len)
 #endif
 	} else {
 		writeBYTE(E_FAIL);
-		throw fe_canopen_error() << reason("CRC test FAILED");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("CRC test FAILED"));
 	}
 
 	/* check for error code */
@@ -211,7 +212,7 @@ void gateway_epos_rs232::sendCommand(WORD *frame)
 		c = readBYTE();
 
 		if (c != E_OK) {
-			throw fe_canopen_error() << reason("EPOS not ready"); //TODO: reply was: %#04x, c;
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("EPOS not ready")); //TODO: reply was: %#04x, c;
 		}
 
 		c = (frame[0] & 0x00FF); //MSB
@@ -225,7 +226,7 @@ void gateway_epos_rs232::sendCommand(WORD *frame)
 		// wait for "End Ack 'O'"
 		c = readBYTE();
 		if (c != E_OK) {
-			throw fe_canopen_error() << reason("EPOS says: CRCerror!");
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("EPOS says: CRCerror!"));
 		}
 	}
 }
@@ -244,7 +245,7 @@ void gateway_epos_rs232::writeBYTE(BYTE c)
 #endif
 
 	if (write(ep, &c, 1) < 0) {
-		throw fe_canopen_error() << errno_call("write") << errno_code(errno);
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << errno_call("write") << errno_code(errno));
 	}
 }
 
@@ -256,7 +257,7 @@ void gateway_epos_rs232::writeWORD(WORD w)
 #endif
 
 	if (write(ep, &w, 2) < 0) {
-		throw fe_canopen_error() << errno_call("write") << errno_code(errno);
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << errno_call("write") << errno_code(errno));
 	}
 }
 
@@ -281,20 +282,20 @@ BYTE gateway_epos_rs232::readBYTE()
 
 		int s = select(ep + 1, &rfds, NULL, NULL, &tv);
 		if (s < 0) {
-			throw fe_canopen_error() << errno_call("select") << errno_code(errno);
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << errno_call("select") << errno_code(errno));
 		} else if (s == 0) {
 			continue;
 		}
 
 		if (!FD_ISSET(ep, &rfds)) {
-			throw fe_canopen_error() << reason("EPOS filedescriptor not in read-ready set");
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("EPOS filedescriptor not in read-ready set"));
 		}
 
 		BYTE c;
 		int n = read(ep, &c, 1);
 		int errsv = errno;
 		if (n < 0 && errsv != EAGAIN) {
-			throw fe_canopen_error() << errno_call("read") << errno_code(errsv);
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << errno_call("read") << errno_code(errsv));
 		}
 		if (n > 0) {
 #ifdef DDEBUG
@@ -315,7 +316,7 @@ BYTE gateway_epos_rs232::readBYTE()
 	}
 
 	// timeout
-	throw fe_canopen_error() << reason("read timeout");
+	BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("read timeout"));
 }
 
 /*  read a single WORD from EPOS, timeout implemented */
@@ -339,20 +340,20 @@ WORD gateway_epos_rs232::readWORD()
 
 		int s = select(ep + 1, &rfds, NULL, NULL, &tv);
 		if (s < 0) {
-			throw fe_canopen_error() << errno_call("select") << errno_code(errno);
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << errno_call("select") << errno_code(errno));
 		} else if (s == 0) {
 			continue;
 		}
 
 		if (!FD_ISSET(ep, &rfds)) {
-			throw fe_canopen_error() << reason("EPOS filedescriptor not in read-ready set");
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("EPOS filedescriptor not in read-ready set"));
 		}
 
 		WORD w;
 		int n = read(ep, &w, sizeof(WORD));
 		int errsv = errno;
 		if (n < 0 && errsv != EAGAIN) {
-			throw fe_canopen_error() << errno_call("read") << errno_code(errsv);
+			BOOST_THROW_EXCEPTION(fe_canopen_error() << errno_call("read") << errno_code(errsv));
 		}
 		if (n > 0) {
 #ifdef DDEBUG
@@ -373,7 +374,7 @@ WORD gateway_epos_rs232::readWORD()
 	}
 
 	// timeout
-	throw fe_canopen_error() << reason("read timeout");
+	BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("read timeout"));
 }
 
 unsigned int gateway_epos_rs232::ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex)
