@@ -21,7 +21,7 @@
 
 #include "base/lib/swarmtypes.h"
 #include "base/mp/mp_robot.h"
-#include "base/lib/ecp_ui_msg.h"
+#include "base/ecp_mp/ecp_ui_msg.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -200,6 +200,92 @@ void swarmitfix::save_plan(const Plan & p)
 	std::string savepath = config.value<std::string>(planner::planpath);
 	std::ofstream ofs ("foo.xml"/*savepath.c_str()*/);
 	plan(ofs, p);
+}
+
+lib::UI_TO_ECP_REPLY swarmitfix::step_mode(Mbase::ItemType & item)
+{
+	// Create the text representation.
+	std::ostringstream ostr;
+	{
+		boost::archive::text_oarchive oa(ostr);
+		xml_schema::ostream<boost::archive::text_oarchive> os(oa);
+
+		// serialize data
+		os << item;
+	}
+
+	// Request
+	lib::ECP_message ecp_to_ui_msg;
+
+	// Setup plan item
+	ecp_to_ui_msg.ecp_message = lib::PLAN_STEP_MODE;
+	ecp_to_ui_msg.plan_item_type = lib::MBASE_AND_BENCH;
+	ecp_to_ui_msg.plan_item_string = ostr.str();
+
+	// Reply
+	lib::UI_reply ui_to_ecp_rep;
+
+	if (messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+
+		uint64_t e = errno;
+		perror("ecp operator_reaction(): Send() to UI failed");
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
+		BOOST_THROW_EXCEPTION(exception::se());
+	}
+
+	if(ui_to_ecp_rep.reply == lib::PLAN_EXEC) {
+		std::istringstream istr(ui_to_ecp_rep.plan_item_string);
+		boost::archive::text_iarchive ia(istr);
+		xml_schema::istream<boost::archive::text_iarchive> is (ia);
+
+		// deserialize data
+		item = Mbase::ItemType(is);
+	}
+
+	return ui_to_ecp_rep.reply;
+}
+
+lib::UI_TO_ECP_REPLY swarmitfix::step_mode(Pkm::ItemType & item)
+{
+	// create archive
+	std::ostringstream ostr;
+	{
+		boost::archive::text_oarchive oa(ostr);
+		xml_schema::ostream<boost::archive::text_oarchive> os(oa);
+
+		// serialize data
+		os << item;
+	}
+
+	// Request
+	lib::ECP_message ecp_to_ui_msg;
+
+	// Setup plan item
+	ecp_to_ui_msg.ecp_message = lib::PLAN_STEP_MODE;
+	ecp_to_ui_msg.plan_item_type = lib::PKM_AND_HEAD;
+	ecp_to_ui_msg.plan_item_string = ostr.str();
+
+	// Reply
+	lib::UI_reply ui_to_ecp_rep;
+
+	if (messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
+
+		uint64_t e = errno;
+		perror("ecp operator_reaction(): Send() to UI failed");
+		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
+		BOOST_THROW_EXCEPTION(exception::se());
+	}
+
+	if(ui_to_ecp_rep.reply == lib::PLAN_EXEC) {
+		std::istringstream istr(ui_to_ecp_rep.plan_item_string);
+		boost::archive::text_iarchive ia(istr);
+		xml_schema::istream<boost::archive::text_iarchive> is (ia);
+
+		// deserialize data
+		item = Pkm::ItemType(is);
+	}
+
+	return ui_to_ecp_rep.reply;
 }
 
 void swarmitfix::main_test_algorithm(void)

@@ -15,7 +15,8 @@
 #include <boost/thread/condition.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include "plan.hxx"
+// Forward declaration.
+class Plan;
 
 //! Interface with the planner and/or
 class planner {

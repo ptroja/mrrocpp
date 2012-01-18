@@ -7,17 +7,15 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <memory>
 #include <exception>
-
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
-
-#include "serialization.h"
 
 #include "planner.h"
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/lib/mrmath/mrmath.h"
+
+#include "plan.hxx"
 
 int main(int argc, char *argv[])
 {
@@ -40,31 +38,29 @@ int main(int argc, char *argv[])
 		std::cerr << "mbase item # " << p.mbase().item().size() << std::endl;
 		std::cerr << "pkm item # " << p.pkm().item().size() << std::endl;
 
-		{
-			// make an archive
-			std::ofstream ofs("foo.xml");
-			assert(ofs.good());
-			boost::archive::xml_oarchive oa(ofs);
-			oa << boost::serialization::make_nvp("item", p.pkm().item().front());
-		}
+		std::ostringstream ostr;
+		boost::archive::text_oarchive oa(ostr);
+		xml_schema::ostream<boost::archive::text_oarchive> os (oa);
 
-		{
-			// open the archive
-			std::ifstream ifs("foo.xml");
-			assert(ifs.good());
-			boost::archive::xml_iarchive ia(ifs);
+		os << p.pkm().item().front();
 
-			// restore the schedule from the archive
-			ia >> boost::serialization::make_nvp("item", p.pkm().item().front());
-		}
+		// Print the text representation.
+		//
+		std::string str (ostr.str ());
 
-		{
-			// make an archive
-			std::ofstream ofs("foo2.xml");
-			assert(ofs.good());
-			boost::archive::xml_oarchive oa(ofs);
-			oa << boost::serialization::make_nvp("item", p.pkm().item().front());
-		}
+		std::cerr << std::endl
+			 << "text representation: " << std::endl
+			 << str << std::endl;
+
+		// Load from a text archive.
+		//
+		std::istringstream istr (str);
+		boost::archive::text_iarchive ia (istr);
+		xml_schema::istream<boost::archive::text_iarchive> is (ia);
+
+		std::auto_ptr<Pkm::ItemType> copy (new Pkm::ItemType (is));
+
+		std::cerr << *copy << std::endl;
 
 		// Create planner object
 		//planner pp(argv[1]);

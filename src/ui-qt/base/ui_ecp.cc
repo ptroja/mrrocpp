@@ -45,7 +45,8 @@ namespace ui {
 namespace common {
 
 ecp_buffer::ecp_buffer(Interface& _interface) :
-		interface(_interface), communication_state(UI_ECP_AFTER_REPLY)
+		interface(_interface), communication_state(UI_ECP_AFTER_REPLY),
+		ecp_to_ui_msg(_ecp_to_ui_msg)
 {
 	thread_id = boost::thread(boost::bind(&ecp_buffer::operator(), this));
 }
@@ -75,7 +76,7 @@ void ecp_buffer::operator()()
 		communication_state = UI_ECP_AFTER_REPLY;
 
 		int32_t type, subtype;
-		int rcvid = messip::port_receive(ch, type, subtype, ecp_to_ui_msg);
+		int rcvid = messip::port_receive(ch, type, subtype, _ecp_to_ui_msg);
 
 		if ((rcvid != MESSIP_MSG_NOREPLY) && (rcvid != 0)) {
 			continue;

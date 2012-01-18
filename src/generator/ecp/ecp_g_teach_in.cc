@@ -433,7 +433,7 @@ bool teach_in::next_step()
 
 }
 
-lib::ECP_TO_UI_COMMAND teach_in::convert(lib::ECP_POSE_SPECIFICATION ps) const
+lib::ECP_TO_UI_REQUEST teach_in::convert(lib::ECP_POSE_SPECIFICATION ps) const
 {
 	switch (ps)
 	{

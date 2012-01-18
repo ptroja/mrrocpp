@@ -3,6 +3,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <string>
+
 #include "WorkersStatus.h"
 
 #include "base/mp/mp_task.h"
@@ -15,11 +16,10 @@
 #include "robot/sbench/dp_sbench.h"
 #include "planner.h"
 
-#include "base/lib/ecp_ui_msg.h"
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
-#include "serialization.h"
+#include "base/ecp_mp/ecp_ui_msg.h"
 #include "base/mp/mp_exceptions.h"
+
+#include "plan.hxx"
 
 namespace mrrocpp {
 namespace mp {
@@ -229,48 +229,11 @@ planner pp;
 	//! Save modified plan to file
 	void save_plan(const Plan & p);
 
-	//! Step-mode execution
-	template<typename T>
-	lib::UI_TO_ECP_COMMAND step_mode(T & item)
-	{
-		// create archive
-		std::ostringstream ofs;
-		{
-			boost::archive::xml_oarchive oa(ofs);
+	//! Step-mode execution of pkm item
+	lib::UI_TO_ECP_REPLY step_mode(Pkm::ItemType & item);
 
-			// serialize data into XML
-			oa << boost::serialization::make_nvp("item", item);
-		}
-
-		// Request
-		lib::ECP_message ecp_to_ui_msg;
-
-		// Setup plan item
-		ecp_to_ui_msg.ecp_message = lib::PLAN_STEP_MODE;
-		ecp_to_ui_msg.plan_item = ofs.str();
-
-		// Reply
-		lib::UI_reply ui_to_ecp_rep;
-
-		if (messip::port_send(UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) {
-
-			uint64_t e = errno;
-			perror("ecp operator_reaction(): Send() to UI failed");
-			sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-			BOOST_THROW_EXCEPTION(exception::se());
-		}
-
-		if(ui_to_ecp_rep.reply == lib::PLAN_EXEC) {
-			std::istringstream ifs(ui_to_ecp_rep.plan_item);
-
-			boost::archive::xml_iarchive ia(ifs);
-
-			// serialize data into XML
-			ia >> boost::serialization::make_nvp("item", item);
-		}
-
-		return ui_to_ecp_rep.reply;
-	}
+	//! Step-mode execution of mbase item
+	lib::UI_TO_ECP_REPLY step_mode(Mbase::ItemType & item);
 
 	//! Access to plan items at given index
 	template<typename T>

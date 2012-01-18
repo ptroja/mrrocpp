@@ -26,7 +26,7 @@
 
 #include "base/lib/datastr.h"
 
-#include "base/lib/ecp_ui_msg.h"
+#include "base/ecp_mp/ecp_ui_msg.h"
 #include "ecp_mp_exceptions.h"
 #include "ecp_mp_task.h"
 #include "ecp_mp_sensor.h"

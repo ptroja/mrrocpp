@@ -11,7 +11,7 @@
 
 #include <list>
 
-#include "base/lib/ecp_ui_msg.h"
+#include "base/ecp_mp/ecp_ui_msg.h"
 #include "base/ecp/ecp_generator.h"
 #include "base/ecp/ecp_taught_in_pose.h"
 
@@ -173,7 +173,7 @@ public:
 	 * @param ps coordinates type of position (pose)
 	 * @return equivalent ECP_TO_UI_COMMAND
 	 */
-	lib::ECP_TO_UI_COMMAND convert(lib::ECP_POSE_SPECIFICATION ps) const;
+	lib::ECP_TO_UI_REQUEST convert(lib::ECP_POSE_SPECIFICATION ps) const;
 
 };
 

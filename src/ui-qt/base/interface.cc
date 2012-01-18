@@ -402,7 +402,8 @@ void Interface::raise_ui_ecp_window_slot()
 
 		case lib::PLAN_STEP_MODE:
 
-			wgt_swarm_obj->my_open(true);
+			//wgt_swarm_obj->my_open(true);
+			wgt_plan_obj->my_open(true);
 
 			break;
 		case lib::C_XYZ_ANGLE_AXIS:
@@ -700,6 +701,7 @@ void Interface::init()
 	wgt_pc = new wgt_process_control(*this);
 	wgt_yes_no_obj = new wgt_yes_no(*this);
 	wgt_swarm_obj = new wgt_swarm(*this);
+	wgt_plan_obj = new wgt_plan(*this);
 	wgt_message_obj = new wgt_message(*this);
 	wgt_input_integer_obj = new wgt_input_integer(*this);
 	wgt_input_double_obj = new wgt_input_double(*this);

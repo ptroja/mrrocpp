@@ -32,7 +32,7 @@ planner::planner(const std::string & path) :
 	// XML validation settings
 	xml_schema::Properties props;
 
-	// Add XSD validation to parser's properties
+	// Add XSD validation to parser's properties.
 #if BOOST_VERSION >=104400
 	props.no_namespace_schema_location (xsdpath.string());
 #else
@@ -50,11 +50,11 @@ planner::planner(const std::string & path) :
 		// Display detailed diagnostics
 		std::cerr << e << std::endl;
 
-		// And leave the rest to the high-level handler
+		// And leave the rest to the high-level handler.
 		throw;
 	}
 
-	// Start triggering operation
+	// Start triggering operation.
 	worker = boost::thread(boost::bind(&planner::operator(), this));
 }
 

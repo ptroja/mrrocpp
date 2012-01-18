@@ -17,9 +17,39 @@ namespace lib {
 
 //------------------------------------------------------------------------------
 /*!
+ *  Types of ECP to UI commands.
+ */
+enum ECP_TO_UI_REQUEST
+{
+	C_INVALID_END_EFFECTOR,
+	C_FRAME,
+	C_XYZ_ANGLE_AXIS,
+	C_XYZ_EULER_ZYZ,
+	C_JOINT,
+	C_MOTOR,
+	YES_NO,
+	DOUBLE_NUMBER,
+	INTEGER_NUMBER,
+	SAVE_FILE,
+	LOAD_FILE,
+	MESSAGE,
+	OPEN_FORCE_SENSOR_MOVE_WINDOW,
+	OPEN_TRAJECTORY_REPRODUCE_WINDOW,
+	TR_REFRESH_WINDOW,
+	TR_DANGEROUS_FORCE_DETECTED,
+	CHOOSE_OPTION,
+	MAM_OPEN_WINDOW,
+	MAM_REFRESH_WINDOW,
+
+	//! Swarm-related entries
+	PLAN_STEP_MODE
+};
+
+//------------------------------------------------------------------------------
+/*!
  *  Reply types from UI to ECP and commands from UI (pressing a button).
  */
-enum UI_TO_ECP_COMMAND
+enum UI_TO_ECP_REPLY
 {
 	NEXT,
 	QUIT,
@@ -75,38 +105,13 @@ enum UI_TO_ECP_COMMAND
 };
 
 //------------------------------------------------------------------------------
-/*!
- *  Types of ECP to UI commands.
- */
-enum ECP_TO_UI_COMMAND
-{
-	C_INVALID_END_EFFECTOR,
-	C_FRAME,
-	C_XYZ_ANGLE_AXIS,
-	C_XYZ_EULER_ZYZ,
-	C_JOINT,
-	C_MOTOR,
-	YES_NO,
-	DOUBLE_NUMBER,
-	INTEGER_NUMBER,
-	SAVE_FILE,
-	LOAD_FILE,
-	MESSAGE,
-	OPEN_FORCE_SENSOR_MOVE_WINDOW,
-	OPEN_TRAJECTORY_REPRODUCE_WINDOW,
-	TR_REFRESH_WINDOW,
-	TR_DANGEROUS_FORCE_DETECTED,
-	CHOOSE_OPTION,
-	MAM_OPEN_WINDOW,
-	MAM_REFRESH_WINDOW,
-
-	//! Swarm-related entries
-	PLAN_STEP_MODE
-};
-
-//------------------------------------------------------------------------------
 /*! Length of a message sent from ECP to MP or UI */
 #define MSG_LENGTH 60
+
+//! Swarm plan item types
+enum PLAN_ITEM_TYPE {
+	MBASE_AND_BENCH, PKM_AND_HEAD
+};
 
 //------------------------------------------------------------------------------
 /*!
@@ -115,7 +120,7 @@ enum ECP_TO_UI_COMMAND
 struct ECP_message
 {
 	/*! Type of message. */
-	ECP_TO_UI_COMMAND ecp_message;
+	ECP_TO_UI_REQUEST ecp_message;
 
 	/*! Robot name. */
 	robot_name_t robot_name;
@@ -156,7 +161,10 @@ struct ECP_message
 	MAM;
 
 	//! XML string with current plan item
-	std::string plan_item;
+	std::string plan_item_string;
+
+	//! Type of plan item
+	PLAN_ITEM_TYPE plan_item_type;
 
 	//! Default constructor
 	ECP_message() {
@@ -177,7 +185,8 @@ private:
 		switch (ecp_message)
 		{
 			case PLAN_STEP_MODE:
-				ar & plan_item;
+				ar & plan_item_type;
+				ar & plan_item_string;
 				break;
 			default:
 				ar & robot_name;
@@ -206,15 +215,18 @@ private:
  */
 struct UI_reply
 {
-	UI_TO_ECP_COMMAND reply;
+	UI_TO_ECP_REPLY reply;
 	int32_t integer_number;
 	double double_number;
 	double coordinates[lib::MAX_SERVOS_NR];
 	char path[80];
 	char filename[20];
 
-	//! XML string with current plan item
-	std::string plan_item;
+	//! Type of plan item
+	PLAN_ITEM_TYPE plan_item_type;
+	
+	//! XML string with current plan item.
+	std::string plan_item_string;
 
 	//! Default constructor
 	UI_reply() {
@@ -235,7 +247,8 @@ private:
 		switch (reply)
 		{
 			case PLAN_EXEC:
-				ar & plan_item;
+				ar & plan_item_type;
+				ar & plan_item_string;
 				break;
 			case PLAN_PREV:
 			case PLAN_NEXT:

@@ -39,9 +39,9 @@ void wgt_swarm::my_open(bool set_on_top)
 {
 	ui->label_message->setText(interface.ui_ecp_obj->ecp_to_ui_msg.string);
 
-	stored_plan_item = interface.ui_ecp_obj->ecp_to_ui_msg.plan_item;
+	stored_plan_item = interface.ui_ecp_obj->ecp_to_ui_msg.plan_item_string;
 
-	ui->textEdit->setPlainText(interface.ui_ecp_obj->ecp_to_ui_msg.plan_item.c_str());
+	ui->textEdit->setPlainText(interface.ui_ecp_obj->ecp_to_ui_msg.plan_item_string.c_str());
 
 	this->setEnabled(true);
 
@@ -70,7 +70,7 @@ void wgt_swarm::on_pushButton_exec_clicked()
 		interface.ui_ecp_obj->ui_rep.reply = lib::PLAN_EXEC;
 
 		interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
-		interface.ui_ecp_obj->ui_rep.plan_item = ui->textEdit->toPlainText().toStdString();
+		interface.ui_ecp_obj->ui_rep.plan_item_string = ui->textEdit->toPlainText().toStdString();
 
 		reply();
 	} else {
