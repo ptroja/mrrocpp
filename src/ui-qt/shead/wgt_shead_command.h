@@ -25,10 +25,11 @@ const std::string WGT_SHEAD_COMMAND = "WGT_SHEAD_COMMAND";
 
 class wgt_shead_command : public wgt_base
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
-	wgt_shead_command(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent = 0);
+	wgt_shead_command(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
+			0);
 
 	QVector <QCheckBox*> checkBox_m_mip_Vector;
 	QVector <QCheckBox*> checkBox_contacts_Vector;
@@ -45,16 +46,16 @@ private:
 	Ui::wgt_shead_commandClass ui;
 	mrrocpp::ui::shead::UiRobot* robot;
 
-	int init();
+	void init();
 
-	int synchro_depended_widgets_disable(bool _set_disabled);
+	void synchro_depended_widgets_disable(bool _set_disabled);
 
-	int get_desired_position();
-	int move_it();
+	void get_desired_position();
+	void move_it();
 
 	boost::shared_ptr <QTimer> timer;
 
-signals:
+	signals:
 	int synchro_depended_init_signal();
 
 private slots:

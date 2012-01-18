@@ -29,22 +29,22 @@ class wgt_bird_hand_commandClass;
 
 class wgt_bird_hand_command : public wgt_base
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit wgt_bird_hand_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
 			0);
 	~wgt_bird_hand_command();
 
-	int get_command();
-	int set_status();
-	int copy_command();
+	void get_command();
+	void set_status();
+	void copy_command();
 
-	int get_variant_finger_command(int fingerId);
-	int get_finger_command(int fingerId);
-	int set_finger_status(int fingerId);
+	void get_variant_finger_command(int fingerId);
+	void get_finger_command(int fingerId);
+	void set_finger_status(int fingerId);
 
-	int copy_finger_command(int fingerId);
+	void copy_finger_command(int fingerId);
 
 	void my_open(bool set_on_top = false);
 
@@ -70,7 +70,7 @@ private:
 
 	lib::bird_hand::MOTION_VARIANT current_profile_type;
 
-signals:
+	signals:
 	void synchro_depended_init_signal();
 	void init_and_copy_signal();
 

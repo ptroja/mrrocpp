@@ -31,7 +31,7 @@ namespace sbench {
 const std::string COMMAND_DATA_VOLTAGE_PORT = "SBENCH_COMMAND_VOLTAGE_DATA_PORT";
 
 /*!
- * @brief SwarmItFix bench pins preasure activation command data port
+ * @brief SwarmItFix bench pins preasure (cleaning) activation command data port
  * @ingroup sbench
  */
 const std::string COMMAND_DATA_PREASURE_PORT = "SBENCH_COMMAND_PREASURE_DATA_PORT";
@@ -52,7 +52,7 @@ enum CBUFFER_VARIANT
 };
 
 /*!
- * @brief SwarmItFix bench pins state typedef
+ * @brief bench pins state typedef
  * @ingroup sbench
  */
 
@@ -63,16 +63,23 @@ class pins_buffer
 private:
 	bool pins_state[NUM_OF_PINS];
 
+protected:
+	int translation_table[8][8];
+
 public:
 
-	int translation_table[8][8];
 	pins_buffer();
 
+	//! clears translation table
 	void set_zeros();
 
-	void set_value(int row, int column, int value);
+	//! sets the value due to the translation table
+	void set_value(int row, int column, bool value);
+
+	//! gets the value due to the translation table
 	bool get_value(int row, int column);
 
+	//! checks if any value in translation table is doubled
 	bool is_any_doubled_value();
 
 	//! Give access to boost::serialization framework
@@ -88,7 +95,7 @@ public:
 };
 
 /*!
- * @brief SwarmItFix bench pins state typedef
+ * @brief voltage (power supply) typedef
  * @ingroup sbench
  */
 
@@ -112,7 +119,7 @@ public:
 };
 
 /*!
- * @brief SwarmItFix bench pins state typedef
+ * @brief SwarmItFix preasure (cleaning activation)  typedef
  * @ingroup sbench
  */
 
@@ -162,11 +169,12 @@ struct cbuffer
 };
 
 /*!
- * @brief SwarmItFix Bench EDP command buffer
+ * @brief SwarmItFix Bench EDP command buffer derrived from c_buffer to be used in ecp edp communication
  * @ingroup sbench
  */
 struct c_buffer : lib::c_buffer
 {
+	//! sbench specific field
 	cbuffer sbench;
 
 	//! Give access to boost::serialization framework
@@ -204,8 +212,14 @@ struct rbuffer : lib::r_buffer
 
 };
 
+/*!
+ * @brief SwarmItFix Bench EDP reply buffer derrived from r_buffer to be used in ecp edp communication
+ * @ingroup sbench
+ */
+
 struct r_buffer : lib::r_buffer
 {
+	//! sbench specific field
 	rbuffer sbench;
 
 	//! Give access to boost::serialization framework

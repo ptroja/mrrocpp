@@ -82,6 +82,12 @@ REGISTER_NON_FATAL_ERROR(nfe_robot_unsynchronized, "Robot unsynchronized")
 REGISTER_FATAL_ERROR(fe_synchronization_unsuccessful, "Robot synchronization failed")
 
 /*!
+ * \brief Exception thrown when robot is in fault state.
+ * \author tkornuta
+ */
+REGISTER_FATAL_ERROR(fe_robot_in_fault_state, "Robot in fault state")
+
+/*!
  * \brief Exception thrown in case of invalid pose specification.
  * \author tkornuta
  */
@@ -183,12 +189,6 @@ REGISTER_SYSTEM_ERROR(se, "System error")
 #define HANDLE_EDP_UNKNOWN_ERROR() \
 	msg->message(mrrocpp::lib::FATAL_ERROR, "Unknown error"); \
 	BOOST_THROW_EXCEPTION(fe() << mrrocpp_error1(EDP_UNIDENTIFIED_ERROR)); \
-
-/*!
- * \brief Exception thrown in case of error fault.
- * \author tkornuta
- */
-REGISTER_FATAL_ERROR(fe_robot_in_fault_state, "Robot in fault state")
 
 } // namespace exception
 } // namespace edp

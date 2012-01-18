@@ -1,12 +1,5 @@
-// -------------------------------------------------------------------------
-//                            robot.h
-// Definicje struktur danych i metod do komunikacji UI z EDP
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
-#ifndef _UI_ECP_R_COMMON_H
-#define _UI_ECP_R_COMMON_H
+#ifndef _UI_ECP_R_COMMON012_H
+#define _UI_ECP_R_COMMON012_H
 
 #include "../ui.h"
 #include "../ui_robot.h"
@@ -15,13 +8,18 @@
 #include "base/lib/mrmath/mrmath.h"
 
 #include "base/ecp/ecp_robot.h"
+#include "ui_ecp_r_base.h"
 
 namespace mrrocpp {
 namespace ui {
 namespace common {
 class UiRobot;
+}
+
+namespace common012 {
+
 // ---------------------------------------------------------------
-class EcpRobot
+class EcpRobot : public common::EcpRobot
 {
 protected:
 
@@ -37,11 +35,9 @@ protected:
 	double current_position[lib::MAX_SERVOS_NR]; // polozenie aktualne
 
 public:
-	UiRobot& ui_robot;
-	ecp::common::robot::ecp_robot *ecp;
 
 	// ecp_buffer ui_edp_package; // by Y
-	EcpRobot(UiRobot& _ui_robot); // Konstruktor
+	EcpRobot(common::UiRobot& _ui_robot); // Konstruktor
 
 	void init();
 
@@ -50,7 +46,6 @@ public:
 
 	virtual ~EcpRobot();
 
-	virtual void execute_motion(void);
 	// virtual void set_edp_master_pid ( pid_t edppid ) {EDP_Pid = edppid;};
 	// Przekazanie identyfikatora procesu EDP
 	// virtual void synchronise ( void ); // Zlecenie synchronizacji robota
@@ -60,9 +55,6 @@ public:
 	// Przepisanie polozen zadanych
 	// do tablicy desired_position[]
 	virtual void get_current_position(double c_position[lib::MAX_SERVOS_NR]); // Pobranie aktualnych polozen
-
-	// by Y - do odczytu stanu poczatkowego robota
-	void get_controller_state(lib::controller_state_t & robot_controller_initial_state_l);
 
 	// Zlecenie ruchu
 	void set_kinematic(uint8_t kinematic_model_no);

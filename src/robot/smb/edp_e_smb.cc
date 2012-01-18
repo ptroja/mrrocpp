@@ -29,6 +29,9 @@ namespace smb {
 
 #include "base/lib/debug.hpp"
 
+// Access to kinematic parameters.
+#define PARAMS ((mrrocpp::kinematics::smb::model*)this->get_current_kinematic_model())
+
 // Maximum velocity: legs (verified for 2000 rpm), pkm (verified for 2000 rpm).
 const uint32_t effector::Vdefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
 // Maximum acceleration: legs (verified for 4000 rpm/s), pkm (verified for 4000 rpm/s).
@@ -38,7 +41,103 @@ const uint32_t effector::Ddefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
 
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
+	DEBUG_METHOD;
+
 	motor_driven_effector::single_thread_master_order(nm_task, nm_tryb);
+}
+
+void effector::synchronise(void)
+{
+	DEBUG_METHOD;
+
+	try {
+		if (robot_test_mode) {
+			controller_state_edp_buf.is_synchronised = true;
+			return;
+		}
+
+		// Check state of the robot.
+		if (controller_state_edp_buf.robot_in_fault_state)
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
+
+		// Step 1: Setup velocity control with analog setpoint.
+		pkm_rotation_node->setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
+
+		// Velocity and acceleration limits.
+		pkm_rotation_node->setMaxProfileVelocity(50);
+		pkm_rotation_node->setMaxAcceleration(1000);
+
+		// NOTE: We assume, that scaling and offset are already set in the EPOS2
+
+		// Start motion.
+		pkm_rotation_node->setControlword(0x000F);
+
+		// Enable analog velocity setpoint.
+		pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, true, false);
+
+		// Setup timer for monitoring.
+		boost::system_time wakeup = boost::get_system_time();
+
+		// Loop until reaching zero offset.
+		printf("\n");
+		while (pkm_rotation_node->getAnalogInput1() != pkm_zero_position_voltage) {
+			printf("\rSMB calibration: Desired =%+10d[mv] | Actual  =%+10d[mv] | Offset  =%+10d[mv]", (int) pkm_zero_position_voltage, (int) pkm_rotation_node->getAnalogInput1(), (int) pkm_rotation_node->getAnalogVelocitySetpoint());
+			fflush(stdout);
+
+			// Sleep for a constant period of time
+			wakeup += boost::posix_time::milliseconds(5);
+
+			boost::thread::sleep(wakeup);
+		};
+		printf("\n");
+
+		// Disable analog velocity setpoint.
+		pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, false, false);
+
+		// Restore velocity and acceleration limits.
+		pkm_rotation_node->setMaxProfileVelocity(Vdefault[1]);
+		pkm_rotation_node->setMaxAcceleration(Adefault[1]);
+
+		// Step 2: Homing.
+		// Activate homing mode.
+		pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, pkm_zero_position_offset);
+		// Step-by-step homing in order to omit the offset setting (the value will be stored in the EPOS for every agent separatelly).
+		/*		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
+		 pkm_rotation_node->reset();
+		 pkm_rotation_node->startHoming();
+		 pkm_rotation_node->monitorHomingStatus();*/
+
+		// Compute joints positions in the home position
+		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+
+		// Homing of the motor controlling the legs rotation - set current position as 0.
+		//legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
+		legs_relative_zero_position = legs_rotation_node->getActualPosition();
+
+		// Set *extended* limits for PKM rotation.
+		axes[1]->setMinimalPositionLimit(PARAMS->lower_pkm_motor_pos_limits - 1000);
+		axes[1]->setMaximalPositionLimit(PARAMS->upper_pkm_motor_pos_limits + 1000);
+
+		// Check whether the synchronization was successful.
+		check_controller_state();
+
+		// Throw non-fatal error - if synchronization wasn't successful.
+		if (!controller_state_edp_buf.is_synchronised) {
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_synchronization_unsuccessful());
+		}
+
+	} catch (mrrocpp::lib::exception::non_fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_EDP_NON_FATAL_ERROR(e_)
+	} catch (mrrocpp::lib::exception::fatal_error & e_) {
+		// Standard error handling.
+		HANDLE_EDP_FATAL_ERROR(e_)
+	} catch (mrrocpp::lib::exception::system_error & e_) {
+		// Standard error handling.
+		HANDLE_EDP_SYSTEM_ERROR(e_)
+	} catch (...) {
+		HANDLE_EDP_UNKNOWN_ERROR()
+	}
 }
 
 void effector::check_controller_state()
@@ -97,7 +196,7 @@ void effector::check_controller_state()
 	controller_state_edp_buf.robot_in_fault_state = (enabled != axes.size());
 }
 
-void effector::get_controller_state(lib::c_buffer &instruction)
+void effector::get_controller_state(lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
 
@@ -208,7 +307,7 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		axesNames[1] = "pkm";
 
 		// Create festo node.
-		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, 10);
+		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, FESTO_ADRESS);
 	}
 
 }
@@ -224,13 +323,12 @@ lib::smb::ALL_LEGS_VARIANT effector::next_legs_state(void)
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(const lib::c_buffer &instruction)
+void effector::move_arm(const lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
-	lib::smb::c_buffer & local_instruction = (lib::smb::c_buffer&) instruction;
 
 	try {
-		switch (local_instruction.smb.variant)
+		switch (instruction.smb.variant)
 		{
 			case lib::smb::POSE:
 				DEBUG_COMMAND("POSE");
@@ -276,6 +374,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 			case lib::smb::FESTO:
 				DEBUG_COMMAND("FESTO");
 
+				// Check state of the robot.
+				if (controller_state_edp_buf.robot_in_fault_state)
+					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
+
 				//if (is_base_positioned_to_move_legs)
 				fai->command();
 				// If all legs are currently OUT then reset legs rotation.
@@ -313,6 +415,10 @@ void effector::move_arm(const lib::c_buffer &instruction)
 void effector::parse_motor_command()
 {
 	DEBUG_METHOD;
+
+	// Check state of the robot.
+	if (controller_state_edp_buf.robot_in_fault_state)
+		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
 
 	// The TWO_UP_ONE_DOWN is the only state in which control of both motors (legs and SPKM rotations) is possible.
 	// In other states control of the motor rotating the legs (lower SMB motor) is prohibited!
@@ -469,10 +575,9 @@ void effector::execute_motor_motion()
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
-	lib::smb::c_buffer & local_instruction = (lib::smb::c_buffer&) instruction;
 
 	try {
 		// Check controller state.
@@ -480,7 +585,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 
 		// Handle only GET and SETGET instructions.
 		if (instruction.instruction_type != lib::SET) {
-			switch (local_instruction.smb.get_pose_specification)
+			switch (instruction.smb.get_pose_specification)
 			{
 
 				case lib::smb::MOTOR:
@@ -568,8 +673,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					reply.smb.epos_controller[1].position = current_joints[1];
 					break;
 				default:
-					// Throw non-fatal error - motion type not supported.
-					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_motion_type());
+					// Throw non-fatal error - command not supported.
+					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
 					break;
 			}
 		}

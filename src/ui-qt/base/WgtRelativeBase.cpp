@@ -39,12 +39,11 @@ void WgtRelativeBase::create_buttons()
 	connect(r_button, SIGNAL(clicked()), this, SLOT(r_button_clicked()), Qt::QueuedConnection);
 }
 
-int WgtRelativeBase::synchro_depended_widgets_disable(bool set_disabled)
+void WgtRelativeBase::synchro_depended_widgets_disable(bool set_disabled)
 {
 	for (int i = 0; i < angle_axis_number; i++) {
 		desired_pos_spin_boxes[i]->setDisabled(set_disabled);
 	}
-	return 1;
 }
 
 void WgtRelativeBase::init_and_copy_slot()

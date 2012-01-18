@@ -233,7 +233,7 @@ public:
 	UNSIGNED16 getSWversion();
 
 	/*! \brief read manufactor device name string firmware */
-	std::string getDeviceName();
+	std::string getCanDeviceName();
 
 	/*! \brief ask for RS232 timeout */
 	UNSIGNED16 getRS232timeout();

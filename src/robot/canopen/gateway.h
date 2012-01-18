@@ -9,13 +9,13 @@
 #include <stdint.h>  /* int types with given size */
 #include <string>
 
-#include "canopen_exceptions.hpp"
 #include <boost/type_traits/is_same.hpp>
+
+#include "canopen_exceptions.hpp"
 
 namespace mrrocpp {
 namespace edp {
 namespace canopen {
-
 
 /*!
  * Data types used for communication (Communication Guide reference)
@@ -26,7 +26,8 @@ typedef uint16_t WORD; ///< \brief 16bit type for EPOS data exchange
 typedef uint8_t BYTE; ///< \brief 8bit type for EPOS data exchange
 
 //! Abstract class for access to the EPOS at the transport layer
-class gateway {
+class gateway
+{
 protected:
 	//! Flag indicating connection status
 	bool device_opened;
@@ -39,15 +40,19 @@ protected:
 
 public:
 	//! Constructor
-	gateway() : device_opened(false), debug(0)
-	{}
+	gateway() :
+			device_opened(false), debug(0)
+	{
+	}
 
 	//! Destructor
 	virtual ~gateway()
-	{}
+	{
+	}
 
 	//! Operation codes of CANopen datagrams
-	typedef enum _CanOpen_OpCode {
+	typedef enum _CanOpen_OpCode
+	{
 		Response_Op = 0x00,
 
 		ReadObject_Op = 0x10,
@@ -83,18 +88,18 @@ public:
 
 		std::string str;
 
-		for(int i = 0; i < r; ++i) {
-			char c = (answer[3+i] & 0x00FF);
+		for (int i = 0; i < r; ++i) {
+			char c = (answer[3 + i] & 0x00FF);
 
-			if(c == 0x00) {
+			if (c == 0x00) {
 				break;
 			} else {
 				str += c;
 			}
 
-			c = ((answer[3+i] & 0xFF00) >> 8);
+			c = ((answer[3 + i] & 0xFF00) >> 8);
 
-			if(c == 0x00) {
+			if (c == 0x00) {
 				break;
 			} else {
 				str += c;
@@ -115,11 +120,11 @@ public:
 		printf("ReadObjectValue(%0x04x, 0x02x)==> %d\n", val);
 #endif
 
-		if ((boost::is_same <T, uint8_t>::value) || (boost::is_same <T, int8_t>::value)
-				|| (boost::is_same <T, uint16_t>::value) || (boost::is_same <T, int16_t>::value)) {
+		if ((boost::is_same < T, uint8_t > ::value) || (boost::is_same < T, int8_t > ::value)
+				|| (boost::is_same < T, uint16_t > ::value) || (boost::is_same < T, int16_t > ::value)) {
 			T val = (T) answer[3];
 			return val;
-		} else if ((boost::is_same <T, uint32_t>::value) || (boost::is_same <T, int32_t>::value)) {
+		} else if ((boost::is_same < T, uint32_t > ::value) || (boost::is_same < T, int32_t > ::value)) {
 			T val = (T) (answer[3] | (answer[4] << 16));
 			return val;
 		} else {
@@ -199,6 +204,9 @@ public:
 	//! Close device
 	virtual void close() = 0;
 
+	//! Get CAN-ID of the gateway itself (0 if gateway gives direct access)
+	virtual BYTE getCanID() = 0;
+
 	/*! \brief check for EPOS error code
 	 *
 	 * @param E_error epos error code
@@ -212,10 +220,12 @@ public:
 	 * @param pDataArray pointer to data for checksum calculation
 	 * @param numberOfWords length of the data
 	 */
-	/*static*/ WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
+	/*static*/
+	WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
 
 	//! Set the debug level
-	void setDebugLevel(int level) {
+	void setDebugLevel(int level)
+	{
 		debug = level;
 	}
 };

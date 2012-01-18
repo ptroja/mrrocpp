@@ -32,17 +32,6 @@ namespace bird_hand {
 const std::string UiRobot::WGT_COMMAND_AND_STATUS = "WGT_COMMAND_AND_STATUS";
 const std::string UiRobot::WGT_CONFIGURATION = "WGT_CONFIGURATION";
 
-int UiRobot::ui_get_edp_pid()
-{
-	return ui_ecp_robot->the_robot->get_EDP_pid();
-}
-
-void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
-{
-	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
-
-}
-
 void UiRobot::edp_create()
 {
 	if (state.edp.state == common::UI_EDP_OFF) {
@@ -54,8 +43,7 @@ void UiRobot::edp_create()
 
 void UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::bird_hand::EcpRobot(*this);
-//	return 1;
+	common::UiRobot::ui_ecp_robot = ui_ecp_robot = new ui::bird_hand::EcpRobot(*this);
 }
 
 void UiRobot::synchronise()
@@ -135,16 +123,6 @@ void UiRobot::setup_menubar()
 // 	robot_menu->addAction(actionbirdhand_Configuration);
 
 	robot_menu->setTitle(QApplication::translate("MainWindow", "&Birdhand", 0, QApplication::UnicodeUTF8));
-}
-
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
-}
-
-void UiRobot::null_ui_ecp_robot()
-{
-	ui_ecp_robot = NULL;
 }
 
 }

@@ -17,7 +17,7 @@ gateway_epos_usb::gateway_epos_usb(int _vendor, int _product, unsigned int _inde
 	vendor(_vendor), product(_product), index(_index)
 {
 	if (ftdi_init(&ftdic) < 0) {
-		fprintf(stderr, "ftdi_init failed\n");
+		throw fe_canopen_error() << reason("ftdi_init failed");
 	}
 	// Set the timeouts to 1 sec (the libftdi defaults to 5 sec)
 	ftdic.usb_read_timeout = 1000;
@@ -470,6 +470,11 @@ void gateway_epos_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Dat
 	}
 
 	checkEPOSerror(E_error);
+}
+
+BYTE gateway_epos_usb::getCanID()
+{
+	return ReadObjectValue <WORD>(0, 0x2000, 0x00);
 }
 
 } /* namespace canopen */

@@ -1,10 +1,10 @@
 /*!
- * \file edp_e_sbench.h
- * \brief File containing the declaration of edp::sbench::effector class.
+ * @file
+ * @brief File containing the declaration of edp::sbench::effector class.
  *
- * \author yoyek
- * \date 2009
+ * @author yoyek
  *
+ * @ingroup sbench
  */
 
 #ifndef __EDP_E_SBENCH_H
@@ -13,24 +13,53 @@
 #include "base/edp/edp_e_motor_driven.h"
 #include "dp_sbench.h"
 #include <comedilib.h>
+#include "../canopen/gateway_epos_usb.h"
+#include "../canopen/gateway_socketcan.h"
+#include "../festo/cpv.h"
+#include "../maxon/epos.h"
 
 namespace mrrocpp {
 namespace edp {
 namespace sbench {
 
-// Klasa reprezentujaca robota IRp-6 na postumencie.
+//! festo hardware activation field name
+const static std::string FESTO_TEST_MODE = "festo_test_mode";
+
+//! relays activation field name
+const static std::string RELAYS_TEST_MODE = "relays_test_mode";
 
 /*!
- * \brief class of EDP SwarmItFix head effector
+ * \brief class of EDP SwarmItFix sbench effector
  *
- * This head is built on top of the SPKM manipulator
+ * This sbench is built on top of the SPKM manipulator
  */
 class effector : public common::motor_driven_effector
 {
 protected:
 
-	// lib::sbench::cbuffer ecp_edp_cbuffer;
-	//lib::sbench::rbuffer edp_ecp_rbuffer;
+	//! address of the festo valve block
+	const static int FESTO_ADRESS = 1;
+
+	//! the number of logical adress blocks in the festo valve block
+	const static int NUMBER_OF_FESTO_GROUPS = 7;
+
+	//! the maximal number of pins that can be cleaned at once (due to the festo block properties)
+	const static int CLEANING_PINS_ACTIVATED_LIMIT = 4;
+
+	//! the maximal number of pins that can be activated (supplied with electricity) at once (due to the relays properties)
+	const static int VOLTAGE_PINS_ACTIVATED_LIMIT = 6;
+
+	//! the festo hardware active flag set by the same labeled configuration field
+	bool festo_test_mode;
+
+	//! the relays hardware activation flag set by the same labeled configuration field
+	bool relays_test_mode;
+
+	//! Access to the CAN gateway unit
+	boost::shared_ptr <canopen::gateway> gateway;
+
+	//! festo shared ptr
+	boost::shared_ptr <festo::cpv> cpv10;
 
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!
@@ -73,6 +102,11 @@ public:
 	 */
 	void create_threads();
 
+	/*!
+	 * \brief The method checks the initial state of the controller.
+	 *
+	 * This method typically communicates with hardware to check if the robot is synchronised etc.
+	 */
 	void get_controller_state(lib::c_buffer &instruction);
 
 	/*!
@@ -126,6 +160,22 @@ public:
 	 */
 	void variant_reply_to_instruction();
 
+
+	/*!
+	 * @brief checks if the configuration file let the festo hardware to run
+	 * or it is in test mode
+	 * @return hardware_active
+	 */
+	bool festo_active();
+
+	/*!
+	 * @brief checks if the configuration file let the relays hardware to run
+	 * or it is in test mode
+	 * @return hardware_active
+	 */
+	bool relays_active();
+
+
 	/*!
 	 * \brief The particular type of instruction send form ECP to EDP
 	 */
@@ -137,12 +187,25 @@ public:
 	lib::sbench::r_buffer reply;
 
 private:
+
+	/*!
+	 * \brief device name for advantech card
+	 */
 	const std::string dev_name;
-	comedi_t *voltage_device; // device descriptor
+
+	/*!
+	 * \brief  device descriptor for advantech card
+	 */
+	comedi_t *voltage_device;
+
+	/*!
+	 * \brief current and desired output data of festo controller
+	 */
+	std::bitset <8> current_output[NUMBER_OF_FESTO_GROUPS + 1], desired_output[NUMBER_OF_FESTO_GROUPS + 1];
 
 };
 
-} // namespace smb
+} // namespace sbench
 } // namespace edp
 } // namespace mrrocpp
 

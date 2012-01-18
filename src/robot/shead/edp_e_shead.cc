@@ -10,7 +10,7 @@
 
 #include "robot/shead/edp_e_shead.h"
 #include "base/edp/reader.h"
-// Kinematyki.
+
 #include "robot/shead/kinematic_model_shead.h"
 
 #include "base/lib/exception.h"
@@ -25,6 +25,8 @@ namespace mrrocpp {
 namespace edp {
 namespace shead {
 
+#include "base/lib/debug.hpp"
+
 const uint32_t effector::Vdefault = 300UL;
 const uint32_t effector::Adefault = 300UL;
 const uint32_t effector::Ddefault = 300UL;
@@ -38,9 +40,12 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		motor_driven_effector(_shell, l_robot_name, instruction, reply)
 {
+	DEBUG_METHOD;
+
+	// Set number of servos.
 	number_of_servos = lib::shead::NUM_OF_SERVOS;
 
-	//  Stworzenie listy dostepnych kinematyk.
+	// Create kinematics.
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
@@ -64,15 +69,18 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 void effector::synchronise(void)
 {
-	if (robot_test_mode) {
-		controller_state_edp_buf.is_synchronised = true;
-		return;
-	}
-
-	// Initialize variable to false in case of exception
-	controller_state_edp_buf.is_synchronised = false;
+	DEBUG_METHOD;
 
 	try {
+		if (robot_test_mode) {
+			controller_state_edp_buf.is_synchronised = true;
+			return;
+		}
+
+		// Check state of the robot.
+		if (controller_state_edp_buf.robot_in_fault_state)
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
+
 		// Common synchronization sequence
 		epos_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
 		epos_node->reset();
@@ -97,9 +105,8 @@ void effector::synchronise(void)
 
 void effector::check_controller_state()
 {
-#if(DEBUG_METHODS)
-	std::cout << "effector::check_controller_state" << std::endl;
-#endif
+	DEBUG_METHOD;
+
 	if (robot_test_mode) {
 		// In test mode robot is always synchronized.
 		controller_state_edp_buf.is_synchronised = true;
@@ -154,11 +161,10 @@ void effector::check_controller_state()
 	controller_state_edp_buf.robot_in_fault_state = (!enabled);
 }
 
-void effector::get_controller_state(lib::c_buffer &instruction)
+void effector::get_controller_state(lib::c_buffer &instruction_)
 {
-#if(DEBUG_METHODS)
-	std::cout << "effector::get_controller_state" << std::endl;
-#endif
+	DEBUG_METHOD;
+
 	try {
 		// False is the initial value
 		controller_state_edp_buf.is_synchronised = false;
@@ -219,10 +225,17 @@ void effector::get_controller_state(lib::c_buffer &instruction)
 
 void effector::parse_motor_command()
 {
+	DEBUG_METHOD;
+
+	// Check state of the robot.
+	if (controller_state_edp_buf.robot_in_fault_state)
+		BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
+
 	// Interpret command according to the pose specification.
 	switch (instruction.shead.set_pose_specification)
 	{
 		case lib::shead::MOTOR:
+			DEBUG_COMMAND("MOTOR");
 			// Copy data directly from buffer.
 			desired_motor_pos_new[0] = instruction.shead.motor_pos[0];
 
@@ -232,6 +245,7 @@ void effector::parse_motor_command()
 			get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new, desired_joints);
 			break;
 		case lib::shead::JOINT:
+			DEBUG_COMMAND("JOINT");
 			// Copy data directly from buffer.
 			desired_joints[0] = instruction.shead.joint_pos[0];
 
@@ -254,6 +268,8 @@ void effector::parse_motor_command()
 
 void effector::execute_motor_motion()
 {
+	DEBUG_METHOD;
+
 	// Execute command.
 	if (is_synchronised()) {
 		// Robot is synchronized.
@@ -283,19 +299,16 @@ void effector::execute_motor_motion()
 }
 
 /*--------------------------------------------------------------------------*/
-void effector::move_arm(const lib::c_buffer &instruction)
+void effector::move_arm(const lib::c_buffer &instruction_)
 {
-	lib::shead::c_buffer & local_instruction = (lib::shead::c_buffer&) instruction;
+	DEBUG_METHOD;
 
 	try {
-		msg->message("move_arm");
 
-		switch (local_instruction.shead.variant)
+		switch (instruction.shead.variant)
 		{
 			case lib::shead::POSE:
-#if(DEBUG_COMMANDS)
-				std::cout << "POSE" << std::endl;
-#endif
+				DEBUG_COMMAND("POSE");
 				// Control the two SMB rotational motors.
 				// Parse command.
 				parse_motor_command();
@@ -303,6 +316,7 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				execute_motor_motion();
 				break;
 			case lib::shead::QUICKSTOP:
+				DEBUG_COMMAND("QUICKSTOP");
 				if (!robot_test_mode) {
 					// Brake with Quickstop command
 					epos_node->setState(maxon::epos::QUICKSTOP);
@@ -312,12 +326,19 @@ void effector::move_arm(const lib::c_buffer &instruction)
 				}
 				break;
 			case lib::shead::CLEAR_FAULT:
+				DEBUG_COMMAND("CLEAR_FAULT");
 				if (!robot_test_mode) {
 					epos_node->clearFault();
 				}
 				break;
 			case lib::shead::SOLIDIFICATION:
-				switch (local_instruction.shead.head_solidification)
+				DEBUG_COMMAND("SOLIDIFICATION");
+
+				// Check state of the robot.
+				if (controller_state_edp_buf.robot_in_fault_state)
+					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
+
+				switch (instruction.shead.head_solidification)
 				{
 					case lib::shead::SOLIDIFICATION_STATE_ON:
 						if (!robot_test_mode) {
@@ -350,12 +371,19 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 						break;
 					default:
-						// TODO: throw
+						// Throw non-fatal error - command not supported.
+						BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
 						break;
 				}
 				break;
 			case lib::shead::VACUUM:
-				switch (local_instruction.shead.vacuum_activation)
+				DEBUG_COMMAND("VACUUM");
+
+				// Check state of the robot.
+				if (controller_state_edp_buf.robot_in_fault_state)
+					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
+
+				switch (instruction.shead.vacuum_activation)
 				{
 					case lib::shead::VACUUM_ON:
 						if (!robot_test_mode) {
@@ -386,7 +414,8 @@ void effector::move_arm(const lib::c_buffer &instruction)
 						}
 						break;
 					default:
-						// TODO: throw
+						// Throw non-fatal error - command not supported.
+						BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
 						break;
 				}
 				break;
@@ -407,21 +436,16 @@ void effector::move_arm(const lib::c_buffer &instruction)
 	}
 }
 
-/*--------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
-
-	lib::shead::c_buffer & local_instruction = (lib::shead::c_buffer&) instruction;
 
 	try {
 		// Check controller state.
 		check_controller_state();
 
 		// Handle only GET and SET_GET instructions.
-		if (local_instruction.instruction_type != lib::SET) {
+		if (instruction.instruction_type != lib::SET) {
 
 			if (robot_test_mode) {
 				// Copy data from virtual state
@@ -437,9 +461,10 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 						(epos_node->getCommandedDigitalOutputs()[3]) ? lib::shead::VACUUM_STATE_ON : lib::shead::VACUUM_STATE_OFF;
 			}
 
-			switch (local_instruction.shead.get_pose_specification)
+			switch (instruction.shead.get_pose_specification)
 			{
 				case lib::shead::MOTOR:
+					DEBUG_COMMAND("MOTOR");
 					if (!robot_test_mode) {
 						// Update current position.
 						current_motor_pos[0] = epos_node->getActualPosition();
@@ -455,6 +480,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					}
 					break;
 				case lib::shead::JOINT:
+					DEBUG_COMMAND("JOINT");
 					if (!robot_test_mode) {
 						// Update current position.
 						current_motor_pos[0] = epos_node->getActualPosition();
@@ -474,8 +500,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 					reply.shead.epos_controller.position = current_joints[0];
 					break;
 				default:
-					// Throw non-fatal error - motion type not supported.
-					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_motion_type());
+					// Throw non-fatal error - command not supported.
+					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_invalid_command());
 					break;
 			}
 		}
@@ -497,12 +523,9 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
 }
 /*--------------------------------------------------------------------------*/
 
-// Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
 void effector::create_kinematic_models_for_given_robot(void)
 {
-	// Stworzenie wszystkich modeli kinematyki.
 	add_kinematic_model(new kinematics::shead::model());
-	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
 }
 

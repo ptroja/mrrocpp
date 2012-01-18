@@ -3,7 +3,7 @@
 
 /*!
  * @file
- * @brief File contains ecp robot class declaration for SwarmItFix Head
+ * @brief File contains ecp robot class declaration for SwarmItFix Bench
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup sbench
@@ -18,7 +18,7 @@ namespace ecp {
 namespace sbench {
 
 /*!
- * @brief SwarmItFix Head gripper ecp robot class
+ * @brief SwarmItFix Bench gripper ecp robot class
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup sbench
@@ -34,17 +34,17 @@ protected:
 public:
 
 	/**
-	 * @brief head soldification command data port
+	 * @brief Bench soldification command data port
 	 */
 	lib::single_thread_port <lib::sbench::voltage_buffer> sbench_command_voltage_data_port;
 
 	/**
-	 * @brief head soldification command data port
+	 * @brief Bench soldification command data port
 	 */
 	lib::single_thread_port <lib::sbench::preasure_buffer> sbench_command_preasure_data_port;
 
 	/**
-	 * @brief Head state reply data request port
+	 * @brief Bench state reply data request port
 	 */
 	lib::single_thread_request_port <lib::sbench::rbuffer> sbench_reply_data_request_port;
 
