@@ -49,6 +49,20 @@ void wgt_plan::reload()
 				// Deserialize data.
 				Pkm::ItemType item(is);
 
+				// Check widget constraints.
+				checkInputWidgetLimits(*ui->agent_input, item.agent());
+				checkInputWidgetLimits(*ui->TBeg_input, item.TBeg());
+				checkInputWidgetLimits(*ui->TEnd_input, item.TEnd());
+				checkInputWidgetLimits(*ui->ind_input, item.ind());
+
+				checkInputWidgetLimits(*ui->x_input, item.Xyz_Euler_Zyz()->x());
+				checkInputWidgetLimits(*ui->y_input, item.Xyz_Euler_Zyz()->y());
+				checkInputWidgetLimits(*ui->z_input, item.Xyz_Euler_Zyz()->z());
+				checkInputWidgetLimits(*ui->alpha_input, item.Xyz_Euler_Zyz()->alpha());
+				checkInputWidgetLimits(*ui->beta_input, item.Xyz_Euler_Zyz()->beta());
+				checkInputWidgetLimits(*ui->gamma_input, item.Xyz_Euler_Zyz()->gamma());
+				checkInputWidgetLimits(*ui->head_input, item.beta7());
+
 				// Setup common frame.
 				ui->agent_input->setValue(item.agent());
 				ui->TBeg_input->setValue(item.TBeg());
@@ -75,6 +89,23 @@ void wgt_plan::reload()
 			{
 				// Deserialize data.
 				Mbase::ItemType item(is);
+
+				// Check widget constraints.
+				checkInputWidgetLimits(*ui->agent_input, item.agent());
+				checkInputWidgetLimits(*ui->TBeg_input, item.TBeg());
+				checkInputWidgetLimits(*ui->TEnd_input, item.TEnd());
+				checkInputWidgetLimits(*ui->ind_input, item.ind());
+
+				checkInputWidgetLimits(*ui->row1_input, item.pinIndices().item().at(0).row());
+				checkInputWidgetLimits(*ui->column1_input, item.pinIndices().item().at(0).column());
+				checkInputWidgetLimits(*ui->row2_input, item.pinIndices().item().at(1).row());
+				checkInputWidgetLimits(*ui->column2_input, item.pinIndices().item().at(1).column());
+				checkInputWidgetLimits(*ui->row3_input, item.pinIndices().item().at(2).row());
+				checkInputWidgetLimits(*ui->column3_input, item.pinIndices().item().at(2).column());
+
+				checkInputWidgetLimits(*ui->pin_input, item.actions().item().front().pin());
+				checkInputWidgetLimits(*ui->dThetaInd_input, item.actions().item().front().dThetaInd());
+				checkInputWidgetLimits(*ui->dPkmTheta_input, item.actions().item().front().dPkmTheta());
 
 				// Setup common frame
 				ui->agent_input->setValue(item.agent());

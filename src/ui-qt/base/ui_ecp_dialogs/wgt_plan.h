@@ -1,22 +1,19 @@
 #ifndef WGT_PLAN_H
 #define WGT_PLAN_H
 
+#include <iostream>
+
 #include <QtGui/QWidget>
 #include <QVBoxLayout>
 #include <QDockWidget>
-#include "ui_wgt_plan.h"
+
 #include "../wgt_base.h"
-#include "../../../base/lib/com_buf.h"
+#include "../interface.h"
 
+#include "base/lib/exception.h"
+
+#include "ui_wgt_plan.h"
 #include "application/swarmitfix/plan.hxx"
-
-namespace mrrocpp {
-namespace ui {
-namespace common {
-class Interface;
-}
-}
-}
 
 class wgt_plan : public wgt_base
 {
@@ -29,6 +26,8 @@ public:
 	void hideEvent(QHideEvent * event);
 	void my_open(bool set_on_top = false);
 
+	REGISTER_FATAL_ERROR(plan_item_out_of_range, "plan item value is out of range");
+
 private:
 	Ui::wgt_planClass* ui;
 
@@ -37,6 +36,26 @@ private:
 
 	//! Reload inputs with original request
 	void reload();
+
+	//! Check if value is within widget limits.
+	template<class WIDGET_T, class VALUE_T>
+	void checkInputWidgetLimits(const WIDGET_T & widget, const VALUE_T value)
+	{
+		if ((value < widget.minimum()) ||(value > widget.maximum())) {
+			std::stringstream msg;
+
+			msg << "Input widget value " << value
+					<< " out of range <" << widget.minimum()
+					<< ".."
+					<< widget.maximum()
+					<< ">";
+
+			std::cerr << msg.str() << std::endl;
+
+			interface.ui_msg->message(lib::NON_FATAL_ERROR, msg.str());
+			BOOST_THROW_EXCEPTION(plan_item_out_of_range());
+		}
+	}
 
 private slots:
 
