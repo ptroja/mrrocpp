@@ -125,7 +125,7 @@ epos::epos(gateway & _device, uint8_t _nodeId, const std::string & _deviceName) 
 		DigitalOutputs[7] = (outputs & (1 << 8)) ? true : false;
 	}
 	// Create node description.
-	nodeDescription = "'" + deviceName + "' (" + boost::lexical_cast<std::string>((int) nodeId) + ")";
+	nodeDescription = "'" + deviceName + "' (CanID " + boost::lexical_cast<std::string>((int) nodeId) + ")";
 
 #if 0
 	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<

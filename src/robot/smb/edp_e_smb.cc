@@ -49,7 +49,7 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	cleaning_active = config.exists_and_true("cleaning_active");
 
 	// Check whether rotation of the PKM (upper SMB platform) is disabled or enabled.
-	pkm_rotation_disabled = config.exists_and_true("disable_pkm_rotation");
+	pkm_rotation_disabled = config.exists_and_true("pkm_rotation_disabled");
 
 	// Create manipulator kinematic model.
 	create_kinematic_models_for_given_robot();
@@ -67,17 +67,16 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		gateway->open();
 
 		// Create epos objects according to CAN ID-mapping.
-		legs_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8, "legs rotation");
-		pkm_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 9, "PKM rotation");
+		legs_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 8, "Legs");
+		pkm_rotation_node = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 9, "PKM");
 
 		// Collect axes into common array container.
 		axes[0] = &(*legs_rotation_node);
-		axesNames[0] = "legs";
 		axes[1] = &(*pkm_rotation_node);
-		axesNames[1] = "pkm";
 
 		// Create festo node.
 		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, FESTO_ADRESS);
+
 	}
 
 }
@@ -146,26 +145,14 @@ void effector::synchronise(void)
 			// Step 2: Homing.
 			// Activate homing mode.
 			pkm_rotation_node->doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, pkm_zero_position_offset);
-			// Step-by-step homing in order to omit the offset setting (the value will be stored in the EPOS for every agent separatelly).
-			/*		pkm_rotation_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-			 pkm_rotation_node->reset();
-			 pkm_rotation_node->startHoming();
-			 pkm_rotation_node->monitorHomingStatus();*/
-		}/* else {
-		 // If disabled - get only the actual position
-		 current_motor_pos[1] = axes[1]->getActualPosition();
-		 }
 
-		 // Compute joints positions in the home position
-		 get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);*/
+			// Homing of the motor controlling the legs rotation - set current position as 0.
+			legs_relative_zero_position = legs_rotation_node->getActualPosition();
 
-		// Homing of the motor controlling the legs rotation - set current position as 0.
-		//legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
-		legs_relative_zero_position = legs_rotation_node->getActualPosition();
-
-		// Set *extended* limits for PKM rotation.
-		axes[1]->setMinimalPositionLimit(PARAMS->lower_pkm_motor_pos_limits - 1000);
-		axes[1]->setMaximalPositionLimit(PARAMS->upper_pkm_motor_pos_limits + 1000);
+			// Set *extended* limits for PKM rotation.
+			axes[1]->setMinimalPositionLimit(PARAMS->lower_pkm_motor_pos_limits - 1000);
+			axes[1]->setMaximalPositionLimit(PARAMS->upper_pkm_motor_pos_limits + 1000);
+		}//: if pkm enabled.
 
 		// Check whether the synchronization was successful.
 		check_controller_state();
@@ -206,48 +193,59 @@ void effector::check_controller_state()
 	// Check axes.
 	for (size_t i = 0; i < axes.size(); ++i) {
 		try {
+			cout << string("Axis ") << axes[i]->getDeviceName() << endl;
 			// Get current EPOS state.
 			maxon::epos::actual_state_t state = axes[i]->getState();
 			if (state != maxon::epos::OPERATION_ENABLE) {
-				cout << string("Axis ") << axesNames[i] << endl;
 				// Print state.
 				axes[i]->printState();
 				// Check if in the FAULT state.
 				if (state == maxon::epos::FAULT) {
-					// Read number of errors
+					// Read number of errors.
 					int errNum = axes[i]->getNumberOfErrors();
-					for (int j = 1; j <= errNum; ++j) {
-						// Get the detailed error
+
+					// Iterate over error array.
+					for (size_t j = 1; j <= errNum; ++j) {
+						// Get the detailed error code.
 						uint32_t errCode = axes[i]->getErrorHistory(j);
 						// Send message to SR.
-						msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axesNames[i] + ": "
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("Axis ") + axes[i]->getDeviceName() + ": "
 								+ axes[i]->ErrorCodeMessage(errCode));
 					}
 				} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
-					// Send message to SR.
-					msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axesNames[i]
-							+ " rotation is disabled");
+					std::cerr<<"!DUPA! disabled\n";
+					// Display this information only in the case of legs rotation or (in case of pkm rotation) if it is enabled.
+					if ((i == 0) || (!pkm_rotation_disabled)) {
+						// Send message to SR.
+						msg->message(mrrocpp::lib::FATAL_ERROR, string("Epos controlling ") + axes[i]->getDeviceName()
+								+ " rotation is disabled");
+					}
 				} //: if fault || disabled
 			} else {
 				// EPOS in enabled state.
 				enabled++;
+				std::cerr<<"!DUPA! enabled\n";
 			}
-			// In this loop step we are sure that axis is working, this powered.
+			// At this point we are sure that axis is working, this powered.
 			powerOn++;
 		} catch (...) {
 			// Probably the axis is not powered on, do nothing.
 		}
-	}
-	// Robot is synchronized if only one axis - the one controlling the PKM rotation - is referenced.
+	}//: for
+
 	if (pkm_rotation_disabled) {
+		// If motor is disabled - robot is always synchronised.
 		controller_state_edp_buf.is_synchronised = true;
+		// ... and at least only the legs rotation must be enabled.
+		controller_state_edp_buf.robot_in_fault_state = (enabled < 1);
 	} else {
-		controller_state_edp_buf.is_synchronised = axes[1]->isReferenced();
+		// Robot is synchronized if only one axis - the one controlling the PKM rotation - is referenced.
+		controller_state_edp_buf.is_synchronised = pkm_rotation_node->isReferenced();
+		// Check fault state.
+		controller_state_edp_buf.robot_in_fault_state = (enabled != axes.size());
 	}
 	// Check whether robot is powered.
 	controller_state_edp_buf.is_power_on = (powerOn == axes.size());
-	// Check fault state.
-	controller_state_edp_buf.robot_in_fault_state = (enabled != axes.size());
 }
 
 void effector::get_controller_state(lib::c_buffer &instruction_)
@@ -262,6 +260,16 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 
 		// Check controller state.
 		check_controller_state();
+
+		// Disable PKM rotation if required.
+		if(pkm_rotation_disabled) {
+			if (pkm_rotation_node->getState() != maxon::epos::SWITCH_ON_DISABLED) {
+				// Disable the motor (in fact move to the SWITCH_ON_DISABLED state).
+				pkm_rotation_node->setState(maxon::epos::DISABLE_VOLTAGE);
+			}
+			// Send adequate message to the UI.
+			msg->message(string("Epos controlling ") + pkm_rotation_node->getDeviceName() + string(" rotation is disabled"));
+		}
 
 		// Copy data to the reply buffer.
 		reply.controller_state = controller_state_edp_buf;
@@ -290,9 +298,7 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		// Reset zero position.
 		if ((!robot_test_mode)
 				&& ((current_legs_state() == lib::smb::ALL_IN) || (current_legs_state() == lib::smb::ALL_OUT))) {
-			/*// Homing of the motor controlling the legs rotation - set current position as 0.
-			 legs_rotation_node->doHoming(mrrocpp::edp::maxon::epos::HM_ACTUAL_POSITION, 0);
-			 legs_rotation_node->monitorHomingStatus();*/
+			 // Set current position as 0.
 			legs_relative_zero_position = (int32_t) current_motor_pos[0];
 		} else
 			legs_relative_zero_position = 0;
@@ -364,12 +370,11 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 								node->setState(maxon::epos::QUICKSTOP);
 							}
 
-					// Reset node right after.
-					BOOST_FOREACH(maxon::epos * node, axes)
-							{
-								// Reset node.
-								node->reset();
-							}
+					// Reset nodes right after.
+					legs_rotation_node->reset();
+					// Reset pkm only if enabled.
+					if (!pkm_rotation_disabled)
+						pkm_rotation_node->reset();
 				} //: !test_mode
 				break;
 
@@ -381,6 +386,10 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 							{
 								node->clearFault();
 							}
+					// If PKM rotation motor should be disabled.
+					if (pkm_rotation_disabled)
+						// Disable the motor (in fact move to the SWITCH_ON_DISABLED state).
+						pkm_rotation_node->setState(maxon::epos::DISABLE_VOLTAGE);
 				} //: !test_mode
 				break;
 
@@ -437,16 +446,17 @@ void effector::parse_motor_command()
 		// Check motors.
 		if ((instruction.smb.set_pose_specification == lib::smb::MOTOR)
 				&& (current_motor_pos[0] != instruction.smb.motor_pos[0]))
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_legs_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
+		// TODO: !check eps instead of classic comparison!
 		else if ((instruction.smb.set_pose_specification == lib::smb::JOINT)
 				&& (current_joints[0] != instruction.smb.joint_pos[0]))
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_legs_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check externals.
 		else if ((instruction.smb.set_pose_specification == lib::smb::EXTERNAL)
 				&& (current_joints[0]
 						!= instruction.smb.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_clamps_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_legs_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 
 	// Interpret command according to the pose specification.
@@ -491,9 +501,6 @@ void effector::parse_motor_command()
 			break;
 		case lib::smb::EXTERNAL:
 			DEBUG_COMMAND("EXTERNAL");
-
-//			instruction.motion_type
-
 			// Leg rotational joint: Copy data directly from buffer and recalculate joint value.
 			desired_joints[0] = instruction.smb.base_vs_bench_rotation
 					* mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio;
@@ -541,12 +548,12 @@ void effector::execute_motor_motion()
 			legs_rotation_node->setProfileVelocity(Vdefault[0]);
 			legs_rotation_node->setProfileAcceleration(Adefault[0]);
 			legs_rotation_node->setProfileDeceleration(Ddefault[0]);
-			// In case of legs rotation node perform the relative move.
+			// In case of legs rotation node perform the *absolute-relative* move.
 			legs_rotation_node->moveAbsolute(desired_motor_pos_new[0] + legs_relative_zero_position);
 
-			// Perform pkm rotation.
-			// Set velocity and acceleration values.
+			// Perform pkm rotation only when motor is enabled.
 			if (!pkm_rotation_disabled) {
+				// Set velocity and acceleration values.
 				pkm_rotation_node->setProfileVelocity(Vdefault[1]);
 				pkm_rotation_node->setProfileAcceleration(Adefault[1]);
 				pkm_rotation_node->setProfileDeceleration(Ddefault[1]);
@@ -572,9 +579,9 @@ void effector::execute_motor_motion()
 			// In case of legs rotation node perform the relative move.
 			legs_rotation_node->moveRelative(desired_motor_pos_new[0]);
 
-			// Perform pkm rotation.
-			// Set velocity and acceleration values.
+			// Perform pkm rotation only when motor is enabled.
 			if (!pkm_rotation_disabled) {
+				// Set velocity and acceleration values.
 				pkm_rotation_node->setProfileVelocity(Vdefault[1]);
 				pkm_rotation_node->setProfileAcceleration(Adefault[1]);
 				pkm_rotation_node->setProfileDeceleration(Ddefault[1]);
@@ -590,7 +597,6 @@ void effector::execute_motor_motion()
 
 }
 
-/*--------------------------------------------------------------------------*/
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;

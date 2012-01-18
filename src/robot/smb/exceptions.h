@@ -85,10 +85,10 @@ inline std::string to_string(retrieved_festo_command const & e)
 REGISTER_NON_FATAL_ERROR(nfe_invalid_command_in_given_state, "Invalid command in given SMB state")
 
 /*!
- * \brief Exception thrown in case of receiving of command requiring the clamps rotation when it is prohibited.
+ * \brief Exception thrown in case of receiving of command requiring the legs rotation when it is prohibited.
  * \author tkornuta
  */
-REGISTER_NON_FATAL_ERROR(nfe_clamps_rotation_prohibited_in_given_state, "Clamps rotation prohibited in given state")
+REGISTER_NON_FATAL_ERROR(nfe_legs_rotation_prohibited_in_given_state, "Legs rotation prohibited in given state")
 
 /*!
  * \brief Unexpected case within a 'switch' statement with a 'default' handler.

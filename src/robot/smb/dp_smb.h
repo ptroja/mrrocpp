@@ -206,12 +206,16 @@ struct cbuffer
 	//! Motion time - used in the Interpolated Position Mode.
 	double estimated_time;
 
+	//! Two-element vector containing desired motor positions.
 	int32_t motor_pos[NUM_OF_SERVOS];
 
+	//! Two-element vector containing desired joint positions.
 	double joint_pos[NUM_OF_SERVOS];
 
-	// external
+	// Desired external legs rotation.
 	int base_vs_bench_rotation;
+
+	// Desired external PKM rotation.
 	double pkm_vs_base_rotation;
 
 	//! Allowed time for the motion in seconds.
