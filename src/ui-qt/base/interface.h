@@ -69,7 +69,7 @@ private:
 	void create_robots();
 	boost::shared_ptr <QTimer> timer;
 
-	bool html_it(std::string &_input, std::string &_output);
+	static void html_it(const std::string &_input, std::string &_output);
 
 	void setRobotsMenu();
 
@@ -131,7 +131,7 @@ public:
 	boost::mutex process_creation_mtx;
 	boost::mutex ui_notification_state_mutex;
 	boost::shared_ptr <lib::configurator> config;
-	boost::shared_ptr <lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
+	boost::shared_ptr <lib::sr_ui> ui_msg; // Obiekt do komunikacji z SR
 
 	// bool is_any_edp_active;
 	bool is_mp_and_ecps_active;

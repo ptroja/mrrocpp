@@ -111,9 +111,8 @@ void Interface::start_on_timer()
 	timer->start(50);
 }
 
-bool Interface::html_it(std::string &_input, std::string &_output)
+void Interface::html_it(const std::string &_input, std::string &_output)
 {
-
 	try {
 		// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
 		boost::regex pattern("(<)|(>)|( )|(&)");
@@ -129,8 +128,6 @@ bool Interface::html_it(std::string &_input, std::string &_output)
 	} catch (std::exception &ex) {
 		std::cout << "blad" << ex.what() << std::endl;
 	}
-
-	return true;
 }
 
 void Interface::timer_slot()
