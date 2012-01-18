@@ -23,6 +23,16 @@
 #include "ui_mainwindow.h"
 
 #include "interface.h"
+
+#include "ui_ecp_dialogs/wgt_yes_no.h"
+#include "ui_ecp_dialogs/wgt_swarm.h"
+#include "ui_ecp_dialogs/wgt_plan.h"
+#include "ui_ecp_dialogs/wgt_message.h"
+#include "ui_ecp_dialogs/wgt_input_integer.h"
+#include "ui_ecp_dialogs/wgt_input_double.h"
+#include "ui_ecp_dialogs/wgt_choose_option.h"
+#include "ui_ecp_dialogs/wgt_teaching.h"
+
 #include "ui_sr.h"
 #include "ui_ecp.h"
 #include "base/lib/ping.h"

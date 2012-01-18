@@ -2,6 +2,7 @@
 #define ALLROBOTS_H_
 
 #include <boost/shared_ptr.hpp>
+
 #include "ui.h"
 
 class MainWindow;

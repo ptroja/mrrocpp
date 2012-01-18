@@ -1,10 +1,11 @@
 #ifndef __INTERFACE_H
 #define __INTERFACE_H
 
-#include <iostream>
-#include <vector>
+#include <string>
+#include <list>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
 
 #include <QMainWindow>
 #include <QTimer>
@@ -14,14 +15,17 @@
 //#include "mainwindow.h"
 #include "wgt_process_control.h"
 #include "wgt_robot_process_control.h"
-#include "ui_ecp_dialogs/wgt_yes_no.h"
-#include "ui_ecp_dialogs/wgt_swarm.h"
-#include "ui_ecp_dialogs/wgt_plan.h"
-#include "ui_ecp_dialogs/wgt_message.h"
-#include "ui_ecp_dialogs/wgt_input_integer.h"
-#include "ui_ecp_dialogs/wgt_input_double.h"
-#include "ui_ecp_dialogs/wgt_choose_option.h"
-#include "ui_ecp_dialogs/wgt_teaching.h"
+
+// Forward declarations
+class wgt_process_control;
+class wgt_yes_no;
+class wgt_swarm;
+class wgt_plan;
+class wgt_message;
+class wgt_input_integer;
+class wgt_input_double;
+class wgt_choose_option;
+class wgt_teaching;
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
@@ -65,8 +69,8 @@ class Interface : public QObject
 {
 Q_OBJECT
 private:
-
 	void create_robots();
+
 	boost::shared_ptr <QTimer> timer;
 
 	static void html_it(const std::string &_input, std::string &_output);
