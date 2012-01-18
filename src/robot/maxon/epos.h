@@ -135,6 +135,9 @@ private:
 	//! ID of the EPOS device on the CAN bus
 	const uint8_t nodeId;
 
+	//! Description (name and ID) of the EPOS device (for presentation purposes).
+	std::string nodeDescription;
+
 	//! remote operation enable bit
 	bool remote;
 

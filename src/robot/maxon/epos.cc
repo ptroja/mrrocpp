@@ -18,6 +18,7 @@
 #include <cmath>
 #include <sys/select.h>
 
+#include <boost/lexical_cast.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/thread/thread_time.hpp>
 #include <boost/thread/thread.hpp>
@@ -123,6 +124,8 @@ epos::epos(gateway & _device, uint8_t _nodeId, const std::string & _deviceName) 
 		DigitalOutputs[6] = (outputs & (1 << 9)) ? true : false;
 		DigitalOutputs[7] = (outputs & (1 << 8)) ? true : false;
 	}
+	// Create node description.
+	nodeDescription = "'" + deviceName + "' (" + boost::lexical_cast<std::string>((int) nodeId) + ")";
 
 #if 0
 	std::cout << "Node[" << (int) nodeId << "] {V,A,D} " <<
@@ -144,7 +147,7 @@ epos::epos(gateway & _device, uint8_t _nodeId, const std::string & _deviceName) 
 
 const std::string & epos::getDeviceName() const
 {
-	return deviceName;
+	return nodeDescription;
 }
 
 /* read EPOS status word */
@@ -541,7 +544,7 @@ int epos::printState()
 {
 	actual_state_t state = getState();
 
-	std::cout << "EPOS node " << (unsigned int) nodeId << ": is in state: ";
+	std::cout << "EPOS node " << getDeviceName() << ": is in state: ";
 
 	switch (state)
 	{
@@ -657,7 +660,7 @@ void epos::clearFault(void)
 		}
 
 		if(recovered) {
-			std::cout << "EPOS node " << (unsigned int) nodeId <<
+			std::cout << "EPOS node " << getDeviceName() <<
 					": recovering in " << retry << " retries" << std::endl;
 		} else {
 			// We are not supposed to clear faults here
@@ -674,7 +677,7 @@ void epos::reset()
 	// TODO: handle initial error conditions
 	actual_state_t state = getState();
 
-	std::cout << "EPOS node " << (unsigned int) nodeId
+	std::cout << "EPOS node " << getDeviceName()
 			<< ": resetting from state '" << stateDescription(state) << "'"
 			<< std::endl;
 
@@ -716,7 +719,7 @@ void epos::reset()
 			} else if (state == FAULT) {
 				BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
 			} else {
-				std::cout << "EPOS node " << (unsigned int) nodeId << ": transited to state '" << stateDescription(state)
+				std::cout << "EPOS node " << getDeviceName() << ": transited to state '" << stateDescription(state)
 						<< "' during shutdown" << std::endl;
 				// Continue;
 			}
@@ -765,7 +768,7 @@ void epos::reset()
 					BOOST_THROW_EXCEPTION(fe() << reason("Device is in the fault state"));
 					break;
 				default:
-					std::cout << "EPOS node " << (unsigned int) nodeId << ": transited to state '" << stateDescription(state)
+					std::cout << "EPOS node " << getDeviceName() << ": transited to state '" << stateDescription(state)
 										<< "' during initialization" << std::endl;
 					break;
 			}
@@ -797,7 +800,7 @@ void epos::reset()
 		BOOST_THROW_EXCEPTION(fe() << reason("Operation Enable expected"));
 	}
 
-	std::cout << "EPOS node " << (unsigned int) nodeId << ": reset OK" << std::endl;
+	std::cout << "EPOS node " << getDeviceName() << ": reset OK" << std::endl;
 }
 
 /* change EPOS state according to firmware spec 8.1.3 */
