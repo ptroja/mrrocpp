@@ -1,5 +1,4 @@
 #include <cstdio>
-#include <boost/static_assert.hpp>
 
 #include "base/lib/debug.hpp"
 

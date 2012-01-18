@@ -4,7 +4,6 @@
 #include <sys/stat.h>
 //<sys/types.h>
 #include <boost/foreach.hpp>
-#include <boost/static_assert.hpp>
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"

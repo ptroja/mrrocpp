@@ -8,7 +8,6 @@
  */
 
 #include <cstdio>
-#include <boost/static_assert.hpp>
 
 #include <comedilib.h>
 
