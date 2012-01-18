@@ -33,11 +33,11 @@ namespace smb {
 #define PARAMS ((mrrocpp::kinematics::smb::model*)this->get_current_kinematic_model())
 
 // Maximum velocity: legs (verified for 2000 rpm), pkm (verified for 2000 rpm).
-const uint32_t effector::Vdefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
+const uint32_t effector::Vdefault[lib::smb::NUM_OF_SERVOS] = { 1000UL, 1000UL };
 // Maximum acceleration: legs (verified for 4000 rpm/s), pkm (verified for 4000 rpm/s).
-const uint32_t effector::Adefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
+const uint32_t effector::Adefault[lib::smb::NUM_OF_SERVOS] = { 1000UL, 1000UL };
 // Maximum deceleration: legs (verified for 4000 rpm/s), pkm (verified for 4000 rpm/s).
-const uint32_t effector::Ddefault[lib::smb::NUM_OF_SERVOS] = { 300UL, 1000UL };
+const uint32_t effector::Ddefault[lib::smb::NUM_OF_SERVOS] = { 1000UL, 1000UL };
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		motor_driven_effector(_shell, l_robot_name, instruction, reply), cleaning_active(false)

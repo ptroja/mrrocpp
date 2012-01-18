@@ -87,13 +87,37 @@ void swarmitfix_smb_test::main_task_algorithm(void)
 			while (true) {
 				// One leg in and out after another with rotation given by parameter.
 				// Rotate around the first leg.
-				rotate_smb(1, rotation);
+//				rotate_smb(1, rotation);
+				move_smb_legs(lib::smb::OUT, lib::smb::IN, lib::smb::IN);
+				wait_ms(delay);
+				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 				wait_ms(delay);
 				// Rotate around the second leg.
-				rotate_smb(2, rotation);
+//				rotate_smb(2, rotation);
+				move_smb_legs(lib::smb::IN, lib::smb::OUT, lib::smb::IN);
+				wait_ms(delay);
+				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+				wait_ms(delay);
 				wait_ms(delay);
 				// Rotate around the third leg.
-				rotate_smb(3, rotation);
+//				rotate_smb(3, rotation);
+				move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::OUT);
+				wait_ms(delay);
+				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+				wait_ms(delay);
+				wait_ms(delay);
+			}
+			break;
+		case 3:
+			while (true) {
+				// Movement according to the plan.
+				rotate_smb(1, 1);
+				wait_ms(delay);
+				rotate_smb(3, 2);
+				wait_ms(delay);
+				rotate_smb(3, -2);
+				wait_ms(delay);
+				rotate_smb(1, -1);
 				wait_ms(delay);
 			}
 			break;
