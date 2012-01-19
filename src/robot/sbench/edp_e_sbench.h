@@ -23,12 +23,6 @@ namespace mrrocpp {
 namespace edp {
 namespace sbench {
 
-//! festo hardware activation field name
-const static std::string FESTO_TEST_MODE = "festo_test_mode";
-
-//! relays activation field name
-const static std::string RELAYS_TEST_MODE = "relays_test_mode";
-
 /*!
  * \brief class of EDP SwarmItFix sbench effector
  *
@@ -53,25 +47,17 @@ protected:
 	//! the maximal number of pins that can be activated (supplied with electricity) at once (due to the relays properties)
 	const static int VOLTAGE_PINS_ACTIVATED_LIMIT = 6;
 
-	//! the festo hardware active flag set by the same labeled configuration field
-	bool festo_test_mode;
-
 	//! the relays hardware activation flag set by the same labeled configuration field
-	bool relays_test_mode;
+	bool power_supply;
+
+	//! the festo hardware active flag set by the same labeled configuration field
+	bool cleaning;
 
 	//! Access to the CAN gateway unit
 	boost::shared_ptr <canopen::gateway> gateway;
 
 	//! festo shared ptr
 	boost::shared_ptr <festo::cpv> cpv10;
-
-	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
-	/*!
-	 * \brief method,  creates a list of available kinematic models for sbench effector.
-	 *
-	 * It will be used if any motor will be commanded to move. Then motor to joint transform will be implemented in kinematics.
-	 */
-	void create_kinematic_models_for_given_robot(void);
 
 	/*!
 	 * \brief current pins state
@@ -89,18 +75,25 @@ public:
 	 */
 	effector(common::shell &_shell);
 
-	//! Destructor
+	/*!
+	 * \brief Disconnects the power supply device.
+	 */
 	~effector();
+
+	/*!
+	 * Empty.
+	 */
+	virtual void create_kinematic_models_for_given_robot(void);
 
 	/*!
 	 * \brief method to init voltage hardware
 	 */
-	void voltage_init();
+	void power_supply_init();
 
 	/*!
 	 * \brief method to init preasure hardware
 	 */
-	void preasure_init();
+	void cleaning_init();
 
 	/*!
 	 * \brief method to create threads other then EDP master thread.
@@ -124,12 +117,12 @@ public:
 	/*!
 	 * \brief method to command voltage of pins
 	 */
-	void voltage_command();
+	void power_supply_command();
 
 	/*!
 	 * \brief method to command preasure in pins
 	 */
-	void preasure_command();
+	void cleaning_command();
 
 	/*!
 	 * \brief method to get position of the motors or joints
@@ -140,12 +133,12 @@ public:
 	/*!
 	 * \brief method to reply of pins
 	 */
-	void voltage_reply();
+	void power_supply_reply();
 
 	/*!
 	 * \brief method to reply preasure in pins
 	 */
-	void preasure_reply();
+	void cleaning_reply();
 
 	/*!
 	 * \brief method to choose master_order variant
@@ -170,14 +163,14 @@ public:
 	 * or it is in test mode
 	 * @return hardware_active
 	 */
-	bool festo_active();
+	bool cleaning_active();
 
 	/*!
 	 * @brief checks if the configuration file let the relays hardware to run
 	 * or it is in test mode
 	 * @return hardware_active
 	 */
-	bool relays_active();
+	bool power_supply_active();
 
 
 	/*!

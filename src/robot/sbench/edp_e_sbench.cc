@@ -41,27 +41,28 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 effector::effector(common::shell &_shell) :
 		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME, instruction, reply),
-		festo_test_mode(1),
-		relays_test_mode(1),
 		dev_name("/dev/comedi0")
 {
 	DEBUG_METHOD;
 
-	// Read values from config file.
-	if (config.exists(FESTO_TEST_MODE)) {
-		festo_test_mode = config.exists_and_true(FESTO_TEST_MODE);
+	if (robot_test_mode) {
+		// If robot test mode - deactivate both flags modes automatically.
+		power_supply = 0;
+		cleaning  = 0;
+	} else {
+		// Read values from config file.
+		power_supply = config.exists_and_true("power_supply");
+		cleaning = config.exists_and_true("cleaning");
 	}
 
-	if (config.exists(RELAYS_TEST_MODE)) {
-		relays_test_mode = config.exists_and_true(RELAYS_TEST_MODE);
-	}
+
 
 	// TODO: what for??
 	number_of_servos = lib::sbench::NUM_OF_SERVOS;
 
 	// Initialize power and pressure supplies.
-	voltage_init();
-	preasure_init();
+	power_supply_init();
+	cleaning_init();
 }
 
 
@@ -69,7 +70,7 @@ effector::effector(common::shell &_shell) :
 effector::~effector()
 {
 	DEBUG_METHOD;
-	if(relays_active()) {
+	if(power_supply_active()) {
 		// Detach from hardware
 		if (power_supply_device) {
 			if(comedi_close(power_supply_device) == -1) {
@@ -80,22 +81,22 @@ effector::~effector()
 }
 
 
-bool effector::festo_active()
+bool effector::cleaning_active()
 {
-	return !festo_test_mode;
+	return cleaning;
 }
 
-bool effector::relays_active()
+bool effector::power_supply_active()
 {
-	return !relays_test_mode;
+	return power_supply;
 }
 
 
-void effector::voltage_init()
+void effector::power_supply_init()
 {
 	DEBUG_METHOD;
-	if (!relays_active()) {
-		msg->message("Power supply of relays will not used (test mode activated)");
+	if (!power_supply_active()) {
+		msg->message("Power supply of relays will not used - test mode activated");
 		// NULL pointer just for safety.
 		power_supply_device = NULL;
 		current_pins_buf.voltage_buf.set_zeros();
@@ -109,13 +110,13 @@ void effector::voltage_init()
 }
 
 
-void effector::preasure_init()
+void effector::cleaning_init()
 {
 	DEBUG_METHOD;
 
 	// Inform the user about the configuration.
-	if (!festo_active()) {
-		msg->message("Festo hardware will not used (test mode activated)");
+	if (!cleaning_active()) {
+		msg->message("FESTO hardware will not used for cleaning - test mode activated");
 		current_pins_buf.preasure_buf.set_zeros();
 	} else {
 		// Initialize the can connection.
@@ -171,19 +172,19 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 
 	switch (instruction.sbench.variant)
 	{
-		case lib::sbench::VOLTAGE:
+		case lib::sbench::POWER_SUPPLY:
 			DEBUG_COMMAND("VOLTAGE");
-			voltage_command();
+			power_supply_command();
 			break;
-		case lib::sbench::PREASURE:
+		case lib::sbench::CLEANING:
 			DEBUG_COMMAND("PREASURE");
-			preasure_command();
+			cleaning_command();
 			break;
 	}
 
 }
 
-void effector::voltage_command()
+void effector::power_supply_command()
 {
 	DEBUG_METHOD;
 
@@ -192,7 +193,7 @@ void effector::voltage_command()
 	lib::sbench::power_supply_state voltage_buf = instruction.sbench.voltage_buf;
 
 	// Check working mode.
-	if (!relays_active()) {
+	if (!power_supply_active()) {
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			if (voltage_buf.pins_state[i]) {
@@ -237,7 +238,7 @@ void effector::voltage_command()
 
 }
 
-void effector::preasure_command()
+void effector::cleaning_command()
 {
 	DEBUG_METHOD;
 
@@ -246,7 +247,7 @@ void effector::preasure_command()
 	lib::sbench::cleaning_state preasure_buf = instruction.sbench.preasure_buf;
 
 	// Check working mode.
-	if (!festo_active()) {
+	if (!cleaning_active()) {
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			if (preasure_buf.pins_state[i]) {
 				ss << "1";
@@ -325,18 +326,18 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;
 
-	voltage_reply();
-	preasure_reply();
+	power_supply_reply();
+	cleaning_reply();
 	reply.sbench = current_pins_buf;
 	reply.servo_step = step_counter;
 }
 
-void effector::voltage_reply()
+void effector::power_supply_reply()
 {
 	DEBUG_METHOD;
 
 	DEBUG_COMMAND("VOLTAGE");
-	if (relays_active()) {
+	if (power_supply_active()) {
 		// read pin_state from hardware
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			unsigned int current_read;
@@ -346,12 +347,12 @@ void effector::voltage_reply()
 	}
 }
 
-void effector::preasure_reply()
+void effector::cleaning_reply()
 {
 	DEBUG_METHOD;
 
 	DEBUG_COMMAND("PREASURE");
-	if (festo_active()) {
+	if (cleaning_active()) {
 		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
 			current_output[i + 1] = cpv10->getOutputs(i + 1);
 		}
@@ -363,11 +364,6 @@ void effector::preasure_reply()
 		}
 
 	}
-}
-
-void effector::create_kinematic_models_for_given_robot(void)
-{
-	// There are no kinematics for sbench.
 }
 
 void effector::create_threads()
@@ -384,6 +380,12 @@ void effector::variant_reply_to_instruction()
 {
 	reply_to_instruction(reply);
 }
+
+void effector::create_kinematic_models_for_given_robot(void)
+{
+	// There are no kinematic models.
+}
+
 
 } // namespace sbench
 

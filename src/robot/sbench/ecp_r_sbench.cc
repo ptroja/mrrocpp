@@ -48,7 +48,7 @@ void robot::create_command()
 	if (power_supply_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
-		ecp_command.sbench.variant = lib::sbench::VOLTAGE;
+		ecp_command.sbench.variant = lib::sbench::POWER_SUPPLY;
 		// generator command interpretation
 
 		ecp_command.sbench.voltage_buf = power_supply_data_port.data;
@@ -59,7 +59,7 @@ void robot::create_command()
 	if (cleaning_state_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
-		ecp_command.sbench.variant = lib::sbench::PREASURE;
+		ecp_command.sbench.variant = lib::sbench::CLEANING;
 		// generator command interpretation
 
 		ecp_command.sbench.preasure_buf = cleaning_state_data_port.data;
