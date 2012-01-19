@@ -117,7 +117,7 @@ private:
 	 *
 	 * it sets the window state taking the info about robot state
 	 */
-	virtual void read_and_copy() = 0;
+	virtual void read_and_set() = 0;
 
 private slots:
 

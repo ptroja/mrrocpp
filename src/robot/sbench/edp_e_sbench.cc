@@ -342,10 +342,9 @@ void effector::voltage_reply()
 {
 	DEBUG_METHOD;
 
+	DEBUG_COMMAND("VOLTAGE");
 	if (relays_active()) {
-
 		// read pin_state from hardware
-
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			unsigned int current_read;
 			comedi_dio_read(power_supply_device, (int) (i / 32), (i % 32), &current_read);
@@ -358,6 +357,7 @@ void effector::preasure_reply()
 {
 	DEBUG_METHOD;
 
+	DEBUG_COMMAND("PREASURE");
 	if (festo_active()) {
 		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
 			current_output[i + 1] = cpv10->getOutputs(i + 1);
