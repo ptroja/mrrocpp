@@ -1,5 +1,6 @@
 /*!
  * @file mp_t_smb_test.cpp
+ * @brief Class for SMB tests metehods declaration.
  *
  * @date Jan 17, 2012
  * @author tkornuta

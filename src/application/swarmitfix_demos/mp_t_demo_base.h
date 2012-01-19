@@ -18,7 +18,6 @@ namespace swarmitfix {
 
 /** @defgroup swarmitfix swarmitfix
  *  @ingroup application
- *  A swarmitfix demo base class.
  *  @{
  */
 
