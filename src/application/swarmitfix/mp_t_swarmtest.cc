@@ -169,8 +169,7 @@ void swarmitfix::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, IO
 			break;
 	}
 
-
-	// Send command if the output buffers are active
+	// Send commands if the output buffers are active
 	if(smb_command_buffer.get()) {
 		smb_command_buffer->Send(cmd_smb);
 		current_workers_status[smb_name] = WorkersStatus::BUSY;
@@ -404,7 +403,7 @@ void swarmitfix::main_test_algorithm(void)
 			handleNotification(lib::shead2::ROBOT_NAME, IO.transmitters.shead2.inputs);
 			handleNotification(lib::spkm1::ROBOT_NAME, IO.transmitters.spkm1.inputs);
 			handleNotification(lib::spkm2::ROBOT_NAME, IO.transmitters.spkm2.inputs);
-			handleNotification(lib::smb1::ROBOT_NAME, IO.transmitters.smb2.inputs);
+			handleNotification(lib::smb1::ROBOT_NAME, IO.transmitters.smb1.inputs);
 			handleNotification(lib::smb2::ROBOT_NAME, IO.transmitters.smb2.inputs);
 		}
 
