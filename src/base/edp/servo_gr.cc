@@ -224,7 +224,6 @@ void servo_buffer::operator()()
 	catch (std::exception & e) {
 		printf("servo group exception: %s\n", e.what());
 		master.msg->message(lib::FATAL_ERROR, e.what());
-		master.edp_shell.close_hardware_busy_file();
 		exit(EXIT_SUCCESS);
 	}
 

@@ -72,12 +72,10 @@ void legs_command::get_mp_ecp_command()
 external_epos_command::external_epos_command(task_t & _ecp_task) :
 		generator_t(_ecp_task)
 {
-
-	epos_external_command_data_port = the_robot->port_manager.get_port < lib::smb::motor_command
-			> (lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT);
-	epos_external_reply_data_request_port = the_robot->port_manager.get_request_port < lib::smb::smb_ext_epos_reply
-			> (lib::smb::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT);
-
+	epos_external_command_data_port =
+			the_robot->port_manager.get_port <lib::smb::motor_command>(lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT);
+	epos_external_reply_data_request_port =
+			the_robot->port_manager.get_request_port <lib::smb::smb_ext_epos_reply>(lib::smb::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT);
 }
 
 bool external_epos_command::first_step()

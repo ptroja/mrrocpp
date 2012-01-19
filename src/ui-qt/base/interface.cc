@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <ctime>
 #include <unistd.h>
 #include <strings.h>
 #include <sys/stat.h>
@@ -22,6 +23,16 @@
 #include "ui_mainwindow.h"
 
 #include "interface.h"
+
+#include "ui_ecp_dialogs/wgt_yes_no.h"
+#include "ui_ecp_dialogs/wgt_swarm.h"
+#include "ui_ecp_dialogs/wgt_plan.h"
+#include "ui_ecp_dialogs/wgt_message.h"
+#include "ui_ecp_dialogs/wgt_input_integer.h"
+#include "ui_ecp_dialogs/wgt_input_double.h"
+#include "ui_ecp_dialogs/wgt_choose_option.h"
+#include "ui_ecp_dialogs/wgt_teaching.h"
+
 #include "ui_sr.h"
 #include "ui_ecp.h"
 #include "base/lib/ping.h"
@@ -81,7 +92,7 @@ Interface::Interface() :
 
 	mw = (boost::shared_ptr <MainWindow>) new MainWindow(*this);
 
-	main_eb = new function_execution_buffer(*this);
+	main_eb = (boost::shared_ptr<function_execution_buffer>) new function_execution_buffer(*this);
 
 	timer = (boost::shared_ptr <QTimer>) new QTimer(this);
 
@@ -93,8 +104,8 @@ Interface::Interface() :
 	ui_state = 1; // ui working
 	file_window_mode = ui::common::FSTRAJECTORY; // uczenie
 
-	all_robots = new AllRobots(this);
-	mp = new Mp(this);
+	all_robots = (boost::shared_ptr<AllRobots>) new AllRobots(*this);
+	mp = (boost::shared_ptr<Mp>) new Mp(*this);
 }
 
 Interface::~Interface()
@@ -110,9 +121,8 @@ void Interface::start_on_timer()
 	timer->start(50);
 }
 
-bool Interface::html_it(std::string &_input, std::string &_output)
+void Interface::html_it(const std::string &_input, std::string &_output)
 {
-
 	try {
 		// Wyrażenie regularne reprezentujące pierwsze dwie kolumny (druga może być pusta)
 		boost::regex pattern("(<)|(>)|( )|(&)");
@@ -128,8 +138,6 @@ bool Interface::html_it(std::string &_input, std::string &_output)
 	} catch (std::exception &ex) {
 		std::cout << "blad" << ex.what() << std::endl;
 	}
-
-	return true;
 }
 
 void Interface::timer_slot()
@@ -325,7 +333,7 @@ void Interface::timer_slot()
 			ui_state = 6;
 	} else if (ui_state == 6) { // zakonczenie aplikacji
 		(*log_file_outfile).close();
-		delete log_file_outfile;
+		log_file_outfile.reset();
 		printf("UI CLOSED\n");
 		abort_threads();
 		get_main_window()->close();
@@ -401,7 +409,8 @@ void Interface::raise_ui_ecp_window_slot()
 
 		case lib::PLAN_STEP_MODE:
 
-			wgt_swarm_obj->my_open();
+			//wgt_swarm_obj->my_open(true);
+			wgt_plan_obj->my_open(true);
 
 			break;
 		case lib::C_XYZ_ANGLE_AXIS:
@@ -699,6 +708,7 @@ void Interface::init()
 	wgt_pc = new wgt_process_control(*this);
 	wgt_yes_no_obj = new wgt_yes_no(*this);
 	wgt_swarm_obj = new wgt_swarm(*this);
+	wgt_plan_obj = new wgt_plan(*this);
 	wgt_message_obj = new wgt_message(*this);
 	wgt_input_integer_obj = new wgt_input_integer(*this);
 	wgt_input_double_obj = new wgt_input_double(*this);
@@ -832,7 +842,7 @@ if(	uname(&sysinfo) == -1) {
 	strcat(log_file_with_dir, file_name);
 
 	// C++ new does not return 0 on failure, so there is no need to check
-	log_file_outfile = new std::ofstream(log_file_with_dir, std::ios::out);
+	log_file_outfile = (boost::shared_ptr<std::ofstream>) new std::ofstream(log_file_with_dir, std::ios::out);
 
 	//ui_msg->message("closing");
 

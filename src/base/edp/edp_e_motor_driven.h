@@ -492,7 +492,7 @@ public:
 	 *
 	 * It is reimplemented in derived classes to call the template class specialized with particular class type
 	 */
-	virtual lib::INSTRUCTION_TYPE variant_receive_instruction();
+	virtual lib::INSTRUCTION_TYPE receive_instruction();
 
 	/*!
 	 * \brief method to reply to ecp with class of particular type

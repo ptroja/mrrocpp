@@ -1,12 +1,16 @@
 #ifndef WGT_SWARM_H
 #define WGT_SWARM_H
 
+#include <boost/shared_ptr.hpp>
+
 #include <QtGui/QWidget>
 #include <QVBoxLayout>
 #include <QDockWidget>
 #include "ui_wgt_swarm.h"
 #include "../wgt_base.h"
 #include "../../../base/lib/com_buf.h"
+
+class XmlSyntaxHighlighter;
 
 namespace mrrocpp {
 namespace ui {
@@ -29,7 +33,16 @@ public:
 private:
 	Ui::wgt_swarmClass* ui;
 
-	char stored_plan_item[SWARM_STRING_SIZE];
+	std::string stored_plan_item;
+
+	//! Syntax highlighter
+	boost::shared_ptr<XmlSyntaxHighlighter> highlighter;
+
+	//! Simple validator
+	bool validate();
+
+	//! Deactivate widget into idle mode
+	void reply();
 
 private slots:
 

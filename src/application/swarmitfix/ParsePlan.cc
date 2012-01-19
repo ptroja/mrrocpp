@@ -6,65 +6,61 @@
  */
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <memory>
 #include <exception>
-
-#include <boost/thread/thread.hpp>
 
 #include "planner.h"
 #include "base/lib/mrmath/homog_matrix.h"
 #include "base/lib/mrmath/mrmath.h"
 
-using namespace std;
+#include "plan.hxx"
 
 int main(int argc, char *argv[])
 {
 	// Check for input arguments
 	if(argc < 2) {
-		cerr << "Usage: " << argv[0] << " plan_file.xml" << endl;
+		std::cerr << "Usage: " << argv[0] << " plan_file.xml" << std::endl;
 		return -1;
 	}
 
 	try {
-		const Plan p = *plan(argv[1], xml_schema::Flags::dont_validate);
+		// XML validation settings
+		xml_schema::Properties props;
 
-		// cerr << p.hNum() << endl;
+		// Add XSD validation to parser's properties
+		props.no_namespace_schema_location ("plan.xsd");
 
-		for(Plan::PkmType::ItemConstIterator it = p.pkm().item().begin();
-				it != p.pkm().item().end();
-				++it) {
+		//const Plan p = *plan(argv[1], xml_schema::Flags::dont_validate);
+		Plan p = *plan(argv[1], 0, props);
 
-			const Plan::PkmType::ItemType & pkmCmd = *it;
+		std::cerr << "mbase item # " << p.mbase().item().size() << std::endl;
+		std::cerr << "pkm item # " << p.pkm().item().size() << std::endl;
 
-			// Test only 1st agent
-			if(pkmCmd.agent() != 1)
-				continue;
+		std::ostringstream ostr;
+		boost::archive::text_oarchive oa(ostr);
+		xml_schema::ostream<boost::archive::text_oarchive> os (oa);
 
-			using namespace mrrocpp;
+		os << p.pkm().item().front();
 
-			// Goal pose
-			lib::Homog_matrix hm;
+		// Print the text representation.
+		//
+		std::string str (ostr.str ());
 
-			if(pkmCmd.pkmToWrist().present()) {
-				hm = lib::Homog_matrix(pkmCmd.pkmToWrist().get());
-			} else if (pkmCmd.Xyz_Euler_Zyz().present()) {
-				hm = lib::Xyz_Euler_Zyz_vector(
-						pkmCmd.Xyz_Euler_Zyz()->x(),
-						pkmCmd.Xyz_Euler_Zyz()->y(),
-						pkmCmd.Xyz_Euler_Zyz()->z(),
-						pkmCmd.Xyz_Euler_Zyz()->ox(),
-						pkmCmd.Xyz_Euler_Zyz()->oy(),
-						pkmCmd.Xyz_Euler_Zyz()->oz()
-						);
-			} else {
-				// This should be already checked by XML validation
-				throw std::runtime_error("Goal pose not defined");
-			}
+		std::cerr << std::endl
+			 << "text representation: " << std::endl
+			 << str << std::endl;
 
-			std::cerr << pkmCmd.pkmToWrist() << std::endl;
-			std::cerr << hm << std::endl << std::endl;
-			//std::cerr << "[" << pkmCmd.l1() << "," << pkmCmd.l2() << "," << pkmCmd.l3() << "]" << std::endl;
-		}
+		// Load from a text archive.
+		//
+		std::istringstream istr (str);
+		boost::archive::text_iarchive ia (istr);
+		xml_schema::istream<boost::archive::text_iarchive> is (ia);
+
+		std::auto_ptr<Pkm::ItemType> copy (new Pkm::ItemType (is));
+
+		std::cerr << *copy << std::endl;
 
 		// Create planner object
 		//planner pp(argv[1]);
@@ -72,8 +68,8 @@ int main(int argc, char *argv[])
 		// Start execution
 		//pp.start();
 
-	} catch (const xml_schema::Exception& e) {
-		cerr << e << endl;
+	} catch (const xml_schema::Exception & e) {
+		std::cerr << "Exception::what(): " << e << std::endl;
 		return 1;
 	}
 

@@ -53,7 +53,6 @@ void force::operator()()
 	catch (std::exception & e) {
 		printf("force sensor exception: %s\n", e.what());
 		sr_msg->message(lib::FATAL_ERROR, e.what());
-		master.edp_shell.close_hardware_busy_file();
 		exit(EXIT_SUCCESS);
 	}
 

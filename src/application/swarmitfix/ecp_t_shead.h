@@ -1,33 +1,40 @@
 #if !defined(_ECP_T_SHEAD_SWARMITFIX_H)
 #define _ECP_T_SHEAD_SWARMITFIX_H
 
-#include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_g_transparent.h"
+#include <boost/shared_ptr.hpp>
 
+#include "robot/shead/ecp_r_shead.h"
+#include "base/ecp/ecp_task.h"
+#include "robot/shead/dp_shead.h"
+
+#include "base/lib/agent/OutputBuffer.h"
+#include "base/lib/agent/InputBuffer.h"
+#include "base/lib/swarmtypes.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace shead {
 namespace task {
 
-class swarmitfix: public common::task::task
+class swarmitfix: public common::task::_task<ecp::shead::robot>
 {
-protected:
-    //generatory
-	common::generator::transparent* gt;
-	//common::generator::smooth* sg;
-	common::generator::sleep* g_sleep;
-	generator::head_soldify* g_head_soldify;
-	generator::head_desoldify* g_head_desoldify;
-	generator::head_vacuum_on* g_head_vacuum_on;
-	generator::head_vacuum_off* g_head_vacuum_off;
-
 public:
-    // KONSTRUKTORY
-    swarmitfix(lib::configurator &_config);
+	//! Constructor
+	swarmitfix(lib::configurator &_config);
 
-    // methods for ECP template to redefine in concrete classes
-    void mp_2_ecp_next_state_string_handler(void);
+	// methods for ECP template to redefine in concrete classes
+	void main_task_algorithm(void);
+
+protected:
+	/**
+	 * Input buffer for MP commands
+	 */
+	lib::agent::InputBuffer<lib::shead::next_state> nextstateBuffer;
+
+	/**
+	 * Output buffer for MP notifications
+	 */
+	boost::shared_ptr<lib::agent::OutputBuffer<lib::notification_t> > notifyBuffer;
 };
 
 }

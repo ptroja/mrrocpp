@@ -102,7 +102,7 @@ public:
 	/*!
 	 * \brief method to receive instruction from ecp of particular type
 	 */
-	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	lib::INSTRUCTION_TYPE receive_instruction();
 
 	/*!
 	 * \brief method to reply to ecp with class of particular type

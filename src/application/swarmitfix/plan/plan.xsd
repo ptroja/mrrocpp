@@ -3,97 +3,6 @@
   <xs:element name="plan">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="head">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element maxOccurs="unbounded" name="item">
-                <xs:complexType>
-                  <xs:complexContent>
-                    <xs:extension base="State">
-                      <xs:sequence>
-                        <xs:element ref="ind"/>
-                        <xs:element name="cx" type="xs:double">
-                          <xs:annotation>
-                            <xs:documentation>location of origin (X
-                              coordinate)
-                            </xs:documentation>
-                          </xs:annotation>
-                        </xs:element>
-                        <xs:element name="cy" type="xs:double">
-                          <xs:annotation>
-                            <xs:documentation>location of origin (Y
-                              coordinate)
-                            </xs:documentation>
-                          </xs:annotation>
-                        </xs:element>
-                        <xs:element name="cz" type="xs:double">
-                          <xs:annotation>
-                            <xs:documentation>location of origin (Z
-                              coordinate)
-                            </xs:documentation>
-                          </xs:annotation>
-                        </xs:element>
-                        <xs:element name="alfa" type="xs:double">
-                          <xs:annotation>
-                            <xs:documentation>orientation in world
-                              coordinates
-                            </xs:documentation>
-                          </xs:annotation>
-                        </xs:element>
-                        <xs:element name="beta" type="xs:double">
-                          <xs:annotation>
-                            <xs:documentation>orientation in world
-                              coordinates
-                            </xs:documentation>
-                          </xs:annotation>
-                        </xs:element>
-                        <xs:element name="gamma" type="xs:double">
-                          <xs:annotation>
-                            <xs:documentation>orientation in world
-                              coordinates
-                            </xs:documentation>
-                          </xs:annotation>
-                        </xs:element>
-                        <xs:element name="line">
-                          <xs:complexType>
-                            <xs:sequence>
-                              <xs:element name="sP" type="xs:integer"/>
-                              <xs:element name="eP" type="xs:integer"/>
-                              <xs:element name="sPos" type="xs:string"/>
-                              <xs:element name="ePos" type="xs:string"/>
-                              <xs:element name="a" type="xs:double"/>
-                              <xs:element name="b" type="xs:integer"/>
-                              <xs:element name="c" type="xs:double"/>
-                              <xs:element name="norm" type="xs:double"/>
-                              <xs:element name="norm2" type="xs:double"/>
-                              <xs:element name="alfa" type="xs:double"/>
-                              <xs:element name="beta" type="xs:double"/>
-                              <xs:element name="gamma" type="xs:double"/>
-                              <xs:element name="len" type="xs:double"/>
-                              <xs:element name="index">
-                                <xs:complexType/>
-                              </xs:element>
-                            </xs:sequence>
-                          </xs:complexType>
-                        </xs:element>
-                        <xs:element name="lineseg">
-                          <xs:complexType/>
-                        </xs:element>
-                        <xs:element name="actions" type="xs:string"/>
-                        <xs:element ref="numActions"/>
-                        <xs:element name="k1" type="xs:double"/>
-                        <xs:element name="k2" type="xs:double"/>
-                        <xs:element name="ABeg" type="xs:double"/>
-                        <xs:element name="AHoldMin" type="xs:double"/>
-                        <xs:element name="AHoldMax" type="xs:double"/>
-                      </xs:sequence>
-                    </xs:extension>
-                  </xs:complexContent>
-                </xs:complexType>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:element name="mbase">
           <xs:complexType>
             <xs:sequence>
@@ -103,51 +12,42 @@
                     <xs:extension base="State">
                       <xs:sequence>
                         <xs:element ref="ind"/>
-                        <xs:element name="bCind" type="xs:int">
-                          <xs:annotation>
-                            <xs:documentation>index into base center matrix of BaseCsp</xs:documentation>
-                          </xs:annotation>
+                        <xs:element name="pinIndices">
+                          <xs:complexType>
+                            <xs:sequence maxOccurs="3" minOccurs="3">
+                              <xs:element name="item">
+                                <xs:complexType>
+                                  <xs:sequence>
+                                    <xs:element name="row">
+                                      <xs:simpleType>
+                                        <xs:restriction base="xs:int">
+                                          <xs:minInclusive value="1"/>
+                                          <xs:maxInclusive value="8"/>
+                                        </xs:restriction>
+                                      </xs:simpleType>
+                                    </xs:element>
+                                    <xs:element name="column">
+                                      <xs:simpleType>
+                                        <xs:restriction base="xs:int">
+                                          <xs:minInclusive value="1"/>
+                                          <xs:maxInclusive value="8"/>
+                                        </xs:restriction>
+                                      </xs:simpleType>
+                                    </xs:element>
+                                  </xs:sequence>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                          </xs:complexType>
                         </xs:element>
-                        <xs:element name="cx" type="xs:double">
-                          <xs:annotation>
-                            <xs:documentation>base center on the bench
-                              (X coordinate)
-                            </xs:documentation>
-                          </xs:annotation>
-                        </xs:element>
-                        <xs:element name="cy" type="xs:double">
-                          <xs:annotation>
-                            <xs:documentation>base center on the bench
-                              (Y coordinate)
-                            </xs:documentation>
-                          </xs:annotation>
-                        </xs:element>
-                        <xs:element name="theta" type="xs:double">
-                          <xs:annotation>
-                            <xs:documentation>base orientation in global
-                              (bench) XY coordinate system (kept within
-                              -2pi:+2pi)
-                            </xs:documentation>
-                          </xs:annotation>
-                        </xs:element>
-                        <xs:element name="pinX" type="xs:string"/>
-                        <xs:element name="pinY" type="xs:string"/>
-                        <xs:element name="pkmTheta" type="xs:double">
-                          <xs:annotation>
-                            <xs:documentation>orientation of pkm base's
-                              X axis in global coordinates; kept within
-                              -4pi:+4pi as it may differ from theta by
-                              -2pi:+2pi
-                            </xs:documentation>
-                          </xs:annotation>
-                        </xs:element>
+                        <xs:element name="pkmTheta" type="xs:float"/>
                         <xs:element name="actions">
                           <xs:complexType>
                             <xs:sequence>
                               <xs:element name="item" maxOccurs="unbounded">
                                 <xs:complexType>
                                   <xs:sequence>
-                                    <xs:element name="pin" type="xs:integer">
+                                    <xs:element name="pin">
                                       <xs:annotation>
                                         <xs:documentation>
                                     by which pin to rotate: 1 - left, 2 - right, 3 -
@@ -155,16 +55,26 @@
                                     base rotation
                                   </xs:documentation>
                                       </xs:annotation>
+                                      <xs:simpleType>
+                                        <xs:restriction base="xs:int">
+                                          <xs:minInclusive value="0"/>
+                                          <xs:maxInclusive value="3"/>
+                                        </xs:restriction>
+                                      </xs:simpleType>
                                     </xs:element>
-                                    <xs:element name="dTheta" type="xs:double">
+                                    <xs:element name="dThetaInd">
                                       <xs:annotation>
-                                        <xs:documentation>delta (rotation) angle in radians from -2pi +1/3
-                                    pi
-                                    to 2pi - 1/3 pi
+                                        <xs:documentation>delta (rotation) angle in multiply of 60deg
                                   </xs:documentation>
                                       </xs:annotation>
+                                      <xs:simpleType>
+                                        <xs:restriction base="xs:int">
+                                          <xs:minInclusive value="-5"/>
+                                          <xs:maxInclusive value="5"/>
+                                        </xs:restriction>
+                                      </xs:simpleType>
                                     </xs:element>
-                                    <xs:element name="dPkmTheta" type="xs:double"/>
+                                    <xs:element name="dPkmTheta" type="xs:float"/>
                                   </xs:sequence>
                                 </xs:complexType>
                               </xs:element>
@@ -189,6 +99,11 @@
                     <xs:extension base="State">
                       <xs:sequence>
                         <xs:element ref="ind"/>
+                        <xs:element name="beta7" type="xs:float">
+                          <xs:annotation>
+                            <xs:documentation>orientation of the head</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
                         <xs:choice minOccurs="1" maxOccurs="1">
                           <xs:annotation>
                             <xs:documentation>pose expressed in one of the supported coordiate systems</xs:documentation>
@@ -204,40 +119,41 @@
                             </xs:annotation>
                             <xs:complexType>
                               <xs:sequence>
-                                <xs:element name="x" type="xs:double">
+                                <xs:element name="x" type="xs:float">
                                   <xs:annotation>
                                     <xs:documentation>X coordinate</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
-                                <xs:element name="y" type="xs:double">
+                                <xs:element name="y" type="xs:float">
                                   <xs:annotation>
                                     <xs:documentation>Y coordinate</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
-                                <xs:element name="z" type="xs:double">
+                                <xs:element name="z" type="xs:float">
                                   <xs:annotation>
                                     <xs:documentation>Z coordinate</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
-                                <xs:element name="ox" type="xs:double">
+                                <xs:element name="alpha" type="xs:float">
                                   <xs:annotation>
-                                    <xs:documentation>rotation around X axis</xs:documentation>
+                                    <xs:documentation>rotation angle</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
-                                <xs:element name="oy" type="xs:double">
+                                <xs:element name="beta" type="xs:float">
                                   <xs:annotation>
-                                    <xs:documentation>rotation around Y axis</xs:documentation>
+                                    <xs:documentation>rotation angle</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
-                                <xs:element name="oz" type="xs:double">
+                                <xs:element name="gamma" type="xs:float">
                                   <xs:annotation>
-                                    <xs:documentation>rotation around Z axis</xs:documentation>
+                                    <xs:documentation>rotation angle</xs:documentation>
                                   </xs:annotation>
                                 </xs:element>
                               </xs:sequence>
                             </xs:complexType>
                           </xs:element>
                         </xs:choice>
+                        <xs:element minOccurs="0" name="expectedInitTime" type="xs:float"/>
                       </xs:sequence>
                     </xs:extension>
                   </xs:complexContent>
@@ -248,32 +164,64 @@
         </xs:element>
       </xs:sequence>
     </xs:complexType>
+    <xs:unique name="ind">
+      <xs:selector xpath="pkm/item|mbase/item"/>
+      <xs:field xpath="ind"/>
+    </xs:unique>
   </xs:element>
-  <xs:element name="ind" type="xs:integer">
+  <xs:element name="ind" type="xs:int">
     <xs:annotation>
       <xs:documentation>execution index along time axis
       </xs:documentation>
     </xs:annotation>
   </xs:element>
-  <xs:element name="numActions" type="xs:integer"/>
+  <xs:element name="numActions">
+    <xs:simpleType>
+      <xs:restriction base="xs:int">
+        <xs:minExclusive value="0"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
   <xs:complexType name="State">
     <xs:sequence>
-      <xs:element name="agent" type="xs:int">
+      <xs:element name="agent">
         <xs:annotation>
           <xs:documentation>index of the agent
           </xs:documentation>
         </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:int">
+            <xs:minInclusive value="1"/>
+            <xs:maxInclusive value="2"/>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:element>
-      <xs:element name="TBeg" type="xs:float">
+      <xs:element name="TBeg">
         <xs:annotation>
           <xs:documentation>time before the transition should be
             completed
           </xs:documentation>
         </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:float">
+            <xs:minInclusive value="0"/>
+          </xs:restriction>
+        </xs:simpleType>
       </xs:element>
-      <xs:element name="TEnd" type="xs:float">
+      <xs:element name="TEnd">
         <xs:annotation>
           <xs:documentation>time after the next transition should start
+          </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:float">
+            <xs:minExclusive value="0"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="state_reached_in_time" type="xs:float" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>measured duration of reaching given state
           </xs:documentation>
         </xs:annotation>
       </xs:element>

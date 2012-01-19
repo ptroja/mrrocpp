@@ -1,9 +1,11 @@
 /*
- * generator/ecp_g_smb.cc
- *
- *Author: yoyek
+ * Author: Piotr Trojanek
  */
 
+#include <boost/thread/thread.hpp>
+#include <boost/date_time/time_duration.hpp>
+
+#include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_smb.h"
@@ -13,225 +15,121 @@ namespace ecp {
 namespace smb {
 namespace generator {
 
-//constructor with parameters: task and time to sleep [s]
-pin_lock::pin_lock(common::task::task& _ecp_task) :
-	common::generator::generator(_ecp_task)
+//
+//
+//
+// quickstop
+//
+//
+//
+
+quickstop::quickstop(task_t & _ecp_task) :
+		generator_t(_ecp_task)
 {
-
-	smb_multi_pin_locking_data_port
-			= the_robot->port_manager.get_port <lib::smb::multi_pin_locking_td> (lib::smb::MULTI_PIN_LOCKING_DATA_PORT);
-	smb_multi_leg_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::smb::multi_leg_reply_td> (lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT);
-
+	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 }
 
-bool pin_lock::first_step()
+bool quickstop::first_step()
 {
-	// parameters copying
-	get_mp_ecp_command();
-
-	smb_multi_pin_locking_data_port->data = mp_ecp_smb_multi_pin_locking_structure;
-	smb_multi_pin_locking_data_port->set();
-	smb_multi_leg_reply_data_request_port->set_request();
+	//the_robot->epos_brake_command_data_port.data = true;
+	the_robot->epos_brake_command_data_port.set();
 
 	return true;
 }
 
-bool pin_lock::next_step()
+bool quickstop::next_step()
 {
-	smb_multi_leg_reply_data_request_port->get();
+	return false;
+}
+
+////////////////////////////////////////////////////////
+//
+//                  stand_up
+//
+////////////////////////////////////////////////////////
+
+stand_up::stand_up(task_t & _ecp_task,
+		const lib::smb::festo_command_td & cmd) :
+		generator_t(_ecp_task)
+{
+	// Keep internal copy of a command
+	festo_command = cmd;
+}
+
+bool stand_up::first_step()
+{
+	sr_ecp_msg.message("legs_command: first_step");
+
+	the_robot->smb_festo_command_data_port.data = festo_command;
+	the_robot->smb_festo_command_data_port.set();
+
+	the_robot->smb_multi_leg_reply_data_request_port.set_request();
+
+	return true;
+}
+
+bool stand_up::next_step()
+{
+	the_robot->smb_multi_leg_reply_data_request_port.get();
+	sr_ecp_msg.message("legs_command: next_step");
+	return false;
+}
+
+////////////////////////////////////////////////////////
+//
+//                  rotate
+//
+////////////////////////////////////////////////////////
+
+rotate::rotate(task_t & _ecp_task,
+		const lib::smb::motor_command & cmd) :
+		generator_t(_ecp_task),
+		query_interval(boost::posix_time::milliseconds(20))
+{
+	// Keep internal copy of a command
+	simple_command = cmd;
+}
+
+bool rotate::first_step()
+{
+	sr_ecp_msg.message("legs_command: first_step");
+	the_robot->epos_external_command_data_port.data = simple_command;
+	the_robot->epos_external_command_data_port.set();
+	the_robot->epos_external_reply_data_request_port.set_request();
+
+	// Record current wall clock
+	wakeup = boost::get_system_time();
+
+	return true;
+}
+
+bool rotate::next_step()
+{
+	the_robot->epos_external_reply_data_request_port.get();
 
 	bool motion_in_progress = false;
 
-	for (int i = 0; i < 3; i++) {
-		if (smb_multi_leg_reply_data_request_port->data.leg[i].locking_in_progress == true) {
+	for (int i = 0; i < lib::smb::NUM_OF_SERVOS; i++) {
+		if (the_robot->epos_external_reply_data_request_port.data.epos_controller[i].motion_in_progress == true) {
 			motion_in_progress = true;
 			break;
 		}
 	}
 
 	if (motion_in_progress) {
-		smb_multi_leg_reply_data_request_port->set_request();
+		// Delay until next EPOS query
+		wakeup += query_interval;
+		boost::thread::sleep(wakeup);
+
+		// Ask about current status
+		the_robot->epos_external_reply_data_request_port.set_request();
 		return true;
-	} else {
-		return false;
-	}
-}
-
-void pin_lock::create_ecp_mp_reply()
-{
-
-}
-
-void pin_lock::get_mp_ecp_command()
-{
-	memcpy(&mp_ecp_smb_multi_pin_locking_structure, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(mp_ecp_smb_multi_pin_locking_structure));
-}
-
-//constructor with parameters: task and time to sleep [s]
-pin_unlock::pin_unlock(common::task::task& _ecp_task) :
-	common::generator::generator(_ecp_task)
-{
-	smb_multi_pin_locking_data_port
-			= the_robot->port_manager.get_port <lib::smb::multi_pin_locking_td> (lib::smb::MULTI_PIN_LOCKING_DATA_PORT);
-	smb_multi_leg_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::smb::multi_leg_reply_td> (lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT);
-}
-
-bool pin_unlock::first_step()
-{
-	// parameters copying
-	get_mp_ecp_command();
-	smb_multi_pin_locking_data_port->data = mp_ecp_smb_multi_pin_locking_structure;
-	smb_multi_pin_locking_data_port->set();
-	smb_multi_leg_reply_data_request_port->set_request();
-	return true;
-}
-
-bool pin_unlock::next_step()
-{
-
-	smb_multi_leg_reply_data_request_port->get();
-
-	bool motion_in_progress = false;
-
-	for (int i = 0; i < 3; i++) {
-		if (smb_multi_leg_reply_data_request_port->data.leg[i].locking_in_progress == true) {
-			motion_in_progress = true;
-			break;
-		}
 	}
 
-	if (motion_in_progress) {
-		smb_multi_leg_reply_data_request_port->set_request();
-		return true;
-	} else {
-		return false;
-	}
-}
-
-void pin_unlock::create_ecp_mp_reply()
-{
-
-}
-
-void pin_unlock::get_mp_ecp_command()
-{
-	memcpy(&mp_ecp_smb_multi_pin_locking_structure, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(mp_ecp_smb_multi_pin_locking_structure));
-}
-
-//constructor with parameters: task and time to sleep [s]
-pin_rise::pin_rise(common::task::task& _ecp_task) :
-	common::generator::generator(_ecp_task)
-{
-	smb_festo_command_data_port
-			= the_robot->port_manager.get_port <lib::smb::multi_pin_insertion_td> (lib::smb::MULTI_PIN_INSERTION_DATA_PORT);
-	smb_multi_leg_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::smb::multi_leg_reply_td> (lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT);
-
-}
-
-bool pin_rise::first_step()
-{
-	// parameters copying
-	get_mp_ecp_command();
-
-	smb_festo_command_data_port->data = mp_ecp_smb_multi_pin_insertion_structure;
-	smb_festo_command_data_port->set();
-	smb_multi_leg_reply_data_request_port->set_request();
-
-	return true;
-}
-
-bool pin_rise::next_step()
-{
-
-	smb_multi_leg_reply_data_request_port->get();
-
-	bool motion_in_progress = false;
-
-	for (int i = 0; i < 3; i++) {
-		if (smb_multi_leg_reply_data_request_port->data.leg[i].insertion_in_progress == true) {
-			motion_in_progress = true;
-			break;
-		}
-	}
-
-	if (motion_in_progress) {
-		smb_multi_leg_reply_data_request_port->set_request();
-		return true;
-	} else {
-		return false;
-	}
-}
-
-void pin_rise::create_ecp_mp_reply()
-{
-
-}
-
-void pin_rise::get_mp_ecp_command()
-{
-	memcpy(&mp_ecp_smb_multi_pin_insertion_structure, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(mp_ecp_smb_multi_pin_insertion_structure));
-}
-
-//constructor with parameters: task and time to sleep [s]
-pin_lower::pin_lower(common::task::task& _ecp_task) :
-	common::generator::generator(_ecp_task)
-{
-	smb_festo_command_data_port
-			= the_robot->port_manager.get_port <lib::smb::multi_pin_insertion_td> (lib::smb::MULTI_PIN_INSERTION_DATA_PORT);
-	smb_multi_leg_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::smb::multi_leg_reply_td> (lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT);
-
-}
-
-bool pin_lower::first_step()
-{
-	// parameters copying
-	get_mp_ecp_command();
-
-	smb_festo_command_data_port->data = mp_ecp_smb_multi_pin_insertion_structure;
-	smb_festo_command_data_port->set();
-	smb_multi_leg_reply_data_request_port->set_request();
-
-	return true;
-}
-
-bool pin_lower::next_step()
-{
-
-	smb_multi_leg_reply_data_request_port->get();
-
-	bool motion_in_progress = false;
-
-	for (int i = 0; i < 3; i++) {
-		if (smb_multi_leg_reply_data_request_port->data.leg[i].insertion_in_progress == true) {
-			motion_in_progress = true;
-			break;
-		}
-	}
-
-	if (motion_in_progress) {
-		smb_multi_leg_reply_data_request_port->set_request();
-		return true;
-	} else {
-		return false;
-	}
-}
-
-void pin_lower::create_ecp_mp_reply()
-{
-
-}
-
-void pin_lower::get_mp_ecp_command()
-{
-	memcpy(&mp_ecp_smb_multi_pin_insertion_structure, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(mp_ecp_smb_multi_pin_insertion_structure));
+	return false;
 }
 
 } // namespace generator
 } // namespace smb
 } // namespace ecp
 } // namespace mrrocpp
-
