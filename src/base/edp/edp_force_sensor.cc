@@ -28,13 +28,6 @@ void force::operator()()
 		configure_sensor();
 	}
 
-	catch (std::exception & e) {
-		printf("force sensor exception: %s\n", e.what());
-		sr_msg->message(lib::FATAL_ERROR, e.what());
-		master.edp_shell.close_hardware_busy_file();
-		exit(EXIT_SUCCESS);
-	}
-
 	catch (lib::exception::se_sensor & error) {
 		std::cerr << "sensor_error w force thread EDP" << std::endl;
 
@@ -55,6 +48,13 @@ void force::operator()()
 		}
 		sr_msg->message(lib::FATAL_ERROR, error0);
 
+	}
+
+	catch (std::exception & e) {
+		printf("force sensor exception: %s\n", e.what());
+		sr_msg->message(lib::FATAL_ERROR, e.what());
+		master.edp_shell.close_hardware_busy_file();
+		exit(EXIT_SUCCESS);
 	}
 
 	catch (...) {
