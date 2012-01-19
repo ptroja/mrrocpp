@@ -1,6 +1,6 @@
 /*!
  * @file mp_t_smb_test.cpp
- * @brief Class for SMB tests metehods declaration.
+ * @brief Class for SMB tests methods declaration.
  *
  * @date Jan 17, 2012
  * @author tkornuta
@@ -90,25 +90,25 @@ void smb_test::main_task_algorithm(void)
 			while (true) {
 				// One leg in and out after another with rotation given by parameter.
 				// Rotate around the first leg.
-//				rotate_smb(1, rotation);
-				move_smb_legs(lib::smb::OUT, lib::smb::IN, lib::smb::IN);
+				rotate_smb(1, rotation);
+/*				move_smb_legs(lib::smb::OUT, lib::smb::IN, lib::smb::IN);
 				wait_ms(delay);
 				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
-				wait_ms(delay);
+				wait_ms(delay);*/
 				// Rotate around the second leg.
-//				rotate_smb(2, rotation);
-				move_smb_legs(lib::smb::IN, lib::smb::OUT, lib::smb::IN);
+				rotate_smb(2, rotation);
+/*				move_smb_legs(lib::smb::IN, lib::smb::OUT, lib::smb::IN);
 				wait_ms(delay);
 				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 				wait_ms(delay);
-				wait_ms(delay);
+				wait_ms(delay);*/
 				// Rotate around the third leg.
-//				rotate_smb(3, rotation);
-				move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::OUT);
+				rotate_smb(3, rotation);
+/*				move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::OUT);
 				wait_ms(delay);
 				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 				wait_ms(delay);
-				wait_ms(delay);
+				wait_ms(delay);*/
 			}
 			break;
 		case 3:

@@ -4,12 +4,14 @@
 
 #include "base/mp/mp_task.h"
 
+// MP robot classes.
 #include "robot/spkm/mp_r_spkm1.h"
 #include "robot/spkm/mp_r_spkm2.h"
 #include "robot/smb/mp_r_smb1.h"
 #include "robot/smb/mp_r_smb2.h"
 #include "robot/shead/mp_r_shead1.h"
 #include "robot/shead/mp_r_shead2.h"
+#include "robot/sbench/mp_r_sbench.h"
 
 namespace mrrocpp {
 namespace mp {

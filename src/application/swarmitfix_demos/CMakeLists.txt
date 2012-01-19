@@ -13,6 +13,13 @@ add_executable(mp_swarmitfix_smb_test
 )
 target_link_libraries(mp_swarmitfix_smb_test mp)
 
+## SBENCH test program. 
+add_executable(mp_swarmitfix_sbench_test 
+	mp_t_demo_base.cc
+	mp_t_sbench_test.cpp
+)
+target_link_libraries(mp_swarmitfix_sbench_test mp)
+
 
 ## SMB *transparent* process. 
 add_executable(ecp_smb_transparent
