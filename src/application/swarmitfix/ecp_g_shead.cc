@@ -27,6 +27,7 @@ bool rotate::first_step()
 {
 	// Parameters copying
 	the_robot->epos_joint_command_data_port.data.desired_position[0] = goal;
+	the_robot->epos_joint_command_data_port.set();
 
 	// Request status data
 	the_robot->epos_joint_reply_data_request_port.set_request();
@@ -64,8 +65,8 @@ control::control(task_t & _ecp_task, const lib::shead::next_state::control_t & _
 bool control::first_step()
 {
 	// Parameters copying
-	the_robot->shead_head_soldification_data_port.data = control_state.solidify;
-	the_robot->shead_vacuum_activation_data_port.data = control_state.vacuum;
+	the_robot->solidification_data_port.data = control_state.solidify;
+	the_robot->vacuum_activation_data_port.data = control_state.vacuum;
 
 	return true;
 }

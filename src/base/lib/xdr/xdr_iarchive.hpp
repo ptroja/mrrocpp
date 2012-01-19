@@ -45,7 +45,7 @@
 
 #define LOAD_A_TYPE(T, P) \
     /** conversion for T */ \
-    xdr_iarchive &load_a_type(T &t,boost::mpl::true_) { \
+    xdr_iarchive &load_a_type(T &t, boost::mpl::true_) { \
         if(!P(&xdrs, (T *) &t)) THROW_LOAD_EXCEPTION; \
         return *this; \
     }

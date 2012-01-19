@@ -317,7 +317,6 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 	DEBUG_METHOD;
 
 	try {
-
 		switch (instruction.shead.variant)
 		{
 			case lib::shead::POSE:

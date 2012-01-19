@@ -106,31 +106,6 @@ const std::string EPOS_MOTOR_REPLY_DATA_REQUEST_PORT = "EPOS_MOTOR_REPLY_DATA_RE
 const std::string EPOS_JOINT_REPLY_DATA_REQUEST_PORT = "EPOS_JOINT_REPLY_DATA_REQUEST_PORT";
 
 /*!
- * @brief SwarmItFix Epos controller mp to ecp command
- * @ingroup epos
- */
-struct mp_to_ecp_cubic_trapezoidal_parameters
-{
-	double dm;
-	double aa;
-	double da;
-	double mv;
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & dm;
-		ar & aa;
-		ar & da;
-		ar & mv;
-	}
-};
-
-/*!
  * @brief SwarmItFix Epos single controller status
  * @ingroup epos
  */
@@ -140,6 +115,7 @@ struct single_controller_epos_reply
 	double position;
 	bool motion_in_progress;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -154,31 +130,6 @@ struct single_controller_epos_reply
 };
 
 /*!
- * @brief SwarmItFix Epos cubic trajectory command - deprecated
- * @ingroup epos
- */
-struct epos_trapezoidal_command
-{
-	double emdm[EPOS_DATA_PORT_SERVOS_NUMBER];
-	double aa[EPOS_DATA_PORT_SERVOS_NUMBER];
-	double da[EPOS_DATA_PORT_SERVOS_NUMBER];
-	double av[EPOS_DATA_PORT_SERVOS_NUMBER];
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & emdm;
-		ar & aa;
-		ar & da;
-		ar & av;
-	}
-};
-
-/*!
  * @brief SwarmItFix Epos motor and joint command, called from UI
  * @ingroup epos
  */
@@ -188,6 +139,7 @@ struct epos_simple_command
 	double desired_position[EPOS_DATA_PORT_SERVOS_NUMBER];
 	double estimated_time;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 

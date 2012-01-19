@@ -27,11 +27,18 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 		pp(_config.value<std::string>(planner::planpath))
 {
 	// Create optional Input buffers
+	if(IS_MP_ROBOT_ACTIVE(shead2)) {
+		IO.transmitters.shead2.inputs.notification.Create(*this, lib::shead2::ROBOT_NAME+"notification");
+	}
 	if(IS_MP_ROBOT_ACTIVE(spkm2)) {
 		IO.transmitters.spkm2.inputs.notification.Create(*this, lib::spkm2::ROBOT_NAME+"notification");
 	}
 	if(IS_MP_ROBOT_ACTIVE(smb2)) {
 		IO.transmitters.smb2.inputs.notification.Create(*this, lib::smb2::ROBOT_NAME+"notification");
+	}
+
+	if(IS_MP_ROBOT_ACTIVE(shead1)) {
+		IO.transmitters.shead1.inputs.notification.Create(*this, lib::shead1::ROBOT_NAME+"notification");
 	}
 	if(IS_MP_ROBOT_ACTIVE(spkm1)) {
 		IO.transmitters.spkm1.inputs.notification.Create(*this, lib::spkm1::ROBOT_NAME+"notification");
@@ -39,6 +46,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	if(IS_MP_ROBOT_ACTIVE(smb1)) {
 		IO.transmitters.smb1.inputs.notification.Create(*this, lib::smb1::ROBOT_NAME+"notification");
 	}
+
 	if(IS_MP_ROBOT_ACTIVE(sbench)) {
 		IO.transmitters.sbench.inputs.notification.Create(*this, lib::sbench::ROBOT_NAME+"notification");
 	}
@@ -47,6 +55,12 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	create_robots();
 
 	// Create optional Output buffers
+	if(is_robot_activated(lib::shead2::ROBOT_NAME)) {
+		IO.transmitters.shead2.outputs.command.Create(robot_m[lib::shead2::ROBOT_NAME]->ecp, "command");
+	}
+	if(is_robot_activated(lib::shead1::ROBOT_NAME)) {
+		IO.transmitters.shead1.outputs.command.Create(robot_m[lib::shead1::ROBOT_NAME]->ecp, "command");
+	}
 	if(is_robot_activated(lib::spkm2::ROBOT_NAME)) {
 		IO.transmitters.spkm2.outputs.command.Create(robot_m[lib::spkm2::ROBOT_NAME]->ecp, "command");
 	}
@@ -70,10 +84,13 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void swarmitfix::create_robots()
 {
-	ACTIVATE_MP_ROBOT(smb2);
-	ACTIVATE_MP_ROBOT(smb1);
+	// Activate all the robots.
+	ACTIVATE_MP_ROBOT(shead1);
+	ACTIVATE_MP_ROBOT(shead2);
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
+	ACTIVATE_MP_ROBOT(smb1);
+	ACTIVATE_MP_ROBOT(smb2);
 	ACTIVATE_MP_ROBOT(sbench);
 }
 

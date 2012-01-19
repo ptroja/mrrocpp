@@ -45,7 +45,7 @@
 
 #define SAVE_A_TYPE(T, P) \
     /** conversion for T */ \
-    xdr_oarchive &save_a_type(T const &t,boost::mpl::true_) { \
+    xdr_oarchive &save_a_type(T const &t, boost::mpl::true_) { \
         if(!P(&xdrs, (T *) &t)) THROW_SAVE_EXCEPTION; \
         return *this; \
     }

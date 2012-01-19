@@ -111,6 +111,7 @@ void swarmitfix::executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, IO_t
 		spkm_command_buffer->Send(cmd_spkm);
 		current_workers_status[spkm_name] = WorkersStatus::BUSY;
 	}
+
 	if(shead_command_buffer.get()) {
 		shead_command_buffer->Send(cmd_shead);
 		current_workers_status[shead_name] = WorkersStatus::BUSY;

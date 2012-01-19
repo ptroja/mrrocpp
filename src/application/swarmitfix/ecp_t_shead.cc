@@ -73,7 +73,7 @@ void swarmitfix::main_task_algorithm(void)
 					g_control.Move();
 					break;
 				case lib::shead::next_state::ROTATE:
-					g_control.Move();
+					g_rotate.Move();
 					break;
 				default:
 					// TODO: execute quickstop command
