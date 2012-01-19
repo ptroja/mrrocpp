@@ -126,6 +126,10 @@ void wgt_plan::reload()
 
 				ui->pin_input->setValue(item.actions().item().front().pin());
 				ui->dThetaInd_input->setValue(item.actions().item().front().dThetaInd());
+
+				// Disable rotation input widget if rotation pin is set to zero.
+				ui->dThetaInd_input->setEnabled(item.actions().item().front().pin() ? true : false);
+
 				ui->dPkmTheta_input->setValue(item.actions().item().front().dPkmTheta());
 			}
 
