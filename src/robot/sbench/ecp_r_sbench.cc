@@ -24,8 +24,6 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 		,
 		sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
 {
-	//  Stworzenie listy dostepnych kinematyk.
-	create_kinematic_models_for_given_robot();
 	data_ports_used = true;
 }
 
@@ -38,16 +36,9 @@ robot::robot(common::task::task_base& _ecp_object) :
 		,
 		sbench_reply_data_request_port(lib::sbench::REPLY_DATA_REQUEST_PORT, port_manager)
 {
-	//  Stworzenie listy dostepnych kinematyk.
-	create_kinematic_models_for_given_robot();
 	data_ports_used = true;
 }
 
-// Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
-void robot::create_kinematic_models_for_given_robot(void)
-{
-// no kinematics in sbench
-}
 
 void robot::create_command()
 {

@@ -84,9 +84,7 @@ enum FESTO_LEG
 {
 	IN, OUT
 };
-// namespace mrrocpp
 
-// namespace mrrocpp
 
 /*!
  * @brief SwarmItFix Mobile Base multi pin insertion command

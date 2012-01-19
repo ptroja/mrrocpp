@@ -118,6 +118,7 @@ private:
 
 };
 
+
 /*!
  * @brief SwarmItFix preasure (cleaning activation)  typedef
  * @ingroup sbench
