@@ -88,6 +88,19 @@ public:
 	//! checks if any value in translation table is doubled
 	bool is_any_doubled_value() const;
 
+	std::string display() const
+	{
+		std::stringstream ss;
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+		return ss.str();
+	}
+
 private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -123,7 +136,6 @@ private:
 	}
 
 };
-
 
 /*!
  * @brief SwarmItFix cleaning activation state.

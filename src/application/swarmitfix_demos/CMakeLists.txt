@@ -7,18 +7,28 @@ target_link_libraries(mp_swarmitfix_demo_agent1_warsaw mp)
 
 
 ## SMB test program. 
-add_executable(mp_swarmitfix_smb_test 
+add_executable(mp_smb_test 
 	mp_t_demo_base.cc
 	mp_t_smb_test.cpp
 )
-target_link_libraries(mp_swarmitfix_smb_test mp)
+target_link_libraries(mp_smb_test mp)
 
 ## SBENCH test program. 
-add_executable(mp_swarmitfix_sbench_test 
+add_executable(mp_sbench_test 
 	mp_t_demo_base.cc
 	mp_t_sbench_test.cpp
 )
-target_link_libraries(mp_swarmitfix_sbench_test mp)
+target_link_libraries(mp_sbench_test mp)
+
+## Powered SMB test program. 
+add_executable(mp_smb_powered_from_bench_test 
+	mp_t_demo_base.cc
+	mp_t_smb_powered_from_bench_test.cpp
+)
+target_link_libraries(mp_smb_powered_from_bench_test mp)
+
+
+
 
 
 ## SMB *transparent* process. 
@@ -59,6 +69,7 @@ ecp_smb_transparent
 ecp_shead_transparent
 ecp_sbench_transparent
 mp_swarmitfix_demo_agent1_warsaw
-mp_swarmitfix_smb_test
-mp_swarmitfix_sbench_test
+mp_smb_test
+mp_sbench_test
+mp_smb_powered_from_bench_test
 DESTINATION bin)

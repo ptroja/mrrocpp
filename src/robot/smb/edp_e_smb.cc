@@ -152,7 +152,7 @@ void effector::synchronise(void)
 			// Set *extended* limits for PKM rotation.
 			axes[1]->setMinimalPositionLimit(PARAMS->lower_pkm_motor_pos_limits - 1000);
 			axes[1]->setMaximalPositionLimit(PARAMS->upper_pkm_motor_pos_limits + 1000);
-		}//: if pkm enabled.
+		} //: if pkm enabled.
 
 		// Check whether the synchronization was successful.
 		check_controller_state();
@@ -213,7 +213,6 @@ void effector::check_controller_state()
 								+ axes[i]->ErrorCodeMessage(errCode));
 					}
 				} else if (state == maxon::epos::SWITCH_ON_DISABLED) {
-					std::cerr<<"!DUPA! disabled\n";
 					// Display this information only in the case of legs rotation or (in case of pkm rotation) if it is enabled.
 					if ((i == 0) || (!pkm_rotation_disabled)) {
 						// Send message to SR.
@@ -224,14 +223,13 @@ void effector::check_controller_state()
 			} else {
 				// EPOS in enabled state.
 				enabled++;
-				std::cerr<<"!DUPA! enabled\n";
 			}
 			// At this point we are sure that axis is working, this powered.
 			powerOn++;
 		} catch (...) {
 			// Probably the axis is not powered on, do nothing.
 		}
-	}//: for
+	} //: for
 
 	if (pkm_rotation_disabled) {
 		// If motor is disabled - robot is always synchronised.
@@ -262,13 +260,16 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		check_controller_state();
 
 		// Disable PKM rotation if required.
-		if(pkm_rotation_disabled) {
-			if (pkm_rotation_node->getState() != maxon::epos::SWITCH_ON_DISABLED) {
-				// Disable the motor (in fact move to the SWITCH_ON_DISABLED state).
-				pkm_rotation_node->setState(maxon::epos::DISABLE_VOLTAGE);
+		if (!robot_test_mode) {
+			if (pkm_rotation_disabled) {
+				if (pkm_rotation_node->getState() != maxon::epos::SWITCH_ON_DISABLED) {
+					// Disable the motor (in fact move to the SWITCH_ON_DISABLED state).
+					pkm_rotation_node->setState(maxon::epos::DISABLE_VOLTAGE);
+				}
+				// Send adequate message to the UI.
+				msg->message(string("Epos controlling ") + pkm_rotation_node->getDeviceName()
+						+ string(" rotation is disabled"));
 			}
-			// Send adequate message to the UI.
-			msg->message(string("Epos controlling ") + pkm_rotation_node->getDeviceName() + string(" rotation is disabled"));
 		}
 
 		// Copy data to the reply buffer.
@@ -298,7 +299,7 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		// Reset zero position.
 		if ((!robot_test_mode)
 				&& ((current_legs_state() == lib::smb::ALL_IN) || (current_legs_state() == lib::smb::ALL_OUT))) {
-			 // Set current position as 0.
+			// Set current position as 0.
 			legs_relative_zero_position = (int32_t) current_motor_pos[0];
 		} else
 			legs_relative_zero_position = 0;
@@ -342,7 +343,6 @@ lib::smb::ALL_LEGS_VARIANT effector::next_legs_state(void)
 	return fai->next_legs_state;
 }
 
-/*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;

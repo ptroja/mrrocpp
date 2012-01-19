@@ -6,8 +6,8 @@
  * @author tkornuta
  */
 
-#ifndef MPTSWARMITFIXLEGSTEST_H_
-#define MPTSWARMITFIXLEGSTEST_H_
+#ifndef MP_T_SWARMITFIX_SMB_TEST_H_
+#define MP_T_SWARMITFIX_SMB_TEST_H_
 
 #include "mp_t_demo_base.h"
 
@@ -55,4 +55,4 @@ public:
 } /* namespace task */
 } /* namespace mp */
 } /* namespace mrrocpp */
-#endif /* MPTSWARMITFIXLEGSTEST_H_ */
+#endif /* MP_T_SWARMITFIX_SMB_TEST_H_ */
