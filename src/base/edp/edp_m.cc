@@ -53,17 +53,12 @@ void catch_signal(int sig)
 		case SIGTERM:
 		case SIGHUP:
 			if (edp_shell) {
-				edp_shell->close_hardware_busy_file();
-
 				edp_shell->msg->message("edp terminated");
 			}
 			exit(EXIT_SUCCESS);
 			break;
 		case SIGSEGV:
 			fprintf(stderr, "Segmentation fault in EDP process\n");
-			if (edp_shell) {
-				edp_shell->close_hardware_busy_file();
-			}
 			signal(SIGSEGV, SIG_DFL);
 			break;
 	} // end: switch
@@ -126,7 +121,6 @@ int main(int argc, char *argv[])
 		printf("edp master runtime error: %s \n", e.what());
 
 		if (edp::common::edp_shell) {
-			edp::common::edp_shell->close_hardware_busy_file();
 			edp::common::edp_shell->msg->message(lib::FATAL_ERROR, e.what());
 			edp::common::edp_shell->msg->message("edp terminated");
 		}

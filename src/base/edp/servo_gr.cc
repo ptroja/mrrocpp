@@ -224,11 +224,12 @@ void servo_buffer::operator()()
 	catch (std::exception & e) {
 		printf("servo group exception: %s\n", e.what());
 		master.msg->message(lib::FATAL_ERROR, e.what());
-		master.edp_shell.close_hardware_busy_file();
 		exit(EXIT_SUCCESS);
 	}
 
-	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY + 10);
+	if(!master.robot_test_mode) {
+		lib::set_thread_priority(lib::PTHREAD_MAX_PRIORITY + 10);
+	}
 
 	// signal master thread to continue executing
 	thread_started.command();

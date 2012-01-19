@@ -9,6 +9,7 @@
 #include <boost/foreach.hpp>
 
 #include "single_thread_port.h"
+
 namespace mrrocpp {
 namespace lib {
 
@@ -23,25 +24,18 @@ const std::string & single_thread_port_interface::get_name() const
 	return name;
 }
 
-single_thread_port_manager::single_thread_port_manager()
+void single_thread_port_manager::add_port(single_thread_port_interface* port_iface)
 {
-}
-
-void single_thread_port_manager::add_port(single_thread_port_interface* single_thread_port_inter)
-{
-	single_thread_port_map[single_thread_port_inter->get_name()] = single_thread_port_inter;
+	single_thread_port_map[port_iface->get_name()] = port_iface;
 }
 
 void single_thread_port_manager::clear_data_ports()
 {
-	single_thread_port_interface_t single_thread_port_map_tmp = single_thread_port_map;
-
 	// przepisanie mapy robotow do skomunikowania na wersje tymczasowa
-	BOOST_FOREACH(const single_thread_port_interface_pair_t & port_node, single_thread_port_map_tmp)
+	BOOST_FOREACH(const single_thread_port_interface_pair_t & port_node, single_thread_port_map)
 			{
 				port_node.second->clear_all_flags();
 			}
-
 }
 
 }

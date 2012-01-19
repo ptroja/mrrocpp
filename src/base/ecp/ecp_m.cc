@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 		ecp::common::ecp_t =
 				(boost::shared_ptr <ecp::common::task::task_base>) ecp::common::task::return_created_ecp_task(*_config);
 
-		lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 3);
+		lib::set_thread_priority(lib::PTHREAD_MAX_PRIORITY - 3);
 
 		// ignore Ctrl-C signal, which cames from UI console
 		signal(SIGINT, SIG_IGN);

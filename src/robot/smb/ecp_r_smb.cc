@@ -17,27 +17,17 @@ namespace ecp {
 namespace smb {
 
 robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-		ecp::common::robot::_ecp_robot <lib::smb::c_buffer, lib::smb::r_buffer>(_robot_name, lib::smb::NUM_OF_SERVOS, _config, _sr_ecp)
-		,
-		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_external_command_data_port(lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
-		,
+		ecp::common::robot::_ecp_robot <lib::smb::c_buffer, lib::smb::r_buffer>(_robot_name, lib::smb::NUM_OF_SERVOS, _config, _sr_ecp),
+		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
+		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
+		epos_external_command_data_port(lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
+		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager),
+		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 
-		smb_festo_command_data_port(lib::smb::FESTO_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager)
-		,
-		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager)
-		,
-		epos_external_reply_data_request_port(lib::smb::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
-		,
+		smb_festo_command_data_port(lib::smb::FESTO_COMMAND_DATA_PORT, port_manager),
+		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
+		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
+		epos_external_reply_data_request_port(lib::smb::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager),
 		smb_multi_leg_reply_data_request_port(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 
@@ -98,8 +88,6 @@ void robot::create_command()
 
 		ecp_command.smb.set_pose_specification = lib::smb::MOTOR;
 
-		ecp_command.smb.estimated_time = epos_motor_command_data_port.data.estimated_time;
-
 		for (int i = 0; i < lib::smb::NUM_OF_SERVOS; ++i) {
 			ecp_command.smb.motor_pos[i] = epos_motor_command_data_port.data.desired_position[i];
 		}
@@ -114,7 +102,6 @@ void robot::create_command()
 
 		ecp_command.smb.set_pose_specification = lib::smb::JOINT;
 
-		ecp_command.smb.estimated_time = epos_joint_command_data_port.data.estimated_time;
 		for (int i = 0; i < lib::smb::NUM_OF_SERVOS; ++i) {
 			ecp_command.smb.joint_pos[i] = epos_joint_command_data_port.data.desired_position[i];
 		}
@@ -128,8 +115,6 @@ void robot::create_command()
 		ecp_command.smb.variant = lib::smb::POSE;
 
 		ecp_command.smb.set_pose_specification = lib::smb::EXTERNAL;
-
-		ecp_command.smb.estimated_time = epos_external_command_data_port.data.estimated_time;
 
 		ecp_command.smb.base_vs_bench_rotation = epos_external_command_data_port.data.base_vs_bench_rotation;
 		ecp_command.smb.pkm_vs_base_rotation = epos_external_command_data_port.data.pkm_vs_base_rotation;

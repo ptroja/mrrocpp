@@ -66,6 +66,4 @@
 	#define DEBUG_JOINT(format, args...)
 #endif
 
-
-
 #endif /* DEBUG_HPP_ */

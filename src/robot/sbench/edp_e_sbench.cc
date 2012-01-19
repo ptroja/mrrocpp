@@ -371,9 +371,9 @@ void effector::create_threads()
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
 }
 
-lib::INSTRUCTION_TYPE effector::variant_receive_instruction()
+lib::INSTRUCTION_TYPE effector::receive_instruction()
 {
-	return receive_instruction(instruction);
+	return common::effector::receive_instruction(instruction);
 }
 
 void effector::variant_reply_to_instruction()

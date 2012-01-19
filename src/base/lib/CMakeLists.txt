@@ -1,11 +1,9 @@
-
 add_subdirectory (messip)
 
 # configsrv is needed only for non-QNX platforms and then messip is used
 add_executable(configsrv configsrv.cc configsrv_m.cc)
 target_link_libraries (configsrv messip ${Boost_THREAD_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 install(TARGETS configsrv DESTINATION bin)
-
 
 add_subdirectory (agent)
 add_subdirectory (sr)
@@ -41,9 +39,14 @@ add_library(mrrocpp
 	ping.cc
 )
 
-add_executable(pvat_test
-	pvat_test.cc
+# Test utilites for Maxon EPOS trajectory calculation
+add_executable(ppm_test
+	ppm_test.cc
 )
+#
+#add_executable(pvat_test
+#	pvat_test.cc
+#)
 
 target_link_libraries (mrrocpp sr)
 

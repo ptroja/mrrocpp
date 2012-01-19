@@ -11,6 +11,7 @@
 
 #include <list>
 
+#include "base/ecp_mp/ecp_ui_msg.h"
 #include "base/ecp/ecp_generator.h"
 #include "base/ecp/ecp_taught_in_pose.h"
 
@@ -30,14 +31,19 @@ class teach_in : public common::generator::generator
 
 protected:
 	/**
+	 * @brief pose list data type
+	 */
+	typedef std::list <ecp_taught_in_pose> pose_list_t;
+
+	/**
 	 * @brief pose list
 	 */
-	std::list <ecp_taught_in_pose> pose_list;
+	pose_list_t pose_list;
 
 	/**
 	 * @brief pose list iterator
 	 */
-	std::list <ecp_taught_in_pose>::iterator pose_list_iterator;
+	pose_list_t::iterator pose_list_iterator;
 
 public:
 
@@ -71,7 +77,7 @@ public:
 	 * @param file_name file path
 	 * @return operation success status
 	 */
-	bool load_file_with_path(const char* file_name);
+	bool load_file_with_path(const std::string & file_name);
 
 	/**
 	 * @brief save trajectory to file set by operator in UI
@@ -99,7 +105,7 @@ public:
 	 * @brief returns pose pointed by the current pose list iterator
 	 * @param tip ecp_taught_in_pose reference to return value
 	 */
-	void get_pose(ecp_taught_in_pose& tip);
+	const ecp_taught_in_pose & get_pose(void) const;
 
 	/**
 	 * @brief returns pose coordinates pointed by the current pose list iterator
@@ -122,13 +128,13 @@ public:
 	 * @brief checks if pose_list_iterator reached the pose list end
 	 * @return check status
 	 */
-	bool is_pose_list_element(void);
+	bool is_pose_list_element(void) const;
 
 	/**
 	 * @brief checks if pose_list_iterator points last element of the pose list
 	 * @return check status
 	 */
-	bool is_last_list_element(void);
+	bool is_last_list_element(void) const;
 
 	/**
 	 * @brief sets pose as the pose list head
@@ -156,7 +162,7 @@ public:
 	 * @brief checks number of pose list elements
 	 * @return number of pose list elements
 	 */
-	int pose_list_length(void);
+	std::size_t pose_list_length(void) const;
 
 	virtual bool first_step();
 
@@ -167,7 +173,7 @@ public:
 	 * @param ps coordinates type of position (pose)
 	 * @return equivalent ECP_TO_UI_COMMAND
 	 */
-	lib::ECP_TO_UI_COMMAND convert(lib::ECP_POSE_SPECIFICATION ps) const;
+	lib::ECP_TO_UI_REQUEST convert(lib::ECP_POSE_SPECIFICATION ps) const;
 
 };
 
