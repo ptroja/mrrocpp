@@ -166,7 +166,7 @@ public:
      * Constructor
      * @param flags
      */
-    xdr_oarchive(unsigned int flags = 0)
+    xdr_oarchive(unsigned int flags __attribute__((unused)) = 0)
     {
         xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_ENCODE);
     }
