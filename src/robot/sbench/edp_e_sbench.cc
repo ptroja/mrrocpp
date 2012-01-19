@@ -99,7 +99,7 @@ void effector::power_supply_init()
 		msg->message("Power supply of relays will not used - test mode activated");
 		// NULL pointer just for safety.
 		power_supply_device = NULL;
-		current_pins_buf.voltage_buf.set_zeros();
+		current_pins_buf.voltage_buf.set_all_off();
 	} else {
 		// Initialize the hardware controlling the power supply.
 		power_supply_device = comedi_open(dev_name.c_str());
@@ -117,7 +117,7 @@ void effector::cleaning_init()
 	// Inform the user about the configuration.
 	if (!cleaning_active()) {
 		msg->message("FESTO hardware will not used for cleaning - test mode activated");
-		current_pins_buf.preasure_buf.set_zeros();
+		current_pins_buf.preasure_buf.set_all_off();
 	} else {
 		// Initialize the can connection.
 		gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
@@ -154,7 +154,7 @@ void effector::cleaning_init()
 		gateway->SendNMTService(FESTO_ADRESS, canopen::gateway::Start_Remote_Node);
 		//gateway->SendNMTService(FESTO_ADRESS, canopen::gateway::Reset_Node);
 
-		current_pins_buf.preasure_buf.set_zeros();
+		current_pins_buf.preasure_buf.set_all_off();
 	}
 }
 

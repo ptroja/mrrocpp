@@ -56,21 +56,30 @@ static int preasure_translation_table[8][8] = {
 
 bench_state::bench_state()
 {
-	set_zeros();
+	set_all_off();
 }
 
-void bench_state::set_zeros()
+void bench_state::set_all_off()
 {
 	for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 		pins_state[i] = 0;
 	}
 }
 
-void bench_state::set_value(int row, int column, bool value)
+void bench_state::set_value(int row, int column, const bool value)
 {
 	assert(row>0 && row<9 && column>0 && column<10);
 	pins_state[translation_table[row-1][column-1]] = value;
 }
+
+void bench_state::set_on(int row, int column) {
+	set_value(row, column, 1);
+}
+
+void bench_state::set_off(int row, int column) {
+	set_value(row, column, 0);
+}
+
 
 bool bench_state::get_value(int row, int column) const
 {

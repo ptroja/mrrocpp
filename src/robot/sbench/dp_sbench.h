@@ -71,10 +71,16 @@ public:
 	bench_state();
 
 	//! clears translation table
-	void set_zeros();
+	void set_all_off();
 
 	//! sets the value due to the translation table
-	void set_value(int row, int column, bool value);
+	void set_value(int row, int column, const bool value);
+
+	//! Sets value on (1) on given row and column.
+	void set_on(int row, int column);
+
+	//! Sets value off (0) on given row and column.
+	void set_off(int row, int column);
 
 	//! gets the value due to the translation table
 	bool get_value(int row, int column) const;
