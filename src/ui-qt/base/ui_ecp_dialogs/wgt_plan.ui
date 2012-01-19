@@ -442,7 +442,7 @@
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
           <property name="decimals">
-           <number>3</number>
+           <number>4</number>
           </property>
           <property name="minimum">
            <double>-1.000000000000000</double>
@@ -468,7 +468,7 @@
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
           <property name="decimals">
-           <number>3</number>
+           <number>4</number>
           </property>
           <property name="minimum">
            <double>-1.000000000000000</double>
@@ -494,7 +494,7 @@
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
           <property name="decimals">
-           <number>3</number>
+           <number>4</number>
           </property>
           <property name="maximum">
            <double>1.000000000000000</double>
@@ -517,7 +517,7 @@
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
           <property name="decimals">
-           <number>3</number>
+           <number>4</number>
           </property>
           <property name="minimum">
            <double>-4.000000000000000</double>
@@ -550,7 +550,7 @@
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
           <property name="decimals">
-           <number>3</number>
+           <number>4</number>
           </property>
           <property name="minimum">
            <double>-4.000000000000000</double>
@@ -569,7 +569,7 @@
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
           <property name="decimals">
-           <number>3</number>
+           <number>4</number>
           </property>
           <property name="minimum">
            <double>-4.000000000000000</double>
@@ -595,7 +595,7 @@
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
           <property name="decimals">
-           <number>3</number>
+           <number>4</number>
           </property>
           <property name="minimum">
            <double>-4.000000000000000</double>
