@@ -62,7 +62,7 @@ void ecp_buffer::operator()()
 
 	interface.mask_signals_for_thread();
 
-	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 5);
+	lib::set_thread_priority(lib::PTHREAD_MAX_PRIORITY - 5);
 
 	lib::set_thread_name("comm");
 

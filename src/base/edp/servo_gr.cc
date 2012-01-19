@@ -227,7 +227,9 @@ void servo_buffer::operator()()
 		exit(EXIT_SUCCESS);
 	}
 
-	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY + 10);
+	if(!master.robot_test_mode) {
+		lib::set_thread_priority(lib::PTHREAD_MAX_PRIORITY + 10);
+	}
 
 	// signal master thread to continue executing
 	thread_started.command();

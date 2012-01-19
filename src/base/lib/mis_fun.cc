@@ -42,8 +42,10 @@ void set_process_sched()
 	}
 }
 
-void set_thread_priority(pthread_t thread, int sched_priority_l)
+void set_thread_priority(int sched_priority_l)
 {
+	const pthread_t thread = pthread_self();
+
 	int policy;
 	struct sched_param param;
 
