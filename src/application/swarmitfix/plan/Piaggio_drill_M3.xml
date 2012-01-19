@@ -53,7 +53,7 @@
       <actions>
         <item>
           <pin>0</pin>
-          <dThetaInd>3</dThetaInd>
+          <dThetaInd>0</dThetaInd>
           <dPkmTheta>-0.003</dPkmTheta>
         </item>
       </actions>
