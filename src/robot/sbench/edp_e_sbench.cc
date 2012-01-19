@@ -32,19 +32,22 @@ namespace mrrocpp {
 namespace edp {
 namespace sbench {
 
+#include "base/lib/debug.hpp"
+
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
 	motor_driven_effector::single_thread_master_order(nm_task, nm_tryb);
 }
 
-// Konstruktor.
 effector::effector(common::shell &_shell) :
 		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME, instruction, reply),
 		festo_test_mode(1),
 		relays_test_mode(1),
 		dev_name("/dev/comedi0")
 {
+	DEBUG_METHOD;
 
+	// Read values from config file.
 	if (config.exists(FESTO_TEST_MODE)) {
 		festo_test_mode = config.exists_and_true(FESTO_TEST_MODE);
 	}
@@ -53,69 +56,71 @@ effector::effector(common::shell &_shell) :
 		relays_test_mode = config.exists_and_true(RELAYS_TEST_MODE);
 	}
 
-	if (!festo_active()) {
-		msg->message(lib::NON_FATAL_ERROR, "festo hardware not used (test mode activated)");
-	}
-
-	if (!relays_active()) {
-		msg->message(lib::NON_FATAL_ERROR, "power supply relays not used (test mode activated)");
-	}
-
+	// TODO: what for??
 	number_of_servos = lib::sbench::NUM_OF_SERVOS;
-	//  Stworzenie listy dostepnych kinematyk.
-	create_kinematic_models_for_given_robot();
 
-	reset_variables();
+	// Initialize power and pressure supplies.
 	voltage_init();
 	preasure_init();
 }
 
-bool effector::festo_active()
-{
-	return (!((robot_test_mode) || (festo_test_mode)));
-}
 
-bool effector::relays_active()
-{
-	return (!((robot_test_mode) || (relays_test_mode)));
-}
-
-void effector::voltage_init()
-{
-	if (relays_active()) {
-
-		// initiate hardware
-		voltage_device = comedi_open(dev_name.c_str());
-
-		if (!voltage_device) {
-
-			throw std::runtime_error("Could not open voltage_device");
-		}
-
-	} else {
-		// Set pointer just for safety
-		voltage_device = NULL;
-
-		current_pins_buf.voltage_buf.set_zeros();
-	}
-}
 
 effector::~effector()
 {
-	if(!robot_test_mode) {
+	DEBUG_METHOD;
+	if(relays_active()) {
 		// Detach from hardware
-		if (voltage_device) {
-			if(comedi_close(voltage_device) == -1) {
-				throw std::runtime_error("comedi_close() failed");
+		if (power_supply_device) {
+			if(comedi_close(power_supply_device) == -1) {
+				throw std::runtime_error("Could not close the power supply device.");
 			}
 		}
 	}
 }
 
+
+bool effector::festo_active()
+{
+	return !festo_test_mode;
+}
+
+bool effector::relays_active()
+{
+	return !relays_test_mode;
+}
+
+
+void effector::voltage_init()
+{
+	DEBUG_METHOD;
+	if (!relays_active()) {
+		msg->message("Power supply of relays will not used (test mode activated)");
+		// NULL pointer just for safety.
+		power_supply_device = NULL;
+		current_pins_buf.voltage_buf.set_zeros();
+	} else {
+		// Initialize the hardware controlling the power supply.
+		// TODO: Add code responsible for remove device opening??
+		power_supply_device = comedi_open(dev_name.c_str());
+		if (!power_supply_device) {
+			throw std::runtime_error("Could not open the power supply device.");
+		}
+	}
+}
+
+
 void effector::preasure_init()
 {
-	if (festo_active()) {
+	DEBUG_METHOD;
 
+	// Inform the user about the configuration.
+	if (!festo_active()) {
+		msg->message("Festo hardware will not used (test mode activated)");
+		current_pins_buf.preasure_buf.set_zeros();
+	} else {
+		// Initialize the can connection.
+		// TODO: is this required?? I think In both cases the epos_usb interface will be used.
 		if (this->config.exists_and_true("can_iface")) {
 			gateway =
 					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
@@ -156,48 +161,44 @@ void effector::preasure_init()
 		//gateway->SendNMTService(FESTO_ADRESS, canopen::gateway::Reset_Node);
 
 		current_pins_buf.preasure_buf.set_zeros();
-
-	} else {
-
-		current_pins_buf.preasure_buf.set_zeros();
 	}
 }
 
-void effector::get_controller_state(lib::c_buffer &instruction)
+void effector::get_controller_state(lib::c_buffer &instruction_)
 {
+	DEBUG_METHOD;
+
 	controller_state_edp_buf.is_synchronised = true;
 	reply.controller_state = controller_state_edp_buf;
 }
 
-/*--------------------------------------------------------------------------*/
-void effector::move_arm(const lib::c_buffer &instruction)
+void effector::move_arm(const lib::c_buffer &instruction_)
 {
+	DEBUG_METHOD;
 
-	const lib::sbench::c_buffer & local_instruction = (lib::sbench::c_buffer &) instruction;
-
-	msg->message("move_arm");
-
-	switch (local_instruction.sbench.variant)
+	switch (instruction.sbench.variant)
 	{
-
 		case lib::sbench::VOLTAGE:
-			voltage_command(local_instruction);
+			DEBUG_COMMAND("VOLTAGE");
+			voltage_command();
 			break;
 		case lib::sbench::PREASURE:
-			preasure_command(local_instruction);
+			DEBUG_COMMAND("PREASURE");
+			preasure_command();
 			break;
-
 	}
 
 }
 
-void effector::voltage_command(const lib::sbench::c_buffer &instruction)
+void effector::voltage_command()
 {
-	msg->message("voltage_command");
+	DEBUG_METHOD;
+
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
 	lib::sbench::voltage_buffer voltage_buf = instruction.sbench.voltage_buf;
 
+	// Check working mode.
 	if (!relays_active()) {
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
@@ -231,7 +232,7 @@ void effector::voltage_command(const lib::sbench::c_buffer &instruction)
 
 		if (total_number_of_pins_activated <= VOLTAGE_PINS_ACTIVATED_LIMIT) {
 			for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-				comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
+				comedi_dio_write(power_supply_device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
 				//	comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), 0);
 			} // send command to hardware
 		} else {
@@ -243,16 +244,16 @@ void effector::voltage_command(const lib::sbench::c_buffer &instruction)
 
 }
 
-void effector::preasure_command(const lib::sbench::c_buffer &instruction)
+void effector::preasure_command()
 {
-	msg->message("preasure_command");
+	DEBUG_METHOD;
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
 	lib::sbench::preasure_buffer preasure_buf = instruction.sbench.preasure_buf;
 
+	// Check working mode.
 	if (!festo_active()) {
-
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			if (preasure_buf.pins_state[i]) {
 				ss << "1";
@@ -327,37 +328,27 @@ void effector::preasure_command(const lib::sbench::c_buffer &instruction)
 
 }
 
-/*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
-	msg->message("get_arm");
-
-	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	//	printf(" GET ARM\n");
-	//	flushall();
-	static int licznikaaa = (-11);
-
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	ss << "get_arm_position: " << licznikaaa;
-	msg->message(ss.str().c_str());
-	//	printf("%s\n", ss.str().c_str());
+	DEBUG_METHOD;
 
 	voltage_reply();
 	preasure_reply();
 	reply.sbench = current_pins_buf;
 	reply.servo_step = step_counter;
 }
-/*--------------------------------------------------------------------------*/
 
 void effector::voltage_reply()
 {
+	DEBUG_METHOD;
+
 	if (relays_active()) {
 
 		// read pin_state from hardware
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 			unsigned int current_read;
-			comedi_dio_read(voltage_device, (int) (i / 32), (i % 32), &current_read);
+			comedi_dio_read(power_supply_device, (int) (i / 32), (i % 32), &current_read);
 			current_pins_buf.voltage_buf.pins_state[i] = current_read;
 		} // send command to hardware
 	}
@@ -365,6 +356,8 @@ void effector::voltage_reply()
 
 void effector::preasure_reply()
 {
+	DEBUG_METHOD;
+
 	if (festo_active()) {
 		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
 			current_output[i + 1] = cpv10->getOutputs(i + 1);
@@ -379,17 +372,14 @@ void effector::preasure_reply()
 	}
 }
 
-// Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
 void effector::create_kinematic_models_for_given_robot(void)
 {
-	// no kinematics in sbench
+	// There are no kinematics for sbench.
 }
 
-/*--------------------------------------------------------------------------*/
 void effector::create_threads()
 {
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
-	//vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
 lib::INSTRUCTION_TYPE effector::variant_receive_instruction()

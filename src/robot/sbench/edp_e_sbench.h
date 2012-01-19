@@ -71,7 +71,7 @@ protected:
 	 *
 	 * It will be used if any motor will be commanded to move. Then motor to joint transform will be implemented in kinematics.
 	 */
-	virtual void create_kinematic_models_for_given_robot(void);
+	void create_kinematic_models_for_given_robot(void);
 
 	/*!
 	 * \brief current pins state
@@ -111,37 +111,34 @@ public:
 
 	/*!
 	 * \brief The method checks the initial state of the controller.
-	 *
-	 * This method typically communicates with hardware to check if the robot is synchronised etc.
+	 * Bench is synchronised at the start.
 	 */
-	void get_controller_state(lib::c_buffer &instruction);
+	void get_controller_state(lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief method to set position of the motors or joints
 	 *
-	 * It will be used if there will be any motor used.
 	 */
-	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
+	void move_arm(const lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief method to command voltage of pins
 	 */
-	void voltage_command(const lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+	void voltage_command();
 
 	/*!
 	 * \brief method to command preasure in pins
 	 */
-	void preasure_command(const lib::sbench::c_buffer &instruction); // przemieszczenie ramienia
+	void preasure_command();
 
 	/*!
 	 * \brief method to get position of the motors or joints
 	 *
-	 * It will be used if there will be any motor used.
 	 */
-	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction_);
 
 	/*!
-	 * \brief method to command reply of pins
+	 * \brief method to reply of pins
 	 */
 	void voltage_reply();
 
@@ -153,7 +150,7 @@ public:
 	/*!
 	 * \brief method to choose master_order variant
 	 *
-	 * IHere the single thread variant is chosen
+	 * Here the single thread variant is chosen.
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
@@ -203,7 +200,7 @@ private:
 	/*!
 	 * \brief  device descriptor for advantech card
 	 */
-	comedi_t *voltage_device;
+	comedi_t *power_supply_device;
 
 	/*!
 	 * \brief current and desired output data of festo controller
