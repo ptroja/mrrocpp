@@ -56,13 +56,12 @@ static int preasure_translation_table[8][8] = {
 
 bench_state::bench_state()
 {
-
+	set_zeros();
 }
 
 void bench_state::set_zeros()
 {
 	for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-
 		pins_state[i] = 0;
 	}
 }

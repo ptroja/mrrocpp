@@ -1061,7 +1061,7 @@ public:
 	/*!
 	 * \brief memory to store data
 	 */
-	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
+	uint32_t data[MP_2_ECP_SERIALIZED_DATA_SIZE / sizeof(uint32_t)];
 
 	/*!
 	 * \brief template method to put data into the memory (serialize)
@@ -1071,8 +1071,9 @@ public:
 	{
 		xdr_oarchive <> oa;
 		oa << buffer;
+
 		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
-		assert(MP_2_ECP_STRING_SIZE > oa.getArchiveSize());
+		assert(MP_2_ECP_SERIALIZED_DATA_SIZE > oa.getArchiveSize());
 
 		// serializacja
 		memcpy(data, oa.get_buffer(), oa.getArchiveSize());
@@ -1084,11 +1085,8 @@ public:
 	template <typename BUFFER_TYPE>
 	void get(BUFFER_TYPE & buffer) const
 	{
-		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
-		assert(MP_2_ECP_STRING_SIZE > sizeof(buffer));
-
 		// deserializacja
-		xdr_iarchive <> ia((const char *) data, (std::size_t) MP_2_ECP_STRING_SIZE);
+		xdr_iarchive <> ia((const char *) data, (std::size_t) MP_2_ECP_SERIALIZED_DATA_SIZE);
 
 		ia >> buffer;
 	}

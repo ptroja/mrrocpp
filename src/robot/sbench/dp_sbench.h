@@ -52,7 +52,7 @@ enum CBUFFER_VARIANT
 };
 
 /*!
- * @brief bench pins state
+ * @brief Bench pins state.
  * @ingroup sbench
  */
 
@@ -96,7 +96,7 @@ private:
 };
 
 /*!
- * @brief voltage (power supply) typedef
+ * @brief Power supply state.
  * @ingroup sbench
  */
 

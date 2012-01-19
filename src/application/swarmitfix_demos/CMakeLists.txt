@@ -57,6 +57,8 @@ install(TARGETS
 ecp_spkm_transparent 
 ecp_smb_transparent 
 ecp_shead_transparent
+ecp_sbench_transparent
 mp_swarmitfix_demo_agent1_warsaw
 mp_swarmitfix_smb_test
+mp_swarmitfix_sbench_test
 DESTINATION bin)

@@ -10,6 +10,7 @@
  */
 
 #include "base/mp/mp_robot.h"
+#include "dp_sbench.h"
 #include "const_sbench.h"
 
 namespace mrrocpp {
