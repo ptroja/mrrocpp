@@ -101,7 +101,6 @@ void effector::voltage_init()
 		current_pins_buf.voltage_buf.set_zeros();
 	} else {
 		// Initialize the hardware controlling the power supply.
-		// TODO: Add code responsible for remove device opening??
 		power_supply_device = comedi_open(dev_name.c_str());
 		if (!power_supply_device) {
 			throw std::runtime_error("Could not open the power supply device.");
@@ -120,13 +119,7 @@ void effector::preasure_init()
 		current_pins_buf.preasure_buf.set_zeros();
 	} else {
 		// Initialize the can connection.
-		// TODO: is this required?? I think In both cases the epos_usb interface will be used.
-		if (this->config.exists_and_true("can_iface")) {
-			gateway =
-					(boost::shared_ptr <canopen::gateway>) new canopen::gateway_socketcan(config.value <std::string>("can_iface"));
-		} else {
-			gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
-		}
+		gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
 
 		// Connect to the gateway.
 		gateway->open();
@@ -196,7 +189,7 @@ void effector::voltage_command()
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	lib::sbench::voltage_buffer voltage_buf = instruction.sbench.voltage_buf;
+	lib::sbench::power_supply_state voltage_buf = instruction.sbench.voltage_buf;
 
 	// Check working mode.
 	if (!relays_active()) {
@@ -232,7 +225,7 @@ void effector::voltage_command()
 
 		if (total_number_of_pins_activated <= VOLTAGE_PINS_ACTIVATED_LIMIT) {
 			for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-				comedi_dio_write(power_supply_device, (int) (i / 32), (i % 32), voltage_buf.pins_state[i]);
+				comedi_dio_write(power_supply_device, (unsigned int) (i / 32), (unsigned int) (i % 32), (unsigned int) voltage_buf.pins_state[i]);
 				//	comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), 0);
 			} // send command to hardware
 		} else {
@@ -250,7 +243,7 @@ void effector::preasure_command()
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	lib::sbench::preasure_buffer preasure_buf = instruction.sbench.preasure_buf;
+	lib::sbench::cleaning_state preasure_buf = instruction.sbench.preasure_buf;
 
 	// Check working mode.
 	if (!festo_active()) {

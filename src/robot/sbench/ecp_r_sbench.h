@@ -30,17 +30,17 @@ public:
 	/**
 	 * @brief Bench power supply command data port
 	 */
-	lib::single_thread_port <lib::sbench::voltage_buffer> sbench_command_voltage_data_port;
+	lib::single_thread_port <lib::sbench::power_supply_state> power_supply_data_port;
 
 	/**
 	 * @brief Bench pressure command data port
 	 */
-	lib::single_thread_port <lib::sbench::preasure_buffer> sbench_command_preasure_data_port;
+	lib::single_thread_port <lib::sbench::cleaning_state> cleaning_state_data_port;
 
 	/**
 	 * @brief Bench state reply data request port
 	 */
-	lib::single_thread_request_port <lib::sbench::rbuffer> sbench_reply_data_request_port;
+	lib::single_thread_request_port <lib::sbench::rbuffer> data_request_port;
 
 	/**
 	 * @brief constructor called from UI

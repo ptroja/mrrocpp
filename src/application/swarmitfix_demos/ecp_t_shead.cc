@@ -26,7 +26,7 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 
 	// Create the generators
 
-	g_joint_epos_command = new shead::generator::sbench_transparent_generator(*this);
+	g_joint_epos_command = new shead::generator::joint_epos_command(*this);
 
 	sr_ecp_msg->message("ecp shead transparent loaded");
 }

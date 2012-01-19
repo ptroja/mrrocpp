@@ -54,12 +54,12 @@ static int preasure_translation_table[8][8] = {
 // not used
 { 2, 1, 0, 56, 57, 58, 59, 60 } };
 
-pins_buffer::pins_buffer()
+bench_state::bench_state()
 {
 
 }
 
-void pins_buffer::set_zeros()
+void bench_state::set_zeros()
 {
 	for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
 
@@ -67,17 +67,17 @@ void pins_buffer::set_zeros()
 	}
 }
 
-void pins_buffer::set_value(int row, int column, bool value)
+void bench_state::set_value(int row, int column, bool value)
 {
 	pins_state[translation_table[row][column]] = value;
 }
 
-bool pins_buffer::get_value(int row, int column) const
+bool bench_state::get_value(int row, int column) const
 {
 	return pins_state[translation_table[row][column]];
 }
 
-bool pins_buffer::is_any_doubled_value() const
+bool bench_state::is_any_doubled_value() const
 {
 // doubled value check
 	for (int i = 0; i < 8; i++) {
@@ -97,8 +97,8 @@ bool pins_buffer::is_any_doubled_value() const
 	return false;
 }
 
-voltage_buffer::voltage_buffer() :
-		pins_buffer()
+power_supply_state::power_supply_state() :
+		bench_state()
 {
 // doubled value check
 	for (int i = 0; i < 8; i++) {
@@ -112,8 +112,8 @@ voltage_buffer::voltage_buffer() :
 	}
 }
 
-preasure_buffer::preasure_buffer() :
-		pins_buffer()
+cleaning_state::cleaning_state() :
+		bench_state()
 {
 // doubled value check
 	for (int i = 0; i < 8; i++) {

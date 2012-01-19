@@ -52,11 +52,11 @@ enum CBUFFER_VARIANT
 };
 
 /*!
- * @brief bench pins state typedef
+ * @brief bench pins state
  * @ingroup sbench
  */
 
-class pins_buffer
+class bench_state
 {
 private:
 	friend class mrrocpp::edp::sbench::effector;
@@ -68,7 +68,7 @@ protected:
 
 public:
 
-	pins_buffer();
+	bench_state();
 
 	//! clears translation table
 	void set_zeros();
@@ -100,10 +100,10 @@ private:
  * @ingroup sbench
  */
 
-class voltage_buffer : public pins_buffer
+class power_supply_state : public bench_state
 {
 public:
-	voltage_buffer();
+	power_supply_state();
 
 private:
 	//! Give access to boost::serialization framework
@@ -113,22 +113,21 @@ private:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object <pins_buffer>(*this);
+		ar & boost::serialization::base_object <bench_state>(*this);
 	}
 
 };
 
 
 /*!
- * @brief SwarmItFix preasure (cleaning activation)  typedef
+ * @brief SwarmItFix cleaning activation state.
  * @ingroup sbench
  */
-
-class preasure_buffer : public pins_buffer
+class cleaning_state : public bench_state
 {
 public:
 
-	preasure_buffer();
+	cleaning_state();
 
 private:
 	//! Give access to boost::serialization framework
@@ -138,7 +137,7 @@ private:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object <pins_buffer>(*this);
+		ar & boost::serialization::base_object <bench_state>(*this);
 	}
 
 };
@@ -152,8 +151,8 @@ struct cbuffer
 	//! Variant of the command
 	CBUFFER_VARIANT variant;
 
-	voltage_buffer voltage_buf;
-	preasure_buffer preasure_buf;
+	power_supply_state voltage_buf;
+	cleaning_state preasure_buf;
 
 private:
 	//! Give access to boost::serialization framework
@@ -199,8 +198,8 @@ private:
  */
 struct rbuffer : lib::r_buffer
 {
-	voltage_buffer voltage_buf;
-	preasure_buffer preasure_buf;
+	power_supply_state voltage_buf;
+	cleaning_state preasure_buf;
 
 private:
 	//! Give access to boost::serialization framework
