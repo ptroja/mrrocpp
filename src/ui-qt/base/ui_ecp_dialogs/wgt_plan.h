@@ -64,6 +64,7 @@ private slots:
 	void on_pushButton_exec_clicked();
 	void on_pushButton_save_clicked();
 	void on_pushButton_reload_clicked();
+	void on_pin_input_valueChanged(int i);
 
 };
 

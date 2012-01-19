@@ -250,6 +250,12 @@ void wgt_plan::on_pushButton_reload_clicked()
 	reload();
 }
 
+void wgt_plan::on_pin_input_valueChanged(int i)
+{
+	// Disable rotation input widget when the pin is set to zero.
+	ui->dThetaInd_input->setEnabled(i != 0);
+}
+
 void wgt_plan::reply()
 {
 	interface.ui_ecp_obj->communication_state = ui::common::UI_ECP_REPLY_READY;
