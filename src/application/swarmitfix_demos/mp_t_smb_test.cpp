@@ -1,11 +1,11 @@
 /*!
- * @file mp_t_swarmitfix_smb_test.cpp
+ * @file mp_t_smb_test.cpp
  *
  * @date Jan 17, 2012
  * @author tkornuta
  */
 
-#include "mp_t_swarmitfix_smb_test.h"
+#include "mp_t_smb_test.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -13,11 +13,13 @@ namespace task {
 
 task* return_created_mp_task(lib::configurator &_config)
 {
-	return new swarmitfix_smb_test(_config);
+	return new swarmitfix::smb_test(_config);
 }
 
-swarmitfix_smb_test::swarmitfix_smb_test(lib::configurator &config_) :
-		swarmitfix_demo_base(config_)
+namespace swarmitfix {
+
+smb_test::smb_test(lib::configurator &config_) :
+		demo_base(config_)
 {
 	if (IS_MP_ROBOT_ACTIVE (smb1)){
 		smb_robot_name = lib::smb1::ROBOT_NAME;
@@ -28,7 +30,7 @@ swarmitfix_smb_test::swarmitfix_smb_test(lib::configurator &config_) :
 
 }
 
-void swarmitfix_smb_test::create_robots()
+void smb_test::create_robots()
 {
 	// Activate SMB robot (depending on the configuration settings).
 	if (smb_robot_name == lib::smb1::ROBOT_NAME) {
@@ -39,7 +41,7 @@ void swarmitfix_smb_test::create_robots()
 }
 
 
-void swarmitfix_smb_test::main_task_algorithm(void)
+void smb_test::main_task_algorithm(void)
 {
 	int mode = config.value <int> ("mode");
 	int delay = config.value <int> ("delay");
@@ -125,6 +127,7 @@ void swarmitfix_smb_test::main_task_algorithm(void)
 
 }
 
+} /* namespace swarmitfix */
 } /* namespace task */
 } /* namespace mp */
 } /* namespace mrrocpp */

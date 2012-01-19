@@ -14,6 +14,7 @@
 namespace mrrocpp {
 namespace mp {
 namespace task {
+namespace swarmitfix {
 
 /** @defgroup swarmitfix swarmitfix
  *  @ingroup application
@@ -29,7 +30,7 @@ namespace task {
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
  * @date Jan 17, 2012
  */
-class swarmitfix_demo_base : public mrrocpp::mp::task::task
+class demo_base : public mrrocpp::mp::task::task
 {
 
 protected:
@@ -107,14 +108,15 @@ protected:
 
 public:
 	//! Calls the base class constructor.
-	swarmitfix_demo_base(lib::configurator &config_);
+	demo_base(lib::configurator &config_);
 
 	//! Empty.
-	virtual ~swarmitfix_demo_base() { }
+	virtual ~demo_base() { }
 
 };
 
 /** @} */ // end of swarmitfix
+} /* namespace swarmitfix */
 }// namespace task
 } // namespace mp
 } // namespace mrrocpp

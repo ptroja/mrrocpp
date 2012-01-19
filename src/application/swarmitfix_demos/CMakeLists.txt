@@ -1,15 +1,15 @@
 ## WUT demo - experiment performed int the end of december in Warsaw. 
 add_executable(mp_swarmitfix_demo_agent1_warsaw 
-	mp_t_swarmitfix_demo_base.cc
-	mp_t_swarmitfix_demo_agent1_warsaw.cpp
+	mp_t_demo_base.cc
+	mp_t_demo_agent1_warsaw.cpp
 )
 target_link_libraries(mp_swarmitfix_demo_agent1_warsaw mp)
 
 
 ## SMB test program. 
 add_executable(mp_swarmitfix_smb_test 
-	mp_t_swarmitfix_demo_base.cc
-	mp_t_swarmitfix_smb_test.cpp
+	mp_t_demo_base.cc
+	mp_t_smb_test.cpp
 )
 target_link_libraries(mp_swarmitfix_smb_test mp)
 

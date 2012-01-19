@@ -9,7 +9,7 @@
 
 #include "base/mp/mp_task.h"
 
-#include "mp_t_swarmitfix_demo_base.h"
+#include "mp_t_demo_base.h"
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
@@ -20,30 +20,32 @@
 namespace mrrocpp {
 namespace mp {
 namespace task {
+namespace swarmitfix {
 
-swarmitfix_demo_base::swarmitfix_demo_base(lib::configurator &config_) :
+
+demo_base::demo_base(lib::configurator &config_) :
 		task(config_)
 {
 
 }
 
-void swarmitfix_demo_base::rotate_smb(int leg_number_, int rotation_)
+void demo_base::rotate_smb(int leg_number_, int rotation_)
 {
-	sr_ecp_msg->message("swarmitfix_demo_base::rotate_smb");
+	sr_ecp_msg->message("demo_base::rotate_smb");
 
 	// Pull all legs in except the one around which the rotation_ will be performed.
 	switch (leg_number_)
 	{
 		case 1:
-			sr_ecp_msg->message("swarmitfix_demo_base::rotate_smb: OUT, IN, IN");
+			sr_ecp_msg->message("demo_base::rotate_smb: OUT, IN, IN");
 			move_smb_legs(lib::smb::OUT, lib::smb::IN, lib::smb::IN);
 			break;
 		case 2:
-			sr_ecp_msg->message("swarmitfix_demo_base::rotate_smb: IN, OUT, IN");
+			sr_ecp_msg->message("demo_base::rotate_smb: IN, OUT, IN");
 			move_smb_legs(lib::smb::IN, lib::smb::OUT, lib::smb::IN);
 			break;
 		case 3:
-			sr_ecp_msg->message("swarmitfix_demo_base::rotate_smb: IN, IN, OUT");
+			sr_ecp_msg->message("demo_base::rotate_smb: IN, IN, OUT");
 			move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::OUT);
 			break;
 		default:
@@ -54,12 +56,12 @@ void swarmitfix_demo_base::rotate_smb(int leg_number_, int rotation_)
 	move_smb_external(rotation_, 0);
 
 	// Pull all legs out.
-	sr_ecp_msg->message("swarmitfix_demo_base::rotate_smb: OUT, OUT, OUT");
+	sr_ecp_msg->message("demo_base::rotate_smb: OUT, OUT, OUT");
 	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 }
 
 
-void swarmitfix_demo_base::move_to_pose_and_return(double support_pkm_x_, double support_pkm_y_, double support_pkm_z_, double support_pkm_alpha_, double support_pkm_beta_, double support_pkm_gamma_, double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_, double smb_joint_, double shead_joint_)
+void demo_base::move_to_pose_and_return(double support_pkm_x_, double support_pkm_y_, double support_pkm_z_, double support_pkm_alpha_, double support_pkm_beta_, double support_pkm_gamma_, double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_, double smb_joint_, double shead_joint_)
 {
 	// Move SMB and SPKM to pose.
 	move_smb_external(0.0, smb_joint_);
@@ -78,9 +80,9 @@ void swarmitfix_demo_base::move_to_pose_and_return(double support_pkm_x_, double
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, -0.035, 0.405, 0, -0.92, 0);
 }
 
-void swarmitfix_demo_base::move_smb_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, lib::smb::FESTO_LEG l3_)
+void demo_base::move_smb_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, lib::smb::FESTO_LEG l3_)
 {
-	sr_ecp_msg->message("swarmitfix_demo_base::move_smb_legs");
+	sr_ecp_msg->message("demo_base::move_smb_legs");
 	lib::smb::festo_command_td mp_ecp_festo_command;
 
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -96,9 +98,9 @@ void swarmitfix_demo_base::move_smb_legs(lib::smb::FESTO_LEG l1_, lib::smb::FEST
 
 }
 
-void swarmitfix_demo_base::move_smb_external(int legs_rotation_, double pkm_rotation_)
+void demo_base::move_smb_external(int legs_rotation_, double pkm_rotation_)
 {
-	sr_ecp_msg->message("swarmitfix_demo_base::move_smb_external");
+	sr_ecp_msg->message("demo_base::move_smb_external");
 
 	lib::smb::motor_command mp_ecp_smb_epos_simple_command;
 
@@ -112,7 +114,7 @@ void swarmitfix_demo_base::move_smb_external(int legs_rotation_, double pkm_rota
 
 }
 
-void swarmitfix_demo_base::move_shead_joints(double joint_)
+void demo_base::move_shead_joints(double joint_)
 {
 	lib::epos::epos_simple_command mp_ecp_shead_epos_simple_command;
 	mp_ecp_shead_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
@@ -124,7 +126,7 @@ void swarmitfix_demo_base::move_shead_joints(double joint_)
 
 }
 
-void swarmitfix_demo_base::move_spkm_joints(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double legA_, double legB_, double legC_, double wrist1_, double wrist2_, double wrist3_)
+void demo_base::move_spkm_joints(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double legA_, double legB_, double legC_, double wrist1_, double wrist2_, double wrist3_)
 {
 	lib::epos::epos_simple_command mp_ecp_spkm_epos_simple_command;
 	mp_ecp_spkm_epos_simple_command.motion_variant = motion_variant_;
@@ -141,7 +143,7 @@ void swarmitfix_demo_base::move_spkm_joints(mrrocpp::lib::epos::EPOS_MOTION_VARI
 
 }
 
-void swarmitfix_demo_base::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double x_, double y_, double z_, double alpha_, double beta_, double gamma_)
+void demo_base::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double x_, double y_, double z_, double alpha_, double beta_, double gamma_)
 {
 	lib::spkm::spkm_epos_simple_command mp_ecp_spkm_epos_simple_command;
 	mp_ecp_spkm_epos_simple_command.motion_variant = motion_variant_;
@@ -162,6 +164,7 @@ void swarmitfix_demo_base::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VA
 	std::cout<<" spkm_robot_name:" << spkm_robot_name <<" -> !done!\n";
 }
 
-} // namespace task
-} // namespace mp
-} // namespace mrrocpp
+} /* namespace swarmitfix */
+} /* namespace task */
+} /* namespace mp */
+} /* namespace mrrocpp */
