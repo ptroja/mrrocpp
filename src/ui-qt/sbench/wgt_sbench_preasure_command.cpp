@@ -44,7 +44,7 @@ void wgt_sbench_preasure_command::read_and_set()
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			docks[i][j]->setChecked(robot->ui_ecp_robot->the_robot->data_request_port.data.preasure_buf.get_value(i, j));
+			docks[i][j]->setChecked(robot->ui_ecp_robot->the_robot->data_request_port.data.preasure_buf.get_value(i+1, j+1));
 		}
 	}
 
@@ -55,7 +55,7 @@ void wgt_sbench_preasure_command::execute()
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			robot->ui_ecp_robot->the_robot->cleaning_state_data_port.data.set_value(i, j, docks[i][j]->isChecked());
+			robot->ui_ecp_robot->the_robot->cleaning_state_data_port.data.set_value(i+1, j+1, docks[i][j]->isChecked());
 		}
 	}
 
@@ -73,7 +73,7 @@ void wgt_sbench_preasure_command::reshresh_widgets() {
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			if (robot->ui_ecp_robot->the_robot->data_request_port.data.preasure_buf.get_value(i, j)) {
+			if (robot->ui_ecp_robot->the_robot->data_request_port.data.preasure_buf.get_value(i+1, j+1)) {
 
 				font.setUnderline(true);
 

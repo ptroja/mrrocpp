@@ -107,6 +107,16 @@ protected:
 			double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_,
 			double smb_joint_, double shead_joint_);
 
+	/*!
+	 * Controls the bench power supply.
+	 */
+	void control_bench_power_supply(mrrocpp::lib::sbench::power_supply_state ps_, int delay_);
+
+	/*!
+	 * Controls the bench cleaning.
+	 */
+	void control_bench_cleaning(mrrocpp::lib::sbench::cleaning_state cs_, int delay_);
+
 public:
 	//! Calls the base class constructor.
 	demo_base(lib::configurator &config_);

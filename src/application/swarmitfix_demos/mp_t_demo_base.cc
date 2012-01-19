@@ -16,6 +16,7 @@
 #include "ecp_mp_g_spkm.h"
 #include "ecp_mp_g_smb.h"
 #include "ecp_mp_g_shead.h"
+#include "ecp_mp_g_sbench.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -163,6 +164,19 @@ void demo_base::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motio
 	wait_for_task_termination(false, 1, spkm_robot_name.c_str());
 	std::cout<<" spkm_robot_name:" << spkm_robot_name <<" -> !done!\n";
 }
+
+void demo_base::control_bench_power_supply(mrrocpp::lib::sbench::power_supply_state ps_, int delay_) {
+	set_next_ecp_state(mrrocpp::ecp_mp::sbench::generator::POWER_SUPPLY_COMMAND, 0, ps_, lib::sbench::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::sbench::ROBOT_NAME.c_str());
+	wait_ms(delay_);
+}
+
+void demo_base::control_bench_cleaning(mrrocpp::lib::sbench::cleaning_state cs_, int delay_) {
+	set_next_ecp_state(mrrocpp::ecp_mp::sbench::generator::CLEANING_COMMAND, 0, cs_, lib::sbench::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::sbench::ROBOT_NAME.c_str());
+	wait_ms(delay_);
+}
+
 
 } /* namespace swarmitfix */
 } /* namespace task */

@@ -68,12 +68,14 @@ void bench_state::set_zeros()
 
 void bench_state::set_value(int row, int column, bool value)
 {
-	pins_state[translation_table[row][column]] = value;
+	assert(row>0 && row<9 && column>0 && column<10);
+	pins_state[translation_table[row-1][column-1]] = value;
 }
 
 bool bench_state::get_value(int row, int column) const
 {
-	return pins_state[translation_table[row][column]];
+	assert(row>0 && row<9 && column>0 && column<10);
+	return pins_state[translation_table[row-1][column-1]];
 }
 
 bool bench_state::is_any_doubled_value() const

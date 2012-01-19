@@ -62,7 +62,7 @@ bool cleaning::first_step()
 	the_robot->cleaning_state_data_port.data = mp_ecp_cleaning_command;
 
 	// Prepare adequate commands.
-	the_robot->power_supply_data_port.set();
+	the_robot->cleaning_state_data_port.set();
 	the_robot->data_request_port.set_request();
 
 	return true;
