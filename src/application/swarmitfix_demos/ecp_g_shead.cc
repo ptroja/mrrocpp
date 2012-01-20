@@ -26,11 +26,14 @@ rotation_command::rotation_command(task_t & _ecp_task) :
 
 bool rotation_command::first_step()
 {
+	sr_ecp_msg.message("rotation_command: first_step");
+
 	// parameters copying
 	get_mp_ecp_command();
-	sr_ecp_msg.message("legs_command: first_step");
+
 	the_robot->epos_joint_command_data_port.data = mp_ecp_epos_simple_command;
 	the_robot->epos_joint_command_data_port.set();
+
 	the_robot->epos_joint_reply_data_request_port.set_request();
 
 	return true;
@@ -38,21 +41,14 @@ bool rotation_command::first_step()
 
 bool rotation_command::next_step()
 {
+	sr_ecp_msg.message("rotation_command: first_step");
+
 	the_robot->epos_joint_reply_data_request_port.get();
 
-	bool motion_in_progress = false;
-
-	for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
-		if (the_robot->epos_joint_reply_data_request_port.data.epos_controller[i].motion_in_progress == true) {
-			motion_in_progress = true;
-			break;
-		}
-	}
-
-	if (motion_in_progress) {
+	if (the_robot->epos_joint_reply_data_request_port.data.epos_controller[0].motion_in_progress) {
 		the_robot->epos_joint_reply_data_request_port.set_request();
 
-		// waits 20ms to check epos state
+		// waits 20ms to check EPOS state
 		delay(20);
 
 		return true;
