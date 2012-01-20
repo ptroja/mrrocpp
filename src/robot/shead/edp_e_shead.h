@@ -68,7 +68,6 @@ protected:
 				solidification_state(lib::shead::SOLIDIFICATION_STATE_OFF), vacuum_state(lib::shead::VACUUM_STATE_OFF)
 		{
 		}
-		;
 	} virtual_state;
 
 	/*!

@@ -12,7 +12,7 @@ namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-shead2::shead2(task::task &mp_object_l) :
+shead2::shead2(task::task & mp_object_l) :
 	shead(lib::shead2::ROBOT_NAME, mp_object_l)
 {
 }

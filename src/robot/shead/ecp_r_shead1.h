@@ -24,9 +24,7 @@ namespace shead1 {
  */
 class robot : public shead::robot
 {
-
 public:
-
 	/**
 	 * @brief constructor called from UI
 	 * @param _config configuration object reference

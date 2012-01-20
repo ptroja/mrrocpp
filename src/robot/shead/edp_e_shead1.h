@@ -3,7 +3,6 @@
  * \brief File containing the declaration of edp::shead1::effector class.
  *
  * \author yoyek
- * \date 2009
  *
  */
 
@@ -16,8 +15,6 @@ namespace mrrocpp {
 namespace edp {
 namespace shead1 {
 
-// Klasa reprezentujaca robota IRp-6 na postumencie.
-
 /*!
  * \brief class of EDP SwarmItFix head effector
  *
@@ -25,10 +22,7 @@ namespace shead1 {
  */
 class effector : public shead::effector
 {
-protected:
-
 public:
-
 	/*!
 	 * \brief class constructor
 	 *

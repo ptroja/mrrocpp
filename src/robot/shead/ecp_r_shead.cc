@@ -17,26 +17,17 @@ namespace ecp {
 namespace shead {
 
 robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-		ecp::common::robot::_ecp_robot <lib::shead::c_buffer, lib::shead::r_buffer>(_robot_name, lib::shead::NUM_OF_SERVOS, _config, _sr_ecp)
-		,
-		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
-		,
+		ecp::common::robot::_ecp_robot <lib::shead::c_buffer, lib::shead::r_buffer>(_robot_name, lib::shead::NUM_OF_SERVOS, _config, _sr_ecp) ,
+		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
+		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
+		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager),
+		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 
-		solidification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager)
-		,
-		vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager)
-		,
+		solidification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager),
+		vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
 
-		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager)
-		,
-		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager)
-		,
+		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
+		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
 
 		shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
 {
@@ -46,26 +37,17 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 }
 
 robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object) :
-		ecp::common::robot::_ecp_robot <lib::shead::c_buffer, lib::shead::r_buffer>(_robot_name, lib::shead::NUM_OF_SERVOS, _ecp_object)
-		,
-		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
-		,
+		ecp::common::robot::_ecp_robot <lib::shead::c_buffer, lib::shead::r_buffer>(_robot_name, lib::shead::NUM_OF_SERVOS, _ecp_object) ,
+		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
+		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
+		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager),
+		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 
-		solidification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager)
-		,
-		vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager)
-		,
+		solidification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager),
+		vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
 
-		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager)
-		,
-		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager)
-		,
+		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
+		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
 
 		shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
 {

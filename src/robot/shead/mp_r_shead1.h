@@ -29,7 +29,7 @@ public:
 	 * @brief constructor
 	 * @param mp_object_l mp task object reference
 	 */
-	shead1(task::task &mp_object_l);
+	shead1(task::task & mp_object_l);
 };
 
 } // namespace robot

@@ -27,4 +27,3 @@ robot::robot(common::task::task_base& _ecp_object) :
 } // namespace shead
 } // namespace ecp
 } // namespace mrrocpp
-
