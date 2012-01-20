@@ -1263,7 +1263,7 @@ bool parabolic_teach_in::first_step()
 	// Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
 	// Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
-	get_pose(tip);
+	tip = get_pose();
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
@@ -1293,6 +1293,7 @@ bool parabolic_teach_in::first_step()
 			 */
 		default:
 			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
+			break;
 	} // end: switch
 
 	return true;
@@ -1416,6 +1417,7 @@ bool parabolic_teach_in::next_step()
 				 */
 			default:
 				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
+				break;
 		} // end: switch
 		the_robot->ecp_command.instruction_type = lib::SET;
 		the_robot->ecp_command.set_type = ARM_DEFINITION; // ARM
@@ -1501,6 +1503,7 @@ bool parabolic_teach_in::next_step()
 				 */
 			default:
 				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
+				break;
 		} // end: switch
 	}
 
@@ -1616,7 +1619,7 @@ void calibration::ecp_save_extended_file(operator_reaction_condition& the_condit
 		to_file << number_of_poses << '\n'; // ???
 		for (i = 0; i < number_of_poses; i++) {
 			to_file << i << ' ';
-			get_pose(tip);
+			tip = get_pose();
 			for (j = 0; j < lib::MAX_SERVOS_NR; j++)
 				to_file << tip.coordinates[j] << ' ';
 			to_file << "    ";
@@ -1652,7 +1655,7 @@ bool calibration::first_step()
 	// Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
 	// Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
-	get_pose(tip);
+	tip = get_pose();
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
@@ -2000,7 +2003,7 @@ bool cubic_spline::first_step()
 	// Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
 	// Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
-	get_pose(tip);
+	tip = get_pose();
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
@@ -2354,7 +2357,7 @@ bool smooth_cubic_spline::first_step()
 	// Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
 	// Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
-	get_pose(tip);
+	tip = get_pose();
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
@@ -2491,11 +2494,12 @@ bool smooth_cubic_spline::next_step()
 					 */
 				default:
 					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
+					break;
 			} // end:switch
 
 			next_pose_list_ptr(); // do nastepnej pozycji na liscie
 			if (is_pose_list_element()) {
-				get_pose(tip);
+				tip = get_pose();
 			} // end : if
 
 		} // end : for (j=1; j<=pose_list_length(); j++)
@@ -2527,7 +2531,7 @@ bool smooth_cubic_spline::next_step()
 		build_coeff = false;
 		initiate_pose_list(); // powrot do pierwszej pozycji na liscie
 		if (is_pose_list_element()) {
-			get_pose(tip);
+			tip = get_pose();
 		} // end : if
 
 	} // end:if BUILD COEFF
@@ -2814,7 +2818,7 @@ bool quintic_spline::first_step()
 	// Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
 	// Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
-	get_pose(tip);
+	tip = get_pose();
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;

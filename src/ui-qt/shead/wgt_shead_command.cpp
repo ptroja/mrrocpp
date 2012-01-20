@@ -228,7 +228,7 @@ void wgt_shead_command::on_pushButton_sol_execute_clicked()
 	try {
 
 		lib::shead::SOLIDIFICATION_ACTIVATION &sa =
-				robot->ui_ecp_robot->the_robot->shead_head_soldification_data_port.data;
+				robot->ui_ecp_robot->the_robot->solidification_data_port.data;
 
 		if (ui.radioButton_sol_activate->isChecked()) {
 			sa = lib::shead::SOLIDIFICATION_ON;
@@ -236,7 +236,7 @@ void wgt_shead_command::on_pushButton_sol_execute_clicked()
 			sa = lib::shead::SOLIDIFICATION_OFF;
 		}
 
-		robot->ui_ecp_robot->the_robot->shead_head_soldification_data_port.set();
+		robot->ui_ecp_robot->the_robot->solidification_data_port.set();
 		robot->ui_ecp_robot->execute_motion();
 
 		init();
@@ -252,7 +252,7 @@ void wgt_shead_command::on_pushButton_vac_execute_clicked()
 
 	try {
 
-		lib::shead::VACUUM_ACTIVATION &va = robot->ui_ecp_robot->the_robot->shead_vacuum_activation_data_port.data;
+		lib::shead::VACUUM_ACTIVATION &va = robot->ui_ecp_robot->the_robot->vacuum_activation_data_port.data;
 
 		if (ui.radioButton_vac_activate->isChecked()) {
 			va = lib::shead::VACUUM_ON;
@@ -260,7 +260,7 @@ void wgt_shead_command::on_pushButton_vac_execute_clicked()
 			va = lib::shead::VACUUM_OFF;
 		}
 
-		robot->ui_ecp_robot->the_robot->shead_vacuum_activation_data_port.set();
+		robot->ui_ecp_robot->the_robot->vacuum_activation_data_port.set();
 		robot->ui_ecp_robot->execute_motion();
 
 		init();

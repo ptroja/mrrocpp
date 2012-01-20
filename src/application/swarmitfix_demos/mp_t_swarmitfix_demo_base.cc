@@ -102,8 +102,6 @@ void swarmitfix_demo_base::move_smb_external(int legs_rotation_, double pkm_rota
 
 	lib::smb::motor_command mp_ecp_smb_epos_simple_command;
 
-	mp_ecp_smb_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
-
 	mp_ecp_smb_epos_simple_command.base_vs_bench_rotation = legs_rotation_;
 	mp_ecp_smb_epos_simple_command.pkm_vs_base_rotation = pkm_rotation_;
 

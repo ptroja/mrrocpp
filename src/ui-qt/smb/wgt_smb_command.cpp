@@ -195,14 +195,12 @@ void wgt_smb_command::init()
 
 void wgt_smb_command::synchro_depended_widgets_disable(bool _set_disabled)
 {
-
 	ui.pushButton_m_execute->setDisabled(_set_disabled);
 	ui.pushButton_ml_copy->setDisabled(_set_disabled);
 	ui.pushButton_ms_copy->setDisabled(_set_disabled);
 
 	for (int i = 0; i < robot->number_of_servos; i++) {
 		doubleSpinBox_m_absolute_Vector[i]->setDisabled(_set_disabled);
-
 	}
 }
 
@@ -216,7 +214,6 @@ void wgt_smb_command::timer_slot()
 
 void wgt_smb_command::get_desired_position()
 {
-
 	if (robot->state.edp.pid != -1) {
 
 		if (robot->state.edp.is_synchronised) {

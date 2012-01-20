@@ -55,12 +55,12 @@ public:
 	/**
 	 * @brief head soldification command data port
 	 */
-	lib::single_thread_port <lib::shead::SOLIDIFICATION_ACTIVATION> shead_head_soldification_data_port;
+	lib::single_thread_port <lib::shead::SOLIDIFICATION_ACTIVATION> solidification_data_port;
 
 	/**
 	 * @brief vacuum activation command data port
 	 */
-	lib::single_thread_port <lib::shead::VACUUM_ACTIVATION> shead_vacuum_activation_data_port;
+	lib::single_thread_port <lib::shead::VACUUM_ACTIVATION> vacuum_activation_data_port;
 
 	/**
 	 * @brief epos motion status reply data request port

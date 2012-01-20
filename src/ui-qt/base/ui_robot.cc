@@ -149,7 +149,6 @@ int UiRobot::edp_create_int()
 
 			if (interface.check_node_existence(state.edp.node_name, robot_name)) {
 
-				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 					try {

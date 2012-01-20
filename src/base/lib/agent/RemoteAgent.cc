@@ -21,6 +21,10 @@
 
 #include "base/lib/impconst.h"
 
+namespace mrrocpp {
+namespace lib {
+namespace agent {
+
 void RemoteAgent::Send(const xdr_oarchive <> & oa)
 {
 	// do a non-blocking send
@@ -29,6 +33,12 @@ void RemoteAgent::Send(const xdr_oarchive <> & oa)
 	if (ret != 0) {
 		throw std::logic_error("Could not send to remote agent");
 	}
+}
+
+void RemoteAgent::Ping()
+{
+	if(messip::port_ping(channel) != 0)
+		throw std::runtime_error("Pinging remote agent failed");
 }
 
 RemoteAgent::RemoteAgent(const std::string & _name) :
@@ -43,7 +53,7 @@ RemoteAgent::RemoteAgent(const std::string & _name) :
 			usleep(lib::CONNECT_DELAY);
 		} else {
 			fprintf(stderr, "Connect to failed at channel '%s'\n", _name.c_str());
-			throw std::logic_error("Connect to remote agent failed");
+			throw std::runtime_error("Connect to remote agent failed");
 		}
 	}
 
@@ -60,3 +70,6 @@ RemoteAgent::~RemoteAgent()
 	}
 }
 
+} // namespace agent
+} // namespace lib
+} // namespace mrrocpp

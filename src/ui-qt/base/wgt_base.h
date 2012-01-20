@@ -25,9 +25,8 @@ class wgt_base : public QWidget //TODO: zmienić dziedziczenie na QDockWidget!
 	Q_OBJECT
 
 public:
-	wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
-	wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent);
-	~wgt_base();
+	wgt_base(const QString & _widget_label, mrrocpp::ui::common::Interface & _interface, QWidget *parent = 0);
+	wgt_base(const QString & _widget_label, mrrocpp::ui::common::Interface & _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent);
 
 	virtual void my_open(bool set_on_top = false);
 	void my_close();
