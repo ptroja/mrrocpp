@@ -1759,7 +1759,7 @@ UNSIGNED16 epos::getRS232timeout()
 	return ReadObjectValue <UNSIGNED16>(0x2005, 0x00);
 }
 
-void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_)
+void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_position_)
 {
 	// Prevent from offseting in the same direction as velocity.
 	assert((velocity_ > 0 && offset_ < 0) || (velocity_ < 0 && offset_ > 0));
@@ -1810,15 +1810,17 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_)
 
 		try {
 			// Homing: move to the index, then continue with an offset.
+			setHomePosition(home_position_);
 			if (offset_ > 0) {
 				doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, offset_);
 			} else if (offset_ < 0) {
 				doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, offset_);
 			} else {
-				doHoming(maxon::epos::HM_ACTUAL_POSITION, 0);
+				doHoming(maxon::epos::HM_ACTUAL_POSITION, offset_);
 			}
-
+			// Monitor homing and set home position.
 			monitorHomingStatus();
+
 		} catch (boost::exception &e_) {
 			// Motor jam!
 			BOOST_THROW_EXCEPTION(fe_motor_jam_detected() << canId(nodeId));
