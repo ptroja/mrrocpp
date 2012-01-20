@@ -1,27 +1,29 @@
 /*!
- * @file mp_t_swarmitfix_demo_agent1_warsaw.cpp
+ * @file mp_t_demo_agent1_warsaw.cpp
  *
  * @date Dec 29, 2011
  * @author tkornuta
  */
 
-#include "mp_t_swarmitfix_demo_agent1_warsaw.h"
+#include "mp_t_demo_agent1_warsaw.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
+task* return_created_mp_task(lib::configurator &_config)
+{
+	return new swarmitfix::demo_agent1_warsaw(_config);
+}
+
+namespace swarmitfix {
+
 #define SMB_WALK 0
 #define SMB_PULL_LEGS 0
 
-task* return_created_mp_task(lib::configurator &_config)
-{
-	return new swarmitfix_demo_agent1_warsaw(_config);
-}
 
-
-swarmitfix_demo_agent1_warsaw::swarmitfix_demo_agent1_warsaw(lib::configurator &config_) :
-		swarmitfix_demo_base(config_)
+demo_agent1_warsaw::demo_agent1_warsaw(lib::configurator &config_) :
+		demo_base(config_)
 {
 	// SMB.
 	if (IS_MP_ROBOT_ACTIVE (smb1)){
@@ -49,7 +51,7 @@ swarmitfix_demo_agent1_warsaw::swarmitfix_demo_agent1_warsaw(lib::configurator &
 	}
 }
 
-void swarmitfix_demo_agent1_warsaw::create_robots()
+void demo_agent1_warsaw::create_robots()
 {
 	// Activate robots (depending on the configuration settings).
 	// SMB.
@@ -75,7 +77,7 @@ void swarmitfix_demo_agent1_warsaw::create_robots()
 }
 
 
-void swarmitfix_demo_agent1_warsaw::main_task_algorithm(void)
+void demo_agent1_warsaw::main_task_algorithm(void)
 {
 	/*
 	 neutral pose OK
@@ -174,6 +176,7 @@ void swarmitfix_demo_agent1_warsaw::main_task_algorithm(void)
 }
 
 
+} /* namespace swarmitfix */
 } /* namespace task */
 } /* namespace mp */
 } /* namespace mrrocpp */

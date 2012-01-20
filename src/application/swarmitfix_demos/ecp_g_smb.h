@@ -27,18 +27,7 @@ class legs_command : public common::generator::_generator <ecp::smb::robot>
 private:
 	lib::smb::festo_command_td mp_ecp_festo_command;
 
-	/**
-	 * @brief pin insertion command data port
-	 */
-	lib::single_thread_port <lib::smb::festo_command_td> *smb_festo_command_data_port;
-
-	/**
-	 * @brief leg status reply data request port
-	 */
-	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> *smb_multi_leg_reply_data_request_port;
-
 public:
-
 	/**
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
@@ -62,21 +51,9 @@ public:
 class external_epos_command : public common::generator::_generator <ecp::smb::robot>
 {
 private:
-
 	lib::smb::motor_command mp_ecp_epos_simple_command;
 
-	/**
-	 * @brief epos external motion command data port
-	 */
-	lib::single_thread_port <lib::smb::motor_command> *epos_external_command_data_port;
-
-	/**
-	 * @brief epos motion status with external reply data request port
-	 */
-	lib::single_thread_request_port <lib::smb::smb_ext_epos_reply> *epos_external_reply_data_request_port;
-
 public:
-
 	/**
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.

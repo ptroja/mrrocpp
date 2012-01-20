@@ -65,7 +65,13 @@ public:
 	/**
 	 * @brief sets the window state taking the info about robot state
 	 */
-	void read_and_copy();
+	void read_and_set();
+
+	/*!
+	 * @brief Refreshes the checkboxes and underlines depending on the current state.
+	 * @author tkornuta
+	 */
+	void reshresh_widgets();
 };
 
 #endif

@@ -20,8 +20,8 @@ using namespace mrrocpp;
 namespace mrrocpp {
 namespace lib {
 
-// Rozmiary buforow
-const int MP_2_ECP_STRING_SIZE = 300;
+// Rozmiary generycznych pol do wstawiania danych zaleznych od aplikacji.
+const int MP_2_ECP_SERIALIZED_DATA_SIZE = 300;
 const int ECP_2_MP_STRING_SIZE = 300;
 
 // Stale do komunikacji

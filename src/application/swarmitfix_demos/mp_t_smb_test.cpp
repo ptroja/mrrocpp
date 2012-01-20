@@ -1,11 +1,12 @@
 /*!
- * @file mp_t_swarmitfix_smb_test.cpp
+ * @file mp_t_smb_test.cpp
+ * @brief Class for SMB tests methods declaration.
  *
  * @date Jan 17, 2012
  * @author tkornuta
  */
 
-#include "mp_t_swarmitfix_smb_test.h"
+#include "mp_t_smb_test.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -13,11 +14,13 @@ namespace task {
 
 task* return_created_mp_task(lib::configurator &_config)
 {
-	return new swarmitfix_smb_test(_config);
+	return new swarmitfix::smb_test(_config);
 }
 
-swarmitfix_smb_test::swarmitfix_smb_test(lib::configurator &config_) :
-		swarmitfix_demo_base(config_)
+namespace swarmitfix {
+
+smb_test::smb_test(lib::configurator &config_) :
+		demo_base(config_)
 {
 	if (IS_MP_ROBOT_ACTIVE (smb1)){
 		smb_robot_name = lib::smb1::ROBOT_NAME;
@@ -28,7 +31,7 @@ swarmitfix_smb_test::swarmitfix_smb_test(lib::configurator &config_) :
 
 }
 
-void swarmitfix_smb_test::create_robots()
+void smb_test::create_robots()
 {
 	// Activate SMB robot (depending on the configuration settings).
 	if (smb_robot_name == lib::smb1::ROBOT_NAME) {
@@ -39,7 +42,7 @@ void swarmitfix_smb_test::create_robots()
 }
 
 
-void swarmitfix_smb_test::main_task_algorithm(void)
+void smb_test::main_task_algorithm(void)
 {
 	int mode = config.value <int> ("mode");
 	int delay = config.value <int> ("delay");
@@ -88,12 +91,36 @@ void swarmitfix_smb_test::main_task_algorithm(void)
 				// One leg in and out after another with rotation given by parameter.
 				// Rotate around the first leg.
 				rotate_smb(1, rotation);
+/*				move_smb_legs(lib::smb::OUT, lib::smb::IN, lib::smb::IN);
 				wait_ms(delay);
+				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+				wait_ms(delay);*/
 				// Rotate around the second leg.
 				rotate_smb(2, rotation);
+/*				move_smb_legs(lib::smb::IN, lib::smb::OUT, lib::smb::IN);
 				wait_ms(delay);
+				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+				wait_ms(delay);
+				wait_ms(delay);*/
 				// Rotate around the third leg.
 				rotate_smb(3, rotation);
+/*				move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::OUT);
+				wait_ms(delay);
+				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+				wait_ms(delay);
+				wait_ms(delay);*/
+			}
+			break;
+		case 3:
+			while (true) {
+				// Movement according to the plan.
+				rotate_smb(1, 1);
+				wait_ms(delay);
+				rotate_smb(3, 2);
+				wait_ms(delay);
+				rotate_smb(3, -2);
+				wait_ms(delay);
+				rotate_smb(1, -1);
 				wait_ms(delay);
 			}
 			break;
@@ -101,6 +128,7 @@ void swarmitfix_smb_test::main_task_algorithm(void)
 
 }
 
+} /* namespace swarmitfix */
 } /* namespace task */
 } /* namespace mp */
 } /* namespace mrrocpp */

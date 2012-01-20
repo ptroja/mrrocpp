@@ -48,15 +48,15 @@ const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
  */
 enum CBUFFER_VARIANT
 {
-	VOLTAGE, PREASURE
+	POWER_SUPPLY, CLEANING
 };
 
 /*!
- * @brief bench pins state typedef
+ * @brief Bench pins state.
  * @ingroup sbench
  */
 
-class pins_buffer
+class bench_state
 {
 private:
 	friend class mrrocpp::edp::sbench::effector;
@@ -68,19 +68,38 @@ protected:
 
 public:
 
-	pins_buffer();
+	bench_state();
 
 	//! clears translation table
-	void set_zeros();
+	void set_all_off();
 
 	//! sets the value due to the translation table
-	void set_value(int row, int column, bool value);
+	void set_value(int row, int column, const bool value);
+
+	//! Sets value on (1) on given row and column.
+	void set_on(int row, int column);
+
+	//! Sets value off (0) on given row and column.
+	void set_off(int row, int column);
 
 	//! gets the value due to the translation table
 	bool get_value(int row, int column) const;
 
 	//! checks if any value in translation table is doubled
 	bool is_any_doubled_value() const;
+
+	std::string display() const
+	{
+		std::stringstream ss;
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+		return ss.str();
+	}
 
 private:
 	//! Give access to boost::serialization framework
@@ -96,14 +115,14 @@ private:
 };
 
 /*!
- * @brief voltage (power supply) typedef
+ * @brief Power supply state.
  * @ingroup sbench
  */
 
-class voltage_buffer : public pins_buffer
+class power_supply_state : public bench_state
 {
 public:
-	voltage_buffer();
+	power_supply_state();
 
 private:
 	//! Give access to boost::serialization framework
@@ -113,21 +132,20 @@ private:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object <pins_buffer>(*this);
+		ar & boost::serialization::base_object <bench_state>(*this);
 	}
 
 };
 
 /*!
- * @brief SwarmItFix preasure (cleaning activation)  typedef
+ * @brief SwarmItFix cleaning activation state.
  * @ingroup sbench
  */
-
-class preasure_buffer : public pins_buffer
+class cleaning_state : public bench_state
 {
 public:
 
-	preasure_buffer();
+	cleaning_state();
 
 private:
 	//! Give access to boost::serialization framework
@@ -137,7 +155,7 @@ private:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object <pins_buffer>(*this);
+		ar & boost::serialization::base_object <bench_state>(*this);
 	}
 
 };
@@ -151,8 +169,8 @@ struct cbuffer
 	//! Variant of the command
 	CBUFFER_VARIANT variant;
 
-	voltage_buffer voltage_buf;
-	preasure_buffer preasure_buf;
+	power_supply_state voltage_buf;
+	cleaning_state preasure_buf;
 
 private:
 	//! Give access to boost::serialization framework
@@ -198,8 +216,8 @@ private:
  */
 struct rbuffer : lib::r_buffer
 {
-	voltage_buffer voltage_buf;
-	preasure_buffer preasure_buf;
+	power_supply_state voltage_buf;
+	cleaning_state preasure_buf;
 
 private:
 	//! Give access to boost::serialization framework

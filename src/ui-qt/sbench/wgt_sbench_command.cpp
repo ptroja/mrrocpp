@@ -101,7 +101,7 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 
 void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
 {
-	read_and_copy();
+	read_and_set();
 }
 
 void wgt_sbench_command::on_pushButton_clear_clicked()
