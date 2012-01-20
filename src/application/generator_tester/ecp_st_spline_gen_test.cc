@@ -25,80 +25,80 @@ sub_task_spline_gen_test::sub_task_spline_gen_test(task::task & _ecp_t) :
 {
 
         if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
-                cvgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 6);
-                cvgenjoint->set_debug(true);
+                spgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 6);
+                spgenjoint->set_debug(true);
                 //cvgenjoint->setType(linear);
 
-                cvgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 6);
-                cvgenmotor->set_debug(true);
+                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 6);
+                spgenmotor->set_debug(true);
 
                 track = false;
                 postument = true;
                 poly = false;
                 conv = false;
 
-                cvgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-                cvgeneuler->set_debug(true);
+                spgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                spgeneuler->set_debug(true);
 
-                cvgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
-                cvgenangle->set_debug(true);
+                spgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                spgenangle->set_debug(true);
 
         } else if (_ecp_t.ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
-                cvgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 7);
-                cvgenjoint->set_debug(true);
+                spgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 7);
+                spgenjoint->set_debug(true);
 
-                cvgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 7);
-                cvgenmotor->set_debug(true);
+                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 7);
+                spgenmotor->set_debug(true);
 
                 track = true;
                 postument = false;
                 poly = false;
                 conv = false;
 
-                cvgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-                cvgeneuler->set_debug(true);
+                spgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                spgeneuler->set_debug(true);
 
-                cvgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
-                cvgenangle->set_debug(true);
+                spgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                spgenangle->set_debug(true);
 
         } else if (_ecp_t.ecp_m_robot->robot_name == lib::polycrank::ROBOT_NAME) {
-                cvgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 7);
-                cvgenjoint->set_debug(true);
+                spgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 7);
+                spgenjoint->set_debug(true);
 
-                cvgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 7);
-                cvgenmotor->set_debug(true);
+                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 7);
+                spgenmotor->set_debug(true);
 
                 track = false;
                 postument = false;
                 poly = true;
                 conv = false;
 
-                cvgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-                cvgeneuler->set_debug(true);
+                spgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                spgeneuler->set_debug(true);
 
-                cvgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
-                cvgenangle->set_debug(true);
+                spgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                spgenangle->set_debug(true);
 
         } else if (_ecp_t.ecp_m_robot->robot_name == lib::conveyor::ROBOT_NAME) {
-                cvgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 1);
-                cvgenjoint->set_debug(true);
+                spgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 1);
+                spgenjoint->set_debug(true);
 
-                cvgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 1);
-                cvgenmotor->set_debug(true);
+                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 1);
+                spgenmotor->set_debug(true);
 
                 track = false;
                 postument = false;
                 poly = false;
                 conv = true;
 
-                cvgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
-                cvgeneuler->set_debug(true);
+                spgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
+                spgeneuler->set_debug(true);
 
-                cvgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
-                cvgenangle->set_debug(true);
+                spgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
+                spgenangle->set_debug(true);
         }
 
-
+        network_path = std::string(ecp_t.mrrocpp_network_path);
 }
 
 void sub_task_spline_gen_test::conditional_execution()
@@ -109,7 +109,19 @@ void sub_task_spline_gen_test::conditional_execution()
         std::vector <double> coordinates3(7);//polycrank
         std::vector <double> coordinates4(1);//conveyor
 
-        // JOINT ABSOLUTE
+        //network_path = "../../src/application/generator_tester/optimizedTraj.trj";
+        //sgenjoint->load_coordinates_from_file(network_path.c_str());
+        //sgenjoint->Move();
+
+        network_path = "../../src/application/generator_tester/trajectory.trj";
+        spgenjoint->load_trajectory_from_file(network_path.c_str());
+        //network_path = std::string(ecp_t.mrrocpp_network_path);
+
+        if (spgenjoint->calculate_interpolate() /*&& spgenjoint->detect_jerks(1) == 0*/) {
+                spgenjoint->Move();
+        }
+
+        /*// JOINT ABSOLUTE
         sr_ecp_msg.message("Joint absolute");
 
         cvgenjoint->reset();
@@ -668,10 +680,10 @@ void sub_task_spline_gen_test::conditional_execution()
 
 sub_task_spline_gen_test::~sub_task_spline_gen_test()
 {
-        delete cvgenjoint;
-        delete cvgenmotor;
-        delete cvgeneuler;
-        delete cvgenangle;
+        delete spgenjoint;
+        delete spgenmotor;
+        delete spgeneuler;
+        delete spgenangle;
 }
 
 } // namespace task

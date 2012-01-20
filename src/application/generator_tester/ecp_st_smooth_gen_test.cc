@@ -110,16 +110,19 @@ void sub_task_smooth_gen_test::conditional_execution()
         //sgenjoint->load_coordinates_from_file(network_path.c_str());
         //sgenjoint->Move();
 
+        network_path = "../../src/application/generator_tester/trajectory.trj";
+        sgenjoint->load_trajectory_from_file(network_path.c_str());
+        //network_path = std::string(ecp_t.mrrocpp_network_path);
+
+        if (sgenjoint->calculate_interpolate()/* && sgenjoint->detect_jerks(1) == 0*/) {
+                sgenjoint->Move();
+        }
+        
         // JOINT ABSOLUTE
-        sr_ecp_msg.message("Joint absolute");
+        /*sr_ecp_msg.message("Joint absolute");
 	sgenjoint->reset();
 	sgenjoint->set_absolute();
 	if (track) {
-                //network_path += "../src/application/generator_tester/trajectory.trj";
-		//sgenjoint->load_trajectory_from_file(network_path.c_str());
-                //network_path = std::string(ecp_t.mrrocpp_network_path);
-
-
                 coordinates2[0] = 0.0;
                 coordinates2[1] = -0.104;
                 coordinates2[2] = -1.542;

@@ -911,8 +911,7 @@ typedef struct r_buffer_arm
 	} measured_current;
 
 	/*!
-	 *  Stan w ktorym znajduje sie regulator chwytaka.
-	 *  @todo Translate to English.
+         *  State of grippers regutor
 	 */
 	int16_t gripper_reg_state;
 

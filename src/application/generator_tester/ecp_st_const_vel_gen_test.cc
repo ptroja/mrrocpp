@@ -97,7 +97,7 @@ sub_task_const_vel_gen_test::sub_task_const_vel_gen_test(task::task & _ecp_t) :
                 cvgenangle->set_debug(true);
         }
 
-
+        network_path = std::string(ecp_t.mrrocpp_network_path);
 }
 
 void sub_task_const_vel_gen_test::conditional_execution()
@@ -108,7 +108,19 @@ void sub_task_const_vel_gen_test::conditional_execution()
         std::vector <double> coordinates3(7);//polycrank
         std::vector <double> coordinates4(1);//conveyor
 
-        // JOINT ABSOLUTE
+        //network_path = "../../src/application/generator_tester/optimizedTraj.trj";
+        //cvgenjoint->load_coordinates_from_file(network_path.c_str());
+        //cvgenjoint->Move();
+
+        network_path = "../../src/application/generator_tester/trajectory.trj";
+        cvgenjoint->load_trajectory_from_file(network_path.c_str());
+        //network_path = std::string(ecp_t.mrrocpp_network_path);
+
+        if (cvgenjoint->calculate_interpolate()/* && cvgenjoint->detect_jerks(1) == 0*/) {
+                cvgenjoint->Move();
+        }
+
+        /*// JOINT ABSOLUTE
         sr_ecp_msg.message("Joint absolute");
         cvgenjoint->reset();
         cvgenjoint->set_absolute();
