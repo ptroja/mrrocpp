@@ -23,11 +23,6 @@ wgt_sbench_preasure_command::wgt_sbench_preasure_command(QString _widget_label, 
 {
 }
 
-wgt_sbench_preasure_command::~wgt_sbench_preasure_command()
-{
-
-}
-
 void wgt_sbench_preasure_command::init()
 {
 	robot->ui_ecp_robot->the_robot->data_request_port.set_request();

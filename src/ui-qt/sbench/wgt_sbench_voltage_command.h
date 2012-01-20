@@ -48,11 +48,6 @@ public:
 			0);
 
 	/**
-	 * @brief destructor
-	 */
-	~wgt_sbench_voltage_command();
-
-	/**
 	 * @brief gathers information about robot state
 	 */
 	void init();

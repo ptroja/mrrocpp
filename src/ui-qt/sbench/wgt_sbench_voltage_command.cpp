@@ -24,11 +24,6 @@ wgt_sbench_voltage_command::wgt_sbench_voltage_command(QString _widget_label, mr
 {
 }
 
-wgt_sbench_voltage_command::~wgt_sbench_voltage_command()
-{
-
-}
-
 void wgt_sbench_voltage_command::init()
 {
 	robot->ui_ecp_robot->the_robot->data_request_port.set_request();

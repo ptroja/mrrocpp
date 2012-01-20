@@ -49,11 +49,6 @@ public:
 			0);
 
 	/**
-	 * @brief destructor
-	 */
-	~wgt_sbench_preasure_command();
-
-	/**
 	 * @brief gathers information about robot state
 	 */
 	void init();
