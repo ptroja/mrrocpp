@@ -669,10 +669,10 @@ void epos::clearFault(void)
 	}
 
 	// Reset node.
-	reset();
+	enable();
 }
 
-void epos::reset()
+void epos::enable()
 {
 	// TODO: handle initial error conditions
 	actual_state_t state = getState();
@@ -890,6 +890,21 @@ UNSIGNED16 epos::getSWversion()
 UNSIGNED16 epos::getDInputPolarity()
 {
 	return ReadObjectValue <UNSIGNED16>(0x2071, 0x03);
+}
+
+void epos::setDInputPolarity(UNSIGNED16 val)
+{
+	WriteObjectValue(0x2071, 0x03, val);
+}
+
+UNSIGNED16 epos::getDInputExecMask()
+{
+	return ReadObjectValue <UNSIGNED16>(0x2071, 0x02);
+}
+
+void epos::setDInputExecMask(UNSIGNED16 val)
+{
+	WriteObjectValue(0x2071, 0x02, val);
 }
 
 /* read digital input */
@@ -1774,7 +1789,7 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_)
 
 		// Velocity mode in the direction of negative limit.
 		setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
-		reset();
+		enable();
 
 		// TODO: set max acceleration?
 		setVelocityModeSettingValue(velocity_);
@@ -1806,7 +1821,7 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_)
 
 		// Halt.
 		setVelocityModeSettingValue(0);
-		reset();
+		enable();
 
 		try {
 			// Homing: move to the index, then continue with an offset.
@@ -2256,6 +2271,26 @@ void epos::setDigitalOutputs(digital_outputs_t cmd)
 UNSIGNED16 epos::getDigitalOutputs()
 {
 	return ReadObjectValue <UNSIGNED16>(0x2078, 0x01);
+}
+
+void epos::setDigitalOutputFunctionalitiesMask(UNSIGNED16 val)
+{
+	WriteObjectValue(0x2078, 0x02, val);
+}
+
+UNSIGNED16 epos::getDigitalOutputFunctionalitiesMask()
+{
+	return ReadObjectValue <UNSIGNED16>(0x2078, 0x02);
+}
+
+void epos::setDigitalOutputFunctionalitiesPolarity(UNSIGNED16 val)
+{
+	WriteObjectValue(0x2078, 0x03, val);
+}
+
+UNSIGNED16 epos::getDigitalOutputFunctionalitiesPolarity()
+{
+	return ReadObjectValue <UNSIGNED16>(0x2078, 0x03);
 }
 
 const epos::digital_outputs_t & epos::getCommandedDigitalOutputs()

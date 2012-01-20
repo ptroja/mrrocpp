@@ -80,6 +80,13 @@ void EcpRobot::brake_motors()
 	execute_motion();
 }
 
+void EcpRobot::disable_brake()
+{
+	the_robot->epos_disable_brake_command_data_port.set();
+
+	execute_motion();
+}
+
 }
 } //namespace ui
 } //namespace mrrocpp

@@ -87,6 +87,12 @@ const std::string EPOS_QUICKSTOP_COMMAND_DATA_PORT = "EPOS_QUICKSTOP_COMMAND_DAT
 const std::string EPOS_BRAKE_COMMAND_DATA_PORT = "EPOS_BRAKE_COMMAND_DATA_PORT";
 
 /*!
+ * @brief SwarmItFix Epos motor brake command data port
+ * @ingroup epos
+ */
+const std::string EPOS_DISABLE_BRAKE_COMMAND_DATA_PORT = "EPOS_DISABLE_BRAKE_COMMAND_DATA_PORT";
+
+/*!
  * @brief SwarmItFix Epos clear fault command data port
  * @ingroup epos
  *
