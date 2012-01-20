@@ -16,6 +16,8 @@
 #include "ui_wgt_sbench_command.h"
 #include "../base/wgt_base.h"
 
+#include "robot/sbench/dp_sbench.h"
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -91,6 +93,16 @@ protected:
 	 * @brief gathers information about robot state
 	 */
 	void init();
+
+	/**
+	 * @brief set the window state taking the info about robot state
+	 */
+	void set(const lib::sbench::bench_state & state);
+
+	/**
+	 * @brief copy widget settings into command buffer
+	 */
+	void get(lib::sbench::bench_state & state);
 
 	/*!
 	 * @brief Refreshes the checkboxes and underlines depending on the current state.

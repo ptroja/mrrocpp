@@ -27,22 +27,13 @@ void wgt_sbench_preasure_command::read_and_set()
 {
 	init();
 
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			docks[i][j]->setChecked(robot->ui_ecp_robot->the_robot->data_request_port.data.preasure_buf.get_value(i+1, j+1));
-		}
-	}
+	wgt_sbench_command::set(robot->ui_ecp_robot->the_robot->data_request_port.data.preasure_buf);
 
 }
 
 void wgt_sbench_preasure_command::execute()
 {
-
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			robot->ui_ecp_robot->the_robot->cleaning_state_data_port.data.set_value(i+1, j+1, docks[i][j]->isChecked());
-		}
-	}
+	wgt_sbench_command::get(robot->ui_ecp_robot->the_robot->cleaning_state_data_port.data);
 
 	robot->ui_ecp_robot->the_robot->cleaning_state_data_port.set();
 	robot->ui_ecp_robot->the_robot->data_request_port.set_request();

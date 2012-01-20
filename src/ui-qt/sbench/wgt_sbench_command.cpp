@@ -113,6 +113,28 @@ void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
 	read_and_set();
 }
 
+void wgt_sbench_command::set(const lib::sbench::bench_state & state)
+{
+
+	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
+		for (int j = 0; j < SBENCH_MAX_COL; j++) {
+			docks[i][j]->setChecked(state.get_value(i+1, j+1));
+		}
+	}
+
+}
+
+void wgt_sbench_command::get(lib::sbench::bench_state & state)
+{
+
+	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
+		for (int j = 0; j < SBENCH_MAX_COL; j++) {
+			state.set_value(i+1, j+1, docks[i][j]->isChecked());
+		}
+	}
+
+}
+
 void wgt_sbench_command::on_pushButton_clear_clicked()
 {
 
