@@ -20,6 +20,9 @@
 #include "../base/menu_bar_action.h"
 #include "../base/mp.h"
 
+#include "wgt_sbench_voltage_command.h"
+#include "wgt_sbench_preasure_command.h"
+
 namespace mrrocpp {
 namespace ui {
 namespace sbench {
