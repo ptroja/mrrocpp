@@ -11,9 +11,8 @@
 #include <memory>
 #include <exception>
 
-#include "planner.h"
-#include "base/lib/mrmath/homog_matrix.h"
-#include "base/lib/mrmath/mrmath.h"
+//#include "base/lib/mrmath/homog_matrix.h"
+//#include "base/lib/mrmath/mrmath.h"
 
 #include "plan.hxx"
 
@@ -61,12 +60,6 @@ int main(int argc, char *argv[])
 		std::auto_ptr<Pkm::ItemType> copy (new Pkm::ItemType (is));
 
 		std::cerr << *copy << std::endl;
-
-		// Create planner object
-		//planner pp(argv[1]);
-
-		// Start execution
-		//pp.start();
 
 	} catch (const xml_schema::Exception & e) {
 		std::cerr << "Exception::what(): " << e << std::endl;
