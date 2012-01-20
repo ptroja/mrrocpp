@@ -105,9 +105,14 @@ protected:
 	void get(lib::sbench::bench_state & state);
 
 	/*!
+	 * @brief Refreshes the checkboxes and underlines depending on the given state.
+	 */
+	void refresh_dock_widgets(const lib::sbench::bench_state & state);
+
+	/*!
 	 * @brief Refreshes the checkboxes and underlines depending on the current state.
 	 */
-	virtual void reshresh_widgets() = 0;
+	void virtual reshresh_widgets() = 0;
 
 private:
 

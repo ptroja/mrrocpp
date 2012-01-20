@@ -44,7 +44,7 @@ public:
 	 * @param _robot UiRobot object pointer
 	 * @param parent pointer to parent widget
 	 */
-	wgt_sbench_voltage_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
+	wgt_sbench_voltage_command(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
 			0);
 
 	/**

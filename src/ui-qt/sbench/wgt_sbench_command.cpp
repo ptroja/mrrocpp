@@ -118,7 +118,7 @@ void wgt_sbench_command::set(const lib::sbench::bench_state & state)
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			docks[i][j]->setChecked(state.get_value(i+1, j+1));
+			docks[i][j]->setChecked(state.get_value(i + 1, j + 1));
 		}
 	}
 
@@ -129,7 +129,34 @@ void wgt_sbench_command::get(lib::sbench::bench_state & state)
 
 	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
 		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			state.set_value(i+1, j+1, docks[i][j]->isChecked());
+			state.set_value(i + 1, j + 1, docks[i][j]->isChecked());
+		}
+	}
+
+}
+
+void wgt_sbench_command::refresh_dock_widgets(const lib::sbench::bench_state & state)
+{
+	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
+		for (int j = 0; j < SBENCH_MAX_COL; j++) {
+			QFont font;
+			QPalette pal;
+
+			if (state.get_value(i + 1, j + 1)) {
+
+				font.setUnderline(true);
+
+				pal.setColor(QPalette::WindowText, Qt::blue);
+				pal.setColor(QPalette::Background, Qt::blue);
+			} else {
+
+				font.setUnderline(false);
+
+				pal.setColor(QPalette::WindowText, Qt::black);
+				pal.setColor(QPalette::Background, Qt::black);
+			}
+			docks[i][j]->setFont(font);
+			docks[i][j]->setPalette(pal);
 		}
 	}
 
