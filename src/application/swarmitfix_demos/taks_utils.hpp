@@ -6,8 +6,8 @@
  * @author tkornuta
  */
 
-#ifndef PLAN_HPP_
-#define PLAN_HPP_
+#ifndef TASK_UTILS_HPP_
+#define TASK_UTILS_HPP_
 
 #include "robot/sbench/dp_sbench.h"
 
@@ -147,4 +147,4 @@ private:
 	}
 };
 
-#endif /* PLAN_HPP_ */
+#endif /* TASK_UTILS_HPP_ */
