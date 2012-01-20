@@ -13,7 +13,6 @@
 #include "base/lib/exception.h"
 
 #include "ui_wgt_plan.h"
-#include "application/swarmitfix/plan.hxx"
 
 class wgt_plan : public wgt_base
 {

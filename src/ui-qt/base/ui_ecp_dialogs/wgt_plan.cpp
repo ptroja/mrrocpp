@@ -4,7 +4,7 @@
 #include "../interface.h"
 #include "../ui_ecp.h"
 
-#include "application/swarmitfix/plan.hxx"
+#include "application/swarmitfix_plan/plan.hxx"
 
 wgt_plan::wgt_plan(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 		wgt_base("Plan control", _interface, parent), ui(new Ui::wgt_planClass)
