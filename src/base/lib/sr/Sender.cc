@@ -13,6 +13,8 @@
 #include <cstring>
 #include <string>
 
+#include <boost/thread/thread.hpp>
+
 #include "base/lib/messip/messip_dataport.h"
 
 #include "base/lib/sr/Sender.h"
@@ -27,7 +29,7 @@ Sender::Sender(const std::string & sr_name)
 	unsigned int tmp = 0;
 	while ((ch = messip::port_connect(sr_name)) == NULL) {
 		if (tmp++ < lib::CONNECT_RETRY) {
-			usleep(lib::CONNECT_DELAY);
+			boost::this_thread::sleep(lib::CONNECT_DELAY);
 		} else {
 			fprintf(stderr, "messip::port_connect(\"%s\") @ %s:%d: %s\n",
 					sr_name.c_str(), __FILE__, __LINE__, strerror(errno));

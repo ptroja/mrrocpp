@@ -12,6 +12,8 @@
 
 #include <string>
 
+#include <boost/thread/thread.hpp>
+
 #include <fcntl.h>
 
 #include "ecp_mp_sensor_interface.h"
@@ -172,9 +174,9 @@ sensor <SENSOR_IMAGE, CONFIGURE_DATA>::sensor(lib::sensor::SENSOR_t _sensor_name
 	// Kilka sekund  (~2) na otworzenie urzadzenia.
 	while ((sd = messip::port_connect(VSP_NAME)) == NULL) {
 		// 		cout<<tmp<<endl;
-		if ((tmp++) < lib::CONNECT_RETRY)
-			usleep(lib::CONNECT_DELAY);
-		else {
+		if ((tmp++) < lib::CONNECT_RETRY) {
+			boost::this_thread::sleep(lib::CONNECT_DELAY);
+		} else {
 			std::cerr << "ecp_mp_sensor: messip::port_connect(" << VSP_NAME << ") failed" << std::endl;
 			BOOST_THROW_EXCEPTION(lib::exception::se_sensor() << lib::exception::mrrocpp_error0(CANNOT_LOCATE_DEVICE));
 		}
