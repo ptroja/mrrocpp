@@ -10,9 +10,7 @@
  */
 
 #include <QtGui/QWidget>
-#include <QVBoxLayout>
 #include <QDockWidget>
-#include <QTimer>
 #include <QCheckBox>
 
 #include "ui_wgt_sbench_command.h"

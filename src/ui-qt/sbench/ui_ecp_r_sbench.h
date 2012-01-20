@@ -11,17 +11,12 @@
 
 #include "../base/ui.h"
 
-#include "base/lib/configurator.h"
-#include "base/lib/mrmath/mrmath.h"
 #include "base/ecp/ecp_robot.h"
 #include "robot/sbench/ecp_r_sbench.h"
 #include "../base/ui_ecp_robot/ui_ecp_r_data_port.h"
 
 namespace mrrocpp {
 namespace ui {
-namespace common {
-class Interface;
-}
 namespace sbench {
 
 /*!
@@ -34,9 +29,7 @@ namespace sbench {
  */
 class EcpRobot : public common::_EcpRobotDataPort <ecp::sbench::robot>
 {
-
 public:
-
 	/**
 	 * @brief constructor
 	 * @param _ui_robot UiRobot object pointer

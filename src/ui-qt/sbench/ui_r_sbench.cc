@@ -74,9 +74,8 @@ void UiRobot::manage_interface()
 					default:
 						break;
 				}
-			} else // jesli robot jest niezsynchronizowany
-			{
-
+			} else {
+				// jesli robot jest niezsynchronizowany
 			}
 			break;
 		default:
@@ -113,4 +112,3 @@ void UiRobot::create_ui_ecp_robot()
 }
 } //namespace ui
 } //namespace mrrocpp
-
