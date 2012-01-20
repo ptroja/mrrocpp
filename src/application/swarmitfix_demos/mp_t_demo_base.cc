@@ -68,23 +68,23 @@ void demo_base::rotate_smb(int leg_number_, int rotation_)
 }
 
 
-void demo_base::move_to_pose_and_return(double support_pkm_x_, double support_pkm_y_, double support_pkm_z_, double support_pkm_alpha_, double support_pkm_beta_, double support_pkm_gamma_, double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_, double smb_joint_, double shead_joint_)
+void demo_base::move_to_pose_and_return(const lib::Xyz_Euler_Zyz_vector & support_pose_, const lib::Xyz_Euler_Zyz_vector & inter_pose_, double smb_joint_, double shead_joint_)
 {
 	// Move SMB and SPKM to pose.
 	smb_rotate_external(0.0, smb_joint_);
 	// Support interpose.
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, inter_pkm_x_, inter_pkm_y_, inter_pkm_z_, inter_pkm_alpha_, inter_pkm_beta_, inter_pkm_gamma_);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, inter_pose_);
 	// Rotate shead.
 	move_shead_joints(shead_joint_);
 	// Support.
-	move_spkm_external(lib::epos::OPERATIONAL, support_pkm_x_, support_pkm_y_, support_pkm_z_, support_pkm_alpha_, support_pkm_beta_, support_pkm_gamma_);
+	move_spkm_external(lib::epos::OPERATIONAL, support_pose_);
 	wait_ms(1000);
 
 	// Move back to the *neutral* PKM pose.
 	// Support interpose.
-	move_spkm_external(lib::epos::OPERATIONAL, inter_pkm_x_, inter_pkm_y_, inter_pkm_z_, inter_pkm_alpha_, inter_pkm_beta_, inter_pkm_gamma_);
+	move_spkm_external(lib::epos::OPERATIONAL, inter_pose_);
 	// Neutral.
-	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, -0.035, 0.405, 0, -0.92, 0);
+	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, lib::Xyz_Euler_Zyz_vector(0.15, -0.035, 0.405, 0, -0.92, 0));
 }
 
 void demo_base::smb_pull_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, lib::smb::FESTO_LEG l3_)
@@ -148,19 +148,19 @@ void demo_base::move_spkm_joints(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_
 
 }
 
-void demo_base::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double x_, double y_, double z_, double alpha_, double beta_, double gamma_)
+void demo_base::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, const lib::Xyz_Euler_Zyz_vector & pose_)
 {
 	lib::spkm::spkm_epos_simple_command mp_ecp_spkm_epos_simple_command;
 	mp_ecp_spkm_epos_simple_command.motion_variant = motion_variant_;
 	mp_ecp_spkm_epos_simple_command.pose_specification = lib::spkm::WRIST_XYZ_EULER_ZYZ;
 	mp_ecp_spkm_epos_simple_command.estimated_time = 1.2;
 
-	mp_ecp_spkm_epos_simple_command.desired_position[0] = x_;
-	mp_ecp_spkm_epos_simple_command.desired_position[1] = y_;
-	mp_ecp_spkm_epos_simple_command.desired_position[2] = z_;
-	mp_ecp_spkm_epos_simple_command.desired_position[3] = alpha_;
-	mp_ecp_spkm_epos_simple_command.desired_position[4] = beta_;
-	mp_ecp_spkm_epos_simple_command.desired_position[5] = gamma_;
+	mp_ecp_spkm_epos_simple_command.desired_position[0] = pose_(0);
+	mp_ecp_spkm_epos_simple_command.desired_position[1] = pose_(1);
+	mp_ecp_spkm_epos_simple_command.desired_position[2] = pose_(2);
+	mp_ecp_spkm_epos_simple_command.desired_position[3] = pose_(3);
+	mp_ecp_spkm_epos_simple_command.desired_position[4] = pose_(4);
+	mp_ecp_spkm_epos_simple_command.desired_position[5] = pose_(5);
 
 	std::cout<<" spkm_robot_name:" << spkm_robot_name <<" -> set_next_ecp_state\n";
 	set_next_ecp_state(ecp_mp::spkm::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_spkm_epos_simple_command, spkm_robot_name);

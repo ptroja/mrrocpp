@@ -109,21 +109,21 @@ protected:
 	 *
 	 * @param [in] motion_variant_ Variant of the motion to be executed (here NON_SYNC_TRAPEZOIDAL, SYNC_TRAPEZOIDAL, OPERATIONAL are available).
 	 */
-	void move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double x_, double y_, double z_, double alpha_, double beta_, double gamma_);
+	void move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, const lib::Xyz_Euler_Zyz_vector & pose_);
 
 	/*!
 	 * @brief Method responsible for supporting the plate in give point and return.
 	 *  The trajectory is acquired though an intermediate pose (the same intermediate pose is considered in both directions).
 	 *
 	 * @author tkornuta
-	 * @param support_* - xyz_zyz of support pose.
-	 * @param inter_* - xyz_zyz of intermediate pose.
+	 * @param support_pose_ - xyz_zyz of support pose.
+	 * @param inter_pose_ - xyz_zyz of intermediate pose.
 	 * @param smb_joint_ - rotation of the SMB (the motor rotating the upper SMB plate).
 	 * @param shead_joint - rotation of the SHEAD.
 	 */
 	void move_to_pose_and_return(
-			double support_pkm_x_, double support_pkm_y_, double support_pkm_z_, double support_pkm_alpha_, double support_pkm_beta_, double support_pkm_gamma_,
-			double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_,
+			const lib::Xyz_Euler_Zyz_vector & support_pose_,
+			const lib::Xyz_Euler_Zyz_vector & inter_pose_,
 			double smb_joint_, double shead_joint_);
 
 	/*!
