@@ -1792,8 +1792,8 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 		enable();
 
 		// TODO: set max acceleration?
+		setControlword(0x000f);
 		setVelocityModeSettingValue(velocity_);
-		setControlword(0x010f);
 
 		// Start monitoring after some interval for acceleration.
 		boost::system_time wakeup = boost::get_system_time() + boost::posix_time::milliseconds(45);
@@ -1826,6 +1826,7 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 		try {
 			// Homing: move to the index, then continue with an offset.
 			setHomePosition(home_position_);
+
 			if (offset_ > 0) {
 				doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, offset_);
 			} else if (offset_ < 0) {
