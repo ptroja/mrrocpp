@@ -6,146 +6,143 @@
  * @author tkornuta
  */
 
+#ifndef TASK_UTILS_HPP_
+#define TASK_UTILS_HPP_
 
-#ifndef PLAN_HPP_
-#define PLAN_HPP_
-
-/*!
- * @brief Structure representing one bench pin.
- * @author tkornuta
- */
-struct pin {
-public:
-	/*!
-	 * Pin row.
-	 */
-	unsigned char row;
-
-	/*!
-	 * Pin column.
-	 */
-	unsigned char column;
-
-	/*!
-	 * Default constructor.
-	 */
-	pin() : row(0), column(0)
-		{ }
-
-	/*!
-	 * Sets row and column.
-	 */
-	pin(unsigned char row_, unsigned char column_) : row(row_), column(column_)
-		{ }
-
-	/*!
-	 * Return the pin description in Row (arabic) - Column (roman) form.
-	 */
-	std::string get_name() const {
-		std::stringstream name;
-		name << (int) row;
-		name <<  "-";
-		switch(column){
-			case 1:
-				name << "I";
-				break;
-			case 2:
-				name << "II";
-				break;
-			case 3:
-				name << "III";
-				break;
-			case 4:
-				name << "IV";
-				break;
-			case 5:
-				name << "V";
-				break;
-			case 6:
-				name << "VI";
-				break;
-			case 7:
-				name << "VII";
-				break;
-			default:
-				name << "?";
-				break;
-		}
-		return name.str();
-	}
-
-};
+#include "robot/sbench/dp_sbench.h"
 
 /*!
- * @brief Stores data related to one rotation around the leg.
+ * @brief Stores data related to rotation of PKM around the leg.
  * @author tkornuta
  */
-struct leg_rotation {
+struct pkm_leg_rotation
+{
 public:
 	/*!
-	 * SMB leg.
+	 * Leg number [1,2,3].
 	 */
 	unsigned char leg;
 
 	/*!
-	 * SMB leg.
+	 * Rotation in external values (-6,-5,...,5,6).
 	 */
 	char rotation;
 
 	/*!
 	 * Default constructor.
 	 */
-	leg_rotation() : leg(0), rotation(0)
-		{ }
+	pkm_leg_rotation() :
+			leg(0), rotation(0)
+	{
+	}
 
 	/*!
 	 * Sets row and column.
 	 */
-	leg_rotation(unsigned char leg_, char rotation_) : leg(leg_), rotation(rotation_)
-		{ }
+	pkm_leg_rotation(unsigned char leg_, char rotation_) :
+			leg(leg_), rotation(rotation_)
+	{
+	}
 
 	/*!
-	 * Return the description.
+	 * Returns the rotation description.
 	 */
-	std::string get_name() const {
+	std::string get_description() const
+	{
 		std::stringstream name;
-		name << (int)leg << " -> " << (int)rotation;
+		name << "rotation around " << (int) leg << " by " << (int) rotation;
 		return name.str();
 	}
 };
 
 /*!
- * Pose of the agent on a bench (location of three pins).
+ * Stores data utilized for execution of one SMB rotation around leg with control of the power from the bench.
  */
-struct bench_pose {
+class power_smb_move
+{
+public:
 	/*!
-	 * Pin around we rotate (bench enumeration).
+	 * Start pose of the agent on the bench.
 	 */
-	pin rotation_pin;
+	lib::sbench::bench_pose start_pose;
 
 	/*!
-	 * First pin on which we will stand.
+	 * Final pose of the agent on the bench.
 	 */
-	pin desired_pin1;
+	lib::sbench::bench_pose final_pose;
 
 	/*!
-	 * Second pin on which we will stand.
+	 * Rotation performed by PKM around given leg in order to get to the final pose.
 	 */
-	pin desired_pin2;
+	pkm_leg_rotation rotation_leg;
 
 	/*!
-	 * Rotation performed in order to get to the pose.
+	 * Pin used in both start and final poses - the one will be powered during rotation.
+	 * It is computed automatically during the object construction.
 	 */
-	leg_rotation rotation;
+	lib::sbench::pin rotation_pin;
 
-	std::string get_name() const {
-		return rotation_pin.get_name() + " | " + desired_pin1.get_name() + " | " + desired_pin2.get_name();
+	/*!
+	 * Default constructor.
+	 */
+	/*	power_smb_move() : start_pose(), final_pose(), rotation_leg()
+	 { }*/
+	/*!
+	 * Initializes the start and final poses, as well as the leg rotation. Sets the rotation pin.
+	 */
+	power_smb_move(lib::sbench::bench_pose start_pose_, lib::sbench::bench_pose final_pose_, pkm_leg_rotation rotation_leg_) :
+			start_pose(start_pose_), final_pose(final_pose_), rotation_leg(rotation_leg_)
+	{
+		// Find rotation pin.
+		find_rotation_pin();
 	}
 
+	/*!
+	 * Returns the power move description.
+	 */
+	std::string get_description() const
+	{
+		std::stringstream name;
+		name << start_pose.get_description() << " -> " << rotation_leg.get_description() << " -> "
+				<< final_pose.get_description();
+		return name.str();
+	}
+
+private:
+	/*
+	 * Finds rotation pin.
+	 */
+	void find_rotation_pin()
+	{
+#if 1
+		// Compare start and final pose pins, taking into consideration the leg that we are going to rotate around.
+		// Assure that the pin was found.
+		if ((final_pose.pins[rotation_leg.leg - 1].column != start_pose.pins[rotation_leg.leg - 1].column)
+				|| (final_pose.pins[rotation_leg.leg - 1].row != start_pose.pins[rotation_leg.leg - 1].row)) {
+			std::cerr << get_description() << std::endl;
+			assert(0);
+		}
+		// Rotation pin found.
+		rotation_pin = start_pose.pins[rotation_leg.leg - 1];
+#else
+		bool found = false;
+		// Compare start and final pose pins.
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				if ((start_pose.pins[i].column == final_pose.pins[j].column)
+						&& (start_pose.pins[i].row == final_pose.pins[j].row)) {
+					rotation_pin = start_pose.pins[i];
+					found = true;
+					break;
+				}
+			} //: for
+		} //: for
+		if (!found) {
+			std::cerr << get_description() << std::endl;
+		}
+		assert(found);
+#endif
+	}
 };
 
-
-
-
-
-#endif /* PLAN_HPP_ */
+#endif /* TASK_UTILS_HPP_ */

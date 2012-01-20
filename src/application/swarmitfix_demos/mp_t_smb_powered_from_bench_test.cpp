@@ -28,7 +28,17 @@ smb_powered_from_bench_test::smb_powered_from_bench_test(lib::configurator &conf
 		smb_robot_name = lib::smb2::ROBOT_NAME;
 	} // else ?
 
-
+	int mode = config.value <int> ("mode");
+	switch (mode){
+		default:
+			// Set "power walk" mode as default.
+		case 0:
+			sr_ecp_msg->message("POWER MOVE!");
+			break;
+		case 1:
+			sr_ecp_msg->message("POWER MOVE! WITH CLEANING");
+			break;
+	}//: switch
 }
 
 void smb_powered_from_bench_test::create_robots()
@@ -46,80 +56,74 @@ void smb_powered_from_bench_test::create_robots()
 
 void smb_powered_from_bench_test::main_task_algorithm(void)
 {
+	using namespace mrrocpp::lib::sbench;
+
 	sr_ecp_msg->message("smb_powered_from_bench_test::main_task_algorithm");
 	int mode = config.value <int> ("mode");
 	unsigned int delay = config.value <unsigned int> ("delay");
 	unsigned int cleaning_time = config.value <int>("cleaning_time");
 
-	// Temporary variables.
-	mrrocpp::lib::sbench::power_supply_state ps;
-	mrrocpp::lib::sbench::cleaning_state cs;
-
 	// 1st pose.
-	power_clean_pose pose1;
-	pose1.rotation_pin = pin(4, 4);
-	pose1.desired_pin1 = pin(3, 3);
-	pose1.desired_pin2 = pin(4, 3);
-	pose1.rotation = leg_rotation(1, -1);
+	bench_pose pose1;
+	pose1.pins[0] = pin(4, 4);
+	pose1.pins[1] = pin(3, 3);
+	pose1.pins[2] = pin(4, 3);
 
 	// 2nd pose.
-	power_clean_pose pose2;
-	pose2.rotation_pin = pin(4, 4);
-	pose2.desired_pin1 = pin(4, 3);
-	pose2.desired_pin2 = pin(5, 3);
-	pose2.rotation = leg_rotation(1, 1);
+	bench_pose pose2;
+	pose2.pins[0] = pin(4, 4);
+	pose2.pins[1] = pin(4, 3);
+	pose2.pins[2] = pin(5, 3);
 
 	// 3rd pose.
-	power_clean_pose pose3;
-	pose3.rotation_pin = pin(5, 3);
-	pose3.desired_pin1 = pin(6, 3);
-	pose3.desired_pin2 = pin(6, 4);
-	pose3.rotation = leg_rotation(3, 3);
+	bench_pose pose3;
+	pose3.pins[0] = pin(6, 3);
+	pose3.pins[1] = pin(6, 4);
+	pose3.pins[2] = pin(5, 3);
 
-	// 4th pose.
-	power_clean_pose pose4;
-	pose4.rotation_pin = pin(5, 3);
-	pose4.desired_pin1 = pin(4, 3);
-	pose4.desired_pin2 = pin(4, 4);
-	pose4.rotation = leg_rotation(3, -3);
+	// Power trajectory.
+	power_smb_move move1 = power_smb_move(pose1, pose2, pkm_leg_rotation(1, 1));
+	power_smb_move move2 = power_smb_move(pose2, pose3, pkm_leg_rotation(3, 3));
+	power_smb_move move3 = power_smb_move(pose3, pose2, pkm_leg_rotation(3, -3));
+	power_smb_move move4 = power_smb_move(pose2, pose1, pkm_leg_rotation(1, -1));
 
 	// Pull out all legs.
-	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+	smb_pull_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 	// Wait for given time.
 	wait_ms(delay);
+
+	// Turn power on 1st pose pins.
+	sr_ecp_msg->message(pose1.get_description());
+	mrrocpp::lib::sbench::power_supply_state ps;
+	ps.set_on(pose1);
+	control_bench_power_supply(ps, delay);
 
 	// Work depending on the mode.
 	switch (mode){
 		default:
 			// Set "power walk" mode as default.
 		case 0:
-			sr_ecp_msg->message("POWER WALK!");
-			// Turn power on pins from the 1st pose.
-			sr_ecp_msg->message(pose1.get_name());
-			ps.set_on(pose1.rotation_pin.row, pose1.rotation_pin.row);
-			ps.set_on(pose1.desired_pin1.row, pose1.desired_pin1.row);
-			ps.set_on(pose1.desired_pin2.row, pose1.desired_pin2.row);
+			sr_ecp_msg->message("POWER MOVE!");
 			while (true) {
 				// Power walk!
-				bench_move_to_power_pose_with_smb(pose2, delay);
-				bench_move_to_power_pose_with_smb(pose3, delay);
-				bench_move_to_power_pose_with_smb(pose4, delay);
-				bench_move_to_power_pose_with_smb(pose1, delay);
+				smb_execute_power_move(move1, delay);
+				smb_execute_power_move(move2, delay);
+				smb_execute_power_move(move3, delay);
+				smb_execute_power_move(move4, delay);
+				sr_ecp_msg->message("Finished - waiting for 3s");
+				wait_ms(3000);
 			}
 			break;
 		case 1:
-			sr_ecp_msg->message("POWER WALK! WITH CLEANING");
-			// Turn power on pins from the 1st pose.
-			sr_ecp_msg->message(pose1.get_name());
-			ps.set_on(pose1.rotation_pin.row, pose1.rotation_pin.row);
-			ps.set_on(pose1.desired_pin1.row, pose1.desired_pin1.row);
-			ps.set_on(pose1.desired_pin2.row, pose1.desired_pin2.row);
+			sr_ecp_msg->message("POWER MOVE! WITH CLEANING");
 			while (true) {
 				// Power walk with cleaning.
-				bench_move_to_power_pose_with_cleaning_and_smb(pose2, delay, cleaning_time);
-				bench_move_to_power_pose_with_cleaning_and_smb(pose3, delay, cleaning_time);
-				bench_move_to_power_pose_with_cleaning_and_smb(pose4, delay, cleaning_time);
-				bench_move_to_power_pose_with_cleaning_and_smb(pose1, delay, cleaning_time);
+				smb_execute_power_move_with_cleaning(move1, delay, cleaning_time);
+				smb_execute_power_move_with_cleaning(move2, delay, cleaning_time);
+				smb_execute_power_move_with_cleaning(move3, delay, cleaning_time);
+				smb_execute_power_move_with_cleaning(move4, delay, cleaning_time);
+				sr_ecp_msg->message("Finished - waiting for 3s");
+				wait_ms(3000);
 			}
 			break;
 	}

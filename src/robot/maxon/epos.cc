@@ -669,10 +669,10 @@ void epos::clearFault(void)
 	}
 
 	// Reset node.
-	reset();
+	enable();
 }
 
-void epos::reset()
+void epos::enable()
 {
 	// TODO: handle initial error conditions
 	actual_state_t state = getState();
@@ -890,6 +890,21 @@ UNSIGNED16 epos::getSWversion()
 UNSIGNED16 epos::getDInputPolarity()
 {
 	return ReadObjectValue <UNSIGNED16>(0x2071, 0x03);
+}
+
+void epos::setDInputPolarity(UNSIGNED16 val)
+{
+	WriteObjectValue(0x2071, 0x03, val);
+}
+
+UNSIGNED16 epos::getDInputExecMask()
+{
+	return ReadObjectValue <UNSIGNED16>(0x2071, 0x02);
+}
+
+void epos::setDInputExecMask(UNSIGNED16 val)
+{
+	WriteObjectValue(0x2071, 0x02, val);
 }
 
 /* read digital input */
@@ -1759,7 +1774,7 @@ UNSIGNED16 epos::getRS232timeout()
 	return ReadObjectValue <UNSIGNED16>(0x2005, 0x00);
 }
 
-void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_)
+void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_position_)
 {
 	// Prevent from offseting in the same direction as velocity.
 	assert((velocity_ > 0 && offset_ < 0) || (velocity_ < 0 && offset_ > 0));
@@ -1774,11 +1789,11 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_)
 
 		// Velocity mode in the direction of negative limit.
 		setOperationMode(maxon::epos::OMD_VELOCITY_MODE);
-		reset();
+		enable();
 
 		// TODO: set max acceleration?
+		setControlword(0x000f);
 		setVelocityModeSettingValue(velocity_);
-		setControlword(0x010f);
 
 		// Start monitoring after some interval for acceleration.
 		boost::system_time wakeup = boost::get_system_time() + boost::posix_time::milliseconds(45);
@@ -1806,19 +1821,22 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_)
 
 		// Halt.
 		setVelocityModeSettingValue(0);
-		reset();
+		enable();
 
 		try {
 			// Homing: move to the index, then continue with an offset.
+			setHomePosition(home_position_);
+
 			if (offset_ > 0) {
 				doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, offset_);
 			} else if (offset_ < 0) {
 				doHoming(maxon::epos::HM_INDEX_NEGATIVE_SPEED, offset_);
 			} else {
-				doHoming(maxon::epos::HM_ACTUAL_POSITION, 0);
+				doHoming(maxon::epos::HM_ACTUAL_POSITION, offset_);
 			}
-
+			// Monitor homing and set home position.
 			monitorHomingStatus();
+
 		} catch (boost::exception &e_) {
 			// Motor jam!
 			BOOST_THROW_EXCEPTION(fe_motor_jam_detected() << canId(nodeId));
@@ -2256,6 +2274,26 @@ void epos::setDigitalOutputs(digital_outputs_t cmd)
 UNSIGNED16 epos::getDigitalOutputs()
 {
 	return ReadObjectValue <UNSIGNED16>(0x2078, 0x01);
+}
+
+void epos::setDigitalOutputFunctionalitiesMask(UNSIGNED16 val)
+{
+	WriteObjectValue(0x2078, 0x02, val);
+}
+
+UNSIGNED16 epos::getDigitalOutputFunctionalitiesMask()
+{
+	return ReadObjectValue <UNSIGNED16>(0x2078, 0x02);
+}
+
+void epos::setDigitalOutputFunctionalitiesPolarity(UNSIGNED16 val)
+{
+	WriteObjectValue(0x2078, 0x03, val);
+}
+
+UNSIGNED16 epos::getDigitalOutputFunctionalitiesPolarity()
+{
+	return ReadObjectValue <UNSIGNED16>(0x2078, 0x03);
 }
 
 const epos::digital_outputs_t & epos::getCommandedDigitalOutputs()

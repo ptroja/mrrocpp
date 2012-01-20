@@ -32,6 +32,7 @@ public:
 	void clear_fault();
 	void stop_motors();
 	void brake_motors();
+	void disable_brake();
 };
 
 }

@@ -1110,6 +1110,13 @@
      </property>
     </widget>
    </item>
+   <item row="8" column="1">
+    <widget class="QPushButton" name="pushButton_disable_brake">
+     <property name="text">
+      <string>Disable brake</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

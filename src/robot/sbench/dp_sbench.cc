@@ -80,6 +80,29 @@ void bench_state::set_off(int row, int column) {
 	set_value(row, column, 0);
 }
 
+void bench_state::set_on(pin pin_){
+	set_value(pin_.row, pin_.column, 1);
+}
+
+void bench_state::set_off(pin pin_) {
+	set_value(pin_.row, pin_.column, 0);
+}
+
+//! Sets on (1) given bench pose (all three pins).
+void bench_state::set_on(bench_pose pose_) {
+	set_on(pose_.pins[0]);
+	set_on(pose_.pins[1]);
+	set_on(pose_.pins[2]);
+}
+
+//! Sets on (0) given bench pose (all three pins).
+void bench_state::set_off(bench_pose pose_) {
+	set_off(pose_.pins[0]);
+	set_off(pose_.pins[1]);
+	set_off(pose_.pins[2]);
+
+}
+
 
 bool bench_state::get_value(int row, int column) const
 {

@@ -226,8 +226,8 @@ public:
 		QUICKSTOP, DISABLE_OPERATION, ENABLE_OPERATION, FAULT_RESET
 	} desired_state_t;
 
-	//! \brief Reset the device by issuing a shutdown command followed by power-on and halt
-	void reset();
+	//! \brief Enable the device by issuing a shutdown command followed by power-on and halt
+	void enable();
 
 	//! \brief High-level command to clear fault
 	void clearFault();
@@ -250,8 +250,17 @@ public:
 	/*! \brief ask for RS232 timeout */
 	UNSIGNED16 getRS232timeout();
 
-	/*! \brief read digital input polarity mask */
+	/*! \brief read digital input polarity */
 	UNSIGNED16 getDInputPolarity();
+
+	/*! \brief read digital input polarity */
+	void setDInputPolarity(UNSIGNED16);
+
+	/*! \brief read digital input polarity */
+	UNSIGNED16 getDInputExecMask();
+
+	/*! \brief read digital input polarity */
+	void setDInputExecMask(UNSIGNED16);
 
 	/*! \brief read digital input*/
 	UNSIGNED16 getDInput();
@@ -761,7 +770,7 @@ public:
 	int doHoming(homing_method_t method, INTEGER32 offset = 0);
 
 	/*! \brief software-only homing to mechanical stop */
-	void doSoftwareHoming(int32_t velocity_, int32_t offset_);
+	void doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_position_ = 0);
 
 	/*! \brief set OpMode to ProfilePosition and make relative movement */
 	void moveRelative(INTEGER32 steps);
@@ -826,6 +835,14 @@ public:
 	void setDigitalOutputs(digital_outputs_t cmd);
 
 	UNSIGNED16 getDigitalOutputs();
+
+	void setDigitalOutputFunctionalitiesMask(UNSIGNED16 val);
+
+	UNSIGNED16 getDigitalOutputFunctionalitiesMask();
+
+	void setDigitalOutputFunctionalitiesPolarity(UNSIGNED16 val);
+
+	UNSIGNED16 getDigitalOutputFunctionalitiesPolarity();
 
 	const digital_outputs_t & getCommandedDigitalOutputs();
 

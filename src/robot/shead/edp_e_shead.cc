@@ -92,7 +92,7 @@ void effector::synchronise(void)
 		epos_node->doSoftwareHoming(homing_velocity, homing_offset);
 #else
 		epos_node->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-		epos_node->reset();
+		epos_node->enable();
 		epos_node->startHoming();
 		epos_node->monitorHomingStatus();
 #endif
@@ -334,7 +334,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 					epos_node->setState(maxon::epos::QUICKSTOP);
 
 					// Switch back to ENABLE state.
-					epos_node->reset();
+					epos_node->enable();
 				}
 				break;
 			case lib::shead::CLEAR_FAULT:

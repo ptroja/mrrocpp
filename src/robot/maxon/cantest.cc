@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 		gateway.SendNMTService(0, gateway::Start_Remote_Node);
 		gateway.SendNMTService(1, gateway::Start_Remote_Node);
 
-		node0.reset();
+		node0.enable();
 
 		std::cout << "gateway CAN-ID: " << (int) node0.getNodeID() << std::endl;
 

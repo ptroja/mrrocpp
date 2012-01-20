@@ -118,6 +118,7 @@ void effector::disable_moog_motor()
 				// Still disabling, do nothing.
 				break;
 			case maxon::epos::SWITCHED_ON:
+			case maxon::epos::SWITCH_ON_DISABLED:
 				in_switched_on = true;
 				break;
 			case maxon::epos::FAULT:
@@ -129,6 +130,69 @@ void effector::disable_moog_motor()
 				break;
 		}
 	}
+}
+
+void effector::enable_moog_brake(bool state)
+{
+	// First go to disabled state.
+	disable_moog_motor();
+
+	// Also need to disable voltage.
+	axis2->setState(maxon::epos::DISABLE_VOLTAGE);
+
+	// Setup the wakeup time
+	boost::system_time wakeup = boost::get_system_time();
+	const boost::system_time timeout = wakeup + boost::posix_time::milliseconds(100);
+
+	// Condition to monitor for
+	bool voltage_enabled = true;
+
+	// Monitor until state change.
+	while(voltage_enabled) {
+		// Increment the wakeup time.
+		wakeup += boost::posix_time::milliseconds(5);
+
+		// Check time clock.
+		if(wakeup > timeout) {
+			msg->message("Timeout waiting to disabling voltage of the Moog motor.");
+			BOOST_THROW_EXCEPTION(exception::fe());
+		}
+
+		// Wait for device state to change
+		boost::thread::sleep(wakeup);
+
+		maxon::epos::actual_state_t state = axis2->getState();
+
+		switch (state) {
+			// These are expected transition states
+			case maxon::epos::SWITCHED_ON:
+				// Still disabling, do nothing.
+				break;
+			case maxon::epos::SWITCH_ON_DISABLED:
+				voltage_enabled = false;
+				break;
+			case maxon::epos::FAULT:
+				BOOST_THROW_EXCEPTION(exception::fe_robot_in_fault_state());
+				break;
+			default:
+				std::cout << "Moog node transited to state '" << maxon::epos::stateDescription(state)
+									<< "' during braking" << std::endl;
+				break;
+		}
+	}
+
+	// Get current polarity.
+	maxon::UNSIGNED16 polarity = axis2->getDigitalOutputFunctionalitiesPolarity();
+
+	// Set polarity of brake pin to low-active.
+	if(state) {
+		polarity |= (0x0004);
+	} else {
+		polarity &= ~(0x0004);
+	}
+
+	// Apply new polarity.
+	axis2->setDigitalOutputFunctionalitiesPolarity(polarity);
 }
 
 void effector::check_controller_state()
@@ -155,10 +219,12 @@ void effector::check_controller_state()
 			cachedStatusWords[i] = axes[i]->getStatusWord();
 			// Get current epos state.
 			maxon::epos::actual_state_t state = maxon::epos::status2state(cachedStatusWords[i]);
+
+			// Handle the Moog motor with special care.
 			if (axes[i] == axis2) {
 				switch (state)
 				{
-					//case maxon::epos::SWITCH_ON_DISABLED:
+					case maxon::epos::SWITCH_ON_DISABLED:
 					case maxon::epos::SWITCHED_ON:
 					case maxon::epos::REFRESH:
 					case maxon::epos::MEASURE_INIT:
@@ -262,7 +328,7 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		check_controller_state();
 
 		// FIXME: uncomment the following line to allow multiple synchronization without resetting.
-//		controller_state_edp_buf.is_synchronised = false;
+		// controller_state_edp_buf.is_synchronised = false;
 
 		// Copy data to reply buffer
 		reply.controller_state = controller_state_edp_buf;
@@ -349,9 +415,6 @@ void effector::synchronise(void)
 	DEBUG_METHOD;
 
 	try {
-		// WORKAROUND: remove those two lines!
-//		synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
-//		return;
 
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
@@ -368,9 +431,9 @@ void effector::synchronise(void)
 		axisC->setOperationMode(maxon::epos::OMD_HOMING_MODE);
 
 		// Enable controller.
-		axisA->reset();
-		axisB->reset();
-		axisC->reset();
+		axisA->enable();
+		axisB->enable();
+		axisC->enable();
 
 		// Start homing.
 		axisA->startHoming();
@@ -389,11 +452,11 @@ void effector::synchronise(void)
 		} while (!finished);
 
 		// Do homing for Moog motor.
-		axis2->doSoftwareHoming(PARAMS.moog_motor_homing_velocity, PARAMS.moog_motor_homing_offset);
+		axis2->doSoftwareHoming(PARAMS.moog_motor_homing_velocity, PARAMS.moog_motor_homing_offset, PARAMS.moog_motor_home_position);
 
 		// Do homing for another motor.
 		axis1->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-		axis1->reset();
+		axis1->enable();
 		axis1->startHoming();
 
 		// Wait until second homing is finished.
@@ -402,9 +465,10 @@ void effector::synchronise(void)
 			usleep(20000);
 		}
 
+#if 0
 		// Do homing for yet another motor.
 		axis3->setOperationMode(maxon::epos::OMD_HOMING_MODE);
-		axis3->reset();
+		axis3->enable();
 		axis3->startHoming();
 
 		// Wait until second homing is finished.
@@ -412,10 +476,15 @@ void effector::synchronise(void)
 			// Delay between queries.
 			usleep(20000);
 		}
+#else
+		// Do homing for axi3 motor.
+		axis3->doSoftwareHoming(PARAMS.axis3_motor_homing_velocity, PARAMS.axis3_motor_homing_offset);
+#endif
+
 
 		// Reset internal state of the motor positions
 		for (size_t i = 0; i < number_of_servos; ++i) {
-			current_motor_pos[i] = desired_motor_pos_old[i] = 0;
+			current_motor_pos[i] = desired_motor_pos_old[i] = axes[i]->getActualPosition();
 		}
 
 		// Set *extended* limits.
@@ -426,6 +495,9 @@ void effector::synchronise(void)
 
 		// Compute joints positions in the home position
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+
+		desired_joints = current_joints;
+		desired_joints_old = current_joints;
 
 		// Now the robot is synchronised.
 		controller_state_edp_buf.is_synchronised = true;
@@ -495,7 +567,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 					BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
 							{
 								// Brake with Quickstop command
-								node->reset();
+								node->enable();
 							}
 				}
 				// Internal position counters need not be updated.
@@ -508,16 +580,38 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 					disable_moog_motor();
 				}
 
+				// Execute brake command.
+				if(!robot_test_mode) {
+					enable_moog_brake(true);
+				}
+
+				// Internal position counters need not be updated.
+				return;
+			case lib::spkm::DISABLE_BRAKE:
+				DEBUG_COMMAND("DISABLE_BRAKE");
+
+				// Execute brake command.
+				if(!robot_test_mode) {
+					enable_moog_brake(false);
+				}
+
 				// Internal position counters need not be updated.
 				return;
 			case lib::spkm::CLEAR_FAULT:
 				DEBUG_COMMAND("CLEAR_FAULT");
+
 				if (!robot_test_mode) {
 					BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
 							{
 								node->clearFault();
 							}
 				} //: !test_mode
+
+				// Execute brake command.
+				if(!robot_test_mode) {
+					enable_moog_brake(true);
+				}
+
 				// Internal position counters need not to be updated.
 				return;
 			default:
@@ -761,7 +855,7 @@ void effector::execute_motion()
 						axes[i]->setProfileDeceleration(Ddefault[i]);
 
 						// Re-enable the moog motor;
-						if(axes[i] == axis2) axes[i]->reset();
+						if(axes[i] == axis2) axes[i]->enable();
 
 						axes[i]->moveAbsolute(desired_motor_pos_new[i]);
 					} else {
@@ -781,7 +875,7 @@ void effector::execute_motion()
 						axes[i]->setProfileDeceleration(Ddefault[i]);
 
 						// Re-enable the moog motor;
-						if(axes[i] == axis2) axes[i]->reset();
+						if(axes[i] == axis2) axes[i]->enable();
 
 						axes[i]->moveRelative(desired_motor_pos_new[i]);
 					} else {
@@ -879,7 +973,7 @@ void effector::execute_motion()
 						axes[i]->setTargetPosition(desired_motor_pos_new[i]);
 
 						// Re-enable the moog motor;
-						if(axes[i] == axis2) axes[i]->reset();
+						if(axes[i] == axis2) axes[i]->enable();
 					}
 				}
 
@@ -1206,7 +1300,7 @@ void effector::interpolated_motion_in_operational_space()
 	// Execute motion
 	if (!robot_test_mode) {
 		// Reset the Moog motor to disable brake.
-		axis2->reset();
+		axis2->enable();
 
 		// Setup motion parameters
 		for (size_t i = 0; i < axes.size(); ++i) {

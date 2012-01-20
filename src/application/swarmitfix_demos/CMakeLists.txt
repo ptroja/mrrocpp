@@ -28,6 +28,16 @@ add_executable(mp_smb_powered_from_bench_test
 target_link_libraries(mp_smb_powered_from_bench_test mp)
 
 
+## Agent1 test program. 
+add_executable(mp_agent1_demo 
+	mp_t_demo_base.cc
+	mp_t_agent1_demo.cpp
+)
+target_link_libraries(mp_agent1_demo mp)
+
+
+
+
 
 
 
@@ -72,4 +82,5 @@ mp_swarmitfix_demo_agent1_warsaw
 mp_smb_test
 mp_sbench_test
 mp_smb_powered_from_bench_test
+mp_agent1_demo
 DESTINATION bin)

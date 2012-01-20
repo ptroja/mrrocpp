@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 		}
 
 		// Change to the operational mode
-		node.reset();
+		node.enable();
 
 		node.clearPvtBuffer();
 
