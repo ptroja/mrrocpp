@@ -49,11 +49,6 @@ public:
 			0);
 
 	/**
-	 * @brief gathers information about robot state
-	 */
-	void init();
-
-	/**
 	 * @brief executes the command (i.e. sends it to robot)
 	 */
 	void execute();

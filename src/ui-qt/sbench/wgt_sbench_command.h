@@ -86,6 +86,17 @@ public:
 	 */
 	mrrocpp::ui::sbench::UiRobot* robot;
 
+protected:
+	/**
+	 * @brief gathers information about robot state
+	 */
+	void init();
+
+	/*!
+	 * @brief Refreshes the checkboxes and underlines depending on the current state.
+	 */
+	virtual void reshresh_widgets() = 0;
+
 private:
 
 	/**
@@ -95,13 +106,6 @@ private:
 	 * Here it calls the init() procedure to gather information about robot state
 	 */
 	void showEvent(QShowEvent * event);
-
-	/**
-	 * @brief procedure to be implemented in derived classed
-	 *
-	 * it gathers information about robot state
-	 */
-	virtual void init() = 0;
 
 	/**
 	 * @brief procedure to be implemented in derived classed
