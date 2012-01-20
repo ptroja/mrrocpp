@@ -141,6 +141,7 @@ void sbench_test::main_task_algorithm(void)
 			// Turn power on 1st pose pins.
 			sr_ecp_msg->message(pose1.get_description());
 			ps.set_on(pose1);
+			control_bench_power_supply(ps, delay);
 			while (true) {
 				bench_execute_power_move(move1, delay);
 				bench_execute_power_move(move2, delay);
@@ -156,6 +157,7 @@ void sbench_test::main_task_algorithm(void)
 			sr_ecp_msg->message(pose1.get_description());
 			sr_ecp_msg->message(pose1.get_description());
 			ps.set_on(pose1);
+			control_bench_power_supply(ps, delay);
 			// Move.
 			while (true) {
 				bench_execute_power_move_with_cleaning(move1, delay, cleaning_time);
