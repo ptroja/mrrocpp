@@ -61,10 +61,6 @@ void smb_powered_from_bench_test::main_task_algorithm(void)
 	unsigned int delay = config.value <unsigned int> ("delay");
 	unsigned int cleaning_time = config.value <int>("cleaning_time");
 
-	// Temporary variables.
-	mrrocpp::lib::sbench::power_supply_state ps;
-	mrrocpp::lib::sbench::cleaning_state cs;
-
 	// 1st pose.
 	bench_pose pose1;
 	pose1.pins[0] = pin(4, 4);
@@ -96,7 +92,9 @@ void smb_powered_from_bench_test::main_task_algorithm(void)
 
 	// Turn power on 1st pose pins.
 	sr_ecp_msg->message(pose1.get_description());
+	mrrocpp::lib::sbench::power_supply_state ps;
 	ps.set_on(pose1);
+	control_bench_power_supply(ps, delay);
 
 	// Work depending on the mode.
 	switch (mode){
