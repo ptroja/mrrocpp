@@ -57,19 +57,26 @@ protected:
 	lib::robot_name_t shead_robot_name;
 
 	/*!
+	 * Sends motor rotation command to SMB in the joint space.
+	 * @param [in] legs_rotation_ Desired absolute rotation around leg (in external values -6, -5, ..., 5, 6).
+	 * @param [in] pkm_rotation_ Desired absolute rotation of the upper SMP by given angle [radians].
+	 */
+	void smb_rotate_external(int legs_rotation_, double pkm_rotation_);
+
+	/*!
 	 * Moves SMB legs in and out.
 	 * @param [in] l1_ Desired position of the leg one (in, out).
 	 * @param [in] l2_ Desired position of the leg two (in, out).
 	 * @param [in] l3_ Desired position of the leg three (in, out).
 	 */
-	void move_smb_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, lib::smb::FESTO_LEG l3_);
+	void smb_pull_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, lib::smb::FESTO_LEG l3_);
 
 	/*!
-	 * Sends motor rotation command to SMB in the joint space.
-	 * @param [in] legs_rotation_ Desired absolute rotation around leg (in external values -6, -5, ..., 5, 6).
-	 * @param [in] pkm_rotation_ Desired absolute rotation of the upper SMP by given angle [radians].
+	 * @brief Stands on given leg (this one stays out, rest goes in).
+	 *
+	 * @param [in] leg_number_ Leg around which the rotation will be performed.
 	 */
-	void move_smb_external(int legs_rotation_, double pkm_rotation_);
+	void smb_stan_on_one_leg(int leg_number_);
 
 	/*!
 	 * @brief Rotates agent around given leg, thus realizes the sequence: pull two legs in, rotate around the third one and pull all legs out.
@@ -132,22 +139,22 @@ protected:
 	/*!
 	 * Controls the bench power (the leg smb is not controlled, thus rotation is simulated).
 	 */
-	void bench_move_to_power_pose(const bench_pose & pose_, unsigned int delay_);
+	void bench_execute_power_move(const power_smb_move & move_, unsigned int delay_);
 
 	/*!
 	 * Controls the bench power and cleaning (the leg smb is not controlled, thus rotation is simulated).
 	 */
-	void bench_move_to_power_pose_with_cleaning(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
+	void bench_execute_power_move_with_cleaning(const power_smb_move & move_, unsigned int delay_, unsigned int cleaning_time_);
 
 	/*!
 	 * Controls the bench power with rotation of the smb leg.
 	 */
-	void bench_move_to_power_pose_with_smb(const bench_pose & pose_, unsigned int delay_);
+	void smb_execute_power_move(const power_smb_move & move_, unsigned int delay_);
 
 	/*!
 	 * Controls the bench power and cleaning with rotation of the smb leg.
 	 */
-	void bench_move_to_power_pose_with_cleaning_and_smb(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
+	void smb_execute_power_move_with_cleaning(const power_smb_move & move_, unsigned int delay_, unsigned int cleaning_time_);
 
 
 public:

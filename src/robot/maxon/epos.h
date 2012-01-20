@@ -770,7 +770,7 @@ public:
 	int doHoming(homing_method_t method, INTEGER32 offset = 0);
 
 	/*! \brief software-only homing to mechanical stop */
-	void doSoftwareHoming(int32_t velocity_, int32_t offset_);
+	void doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_position_ = 0);
 
 	/*! \brief set OpMode to ProfilePosition and make relative movement */
 	void moveRelative(INTEGER32 steps);

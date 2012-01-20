@@ -12,7 +12,7 @@
 #include <string>
 #include <boost/serialization/serialization.hpp>
 #include "const_sbench.h"
-#include "../../base/lib/com_buf.h"
+#include "base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -52,10 +52,105 @@ enum CBUFFER_VARIANT
 };
 
 /*!
+ * @brief Structure representing one bench pin.
+ * @author tkornuta
+ */
+struct pin
+{
+public:
+	/*!
+	 * Pin row.
+	 */
+	unsigned char row;
+
+	/*!
+	 * Pin column.
+	 */
+	unsigned char column;
+
+	/*!
+	 * Default constructor.
+	 */
+	pin() :
+			row(0), column(0)
+	{
+	}
+
+	/*!
+	 * Sets row and column.
+	 */
+	pin(unsigned char row_, unsigned char column_) :
+			row(row_), column(column_)
+	{
+	}
+
+	/*!
+	 * Returns the pin description in Row (arabic) - Column (roman) form.
+	 */
+	std::string get_description() const
+	{
+		std::stringstream name;
+		name << (int) row;
+		name << "-";
+		switch (column)
+		{
+			case 1:
+				name << "I";
+				break;
+			case 2:
+				name << "II";
+				break;
+			case 3:
+				name << "III";
+				break;
+			case 4:
+				name << "IV";
+				break;
+			case 5:
+				name << "V";
+				break;
+			case 6:
+				name << "VI";
+				break;
+			case 7:
+				name << "VII";
+				break;
+			default:
+				name << "?";
+				break;
+		}
+		return name.str();
+	}
+
+};
+
+
+/*!
+ * Pose of the agent on a bench (location of three pins).
+ * @author tkornuta
+ */
+struct bench_pose
+{
+	/*!
+	 * Pins utilized in this pose (according to the bench enumeration).
+	 */
+	pin pins[3];
+
+	/*!
+	 * Returns the pose description.
+	 */
+	std::string get_description() const
+	{
+		return pins[0].get_description() + " | " + pins[1].get_description() + " | " + pins[2].get_description();
+	}
+
+};
+
+
+/*!
  * @brief Bench pins state.
  * @ingroup sbench
  */
-
 class bench_state
 {
 private:
@@ -76,11 +171,23 @@ public:
 	//! sets the value due to the translation table
 	void set_value(int row, int column, const bool value);
 
-	//! Sets value on (1) on given row and column.
+	//! Sets value on (1) in given row and column.
 	void set_on(int row, int column);
 
-	//! Sets value off (0) on given row and column.
+	//! Sets value off (0) in given row and column.
 	void set_off(int row, int column);
+
+	//! Sets on given pin (1).
+	void set_on(pin pin_);
+
+	//! Sets given pin off (0).
+	void set_off(pin pin_);
+
+	//! Sets on (1) given bench pose (all three pins).
+	void set_on(bench_pose pose_);
+
+	//! Sets on (0) given bench pose (all three pins).
+	void set_off(bench_pose pose_);
 
 	//! gets the value due to the translation table
 	bool get_value(int row, int column) const;

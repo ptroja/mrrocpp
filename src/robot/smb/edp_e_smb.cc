@@ -445,17 +445,16 @@ void effector::parse_motor_command()
 		// Check the difference between current and desired values.
 		// Check motors.
 		if ((instruction.smb.set_pose_specification == lib::smb::MOTOR)
-				&& (current_motor_pos[0] != instruction.smb.motor_pos[0]))
+				&& (abs(current_motor_pos[0] - instruction.smb.motor_pos[0]) > 5 ))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_legs_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check joints.
 		// TODO: !check eps instead of classic comparison!
 		else if ((instruction.smb.set_pose_specification == lib::smb::JOINT)
-				&& (current_joints[0] != instruction.smb.joint_pos[0]))
+				&& (fabs(current_joints[0] - instruction.smb.joint_pos[0]) > 1.0E-4 ))
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_legs_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 		// Check externals.
 		else if ((instruction.smb.set_pose_specification == lib::smb::EXTERNAL)
-				&& (current_joints[0]
-						!= instruction.smb.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio))
+				&& (fabs(current_joints[0]- instruction.smb.base_vs_bench_rotation * mrrocpp::kinematics::smb::leg_rotational_ext2i_ratio)) >  1.0E-4 )
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_legs_rotation_prohibited_in_given_state()<<current_state(current_legs_state()));
 	}
 

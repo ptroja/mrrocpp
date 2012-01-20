@@ -328,7 +328,7 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		check_controller_state();
 
 		// FIXME: uncomment the following line to allow multiple synchronization without resetting.
-//		controller_state_edp_buf.is_synchronised = false;
+		// controller_state_edp_buf.is_synchronised = false;
 
 		// Copy data to reply buffer
 		reply.controller_state = controller_state_edp_buf;
@@ -415,9 +415,6 @@ void effector::synchronise(void)
 	DEBUG_METHOD;
 
 	try {
-		// WORKAROUND: remove those two lines!
-//		synchronise_moog_motor(*axis2, PARAMS.lower_motor_pos_limits[2], PARAMS.upper_motor_pos_limits[2], PARAMS.moog_motor_homing_offset);
-//		return;
 
 		if (robot_test_mode) {
 			controller_state_edp_buf.is_synchronised = true;
@@ -455,7 +452,7 @@ void effector::synchronise(void)
 		} while (!finished);
 
 		// Do homing for Moog motor.
-		axis2->doSoftwareHoming(PARAMS.moog_motor_homing_velocity, PARAMS.moog_motor_homing_offset);
+		axis2->doSoftwareHoming(PARAMS.moog_motor_homing_velocity, PARAMS.moog_motor_homing_offset, PARAMS.moog_motor_home_position);
 
 		// Do homing for another motor.
 		axis1->setOperationMode(maxon::epos::OMD_HOMING_MODE);
@@ -468,6 +465,7 @@ void effector::synchronise(void)
 			usleep(20000);
 		}
 
+#if 0
 		// Do homing for yet another motor.
 		axis3->setOperationMode(maxon::epos::OMD_HOMING_MODE);
 		axis3->enable();
@@ -478,10 +476,15 @@ void effector::synchronise(void)
 			// Delay between queries.
 			usleep(20000);
 		}
+#else
+		// Do homing for axi3 motor.
+		axis3->doSoftwareHoming(PARAMS.axis3_motor_homing_velocity, PARAMS.axis3_motor_homing_offset);
+#endif
+
 
 		// Reset internal state of the motor positions
 		for (size_t i = 0; i < number_of_servos; ++i) {
-			current_motor_pos[i] = desired_motor_pos_old[i] = 0;
+			current_motor_pos[i] = desired_motor_pos_old[i] = axes[i]->getActualPosition();
 		}
 
 		// Set *extended* limits.
