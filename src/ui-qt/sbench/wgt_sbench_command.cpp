@@ -24,17 +24,14 @@ wgt_sbench_command::wgt_sbench_command(const QString & _widget_label, mrrocpp::u
 	robot = dynamic_cast <mrrocpp::ui::sbench::UiRobot *>(_robot);
 
 	// utworzenie list widgetow
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			int k = (i + 1) % 2;
-
-			QCheckBox *tmp_checkbox;
-			tmp_checkbox = new QCheckBox(this);
+	for (int row = 0; row < SBENCH_MAX_ROW; ++row) {
+		for (int column = 0; column < SBENCH_MAX_COL; ++column) {
+			QCheckBox *tmp_checkbox = new QCheckBox(this);
 
 			std::stringstream tmp_stringsteam;
-			tmp_stringsteam << i + 1 << "-";
+			tmp_stringsteam << row + 1 << "-";
 
-			switch (j)
+			switch (column)
 			{
 				case 0:
 					tmp_stringsteam << "I";
@@ -76,13 +73,16 @@ wgt_sbench_command::wgt_sbench_command(const QString & _widget_label, mrrocpp::u
 			 tmp_checkbox->update();
 			 */
 
-			ui.gridLayout->addWidget(tmp_checkbox, i, (2 * j) + k);
+
+			int shift = (row + 1) % 2;
+
+			ui.gridLayout->addWidget(tmp_checkbox, SBENCH_MAX_ROW-1-row, 2*SBENCH_MAX_COL - (2 * column) - shift);
 			//	checkBox_Vector.append(tmp_checkbox);
 
-			docks[i][j] = tmp_checkbox;
+			docks[row][column] = tmp_checkbox;
 
 			// unused docks are disabled
-			if (((k == 0) && (i > 6)) || ((k == 1) && (j > 6))) {
+			if (((shift == 0) && (row > 6)) || ((shift == 1) && (column > 6))) {
 				tmp_checkbox->setDisabled(true);
 			}
 		}
@@ -116,9 +116,9 @@ void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
 void wgt_sbench_command::set(const lib::sbench::bench_state & state)
 {
 
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			docks[i][j]->setChecked(state.get_value(i + 1, j + 1));
+	for (int row = 0; row < SBENCH_MAX_ROW; ++row) {
+		for (int column = 0; column < SBENCH_MAX_COL; ++column) {
+			docks[row][column]->setChecked(state.get_value(row + 1, column + 1));
 		}
 	}
 
@@ -127,9 +127,9 @@ void wgt_sbench_command::set(const lib::sbench::bench_state & state)
 void wgt_sbench_command::get(lib::sbench::bench_state & state)
 {
 
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			state.set_value(i + 1, j + 1, docks[i][j]->isChecked());
+	for (int row = 0; row < SBENCH_MAX_ROW; ++row) {
+		for (int column = 0; column < SBENCH_MAX_COL; ++column) {
+			state.set_value(row + 1, column + 1, docks[row][column]->isChecked());
 		}
 	}
 
@@ -137,17 +137,17 @@ void wgt_sbench_command::get(lib::sbench::bench_state & state)
 
 void wgt_sbench_command::refresh_dock_widgets(const lib::sbench::bench_state & state)
 {
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
+	for (int row = 0; row < SBENCH_MAX_ROW; ++row) {
+		for (int column = 0; column < SBENCH_MAX_COL; ++column) {
 			QFont font;
 			QPalette pal;
 
-			if (state.get_value(i + 1, j + 1)) {
+			if (state.get_value(row + 1, column + 1)) {
 
 				font.setUnderline(true);
 
-				pal.setColor(QPalette::WindowText, Qt::blue);
-				pal.setColor(QPalette::Background, Qt::blue);
+				pal.setColor(QPalette::WindowText, Qt::red);
+				pal.setColor(QPalette::Background, Qt::red);
 			} else {
 
 				font.setUnderline(false);
@@ -155,8 +155,8 @@ void wgt_sbench_command::refresh_dock_widgets(const lib::sbench::bench_state & s
 				pal.setColor(QPalette::WindowText, Qt::black);
 				pal.setColor(QPalette::Background, Qt::black);
 			}
-			docks[i][j]->setFont(font);
-			docks[i][j]->setPalette(pal);
+			docks[row][column]->setFont(font);
+			docks[row][column]->setPalette(pal);
 		}
 	}
 
@@ -165,9 +165,9 @@ void wgt_sbench_command::refresh_dock_widgets(const lib::sbench::bench_state & s
 void wgt_sbench_command::on_pushButton_clear_clicked()
 {
 
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			docks[i][j]->setChecked(false);
+	for (int row = 0; row < SBENCH_MAX_ROW; ++row) {
+		for (int column = 0; column < SBENCH_MAX_COL; ++column) {
+			docks[row][column]->setChecked(false);
 		}
 	}
 
