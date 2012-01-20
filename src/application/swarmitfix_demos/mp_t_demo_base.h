@@ -1,8 +1,14 @@
+/*!
+ * @file mp_t_smb_powered_from_bench_test.h
+ * @brief Class for SMB tests.
+ *
+ * @date Jan 17, 2012
+ * @author tkornuta
+ */
+
 #if !defined(__MP_T_SWARMITFIX_DEMO_BASE_H)
 #define __MP_T_SWARMITFIX_DEMO_BASE_H
 
-
-#include "boost/lexical_cast.hpp"
 
 #include "base/mp/mp_task.h"
 
@@ -15,135 +21,13 @@
 #include "robot/shead/mp_r_shead2.h"
 #include "robot/sbench/mp_r_sbench.h"
 
+#include "taks_utils.hpp"
+
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
 namespace swarmitfix {
-
-
-struct pin {
-public:
-	/*!
-	 * Pin row.
-	 */
-	unsigned char row;
-
-	/*!
-	 * Pin column.
-	 */
-	unsigned char column;
-
-	/*!
-	 * Default constructor.
-	 */
-	pin() : row(0), column(0)
-		{ }
-
-	/*!
-	 * Sets row and column.
-	 */
-	pin(unsigned char row_, unsigned char column_) : row(row_), column(column_)
-		{ }
-
-	/*!
-	 * Return the pin description in Row (arabic) - Column (roman) form.
-	 */
-	std::string get_name() const {
-		std::stringstream name;
-		name << (int) row;
-		name <<  "-";
-		switch(column){
-			case 1:
-				name << "I";
-				break;
-			case 2:
-				name << "II";
-				break;
-			case 3:
-				name << "III";
-				break;
-			case 4:
-				name << "IV";
-				break;
-			case 5:
-				name << "V";
-				break;
-			case 6:
-				name << "VI";
-				break;
-			case 7:
-				name << "VII";
-				break;
-			default:
-				name << "?";
-				break;
-		}
-		return name.str();
-	}
-
-};
-
-struct leg_rotation {
-public:
-	/*!
-	 * SMB leg.
-	 */
-	unsigned char leg;
-
-	/*!
-	 * SMB leg.
-	 */
-	char rotation;
-
-	/*!
-	 * Default constructor.
-	 */
-	leg_rotation() : leg(0), rotation(0)
-		{ }
-
-	/*!
-	 * Sets row and column.
-	 */
-	leg_rotation(unsigned char leg_, char rotation_) : leg(leg_), rotation(rotation_)
-		{ }
-
-	/*!
-	 * Return the description.
-	 */
-	std::string get_name() const {
-		std::stringstream name;
-		name << (int)leg << " -> " << (int)rotation;
-		return name.str();
-	}
-};
-
-struct power_clean_pose {
-	/*!
-	 * Pin around we rotate (bench enumeration).
-	 */
-	pin rotation_pin;
-
-	/*!
-	 * First pin on which we will stand.
-	 */
-	pin desired_pin1;
-
-	/*!
-	 * Second pin on which we will stand.
-	 */
-	pin desired_pin2;
-
-	/*!
-	 * Rotation performed in order to get to the pose.
-	 */
-	leg_rotation rotation;
-
-	std::string get_name() const {
-		return rotation_pin.get_name() + " | " + desired_pin1.get_name() + " | " + desired_pin2.get_name();
-	}
-
-};
-
 
 
 /** @defgroup swarmitfix swarmitfix
@@ -173,19 +57,26 @@ protected:
 	lib::robot_name_t shead_robot_name;
 
 	/*!
+	 * Sends motor rotation command to SMB in the joint space.
+	 * @param [in] legs_rotation_ Desired absolute rotation around leg (in external values -6, -5, ..., 5, 6).
+	 * @param [in] pkm_rotation_ Desired absolute rotation of the upper SMP by given angle [radians].
+	 */
+	void smb_rotate_external(int legs_rotation_, double pkm_rotation_);
+
+	/*!
 	 * Moves SMB legs in and out.
 	 * @param [in] l1_ Desired position of the leg one (in, out).
 	 * @param [in] l2_ Desired position of the leg two (in, out).
 	 * @param [in] l3_ Desired position of the leg three (in, out).
 	 */
-	void move_smb_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, lib::smb::FESTO_LEG l3_);
+	void smb_pull_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, lib::smb::FESTO_LEG l3_);
 
 	/*!
-	 * Sends motor rotation command to SMB in the joint space.
-	 * @param [in] legs_rotation_ Desired absolute rotation around leg (in external values -6, -5, ..., 5, 6).
-	 * @param [in] pkm_rotation_ Desired absolute rotation of the upper SMP by given angle [radians].
+	 * @brief Stands on given leg (this one stays out, rest goes in).
+	 *
+	 * @param [in] leg_number_ Leg around which the rotation will be performed.
 	 */
-	void move_smb_external(int legs_rotation_, double pkm_rotation_);
+	void smb_stan_on_one_leg(int leg_number_);
 
 	/*!
 	 * @brief Rotates agent around given leg, thus realizes the sequence: pull two legs in, rotate around the third one and pull all legs out.
@@ -218,21 +109,21 @@ protected:
 	 *
 	 * @param [in] motion_variant_ Variant of the motion to be executed (here NON_SYNC_TRAPEZOIDAL, SYNC_TRAPEZOIDAL, OPERATIONAL are available).
 	 */
-	void move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double x_, double y_, double z_, double alpha_, double beta_, double gamma_);
+	void move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, const lib::Xyz_Euler_Zyz_vector & pose_);
 
 	/*!
 	 * @brief Method responsible for supporting the plate in give point and return.
 	 *  The trajectory is acquired though an intermediate pose (the same intermediate pose is considered in both directions).
 	 *
 	 * @author tkornuta
-	 * @param support_* - xyz_zyz of support pose.
-	 * @param inter_* - xyz_zyz of intermediate pose.
+	 * @param support_pose_ - xyz_zyz of support pose.
+	 * @param inter_pose_ - xyz_zyz of intermediate pose.
 	 * @param smb_joint_ - rotation of the SMB (the motor rotating the upper SMB plate).
 	 * @param shead_joint - rotation of the SHEAD.
 	 */
 	void move_to_pose_and_return(
-			double support_pkm_x_, double support_pkm_y_, double support_pkm_z_, double support_pkm_alpha_, double support_pkm_beta_, double support_pkm_gamma_,
-			double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_,
+			const lib::Xyz_Euler_Zyz_vector & support_pose_,
+			const lib::Xyz_Euler_Zyz_vector & inter_pose_,
 			double smb_joint_, double shead_joint_);
 
 	/*!
@@ -248,22 +139,22 @@ protected:
 	/*!
 	 * Controls the bench power (the leg smb is not controlled, thus rotation is simulated).
 	 */
-	void bench_move_to_power_pose(const power_clean_pose & pose_, unsigned int delay_);
+	void bench_execute_power_move(const power_smb_move & move_, unsigned int delay_);
 
 	/*!
 	 * Controls the bench power and cleaning (the leg smb is not controlled, thus rotation is simulated).
 	 */
-	void bench_move_to_power_pose_with_cleaning(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
+	void bench_execute_power_move_with_cleaning(const power_smb_move & move_, unsigned int delay_, unsigned int cleaning_time_);
 
 	/*!
 	 * Controls the bench power with rotation of the smb leg.
 	 */
-	void bench_move_to_power_pose_with_smb(const power_clean_pose & pose_, unsigned int delay_);
+	void smb_execute_power_move(const power_smb_move & move_, unsigned int delay_);
 
 	/*!
 	 * Controls the bench power and cleaning with rotation of the smb leg.
 	 */
-	void bench_move_to_power_pose_with_cleaning_and_smb(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
+	void smb_execute_power_move_with_cleaning(const power_smb_move & move_, unsigned int delay_, unsigned int cleaning_time_);
 
 
 public:
