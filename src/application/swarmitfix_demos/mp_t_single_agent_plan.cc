@@ -78,66 +78,16 @@ void single_agent_demo::executeCommandItem(const Plan::PkmType::ItemType & pkmCm
 
 void single_agent_demo::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd)
 {
-#if 0
-	// Setup command for the mobile base
-	lib::smb::next_state_t cmd_smb(lib::smb::ACTION_LIST);
+	// TODO: Only single-item actions are supported at this time.
+	assert(smbCmd.actions().item().size() == 1);
 
-	std::cerr << "MP: smb" << (unsigned int) smbCmd.agent() << " @" << smbCmd.ind() << " # of actions = " << smbCmd.actions().item().size() << std::endl;
-
-	// Iterate over action sequence
-	BOOST_FOREACH(const Plan::MbaseType::ItemType::ActionsType::ItemType & it, smbCmd.actions().item())
-	{
-		std::cerr << "pin " << it.pin() << std::endl;
-		std::cerr << "dPkmTheta " << it.dPkmTheta() << std::endl;
-
-		// Setup single action
-		lib::smb::action act;
-
-		if(it.pin()) {
-			act.setRotationPin(it.pin());
-			act.setdThetaInd(it.dThetaInd());
-		}
-		// FIXME: this should be not needed anymore
-//		double normalizedPkmTheta = smbCmd.pkmTheta();
-//		while(normalizedPkmTheta > M_PI) normalizedPkmTheta -= 2*M_PI;
-//		while(normalizedPkmTheta < -M_PI) normalizedPkmTheta += 2*M_PI;
-//		act.setdPkmTheta(normalizedPkmTheta);
-
-		// Append action to the command sequence
-		cmd_smb.actions.push_back(act);
+	// Check if robot name match with item.
+	if((smb_robot_name == lib::smb1::ROBOT_NAME && smbCmd.agent() == 1) ||
+		(smb_robot_name == lib::smb2::ROBOT_NAME && smbCmd.agent() == 2)) {
+		// Execute command.
+		smb_rotate_external(0, smbCmd.actions().item().front().dPkmTheta());
+		//move_shead_joints(pkmCmd.beta7());
 	}
-
-	// Setup command for the bench
-	lib::sbench::cbuffer cmd_sbench;
-
-	// Find output buffers
-	IO_t::transmitters_t::smb_t::_outputs::command_t smb_command_buffer;
-	lib::robot_name_t smb_name;
-
-	switch((int) smbCmd.agent()) {
-		case 1:
-			smb_command_buffer = IO.transmitters.smb1.outputs.command;
-			smb_name = lib::smb1::ROBOT_NAME;
-			break;
-		case 2:
-			smb_command_buffer = IO.transmitters.smb2.outputs.command;
-			smb_name = lib::smb2::ROBOT_NAME;
-			break;
-		default:
-			throw std::runtime_error("Unexpected 'agent' in MBASE plan item");
-			break;
-	}
-
-	// Send commands if the output buffers are active
-	if(smb_command_buffer.get()) {
-		smb_command_buffer->Send(cmd_smb);
-		current_workers_status[smb_name] = WorkersStatus::BUSY;
-	}
-	if(IO.transmitters.sbench.outputs.command.get()) {
-		IO.transmitters.sbench.outputs.command->Send(cmd_sbench);
-		current_workers_status[lib::sbench::ROBOT_NAME] = WorkersStatus::BUSY;
-	}
-#endif
 }
 
 single_agent_demo::single_agent_demo(lib::configurator &config_) :
