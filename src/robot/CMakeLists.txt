@@ -6,13 +6,19 @@ add_subdirectory (bird_hand)
 endif(ROBOT_BIRD_HAND)
 
 if(ROBOTS_SWARMITFIX)
-add_subdirectory (shead)
-add_subdirectory (smb)
-add_subdirectory (spkm)
-add_subdirectory (sbench)
-add_subdirectory (canopen)
-add_subdirectory (maxon)
-add_subdirectory (festo)
+    # Hardware interface.
+    add_subdirectory (canopen)
+    add_subdirectory (maxon)
+    add_subdirectory (festo)
+    
+    # Robots for the agents.
+    add_subdirectory (shead)
+    add_subdirectory (smb)
+    add_subdirectory (spkm)
+    
+    if(NOT UBUNTU32BIT)
+        add_subdirectory (sbench)
+    endif(NOT UBUNTU32BIT)
 endif(ROBOTS_SWARMITFIX)
 
 if(ROBOTS_012)
