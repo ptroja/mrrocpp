@@ -105,8 +105,6 @@ void demo_base::move_smb_external(int legs_rotation_, double pkm_rotation_)
 
 	lib::smb::motor_command mp_ecp_smb_epos_simple_command;
 
-	mp_ecp_smb_epos_simple_command.motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
-
 	mp_ecp_smb_epos_simple_command.base_vs_bench_rotation = legs_rotation_;
 	mp_ecp_smb_epos_simple_command.pkm_vs_base_rotation = pkm_rotation_;
 
@@ -179,7 +177,7 @@ void demo_base::control_bench_cleaning(const mrrocpp::lib::sbench::cleaning_stat
 	wait_ms(delay_);
 }
 
-void demo_base::bench_move_to_power_pose(const power_clean_pose & pose_, unsigned int delay_) {
+void demo_base::bench_move_to_power_pose(const bench_pose & pose_, unsigned int delay_) {
 	// Temporary variables.
 	mrrocpp::lib::sbench::power_supply_state power;
 
@@ -199,7 +197,7 @@ void demo_base::bench_move_to_power_pose(const power_clean_pose & pose_, unsigne
 }
 
 
-void demo_base::bench_move_to_power_pose_with_cleaning(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_)
+void demo_base::bench_move_to_power_pose_with_cleaning(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_)
 {
 	// Temporary variables.
 	mrrocpp::lib::sbench::power_supply_state power;
@@ -230,7 +228,7 @@ void demo_base::bench_move_to_power_pose_with_cleaning(const power_clean_pose & 
 	control_bench_power_supply(power, delay_);
 }
 
-void demo_base::bench_move_to_power_pose_with_smb(const power_clean_pose & pose_, unsigned int delay_) {
+void demo_base::bench_move_to_power_pose_with_smb(const bench_pose & pose_, unsigned int delay_) {
 	// Temporary variables.
 	mrrocpp::lib::sbench::power_supply_state power;
 	mrrocpp::lib::sbench::cleaning_state cleaning;
@@ -255,7 +253,7 @@ void demo_base::bench_move_to_power_pose_with_smb(const power_clean_pose & pose_
 	control_bench_power_supply(power, delay_);
 }
 
-void demo_base::bench_move_to_power_pose_with_cleaning_and_smb(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_) {
+void demo_base::bench_move_to_power_pose_with_cleaning_and_smb(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_) {
 	// Temporary variables.
 	mrrocpp::lib::sbench::power_supply_state power;
 	mrrocpp::lib::sbench::cleaning_state cleaning;

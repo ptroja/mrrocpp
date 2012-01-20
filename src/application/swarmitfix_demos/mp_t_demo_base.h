@@ -1,8 +1,14 @@
+/*!
+ * @file mp_t_smb_powered_from_bench_test.h
+ * @brief Class for SMB tests.
+ *
+ * @date Jan 17, 2012
+ * @author tkornuta
+ */
+
 #if !defined(__MP_T_SWARMITFIX_DEMO_BASE_H)
 #define __MP_T_SWARMITFIX_DEMO_BASE_H
 
-
-#include "boost/lexical_cast.hpp"
 
 #include "base/mp/mp_task.h"
 
@@ -15,135 +21,13 @@
 #include "robot/shead/mp_r_shead2.h"
 #include "robot/sbench/mp_r_sbench.h"
 
+#include "taks_utils.hpp"
+
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
 namespace swarmitfix {
-
-
-struct pin {
-public:
-	/*!
-	 * Pin row.
-	 */
-	unsigned char row;
-
-	/*!
-	 * Pin column.
-	 */
-	unsigned char column;
-
-	/*!
-	 * Default constructor.
-	 */
-	pin() : row(0), column(0)
-		{ }
-
-	/*!
-	 * Sets row and column.
-	 */
-	pin(unsigned char row_, unsigned char column_) : row(row_), column(column_)
-		{ }
-
-	/*!
-	 * Return the pin description in Row (arabic) - Column (roman) form.
-	 */
-	std::string get_name() const {
-		std::stringstream name;
-		name << (int) row;
-		name <<  "-";
-		switch(column){
-			case 1:
-				name << "I";
-				break;
-			case 2:
-				name << "II";
-				break;
-			case 3:
-				name << "III";
-				break;
-			case 4:
-				name << "IV";
-				break;
-			case 5:
-				name << "V";
-				break;
-			case 6:
-				name << "VI";
-				break;
-			case 7:
-				name << "VII";
-				break;
-			default:
-				name << "?";
-				break;
-		}
-		return name.str();
-	}
-
-};
-
-struct leg_rotation {
-public:
-	/*!
-	 * SMB leg.
-	 */
-	unsigned char leg;
-
-	/*!
-	 * SMB leg.
-	 */
-	char rotation;
-
-	/*!
-	 * Default constructor.
-	 */
-	leg_rotation() : leg(0), rotation(0)
-		{ }
-
-	/*!
-	 * Sets row and column.
-	 */
-	leg_rotation(unsigned char leg_, char rotation_) : leg(leg_), rotation(rotation_)
-		{ }
-
-	/*!
-	 * Return the description.
-	 */
-	std::string get_name() const {
-		std::stringstream name;
-		name << (int)leg << " -> " << (int)rotation;
-		return name.str();
-	}
-};
-
-struct power_clean_pose {
-	/*!
-	 * Pin around we rotate (bench enumeration).
-	 */
-	pin rotation_pin;
-
-	/*!
-	 * First pin on which we will stand.
-	 */
-	pin desired_pin1;
-
-	/*!
-	 * Second pin on which we will stand.
-	 */
-	pin desired_pin2;
-
-	/*!
-	 * Rotation performed in order to get to the pose.
-	 */
-	leg_rotation rotation;
-
-	std::string get_name() const {
-		return rotation_pin.get_name() + " | " + desired_pin1.get_name() + " | " + desired_pin2.get_name();
-	}
-
-};
-
 
 
 /** @defgroup swarmitfix swarmitfix
@@ -248,22 +132,22 @@ protected:
 	/*!
 	 * Controls the bench power (the leg smb is not controlled, thus rotation is simulated).
 	 */
-	void bench_move_to_power_pose(const power_clean_pose & pose_, unsigned int delay_);
+	void bench_move_to_power_pose(const bench_pose & pose_, unsigned int delay_);
 
 	/*!
 	 * Controls the bench power and cleaning (the leg smb is not controlled, thus rotation is simulated).
 	 */
-	void bench_move_to_power_pose_with_cleaning(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
+	void bench_move_to_power_pose_with_cleaning(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
 
 	/*!
 	 * Controls the bench power with rotation of the smb leg.
 	 */
-	void bench_move_to_power_pose_with_smb(const power_clean_pose & pose_, unsigned int delay_);
+	void bench_move_to_power_pose_with_smb(const bench_pose & pose_, unsigned int delay_);
 
 	/*!
 	 * Controls the bench power and cleaning with rotation of the smb leg.
 	 */
-	void bench_move_to_power_pose_with_cleaning_and_smb(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
+	void bench_move_to_power_pose_with_cleaning_and_smb(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
 
 
 public:

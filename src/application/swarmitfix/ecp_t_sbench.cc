@@ -30,17 +30,18 @@ void swarmitfix::main_task_algorithm(void)
 
 	if (0) {
 		// Setup initial pin state
-		lib::sbench::voltage_buffer pins;
+		lib::sbench::power_supply_state pins;
 
 		// Generator to execute the command
-		generator::pin_config g_pin_setup(*this, pins);
+		generator::power_supply power(*this, pins);
 
 		// Command the robot
-		g_pin_setup.Move();
+		power.Move();
 	}
 
 	// Generator to change state of the pins
-	generator::pin_config g_pin_config(*this, nextstateBuffer.access);
+	generator::power_supply power(*this, nextstateBuffer.access.voltage_buf);
+	generator::cleaning clean(*this, nextstateBuffer.access.preasure_buf);
 
 	// Loop execution coordinator's commands
 	while(true) {
@@ -54,7 +55,18 @@ void swarmitfix::main_task_algorithm(void)
 			nextstateBuffer.markAsUsed();
 
 			// Dispatch to the generator
-			g_pin_config.Move();
+			switch(nextstateBuffer.access.variant) {
+				case lib::sbench::POWER_SUPPLY:
+					power.Move();
+					break;
+				case lib::sbench::CLEANING:
+					clean.Move();
+					break;
+				default:
+					// This should not happend.
+					throw std::runtime_error("Unknown bench command variant");
+			}
+
 
 		} catch (const std::exception & e) {
 			// Report problem...

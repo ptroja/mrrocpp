@@ -27,7 +27,7 @@ protected:
 	/**
 	 * Input buffer for MP commands
 	 */
-	lib::agent::InputBuffer<lib::sbench::voltage_buffer> nextstateBuffer;
+	lib::agent::InputBuffer<lib::sbench::cbuffer> nextstateBuffer;
 
 	/**
 	 * Output buffer for MP notifications

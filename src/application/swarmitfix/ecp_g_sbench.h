@@ -17,11 +17,11 @@ namespace ecp {
 namespace sbench {
 namespace generator {
 
-class pin_config : public common::generator::_generator<ecp::sbench::robot>
+class power_supply : public common::generator::_generator<ecp::sbench::robot>
 {
 public:
 	//! Constructor
-	pin_config(task_t & _ecp_task, const lib::sbench::voltage_buffer & _pins_buffer);
+	power_supply(task_t & _ecp_task, const lib::sbench::power_supply_state & _pins_buffer);
 
 	//! first step generation
 	bool first_step();
@@ -31,7 +31,25 @@ public:
 
 private:
 	//! Pin configuration
-	const lib::sbench::voltage_buffer & pin_configuration;
+	const lib::sbench::power_supply_state & pin_configuration;
+};
+
+
+class cleaning : public common::generator::_generator<ecp::sbench::robot>
+{
+public:
+	//! Constructor
+	cleaning(task_t & _ecp_task, const lib::sbench::cleaning_state & _pins_buffer);
+
+	//! first step generation
+	bool first_step();
+
+	//! next step generation
+	bool next_step();
+
+private:
+	//! Pin configuration
+	const lib::sbench::cleaning_state & pin_configuration;
 };
 
 } // namespace generator
