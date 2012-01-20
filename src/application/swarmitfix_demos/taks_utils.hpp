@@ -90,11 +90,11 @@ public:
 	/*!
 	 * Initializes the start and final poses, as well as the leg rotation. Sets the rotation pin.
 	 */
-	power_smb_move(lib::sbench::bench_pose start_pose_, lib::sbench::bench_pose final_pose_, pkm_leg_rotation rotation_leg_) :
+	power_smb_move(const lib::sbench::bench_pose & start_pose_, const lib::sbench::bench_pose & final_pose_, const pkm_leg_rotation & rotation_leg_) :
 			start_pose(start_pose_), final_pose(final_pose_), rotation_leg(rotation_leg_)
 	{
 		// Find rotation pin.
-		find_rotation_pin();
+		validate_rotation_pin();
 	}
 
 	/*!
@@ -110,11 +110,10 @@ public:
 
 private:
 	/*
-	 * Finds rotation pin.
+	 * Validates rotation pin.
 	 */
-	void find_rotation_pin()
+	void validate_rotation_pin()
 	{
-#if 1
 		// Compare start and final pose pins, taking into consideration the leg that we are going to rotate around.
 		// Assure that the pin was found.
 		if ((final_pose.pins[rotation_leg.leg - 1].column != start_pose.pins[rotation_leg.leg - 1].column)
@@ -124,24 +123,6 @@ private:
 		}
 		// Rotation pin found.
 		rotation_pin = start_pose.pins[rotation_leg.leg - 1];
-#else
-		bool found = false;
-		// Compare start and final pose pins.
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				if ((start_pose.pins[i].column == final_pose.pins[j].column)
-						&& (start_pose.pins[i].row == final_pose.pins[j].row)) {
-					rotation_pin = start_pose.pins[i];
-					found = true;
-					break;
-				}
-			} //: for
-		} //: for
-		if (!found) {
-			std::cerr << get_description() << std::endl;
-		}
-		assert(found);
-#endif
 	}
 };
 

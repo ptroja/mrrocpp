@@ -69,6 +69,7 @@ void agent1_demo::create_robots()
 	} else {
 		ACTIVATE_MP_ROBOT(shead2)
 	}
+
 	// Activate the SBENCH robot.
 	ACTIVATE_MP_ROBOT(sbench)
 }
@@ -101,10 +102,10 @@ void agent1_demo::main_task_algorithm(void)
 	pose3.pins[2] = pin(5, 3);
 
 	// Power trajectory.
-	power_smb_move move1 = power_smb_move(pose1, pose2, pkm_leg_rotation(1, 1));
-	power_smb_move move2 = power_smb_move(pose2, pose3, pkm_leg_rotation(3, 3));
-	power_smb_move move3 = power_smb_move(pose3, pose2, pkm_leg_rotation(3, -3));
-	power_smb_move move4 = power_smb_move(pose2, pose1, pkm_leg_rotation(1, -1));
+	power_smb_move move1(pose1, pose2, pkm_leg_rotation(1, 1));
+	power_smb_move move2(pose2, pose3, pkm_leg_rotation(3, 3));
+	power_smb_move move3(pose3, pose2, pkm_leg_rotation(3, -3));
+	power_smb_move move4(pose2, pose1, pkm_leg_rotation(1, -1));
 
 	// Support poses.
 	/*
@@ -112,7 +113,7 @@ void agent1_demo::main_task_algorithm(void)
 	 tool:  -0.1412 -0.035 0.5768 3.1416 0.137 0
 	 wrist: 0.15 -0.035 0.405 0 -0.92 0
 	 */
-	lib::Xyz_Euler_Zyz_vector neutral_pose = lib::Xyz_Euler_Zyz_vector(0.15, -0.035, 0.405, 0, -0.92, 0);
+	lib::Xyz_Euler_Zyz_vector neutral_pose(0.15, -0.035, 0.405, 0, -0.92, 0);
 
 	/*
 	 Podparcie nr 1: smb rot = 1
@@ -123,8 +124,8 @@ void agent1_demo::main_task_algorithm(void)
 	 tool:  -0.33 0 0.59 3.1416 0.02 0
 	 wrist: -0.0609 0 0.3853 0 -0.803 0
 	 */
-	lib::Xyz_Euler_Zyz_vector support_pose1 = lib::Xyz_Euler_Zyz_vector(-0.0693, 0, 0.4097, 0, -0.763, -0.03);
-	lib::Xyz_Euler_Zyz_vector inter_pose1 = lib::Xyz_Euler_Zyz_vector(-0.0609, 0, 0.3853, 0, -0.803, 0);
+	lib::Xyz_Euler_Zyz_vector support_pose1(-0.0693, 0, 0.4097, 0, -0.763, -0.03);
+	lib::Xyz_Euler_Zyz_vector inter_pose1(-0.0609, 0, 0.3853, 0, -0.803, 0);
 
 	/*
 	 Podparcie 2: smb rot = 0, legs out
@@ -135,8 +136,8 @@ void agent1_demo::main_task_algorithm(void)
 	 tool:  -0.2919 0 0.6 -3.1416 0 0
 	 wrist: -0.0269 0 0.39 0 -0.783 0
 	 */
-	lib::Xyz_Euler_Zyz_vector support_pose2 = lib::Xyz_Euler_Zyz_vector(-0.0333, 0, 0.4081, 0, -0.753, 0);
-	lib::Xyz_Euler_Zyz_vector inter_pose2 = lib::Xyz_Euler_Zyz_vector(-0.0269, 0, 0.39, 0, -0.783, 0);
+	lib::Xyz_Euler_Zyz_vector support_pose2(-0.0333, 0, 0.4081, 0, -0.753, 0);
+	lib::Xyz_Euler_Zyz_vector inter_pose2(-0.0269, 0, 0.39, 0, -0.783, 0);
 
 	/*
 	 Podparcie nr 3: smb rot = -1
@@ -147,8 +148,8 @@ void agent1_demo::main_task_algorithm(void)
 	 tool:  -0.3691 0 0.5847 3.1416 0.02 0
 	 wrist: -0.1 0 0.38 0 -0.803 0
 	 */
-	lib::Xyz_Euler_Zyz_vector support_pose3 = lib::Xyz_Euler_Zyz_vector(-0.1149, 0, 0.404, 0, -0.733, 0);
-	lib::Xyz_Euler_Zyz_vector inter_pose3 = lib::Xyz_Euler_Zyz_vector(-0.1, 0, 0.38, 0, -0.803, 0);
+	lib::Xyz_Euler_Zyz_vector support_pose3(-0.1149, 0, 0.404, 0, -0.733, 0);
+	lib::Xyz_Euler_Zyz_vector inter_pose3(-0.1, 0, 0.38, 0, -0.803, 0);
 
 	// Pull out all legs.
 //	smb_pull_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
