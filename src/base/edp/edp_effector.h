@@ -55,7 +55,7 @@ protected:
 	 * IT also makes initial ECP command interpretation.
 	 */
 	template <typename ROBOT_COMMAND_T>
-	lib::INSTRUCTION_TYPE receive_instruction(ROBOT_COMMAND_T & instruction)
+	lib::INSTRUCTION_TYPE receive_instruction(ROBOT_COMMAND_T & instruction_)
 	{
 		// oczekuje na polecenie od ECP, wczytuje je oraz zwraca jego typ
 		int rcvid;
@@ -86,7 +86,7 @@ protected:
 
 		caller = rcvid;
 
-		instruction = new_ecp_command;
+		instruction_ = new_ecp_command;
 		//	if ((instruction.instruction_type == lib::SET) || (instruction.instruction_type == lib::SET_GET)) {
 
 		//	std::cout << "edp effector: " << instruction.instruction_type << "\n";
@@ -94,7 +94,7 @@ protected:
 		instruction_deserialization();
 		//	}
 
-		return instruction.instruction_type;
+		return instruction_.instruction_type;
 	}
 
 	/*!

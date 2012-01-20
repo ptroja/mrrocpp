@@ -1151,7 +1151,7 @@ p, li { white-space: pre-wrap; }
                   </size>
                  </property>
                  <property name="text">
-                  <string>&lt;</string>
+                  <string>-</string>
                  </property>
                 </widget>
                </item>
@@ -1180,7 +1180,7 @@ p, li { white-space: pre-wrap; }
                   </size>
                  </property>
                  <property name="text">
-                  <string>&gt;</string>
+                  <string>+</string>
                  </property>
                 </widget>
                </item>

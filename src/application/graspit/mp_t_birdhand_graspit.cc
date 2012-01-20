@@ -119,8 +119,8 @@ void graspit::main_task_algorithm(void)
 		// TODO: throw
 	}
 
-	char tmp_string1[lib::MP_2_ECP_STRING_SIZE];
-	char tmp_string2[lib::MP_2_ECP_STRING_SIZE];
+	char tmp_string1[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
+	char tmp_string2[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
 
 	struct _irp6
 	{

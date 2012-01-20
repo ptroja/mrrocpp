@@ -92,7 +92,7 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	// sekwencja generator na wybranym chwytaku
 
-	char tmp_string[lib::MP_2_ECP_STRING_SIZE];
+	char tmp_string[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
 
 	lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
 

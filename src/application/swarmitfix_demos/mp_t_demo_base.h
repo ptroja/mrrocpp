@@ -1,23 +1,37 @@
+/*!
+ * @file mp_t_smb_powered_from_bench_test.h
+ * @brief Class for SMB tests.
+ *
+ * @date Jan 17, 2012
+ * @author tkornuta
+ */
+
 #if !defined(__MP_T_SWARMITFIX_DEMO_BASE_H)
 #define __MP_T_SWARMITFIX_DEMO_BASE_H
 
 
 #include "base/mp/mp_task.h"
 
+// MP robot classes.
 #include "robot/spkm/mp_r_spkm1.h"
 #include "robot/spkm/mp_r_spkm2.h"
 #include "robot/smb/mp_r_smb1.h"
 #include "robot/smb/mp_r_smb2.h"
 #include "robot/shead/mp_r_shead1.h"
 #include "robot/shead/mp_r_shead2.h"
+#include "robot/sbench/mp_r_sbench.h"
+
+#include "taks_utils.hpp"
+
 
 namespace mrrocpp {
 namespace mp {
 namespace task {
+namespace swarmitfix {
+
 
 /** @defgroup swarmitfix swarmitfix
  *  @ingroup application
- *  A swarmitfix demo base class.
  *  @{
  */
 
@@ -29,7 +43,7 @@ namespace task {
  * @author tkornuta <tkornuta@ia.pw.edu.pl>, Warsaw University of Technology
  * @date Jan 17, 2012
  */
-class swarmitfix_demo_base : public mrrocpp::mp::task::task
+class demo_base : public mrrocpp::mp::task::task
 {
 
 protected:
@@ -105,16 +119,48 @@ protected:
 			double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_,
 			double smb_joint_, double shead_joint_);
 
+	/*!
+	 * Controls the bench power supply.
+	 */
+	void control_bench_power_supply(const mrrocpp::lib::sbench::power_supply_state & ps_, int delay_);
+
+	/*!
+	 * Controls the bench cleaning.
+	 */
+	void control_bench_cleaning(const mrrocpp::lib::sbench::cleaning_state & cs_, int delay_);
+
+	/*!
+	 * Controls the bench power (the leg smb is not controlled, thus rotation is simulated).
+	 */
+	void bench_move_to_power_pose(const power_clean_pose & pose_, unsigned int delay_);
+
+	/*!
+	 * Controls the bench power and cleaning (the leg smb is not controlled, thus rotation is simulated).
+	 */
+	void bench_move_to_power_pose_with_cleaning(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
+
+	/*!
+	 * Controls the bench power with rotation of the smb leg.
+	 */
+	void bench_move_to_power_pose_with_smb(const power_clean_pose & pose_, unsigned int delay_);
+
+	/*!
+	 * Controls the bench power and cleaning with rotation of the smb leg.
+	 */
+	void bench_move_to_power_pose_with_cleaning_and_smb(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
+
+
 public:
 	//! Calls the base class constructor.
-	swarmitfix_demo_base(lib::configurator &config_);
+	demo_base(lib::configurator &config_);
 
 	//! Empty.
-	virtual ~swarmitfix_demo_base() { }
+	virtual ~demo_base() { }
 
 };
 
 /** @} */ // end of swarmitfix
+} /* namespace swarmitfix */
 }// namespace task
 } // namespace mp
 } // namespace mrrocpp
