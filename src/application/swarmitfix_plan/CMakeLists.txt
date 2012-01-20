@@ -7,12 +7,12 @@ XSD_SCHEMA( PLAN_SRCS plan.xsd --type-naming ucc --root-element plan --generate-
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}) # for the "plan.hxx"
 
-add_library(plan ${PLAN_SRCS})
-target_link_libraries(plan ${XERCES_LIBRARIES})
+add_library(plan ${PLAN_SRCS} plan_iface.cc)
+target_link_libraries(plan ${XERCES_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY})
 
 add_executable(plantest ParsePlan.cc)
 
-target_link_libraries(plantest plan ${Boost_THREAD_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} mrrocpp)
+target_link_libraries(plantest plan mrrocpp)
 
 endif(XSD_FOUND AND XERCES_FOUND)
 
