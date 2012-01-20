@@ -6,12 +6,10 @@
  * @author tkornuta
  */
 
-#ifndef PLAN_HPP_
-#define PLAN_HPP_
+#ifndef TASK_UTILS_HPP_
+#define TASK_UTILS_HPP_
 
 #include "robot/sbench/dp_sbench.h"
-
-using namespace mrrocpp::lib::sbench;
 
 /*!
  * @brief Stores data related to rotation of PKM around the leg.
@@ -66,12 +64,12 @@ public:
 	/*!
 	 * Start pose of the agent on the bench.
 	 */
-	bench_pose start_pose;
+	lib::sbench::bench_pose start_pose;
 
 	/*!
 	 * Final pose of the agent on the bench.
 	 */
-	bench_pose final_pose;
+	lib::sbench::bench_pose final_pose;
 
 	/*!
 	 * Rotation performed by PKM around given leg in order to get to the final pose.
@@ -82,7 +80,7 @@ public:
 	 * Pin used in both start and final poses - the one will be powered during rotation.
 	 * It is computed automatically during the object construction.
 	 */
-	pin rotation_pin;
+	lib::sbench::pin rotation_pin;
 
 	/*!
 	 * Default constructor.
@@ -92,7 +90,7 @@ public:
 	/*!
 	 * Initializes the start and final poses, as well as the leg rotation. Sets the rotation pin.
 	 */
-	power_smb_move(bench_pose start_pose_, bench_pose final_pose_, pkm_leg_rotation rotation_leg_) :
+	power_smb_move(lib::sbench::bench_pose start_pose_, lib::sbench::bench_pose final_pose_, pkm_leg_rotation rotation_leg_) :
 			start_pose(start_pose_), final_pose(final_pose_), rotation_leg(rotation_leg_)
 	{
 		// Find rotation pin.
@@ -147,4 +145,4 @@ private:
 	}
 };
 
-#endif /* PLAN_HPP_ */
+#endif /* TASK_UTILS_HPP_ */

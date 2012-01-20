@@ -10,6 +10,8 @@
 #include <cstdio>
 #include <unistd.h>
 
+#include <boost/thread/thread.hpp>
+
 #include "RemoteAgent.h"
 
 #include "../messip/messip.h"
@@ -50,7 +52,7 @@ RemoteAgent::RemoteAgent(const std::string & _name) :
 
 	while ((channel = messip::port_connect(_name)) == NULL) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			usleep(lib::CONNECT_DELAY);
+			boost::this_thread::sleep(lib::CONNECT_DELAY);
 		} else {
 			fprintf(stderr, "Connect to failed at channel '%s'\n", _name.c_str());
 			throw std::runtime_error("Connect to remote agent failed");

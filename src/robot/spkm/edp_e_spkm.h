@@ -132,6 +132,11 @@ public:
 	void disable_moog_motor();
 
 	/*!
+	 * @brief Disable brake of the MOOG motor.
+	 */
+	void enable_moog_brake(bool state);
+
+	/*!
 	 * @brief method to create threads other then EDP master thread.
 	 *
 	 * Here there is only one extra thread - reader_thread.

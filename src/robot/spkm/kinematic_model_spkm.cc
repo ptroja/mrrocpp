@@ -136,7 +136,7 @@ void kinematic_model_spkm::mp2i_transform(const lib::MotorArray & local_current_
 }
 
 
-void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix& local_desired_end_effector_frame)
+void kinematic_model_spkm::inverse_kinematics_transform(lib::JointArray & local_desired_joints, const lib::JointArray & local_current_joints, const lib::Homog_matrix & local_desired_end_effector_frame)
 {
 	// Transform Homog_matrix to Matrix4d.
 	Homog4d O_W_T_desired;

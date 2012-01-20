@@ -75,6 +75,8 @@ void agent1_demo::create_robots()
 
 void agent1_demo::main_task_algorithm(void)
 {
+	using namespace mrrocpp::lib::sbench;
+
 	sr_ecp_msg->message("smb_powered_from_bench_test::main_task_algorithm");
 	int mode = config.value <int>("mode");
 	unsigned int delay = config.value <unsigned int>("delay");

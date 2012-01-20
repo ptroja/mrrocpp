@@ -371,10 +371,10 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 							}
 
 					// Reset nodes right after.
-					legs_rotation_node->reset();
+					legs_rotation_node->enable();
 					// Reset pkm only if enabled.
 					if (!pkm_rotation_disabled)
-						pkm_rotation_node->reset();
+						pkm_rotation_node->enable();
 				} //: !test_mode
 				break;
 

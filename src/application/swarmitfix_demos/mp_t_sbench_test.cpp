@@ -54,6 +54,8 @@ void sbench_test::create_robots()
 
 void sbench_test::main_task_algorithm(void)
 {
+	using namespace mrrocpp::lib::sbench;
+
 	sr_ecp_msg->message("sbench_test::main_task_algorithm");
 
 	int mode = config.value <int>("mode");

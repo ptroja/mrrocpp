@@ -18,6 +18,7 @@
 
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/thread/thread.hpp>
 
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
@@ -50,7 +51,7 @@ task::task(lib::configurator &_config) :
 
 	while ((UI_fd = messip::port_connect(ui_net_attach_point)) == NULL) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			usleep(lib::CONNECT_DELAY);
+			boost::this_thread::sleep(lib::CONNECT_DELAY);
 		} else {
 			int e = errno;
 			perror("Connect to UI failed");

@@ -11,6 +11,7 @@
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
+#include <boost/thread/thread.hpp>
 
 #include "wgt_robot_process_control.h"
 #include "menu_bar.h"
@@ -259,7 +260,7 @@ void UiRobot::connect_to_reader()
 
 	while ((state.edp.reader_fd = messip::port_connect(state.edp.network_reader_attach_point)) == lib::invalid_fd) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			usleep(lib::CONNECT_DELAY);
+			boost::this_thread::sleep(lib::CONNECT_DELAY);
 		} else {
 			perror("blad odwolania do READER");
 			break;
@@ -320,7 +321,7 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 		if (errno == EINTR)
 			break;
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			usleep(lib::CONNECT_DELAY);
+			boost::this_thread::sleep(lib::CONNECT_DELAY);
 		} else {
 			perror("blad odwolania do ECP_TRIGGER");
 		}
