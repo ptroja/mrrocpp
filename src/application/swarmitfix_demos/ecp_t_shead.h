@@ -21,7 +21,7 @@ protected:
 //! Stop the robot in case of emergency
 //	boost::shared_ptr <generator::shead_quickstop> g_quickstop;
 
-	generator::joint_epos_command* g_joint_epos_command;
+	generator::rotation_command* g_joint_epos_command;
 
 public:
 	//! Constructor
