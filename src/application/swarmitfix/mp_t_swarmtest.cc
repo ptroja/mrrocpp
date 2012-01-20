@@ -150,7 +150,7 @@ void swarmitfix::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, IO
 	}
 
 	// Setup command for the bench
-	lib::sbench::voltage_buffer cmd_sbench;
+	lib::sbench::cbuffer cmd_sbench;
 
 	// Find output buffers
 	IO_t::transmitters_t::smb_t::_outputs::command_t smb_command_buffer;

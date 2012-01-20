@@ -132,22 +132,22 @@ protected:
 	/*!
 	 * Controls the bench power (the leg smb is not controlled, thus rotation is simulated).
 	 */
-	void bench_move_to_power_pose(const power_clean_pose & pose_, unsigned int delay_);
+	void bench_move_to_power_pose(const bench_pose & pose_, unsigned int delay_);
 
 	/*!
 	 * Controls the bench power and cleaning (the leg smb is not controlled, thus rotation is simulated).
 	 */
-	void bench_move_to_power_pose_with_cleaning(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
+	void bench_move_to_power_pose_with_cleaning(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
 
 	/*!
 	 * Controls the bench power with rotation of the smb leg.
 	 */
-	void bench_move_to_power_pose_with_smb(const power_clean_pose & pose_, unsigned int delay_);
+	void bench_move_to_power_pose_with_smb(const bench_pose & pose_, unsigned int delay_);
 
 	/*!
 	 * Controls the bench power and cleaning with rotation of the smb leg.
 	 */
-	void bench_move_to_power_pose_with_cleaning_and_smb(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
+	void bench_move_to_power_pose_with_cleaning_and_smb(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_);
 
 
 public:

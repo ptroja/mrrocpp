@@ -177,7 +177,7 @@ void demo_base::control_bench_cleaning(const mrrocpp::lib::sbench::cleaning_stat
 	wait_ms(delay_);
 }
 
-void demo_base::bench_move_to_power_pose(const power_clean_pose & pose_, unsigned int delay_) {
+void demo_base::bench_move_to_power_pose(const bench_pose & pose_, unsigned int delay_) {
 	// Temporary variables.
 	mrrocpp::lib::sbench::power_supply_state power;
 
@@ -197,7 +197,7 @@ void demo_base::bench_move_to_power_pose(const power_clean_pose & pose_, unsigne
 }
 
 
-void demo_base::bench_move_to_power_pose_with_cleaning(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_)
+void demo_base::bench_move_to_power_pose_with_cleaning(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_)
 {
 	// Temporary variables.
 	mrrocpp::lib::sbench::power_supply_state power;
@@ -228,7 +228,7 @@ void demo_base::bench_move_to_power_pose_with_cleaning(const power_clean_pose & 
 	control_bench_power_supply(power, delay_);
 }
 
-void demo_base::bench_move_to_power_pose_with_smb(const power_clean_pose & pose_, unsigned int delay_) {
+void demo_base::bench_move_to_power_pose_with_smb(const bench_pose & pose_, unsigned int delay_) {
 	// Temporary variables.
 	mrrocpp::lib::sbench::power_supply_state power;
 	mrrocpp::lib::sbench::cleaning_state cleaning;
@@ -253,7 +253,7 @@ void demo_base::bench_move_to_power_pose_with_smb(const power_clean_pose & pose_
 	control_bench_power_supply(power, delay_);
 }
 
-void demo_base::bench_move_to_power_pose_with_cleaning_and_smb(const power_clean_pose & pose_, unsigned int delay_, unsigned int cleaning_time_) {
+void demo_base::bench_move_to_power_pose_with_cleaning_and_smb(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_) {
 	// Temporary variables.
 	mrrocpp::lib::sbench::power_supply_state power;
 	mrrocpp::lib::sbench::cleaning_state cleaning;

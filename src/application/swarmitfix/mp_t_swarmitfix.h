@@ -111,7 +111,7 @@ typedef struct _IO {
 			//! Output buffers
 			struct _outputs {
 				//! Data type of output buffer
-				typedef OutputPtr<lib::sbench::voltage_buffer> command_t;
+				typedef OutputPtr<lib::sbench::cbuffer> command_t;
 
 				//! OutputBuffer: Command to execute
 				command_t command;

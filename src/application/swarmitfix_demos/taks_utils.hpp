@@ -114,8 +114,10 @@ public:
 	}
 };
 
-
-struct power_clean_pose {
+/*!
+ * Pose of the agent on a bench (location of three pins).
+ */
+struct bench_pose {
 	/*!
 	 * Pin around we rotate (bench enumeration).
 	 */
