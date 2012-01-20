@@ -22,6 +22,27 @@ namespace swarmitfix {
 sbench_test::sbench_test(lib::configurator &config_) :
 		demo_base(config_)
 {
+	int mode = config.value <int> ("mode");
+	switch (mode){
+		default:
+			// Set "reset" mode as default.
+		case 0:
+			sr_ecp_msg->message("RESET BOTH POWER SUPPLY AND CLEANING");
+			break;
+		case 1:
+			sr_ecp_msg->message("PIN POWER MOVE");
+			break;
+		case 2:
+			sr_ecp_msg->message("CLEANING MOVE");
+			break;
+		case 3:
+			sr_ecp_msg->message("POWER MOVE!");
+			break;
+		case 4:
+			sr_ecp_msg->message("POWER MOVE! WITH CLEANING");
+			break;
+	}//: switch
+
 }
 
 void sbench_test::create_robots()
@@ -43,26 +64,30 @@ void sbench_test::main_task_algorithm(void)
 	mrrocpp::lib::sbench::power_supply_state ps;
 	mrrocpp::lib::sbench::cleaning_state cs;
 
-	// 1st (and also 5th) pose.
+	// 1st pose.
 	bench_pose pose1;
-	pose1.rotation_pin = pin(4, 4);
-	pose1.desired_pin1 = pin(3, 3);
-	pose1.desired_pin2 = pin(4, 3);
+	pose1.pins[0] = pin(4, 4);
+	pose1.pins[1] = pin(3, 3);
+	pose1.pins[2] = pin(4, 3);
+
 	// 2nd pose.
 	bench_pose pose2;
-	pose2.rotation_pin = pin(4, 4);
-	pose2.desired_pin1 = pin(4, 3);
-	pose2.desired_pin2 = pin(5, 3);
+	pose2.pins[0] = pin(4, 4);
+	pose2.pins[1] = pin(4, 3);
+	pose2.pins[2] = pin(5, 3);
+
 	// 3rd pose.
 	bench_pose pose3;
-	pose3.rotation_pin = pin(5, 3);
-	pose3.desired_pin1 = pin(6, 3);
-	pose3.desired_pin2 = pin(6, 4);
-	// 4th pose.
-	bench_pose pose4;
-	pose4.rotation_pin = pin(5, 3);
-	pose4.desired_pin1 = pin(4, 3);
-	pose4.desired_pin2 = pin(4, 4);
+	pose3.pins[0] = pin(6, 3);
+	pose3.pins[1] = pin(6, 4);
+	pose3.pins[2] = pin(5, 3);
+
+	// Power trajectory.
+	power_smb_move move1 = power_smb_move(pose1, pose2, pkm_leg_rotation(1, 1));
+	power_smb_move move2 = power_smb_move(pose2, pose3, pkm_leg_rotation(3, 3));
+	power_smb_move move3 = power_smb_move(pose3, pose2, pkm_leg_rotation(3, -3));
+	power_smb_move move4 = power_smb_move(pose2, pose1, pkm_leg_rotation(1, -1));
+
 
 	// Work depending on the mode.
 	switch (mode)
@@ -75,7 +100,7 @@ void sbench_test::main_task_algorithm(void)
 			control_bench_cleaning(cs, delay);
 			break;
 		case 1:
-			sr_ecp_msg->message("POWER SUPPLY");
+			sr_ecp_msg->message("PIN POWER MOVE");
 			while (true) {
 				// Power supply.
 				ps.set_off(1, 3);
@@ -92,7 +117,7 @@ void sbench_test::main_task_algorithm(void)
 			}
 			break;
 		case 2:
-			sr_ecp_msg->message("CLEANING");
+			sr_ecp_msg->message("CLEANING MOVE");
 			while (true) {
 				// Cleaning.
 				cs.set_on(1, 1);
@@ -112,33 +137,33 @@ void sbench_test::main_task_algorithm(void)
 			}
 			break;
 		case 3:
-			sr_ecp_msg->message("POWER TRAJECTORY");
-			// Turn power on the 1st power pose.
-			sr_ecp_msg->message(pose1.get_name());
-			ps.set_on(pose1.rotation_pin.row, pose1.rotation_pin.row);
-			ps.set_on(pose1.desired_pin1.row, pose1.desired_pin1.row);
-			ps.set_on(pose1.desired_pin2.row, pose1.desired_pin2.row);
+			sr_ecp_msg->message("POWER MOVE!");
+			// Turn power on 1st pose pins.
+			sr_ecp_msg->message(pose1.get_description());
+			ps.set_on(pose1);
 			while (true) {
-				bench_move_to_power_pose(pose2, delay);
-				bench_move_to_power_pose(pose3, delay);
-				bench_move_to_power_pose(pose4, delay);
-				bench_move_to_power_pose(pose1, delay);
+				bench_execute_power_move(move1, delay);
+				bench_execute_power_move(move2, delay);
+				bench_execute_power_move(move3, delay);
+				bench_execute_power_move(move4, delay);
+				sr_ecp_msg->message("Finished - waiting for 3s");
+				wait_ms(3000);
 			}
 			break;
 		case 4:
-			sr_ecp_msg->message("POWER TRAJECTORY WITH CLEANING");
+			sr_ecp_msg->message("POWER MOVE! WITH CLEANING");
 			// Turn power on the 1st power pose.
-			sr_ecp_msg->message(pose1.get_name());
-			ps.set_on(pose1.rotation_pin.row, pose1.rotation_pin.row);
-			ps.set_on(pose1.desired_pin1.row, pose1.desired_pin1.row);
-			ps.set_on(pose1.desired_pin2.row, pose1.desired_pin2.row);
-			control_bench_power_supply(ps, delay);
+			sr_ecp_msg->message(pose1.get_description());
+			sr_ecp_msg->message(pose1.get_description());
+			ps.set_on(pose1);
 			// Move.
 			while (true) {
-				bench_move_to_power_pose_with_cleaning(pose2, delay, cleaning_time);
-				bench_move_to_power_pose_with_cleaning(pose3, delay, cleaning_time);
-				bench_move_to_power_pose_with_cleaning(pose4, delay, cleaning_time);
-				bench_move_to_power_pose_with_cleaning(pose1, delay, cleaning_time);
+				bench_execute_power_move_with_cleaning(move1, delay, cleaning_time);
+				bench_execute_power_move_with_cleaning(move2, delay, cleaning_time);
+				bench_execute_power_move_with_cleaning(move3, delay, cleaning_time);
+				bench_execute_power_move_with_cleaning(move4, delay, cleaning_time);
+				sr_ecp_msg->message("Finished - waiting for 3s");
+				wait_ms(3000);
 			}
 			break;
 	} //: switch

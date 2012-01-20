@@ -30,42 +30,48 @@ demo_base::demo_base(lib::configurator &config_) :
 
 }
 
-void demo_base::rotate_smb(int leg_number_, int rotation_)
-{
-	sr_ecp_msg->message("demo_base::rotate_smb");
-
+void demo_base::smb_stan_on_one_leg(int leg_number_) {
+	sr_ecp_msg->message("demo_base::smb_stan_on_the_leg");
 	// Pull all legs in except the one around which the rotation_ will be performed.
 	switch (leg_number_)
 	{
 		case 1:
 			sr_ecp_msg->message("demo_base::rotate_smb: OUT, IN, IN");
-			move_smb_legs(lib::smb::OUT, lib::smb::IN, lib::smb::IN);
+			smb_pull_legs(lib::smb::OUT, lib::smb::IN, lib::smb::IN);
 			break;
 		case 2:
 			sr_ecp_msg->message("demo_base::rotate_smb: IN, OUT, IN");
-			move_smb_legs(lib::smb::IN, lib::smb::OUT, lib::smb::IN);
+			smb_pull_legs(lib::smb::IN, lib::smb::OUT, lib::smb::IN);
 			break;
 		case 3:
 			sr_ecp_msg->message("demo_base::rotate_smb: IN, IN, OUT");
-			move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::OUT);
+			smb_pull_legs(lib::smb::IN, lib::smb::IN, lib::smb::OUT);
 			break;
 		default:
 			break;
 	}
+}
+
+void demo_base::rotate_smb(int leg_number_, int rotation_)
+{
+	sr_ecp_msg->message("demo_base::rotate_smb");
+
+	// Stand on one leg.
+	smb_stan_on_one_leg(leg_number_);
 
 	// Rotate around the leg - the SPKM rotation is set to zero.
-	move_smb_external(rotation_, 0);
+	smb_rotate_external(rotation_, 0);
 
 	// Pull all legs out.
 	sr_ecp_msg->message("demo_base::rotate_smb: OUT, OUT, OUT");
-	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+	smb_pull_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 }
 
 
 void demo_base::move_to_pose_and_return(double support_pkm_x_, double support_pkm_y_, double support_pkm_z_, double support_pkm_alpha_, double support_pkm_beta_, double support_pkm_gamma_, double inter_pkm_x_, double inter_pkm_y_, double inter_pkm_z_, double inter_pkm_alpha_, double inter_pkm_beta_, double inter_pkm_gamma_, double smb_joint_, double shead_joint_)
 {
 	// Move SMB and SPKM to pose.
-	move_smb_external(0.0, smb_joint_);
+	smb_rotate_external(0.0, smb_joint_);
 	// Support interpose.
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, inter_pkm_x_, inter_pkm_y_, inter_pkm_z_, inter_pkm_alpha_, inter_pkm_beta_, inter_pkm_gamma_);
 	// Rotate shead.
@@ -81,7 +87,7 @@ void demo_base::move_to_pose_and_return(double support_pkm_x_, double support_pk
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, -0.035, 0.405, 0, -0.92, 0);
 }
 
-void demo_base::move_smb_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, lib::smb::FESTO_LEG l3_)
+void demo_base::smb_pull_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, lib::smb::FESTO_LEG l3_)
 {
 	sr_ecp_msg->message("demo_base::move_smb_legs");
 	lib::smb::festo_command_td mp_ecp_festo_command;
@@ -99,7 +105,7 @@ void demo_base::move_smb_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, 
 
 }
 
-void demo_base::move_smb_external(int legs_rotation_, double pkm_rotation_)
+void demo_base::smb_rotate_external(int legs_rotation_, double pkm_rotation_)
 {
 	sr_ecp_msg->message("demo_base::move_smb_external");
 
@@ -164,127 +170,123 @@ void demo_base::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motio
 }
 
 void demo_base::control_bench_power_supply(const mrrocpp::lib::sbench::power_supply_state & ps_, int delay_) {
-	this->sr_ecp_msg->message(std::string("demo_base::control_bench_power_supply\n")+ps_.display());
+	this->sr_ecp_msg->message("demo_base::control_bench_power_supply");
+	this->sr_ecp_msg->message(ps_.display());
 	set_next_ecp_state(mrrocpp::ecp_mp::sbench::generator::POWER_SUPPLY_COMMAND, 0, ps_, lib::sbench::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::sbench::ROBOT_NAME.c_str());
 	wait_ms(delay_);
 }
 
 void demo_base::control_bench_cleaning(const mrrocpp::lib::sbench::cleaning_state & cs_, int delay_) {
-	this->sr_ecp_msg->message(std::string("demo_base::control_bench_cleaning\n")+cs_.display());
+	this->sr_ecp_msg->message("demo_base::control_bench_cleaning");
+	this->sr_ecp_msg->message(cs_.display());
 	set_next_ecp_state(mrrocpp::ecp_mp::sbench::generator::CLEANING_COMMAND, 0, cs_, lib::sbench::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::sbench::ROBOT_NAME.c_str());
 	wait_ms(delay_);
 }
 
-void demo_base::bench_move_to_power_pose(const bench_pose & pose_, unsigned int delay_) {
-	// Temporary variables.
+void demo_base::bench_execute_power_move(const power_smb_move & move_, unsigned int delay_) {
+	sr_ecp_msg->message(move_.get_description());
+
+	// Bench state.
+	// TODO: it should be read from current bench state!!
 	mrrocpp::lib::sbench::power_supply_state power;
 
-	// Rotation on leg.
-	sr_ecp_msg->message(pose_.rotation_pin.get_name());
-	power.set_all_off();
-	power.set_on(pose_.rotation_pin.row, pose_.rotation_pin.column);
+	// Turn power only on the rotation pin.
+	power.set_off(move_.start_pose);
+	power.set_on(move_.rotation_pin);
+	this->sr_ecp_msg->message(std::string("power on pin:")+move_.rotation_pin.get_description());
 	control_bench_power_supply(power, delay_);
 
-	// Desired power pose.
-	sr_ecp_msg->message(pose_.get_name());
-	power.set_all_off();
-	power.set_on(pose_.rotation_pin.row, pose_.rotation_pin.column);
-	power.set_on(pose_.desired_pin1.row, pose_.desired_pin1.column);
-	power.set_on(pose_.desired_pin2.row, pose_.desired_pin2.column);
+	// Power the final pose.
+	power.set_on(move_.final_pose);
 	control_bench_power_supply(power, delay_);
 }
 
 
-void demo_base::bench_move_to_power_pose_with_cleaning(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_)
+void demo_base::bench_execute_power_move_with_cleaning(const power_smb_move & move_, unsigned int delay_, unsigned int cleaning_time_)
 {
-	// Temporary variables.
+	sr_ecp_msg->message(move_.get_description());
+
+	// Bench power and cleaning states.
+	// TODO: they should be read from current bench state!!
 	mrrocpp::lib::sbench::power_supply_state power;
 	mrrocpp::lib::sbench::cleaning_state cleaning;
 
-	// Rotation on leg.
-	sr_ecp_msg->message(pose_.rotation_pin.get_name());
-	power.set_all_off();
-	power.set_on(pose_.rotation_pin.row, pose_.rotation_pin.column);
+	// Turn power only on the rotation pin.
+	power.set_off(move_.start_pose);
+	power.set_on(move_.rotation_pin);
+	this->sr_ecp_msg->message(std::string("power on pin:")+move_.rotation_pin.get_description());
 	control_bench_power_supply(power, delay_);
 
-	// Clean desired pose.
-	cleaning.set_all_off();
-	cleaning.set_on(pose_.desired_pin1.row, pose_.desired_pin1.column);
-	cleaning.set_on(pose_.desired_pin2.row, pose_.desired_pin2.column);
+	// Turn the cleaning on two pins of the desired pose.
+	cleaning.set_on(move_.final_pose);
+	cleaning.set_off(move_.rotation_pin);
 	control_bench_cleaning(cleaning, cleaning_time_);
 
-	// Reset cleaning.
-	cleaning.set_all_off();
+	// Turn of the cleaning.
+	cleaning.set_off(move_.final_pose);
 	control_bench_cleaning(cleaning, 0);
 
-	// Desired power pose.
-	sr_ecp_msg->message(pose_.get_name());
-	power.set_all_off();
-	power.set_on(pose_.rotation_pin.row, pose_.rotation_pin.column);
-	power.set_on(pose_.desired_pin1.row, pose_.desired_pin1.column);
-	power.set_on(pose_.desired_pin2.row, pose_.desired_pin2.column);
+	// Power the final pose.
+	power.set_on(move_.final_pose);
 	control_bench_power_supply(power, delay_);
 }
 
-void demo_base::bench_move_to_power_pose_with_smb(const bench_pose & pose_, unsigned int delay_) {
-	// Temporary variables.
-	mrrocpp::lib::sbench::power_supply_state power;
-	mrrocpp::lib::sbench::cleaning_state cleaning;
+void demo_base::smb_execute_power_move(const power_smb_move & move_, unsigned int delay_) {
+	sr_ecp_msg->message(move_.get_description());
 
-	// Leave power only on the rotation leg.
-	sr_ecp_msg->message(pose_.rotation_pin.get_name());
-	power.set_all_off();
-	power.set_on(pose_.rotation_pin.row, pose_.rotation_pin.column);
+	// Bench state.
+	// TODO: it should be read from current bench state!!
+	mrrocpp::lib::sbench::power_supply_state power;
+
+	// Turn power only on the rotation pin.
+	power.set_off(move_.start_pose);
+	power.set_on(move_.rotation_pin);
+	this->sr_ecp_msg->message(std::string("power on pin:")+move_.rotation_pin.get_description());
 	control_bench_power_supply(power, delay_);
 
-	// Rotate on leg.
-	sr_ecp_msg->message(pose_.rotation.get_name());
-	rotate_smb(pose_.rotation.leg, pose_.rotation.rotation);
+	// Rotate on the leg.
+	rotate_smb(move_.rotation_leg.leg, move_.rotation_leg.rotation);
 	wait_ms(delay_);
 
-	// Desired power pose.
-	sr_ecp_msg->message(pose_.get_name());
-	power.set_all_off();
-	power.set_on(pose_.rotation_pin.row, pose_.rotation_pin.column);
-	power.set_on(pose_.desired_pin1.row, pose_.desired_pin1.column);
-	power.set_on(pose_.desired_pin2.row, pose_.desired_pin2.column);
+	// Power the final pose.
+	power.set_on(move_.final_pose);
 	control_bench_power_supply(power, delay_);
 }
 
-void demo_base::bench_move_to_power_pose_with_cleaning_and_smb(const bench_pose & pose_, unsigned int delay_, unsigned int cleaning_time_) {
-	// Temporary variables.
+void demo_base::smb_execute_power_move_with_cleaning(const power_smb_move & move_, unsigned int delay_, unsigned int cleaning_time_) {
+	sr_ecp_msg->message(move_.get_description());
+
+	// Bench power and cleaning states.
+	// TODO: they should be read from current bench state!!
 	mrrocpp::lib::sbench::power_supply_state power;
 	mrrocpp::lib::sbench::cleaning_state cleaning;
 
-	// Leave power only on the rotation leg.
-	sr_ecp_msg->message(pose_.rotation_pin.get_name());
-	power.set_all_off();
-	power.set_on(pose_.rotation_pin.row, pose_.rotation_pin.column);
-	control_bench_power_supply(power, delay_);
+	// Turn power only on the rotation pin.
+	power.set_off(move_.start_pose);
+	power.set_on(move_.rotation_pin);
+	this->sr_ecp_msg->message(std::string("power on pin:")+move_.rotation_pin.get_description());
+	control_bench_power_supply(power, 0);
 
-	// Turn cleaning on the desired pins.
-	cleaning.set_all_off();
-	cleaning.set_on(pose_.desired_pin1.row, pose_.desired_pin1.column);
-	cleaning.set_on(pose_.desired_pin2.row, pose_.desired_pin2.column);
-	control_bench_cleaning(cleaning, cleaning_time_);
-
-	// Rotate on leg.
-	sr_ecp_msg->message(pose_.rotation.get_name());
-	rotate_smb(pose_.rotation.leg, pose_.rotation.rotation);
+	// Stand on one leg and rotate around it - the SPKM rotation is set to zero
+	smb_stan_on_one_leg(move_.rotation_leg.leg);
+	smb_rotate_external(move_.rotation_leg.rotation, 0);
 	wait_ms(delay_);
 
-	// Reset cleaning.
-	cleaning.set_all_off();
+	// Turn the cleaning on two pins of the desired pose.
+	cleaning.set_on(move_.final_pose);
+	cleaning.set_off(move_.rotation_pin);
 	control_bench_cleaning(cleaning, 0);
 
-	// Desired power pose.
-	sr_ecp_msg->message(pose_.get_name());
-	power.set_all_off();
-	power.set_on(pose_.rotation_pin.row, pose_.rotation_pin.column);
-	power.set_on(pose_.desired_pin1.row, pose_.desired_pin1.column);
-	power.set_on(pose_.desired_pin2.row, pose_.desired_pin2.column);
+	// Stand on all legs.
+	smb_pull_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+	// Turn off the cleaning.
+	cleaning.set_off(move_.final_pose);
+	control_bench_cleaning(cleaning, 0);
+
+	// Power the final pose.
+	power.set_on(move_.final_pose);
 	control_bench_power_supply(power, delay_);
 }
 

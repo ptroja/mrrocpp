@@ -49,7 +49,7 @@ void smb_test::main_task_algorithm(void)
 	int rotation = config.value <int> ("rotation");
 
 	// Pull out all legs.
-	move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+	smb_pull_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 	// Wait for given time.
 	wait_ms(delay);
 
@@ -60,9 +60,9 @@ void smb_test::main_task_algorithm(void)
 		case 0:
 			while (true) {
 				// Legs in and out.
-				move_smb_legs(lib::smb::IN, lib::smb::IN, lib::smb::IN);
+				smb_pull_legs(lib::smb::IN, lib::smb::IN, lib::smb::IN);
 				wait_ms(delay);
-				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+				smb_pull_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 				wait_ms(delay);
 			}
 			break;
@@ -70,19 +70,19 @@ void smb_test::main_task_algorithm(void)
 			while (true) {
 				// One leg in and out after another.
 				// Pull in first leg.
-				move_smb_legs(lib::smb::IN, lib::smb::OUT, lib::smb::OUT);
+				smb_pull_legs(lib::smb::IN, lib::smb::OUT, lib::smb::OUT);
 				wait_ms(delay);
-				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+				smb_pull_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 				wait_ms(delay);
 				// Pull in second leg.
-				move_smb_legs(lib::smb::OUT, lib::smb::IN, lib::smb::OUT);
+				smb_pull_legs(lib::smb::OUT, lib::smb::IN, lib::smb::OUT);
 				wait_ms(delay);
-				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+				smb_pull_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 				wait_ms(delay);
 				// Pull in third leg.
-				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::IN);
+				smb_pull_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::IN);
 				wait_ms(delay);
-				move_smb_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+				smb_pull_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
 				wait_ms(delay);
 			}
 			break;

@@ -131,7 +131,7 @@ void demo_agent1_warsaw::main_task_algorithm(void)
 	rotate_smb(3, 1);
 
 	// Move SMB and SPKM to pose 4.
-	move_smb_external(0, 2.0);
+	smb_rotate_external(0, 2.0);
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.05, 0, 0.425, 0, -0.81, -0.1);
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.05, 0, 0.445, 0, -0.81, -0.1);
 	wait_ms(1000);
@@ -141,7 +141,7 @@ void demo_agent1_warsaw::main_task_algorithm(void)
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
 
 	// Move SMB and SPKM to pose 3.
-	move_smb_external(0, -1.500);
+	smb_rotate_external(0, -1.500);
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.409, 0, -0.868, 0.09);
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.429, 0, -0.868, 0.09);
 	wait_ms(1000);
@@ -151,7 +151,7 @@ void demo_agent1_warsaw::main_task_algorithm(void)
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, 0.15, 0, 0.405, 0, -1.045, 0);
 
 	// Move SMB and SPKM to pose 5.
-	move_smb_external(0, -3.0);
+	smb_rotate_external(0, -3.0);
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.404, 0, -0.83, -0.02);
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, -0.1, 0, 0.424, 0, -0.83, -0.02);
 	wait_ms(1000);
@@ -163,11 +163,11 @@ void demo_agent1_warsaw::main_task_algorithm(void)
 	// Move to SMB position 1 - rotate around leg 3 by -60 degrees.
 	rotate_smb(3, -1);
 	// Move to start position.
-	move_smb_external(0, 0);
+	smb_rotate_external(0, 0);
 #endif
 
 	// Rotate SMB to synchro position.
-	move_smb_external(0.0, 0.0);
+	smb_rotate_external(0.0, 0.0);
 	wait_ms(1000);
 
 #if(SMB_PULL_LEGS)
