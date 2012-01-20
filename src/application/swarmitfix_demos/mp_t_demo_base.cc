@@ -71,7 +71,7 @@ void demo_base::rotate_smb(int leg_number_, int rotation_)
 void demo_base::move_to_pose_and_return(const lib::Xyz_Euler_Zyz_vector & support_pose_, const lib::Xyz_Euler_Zyz_vector & inter_pose_, double smb_joint_, double shead_joint_)
 {
 	// Move SMB and SPKM to pose.
-	smb_rotate_external(0.0, smb_joint_);
+	smb_rotate_external(0, smb_joint_);
 	// Support interpose.
 	move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, inter_pose_);
 	// Rotate shead.
