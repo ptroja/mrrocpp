@@ -10,12 +10,9 @@
  */
 
 #include <QObject>
-#include <QMenu>
+
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
-
-#include "wgt_sbench_voltage_command.h"
-#include "wgt_sbench_preasure_command.h"
 
 namespace Ui {
 class MenuBar;

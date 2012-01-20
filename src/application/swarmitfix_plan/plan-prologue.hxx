@@ -5,5 +5,5 @@
 
 // Include insertion/extraction operators for fundamental types.
 //
-#include "application/swarmitfix/boost-archive-insertion.hxx"
-#include "application/swarmitfix/boost-archive-extraction.hxx"
+#include "application/swarmitfix_plan/boost-archive-insertion.hxx"
+#include "application/swarmitfix_plan/boost-archive-extraction.hxx"
