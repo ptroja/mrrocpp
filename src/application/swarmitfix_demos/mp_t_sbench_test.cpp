@@ -44,22 +44,22 @@ void sbench_test::main_task_algorithm(void)
 	mrrocpp::lib::sbench::cleaning_state cs;
 
 	// 1st (and also 5th) pose.
-	power_clean_pose pose1;
+	bench_pose pose1;
 	pose1.rotation_pin = pin(4, 4);
 	pose1.desired_pin1 = pin(3, 3);
 	pose1.desired_pin2 = pin(4, 3);
 	// 2nd pose.
-	power_clean_pose pose2;
+	bench_pose pose2;
 	pose2.rotation_pin = pin(4, 4);
 	pose2.desired_pin1 = pin(4, 3);
 	pose2.desired_pin2 = pin(5, 3);
 	// 3rd pose.
-	power_clean_pose pose3;
+	bench_pose pose3;
 	pose3.rotation_pin = pin(5, 3);
 	pose3.desired_pin1 = pin(6, 3);
 	pose3.desired_pin2 = pin(6, 4);
 	// 4th pose.
-	power_clean_pose pose4;
+	bench_pose pose4;
 	pose4.rotation_pin = pin(5, 3);
 	pose4.desired_pin1 = pin(4, 3);
 	pose4.desired_pin2 = pin(4, 4);

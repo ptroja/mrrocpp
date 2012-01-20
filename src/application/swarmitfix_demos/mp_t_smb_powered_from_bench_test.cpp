@@ -28,6 +28,17 @@ smb_powered_from_bench_test::smb_powered_from_bench_test(lib::configurator &conf
 		smb_robot_name = lib::smb2::ROBOT_NAME;
 	} // else ?
 
+	int mode = config.value <int> ("mode");
+	switch (mode){
+		default:
+			// Set "power walk" mode as default.
+		case 0:
+			sr_ecp_msg->message("POWER WALK!");
+			break;
+		case 1:
+			sr_ecp_msg->message("POWER WALK! WITH CLEANING");
+			break;
+	}//: switch
 
 }
 
@@ -56,28 +67,28 @@ void smb_powered_from_bench_test::main_task_algorithm(void)
 	mrrocpp::lib::sbench::cleaning_state cs;
 
 	// 1st pose.
-	power_clean_pose pose1;
+	bench_pose pose1;
 	pose1.rotation_pin = pin(4, 4);
 	pose1.desired_pin1 = pin(3, 3);
 	pose1.desired_pin2 = pin(4, 3);
 	pose1.rotation = leg_rotation(1, -1);
 
 	// 2nd pose.
-	power_clean_pose pose2;
+	bench_pose pose2;
 	pose2.rotation_pin = pin(4, 4);
 	pose2.desired_pin1 = pin(4, 3);
 	pose2.desired_pin2 = pin(5, 3);
 	pose2.rotation = leg_rotation(1, 1);
 
 	// 3rd pose.
-	power_clean_pose pose3;
+	bench_pose pose3;
 	pose3.rotation_pin = pin(5, 3);
 	pose3.desired_pin1 = pin(6, 3);
 	pose3.desired_pin2 = pin(6, 4);
 	pose3.rotation = leg_rotation(3, 3);
 
 	// 4th pose.
-	power_clean_pose pose4;
+	bench_pose pose4;
 	pose4.rotation_pin = pin(5, 3);
 	pose4.desired_pin1 = pin(4, 3);
 	pose4.desired_pin2 = pin(4, 4);

@@ -116,6 +116,7 @@ public:
 
 /*!
  * Pose of the agent on a bench (location of three pins).
+ * @author tkornuta
  */
 struct bench_pose {
 	/*!
@@ -144,7 +145,7 @@ struct bench_pose {
 
 };
 
-
+//class power_move
 
 
 
