@@ -32,9 +32,16 @@ namespace mrrocpp {
 namespace edp {
 namespace spkm {
 
+// Debug executed methods.
+#define DEBUG_METHODS 0
+#define DEBUG_COMMANDS 0
+#define DEBUG_FRAMES 0
+#define DEBUG_JOINTS 0
+#define DEBUG_MOTORS 0
+
 #include "base/lib/debug.hpp"
 // Debug PVT triples.
-#define DEBUG_PVT 1
+#define DEBUG_PVT 0
 
 using namespace mrrocpp::lib;
 using namespace mrrocpp::lib::pvat;
@@ -50,6 +57,51 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		manip_effector(_shell, l_robot_name, instruction, reply)
 {
 	DEBUG_METHOD;
+
+	// Set default motor velocities, accelerations and decelerations for axis 0 - leg A.
+	// TODO: apply original values: V = 5000UL, A = 50000UL
+	Vdefault[0] = 1000UL;
+	MotorVmax[0] = 1000UL;
+	Adefault[0] = 10000UL;
+	Ddefault[0] = 10000UL;
+	MotorAmax[0] = 10000UL;
+
+	// Set default motor velocities, accelerations and decelerations for axis 1 - leg B.
+	// TODO: apply original values: V = 5000UL, A = 50000UL
+	Vdefault[1] = 1000UL;
+	MotorVmax[1] = 1000UL;
+	Adefault[1] = 10000UL;
+	Ddefault[1] = 10000UL;
+	MotorAmax[1] = 10000UL;
+
+	// Set default motor velocities, accelerations and decelerations for axis 2 - leg C.
+	// TODO: apply original values: V = 5000UL, A = 50000UL
+	Vdefault[2] = 1000UL;
+	MotorVmax[2] = 1000UL;
+	Adefault[2] = 10000UL;
+	Ddefault[2] = 10000UL;
+	MotorAmax[2] = 10000UL;
+
+	// Set default motor velocities, accelerations and decelerations for axis 3 - (lower wrist rotation - "axis 1").
+	Vdefault[3] = 5000UL;
+	MotorVmax[3] = 5000UL;
+	Adefault[3] = 10000UL;
+	Ddefault[3] = 10000UL;
+	MotorAmax[3] = 10000UL;
+
+	// Set default motor velocities, accelerations and decelerations for axis 4 - (wrist rotation - "axis 2") - the MOOG motor.
+	Vdefault[4] = 3000UL;
+	MotorVmax[4] = 3000UL;
+	Adefault[4] = 6000UL;
+	Ddefault[4] = 6000UL;
+	MotorAmax[4] = 6000UL;
+
+	// Set default motor velocities, accelerations and decelerations for axis 5 - (upper wrist rotation - "axis 3").
+	Vdefault[5] = 5000UL;
+	MotorVmax[5] = 5000UL;
+	Adefault[5] = 30000UL;
+	Ddefault[5] = 30000UL;
+	MotorAmax[5] = 30000UL;
 
 	// Set number of servos.
 	number_of_servos = lib::spkm::NUM_OF_SERVOS;

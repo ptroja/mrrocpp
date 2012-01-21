@@ -1078,10 +1078,14 @@ void epos::setVelocityModeSettingValue(INTEGER32 val)
 void epos::setProfileVelocity(UNSIGNED32 val)
 {
 	if (ProfileVelocity != val) {
+#if 0
 		std::cout << "ProfileVelocity[" << (int) nodeId << "] <= " << val << std::endl;
+#endif
 		WriteObjectValue(0x6081, 0x00, val);
 		ProfileVelocity = val;
+#if 0
 		std::cout << "ProfileVelocity[" << (int) nodeId << "] <= " << getProfileVelocity() << std::endl;
+#endif
 	}
 }
 
@@ -1089,9 +1093,13 @@ void epos::setProfileAcceleration(UNSIGNED32 val)
 {
 	if (ProfileAcceleration != val) {
 		WriteObjectValue(0x6083, 0x00, val);
+#if 0
 		std::cout << "ProfileAcceleration[" << (int) nodeId << "] <= " << val << std::endl;
+#endif
 		ProfileAcceleration = val;
+#if 0
 		std::cout << "ProfileAcceleration[" << (int) nodeId << "] <= " << getProfileAcceleration() << std::endl;
+#endif
 	}
 }
 
@@ -1099,9 +1107,13 @@ void epos::setProfileDeceleration(UNSIGNED32 val)
 {
 	if (ProfileDeceleration != val) {
 		WriteObjectValue(0x6084, 0x00, val);
+#if 0
 		std::cout << "ProfileDeceleration[" << (int) nodeId << "] <= " << val << std::endl;
+#endif
 		ProfileDeceleration = val;
+#if 0
 		std::cout << "ProfileDeceleration[" << (int) nodeId << "] <= " << getProfileDeceleration() << std::endl;
+#endif
 	}
 }
 

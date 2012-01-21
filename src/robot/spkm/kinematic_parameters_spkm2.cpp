@@ -75,7 +75,7 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	upper_motor_pos_limits[2] = 8000;
 	// Lower wrist rotation.
 	upper_motor_pos_limits[3] = 379000;
-	upper_motor_pos_limits[4] =   2000;
+	upper_motor_pos_limits[4] = 185000;
 	// Upper wrist rotation.
 	upper_motor_pos_limits[5] = 260000;
 
@@ -108,9 +108,10 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	lower_joints_limits[4] = -1.5708;
 	lower_joints_limits[5] = -2.43;
 
+	// TODO: Set thyk alpha and beta PARAMS!!!!!
 	// Initialization of upper thyk alpha angle limit.
 	// Those values were determined experimentally.
-	upper_alpha_thyk_angle_limit[0] = 30.0;
+/*	upper_alpha_thyk_angle_limit[0] = 30.0;
 	upper_alpha_thyk_angle_limit[1] = 50.0;
 	upper_alpha_thyk_angle_limit[2] = 30.0;
 
@@ -122,15 +123,15 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 
 	// Initialization of upper thyk beta angle limit.
 	// Those values were determined experimentally.
-	upper_beta_thyk_angle_limit[0] = 30.0;
+	upper_beta_thyk_angle_limit[0] = 40.0;
 	upper_beta_thyk_angle_limit[1] = 50.0;
-	upper_beta_thyk_angle_limit[2] = 30.0;
+	upper_beta_thyk_angle_limit[2] = 40.0;
 
 	// Initialization of lower thyk beta angle limit.
 	// Those values were determined experimentally.
 	lower_beta_thyk_angle_limit[0] = -30.0;
 	lower_beta_thyk_angle_limit[1] = -50.0;
-	lower_beta_thyk_angle_limit[2] = -30.0;
+	lower_beta_thyk_angle_limit[2] = -30.0;*/
 
 	// Lower platform: Initialize the jb coordinate of P1A in O(ib,jb,kb).
 	lA = -0.05;

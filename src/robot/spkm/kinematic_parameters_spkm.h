@@ -103,17 +103,20 @@ public:
 	//! Smallest values that joints can reach.
 	double lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! Largest values of upper thyk alpha angle.
-	double upper_alpha_thyk_angle_limit[3];
+	//! Value  of thyk alpha angle for legs A and C (the same for both sides).
+	double alpha_thyk_angle_limit_AC;
 
-	//! Smallest values of lower thyk alpha angle.
-	double lower_alpha_thyk_angle_limit[3];
+	//! Value  of thyk alpha internal angle for leg B (the same for both sides).
+	double alpha_thyk_angle_limit_B_int;
 
-	//! Largest values of upper thyk beta angle.
-	double upper_beta_thyk_angle_limit[3];
+	//! Value  of thyk alpha external angle for leg B (the same for both sides).
+	double alpha_thyk_angle_limit_B_ext;
 
-	//! Smallest values of lower thyk beta angle.
-	double lower_beta_thyk_angle_limit[3];
+	//! Value  of thyk beta internal angle for leg B (the same for both sides).
+	double beta_thyk_angle_limit_B_int;
+
+	//! Value  of thyk beta external angle for leg B (the same for both sides).
+	double beta_thyk_angle_limit_B_ext;
 
 	// You must overload "operator new" so that it generates 16-bytes-aligned pointers.
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW

@@ -77,7 +77,7 @@ void kinematic_model_spkm::check_cartesian_pose(const lib::Homog_matrix& H_) con
 	Homog4d uA_lA_T = O_uA_T - O_lA_T;
 	Homog4d uB_lB_T = O_uB_T - O_lB_T;
 	Homog4d uC_lC_T = O_uC_T - O_lC_T;
-
+/*
 	// Thyk alpha = rotation around the x axes of legs A, B, and C of the upper platform: alpha = arc tan (|y|/|z|).
 	double thyk_alpha[3];
 	thyk_alpha[0] = atan2 (uA_lA_T(1,3), uA_lA_T(2,3)) * 180.0 / M_PI;
@@ -87,14 +87,6 @@ void kinematic_model_spkm::check_cartesian_pose(const lib::Homog_matrix& H_) con
 	cout << "alpha: A=" << thyk_alpha[0] << " B=" << thyk_alpha[1] << " C=" << thyk_alpha[2] <<endl;
 #endif
 
-	// Check thyk alpha angle.
-	for (int i = 0; i < 3; ++i) {
-		if (thyk_alpha[i] > params.upper_alpha_thyk_angle_limit[i])
-			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_alpha[i]) << limit_value(params.upper_alpha_thyk_angle_limit[i]));
-		else if (thyk_alpha[i] < params.lower_alpha_thyk_angle_limit[i])
-			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_alpha[i]) << limit_value(params.lower_alpha_thyk_angle_limit[i]));
-	}
-
 	// Thyk beta = rotation around the y axes of legs A, B, and C of the upper platform: alpha = arc tan (|x|/|z|).
 	double thyk_beta[3];
 	thyk_beta[0] = atan2 (uA_lA_T(0,3), uA_lA_T(2,3)) * 180.0 / M_PI;
@@ -103,14 +95,35 @@ void kinematic_model_spkm::check_cartesian_pose(const lib::Homog_matrix& H_) con
 #if(DEBUG_KINEMATICS)
 	cout << "beta: A=" << thyk_beta[0] << " B=" << thyk_beta[1] << " C=" << thyk_beta[2] <<endl;
 #endif
+*/
+	// Check thyk alpha angle.
+/*	for (int i = 0; i < 3; ++i) {
+		if (thyk_alpha[i] > params.upper_alpha_thyk_angle_limit[i])
+			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_alpha[i]) << limit_value(params.upper_alpha_thyk_angle_limit[i]));
+		else if (thyk_alpha[i] < params.lower_alpha_thyk_angle_limit[i])
+			BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_alpha[i]) << limit_value(params.lower_alpha_thyk_angle_limit[i]));
+	}*/
 
-	// Check thyk beta angle.
+/*	// Check thyk beta angle.
 	for (int i = 0; i < 3; ++i) {
 		if (thyk_beta[i] > params.upper_beta_thyk_angle_limit[i])
 			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(UPPER_LIMIT) << desired_value(thyk_beta[i]) << desired_value(thyk_alpha[i]) << limit_value(params.upper_beta_thyk_angle_limit[i]));
 		else if (thyk_beta[i] < params.lower_beta_thyk_angle_limit[i])
 			BOOST_THROW_EXCEPTION(nfe_thyk_beta_limit_exceeded() << angle_number(i) << limit_type(LOWER_LIMIT) << desired_value(thyk_beta[i]) << desired_value(thyk_alpha[i]) << limit_value(params.lower_beta_thyk_angle_limit[i]));
-	}
+	}*/
+
+/*	// Check thyk alpha angle for legs A and C.
+	if (thyk_alpha[0] > params.alpha_thyk_angle_limit_AC)
+		BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(0) << limit_type(UPPER_LIMIT) << desired_value(thyk_alpha[0]) << limit_value(params.alpha_thyk_angle_limit_AC));
+	else if (thyk_alpha[0] < -params.alpha_thyk_angle_limit_AC)
+		BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(0) << limit_type(LOWER_LIMIT) << desired_value(thyk_alpha[0]) << limit_value(params.alpha_thyk_angle_limit_AC));
+	else if (thyk_alpha[2] > params.alpha_thyk_angle_limit_AC)
+		BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(2) << limit_type(UPPER_LIMIT) << desired_value(thyk_alpha[2]) << limit_value(params.alpha_thyk_angle_limit_AC));
+	else if (thyk_alpha[2] < -params.alpha_thyk_angle_limit_AC)
+		BOOST_THROW_EXCEPTION(nfe_thyk_alpha_limit_exceeded() << angle_number(2) << limit_type(LOWER_LIMIT) << desired_value(thyk_alpha[2]) << limit_value(params.alpha_thyk_angle_limit_AC));
+*/
+	// Check leg B.
+
 
 }
 
