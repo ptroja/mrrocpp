@@ -38,8 +38,11 @@ typedef Eigen::Matrix<double, 4 , 4> Homog4d;
  *
  * @ingroup SIF_KINEMATICS
  */
-struct kinematic_parameters_spkm {
+class kinematic_parameters_spkm {
 public:
+	//! Constructor - sets the values of common PKM parameters.
+	kinematic_parameters_spkm();
+
 	//! Lower platform: jb coordinate of P1A in O(ib,jb,kb).
 	double lA;
 
