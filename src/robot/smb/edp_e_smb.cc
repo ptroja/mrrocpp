@@ -259,6 +259,11 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		// Check controller state.
 		check_controller_state();
 
+		// Check config settings - if flag set, the robot won't be synchronized at start.
+		if (config.exists_and_true("always_synchronize") && (!pkm_rotation_disabled)) {
+			controller_state_edp_buf.is_synchronised = false;
+		}
+
 		// Disable PKM rotation if required.
 		if (!robot_test_mode) {
 			if (pkm_rotation_disabled) {

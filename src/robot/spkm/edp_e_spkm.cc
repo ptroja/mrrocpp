@@ -327,8 +327,10 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		// Check controller state.
 		check_controller_state();
 
-		// FIXME: uncomment the following line to allow multiple synchronization without resetting.
-		// controller_state_edp_buf.is_synchronised = false;
+		// Check config settings - if flag set, the robot won't be synchronized at start.
+		if (config.exists_and_true("always_synchronize")) {
+			controller_state_edp_buf.is_synchronised = false;
+		}
 
 		// Copy data to reply buffer
 		reply.controller_state = controller_state_edp_buf;

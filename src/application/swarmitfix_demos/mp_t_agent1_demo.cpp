@@ -210,11 +210,13 @@ void agent1_demo::main_task_algorithm(void)
 	tool: -0.31 0 0.625 0.6084 0.17 3.1416
 	wrist: -0.1248 0.129 0.3732 0.6084 -0.613 0
 	*/
-	lib::Xyz_Euler_Zyz_vector support_pose1(-0.1248, 0.129, 0.4032, 0.6084, -0.613, 0);
-	lib::Xyz_Euler_Zyz_vector inter_pose1(-0.1248, 0.129, 0.3732, 0.6084, -0.613, 0);
-	move_to_pose_and_return(support_pose1, inter_pose1, -1.4381, 0);
+	while (1) {
+		lib::Xyz_Euler_Zyz_vector support_pose1(-0.1248, 0.129, 0.4032, 0.6084, -0.613, 0);
+		lib::Xyz_Euler_Zyz_vector inter_pose1(-0.1248, 0.129, 0.3732, 0.6084, -0.613, 0);
+		move_to_pose_and_return(support_pose1, inter_pose1, -1.4381, 0);
+		wait_ms(delay);
 
-
+	}
 }
 
 } /* namespace swarmitfix */
