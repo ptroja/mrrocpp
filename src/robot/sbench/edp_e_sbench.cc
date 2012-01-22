@@ -74,7 +74,7 @@ effector::~effector()
 		// Detach from hardware
 		if (power_supply_device) {
 			if(comedi_close(power_supply_device) == -1) {
-				throw std::runtime_error("Could not close the power supply device.");
+				// TODO: print error message
 			}
 		}
 	}
