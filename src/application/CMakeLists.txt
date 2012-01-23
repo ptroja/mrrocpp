@@ -1,5 +1,5 @@
 # Recurse into subdirectories.
-if(ROBOTS_012)
+if(ROBOTS_012 AND NOT UBUNTU32BIT)
 #add_subdirectory (bclikeregions)
 add_subdirectory (ball)
 add_subdirectory (block_move)
@@ -28,15 +28,17 @@ add_subdirectory (visual_servoing)
 add_subdirectory (visual_servoing_demo)
 add_subdirectory (wii_teach)
 add_subdirectory (trajectory_stats)
-endif(ROBOTS_012)
+endif(ROBOTS_012 AND NOT UBUNTU32BIT)
 
-if(ROBOT_BIRD_HAND)
+if(ROBOT_BIRD_HAND AND NOT UBUNTU32BIT)
+
 add_subdirectory (bird_hand_test)
-endif(ROBOT_BIRD_HAND)
 
-if(ROBOT_BIRD_HAND AND ROBOTS_012)
+endif(ROBOT_BIRD_HAND AND NOT UBUNTU32BIT)
+
+if(ROBOT_BIRD_HAND AND ROBOTS_012  AND NOT UBUNTU32BIT)
 add_subdirectory (graspit)
-endif(ROBOT_BIRD_HAND AND ROBOTS_012)
+endif(ROBOT_BIRD_HAND AND ROBOTS_012 AND NOT UBUNTU32BIT)
 
 if(ROBOTS_SWARMITFIX AND NOT UBUNTU32BIT)
 add_subdirectory (swarmitfix_plan)
