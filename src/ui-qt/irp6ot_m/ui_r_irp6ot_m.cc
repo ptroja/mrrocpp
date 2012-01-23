@@ -11,7 +11,7 @@
 #include "../irp6_m/wgt_irp6_m_tool_euler.h"
 
 #include "ui_r_irp6ot_m.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+#include "ui_ecp_r_irp6ot_m.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "../base/interface.h"
 
@@ -36,30 +36,29 @@ namespace irp6ot_m {
 //
 //
 
-int UiRobot::ui_get_edp_pid()
+void UiRobot::open_c_motor_window()
 {
-	return ui_ecp_robot->ecp->get_EDP_pid();
+	wgts[WGT_MOTORS]->my_open();
 }
 
-void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
+void UiRobot::open_c_joint_window()
 {
-	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
-
+	wgts[WGT_JOINTS]->my_open();
 }
+
 
 void UiRobot::create_ui_ecp_robot()
 {
-	ui_ecp_robot = new ui::common::EcpRobot(*this);
-//	return 1;
+	common::UiRobot::ui_ecp_robot = ui_ecp_robot = new ui::irp6ot_m::EcpRobot(*this);
+
 }
 
-int UiRobot::edp_create_int_extra_operations()
+void UiRobot::edp_create_int_extra_operations()
 {
 	wgts[WGT_MOTORS]->synchro_depended_init();
-	return 1;
 }
 
-int UiRobot::move_to_synchro_position()
+void UiRobot::move_to_synchro_position()
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -67,10 +66,9 @@ int UiRobot::move_to_synchro_position()
 	}
 	eb.command(boost::bind(&ui::irp6ot_m::UiRobot::execute_motor_motion, &(*this)));
 
-	return 1;
 }
 
-int UiRobot::move_to_front_position()
+void UiRobot::move_to_front_position()
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -81,10 +79,9 @@ int UiRobot::move_to_front_position()
 
 	eb.command(boost::bind(&ui::irp6ot_m::UiRobot::execute_joint_motion, &(*this)));
 
-	return 1;
 }
 
-int UiRobot::move_to_preset_position(int variant)
+void UiRobot::move_to_preset_position(int variant)
 {
 
 	for (int i = 0; i < number_of_servos; i++) {
@@ -92,7 +89,6 @@ int UiRobot::move_to_preset_position(int variant)
 	}
 	eb.command(boost::bind(&ui::irp6ot_m::UiRobot::execute_joint_motion, &(*this)));
 
-	return 1;
 }
 
 UiRobot::UiRobot(common::Interface& _interface) :
@@ -116,10 +112,9 @@ void UiRobot::setup_menubar()
 
 }
 
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 {
 	eb.command(boost::bind(&ui::irp6ot_m::UiRobot::synchronise_int, &(*this)));
-	return 1;
 }
 
 }

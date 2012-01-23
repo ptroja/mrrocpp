@@ -1,3 +1,5 @@
+#include <QtXml/QDomDocument>
+
 #include "ui_ecp_r_spkm.h"
 #include "ui_r_spkm.h"
 #include "robot/spkm/const_spkm.h"
@@ -8,7 +10,7 @@
 #include "../base/ui_robot.h"
 
 wgt_spkm_ext::wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
-		wgt_base(_widget_label, _interface, parent), current_pose_specification(lib::spkm::XYZ_EULER_ZYZ)
+		wgt_base(_widget_label, _interface, parent), current_pose_specification(lib::spkm::WRIST_XYZ_EULER_ZYZ)
 {
 	ui.setupUi(this);
 	robot = dynamic_cast <mrrocpp::ui::spkm::UiRobot *>(_robot);
@@ -61,7 +63,7 @@ void wgt_spkm_ext::on_pushButton_read_clicked()
 	init();
 }
 
-int wgt_spkm_ext::init()
+void wgt_spkm_ext::init()
 {
 
 	try {
@@ -110,12 +112,9 @@ int wgt_spkm_ext::init()
 	} // end try
 	CATCH_SECTION_UI_PTR
 
-	return 1;
 }
 
-int wgt_spkm_ext::set_single_axis(int axis,
-// QDoubleSpinBox* qdsb_mcur,
-QAbstractButton* qab_mip)
+void wgt_spkm_ext::set_single_axis(int axis, QAbstractButton* qab_mip)
 {
 	lib::spkm::spkm_ext_epos_reply &ser = robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
 //	qdsb_mcur->setValue(er.epos_controller[axis].current);
@@ -125,8 +124,6 @@ QAbstractButton* qab_mip)
 	} else {
 		qab_mip->setChecked(false);
 	}
-
-	return 1;
 }
 
 void wgt_spkm_ext::on_pushButton_import_clicked()
@@ -139,6 +136,58 @@ void wgt_spkm_ext::on_pushButton_import_clicked()
 		doubleSpinBox_des_Vector[i]->setValue(val[i]);
 	}
 
+}
+
+void wgt_spkm_ext::on_pushButton_importxml_clicked()
+{
+	try {
+
+		/*
+		 <Xyz_Euler_Zyz>
+		 <x>0.0533</x>
+		 <y>0</y>
+		 <z>0.436</z>
+		 <alpha>3.1416</alpha>
+		 <beta>0.783</beta>
+		 <gamma>3.1416</gamma>
+		 </Xyz_Euler_Zyz>
+		 */
+
+		QString xmlText = interface.get_main_window()->get_lineEdit_qstring();
+
+		QDomDocument doc;
+		doc.setContent(xmlText);
+
+		QDomNodeList list;
+		QString singlevalue;
+
+		list = doc.elementsByTagName("x");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[0]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+		list = doc.elementsByTagName("y");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[1]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+		list = doc.elementsByTagName("z");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[2]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+		list = doc.elementsByTagName("alpha");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[3]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+		list = doc.elementsByTagName("beta");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[4]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+		list = doc.elementsByTagName("gamma");
+		singlevalue = list.at(0).toElement().text();
+		doubleSpinBox_des_Vector[5]->setValue(boost::lexical_cast <double>(singlevalue.toStdString()));
+
+	} catch (...) {
+		interface.ui_msg->message(lib::NON_FATAL_ERROR, "xml position import failed");
+	}
 }
 
 void wgt_spkm_ext::on_pushButton_export_clicked()
@@ -184,7 +233,7 @@ void wgt_spkm_ext::on_pushButton_stop_clicked()
 	robot->execute_stop_motor();
 }
 
-int wgt_spkm_ext::copy()
+void wgt_spkm_ext::copy()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -202,8 +251,6 @@ int wgt_spkm_ext::copy()
 		}
 
 	}
-
-	return 1;
 }
 
 void wgt_spkm_ext::on_pushButton_execute_clicked()
@@ -296,7 +343,7 @@ void wgt_spkm_ext::on_pushButton_5r_clicked()
 	move_it();
 }
 
-int wgt_spkm_ext::get_desired_position()
+void wgt_spkm_ext::get_desired_position()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -313,10 +360,9 @@ int wgt_spkm_ext::get_desired_position()
 			}
 		}
 	}
-	return 1;
 }
 
-int wgt_spkm_ext::move_it()
+void wgt_spkm_ext::move_it()
 {
 
 	// wychwytania ew. bledow ECP::robot
@@ -360,14 +406,12 @@ int wgt_spkm_ext::move_it()
 	} // end try
 
 	CATCH_SECTION_UI_PTR
-
-	return 1;
 }
 
 void wgt_spkm_ext::on_radioButton_no_tool_toggled()
 {
 	if (ui.radioButton_no_tool->isChecked()) {
-		current_pose_specification = lib::spkm::XYZ_EULER_ZYZ;
+		current_pose_specification = lib::spkm::WRIST_XYZ_EULER_ZYZ;
 		init();
 	}
 }
@@ -375,15 +419,7 @@ void wgt_spkm_ext::on_radioButton_no_tool_toggled()
 void wgt_spkm_ext::on_radioButton_tool_oriented_toggled()
 {
 	if (ui.radioButton_tool_oriented->isChecked()) {
-		current_pose_specification = lib::spkm::TOOL_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
-		init();
-	}
-}
-
-void wgt_spkm_ext::on_radioButton_wrist_oriented_toggled()
-{
-	if (ui.radioButton_wrist_oriented->isChecked()) {
-		current_pose_specification = lib::spkm::WRIST_ORIENTED_XYZ_EULER_ZYZ_WITH_TOOL;
+		current_pose_specification = lib::spkm::TOOL_XYZ_EULER_ZYZ;
 		init();
 	}
 }

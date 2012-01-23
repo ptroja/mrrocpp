@@ -3,7 +3,7 @@
 
 /*!
  * @file
- * @brief File contains ecp robot class declaration for SwarmItFix Head
+ * @brief File contains ecp robot class declaration for SwarmItFix Bench
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup sbench
@@ -18,38 +18,35 @@ namespace ecp {
 namespace sbench {
 
 /*!
- * @brief SwarmItFix Head gripper ecp robot class
+ * @brief SwarmItFix Bench gripper ecp robot class
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup sbench
  */
-class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
+
+class robot : public common::robot::_ecp_robot <lib::sbench::c_buffer, lib::sbench::r_buffer>
+		, public kinematics::common::kinematics_manager
 {
 protected:
-
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::sbench::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::sbench::rbuffer edp_ecp_rbuffer;
 
 	void create_kinematic_models_for_given_robot(void);
 
 public:
 
 	/**
-	 * @brief head soldification command data port
+	 * @brief Bench soldification command data port
 	 */
-	lib::single_thread_port <lib::sbench::pins_state_td> sbench_command_data_port;
+	lib::single_thread_port <lib::sbench::voltage_buffer> sbench_command_voltage_data_port;
 
 	/**
-	 * @brief Head state reply data request port
+	 * @brief Bench soldification command data port
 	 */
-	lib::single_thread_request_port <lib::sbench::pins_state_td> sbench_reply_data_request_port;
+	lib::single_thread_port <lib::sbench::preasure_buffer> sbench_command_preasure_data_port;
+
+	/**
+	 * @brief Bench state reply data request port
+	 */
+	lib::single_thread_request_port <lib::sbench::rbuffer> sbench_reply_data_request_port;
 
 	/**
 	 * @brief constructor called from UI

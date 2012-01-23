@@ -5,11 +5,9 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-// Klasa edp_irp6ot_effector.
 #include "edp_e_smb2.h"
 #include "const_smb2.h"
 #include "base/edp/reader.h"
-// Kinematyki.
 #include "robot/smb/kinematic_model_smb.h"
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
@@ -21,16 +19,21 @@ namespace mrrocpp {
 namespace edp {
 namespace smb2 {
 
-// Konstruktor.
-effector::effector(common::shell &_shell) :
-	smb::effector(_shell, lib::smb2::ROBOT_NAME)
-{
+#include "base/lib/debug.hpp"
 
+effector::effector(common::shell &_shell) :
+		smb::effector(_shell, lib::smb2::ROBOT_NAME)
+{
+	DEBUG_METHOD;
+
+	// Set synchronization values, different for both SMBs.
+	pkm_zero_position_voltage = 2500;
+	pkm_zero_position_offset = 9850;
 }
+
 
 }
 // namespace smb
-
 
 namespace common {
 

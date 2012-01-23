@@ -1,26 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////
-/*! \file     src/lib/com_buf.h
- *
+/*
  *  Data structures for IPC.
- *
- *  \author   tkornuta
- *  \date     2006-11-29
- *  \URL: https://segomo.elka.pw.edu.pl/svn/mrrocpp/base/trunk/include/lib/com_buf.h $
- *  $LastChangedRevision$
- *  $LastChangedDate$
- *  $LastChangedBy$
- *
- *  \todo <ul>
- *          <li>Translate to English where necessary.</li>
- *          <li>Write detailed comments.</li>
- *          <li>Suplement comments for those consts, variables and structures
- *              that are not commented at all.</li>
- *          <li>Clean up the commented fragments of code.</li>
- *        </ul>
  */
 ////////////////////////////////////////////////////////////////////////////////
 #ifndef __COM_BUF_H
 #define __COM_BUF_H
+
+#include "base/lib/xdr/xdr_iarchive.hpp"
+#include "base/lib/xdr/xdr_oarchive.hpp"
 
 #include <vector>
 
@@ -38,11 +25,10 @@
 
 #include "base/lib/messip/messip.h"
 
+#define SWARM_STRING_SIZE 1024
+
 namespace mrrocpp {
 namespace lib {
-
-#define ECP_EDP_SERIALIZED_COMMAND_SIZE 200
-#define EDP_ECP_SERIALIZED_REPLY_SIZE 200
 
 typedef messip_channel_t * fd_client_t;
 static const fd_client_t invalid_fd = NULL;
@@ -135,7 +121,13 @@ enum UI_TO_ECP_COMMAND
 	MAM_CLEAR,
 	MAM_SAVE,
 	MAM_EXIT,
-	MAM_CALIBRATE
+	MAM_CALIBRATE,
+
+	//! Swarm-related entries
+	PLAN_PREV,
+	PLAN_NEXT,
+	PLAN_EXEC,
+	PLAN_SAVE
 };
 
 //------------------------------------------------------------------------------
@@ -162,7 +154,10 @@ enum ECP_TO_UI_COMMAND
 	TR_DANGEROUS_FORCE_DETECTED,
 	CHOOSE_OPTION,
 	MAM_OPEN_WINDOW,
-	MAM_REFRESH_WINDOW
+	MAM_REFRESH_WINDOW,
+
+	//! Swarm-related entries
+	PLAN_STEP_MODE
 };
 
 //------------------------------------------------------------------------------
@@ -175,11 +170,12 @@ enum ECP_TO_UI_COMMAND
  */
 struct ECP_message
 {
-
 	/*! Type of message. */
 	ECP_TO_UI_COMMAND ecp_message;
+
 	/*! Robot name. */
 	robot_name_t robot_name;
+
 	/*! Number of options - from 2 to 4 - - for CHOOSE_OPTION mode. */
 	uint8_t nr_of_options;
 
@@ -215,6 +211,10 @@ struct ECP_message
 	/*! Robot positions + Sensor readings + Measure number. */
 	MAM;
 
+	//! XML string with current plan item
+	//std::string plan_item;
+	char plan_item[SWARM_STRING_SIZE];
+
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -223,21 +223,30 @@ struct ECP_message
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & ecp_message;
-		ar & robot_name;
-		ar & nr_of_options;
 
-		ar & string;
+		switch (ecp_message)
+		{
+			case PLAN_STEP_MODE:
+				ar & plan_item;
+				break;
+			default:
+				ar & robot_name;
+				ar & nr_of_options;
 
-		ar & RS.robot_position;
-		ar & RS.sensor_reading;
+				ar & string;
 
-		ar & R2S.robot_position;
-		ar & R2S.digital_scales_sensor_reading;
-		ar & R2S.force_sensor_reading;
+				ar & RS.robot_position;
+				ar & RS.sensor_reading;
 
-		ar & MAM.robot_position;
-		ar & MAM.sensor_reading;
-		ar & MAM.measure_number;
+				ar & R2S.robot_position;
+				ar & R2S.digital_scales_sensor_reading;
+				ar & R2S.force_sensor_reading;
+
+				ar & MAM.robot_position;
+				ar & MAM.sensor_reading;
+				ar & MAM.measure_number;
+				break;
+		}
 	}
 };
 
@@ -247,7 +256,6 @@ struct ECP_message
  */
 struct UI_reply
 {
-
 	UI_TO_ECP_COMMAND reply;
 	int32_t integer_number;
 	double double_number;
@@ -255,19 +263,41 @@ struct UI_reply
 	char path[80];
 	char filename[20];
 
+	UI_reply()
+	{
+		path[0] = '\0';
+		filename[0] = '\0';
+	}
+
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
+
+	//! XML string with current plan item
+	char plan_item[SWARM_STRING_SIZE];
 
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & reply;
-		ar & integer_number;
-		ar & double_number;
-		ar & coordinates;
-		ar & path;
-		ar & filename;
+
+		switch (reply)
+		{
+			case PLAN_EXEC:
+				ar & plan_item;
+				break;
+			case PLAN_PREV:
+			case PLAN_NEXT:
+			case PLAN_SAVE:
+				break;
+			default:
+				ar & integer_number;
+				ar & double_number;
+				ar & coordinates;
+				ar & path;
+				ar & filename;
+				break;
+		}
 	}
 };
 
@@ -751,7 +781,6 @@ struct c_buffer
 	uint16_t value_in_step_no;
 	c_buffer_robot_model_t robot_model;
 	c_buffer_arm_t arm;
-	uint32_t serialized_command[ECP_EDP_SERIALIZED_COMMAND_SIZE];
 
 	//-----------------------------------------------------
 	//                      METHODS
@@ -777,7 +806,6 @@ struct c_buffer
 		ar & value_in_step_no;
 		ar & robot_model;
 		ar & arm;
-		ar & serialized_command;
 	}
 
 	c_buffer(void); // by W odkomentowane
@@ -993,7 +1021,6 @@ struct r_buffer : r_buffer_base
 
 	r_buffer_robot_model_t robot_model;
 	r_buffer_arm_t arm;
-	uint32_t serialized_reply[EDP_ECP_SERIALIZED_REPLY_SIZE];
 
 	//-----------------------------------------------------
 	//                      METHODS
@@ -1018,28 +1045,76 @@ struct r_buffer : r_buffer_base
 		// The following are unions... probably have to handle with boost::variant
 		ar & robot_model;
 		ar & arm;
-		ar & serialized_reply;
 	}
 };
 
 //------------------------------------------------------------------------------
-/*! Target position for the mobile robot. */
-class playerpos_goal_t
+/*!
+ *\brief Buffer to store data for communication between processes with
+ *\brief various data types and serialization
+ */
+class seter_geter_buffer_t
 {
-private:
-	double x, y, t;
-
 public:
-	void forward(double length);
-	void turn(double angle);
-	void setGoal(double _x, double _y, double _z);
 
-	double getX() const;
-	double getY() const;
-	double getT() const;
+	/*!
+	 * \brief memory to store data
+	 */
+	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
 
-	playerpos_goal_t(double _x, double _y, double _t);
-	playerpos_goal_t();
+	/*!
+	 * \brief template method to put data into the memory (serialize)
+	 */
+	template <typename BUFFER_TYPE>
+	void set(const BUFFER_TYPE & buffer)
+	{
+		xdr_oarchive <> oa;
+		oa << buffer;
+		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
+		assert(MP_2_ECP_STRING_SIZE > oa.getArchiveSize());
+
+		// serializacja
+		memcpy(data, oa.get_buffer(), oa.getArchiveSize());
+	}
+
+	/*!
+	 * \brief template method to get data data from the memory (deserialize)
+	 */
+	template <typename BUFFER_TYPE>
+	void get(BUFFER_TYPE & buffer) const
+	{
+		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
+		assert(MP_2_ECP_STRING_SIZE > sizeof(buffer));
+
+		// deserializacja
+		xdr_iarchive <> ia((const char *) data, (std::size_t) MP_2_ECP_STRING_SIZE);
+
+		ia >> buffer;
+	}
+
+	/*!
+	 * \brief template method to get data data from the memory (deserialize)
+	 */
+	template <typename BUFFER_TYPE>
+	BUFFER_TYPE get() const
+	{
+		BUFFER_TYPE buffer_tmp;
+
+		get(buffer_tmp);
+
+		return buffer_tmp;
+	}
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & data;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -1052,12 +1127,7 @@ struct ecp_next_state_t
 	std::string next_state;
 
 	int variant;
-	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
-
-	/*! Target position for the mobile robot. */
-	playerpos_goal_t playerpos_goal;
-
-	const char * get_mp_2_ecp_next_state_string() const;
+	seter_geter_buffer_t sg_buf;
 
 private:
 	//! Give access to boost::serialization framework
@@ -1069,7 +1139,7 @@ private:
 	{
 		ar & next_state;
 		ar & variant;
-		ar & data;
+		ar & sg_buf;
 		// ar & playerpos_goal; // this is not used at this moment
 	}
 };

@@ -26,7 +26,7 @@ class sleep : public common::generator::generator
 		timespec starttime;
 
 	public:
-		sleep(common::task::task& _ecp_task, double=1);		//constructor
+		sleep(task_t & _ecp_task, double = 1);		//constructor
 		bool first_step();		//first step generation
 		bool next_step();			//next step generation
 		void init_time(double=1);	//initialize time

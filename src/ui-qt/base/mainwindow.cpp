@@ -249,6 +249,11 @@ void MainWindow::get_lineEdit_position(double* val, int number_of_servos)
 
 }
 
+QString MainWindow::get_lineEdit_qstring()
+{
+	return ui->lineEdit_position->text();
+}
+
 void MainWindow::ui_notification_slot()
 {
 

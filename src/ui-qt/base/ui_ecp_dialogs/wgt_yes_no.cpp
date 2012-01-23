@@ -4,7 +4,7 @@
 #include <QHideEvent>
 
 wgt_yes_no::wgt_yes_no(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
-	wgt_base("Yes No Dialog", _interface, parent), ui(new Ui::wgt_yes_noClass)
+		wgt_base("Yes No Dialog", _interface, parent), ui(new Ui::wgt_yes_noClass)
 {
 	ui->setupUi(this);
 
@@ -42,7 +42,8 @@ void wgt_yes_no::on_pushButton_no_clicked()
 	my_close();
 }
 
-Ui::wgt_yes_noClass * wgt_yes_no::get_ui()
+void wgt_yes_no::my_open(bool set_on_top)
 {
-	return ui;
+	ui->label_message->setText(interface.ui_ecp_obj->ecp_to_ui_msg.string);
+	wgt_base::my_open(set_on_top);
 }

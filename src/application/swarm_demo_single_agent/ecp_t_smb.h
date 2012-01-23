@@ -9,7 +9,7 @@ namespace ecp {
 namespace smb {
 namespace task {
 
-class swarmitfix : public common::task::task
+class swarmitfix : public common::task::_task <ecp::smb::robot>
 {
 protected:
 	//generatory

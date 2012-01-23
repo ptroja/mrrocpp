@@ -6,7 +6,7 @@
 #include "../irp6_m/wgt_irp6_m_joints.h"
 
 #include "ui_r_irp6_m.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common012.h"
 
 #include "../base/interface.h"
 
@@ -32,9 +32,8 @@ const std::string UiRobot::WGT_TOOL_EULER = "WGT_TOOL_EULER";
 // KLASA UiRobot
 //
 //
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 {
-	return 1;
 }
 
 int UiRobot::execute_motor_motion()
@@ -95,18 +94,8 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, i
 {
 }
 
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
-}
 
-void UiRobot::null_ui_ecp_robot()
-{
-	ui_ecp_robot = NULL;
-
-}
-
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	common::UiRobot::manage_interface();
@@ -168,13 +157,11 @@ int UiRobot::manage_interface()
 
 	}
 
-	return 1;
 }
 
-int UiRobot::move_to_preset_position(int variant)
+void UiRobot::move_to_preset_position(int variant)
 {
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()

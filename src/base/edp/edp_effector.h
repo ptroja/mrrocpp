@@ -3,7 +3,6 @@
  * \brief File containing the declaration of edp::common::effector class.
  *
  * \author yoyek
- * \date 2009
  *
  */
 
@@ -36,12 +35,6 @@ protected:
 	 */
 	lib::REPLY_TYPE real_reply_type;
 
-	/*!
-	 * \brief structure of reply of EDP process send to ECP process.
-	 *
-	 * It is used a union of structures for all EDP's
-	 */
-	//lib::r_buffer reply;
 	/*!
 	 * \brief id of ECP process sending a command.
 	 *
@@ -224,12 +217,6 @@ public:
 	 */
 	virtual void create_threads() = 0;
 
-	/*!
-	 * \brief ECP command union.
-	 *
-	 * Command sent by ECP.
-	 */
-	//lib::c_buffer instruction;
 };
 /************************ EDP_EFFECTOR ****************************/
 

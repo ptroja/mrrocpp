@@ -15,8 +15,8 @@ namespace common {
 namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
-sleep::sleep(common::task::task& _ecp_task, double s) :
-	common::generator::generator(_ecp_task)
+sleep::sleep(task_t & _ecp_task, double s) :
+	generator_t(_ecp_task)
 {
 	if (the_robot)
 		the_robot->communicate_with_edp = false; //do not communicate with edp

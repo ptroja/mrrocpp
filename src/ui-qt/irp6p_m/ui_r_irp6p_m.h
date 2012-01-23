@@ -17,12 +17,10 @@
 #include "../base/menu_bar.h"
 #include "../base/menu_bar_action.h"
 
-
-namespace Ui{
+namespace Ui {
 class MenuBar;
 class MenuBarAction;
 }
-
 
 namespace mrrocpp {
 namespace ui {
@@ -39,7 +37,6 @@ namespace irp6p_m {
 //
 //
 
-
 class UiRobot : public irp6_m::UiRobot
 {
 Q_OBJECT
@@ -48,24 +45,32 @@ public:
 
 	UiRobot(common::Interface& _interface);
 
+	void synchronise();
 
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_MOTOR variant
+	 */
 
-	int synchronise();
+	void open_c_motor_window();
 
-	int move_to_synchro_position();
-	int move_to_front_position();
-	int move_to_preset_position(int variant);
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_JOINT variant
+	 */
+
+	void open_c_joint_window();
+
+	void move_to_synchro_position();
+	void move_to_front_position();
+	void move_to_preset_position(int variant);
 	void create_ui_ecp_robot();
-	int edp_create_int_extra_operations();
-
-	int ui_get_edp_pid();
-	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
-
+	void edp_create_int_extra_operations();
 
 	void setup_menubar();
 
 private:
-    QAction *actionirp6p_m_Motors;
+	QAction *actionirp6p_m_Motors;
 
 };
 

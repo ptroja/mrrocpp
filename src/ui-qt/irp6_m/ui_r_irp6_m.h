@@ -28,6 +28,8 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 class Interface;
+}
+namespace common012 {
 class EcpRobot;
 }
 
@@ -43,20 +45,18 @@ class UiRobot : public common::UiRobot
 {
 public:
 
-	common::EcpRobot *ui_ecp_robot;
+	common012::EcpRobot *ui_ecp_robot;
 
 	UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
 
 	void setup_menubar();
 
-	int manage_interface();
+	void manage_interface();
 
-	void delete_ui_ecp_robot();
-	void null_ui_ecp_robot();
 	int synchronise_int();
-	virtual int move_to_preset_position(int variant);
+	virtual void move_to_preset_position(int variant);
 
-	virtual int synchronise();
+	virtual void synchronise();
 
 	int execute_motor_motion();
 	int execute_joint_motion();

@@ -33,32 +33,6 @@ namespace spkm {
 class effector : public common::manip_effector
 {
 private:
-	//! Access to the CAN gateway unit
-	boost::shared_ptr <canopen::gateway> gateway;
-
-	//! PKM axes.
-	boost::shared_ptr <maxon::epos> axisA, axisB, axisC, axis1, axis2, axis3;
-
-	//! Names of PKM axes.
-	boost::array <std::string, mrrocpp::lib::spkm::NUM_OF_SERVOS> axesNames;
-
-	//! Axes container.
-	boost::array <maxon::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
-
-	//! Default axis velocity [rpm]
-	static const uint32_t Vdefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
-
-	//! Default axis acceleration [rpm/s]
-	static const uint32_t Adefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
-
-	//! Default axis deceleration [rpm/s]
-	static const uint32_t Ddefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
-
-	//! Maximal motor velocity [rpm].
-	static const uint32_t MotorVmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
-
-	//! Max motor acceleration [rpm/s].
-	static const uint32_t MotorAmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
 	/*!
 	 * \brief "Desired" joint values that were required by previously received SET command.
@@ -81,31 +55,45 @@ private:
 	 * \brief Desired tool frame (pose of the SHEAD tip in the PKM base reference frame).
 	 * \author tkornuta
 	 */
-	lib::Homog_matrix desired_shead_frame;
+	lib::Homog_matrix desired_spkm_frame;
 
 	/*!
 	 * \brief Current tool frame (pose of the SHEAD tip in the PKM base reference frame).
 	 * \author tkornuta
 	 */
-	lib::Homog_matrix current_shead_frame;
-
-	//! Handler for the asynchronous execution of the interpolated profile motion
-	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
+	lib::Homog_matrix current_spkm_frame;
 
 	//! Method checks the state of EPOS controllers.
 	void check_controller_state();
 
 protected:
-	lib::spkm::cbuffer ecp_edp_cbuffer;
-	lib::spkm::rbuffer edp_ecp_rbuffer;
 
-	/*!
-	 * @brief method,  creates a list of available kinematic models for spkm effector.
-	 *
-	 * Here it is parallel manipulator direct and inverse kinematic transform
-	 * and motor to joint transform
-	 */
-	virtual void create_kinematic_models_for_given_robot(void);
+	//! Default axis velocity [rpm]
+	uint32_t Vdefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Default axis acceleration [rpm/s]
+	uint32_t Adefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Default axis deceleration [rpm/s]
+	uint32_t Ddefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Maximal motor velocity [rpm].
+	uint32_t MotorVmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Max motor acceleration [rpm/s].
+	uint32_t MotorAmax[mrrocpp::lib::spkm::NUM_OF_SERVOS];
+
+	//! Access to the CAN gateway unit
+	boost::shared_ptr <canopen::gateway> gateway;
+
+	//! PKM axes.
+	boost::shared_ptr <maxon::epos> axisA, axisB, axisC, axis1, axis2, axis3;
+
+	//! Axes container.
+	boost::array <maxon::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
+
+	//! Handler for the asynchronous execution of the interpolated profile motion
+	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
 public:
 
@@ -131,11 +119,13 @@ public:
 	void create_threads();
 
 	/*!
-	 * @brief method to move robot arm
+	 * \brief Executes the *move_arm* command.
 	 *
-	 * it chooses the single thread variant from the manip_effector
+	 * It chooses the single thread variant from the motor_driven_effector.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void move_arm(const lib::c_buffer &instruction);
+	void move_arm(const lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief Method responsible for parsing of the command for motors controlling the legs and SPKM rotation.
@@ -158,15 +148,17 @@ public:
 	/*!
 	 * \brief Method initializes all SPKM variables (including motors, joints and frames), depending on working mode (robot_test_mode) and robot state.
 	 * Called only once after process creation.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void get_controller_state(lib::c_buffer &instruction);
+	void get_controller_state(lib::c_buffer &instruction_);
 
 	/*!
 	 * @brief method to get position of the arm
 	 *
-	 * Here it calls common::manip_effector::get_arm_position_get_arm_type_switch
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void get_arm_position(bool read_hardware, lib::c_buffer &instruction);
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction_);
 
 	/*!
 	 * @brief method to choose master_order variant
@@ -176,23 +168,28 @@ public:
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
 	/*!
-	 * @brief method to deserialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
+	 * \brief method to receive instruction from ecp of particular type
 	 */
-	void instruction_deserialization();
+	lib::INSTRUCTION_TYPE variant_receive_instruction();
 
 	/*!
-	 * @brief method to serialize part of the reply
-	 *
-	 * Currently simple memcpy implementation
+	 * \brief method to reply to ecp with class of particular type
 	 */
-	void reply_serialization();
+	void variant_reply_to_instruction();
+
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
+	lib::spkm::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
+	lib::spkm::r_buffer reply;
 };
 
 } // namespace spkm
 } // namespace edp
 } // namespace mrrocpp
-
 
 #endif

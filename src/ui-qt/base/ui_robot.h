@@ -27,6 +27,8 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
+class EcpRobot;
+
 const std::string WGT_ROBOT_PC = "WGT_ROBOT_PC";
 
 #define CATCH_SECTION_IN_ROBOT catch (ecp::exception::se_r & error) { \
@@ -91,9 +93,11 @@ class Interface;
 
 class UiRobot : public QObject
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
+
+	EcpRobot *ui_ecp_robot;
 	Interface& interface;
 
 	const lib::robot_name_t getName();
@@ -117,6 +121,34 @@ public:
 	UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos);
 	~UiRobot();
 
+	/*
+	 * opens move window on mp or ecp request
+	 * C_XYZ_ANGLE_AXIS variant
+	 */
+
+	virtual void open_c_xyz_angle_axis_window();
+
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_XYZ_EULER_ZYZ variant
+	 */
+
+	virtual void open_c_xyz_euler_zyz_window();
+
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_JOINT variant
+	 */
+
+	virtual void open_c_joint_window();
+
+	/*
+	 * opens move window on mp or ecp request
+	 * 	 * C_MOTOR variant
+	 */
+
+	virtual void open_c_motor_window();
+
 	bool is_edp_loaded();
 
 	void create_thread();
@@ -137,11 +169,10 @@ public:
 	void connect_to_reader(void);
 	void connect_to_ecp_pulse_chanell(void); //TODO: channel, nie chanell
 	void pulse_ecp_execute(int code, int value);
-	virtual void delete_ui_ecp_robot() = 0;
-	virtual void null_ui_ecp_robot() = 0;
-	virtual int ui_get_edp_pid() = 0;
-	virtual void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l) = 0;
-	virtual int manage_interface();
+	virtual void delete_ui_ecp_robot();
+	int ui_get_edp_pid();
+	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
+	virtual void manage_interface();
 	virtual void setup_menubar();
 	virtual int execute_clear_fault()
 	{
@@ -157,7 +188,7 @@ public:
 		return NULL;
 	}
 
-	virtual int synchronise() = 0;
+	virtual void synchronise() = 0;
 	virtual void edp_create();
 	virtual int edp_create_int();
 	virtual void create_ui_ecp_robot() = 0;
@@ -169,15 +200,15 @@ public:
 	void block_ecp_trigger();
 	void unblock_ecp_trigger();
 
-	virtual int edp_create_int_extra_operations();
+	virtual void edp_create_int_extra_operations();
 
 	bool check_synchronised_and_loaded();
 	bool deactivate_ecp_trigger();
-	int reload_configuration();
+	void reload_configuration();
 
-	virtual int move_to_synchro_position();
-	virtual int move_to_front_position();
-	virtual int move_to_preset_position(int variant);
+	virtual void move_to_synchro_position();
+	virtual void move_to_front_position();
+	virtual void move_to_preset_position(int variant);
 
 	// default try catch handlers
 	void catch_ecp_robot_fe(ecp::exception::fe_r & error);

@@ -19,8 +19,6 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-
-#include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
@@ -29,7 +27,6 @@
 #include "robot/smb/mp_r_smb.h"
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
-#include "robot/player/const_player.h"
 
 using namespace logger;
 
@@ -45,12 +42,12 @@ task* return_created_mp_task(lib::configurator &_config)
 }
 
 visualservo_tester::visualservo_tester(lib::configurator &config) :
-	task(config), config_section_name("[visualservo_tester]")
+		task(config), config_section_name("[visualservo_tester]")
 {
-	run_vs = config.value <bool> ("run_vs", config_section_name);
-	run_conveyor = config.value <bool> ("run_conveyor", config_section_name);
-	vs_settle_time = config.value <int> ("vs_settle_time", config_section_name);
-	robot_name = config.value <std::string> ("robot_name", config_section_name);
+	run_vs = config.value <bool>("run_vs", config_section_name);
+	run_conveyor = config.value <bool>("run_conveyor", config_section_name);
+	vs_settle_time = config.value <int>("vs_settle_time", config_section_name);
+	robot_name = config.value <std::string>("robot_name", config_section_name);
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
@@ -69,7 +66,7 @@ void visualservo_tester::main_task_algorithm(void)
 {
 	if (run_vs) {
 		sr_ecp_msg->message("Starting visual servo");
-		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", 0, robot_name);
+		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST, 0, "", robot_name);
 		sr_ecp_msg->message("Visual servo started.");
 
 		char txt[128];
@@ -85,7 +82,7 @@ void visualservo_tester::main_task_algorithm(void)
 	if (run_conveyor) {
 		sr_ecp_msg->message("Starting conveyor");
 
-		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_CONVEYOR_VS_TEST, 0, "", 0, lib::conveyor::ROBOT_NAME);
+		set_next_ecp_state(mrrocpp::ecp_mp::generator::ECP_GEN_CONVEYOR_VS_TEST, 0, "", lib::conveyor::ROBOT_NAME);
 
 		sr_ecp_msg->message("Conveyor started.");
 	}
@@ -95,7 +92,7 @@ void visualservo_tester::main_task_algorithm(void)
 	log("visualservo_tester::main_task_algorithm() 4\n");
 }
 
-}//namespace task
+} //namespace task
 
 }
 

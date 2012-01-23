@@ -2,6 +2,7 @@
 #include "interface.h"
 #include "mainwindow.h"
 #include "ui_robot.h"
+
 #include <QMainWindow>
 #include <QLocale>
 
@@ -79,7 +80,7 @@ void wgt_base::init_and_copy()
 	emit init_and_copy_signal();
 }
 
-int wgt_base::get_desired_position()
+void wgt_base::get_desired_position()
 {
 	if (robot->state.edp.pid != -1) {
 		if (robot->state.edp.is_synchronised)
@@ -89,7 +90,6 @@ int wgt_base::get_desired_position()
 			for (int i = 0; i < rows_number; i++)
 				robot->desired_pos[i] = 0.0;
 	}
-	return 1;
 }
 
 void wgt_base::setup_ui(QGridLayout *layout, int _rows_number)

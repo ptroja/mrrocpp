@@ -17,41 +17,61 @@ namespace ecp {
 namespace shead {
 
 robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-		ecp::common::robot::ecp_robot(_robot_name, lib::shead::NUM_OF_SERVOS, _config, _sr_ecp),
-		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
-		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
-		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
-		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
+		ecp::common::robot::_ecp_robot <lib::shead::c_buffer, lib::shead::r_buffer>(_robot_name, lib::shead::NUM_OF_SERVOS, _config, _sr_ecp)
+		,
+		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager)
+		,
+		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager)
+		,
+		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager)
+		,
+		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
+		,
 
-		shead_head_soldification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager),
-		shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
+		shead_head_soldification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager)
+		,
+		shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager)
+		,
 
-		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
-		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
+		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager)
+		,
+		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager)
+		,
 
 		shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object) :
-		ecp::common::robot::ecp_robot(_robot_name, lib::shead::NUM_OF_SERVOS, _ecp_object),
-		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
-		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
-		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager),
-		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
+		ecp::common::robot::_ecp_robot <lib::shead::c_buffer, lib::shead::r_buffer>(_robot_name, lib::shead::NUM_OF_SERVOS, _ecp_object)
+		,
+		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager)
+		,
+		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager)
+		,
+		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager)
+		,
+		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
+		,
 
-		shead_head_soldification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager),
-		shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager),
+		shead_head_soldification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager)
+		,
+		shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager)
+		,
 
-		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
-		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
+		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager)
+		,
+		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager)
+		,
 
 		shead_reply_data_request_port(lib::shead::REPLY_DATA_REQUEST_PORT, port_manager)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
@@ -65,11 +85,6 @@ void robot::create_kinematic_models_for_given_robot(void)
 
 void robot::create_command()
 {
-	// checks if any data_port is set
-	bool is_new_data = false;
-
-	// cheks if any data_request_posrt is set
-	bool is_new_request = false;
 
 	if (epos_motor_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
@@ -78,15 +93,12 @@ void robot::create_command()
 			ecp_command.set_arm_type = lib::MOTOR;
 		}
 
-		ecp_edp_cbuffer.variant = lib::shead::POSE;
+		ecp_command.shead.variant = lib::shead::POSE;
 
-		ecp_edp_cbuffer.set_pose_specification = lib::shead::MOTOR;
-
-		ecp_edp_cbuffer.motion_variant = epos_motor_command_data_port.data.motion_variant;
-		ecp_edp_cbuffer.estimated_time = epos_motor_command_data_port.data.estimated_time;
+		ecp_command.shead.set_pose_specification = lib::shead::MOTOR;
 
 		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; ++i) {
-			ecp_edp_cbuffer.motor_pos[i] = epos_motor_command_data_port.data.desired_position[i];
+			ecp_command.shead.motor_pos[i] = epos_motor_command_data_port.data.desired_position[i];
 		}
 
 		check_then_set_command_flag(is_new_data);
@@ -95,14 +107,12 @@ void robot::create_command()
 	if (epos_joint_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
-		ecp_edp_cbuffer.variant = lib::shead::POSE;
+		ecp_command.shead.variant = lib::shead::POSE;
 
-		ecp_edp_cbuffer.set_pose_specification = lib::shead::JOINT;
+		ecp_command.shead.set_pose_specification = lib::shead::JOINT;
 
-		ecp_edp_cbuffer.motion_variant = epos_joint_command_data_port.data.motion_variant;
-		ecp_edp_cbuffer.estimated_time = epos_joint_command_data_port.data.estimated_time;
 		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; ++i) {
-			ecp_edp_cbuffer.joint_pos[i] = epos_joint_command_data_port.data.desired_position[i];
+			ecp_command.shead.joint_pos[i] = epos_joint_command_data_port.data.desired_position[i];
 		}
 
 		check_then_set_command_flag(is_new_data);
@@ -110,10 +120,14 @@ void robot::create_command()
 
 	if (epos_brake_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
+		if (!is_synchronised()) {
+			ecp_command.motion_type = lib::RELATIVE;
+			ecp_command.set_arm_type = lib::MOTOR;
+		}
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::shead::QUICKSTOP;
+		ecp_command.shead.variant = lib::shead::QUICKSTOP;
 
 		check_then_set_command_flag(is_new_data);
 	}
@@ -126,7 +140,7 @@ void robot::create_command()
 			ecp_command.motion_type = lib::RELATIVE;
 			ecp_command.set_arm_type = lib::MOTOR;
 		}
-		ecp_edp_cbuffer.variant = lib::shead::CLEAR_FAULT;
+		ecp_command.shead.variant = lib::shead::CLEAR_FAULT;
 
 		check_then_set_command_flag(is_new_data);
 	}
@@ -137,9 +151,9 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::shead::SOLIDIFICATION;
+		ecp_command.shead.variant = lib::shead::SOLIDIFICATION;
 
-		ecp_edp_cbuffer.head_solidification = shead_head_soldification_data_port.data;
+		ecp_command.shead.head_solidification = shead_head_soldification_data_port.data;
 
 		check_then_set_command_flag(is_new_data);
 	}
@@ -150,16 +164,16 @@ void robot::create_command()
 		// generator command interpretation
 		// narazie proste przepisanie
 
-		ecp_edp_cbuffer.variant = lib::shead::VACUUM;
+		ecp_command.shead.variant = lib::shead::VACUUM;
 
-		ecp_edp_cbuffer.vacuum_activation = shead_vacuum_activation_data_port.data;
+		ecp_command.shead.vacuum_activation = shead_vacuum_activation_data_port.data;
 
 		check_then_set_command_flag(is_new_data);
 
 	}
 
 	if (epos_motor_reply_data_request_port.is_new_request()) {
-		ecp_edp_cbuffer.get_pose_specification = lib::shead::MOTOR;
+		ecp_command.shead.get_pose_specification = lib::shead::MOTOR;
 		//	ecp_command.get_arm_type = lib::MOTOR;
 		//sr_ecp_msg.message("epos_motor_reply_data_request_port");
 
@@ -167,7 +181,7 @@ void robot::create_command()
 	}
 
 	if (epos_joint_reply_data_request_port.is_new_request()) {
-		ecp_edp_cbuffer.get_pose_specification = lib::shead::JOINT;
+		ecp_command.shead.get_pose_specification = lib::shead::JOINT;
 		//ecp_command.get_arm_type = lib::JOINT;
 		//	sr_ecp_msg.message("epos_joint_reply_data_request_port.is_new_request()");
 		check_then_set_command_flag(is_new_request);
@@ -175,47 +189,21 @@ void robot::create_command()
 
 	is_new_request = is_new_request || shead_reply_data_request_port.is_new_request();
 
-	communicate_with_edp = true;
-
-	if (is_new_data && is_new_request) {
-		ecp_command.instruction_type = lib::SET_GET;
-	} else if (is_new_data) {
-		ecp_command.instruction_type = lib::SET;
-	} else if (is_new_request) {
-		ecp_command.instruction_type = lib::GET;
-	} else {
-		communicate_with_edp = false;
-	}
-
-	if (is_new_request) {
-		ecp_command.get_type = ARM_DEFINITION;
-	}
-
-	// message serialization
-	if (communicate_with_edp) {
-		memcpy(ecp_command.serialized_command, &ecp_edp_cbuffer, sizeof(ecp_edp_cbuffer));
-		assert(sizeof(ecp_command.serialized_command) >= sizeof(ecp_edp_cbuffer));
-	}
 }
 
 void robot::get_reply()
 {
 
-	// message deserialization
-	memcpy(&edp_ecp_rbuffer, reply_package.serialized_reply, sizeof(edp_ecp_rbuffer));
-
 	// generator reply generation
 
 	if (epos_motor_reply_data_request_port.is_new_request()) {
 		// generator reply generation
-		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
-			epos_motor_reply_data_request_port.data.epos_controller[i].position =
-					edp_ecp_rbuffer.epos_controller[i].position;
-			epos_motor_reply_data_request_port.data.epos_controller[i].current =
-					edp_ecp_rbuffer.epos_controller[i].current;
-			epos_motor_reply_data_request_port.data.epos_controller[i].motion_in_progress =
-					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
-		}
+		epos_motor_reply_data_request_port.data.epos_controller[0].position =
+				reply_package.shead.epos_controller.position;
+		epos_motor_reply_data_request_port.data.epos_controller[0].current =
+				reply_package.shead.epos_controller.current;
+		epos_motor_reply_data_request_port.data.epos_controller[0].motion_in_progress =
+				reply_package.shead.epos_controller.motion_in_progress;
 		epos_motor_reply_data_request_port.set();
 	}
 
@@ -223,21 +211,19 @@ void robot::get_reply()
 		// generator reply generation
 		sr_ecp_msg.message("ECP get_reply epos_joint_reply_data_request_port");
 
-		for (int i = 0; i < lib::shead::NUM_OF_SERVOS; i++) {
-			epos_joint_reply_data_request_port.data.epos_controller[i].position =
-					edp_ecp_rbuffer.epos_controller[i].position;
-			epos_joint_reply_data_request_port.data.epos_controller[i].current =
-					edp_ecp_rbuffer.epos_controller[i].current;
-			epos_joint_reply_data_request_port.data.epos_controller[i].motion_in_progress =
-					edp_ecp_rbuffer.epos_controller[i].motion_in_progress;
-		}
-		//	epos_joint_reply_data_request_port.data.contact = edp_ecp_rbuffer.contact;
+		epos_joint_reply_data_request_port.data.epos_controller[0].position =
+				reply_package.shead.epos_controller.position;
+		epos_joint_reply_data_request_port.data.epos_controller[0].current =
+				reply_package.shead.epos_controller.current;
+		epos_joint_reply_data_request_port.data.epos_controller[0].motion_in_progress =
+				reply_package.shead.epos_controller.motion_in_progress;
+		//	epos_joint_reply_data_request_port.data.contact = reply_package.shead.contact;
 
 		epos_joint_reply_data_request_port.set();
 	}
 
 	if (shead_reply_data_request_port.is_new_request()) {
-		shead_reply_data_request_port.data = edp_ecp_rbuffer.shead_reply;
+		shead_reply_data_request_port.data = reply_package.shead.shead_reply;
 
 		shead_reply_data_request_port.set();
 	}

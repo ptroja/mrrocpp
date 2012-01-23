@@ -1,4 +1,3 @@
-if(ROBOT_IRP6_ON_TRACK_TFG)
 
 add_executable(edp_irp6ot_tfg
 	edp_irp6ot_tfg_effector.cc
@@ -19,10 +18,10 @@ add_library(kinematicsirp6ot_tfg
 target_link_libraries(kinematicsirp6ot_tfg kinematic_model_irp6_tfg kinematics)
 	
 add_library(ecp_r_irp6ot_tfg ecp_r_irp6ot_tfg)	
+add_library(mp_r_irp6ot_tfg mp_r_irp6ot_tfg)	
 	
 target_link_libraries(ecp_r_irp6ot_tfg kinematicsirp6ot_tfg)
 
 install(TARGETS edp_irp6ot_tfg DESTINATION bin)
-install(TARGETS kinematicsirp6ot_tfg ecp_r_irp6ot_tfg DESTINATION lib)
+install(TARGETS kinematicsirp6ot_tfg ecp_r_irp6ot_tfg mp_r_irp6ot_tfg DESTINATION lib)
 
-endif(ROBOT_IRP6_ON_TRACK_TFG)

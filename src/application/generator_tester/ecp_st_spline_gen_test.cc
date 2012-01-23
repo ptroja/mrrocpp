@@ -10,7 +10,7 @@
 
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
-#include "robot/polycrank/const_polycrank.h"
+
 #include "robot/conveyor/const_conveyor.h"
 
 #include "base/ecp/ecp_task.h"
@@ -21,7 +21,7 @@ namespace common {
 namespace sub_task {
 
 sub_task_spline_gen_test::sub_task_spline_gen_test(task::task & _ecp_t) :
-        sub_task(_ecp_t)
+		sub_task(_ecp_t)
 {
 
         if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
@@ -34,7 +34,6 @@ sub_task_spline_gen_test::sub_task_spline_gen_test(task::task & _ecp_t) :
 
                 track = false;
                 postument = true;
-                poly = false;
                 conv = false;
 
                 spgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
@@ -50,28 +49,9 @@ sub_task_spline_gen_test::sub_task_spline_gen_test(task::task & _ecp_t) :
                 spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 7);
                 spgenmotor->set_debug(true);
 
-                track = true;
-                postument = false;
-                poly = false;
-                conv = false;
-
-                spgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-                spgeneuler->set_debug(true);
-
-                spgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
-                spgenangle->set_debug(true);
-
-        } else if (_ecp_t.ecp_m_robot->robot_name == lib::polycrank::ROBOT_NAME) {
-                spgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 7);
-                spgenjoint->set_debug(true);
-
-                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 7);
+                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 6);
                 spgenmotor->set_debug(true);
 
-                track = false;
-                postument = false;
-                poly = true;
-                conv = false;
 
                 spgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
                 spgeneuler->set_debug(true);
@@ -86,10 +66,8 @@ sub_task_spline_gen_test::sub_task_spline_gen_test(task::task & _ecp_t) :
                 spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 1);
                 spgenmotor->set_debug(true);
 
-                track = false;
-                postument = false;
-                poly = false;
-                conv = true;
+                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 1);
+                spgenmotor->set_debug(true);
 
                 spgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
                 spgeneuler->set_debug(true);
@@ -106,7 +84,6 @@ void sub_task_spline_gen_test::conditional_execution()
 
         std::vector <double> coordinates1(6);//postument
         std::vector <double> coordinates2(7);//track
-        std::vector <double> coordinates3(7);//polycrank
         std::vector <double> coordinates4(1);//conveyor
 
         //network_path = "../../src/application/generator_tester/optimizedTraj.trj";
@@ -144,15 +121,6 @@ void sub_task_spline_gen_test::conditional_execution()
                 coordinates1[4] = 3.358;
                 coordinates1[5] = -2.538;
                 cvgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
-        } else if (poly) {
-                coordinates3[0] = 1.500;
-                coordinates3[1] = 1.500;
-                coordinates3[2] = 1.500;
-                coordinates3[3] = 1.500;
-                coordinates3[4] = 1.500;
-                coordinates3[5] = 1.500;
-                coordinates3[6] = 1.500;
-                cvgenjoint->load_absolute_joint_trajectory_pose(coordinates3);
         } else if (conv) {
                 coordinates4[0] = 1.500;
                 cvgenjoint->load_absolute_joint_trajectory_pose(coordinates4);
@@ -174,16 +142,7 @@ void sub_task_spline_gen_test::conditional_execution()
                 coordinates1[3] = 1.034;
                 coordinates1[4] = 3.858;
                 coordinates1[5] = -2.738;
-                cvgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
-        } else if (poly) {
-                coordinates3[0] = 1.000;
-                coordinates3[1] = 1.000;
-                coordinates3[2] = 1.000;
-                coordinates3[3] = 1.000;
-                coordinates3[4] = 1.000;
-                coordinates3[5] = 1.000;
-                coordinates3[6] = 1.000;
-                cvgenjoint->load_absolute_joint_trajectory_pose(coordinates3);
+                cvgenjoint->load_absolute_joint_trajectory_pose(coordinates1)
         } else if (conv) {
                 coordinates4[0] = 1.000;
                 cvgenjoint->load_absolute_joint_trajectory_pose(coordinates4);
@@ -206,15 +165,6 @@ void sub_task_spline_gen_test::conditional_execution()
                 coordinates1[4] = 3.658;
                 coordinates1[5] = -2.738;
                 cvgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
-        } else if (poly) {
-                coordinates3[0] = 0.500;
-                coordinates3[1] = 0.500;
-                coordinates3[2] = 0.500;
-                coordinates3[3] = 0.500;
-                coordinates3[4] = 0.500;
-                coordinates3[5] = 0.500;
-                coordinates3[6] = 0.500;
-                cvgenjoint->load_absolute_joint_trajectory_pose(coordinates3);
         } else if (conv) {
                 coordinates4[0] = 0.500;
                 cvgenjoint->load_absolute_joint_trajectory_pose(coordinates4);

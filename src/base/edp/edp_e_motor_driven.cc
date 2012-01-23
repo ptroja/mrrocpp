@@ -108,6 +108,7 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
 			printf("EFF_TYPE: %d\n", instruction.get_arm_type);
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_GET_END_EFFECTOR_TYPE));
+			break;
 	}
 
 }
@@ -129,7 +130,7 @@ void motor_driven_effector::single_thread_move_arm(const lib::c_buffer &instruct
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_SET_END_EFFECTOR_TYPE));
-
+			break;
 	}
 
 }
@@ -153,7 +154,7 @@ void motor_driven_effector::multi_thread_move_arm(const lib::c_buffer &instructi
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_SET_END_EFFECTOR_TYPE));
-
+			break;
 	}
 
 }
@@ -192,7 +193,7 @@ void motor_driven_effector::multi_thread_master_order(MT_ORDER nm_task, int nm_t
 	mt_tt_obj->master_to_trans_t_order(nm_task, nm_tryb, instruction);
 }
 
-motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_robot_name) :
+motor_driven_effector::motor_driven_effector(shell &_shell, const lib::robot_name_t & l_robot_name, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref) :
 		effector(_shell, l_robot_name),
 		servo_current_motor_pos(lib::MAX_SERVOS_NR),
 		servo_current_joints(lib::MAX_SERVOS_NR),
@@ -202,7 +203,10 @@ motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_
 		desired_motor_pos_new(lib::MAX_SERVOS_NR),
 		current_motor_pos(lib::MAX_SERVOS_NR),
 		step_counter(0),
-		number_of_servos(-1)
+		number_of_servos(-1),
+		instruction(c_buffer_ref),
+		reply(r_buffer_ref),
+		move_arm_second_phase(false)
 {
 	controller_state_edp_buf.is_synchronised = false;
 	controller_state_edp_buf.is_power_on = true;
@@ -212,10 +216,9 @@ motor_driven_effector::motor_driven_effector(shell &_shell, lib::robot_name_t l_
 
 	// is_get_arm_read_hardware=false;
 
-	//#ifdef DOCENT_SENSOR
 	startedCallbackRegistered_ = false;
 	stoppedCallbackRegistered_ = false;
-	//#endif
+
 	float _velocity_limit_global_factor;
 
 	if (config.exists("velocity_limit_global_factor")) {
@@ -425,7 +428,7 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 				default: // blad
 					// ustawi numer bledu
 					BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_REPLY_TYPE));
-
+					break;
 			}
 			break;
 		case lib::SET_GET:
@@ -484,13 +487,13 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 				default: // blad
 					// ustawi numer bledu
 					BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_REPLY_TYPE));
-
+					break;
 			}
 			break;
 		default: // blad
 			// ustawi numer bledu
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_INSTRUCTION_TYPE));
-
+			break;
 	}
 
 	// printf("interpret instruction koniec\n");
@@ -643,10 +646,9 @@ void motor_driven_effector::compute_motors(const lib::c_buffer &instruction)
 				get_current_kinematic_model()->mp2i_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
 			}
 			break;
-		default: {
-
+		default:
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_TYPE));
-		}
+			break;
 	}
 
 	// kinematyka nie stwierdzila bledow, przepisanie wartosci
@@ -674,6 +676,7 @@ void motor_driven_effector::set_robot_model(const lib::c_buffer &instruction)
 			// ustawia numer bledu
 
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_SET_ROBOT_MODEL_TYPE));
+			break;
 	}
 }
 
@@ -695,6 +698,7 @@ void motor_driven_effector::get_robot_model(lib::c_buffer &instruction)
 		default: // blad: nie istniejaca specyfikacja modelu robota
 			// ustawie numer bledu
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_GET_ROBOT_MODEL_TYPE));
+			break;
 
 	}
 }
@@ -729,7 +733,7 @@ void motor_driven_effector::compute_joints(const lib::c_buffer &instruction)
 			break;
 		default:
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_TYPE));
-
+			break;
 	}
 	// check_joints(desired_joints);
 	get_current_kinematic_model()->i2mp_transform(desired_motor_pos_new_tmp, desired_joints_tmp);
@@ -737,10 +741,9 @@ void motor_driven_effector::compute_joints(const lib::c_buffer &instruction)
 	// kinematyka nie stwierdzila bledow, przepisanie wartosci
 	for (int i = 0; i < number_of_servos; i++) {
 		desired_joints[i] = desired_joints_tmp[i];
-                rb_obj->step_data.desired_joints[i] = desired_joints[i];//zapis struktury readera
+		rb_obj->step_data.desired_joints[i] = desired_joints[i]; //zapis struktury readera
 		desired_motor_pos_new[i] = desired_motor_pos_new_tmp[i];
 	}
-
 
 }
 
@@ -820,14 +823,14 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			{
 				case GET_STATE:
 					// wstepna interpretacja nadeslanego polecenia w celu wykrycia nieprawidlowosci
-					switch (receive_instruction(instruction))
+					switch (variant_receive_instruction())
 					{
 						case lib::GET:
 							// potwierdzenie przyjecia polecenia (dla ECP)
 							//            printf("SET_GET\n");
 							reply.reply_type = lib::ACKNOWLEDGE;
 							reply.reply_type = lib::ACKNOWLEDGE;
-							reply_to_instruction(reply);
+							variant_reply_to_instruction();
 
 							if ((rep_type(instruction)) == lib::CONTROLLER_STATE) {
 								// master_order(MT_GET_CONTROLLER_STATE, 0);
@@ -853,9 +856,9 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 					next_state = WAIT;
 					break;
 				case WAIT:
-					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa =>
+					if (variant_receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
 						// zle jej wykonanie, czyli wyslij odpowiedz
-						reply_to_instruction(reply);
+						variant_reply_to_instruction();
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						BOOST_THROW_EXCEPTION(nfe_3() << mrrocpp_error0(QUERY_EXPECTED));
 					}
@@ -899,7 +902,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			establish_error(reply, error0, OK);
 			//  printf("catch NonFatal_error_1\n");
 			// informacja dla ECP o bledzie
-			reply_to_instruction(reply);
+			variant_reply_to_instruction();
 			msg->message(lib::NON_FATAL_ERROR, error0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_STATE;
@@ -943,7 +946,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 
 			establish_error(reply, error0, OK);
 			// informacja dla ECP o bledzie
-			reply_to_instruction(reply);
+			variant_reply_to_instruction();
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
 			establish_error(reply, err_no_0, err_no_1);
@@ -989,13 +992,13 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			{
 				case GET_SYNCHRO:
 					/* Oczekiwanie na zlecenie synchronizacji robota */
-					switch (receive_instruction(instruction))
+					switch (variant_receive_instruction())
 					{
 						case lib::SYNCHRO:
 							// instrukcja wlasciwa => zle jej wykonanie
 							/* Potwierdzenie przyjecia instrukcji synchronizacji do wykonania */
 							reply.reply_type = lib::ACKNOWLEDGE;
-							reply_to_instruction(reply);
+							variant_reply_to_instruction();
 							/* Zlecenie wykonania synchronizacji */
 
 							master_order(MT_SYNCHRONISE, 0); // by Y przejscie przez watek transfor w celu ujednolicenia
@@ -1009,7 +1012,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 							if (pre_synchro_motion(instruction)) {
 								/* Potwierdzenie przyjecia instrukcji ruchow presynchronizacyjnych do wykonania */
 								reply.reply_type = lib::ACKNOWLEDGE;
-								reply_to_instruction(reply);
+								variant_reply_to_instruction();
 								/* Zlecenie wykonania ruchow presynchronizacyjnych */
 								interpret_instruction(instruction);
 								// Jezeli wystapil blad w trakcie realizacji ruchow presynchronizacyjnych,
@@ -1017,29 +1020,29 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 
 								/* Oczekiwanie na poprawne zakoczenie synchronizacji */
 								next_state = WAIT_Q;
-							} else
+							} else {
 								// blad: jedyna instrukcja w tym stanie moze by polecenie
 								// synchronizacji lub ruchow presynchronizacyjnych
 								// Bez synchronizacji adna inna instrukcja nie moze by wykonana przez EDP
 								/* Informacja o bedzie polegajcym na braku polecenia synchronizacji */
 								BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(NOT_YET_SYNCHRONISED));
-
+							}
 							break;
 						default: // blad: jedyna instrukcja w tym stanie moze by polecenie
 							// synchronizacji lub ruchow presynchronizacyjnych
 							// Bez synchronizacji adna inna instrukcja nie moze by wykonana przez EDP
 							/* Informacja o bedzie polegajcym na braku polecenia synchronizacji */
 							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(INVALID_INSTRUCTION_TYPE));
-
+							break;
 					}
 					break;
 				case SYNCHRO_TERMINATED:
 					/* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
-					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
+					if (variant_receive_instruction() == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
 						// Budowa adekwatnej odpowiedzi
 						reply.reply_type = lib::SYNCHRO_OK;
 						msg->message("Robot is synchronized");
-						reply_to_instruction(reply);
+						variant_reply_to_instruction();
 						next_state = GET_INSTRUCTION;
 
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
@@ -1048,9 +1051,9 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 					break;
 				case WAIT_Q:
 					/* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
-					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
+					if (variant_receive_instruction() == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
 						// Budowa adekwatnej odpowiedzi
-						reply_to_instruction(reply);
+						variant_reply_to_instruction();
 						next_state = GET_SYNCHRO;
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						BOOST_THROW_EXCEPTION(nfe_3() << mrrocpp_error0(QUERY_EXPECTED));
@@ -1075,7 +1078,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			}
 
 			establish_error(reply, error0, OK);
-			reply_to_instruction(reply);
+			variant_reply_to_instruction();
 			msg->message(lib::NON_FATAL_ERROR, error0);
 			// powrot do stanu: GET_SYNCHRO
 			next_state = GET_SYNCHRO;
@@ -1092,13 +1095,19 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			if (uint64_t const * tmp = boost::get_error_info <mrrocpp_error0>(error)) {
 				error0 = *tmp;
 			}
-
-			lib::REPLY_TYPE rep_type = reply.reply_type;
+			/* OLD VERSION
+			 lib::REPLY_TYPE rep_type = reply.reply_type;
+			 establish_error(reply, error0, OK);
+			 variant_reply_to_instruction();
+			 msg->message(lib::NON_FATAL_ERROR, error0);
+			 // przywrocenie poprzedniej odpowiedzi
+			 reply.reply_type = rep_type; // powrot do stanu: WAIT_Q
+			 */
+			// NEW VERSION
 			establish_error(reply, error0, OK);
-			reply_to_instruction(reply);
 			msg->message(lib::NON_FATAL_ERROR, error0);
-			// przywrocenie poprzedniej odpowiedzi
-			reply.reply_type = rep_type; // powrot do stanu: WAIT_Q
+			// END
+
 			next_state = WAIT_Q;
 		} // end: catch(transformer::NonFatal_error nfe2)
 
@@ -1117,7 +1126,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			uint64_t err_no_0 = reply.error_no.error0;
 			uint64_t err_no_1 = reply.error_no.error1;
 			establish_error(reply, error0, OK);
-			reply_to_instruction(reply);
+			variant_reply_to_instruction();
 			msg->message(lib::NON_FATAL_ERROR, error0);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
@@ -1141,7 +1150,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 
 			lib::REPLY_TYPE rep_type = reply.reply_type;
 			establish_error(reply, error0, OK);
-			reply_to_instruction(reply);
+			variant_reply_to_instruction();
 			msg->message(lib::NON_FATAL_ERROR, error0);
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
@@ -1165,16 +1174,16 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 				error1 = *tmp;
 			}
 
-			if (receive_instruction(instruction) != lib::QUERY) {
+			if (variant_receive_instruction() != lib::QUERY) {
 				// blad: powinna byla nadejsc instrukcja QUERY
 				establish_error(reply, QUERY_EXPECTED, OK);
-				reply_to_instruction(reply);
+				variant_reply_to_instruction();
 				printf("QQQ\n");
-				receive_instruction(instruction);
+				variant_receive_instruction();
 			}
 			reply.reply_type = lib::ERROR;
 			establish_error(reply, error0, error1);
-			reply_to_instruction(reply);
+			variant_reply_to_instruction();
 			msg->message(lib::FATAL_ERROR, error0, error1);
 			// powrot do stanu: GET_SYNCHRO
 			next_state = GET_SYNCHRO;
@@ -1193,7 +1202,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			{
 				case GET_INSTRUCTION:
 					// wstepna interpretacja nadesanego polecenia w celu wykrycia nieprawidlowosci
-					switch (receive_instruction(instruction))
+					switch (variant_receive_instruction())
 					{
 						case lib::SET:
 						case lib::GET:
@@ -1201,22 +1210,25 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 							// potwierdzenie przyjecia polecenia (dla ECP)
 							// printf("SET_GET\n");
 							reply.reply_type = lib::ACKNOWLEDGE;
-							reply_to_instruction(reply);
+							variant_reply_to_instruction();
 							break;
 						case lib::SYNCHRO: // blad: robot jest juz zsynchronizowany
 							// okreslenie numeru bledu
 
 							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(ALREADY_SYNCHRONISED));
+							break;
 
 						case lib::QUERY: // blad: nie ma o co pytac - zadne polecenie uprzednio nie zostalo wydane
 							// okreslenie numeru bledu
 
 							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(QUERY_NOT_EXPECTED));
+							break;
 
 						default: // blad: nieznana instrukcja
 							// okreslenie numeru bledu
 
 							BOOST_THROW_EXCEPTION(edp::exception::nfe_1() << mrrocpp_error0(UNKNOWN_INSTRUCTION));
+							break;
 
 					}
 					next_state = EXECUTE_INSTRUCTION;
@@ -1227,9 +1239,9 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 					next_state = WAIT;
 					break;
 				case WAIT:
-					if (receive_instruction(instruction) == lib::QUERY) { // instrukcja wlasciwa =>
+					if (variant_receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
 						// zlec jej wykonanie, czyli wyslij odpowiedz
-						reply_to_instruction(reply);
+						variant_reply_to_instruction();
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
 						BOOST_THROW_EXCEPTION(nfe_3() << mrrocpp_error0(QUERY_EXPECTED));
 					}
@@ -1254,7 +1266,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			establish_error(reply, error0, OK);
 			// printf("catch NonFatal_error_1\n");
 			// informacja dla ECP o bledzie
-			reply_to_instruction(reply);
+			variant_reply_to_instruction();
 			msg->message(lib::NON_FATAL_ERROR, error0);
 			// powrot do stanu: GET_INSTRUCTION
 			next_state = GET_INSTRUCTION;
@@ -1298,7 +1310,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 
 			establish_error(reply, error0, OK);
 			// informacja dla ECP o bledzie
-			reply_to_instruction(reply);
+			variant_reply_to_instruction();
 			// przywrocenie poprzedniej odpowiedzi
 			reply.reply_type = rep_type;
 			establish_error(reply, err_no_0, err_no_1);
@@ -1345,7 +1357,15 @@ void motor_driven_effector::main_loop()
 	post_synchro_loop(next_state);
 }
 
-//#ifdef DOCENT_SENSOR
+lib::INSTRUCTION_TYPE motor_driven_effector::variant_receive_instruction()
+{
+	return receive_instruction(instruction);
+}
+
+void motor_driven_effector::variant_reply_to_instruction()
+{
+	reply_to_instruction(reply);
+}
 
 void motor_driven_effector::registerReaderStartedCallback(boost::function <void()> startedCallback)
 {
@@ -1371,8 +1391,7 @@ void motor_driven_effector::onReaderStopped()
 		stoppedCallback_();
 	}
 }
-//#endif
 
-}// namespace common
+} // namespace common
 } // namespace edp
 } // namespace mrrocpp

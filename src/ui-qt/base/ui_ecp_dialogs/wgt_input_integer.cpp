@@ -44,7 +44,9 @@ void wgt_input_integer::on_pushButton_cancel_clicked()
 	my_close();
 }
 
-Ui::wgt_input_integerClass * wgt_input_integer::get_ui()
+void wgt_input_integer::my_open(bool set_on_top)
 {
-	return ui;
+	ui->label_message->setText(interface.ui_ecp_obj->ecp_to_ui_msg.string);
+	wgt_base::my_open(set_on_top);
 }
+

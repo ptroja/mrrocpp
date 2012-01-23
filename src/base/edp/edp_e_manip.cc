@@ -108,8 +108,8 @@ bool manip_effector::compute_servo_joints_and_frame(void)
 }
 
 /*--------------------------------------------------------------------------*/
-manip_effector::manip_effector(shell &_shell, lib::robot_name_t l_robot_name) :
-		motor_driven_effector(_shell, l_robot_name)
+manip_effector::manip_effector(shell &_shell, const lib::robot_name_t & l_robot_name, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref) :
+		motor_driven_effector(_shell, l_robot_name, c_buffer_ref, r_buffer_ref)
 {
 }
 
@@ -486,6 +486,7 @@ void manip_effector::iterate_macrostep(const lib::JointArray & begining_joints, 
 			 }
 			 */
 			mt_tt_obj->trans_t_to_master_synchroniser.command();
+			move_arm_second_phase = true;
 		}
 
 		last_force_step_counter = step_counter;

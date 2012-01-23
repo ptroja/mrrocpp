@@ -3,7 +3,7 @@
 /*                                         Version 2.01  */
 
 #include "ui_r_single_motor.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common012.h"
 #include "../base/interface.h"
 
 #include "../base/mainwindow.h"
@@ -26,18 +26,6 @@ namespace single_motor {
 UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
 		common::UiRobot(_interface, _robot_name, _number_of_servos)
 {
-
-}
-
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
-
-}
-
-void UiRobot::null_ui_ecp_robot()
-{
-	ui_ecp_robot = NULL;
 
 }
 
@@ -73,7 +61,7 @@ void UiRobot::setup_menubar()
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	common::UiRobot::manage_interface();
@@ -89,8 +77,6 @@ int UiRobot::manage_interface()
 			break;
 		case common::UI_EDP_WAITING_TO_START_READER:
 		case common::UI_EDP_WAITING_TO_STOP_READER:
-
-
 
 			// jesli robot jest zsynchronizowany
 			if (state.edp.is_synchronised) {
@@ -124,7 +110,6 @@ int UiRobot::manage_interface()
 
 	}
 
-	return 1;
 }
 
 }

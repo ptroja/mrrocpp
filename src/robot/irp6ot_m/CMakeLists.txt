@@ -1,4 +1,4 @@
-if(ROBOT_IRP6_ON_TRACK_M)
+
 
 add_executable(edp_irp6ot_m
 	edp_irp6ot_m_effector.cc
@@ -30,10 +30,10 @@ add_library(kinematicsirp6ot_m
 target_link_libraries(kinematicsirp6ot_m kinematics)
 	
 add_library(ecp_r_irp6ot_m ecp_r_irp6ot_m.cc)
+add_library(mp_r_irp6ot_m mp_r_irp6ot_m.cc)
 	
 target_link_libraries(ecp_r_irp6ot_m kinematicsirp6ot_m)
 
 install(TARGETS edp_irp6ot_m DESTINATION bin)
-install(TARGETS kinematicsirp6ot_m ecp_r_irp6ot_m DESTINATION lib)
+install(TARGETS kinematicsirp6ot_m ecp_r_irp6ot_m mp_r_irp6ot_m DESTINATION lib)
 
-endif(ROBOT_IRP6_ON_TRACK_M)

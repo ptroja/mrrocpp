@@ -30,14 +30,15 @@ namespace ecp {
 namespace common {
 namespace task {
 
-task_base::task_base(lib::configurator &_config) :
-	ecp_mp::task::task(_config),
-	MP(lib::MP_SECTION),
-	reply(MP, _config.section_name),
-	command(*this, "MP_COMMAND"),
-	mp_command(command.access),
-	mp_2_ecp_next_state_string(mp_command.ecp_next_state.next_state),
-	continuous_coordination(false)
+task_base::task_base(lib::configurator &_config, boost::shared_ptr<robot::ecp_robot_base> & robot_ref) :
+		ecp_mp::task::task(_config),
+		ecp_m_robot(robot_ref),
+		MP(lib::MP_SECTION),
+		reply(MP, _config.section_name),
+		command(*this, "MP_COMMAND"),
+		mp_command(command.access),
+		mp_2_ecp_next_state_string(mp_command.ecp_next_state.next_state),
+		continuous_coordination(false)
 {
 	initialize_communication();
 }
@@ -273,7 +274,7 @@ bool task_base::peek_mp_message()
 
 				case lib::STOP:
 					set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "peek_mp_message lib::STOP");
+					//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "peek_mp_message lib::STOP");
 					command.markAsUsed();
 					// Reply with ACK
 					reply.Send(ecp_reply);
@@ -281,7 +282,7 @@ bool task_base::peek_mp_message()
 					break;
 				case lib::PAUSE_TASK:
 					//	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "peek_mp_message lib::PAUSE_TASK");
+					//sr_ecp_msg->message(lib::NON_FATAL_ERROR, "peek_mp_message lib::PAUSE_TASK");
 					command.markAsUsed();
 					// Reply with ACK
 					//reply.Send(ecp_reply);
@@ -323,7 +324,7 @@ void task_base::wait_for_resume()
 		{
 			case lib::STOP:
 				set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_resume lib::STOP");
+				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_resume lib::STOP");
 
 				// Reply with ACK
 				reply.Send(ecp_reply);
@@ -331,7 +332,7 @@ void task_base::wait_for_resume()
 				break;
 			case lib::RESUME_TASK:
 				//	set_ecp_reply(lib::ECP_ACKNOWLEDGE);
-				sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_resume lib::RESUME_TASK");
+				//	sr_ecp_msg->message(lib::NON_FATAL_ERROR, "wait_for_resume lib::RESUME_TASK");
 
 				// Reply with ACK
 				//	reply.Send(ecp_reply);

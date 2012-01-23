@@ -49,8 +49,8 @@ wgt_spkm_inc::wgt_spkm_inc(QString _widget_label, mrrocpp::ui::common::Interface
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 
 	for (int i = 0; i < robot->number_of_servos; i++) {
-		doubleSpinBox_des_Vector[i]->setMaximum(robot->kinematic_params.upper_motor_pos_limits[i]);
-		doubleSpinBox_des_Vector[i]->setMinimum(robot->kinematic_params.lower_motor_pos_limits[i]);
+		doubleSpinBox_des_Vector[i]->setMaximum(robot->kinematic_params->upper_motor_pos_limits[i]);
+		doubleSpinBox_des_Vector[i]->setMinimum(robot->kinematic_params->lower_motor_pos_limits[i]);
 	}
 
 }
@@ -80,7 +80,7 @@ void wgt_spkm_inc::on_pushButton_read_clicked()
 	init();
 }
 
-int wgt_spkm_inc::synchro_depended_widgets_disable(bool _set_disabled)
+void wgt_spkm_inc::synchro_depended_widgets_disable(bool _set_disabled)
 {
 	ui.pushButton_execute->setDisabled(_set_disabled);
 	ui.pushButton_read->setDisabled(_set_disabled);
@@ -90,8 +90,6 @@ int wgt_spkm_inc::synchro_depended_widgets_disable(bool _set_disabled)
 	for (int i = 0; i < robot->number_of_servos; i++) {
 		doubleSpinBox_des_Vector[i]->setDisabled(_set_disabled);
 	}
-
-	return 1;
 }
 
 void wgt_spkm_inc::synchro_depended_init_slot()
@@ -146,7 +144,7 @@ int wgt_spkm_inc::init()
 	return 1;
 }
 
-int wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip)
+void wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSpinBox* qdsb_cur_p, QAbstractButton* qab_mip)
 {
 
 	lib::epos::epos_reply &er = robot->ui_ecp_robot->the_robot->epos_motor_reply_data_request_port.data;
@@ -158,8 +156,6 @@ int wgt_spkm_inc::set_single_axis(int axis, QDoubleSpinBox* qdsb_mcur, QDoubleSp
 	} else {
 		qab_mip->setChecked(false);
 	}
-
-	return 1;
 }
 
 void wgt_spkm_inc::on_pushButton_import_clicked()
@@ -309,7 +305,7 @@ void wgt_spkm_inc::on_pushButton_5r_clicked()
 	move_it();
 }
 
-int wgt_spkm_inc::get_desired_position()
+void wgt_spkm_inc::get_desired_position()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -326,10 +322,9 @@ int wgt_spkm_inc::get_desired_position()
 			}
 		}
 	}
-	return 1;
 }
 
-int wgt_spkm_inc::move_it()
+void wgt_spkm_inc::move_it()
 {
 
 	// wychwytania ew. bledow ECP::robot
@@ -368,8 +363,6 @@ int wgt_spkm_inc::move_it()
 	} // end try
 
 	CATCH_SECTION_UI_PTR
-
-	return 1;
 }
 
 void wgt_spkm_inc::showEvent(QShowEvent * event)

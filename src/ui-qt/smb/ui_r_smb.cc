@@ -16,22 +16,6 @@ namespace mrrocpp {
 namespace ui {
 namespace smb {
 
-//
-//
-// KLASA UiRobotIrp6ot_m
-//
-//
-
-int UiRobot::ui_get_edp_pid()
-{
-	return ui_ecp_robot->the_robot->get_EDP_pid();
-}
-
-void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
-{
-	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
-
-}
 
 UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 		common::UiRobot(_interface, _robot_name, lib::smb::NUM_OF_SERVOS), ui_ecp_robot(NULL)
@@ -39,7 +23,7 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name) :
 
 }
 
-int UiRobot::manage_interface()
+void UiRobot::manage_interface()
 {
 
 	common::UiRobot::manage_interface();
@@ -89,7 +73,6 @@ int UiRobot::manage_interface()
 			break;
 	}
 
-	return 1;
 }
 
 void UiRobot::setup_menubar()
@@ -116,13 +99,11 @@ void UiRobot::setup_menubar()
 
 }
 
-int UiRobot::synchronise()
+void UiRobot::synchronise()
 
 {
 
 	eb.command(boost::bind(&ui::smb::UiRobot::synchronise_int, &(*this)));
-
-	return 1;
 
 }
 
@@ -175,16 +156,6 @@ int UiRobot::execute_stop_motor()
 	CATCH_SECTION_IN_ROBOT
 
 	return 1;
-}
-
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
-}
-
-void UiRobot::null_ui_ecp_robot()
-{
-	ui_ecp_robot = NULL;
 }
 
 }

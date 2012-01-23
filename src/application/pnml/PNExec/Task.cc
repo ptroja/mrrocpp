@@ -65,9 +65,9 @@ mrrocpp::lib::robot_name_t TrajectoryTask::execute(mrrocpp::mp::common::robots_t
 	_robot.mp_command.command = lib::NEXT_STATE;
 	_robot.mp_command.ecp_next_state.next_state = mrrocpp::ecp_mp::generator::ECP_GEN_SMOOTH;
 
-	strncpy(_robot.mp_command.ecp_next_state.data,
+	strncpy(_robot.mp_command.ecp_next_state.sg_buf.data,
 			file.c_str(),
-			sizeof(_robot.mp_command.ecp_next_state.data));
+			sizeof(_robot.mp_command.ecp_next_state.sg_buf.data));
 
 	_robot.mp_command.command = lib::NEXT_STATE;
 	_robot.communicate = true;

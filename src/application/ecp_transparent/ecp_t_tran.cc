@@ -19,8 +19,6 @@
 
 #include "robot/conveyor/ecp_r_conv.h"
 
-#include "robot/polycrank/ecp_r_polycrank.h"
-
 #include "robot/irp6p_m/const_irp6p_m.h"
 
 #include "ecp_t_tran.h"
@@ -46,8 +44,6 @@ tran::tran(lib::configurator &_config) :
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else if (config.robot_name == lib::conveyor::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new conveyor::robot(*this);
-	} else if (config.robot_name == lib::polycrank::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr <robot_t>) new polycrank::robot(*this);
 	}
 
 	sr_ecp_msg->message("ecp loaded");

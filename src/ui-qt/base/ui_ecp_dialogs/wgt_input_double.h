@@ -23,10 +23,8 @@ public:
 	wgt_input_double(mrrocpp::ui::common::Interface& _interface, QWidget *parent = 0);
 	~wgt_input_double();
 
-	Ui::wgt_input_doubleClass * get_ui();
-
 	void hideEvent(QHideEvent * event);
-
+	void my_open(bool set_on_top=false);
 private:
 	Ui::wgt_input_doubleClass* ui;
 

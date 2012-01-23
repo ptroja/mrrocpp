@@ -23,21 +23,12 @@ namespace smb {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup smb
  */
-class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
+class robot : public common::robot::_ecp_robot <lib::smb::c_buffer, lib::smb::r_buffer>
+		, public kinematics::common::kinematics_manager
 {
 
 protected:
 	void create_kinematic_models_for_given_robot(void);
-
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::smb::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::smb::rbuffer edp_ecp_rbuffer;
 
 public:
 

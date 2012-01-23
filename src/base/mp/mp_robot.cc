@@ -29,15 +29,15 @@ namespace mp {
 namespace robot {
 
 robot::robot(const lib::robot_name_t & l_robot_name, task::task &mp_object_l, int _number_of_servos) :
-	ecp_mp::robot(l_robot_name),
-	number_of_servos(_number_of_servos),
-	ECP_pid(mp_object_l.config, mp_object_l.config.get_ecp_section(robot_name)),
-	ecp(mp_object_l.config.get_ecp_section(robot_name)),
-	command(ecp, "MP_COMMAND"),
-	sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
-	reply(mp_object_l, mp_object_l.config.get_ecp_section(robot_name)),
-	ecp_reply_package(reply.access),
-	communicate_with_ecp(true)
+		ecp_mp::robot(l_robot_name),
+		number_of_servos(_number_of_servos),
+		ECP_pid(mp_object_l.config, mp_object_l.config.get_ecp_section(robot_name)),
+		ecp(mp_object_l.config.get_ecp_section(robot_name)),
+		command(ecp, "MP_COMMAND"),
+		sr_ecp_msg(*(mp_object_l.sr_ecp_msg)),
+		reply(mp_object_l, mp_object_l.config.get_ecp_section(robot_name)),
+		ecp_reply_package(reply.access),
+		communicate_with_ecp(true)
 {
 }
 
@@ -75,7 +75,7 @@ void robot::execute_motion(void)
 
 void robot::terminate_ecp(void)
 {
-	sr_ecp_msg.message(lib::NON_FATAL_ERROR, "terminate_ecp");
+	//sr_ecp_msg.message(lib::NON_FATAL_ERROR, "terminate_ecp");
 
 	// zlecenie STOP zakonczenia ruchu
 	send_command(lib::STOP);

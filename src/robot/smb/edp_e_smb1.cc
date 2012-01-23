@@ -1,18 +1,12 @@
-#include <cstdio>
-
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-// Klasa edp_irp6ot_effector.
 #include "edp_e_smb1.h"
 #include "const_smb1.h"
 #include "base/edp/reader.h"
-// Kinematyki.
 #include "robot/smb/kinematic_model_smb.h"
-#include "base/edp/manip_trans_t.h"
-#include "base/edp/vis_server.h"
 
 #include "base/lib/exception.h"
 using namespace mrrocpp::lib::exception;
@@ -21,16 +15,21 @@ namespace mrrocpp {
 namespace edp {
 namespace smb1 {
 
-// Konstruktor.
+#include "base/lib/debug.hpp"
+
 effector::effector(common::shell &_shell) :
-	smb::effector(_shell, lib::smb1::ROBOT_NAME)
+		smb::effector(_shell, lib::smb1::ROBOT_NAME)
 {
+	DEBUG_METHOD;
+
+	// Set synchronization values, different for both SMBs.
+	pkm_zero_position_voltage = 2300;
+	pkm_zero_position_offset = 9850;
 
 }
 
 }
 // namespace smb
-
 
 namespace common {
 

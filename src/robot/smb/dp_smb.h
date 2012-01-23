@@ -11,6 +11,7 @@
 
 #include "robot/maxon/dp_epos.h"
 #include "const_smb.h"
+#include "../../base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -73,7 +74,7 @@ struct leg_reply
 		ar & is_attached;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base single leg festo command
@@ -107,7 +108,7 @@ struct festo_command_td
 		ar & undetachable;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base multi leg reply
@@ -115,6 +116,7 @@ struct festo_command_td
  */
 struct multi_leg_reply_td
 {
+
 	leg_reply leg[LEG_CLAMP_NUMBER];
 
 	//! Give access to boost::serialization framework
@@ -127,7 +129,7 @@ struct multi_leg_reply_td
 		ar & leg;
 	}
 
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Epos all controllers status
@@ -176,7 +178,7 @@ struct smb_epos_simple_command
 		ar & pkm_vs_base_rotation;
 		ar & estimated_time;
 	}
-}__attribute__((__packed__));
+};
 
 /*!
  * @brief SwarmItFix Mobile Base EDP command buffer
@@ -256,7 +258,24 @@ struct cbuffer
 		};
 	}
 
-}__attribute__((__packed__));
+};
+
+struct c_buffer : lib::c_buffer
+{
+	cbuffer smb;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & boost::serialization::base_object <lib::c_buffer>(*this);
+		ar & smb;
+	}
+
+};
 
 /*!
  * @brief SwarmItFix Mobile Base EDP reply buffer
@@ -276,6 +295,24 @@ struct rbuffer
 	{
 		ar & multi_leg_reply;
 		ar & epos_controller;
+	}
+
+};
+
+struct r_buffer : lib::r_buffer
+{
+	rbuffer smb;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		// serialize base class informationZ
+		ar & boost::serialization::base_object <lib::r_buffer>(*this);
+		ar & smb;
 	}
 
 };
