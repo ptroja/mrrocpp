@@ -10,6 +10,7 @@
 #include <string>
 
 #include <boost/type_traits/is_same.hpp>
+#include <boost/throw_exception.hpp>
 
 #include "canopen_exceptions.hpp"
 
@@ -28,6 +29,18 @@ typedef uint8_t BYTE; ///< \brief 8bit type for EPOS data exchange
 //! Abstract class for access to the EPOS at the transport layer
 class gateway
 {
+private:
+	/*! \brief Read Object.
+	 *
+	 * @param ans answer buffer
+	 * @param ans_len of answer buffer
+	 * @param nodeId node-Id of the target device
+	 * @param index object entry index in a dictionary
+	 * @param subindex object entry subindex of in a dictionary
+	 * @return answer array from the controller
+	 */
+	virtual unsigned int ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex) = 0;
+
 protected:
 	//! Flag indicating connection status
 	bool device_opened;
@@ -70,50 +83,22 @@ public:
 		ReadLSSFrame_Op = 0x31
 	} CanOpen_OpCode_t;
 
-	/*! \brief Read Object from EPOS memory, firmware definition 6.3.1.1
-	 *
-	 * @param ans answer buffer
-	 * @param ans_len of answer buffer
-	 * @param nodeId node-Id of the target device
-	 * @param index object entry index in a dictionary
-	 * @param subindex object entry subindex of in a dictionary
-	 * @return answer array from the controller
-	 */
-	virtual unsigned int ReadObject(WORD *ans, unsigned int ans_len, uint8_t nodeId, WORD index, BYTE subindex) = 0;
-
-	std::string ReadObjectStringValue(uint8_t nodeId, canopen::WORD index, canopen::BYTE subindex)
-	{
-		canopen::WORD answer[8];
-		unsigned int r = this->ReadObject(answer, 8, nodeId, index, subindex);
-
-		std::string str;
-
-		for (int i = 0; i < r; ++i) {
-			char c = (answer[3 + i] & 0x00FF);
-
-			if (c == 0x00) {
-				break;
-			} else {
-				str += c;
-			}
-
-			c = ((answer[3 + i] & 0xFF00) >> 8);
-
-			if (c == 0x00) {
-				break;
-			} else {
-				str += c;
-			}
-		}
-
-		return str;
-	}
+	// FIXME: this need to be tested.
+	//std::string ReadObjectStringValue(uint8_t nodeId, canopen::WORD index, canopen::BYTE subindex);
 
 	template <class T>
 	T ReadObjectValue(uint8_t nodeId, canopen::WORD index, canopen::BYTE subindex)
 	{
 		canopen::WORD answer[8];
-		this->ReadObject(answer, 8, nodeId, index, subindex);
+
+		try {
+			this->ReadObject(answer, 8, nodeId, index, subindex);
+		} catch (boost::exception & e) {
+			e << dictionary_index(index);
+			e << dictionary_subindex(subindex);
+			e << canId(nodeId);
+			throw;
+		}
 
 #ifdef DEBUG
 		T val;
@@ -128,7 +113,7 @@ public:
 			T val = (T) (answer[3] | (answer[4] << 16));
 			return val;
 		} else {
-			throw canopen::fe_canopen_error() << canopen::reason("Unsupported ReadObjectValue conversion");
+			BOOST_THROW_EXCEPTION(canopen::fe_canopen_error() << canopen::reason("Unsupported ReadObjectValue conversion"));
 		}
 	}
 
@@ -211,7 +196,7 @@ public:
 	 *
 	 * @param E_error epos error code
 	 */
-	static void checkEPOSerror(DWORD E_error);
+	static void checkCanOpenError(DWORD E_error);
 
 	/*! \brief Checksum calculation
 	 *
@@ -224,10 +209,7 @@ public:
 	WORD CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords);
 
 	//! Set the debug level
-	void setDebugLevel(int level)
-	{
-		debug = level;
-	}
+	void setDebugLevel(int level);
 };
 
 } /* namespace canopen_ */

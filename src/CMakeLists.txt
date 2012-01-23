@@ -111,8 +111,8 @@ endif (UBUNTU32BIT)
 
 # Warning messages (GCC)
 if(CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-sign-compare -Werror=return-type")
+	set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Werror=return-type")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Werror=return-type")
 endif(CMAKE_COMPILER_IS_GNUCXX)	
 
 
@@ -123,9 +123,9 @@ include(FindComedi)
 
 # Make sure the compiler can find include files
 include_directories (${MRROCPP_SOURCE_DIR}/src) 
-include_directories (${LIBXML2_INCLUDE_DIR})
-include_directories (${Boost_INCLUDE_DIR})
-include_directories (${EIGEN2_INCLUDE_DIRS})
+include_directories (SYSTEM ${LIBXML2_INCLUDE_DIR})
+include_directories (SYSTEM ${Boost_INCLUDE_DIR})
+include_directories (SYSTEM ${EIGEN2_INCLUDE_DIRS})
 
 
 include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)

@@ -2,6 +2,9 @@
  * Author: Piotr Trojanek
  */
 
+#include <boost/thread/thread.hpp>
+#include <boost/date_time/time_duration.hpp>
+
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
@@ -20,10 +23,10 @@ namespace generator {
 //
 //
 
-//constructor with parameters: task and time to sleep [s]
-spkm_pose::spkm_pose(task_t & _ecp_task, const lib::spkm::next_state_t::segment_sequence_t & _segments) :
+spkm_pose::spkm_pose(task_t & _ecp_task, const lib::spkm::segment_t & _segment) :
 		generator_t(_ecp_task),
-		segments(_segments)
+		segment(_segment),
+		query_interval(boost::posix_time::milliseconds(20))
 {
 	//	if (the_robot) the_robot->communicate_with_edp = false; //do not communicate with edp
 }
@@ -31,6 +34,7 @@ spkm_pose::spkm_pose(task_t & _ecp_task, const lib::spkm::next_state_t::segment_
 void spkm_pose::request_segment_execution(robot_t & robot, const lib::spkm::segment_t & segment)
 {
 	// Copy the motion type
+	robot.epos_external_command_data_port.data.pose_specification = lib::spkm::WRIST_XYZ_EULER_ZYZ;
 	robot.epos_external_command_data_port.data.motion_variant = segment.motion_type;
 	robot.epos_external_command_data_port.data.estimated_time = segment.duration;
 
@@ -49,21 +53,21 @@ bool spkm_pose::first_step()
 {
 	sr_ecp_msg.message("spkm_pose: first_step");
 
-	std::cerr << "ECP # of segments " << segments.size() << std::endl;
-	std::cerr << "pose\n" << segments.begin()->goal_pose << std::endl;
-	std::cerr << "motion type " << segments.begin()->motion_type << std::endl;
-	std::cerr << "duration " << segments.begin()->duration << std::endl;
-	std::cerr << "guarded_motion " << segments.begin()->guarded_motion << std::endl;
-
-	// skip the empty command sequence
-	if(segments.empty())
-		return false;
-
-	// set iterator to the first command
-	segment_iterator = segments.begin();
+	std::cerr << "ECP segment:" << std::endl;
+	std::cerr << "\tpose" << segment.goal_pose << std::endl;
+	std::cerr << "\tmotion type " << segment.motion_type << std::endl;
+	std::cerr << "\tduration " << segment.duration << std::endl;
+	std::cerr << "\tguarded_motion " << segment.guarded_motion << std::endl;
 
 	// Prepare command for execution of the first motion segment
-	request_segment_execution(*the_robot, *segment_iterator);
+	request_segment_execution(*the_robot, segment);
+
+	// Request status report
+	the_robot->epos_external_reply_data_request_port.set_data = lib::spkm::TOOL_XYZ_EULER_ZYZ;
+	the_robot->epos_external_reply_data_request_port.set_request();
+
+	// Record current wall clock
+	wakeup = boost::get_system_time();
 
 	return true;
 }
@@ -73,43 +77,33 @@ bool spkm_pose::next_step()
 	sr_ecp_msg.message("spkm_pose: next_step");
 
 	// A co to jest??? (ptroja)
-	if (the_robot->epos_motor_reply_data_request_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
+	//if (the_robot->epos_motor_reply_data_request_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
+	//}
 
-		std::stringstream ss(std::stringstream::in | std::stringstream::out);
-		ss << "licznik: " << the_robot->epos_motor_reply_data_request_port.data.epos_controller[3].position;
+	the_robot->epos_external_reply_data_request_port.get();
 
-		sr_ecp_msg.message(ss.str());
-	}
-
-	// Check motion status of the PKM
 	bool motion_in_progress = false;
 
-	for (int i = 0; i < 6; i++) {
-		if (the_robot->epos_motor_reply_data_request_port.data.epos_controller[i].motion_in_progress == true) {
+	for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
+		if (the_robot->epos_external_reply_data_request_port.data.epos_controller[i].motion_in_progress == true) {
 			motion_in_progress = true;
 			break;
 		}
 	}
 
-	// Check if the commanded motion is already completed
 	if (motion_in_progress) {
-		// Request new status data
-		the_robot->epos_motor_reply_data_request_port.set_request();
+		// Request status report
+		the_robot->epos_external_reply_data_request_port.set_request();
+
+		// Delay until next EPOS query
+		wakeup += query_interval;
+		boost::thread::sleep(wakeup);
+
 		return true;
 	}
 
-	// Increment the segment iterator
-	++segment_iterator;
-
-	// Check if the motion sequence is completed
-	if (segment_iterator == segments.end())
-		return false;
-
-	// Prepare command for execution of a next motion segment
-	request_segment_execution(*the_robot, *segment_iterator);
-
-	// Continue
-	return true;
+	// Terminate
+	return false;
 }
 
 //
@@ -129,7 +123,7 @@ spkm_quickstop::spkm_quickstop(task_t & _ecp_task) :
 bool spkm_quickstop::first_step()
 {
 	//the_robot->epos_brake_command_data_port.data = true;
-	the_robot->epos_brake_command_data_port.set();
+	the_robot->epos_quickstop_command_data_port.set();
 
 	return true;
 }
@@ -143,4 +137,3 @@ bool spkm_quickstop::next_step()
 } // namespace spkm
 } // namespace ecp
 } // namespace mrrocpp
-

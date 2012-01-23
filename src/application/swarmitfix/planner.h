@@ -15,7 +15,8 @@
 #include <boost/thread/condition.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include "plan.hxx"
+// Forward declaration.
+class Plan;
 
 //! Interface with the planner and/or
 class planner {
@@ -37,7 +38,10 @@ public:
 	void resume();
 
 	//! Access to the plan data
-	const Plan * getPlan(void) const;
+	Plan * getPlan(void) const;
+
+	//! Key with path to plan file
+	static std::string planpath;
 
 private:
 	//! Reference to the plan

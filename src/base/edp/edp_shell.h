@@ -57,10 +57,15 @@ private:
 	 * \brief EDP pid
 	 *
 	 */
-	pid_t my_pid;
+	const pid_t my_pid;
+
+	/*!
+	 * \brief Method to close hardware busy notification file
+	 *
+	 */
+	void close_hardware_busy_file(void);
 
 public:
-
 	/*!
 	 * \brief Pointer to object to communicate with UI SR thread outside the signal handlers.
 	 *
@@ -69,14 +74,10 @@ public:
 	boost::shared_ptr <lib::sr_edp> msg;
 
 	shell(lib::configurator &_config);
+
+	//! Destructor
 	~shell();
 	bool detect_hardware_busy(void);
-
-	/*!
-	 * \brief Method to close hardware busy notification file
-	 *
-	 */
-	bool close_hardware_busy_file(void);
 
 	/*!
 	 * \brief Method to create hardware busy notification file

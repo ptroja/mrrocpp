@@ -24,7 +24,7 @@ ecp_mp_message::~ecp_mp_message(){
 
 
 char* ecp_mp_message::robotPositionToString(std::vector<double> vec){
-	char *ret = new char[lib::MP_2_ECP_STRING_SIZE];
+	char *ret = new char[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
 	double* tab = reinterpret_cast<double*>(ret);
 
 	//Write to matrix number of elements which will be written to
@@ -32,7 +32,7 @@ char* ecp_mp_message::robotPositionToString(std::vector<double> vec){
 
 	int i = 1;
 	//Rewrite vector elements to matrix
-	for(std::vector<double>::iterator it = vec.begin(); (it != vec.end()) && (i < lib::MP_2_ECP_STRING_SIZE/sizeof(double)); ++it, ++i){
+	for(std::vector<double>::iterator it = vec.begin(); (it != vec.end()) && (i < lib::MP_2_ECP_SERIALIZED_DATA_SIZE/sizeof(double)); ++it, ++i){
 		tab[i] = *it;
 	}
 
@@ -42,7 +42,7 @@ char* ecp_mp_message::robotPositionToString(std::vector<double> vec){
 }
 
 char* ecp_mp_message::robotPositionToString(double& par0, double& par1, double& par2, double& par3, double& par4, double& par5, double& par6, double& par7){
-	char *ret = new char[lib::MP_2_ECP_STRING_SIZE];
+	char *ret = new char[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
 
 	double* tab = reinterpret_cast<double*>(ret);
 
@@ -83,7 +83,7 @@ std::vector<double> ecp_mp_message::stringToRobotPosition(const uint32_t* str){
 
 
 char* ecp_mp_message::fradiaOrderToString(task::fradia_regions& reg, std::vector<double> vec){
-	char* ret = new char[lib::MP_2_ECP_STRING_SIZE];
+	char* ret = new char[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
 
 	double *tab = reinterpret_cast<double*>(ret);
 
@@ -115,7 +115,7 @@ char* ecp_mp_message::fradiaOrderToString(task::fradia_regions& reg, std::vector
 	tab[VEC_POS - 1] = vec.size();
 
 	int i = VEC_POS;
-	for(std::vector<double>::iterator it = vec.begin(); (it != vec.end()) && (i < lib::MP_2_ECP_STRING_SIZE/sizeof(double)); ++it, ++i){
+	for(std::vector<double>::iterator it = vec.begin(); (it != vec.end()) && (i < lib::MP_2_ECP_SERIALIZED_DATA_SIZE/sizeof(double)); ++it, ++i){
 		tab[i] = *it;
 	}
 

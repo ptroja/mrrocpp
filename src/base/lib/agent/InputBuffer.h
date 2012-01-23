@@ -6,6 +6,10 @@
 #include "InputBufferBase.h"
 #include "base/lib/xdr/xdr_iarchive.hpp"
 
+namespace mrrocpp {
+namespace lib {
+namespace agent {
+
 /**
  * Input data buffer
  */
@@ -87,5 +91,9 @@ public:
 	 */
 	const T & access;
 };
+
+} // namespace agent
+} // namespace lib
+} // namespace mrrocpp
 
 #endif /* _INPUTBUFFER_H */

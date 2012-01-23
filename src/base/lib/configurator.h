@@ -160,13 +160,6 @@ public:
 	pid_t process_spawn(const std::string & _section_name);
 
 	/**
-	 * Get QNX node number
-	 * @param node_name_l node name
-	 * @return node number
-	 */
-	static int return_node_number(const std::string & node_name_l);
-
-	/**
 	 * Return network attach point
 	 * @param _type type of the network path
 	 * @param _key configuration key

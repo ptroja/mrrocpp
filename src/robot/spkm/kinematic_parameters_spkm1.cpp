@@ -24,6 +24,21 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	synchro_positions[4] = 0.0;
 	synchro_positions[5] = 0.0;
 
+	// Moog motor homing offset (in [qc]).
+	moog_motor_homing_offset = 83000;
+
+	// Moog motor homing velocity.
+	moog_motor_homing_velocity = -100;
+
+	//! Home position of the Moog motor [qc].
+	moog_motor_home_position = -300000;
+
+	// Homing offset of axis 3 motor [qc].
+	axis3_motor_homing_offset = 269300;
+
+	// Homing velocity of the axis 3 motor [rpm].
+	axis3_motor_homing_velocity = -100;
+
 	// Initialization of the encoder resolution. Equals to the Counts Per Turn (CPT) x 4.
 	encoder_resolution[0] = 500*4;
 	encoder_resolution[1] = 500*4;

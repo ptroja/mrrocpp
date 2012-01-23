@@ -12,7 +12,7 @@
 #include <string>
 #include <boost/serialization/serialization.hpp>
 #include "const_sbench.h"
-#include "../../base/lib/com_buf.h"
+#include "base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace edp {
@@ -48,19 +48,114 @@ const std::string REPLY_DATA_REQUEST_PORT = "SBENCH_REPLY_DATA_REQUEST_PORT";
  */
 enum CBUFFER_VARIANT
 {
-	VOLTAGE, PREASURE
+	POWER_SUPPLY, CLEANING
 };
 
 /*!
- * @brief bench pins state typedef
+ * @brief Structure representing one bench pin.
+ * @author tkornuta
+ */
+struct pin
+{
+public:
+	/*!
+	 * Pin row.
+	 */
+	unsigned char row;
+
+	/*!
+	 * Pin column.
+	 */
+	unsigned char column;
+
+	/*!
+	 * Default constructor.
+	 */
+	pin() :
+			row(0), column(0)
+	{
+	}
+
+	/*!
+	 * Sets row and column.
+	 */
+	pin(unsigned char row_, unsigned char column_) :
+			row(row_), column(column_)
+	{
+	}
+
+	/*!
+	 * Returns the pin description in Row (arabic) - Column (roman) form.
+	 */
+	std::string get_description() const
+	{
+		std::stringstream name;
+		name << (int) row;
+		name << "-";
+		switch (column)
+		{
+			case 1:
+				name << "I";
+				break;
+			case 2:
+				name << "II";
+				break;
+			case 3:
+				name << "III";
+				break;
+			case 4:
+				name << "IV";
+				break;
+			case 5:
+				name << "V";
+				break;
+			case 6:
+				name << "VI";
+				break;
+			case 7:
+				name << "VII";
+				break;
+			default:
+				name << "?";
+				break;
+		}
+		return name.str();
+	}
+
+};
+
+
+/*!
+ * Pose of the agent on a bench (location of three pins).
+ * @author tkornuta
+ */
+struct bench_pose
+{
+	/*!
+	 * Pins utilized in this pose (according to the bench enumeration).
+	 */
+	pin pins[3];
+
+	/*!
+	 * Returns the pose description.
+	 */
+	std::string get_description() const
+	{
+		return pins[0].get_description() + " | " + pins[1].get_description() + " | " + pins[2].get_description();
+	}
+
+};
+
+
+/*!
+ * @brief Bench pins state.
  * @ingroup sbench
  */
-
-class pins_buffer
+class bench_state
 {
+private:
 	friend class mrrocpp::edp::sbench::effector;
 
-private:
 	bool pins_state[NUM_OF_PINS];
 
 protected:
@@ -68,20 +163,52 @@ protected:
 
 public:
 
-	pins_buffer();
+	bench_state();
 
 	//! clears translation table
-	void set_zeros();
+	void set_all_off();
 
 	//! sets the value due to the translation table
-	void set_value(int row, int column, bool value);
+	void set_value(int row, int column, const bool value);
+
+	//! Sets value on (1) in given row and column.
+	void set_on(int row, int column);
+
+	//! Sets value off (0) in given row and column.
+	void set_off(int row, int column);
+
+	//! Sets on given pin (1).
+	void set_on(pin pin_);
+
+	//! Sets given pin off (0).
+	void set_off(pin pin_);
+
+	//! Sets on (1) given bench pose (all three pins).
+	void set_on(bench_pose pose_);
+
+	//! Sets on (0) given bench pose (all three pins).
+	void set_off(bench_pose pose_);
 
 	//! gets the value due to the translation table
-	bool get_value(int row, int column);
+	bool get_value(int row, int column) const;
 
 	//! checks if any value in translation table is doubled
-	bool is_any_doubled_value();
+	bool is_any_doubled_value() const;
 
+	std::string display() const
+	{
+		std::stringstream ss;
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+		return ss.str();
+	}
+
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -95,17 +222,16 @@ public:
 };
 
 /*!
- * @brief voltage (power supply) typedef
+ * @brief Power supply state.
  * @ingroup sbench
  */
 
-class voltage_buffer : public pins_buffer
+class power_supply_state : public bench_state
 {
-
 public:
+	power_supply_state();
 
-	voltage_buffer();
-
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -113,23 +239,22 @@ public:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object <pins_buffer>(*this);
+		ar & boost::serialization::base_object <bench_state>(*this);
 	}
 
 };
 
 /*!
- * @brief SwarmItFix preasure (cleaning activation)  typedef
+ * @brief SwarmItFix cleaning activation state.
  * @ingroup sbench
  */
-
-class preasure_buffer : public pins_buffer
+class cleaning_state : public bench_state
 {
-
 public:
 
-	preasure_buffer();
+	cleaning_state();
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -137,7 +262,7 @@ public:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & boost::serialization::base_object <pins_buffer>(*this);
+		ar & boost::serialization::base_object <bench_state>(*this);
 	}
 
 };
@@ -151,9 +276,10 @@ struct cbuffer
 	//! Variant of the command
 	CBUFFER_VARIANT variant;
 
-	voltage_buffer voltage_buf;
-	preasure_buffer preasure_buf;
+	power_supply_state voltage_buf;
+	cleaning_state preasure_buf;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -177,6 +303,7 @@ struct c_buffer : lib::c_buffer
 	//! sbench specific field
 	cbuffer sbench;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -196,9 +323,10 @@ struct c_buffer : lib::c_buffer
  */
 struct rbuffer : lib::r_buffer
 {
-	voltage_buffer voltage_buf;
-	preasure_buffer preasure_buf;
+	power_supply_state voltage_buf;
+	cleaning_state preasure_buf;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -222,6 +350,7 @@ struct r_buffer : lib::r_buffer
 	//! sbench specific field
 	rbuffer sbench;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 

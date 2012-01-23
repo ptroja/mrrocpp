@@ -135,6 +135,9 @@ private:
 	//! ID of the EPOS device on the CAN bus
 	const uint8_t nodeId;
 
+	//! Description (name and ID) of the EPOS device (for presentation purposes).
+	std::string nodeDescription;
+
 	//! remote operation enable bit
 	bool remote;
 
@@ -147,6 +150,12 @@ public:
 	 * \author ptrojane/tkornuta
 	 */
 	REGISTER_FATAL_ERROR(fe, "EPOS error");
+
+	/*!
+	 * \brief Exception thrown when the motor jam is detected.
+	 * \author Tomasz Kornuta
+	 */
+	REGISTER_FATAL_ERROR(fe_motor_jam_detected, "Motor jam detected");
 
 	/*! \brief create new EPOS object
 	 *
@@ -217,8 +226,8 @@ public:
 		QUICKSTOP, DISABLE_OPERATION, ENABLE_OPERATION, FAULT_RESET
 	} desired_state_t;
 
-	//! \brief Reset the device by issuing a shutdown command followed by power-on and halt
-	void reset();
+	//! \brief Enable the device by issuing a shutdown command followed by power-on and halt
+	void enable();
 
 	//! \brief High-level command to clear fault
 	void clearFault();
@@ -232,14 +241,26 @@ public:
 	/*! \brief ask EPOS for software version */
 	UNSIGNED16 getSWversion();
 
-	/*! \brief read manufactor device name string firmware */
-	std::string getCanDeviceName();
+	/**!
+	 * \brief read manufactor device name string firmware
+	 * \fixme does not work
+	 */
+//	std::string getCanDeviceName();
 
 	/*! \brief ask for RS232 timeout */
 	UNSIGNED16 getRS232timeout();
 
-	/*! \brief read digital input polarity mask */
+	/*! \brief read digital input polarity */
 	UNSIGNED16 getDInputPolarity();
+
+	/*! \brief read digital input polarity */
+	void setDInputPolarity(UNSIGNED16);
+
+	/*! \brief read digital input polarity */
+	UNSIGNED16 getDInputExecMask();
+
+	/*! \brief read digital input polarity */
+	void setDInputExecMask(UNSIGNED16);
 
 	/*! \brief read digital input*/
 	UNSIGNED16 getDInput();
@@ -317,6 +338,9 @@ public:
 
 	//! write velocity for velocity profile mode
 	void setTargetVelocity(INTEGER32 val);
+
+	//! write velocity for velocity mode
+	void setVelocityModeSettingValue(INTEGER32 val);
 
 	//! write velocity normally attained at the end of the acceleration ramp during a profiled move
 	void setProfileVelocity(UNSIGNED32 vel);
@@ -499,11 +523,14 @@ public:
 	//! \brief write motor thermal constant
 	void setMotorThermalConstant(UNSIGNED16 val);
 
-	/*! \brief read actual position */
+	/*! \brief read actual velocity */
 	INTEGER32 setDemandVelocity();
 
-	/*! \brief read actual position */
+	/*! \brief read actual velocity */
 	INTEGER32 getActualVelocity();
+
+	/*! \brief read actual velocity averaged over low-pass filter */
+	INTEGER32 getActualVelocityAveraged();
 
 	/*! \brief read actual current */
 	INTEGER16 getActualCurrent();
@@ -586,6 +613,9 @@ public:
 
 	/*! \brief write the Maximal Position Limit */
 	void setMaximalPositionLimit(INTEGER32 val);
+
+	/*! \brief disable position limits */
+	void disablePositionLimits();
 
 	//! @}
 
@@ -739,6 +769,9 @@ public:
 	/*! \brief does a homing move. Give homing mode (see firmware 9.3) and start position */
 	int doHoming(homing_method_t method, INTEGER32 offset = 0);
 
+	/*! \brief software-only homing to mechanical stop */
+	void doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_position_ = 0);
+
 	/*! \brief set OpMode to ProfilePosition and make relative movement */
 	void moveRelative(INTEGER32 steps);
 
@@ -779,7 +812,7 @@ public:
 	//!\ brief Analog velocity setpoint configuration
 	void setAnalogVelocitySetpointScaling(INTEGER16 val);
 
-	INTEGER16 getAnalogVelocitySetpointScaling(INTEGER16 val);
+	INTEGER16 getAnalogVelocitySetpointScaling();
 
 	void setAnalogVelocitySetpointOffset(INTEGER32 val);
 
@@ -802,6 +835,14 @@ public:
 	void setDigitalOutputs(digital_outputs_t cmd);
 
 	UNSIGNED16 getDigitalOutputs();
+
+	void setDigitalOutputFunctionalitiesMask(UNSIGNED16 val);
+
+	UNSIGNED16 getDigitalOutputFunctionalitiesMask();
+
+	void setDigitalOutputFunctionalitiesPolarity(UNSIGNED16 val);
+
+	UNSIGNED16 getDigitalOutputFunctionalitiesPolarity();
 
 	const digital_outputs_t & getCommandedDigitalOutputs();
 

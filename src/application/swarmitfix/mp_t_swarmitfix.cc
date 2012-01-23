@@ -1,18 +1,11 @@
 // Start of user code user defined headers
-#include <boost/foreach.hpp>
-
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "ecp_mp_g_spkm.h"
-
 #include "robot/shead/mp_r_shead1.h"
 #include "robot/shead/mp_r_shead2.h"
 #include "robot/spkm/mp_r_spkm1.h"
 #include "robot/spkm/mp_r_spkm2.h"
 #include "robot/smb/mp_r_smb1.h"
 #include "robot/smb/mp_r_smb2.h"
+#include "robot/sbench/mp_r_sbench.h"
 // End of user code
 
 #include "base/lib/sr/srlib.h"
@@ -31,14 +24,21 @@ task* return_created_mp_task(lib::configurator &_config)
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
 		task(_config),
-		pp(_config.value<std::string>("planpath"))
+		pp(_config.value<std::string>(planner::planpath))
 {
 	// Create optional Input buffers
+	if(IS_MP_ROBOT_ACTIVE(shead2)) {
+		IO.transmitters.shead2.inputs.notification.Create(*this, lib::shead2::ROBOT_NAME+"notification");
+	}
 	if(IS_MP_ROBOT_ACTIVE(spkm2)) {
 		IO.transmitters.spkm2.inputs.notification.Create(*this, lib::spkm2::ROBOT_NAME+"notification");
 	}
 	if(IS_MP_ROBOT_ACTIVE(smb2)) {
 		IO.transmitters.smb2.inputs.notification.Create(*this, lib::smb2::ROBOT_NAME+"notification");
+	}
+
+	if(IS_MP_ROBOT_ACTIVE(shead1)) {
+		IO.transmitters.shead1.inputs.notification.Create(*this, lib::shead1::ROBOT_NAME+"notification");
 	}
 	if(IS_MP_ROBOT_ACTIVE(spkm1)) {
 		IO.transmitters.spkm1.inputs.notification.Create(*this, lib::spkm1::ROBOT_NAME+"notification");
@@ -47,15 +47,34 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 		IO.transmitters.smb1.inputs.notification.Create(*this, lib::smb1::ROBOT_NAME+"notification");
 	}
 
+	if(IS_MP_ROBOT_ACTIVE(sbench)) {
+		IO.transmitters.sbench.inputs.notification.Create(*this, lib::sbench::ROBOT_NAME+"notification");
+	}
+
 	// Call the robot activation so we can support only the active ones
 	create_robots();
 
 	// Create optional Output buffers
+	if(is_robot_activated(lib::shead2::ROBOT_NAME)) {
+		IO.transmitters.shead2.outputs.command.Create(robot_m[lib::shead2::ROBOT_NAME]->ecp, "command");
+	}
+	if(is_robot_activated(lib::shead1::ROBOT_NAME)) {
+		IO.transmitters.shead1.outputs.command.Create(robot_m[lib::shead1::ROBOT_NAME]->ecp, "command");
+	}
 	if(is_robot_activated(lib::spkm2::ROBOT_NAME)) {
 		IO.transmitters.spkm2.outputs.command.Create(robot_m[lib::spkm2::ROBOT_NAME]->ecp, "command");
 	}
 	if(is_robot_activated(lib::spkm1::ROBOT_NAME)) {
 		IO.transmitters.spkm1.outputs.command.Create(robot_m[lib::spkm1::ROBOT_NAME]->ecp, "command");
+	}
+	if(is_robot_activated(lib::smb2::ROBOT_NAME)) {
+		IO.transmitters.smb2.outputs.command.Create(robot_m[lib::smb2::ROBOT_NAME]->ecp, "command");
+	}
+	if(is_robot_activated(lib::smb1::ROBOT_NAME)) {
+		IO.transmitters.smb1.outputs.command.Create(robot_m[lib::smb1::ROBOT_NAME]->ecp, "command");
+	}
+	if(is_robot_activated(lib::sbench::ROBOT_NAME)) {
+		IO.transmitters.sbench.outputs.command.Create(robot_m[lib::sbench::ROBOT_NAME]->ecp, "command");
 	}
 	
 	// Start of user code Initialize internal memory variables
@@ -65,10 +84,14 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void swarmitfix::create_robots()
 {
-	ACTIVATE_MP_ROBOT(smb2);
-	ACTIVATE_MP_ROBOT(smb1);
+	// Activate all the robots.
+	ACTIVATE_MP_ROBOT(shead1);
+	ACTIVATE_MP_ROBOT(shead2);
 	ACTIVATE_MP_ROBOT(spkm1);
 	ACTIVATE_MP_ROBOT(spkm2);
+	ACTIVATE_MP_ROBOT(smb1);
+	ACTIVATE_MP_ROBOT(smb2);
+	ACTIVATE_MP_ROBOT(sbench);
 }
 
 void swarmitfix::main_task_algorithm(void)

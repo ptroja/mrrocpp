@@ -68,8 +68,6 @@ REGISTER_NON_FATAL_ERROR(nfe_thyk_alpha_limit_exceeded, "Thyk alpha limit is exc
  */
 REGISTER_NON_FATAL_ERROR(nfe_thyk_beta_limit_exceeded, "Thyk beta limit is exceeded")
 
-
-
 } // namespace spkm
 } // namespace edp
 } // namespace mrrocpp

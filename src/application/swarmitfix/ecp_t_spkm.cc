@@ -5,7 +5,6 @@
 
 #include "ecp_t_spkm.h"
 #include "ecp_g_spkm.h"
-#include "ecp_mp_g_spkm.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -26,19 +25,37 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 	}
 
 	// Create task-dependent IO buffers
-	notifyBuffer = (boost::shared_ptr<OutputBuffer<lib::notification_t> >)
-			new OutputBuffer<lib::notification_t>(MP, ecp_m_robot->robot_name+lib::notifyBufferId);
-
-	// Create the generators
-	g_pose = (boost::shared_ptr <generator::spkm_pose>) new generator::spkm_pose(*this, nextstateBuffer.access.segments);
-	g_quickstop = (boost::shared_ptr <generator::spkm_quickstop>) new generator::spkm_quickstop(*this);
+	notifyBuffer = (boost::shared_ptr<lib::agent::OutputBuffer<lib::notification_t> >)
+			new lib::agent::OutputBuffer<lib::notification_t>(MP, ecp_m_robot->robot_name+lib::notifyBufferId);
 
 	sr_ecp_msg->message("ecp spkm loaded");
 }
 
 void swarmitfix::main_task_algorithm(void)
 {
-	std::cerr << "> swarmitfix::main_task_algorithm" << std::endl;
+	std::cerr << "spkm> swarmitfix::main_task_algorithm" << std::endl;
+
+	if (0) {
+		// Start PKM pose (also known as "neutral")
+		lib::Homog_matrix hm = lib::Xyz_Euler_Zyz_vector(
+				0.15, 0, 0.405, 0, -1.045, 0
+				);
+
+		// Setup single motion segment
+		lib::spkm::segment_t segment(hm);
+
+		// Generator for motion execution
+		generator::spkm_pose g_pose(*this, segment);
+
+		// Move the robot the the specified pose
+		g_pose.Move();
+	}
+
+	//! Move the robot the the specified pose
+	generator::spkm_pose g_pose(*this, nextstateBuffer.access.segment);
+
+	//! Stop the robot in case of emergency
+	generator::spkm_quickstop g_quickstop(*this);
 
 	// Loop execution coordinator's commands
 	while(true) {
@@ -53,18 +70,20 @@ void swarmitfix::main_task_algorithm(void)
 
 			// Dispatch to selected generator
 			switch(nextstateBuffer.Get().variant) {
-				case lib::spkm::POSE_LIST:
-					g_pose->Move();
+				case lib::spkm::GOAL_POSE:
+					g_pose.Move();
 					break;
 				default:
-					g_quickstop->Move();
+					g_quickstop.Move();
 					break;
 			}
 
-		} catch (std::exception & e) {
-			// Report problem and re-throw exception to the process shell
+		} catch (const std::exception & e) {
+			// Report problem...
 			notifyBuffer->Send(lib::NACK);
-			throw;
+
+			// And DO NOT re-throw exception to the process shell
+			// throw;
 		}
 
 		// Reply with acknowledgment
