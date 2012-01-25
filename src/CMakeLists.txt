@@ -115,6 +115,8 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Werror=return-type")
 endif(CMAKE_COMPILER_IS_GNUCXX)	
 
+# Enable C++0x extensions
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 
 # Boost is a common requirements for all the platforms
 find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
