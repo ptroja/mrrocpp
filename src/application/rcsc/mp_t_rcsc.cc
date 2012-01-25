@@ -768,10 +768,10 @@ void rubik_cube_solver::approach_op(int mode)
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	//podnoszenie o 2 milimetry nad kostke
 	// uruchomienie tff_nose run dla traka z podatnoscia w jednej osi
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, ecp_mp::sub_task::behaviour_specification_data_type(true, false, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, ecp_mp::sub_task::behaviour_specification_data_type(false, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
 
 	// uruchomienie zaciskania chwytaka traka do pozycji zadanej odpowiadajacej zacisnieciu na kostce z pol centymentrowym luzem
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.065, lib::irp6ot_tfg::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.070, lib::irp6ot_tfg::ROBOT_NAME);
 
 	// oczekiwania na zakonczenie ruchu chwytaka
 	wait_for_task_termination(false, 1, lib::irp6ot_tfg::ROBOT_NAME.c_str());
