@@ -494,7 +494,7 @@ void epos::setRemoteOperation(bool enable)
 	}
 }
 
-const char * epos::stateDescription(int state)
+const char * epos::stateDescription(actual_state_t state)
 {
 	switch (state)
 	{
@@ -1810,9 +1810,6 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 		// Start monitoring after some interval for acceleration.
 		boost::system_time wakeup = boost::get_system_time();
 
-		//! Actual velocity value.
-		int32_t velocity;
-
 		// Display velocity values during acceleration.
 		for(int i = 0; i < 10; ++i) {
 			// Increment the next wakeup time.
@@ -1821,13 +1818,18 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 			// Wait for device state to change.
 			boost::thread::sleep(wakeup);
 
-			velocity = getActualVelocityAveraged();
-
-			std::cout << "software homing: acceleration phase velocity = " << velocity << std::endl;
+			// Monitor velocity and state of the motor.
+			std::cout << "software homing -- initial phase:"
+					" velocity = " << getActualVelocityAveraged() <<
+					" state = " << stateDescription(getState()) <<
+					std::endl;
 		}
 
-		// Startup monitoring counter.
+		// Setup monitoring counter.
 		unsigned int monitor_counter = 0;
+
+		//! Actual velocity value.
+		int32_t velocity;
 
 		do {
 			// Increment the next wakeup time.
@@ -1840,7 +1842,10 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 
 			if(++monitor_counter < 20) {
 				// FIXME: Uncomment the following to debug the wakup/startup timer.
-				 std::cout << "software homing: monitoring velocity = " << velocity << std::endl;
+				 std::cout << "software homing -- main phase:"
+						 " velocity = " << velocity <<
+						 " state = " << stateDescription(getState()) <<
+						 std::endl;
 			}
 		} while(abs(velocity) > 10);
 
