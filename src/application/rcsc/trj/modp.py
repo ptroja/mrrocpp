@@ -9,8 +9,8 @@ value5 = float(sys.argv[6])
 
 output0 = value0
 output1 = value1
-output2 = value2 + output1 + math.pi/2
-output3 = value3 + output2
+output2 = value2 - output1 - math.pi/2
+output3 = value3 - output2 - output1 - math.pi/2
 output4 = value4
 output5 = value5
 

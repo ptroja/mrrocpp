@@ -11,8 +11,8 @@ value6 = float(sys.argv[7])
 output0 = value0
 output1 = value1
 output2 = value2
-output3 = value3 + output2 + math.pi/2
-output4 = value4 + output3
+output3 = value3 - output2 - math.pi/2
+output4 = value4 - output3 - output2 - math.pi/2
 output5 = value5
 output6 = value6
 
