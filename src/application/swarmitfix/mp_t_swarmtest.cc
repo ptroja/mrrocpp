@@ -55,7 +55,7 @@ void swarmitfix::executeCommandItem(const Plan::PkmType::ItemType & pkmCmd, IO_t
 	}
 
 	// Setup command for the PKM
-	lib::spkm::next_state_t cmd_spkm(lib::spkm::GOAL_POSE);
+	lib::spkm::next_state_t cmd_spkm(lib::spkm::command_variant::GOAL_POSE);
 
 	cmd_spkm.segment = lib::spkm::segment_t(hm);
 

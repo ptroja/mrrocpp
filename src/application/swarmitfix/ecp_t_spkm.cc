@@ -70,7 +70,7 @@ void swarmitfix::main_task_algorithm(void)
 
 			// Dispatch to selected generator
 			switch(nextstateBuffer.Get().variant) {
-				case lib::spkm::GOAL_POSE:
+				case lib::spkm::command_variant::GOAL_POSE:
 					g_pose.Move();
 					break;
 				default:

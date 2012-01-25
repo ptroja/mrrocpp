@@ -586,7 +586,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 		// Check command type.
 		switch (instruction.spkm.variant)
 		{
-			case lib::spkm::POSE:
+			case lib::spkm::CBUFFER_VARIANT::POSE:
 				DEBUG_COMMAND("POSE");
 				if (controller_state_edp_buf.robot_in_fault_state) {
 					return;
@@ -606,7 +606,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 				execute_motion();
 				// Continue - update the robot state.
 				break;
-			case lib::spkm::QUICKSTOP:
+			case lib::spkm::CBUFFER_VARIANT::QUICKSTOP:
 				DEBUG_COMMAND("QUICKSTOP");
 
 				if (!robot_test_mode) {
@@ -626,7 +626,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 				}
 				// Internal position counters need not be updated.
 				return;
-			case lib::spkm::BRAKE:
+			case lib::spkm::CBUFFER_VARIANT::BRAKE:
 				DEBUG_COMMAND("BRAKE");
 
 				// Execute brake command.
@@ -641,7 +641,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 
 				// Internal position counters need not be updated.
 				return;
-			case lib::spkm::DISABLE_BRAKE:
+			case lib::spkm::CBUFFER_VARIANT::DISABLE_BRAKE:
 				DEBUG_COMMAND("DISABLE_BRAKE");
 
 				// Execute brake command.
@@ -651,7 +651,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 
 				// Internal position counters need not be updated.
 				return;
-			case lib::spkm::CLEAR_FAULT:
+			case lib::spkm::CBUFFER_VARIANT::CLEAR_FAULT:
 				DEBUG_COMMAND("CLEAR_FAULT");
 
 				if (!robot_test_mode) {
@@ -678,7 +678,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 		desired_motor_pos_old = desired_motor_pos_new;
 
 		// Check whether the motion was performed in the cartesian space - then we know where manipulator will be when the next command arrives:).
-		if (instruction.spkm.set_pose_specification == lib::spkm::WRIST_XYZ_EULER_ZYZ) {
+		if (instruction.spkm.set_pose_specification == lib::spkm::POSE_SPECIFICATION::WRIST_XYZ_EULER_ZYZ) {
 			// Command was given in the wrist frame.
 			current_end_effector_frame = desired_end_effector_frame;
 			current_spkm_frame = current_end_effector_frame * shead_frame;
@@ -688,7 +688,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 			std::cerr << "current_spkm_frame:\n" << current_spkm_frame << endl;
 			std::cerr << "current_end_effector_frame:\n" << current_end_effector_frame << endl;
 #endif
-		} else if (instruction.spkm.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
+		} else if (instruction.spkm.set_pose_specification == lib::spkm::POSE_SPECIFICATION::TOOL_XYZ_EULER_ZYZ) {
 			// Command was given in the tool (SHEAD) frame.
 			current_spkm_frame = desired_spkm_frame;
 			current_end_effector_frame = desired_spkm_frame * !shead_frame;
@@ -729,7 +729,7 @@ void effector::parse_motor_command()
 	try {
 		switch (instruction.spkm.set_pose_specification)
 		{
-			case lib::spkm::MOTOR:
+			case lib::spkm::POSE_SPECIFICATION::MOTOR:
 				DEBUG_COMMAND("MOTOR");
 
 				// Copy data directly from buffer
@@ -748,7 +748,7 @@ void effector::parse_motor_command()
 
 				break;
 
-			case lib::spkm::JOINT:
+			case lib::spkm::POSE_SPECIFICATION::JOINT:
 				DEBUG_COMMAND("JOINT");
 
 				// Copy data directly from buffer
@@ -774,7 +774,7 @@ void effector::parse_motor_command()
 
 				break;
 
-			case lib::spkm::WRIST_XYZ_EULER_ZYZ:
+			case lib::spkm::POSE_SPECIFICATION::WRIST_XYZ_EULER_ZYZ:
 				DEBUG_COMMAND("XYZ_EULER_ZYZ");
 
 #if(DEBUG_FRAMES)
@@ -819,7 +819,7 @@ void effector::parse_motor_command()
 				desired_joints_old = desired_joints;
 				break;
 
-			case lib::spkm::TOOL_XYZ_EULER_ZYZ: {
+			case lib::spkm::POSE_SPECIFICATION::TOOL_XYZ_EULER_ZYZ: {
 				DEBUG_COMMAND("TOOL_XYZ_EULER_ZYZ");
 #if(DEBUG_FRAMES)
 				std::cerr << "TOOL_XYZ_EULER_ZYZ: [";
@@ -1080,11 +1080,11 @@ void effector::interpolated_motion_in_operational_space()
 		BOOST_THROW_EXCEPTION(mrrocpp::edp::spkm::nfe_current_cartesian_pose_unknown());
 
 	// Check pose specification.
-	if (instruction.spkm.set_pose_specification == lib::spkm::WRIST_XYZ_EULER_ZYZ) {
+	if (instruction.spkm.set_pose_specification == lib::spkm::POSE_SPECIFICATION::WRIST_XYZ_EULER_ZYZ) {
 		DEBUG_COMMAND("WRIST_XYZ_EULER_ZYZ");
 		// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
 		desired_end_effector_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(instruction.spkm.goal_pos));
-	} else if (instruction.spkm.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
+	} else if (instruction.spkm.set_pose_specification == lib::spkm::POSE_SPECIFICATION::TOOL_XYZ_EULER_ZYZ) {
 		DEBUG_COMMAND("TOOL_XYZ_EULER_ZYZ");
 		// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
 		desired_spkm_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(instruction.spkm.goal_pos));
@@ -1139,10 +1139,10 @@ void effector::interpolated_motion_in_operational_space()
 	Eigen::Matrix <double, lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS> motor_interpolations;
 
 	// Check pose specification.
-	if (instruction.spkm.set_pose_specification == lib::spkm::WRIST_XYZ_EULER_ZYZ) {
+	if (instruction.spkm.set_pose_specification == lib::spkm::POSE_SPECIFICATION::WRIST_XYZ_EULER_ZYZ) {
 		// Perform motion in wrist frame.
 		cubic_polynomial_interpolate_motor_poses <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1, lib::spkm::NUM_OF_SERVOS>(motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_end_effector_frame, desired_end_effector_frame);
-	} else if (instruction.spkm.set_pose_specification == lib::spkm::TOOL_XYZ_EULER_ZYZ) {
+	} else if (instruction.spkm.set_pose_specification == lib::spkm::POSE_SPECIFICATION::TOOL_XYZ_EULER_ZYZ) {
 		// Perform motion in tool frame.
 		cubic_polynomial_interpolate_motor_poses_in_tool_frame <lib::spkm::NUM_OF_MOTION_SEGMENTS + 1,
 				lib::spkm::NUM_OF_SERVOS>(motor_interpolations, motion_time, time_invervals, get_current_kinematic_model(), desired_joints_old, current_spkm_frame, desired_spkm_frame, shead_frame);
@@ -1449,7 +1449,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 		if (instruction.instruction_type != lib::SET) {
 			switch (instruction.spkm.get_pose_specification)
 			{
-				case lib::spkm::MOTOR: {
+				case lib::spkm::POSE_SPECIFICATION::MOTOR:
 					DEBUG_COMMAND("MOTOR");
 					for (size_t i = 0; i < axes.size(); ++i) {
 						if (robot_test_mode) {
@@ -1463,9 +1463,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 							reply.spkm.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
 						}
 					}
-				}
 					break;
-				case lib::spkm::JOINT: {
+				case lib::spkm::POSE_SPECIFICATION::JOINT:
 					DEBUG_COMMAND("JOINT");
 					// Read actual values from the hardware.
 					if (!robot_test_mode) {
@@ -1483,17 +1482,18 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 					for (size_t i = 0; i < number_of_servos; ++i) {
 						reply.spkm.epos_controller[i].position = current_joints[i];
 					}
-				}
 					break;
-				case lib::spkm::WRIST_XYZ_EULER_ZYZ: {
+				case lib::spkm::POSE_SPECIFICATION::WRIST_XYZ_EULER_ZYZ:
 					DEBUG_COMMAND("WRIST_XYZ_EULER_ZYZ");
 					// Return current end-effector pose if it is known (last motion was performed in the cartesian space).
 					if (!is_current_cartesian_pose_known)
 						current_end_effector_frame.setIdentity();
 
-					Xyz_Euler_Zyz_vector zyz;
-					current_end_effector_frame.get_xyz_euler_zyz_without_limits(zyz, current_joints[3], current_joints[4], current_joints[5]);
-					zyz.to_table(reply.spkm.current_pose);
+					{
+						Xyz_Euler_Zyz_vector zyz;
+						current_end_effector_frame.get_xyz_euler_zyz_without_limits(zyz, current_joints[3], current_joints[4], current_joints[5]);
+						zyz.to_table(reply.spkm.current_pose);
+					}
 
 #if(DEBUG_FRAMES)
 					std::cerr << "Returned WRIST_XYZ_EULER_ZYZ: " << zyz.transpose() << endl;
@@ -1506,17 +1506,18 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 							reply.spkm.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
 						}
 					}
-				}
 					break;
-				case lib::spkm::TOOL_XYZ_EULER_ZYZ: {
+				case lib::spkm::POSE_SPECIFICATION::TOOL_XYZ_EULER_ZYZ:
 					DEBUG_COMMAND("TOOL_XYZ_EULER_ZYZ");
 					// Return current end-effector pose if it is known (last motion was performed in the cartesian space).
 					if (!is_current_cartesian_pose_known)
 						current_spkm_frame.setIdentity();
 
-					Xyz_Euler_Zyz_vector zyz;
-					current_spkm_frame.get_xyz_euler_zyz(zyz);
-					zyz.to_table(reply.spkm.current_pose);
+					{
+						Xyz_Euler_Zyz_vector zyz;
+						current_spkm_frame.get_xyz_euler_zyz(zyz);
+						zyz.to_table(reply.spkm.current_pose);
+					}
 					/*					lib::Xyz_Rpy_vector rpy;
 					 current_spkm_frame.get_xyz_rpy(rpy);
 					 rpy.to_table(reply.spkm.current_pose);*/
@@ -1539,7 +1540,6 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 							reply.spkm.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
 						}
 					}
-				}
 					break;
 				default:
 					// Throw non-fatal error - command not supported.

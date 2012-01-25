@@ -78,10 +78,10 @@ private:
 /**
  * ECP command variant
  */
-typedef enum _command_variant
+enum class command_variant
 {
 	GOAL_POSE, STOP
-} command_variant;
+};
 
 /*!
  *  Command for ECP agent
@@ -95,7 +95,7 @@ typedef struct _next_state_t
 	spkm::segment_t segment;
 
 	//! Constructor with safe defaults
-	_next_state_t(command_variant _variant = STOP) :
+	_next_state_t(command_variant _variant = command_variant::STOP) :
 			variant(_variant)
 	{
 	}
@@ -111,7 +111,7 @@ private:
 		ar & variant;
 		switch (variant)
 		{
-			case GOAL_POSE:
+			case command_variant::GOAL_POSE:
 				ar & segment;
 				break;
 			default:
@@ -124,7 +124,7 @@ private:
  * @brief SwarmItFix Parallel Kinematic Machine EDP variant buffer variant enum
  * @ingroup spkm
  */
-enum CBUFFER_VARIANT
+enum class CBUFFER_VARIANT
 {
 	POSE, QUICKSTOP, CLEAR_FAULT, BRAKE, DISABLE_BRAKE
 };
@@ -133,10 +133,10 @@ enum CBUFFER_VARIANT
  * Pose specification variants
  * @ingroup spkm
  */
-typedef enum _POSE_SPECIFICATION
+enum class POSE_SPECIFICATION
 {
 	WRIST_XYZ_EULER_ZYZ, TOOL_XYZ_EULER_ZYZ, JOINT, MOTOR
-} POSE_SPECIFICATION;
+};
 
 /*!
  * @brief SwarmItFix Epos external mode controllers status
@@ -250,18 +250,18 @@ private:
 		ar & get_pose_specification;
 		switch (variant)
 		{
-			case POSE:
+			case CBUFFER_VARIANT::POSE:
 				ar & set_pose_specification;
 				switch (set_pose_specification)
 				{
-					case TOOL_XYZ_EULER_ZYZ:
-					case WRIST_XYZ_EULER_ZYZ:
+					case POSE_SPECIFICATION::TOOL_XYZ_EULER_ZYZ:
+					case POSE_SPECIFICATION::WRIST_XYZ_EULER_ZYZ:
 						ar & goal_pos;
 						break;
-					case JOINT:
+					case POSE_SPECIFICATION::JOINT:
 						ar & joint_pos;
 						break;
-					case MOTOR:
+					case POSE_SPECIFICATION::MOTOR:
 						ar & motor_pos;
 						break;
 				}

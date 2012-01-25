@@ -105,7 +105,7 @@ bool external_epos_command::first_step()
 	sr_ecp_msg.message("legs_command: first_step");
 	epos_external_command_data_port->data = mp_ecp_epos_simple_command;
 	epos_external_command_data_port->set();
-	epos_external_reply_data_request_port->set_data = lib::spkm::WRIST_XYZ_EULER_ZYZ;
+	epos_external_reply_data_request_port->set_data = lib::spkm::POSE_SPECIFICATION::WRIST_XYZ_EULER_ZYZ;
 	epos_external_reply_data_request_port->set_request();
 
 	return true;
@@ -127,7 +127,7 @@ bool external_epos_command::next_step()
 	}
 
 	if (motion_in_progress) {
-		epos_external_reply_data_request_port->set_data = lib::spkm::WRIST_XYZ_EULER_ZYZ;
+		epos_external_reply_data_request_port->set_data = lib::spkm::POSE_SPECIFICATION::WRIST_XYZ_EULER_ZYZ;
 		epos_external_reply_data_request_port->set_request();
 		return true;
 	} else {

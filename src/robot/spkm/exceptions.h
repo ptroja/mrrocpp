@@ -28,13 +28,13 @@ inline std::string to_string(pose_specification const & e)
 {
 	switch (e.value())
 	{
-		case lib::spkm::WRIST_XYZ_EULER_ZYZ:
+		case lib::spkm::POSE_SPECIFICATION::WRIST_XYZ_EULER_ZYZ:
 			return "WRIST_XYZ_EULER_ZYZ";
-		case lib::spkm::TOOL_XYZ_EULER_ZYZ:
+		case lib::spkm::POSE_SPECIFICATION::TOOL_XYZ_EULER_ZYZ:
 			return "TOOL_XYZ_EULER_ZYX";
-		case lib::spkm::JOINT:
+		case lib::spkm::POSE_SPECIFICATION::JOINT:
 			return "JOINT";
-		case lib::spkm::MOTOR:
+		case lib::spkm::POSE_SPECIFICATION::MOTOR:
 			return "MOTOR";
 		default:
 			return "UNKNOWN";

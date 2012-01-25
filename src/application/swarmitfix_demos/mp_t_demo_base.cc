@@ -152,7 +152,7 @@ void demo_base::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motio
 {
 	lib::spkm::spkm_epos_simple_command mp_ecp_spkm_epos_simple_command;
 	mp_ecp_spkm_epos_simple_command.motion_variant = motion_variant_;
-	mp_ecp_spkm_epos_simple_command.pose_specification = lib::spkm::WRIST_XYZ_EULER_ZYZ;
+	mp_ecp_spkm_epos_simple_command.pose_specification = lib::spkm::POSE_SPECIFICATION::WRIST_XYZ_EULER_ZYZ;
 	mp_ecp_spkm_epos_simple_command.estimated_time = 1.2;
 
 	mp_ecp_spkm_epos_simple_command.desired_position[0] = pose_(0);
