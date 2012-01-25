@@ -9,10 +9,7 @@
  * @ingroup spkm
  */
 
-#include <vector>
-
 #include <boost/serialization/serialization.hpp>
-#include <boost/serialization/vector.hpp>
 
 #include "base/lib/mrmath/homog_matrix.h"
 #include "robot/maxon/dp_epos.h"
