@@ -1,5 +1,6 @@
 # Recurse into subdirectories.
 if(ROBOTS_012 AND NOT UBUNTU32BIT)
+add_subdirectory (android_teach)
 #add_subdirectory (bclikeregions)
 add_subdirectory (ball)
 add_subdirectory (block_move)
@@ -45,3 +46,4 @@ add_subdirectory (swarmitfix_plan)
 add_subdirectory (swarmitfix_demos)
 add_subdirectory (swarmitfix)
 endif(ROBOTS_SWARMITFIX AND NOT UBUNTU32BIT)
+
