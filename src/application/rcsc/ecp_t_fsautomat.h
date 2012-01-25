@@ -49,7 +49,7 @@ protected:
 	//podzadania
 	common::sub_task::gripper_opening* go_st;
 
-	bang_trajectories_map * trjMap;
+	bang_trajectories_map trjMap;
 	int axes_num;
 
 	void load_trajectory_from_xml(std::pair<std::vector<ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> pair_trj_motion);

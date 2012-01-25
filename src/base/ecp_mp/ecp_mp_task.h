@@ -56,8 +56,7 @@ public:
 	 */
 	typedef std::map <const char *, ecp_mp::common::Trajectory> trajectories_t;
 
-	typedef std::map <std::string,
-			std::pair <std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> > bang_trajectories_map;
+	typedef std::map <std::string, ecp_mp::common::trajectory_pose::bang_bang_motion_trajectory> bang_trajectories_map;
 
 	/**
 	 * @brief Constructor
@@ -162,7 +161,7 @@ public:
 	 * @param stateID task state id
 	 * @return Trajectory pointer
 	 */
-	std::pair <std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>, lib::MOTION_TYPE> createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num);
+	ecp_mp::common::trajectory_pose::bang_bang_motion_trajectory createTrajectory2(xmlNodePtr actNode, xmlChar *stateID, int axes_num);
 
 	/**
 	 * @brief loads trajectory
@@ -170,7 +169,7 @@ public:
 	 * @param robot_name_t robot associated with trajectory
 	 * @return trajectories_t pointer
 	 */
-	bang_trajectories_map * loadTrajectories(const char * fileName, lib::robot_name_t propRobot, int axes_num);
+	bang_trajectories_map loadTrajectories(const char * fileName, lib::robot_name_t propRobot, int axes_num);
 };
 
 } // namespace task
