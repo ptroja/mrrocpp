@@ -123,8 +123,8 @@ void agent1_demo::main_task_algorithm(void)
 	 tool:  -0.33 0 0.59 3.1416 0.02 0
 	 wrist: -0.0609 0 0.3853 0 -0.803 0
 	 */
-	lib::Xyz_Euler_Zyz_vector support_pose1(-0.0693, 0, 0.4097, 0, -0.763, -0.03);
-	lib::Xyz_Euler_Zyz_vector inter_pose1(-0.0609, 0, 0.3853, 0, -0.803, 0);
+//	lib::Xyz_Euler_Zyz_vector support_pose1(-0.0693, 0, 0.4097, 0, -0.763, -0.03);
+//	lib::Xyz_Euler_Zyz_vector inter_pose1(-0.0609, 0, 0.3853, 0, -0.803, 0);
 
 	/*
 	 Podparcie 2: smb rot = 0, legs out
@@ -135,8 +135,8 @@ void agent1_demo::main_task_algorithm(void)
 	 tool:  -0.2919 0 0.6 -3.1416 0 0
 	 wrist: -0.0269 0 0.39 0 -0.783 0
 	 */
-	lib::Xyz_Euler_Zyz_vector support_pose2(-0.0333, 0, 0.4081, 0, -0.753, 0);
-	lib::Xyz_Euler_Zyz_vector inter_pose2(-0.0269, 0, 0.39, 0, -0.783, 0);
+//	lib::Xyz_Euler_Zyz_vector support_pose2(-0.0333, 0, 0.4081, 0, -0.753, 0);
+//	lib::Xyz_Euler_Zyz_vector inter_pose2(-0.0269, 0, 0.39, 0, -0.783, 0);
 
 	/*
 	 Podparcie nr 3: smb rot = -1
@@ -147,8 +147,8 @@ void agent1_demo::main_task_algorithm(void)
 	 tool:  -0.3691 0 0.5847 3.1416 0.02 0
 	 wrist: -0.1 0 0.38 0 -0.803 0
 	 */
-	lib::Xyz_Euler_Zyz_vector support_pose3(-0.1149, 0, 0.404, 0, -0.733, 0);
-	lib::Xyz_Euler_Zyz_vector inter_pose3(-0.1, 0, 0.38, 0, -0.803, 0);
+//	lib::Xyz_Euler_Zyz_vector support_pose3(-0.1149, 0, 0.404, 0, -0.733, 0);
+//	lib::Xyz_Euler_Zyz_vector inter_pose3(-0.1, 0, 0.38, 0, -0.803, 0);
 
 	// Pull out all legs.
 //	smb_pull_legs(lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
@@ -156,11 +156,11 @@ void agent1_demo::main_task_algorithm(void)
 //	wait_ms(delay);
 
 	// Turn power on 1st pose pins.
-	sr_ecp_msg->message(pose1.get_description());
+/*	sr_ecp_msg->message(pose1.get_description());
 	mrrocpp::lib::sbench::power_supply_state ps;
 	ps.set_on(pose1);
-	control_bench_power_supply(ps, delay);
-
+	control_bench_power_supply(ps, delay);*/
+/*
 	if ((mode == 0) || (mode == 2)) {
 		// Move to the *neutral* PKM pose.
 		move_spkm_external(lib::epos::SYNC_TRAPEZOIDAL, neutral_pose);
@@ -198,7 +198,25 @@ void agent1_demo::main_task_algorithm(void)
 		smb_execute_power_move(move4, delay);
 	}
 	sr_ecp_msg->message("Task finished");
+*/
+	/*
+	PKM pierwsza pozycja
+	smb: -1.4381
 
+	tool: -0.31 0 0.655 3.75 -0.17 0
+	wrist:  -0.1248 0.129 0.4032 0.6084 -0.613 0
+
+	odejście:
+	tool: -0.31 0 0.625 0.6084 0.17 3.1416
+	wrist: -0.1248 0.129 0.3732 0.6084 -0.613 0
+	*/
+	while (1) {
+		lib::Xyz_Euler_Zyz_vector support_pose1(-0.1248, 0.129, 0.4032, 0.6084, -0.613, 0);
+		lib::Xyz_Euler_Zyz_vector inter_pose1(-0.1248, 0.129, 0.3732, 0.6084, -0.613, 0);
+		move_to_pose_and_return(support_pose1, inter_pose1, -1.4381, 0);
+		wait_ms(delay);
+
+	}
 }
 
 } /* namespace swarmitfix */

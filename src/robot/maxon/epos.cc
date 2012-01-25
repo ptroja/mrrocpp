@@ -1078,10 +1078,14 @@ void epos::setVelocityModeSettingValue(INTEGER32 val)
 void epos::setProfileVelocity(UNSIGNED32 val)
 {
 	if (ProfileVelocity != val) {
+#if 0
 		std::cout << "ProfileVelocity[" << (int) nodeId << "] <= " << val << std::endl;
+#endif
 		WriteObjectValue(0x6081, 0x00, val);
 		ProfileVelocity = val;
+#if 0
 		std::cout << "ProfileVelocity[" << (int) nodeId << "] <= " << getProfileVelocity() << std::endl;
+#endif
 	}
 }
 
@@ -1089,9 +1093,13 @@ void epos::setProfileAcceleration(UNSIGNED32 val)
 {
 	if (ProfileAcceleration != val) {
 		WriteObjectValue(0x6083, 0x00, val);
+#if 0
 		std::cout << "ProfileAcceleration[" << (int) nodeId << "] <= " << val << std::endl;
+#endif
 		ProfileAcceleration = val;
+#if 0
 		std::cout << "ProfileAcceleration[" << (int) nodeId << "] <= " << getProfileAcceleration() << std::endl;
+#endif
 	}
 }
 
@@ -1099,9 +1107,13 @@ void epos::setProfileDeceleration(UNSIGNED32 val)
 {
 	if (ProfileDeceleration != val) {
 		WriteObjectValue(0x6084, 0x00, val);
+#if 0
 		std::cout << "ProfileDeceleration[" << (int) nodeId << "] <= " << val << std::endl;
+#endif
 		ProfileDeceleration = val;
+#if 0
 		std::cout << "ProfileDeceleration[" << (int) nodeId << "] <= " << getProfileDeceleration() << std::endl;
+#endif
 	}
 }
 
@@ -1796,26 +1808,39 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 		setVelocityModeSettingValue(velocity_);
 
 		// Start monitoring after some interval for acceleration.
-		boost::system_time wakeup = boost::get_system_time() + boost::posix_time::milliseconds(45);
-
-		// Startup monitoring counter.
-		unsigned int monitor_counter = 0;
+		boost::system_time wakeup = boost::get_system_time();
 
 		//! Actual velocity value.
 		int32_t velocity;
 
-		do {
+		// Display velocity values during acceleration.
+		for(int i = 0; i < 10; ++i) {
+			// Increment the next wakeup time.
+			wakeup += boost::posix_time::milliseconds(5);
+
 			// Wait for device state to change.
 			boost::thread::sleep(wakeup);
 
+			velocity = getActualVelocityAveraged();
+
+			std::cout << "software homing: acceleration phase velocity = " << velocity << std::endl;
+		}
+
+		// Startup monitoring counter.
+		unsigned int monitor_counter = 0;
+
+		do {
 			// Increment the next wakeup time.
 			wakeup += boost::posix_time::milliseconds(5);
+
+			// Wait for device state to change.
+			boost::thread::sleep(wakeup);
 
 			velocity = getActualVelocityAveraged();
 
 			if(++monitor_counter < 20) {
 				// FIXME: Uncomment the following to debug the wakup/startup timer.
-				 std::cout << "software homing velocity: " << velocity << std::endl;
+				 std::cout << "software homing: monitoring velocity = " << velocity << std::endl;
 			}
 		} while(abs(velocity) > 10);
 
