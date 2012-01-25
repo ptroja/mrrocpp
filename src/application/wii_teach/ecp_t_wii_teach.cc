@@ -6,7 +6,7 @@
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/lib/ecp_ui_msg.h"
+#include "base/ecp_mp/ecp_ui_msg.h"
 
 #include "base/lib/sr/srlib.h"
 #include "application/wii_teach/sensor/ecp_mp_s_wiimote.h"
