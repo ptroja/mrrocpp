@@ -1,6 +1,5 @@
 # Recurse into subdirectories.
 if(ROBOTS_012 AND NOT UBUNTU32BIT)
-add_subdirectory (android_teach)
 #add_subdirectory (bclikeregions)
 add_subdirectory (ball)
 add_subdirectory (block_move)
@@ -28,6 +27,7 @@ add_subdirectory (time)
 add_subdirectory (visual_servoing)
 add_subdirectory (visual_servoing_demo)
 add_subdirectory (wii_teach)
+add_subdirectory (android_teach)
 add_subdirectory (trajectory_stats)
 endif(ROBOTS_012 AND NOT UBUNTU32BIT)
 
