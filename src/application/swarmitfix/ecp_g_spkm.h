@@ -1,16 +1,18 @@
 /*
- * generator/ecp_g_epos.h
+ * ecp_g_spkm.h
  *
- *Author: yoyek
+ * Author: ptroja
  */
 
 #ifndef ECP_G_SPKM_H_
 #define ECP_G_SPKM_H_
 
+#include <boost/thread/thread_time.hpp>
+
 #include "robot/spkm/ecp_r_spkm.h"
+#include "robot/spkm/dp_spkm.h"
 
 #include "base/ecp/ecp_generator.h"
-#include "robot/epos/dp_epos.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -20,24 +22,40 @@ namespace generator {
 class spkm_pose : public common::generator::_generator<ecp::spkm::robot>
 {
 public:
-	void create_ecp_mp_reply();
-	void get_mp_ecp_command();
+	//! Constructor
+	spkm_pose(task_t & _ecp_task, const lib::spkm::segment_t & _segment);
 
-	spkm_pose(task_t & _ecp_task); //constructor
-	bool first_step(); //first step generation
-	bool next_step(); //next step generation
+	//! first step generation
+	bool first_step();
+
+	//! next step generation
+	bool next_step();
+
+private:
+	//! Request execution of a single motion segment
+	void request_segment_execution(robot_t & robot, const lib::spkm::segment_t & segment);
+
+	//! Motion segments
+	const lib::spkm::segment_t & segment;
+
+	//! Wakeup timer
+	boost::system_time wakeup;
+
+	//! Effector query interval
+	const boost::posix_time::time_duration query_interval;
 };
 
 class spkm_quickstop : public common::generator::_generator<ecp::spkm::robot>
 {
 public:
-	void create_ecp_mp_reply();
-	void get_mp_ecp_command();
+	//! Constructor
+	spkm_quickstop(task_t & _ecp_task);
 
-	spkm_quickstop(task_t & _ecp_task); //constructor
+	//! first step generation
+	bool first_step();
 
-	bool first_step(); //first step generation
-	bool next_step(); //next step generation
+	//! next step generation
+	bool next_step();
 };
 
 } // namespace generator

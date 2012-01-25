@@ -14,7 +14,6 @@
 #include "base/lib/sr/srlib.h"
 #include "base/mp/mp_task.h"
 
-#include "base/mp/MP_main_error.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "robot/irp6_tfg/dp_tfg.h"
 #include "mp_t_tfg_graspit.h"
@@ -30,8 +29,6 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
-
-#include "robot/polycrank/mp_r_polycrank.h"
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
@@ -40,38 +37,29 @@
 #include "robot/smb/mp_r_smb.h"
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
-#include "robot/player/const_player.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace task {
 
 graspit::graspit(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
-	trgraspit = new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
+	trgraspit =
+			new ecp_mp::transmitter::TRGraspit(ecp_mp::transmitter::TRANSMITTER_GRASPIT, "[transmitter_graspit]", *this);
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
 void graspit::create_robots()
 {
 	ACTIVATE_MP_ROBOT(conveyor);
-	
-	
-	ACTIVATE_MP_ROBOT(polycrank);
+
 	ACTIVATE_MP_ROBOT(bird_hand);
-	ACTIVATE_MP_ROBOT(spkm);
-	ACTIVATE_MP_ROBOT(smb);
-	ACTIVATE_MP_ROBOT(shead);
+
 	ACTIVATE_MP_ROBOT(irp6ot_tfg);
 	ACTIVATE_MP_ROBOT(irp6ot_m);
 	ACTIVATE_MP_ROBOT(irp6p_tfg);
 	ACTIVATE_MP_ROBOT(irp6p_m);
-	ACTIVATE_MP_ROBOT(sarkofag);
-
-	ACTIVATE_MP_DEFAULT_ROBOT(electron);
-	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
-	ACTIVATE_MP_DEFAULT_ROBOT(festival);
 
 }
 
@@ -83,8 +71,8 @@ void graspit::main_task_algorithm(void)
 	lib::robot_name_t manipulator_name;
 	lib::robot_name_t gripper_name;
 
-	int port = config.value <int> ("graspit_port", "[transmitter_graspit]");
-	std::string node_name = config.value <std::string> ("graspit_node_name", "[transmitter_graspit]");
+	int port = config.value <int>("graspit_port", "[transmitter_graspit]");
+	std::string node_name = config.value <std::string>("graspit_node_name", "[transmitter_graspit]");
 
 	//get the data from GraspIt
 	trgraspit->TRconnect(node_name.c_str(), port);
@@ -120,16 +108,16 @@ void graspit::main_task_algorithm(void)
 	trgraspit->from_va.grasp_joint[12] /= 1000;
 
 	// ROBOT IRP6_ON_TRACK
-	if (config.value <int> ("is_irp6ot_m_active", lib::UI_SECTION)) {
+	if (config.value <int>("is_irp6ot_m_active", lib::UI_SECTION)) {
 		manipulator_name = lib::irp6ot_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6ot_tfg_active", lib::UI_SECTION)) {
+		if (config.value <int>("is_irp6ot_tfg_active", lib::UI_SECTION)) {
 			gripper_name = lib::irp6ot_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
 		}
-	} else if (config.value <int> ("is_irp6p_m_active", lib::UI_SECTION)) {
+	} else if (config.value <int>("is_irp6p_m_active", lib::UI_SECTION)) {
 		manipulator_name = lib::irp6p_m::ROBOT_NAME;
-		if (config.value <int> ("is_irp6p_tfg_active", lib::UI_SECTION)) {
+		if (config.value <int>("is_irp6p_tfg_active", lib::UI_SECTION)) {
 			gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 		} else {
 			// TODO: throw
@@ -138,8 +126,8 @@ void graspit::main_task_algorithm(void)
 		// TODO: throw
 	}
 
-	char tmp_string1[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
-	char tmp_string2[lib::MP_2_ECP_NEXT_STATE_STRING_SIZE];
+	char tmp_string1[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
+	char tmp_string2[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
 
 	struct _irp6
 	{
@@ -154,13 +142,13 @@ void graspit::main_task_algorithm(void)
 	memcpy(tmp_string1, &mp_ecp_command, sizeof(mp_ecp_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, gripper_name);
 
-	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+	wait_for_task_termination(false, 1, gripper_name.c_str());
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), 1, manipulator_name.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, manipulator_name);
 
-	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
 	for (int i = 0; i < 6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i + 6];
@@ -169,13 +157,13 @@ void graspit::main_task_algorithm(void)
 	memcpy(tmp_string1, &mp_ecp_command, sizeof(mp_ecp_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecps_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), 1, manipulator_name.c_str());
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, manipulator_name);
 
-	run_extended_empty_gen_and_wait(1, 1, manipulator_name.c_str(), manipulator_name.c_str());
+	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), 1, gripper_name.c_str());
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, gripper_name);
 
-	run_extended_empty_gen_and_wait(1, 1, gripper_name.c_str(), gripper_name.c_str());
+	wait_for_task_termination(false, 1, gripper_name.c_str());
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	for (int i = 6; i < 13; ++i)

@@ -5,7 +5,9 @@
  * @ingroup generators
  */
 
+#include "base/ecp/ecp_exceptions.h"
 #include "base/ecp/ecp_robot.h"
+
 #include "ecp_g_get_position.h"
 
 namespace mrrocpp {
@@ -15,10 +17,9 @@ namespace generator {
 
 using namespace std;
 
-get_position::get_position(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
-	common::generator::generator(_ecp_task)
+get_position::get_position(task_t & _ecp_task, lib::ECP_POSE_SPECIFICATION pose_spec, int axes_num) :
+		generator_t(_ecp_task)
 {
-	position = vector <double> ();
 	this->axes_num = axes_num;
 	this->pose_spec = pose_spec;
 }
@@ -32,9 +33,8 @@ bool get_position::first_step()
 {
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction_type = lib::GET;
-	the_robot->ecp_command.motion_type = lib::ABSOLUTE; //aqui siempre ABSOLUTE, RELATIVE makes no sense here
+        the_robot->ecp_command.motion_type = lib::ABSOLUTE; //aqui siempre ABSOLUTE, RELATIVE makes no sense here (q no tiene sentido)
 	the_robot->ecp_command.interpolation_type = lib::MIM;
-
 	switch (pose_spec)
 	{
 		case lib::ECP_XYZ_ANGLE_AXIS:
@@ -50,7 +50,8 @@ bool get_position::first_step()
 			the_robot->ecp_command.get_arm_type = lib::JOINT;
 			break;
 		default:
-			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
+			break;
 	}
 	return true;
 }
@@ -58,9 +59,8 @@ bool get_position::first_step()
 bool get_position::next_step()
 {
 	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS || pose_spec == lib::ECP_XYZ_EULER_ZYZ) {
-
 		lib::Homog_matrix actual_position_matrix;
-		actual_position_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+		actual_position_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
 
 		if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS) {
 			lib::Xyz_Angle_Axis_vector angle_axis_vector;
@@ -73,7 +73,7 @@ bool get_position::next_step()
 			euler_vector.to_vector(position);
 
 		} else {
-			throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 		}
 
 	} else if (pose_spec == lib::ECP_JOINT || pose_spec == lib::ECP_MOTOR) {
@@ -82,12 +82,12 @@ bool get_position::next_step()
 			position.push_back(the_robot->reply_package.arm.pf_def.arm_coordinates[i]);
 		}
 	} else {
-		throw ECP_error(lib::NON_FATAL_ERROR, INVALID_POSE_SPECIFICATION);
+		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 	}
 	return false;
 }
 
-vector <double> get_position::get_position_vector()
+const vector<double> & get_position::get_position_vector() const
 {
 	return position;
 }

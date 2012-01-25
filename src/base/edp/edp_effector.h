@@ -3,25 +3,13 @@
  * \brief File containing the declaration of edp::common::effector class.
  *
  * \author yoyek
- * \date 2009
  *
  */
 
 #ifndef __EDP_EFFECTOR_H
 #define __EDP_EFFECTOR_H
 
-#include <boost/shared_ptr.hpp>
-
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-
-#include "base/edp/edp_typedefs.h"
-
-#include "base/lib/sr/sr_edp.h"
-#include "base/lib/configurator.h"
-
-#include "base/lib/exception.h"
+#include "edp_shell.h"
 
 using namespace mrrocpp::lib::exception;
 
@@ -48,13 +36,6 @@ protected:
 	lib::REPLY_TYPE real_reply_type;
 
 	/*!
-	 * \brief structure of reply of EDP process send to ECP process.
-	 *
-	 * It is used a union of structures for all EDP's
-	 */
-	//lib::r_buffer reply;
-
-	/*!
 	 * \brief id of ECP process sending a command.
 	 *
 	 * It is stored for a further reply purpose.
@@ -74,7 +55,7 @@ protected:
 	 * IT also makes initial ECP command interpretation.
 	 */
 	template <typename ROBOT_COMMAND_T>
-	lib::INSTRUCTION_TYPE receive_instruction(ROBOT_COMMAND_T & instruction)
+	lib::INSTRUCTION_TYPE receive_instruction(ROBOT_COMMAND_T & instruction_)
 	{
 		// oczekuje na polecenie od ECP, wczytuje je oraz zwraca jego typ
 		int rcvid;
@@ -86,7 +67,7 @@ protected:
 		ROBOT_COMMAND_T new_ecp_command;
 
 		/* Do your MsgReceive's here now with the chid */
-		while (1) {
+		while (true) {
 
 			int32_t type, subtype;
 			rcvid = messip::port_receive(server_attach, type, subtype, new_ecp_command);
@@ -105,15 +86,15 @@ protected:
 
 		caller = rcvid;
 
-		instruction = new_ecp_command;
-		if ((instruction.instruction_type == lib::SET) || (instruction.instruction_type == lib::SET_GET)) {
+		instruction_ = new_ecp_command;
+		//	if ((instruction.instruction_type == lib::SET) || (instruction.instruction_type == lib::SET_GET)) {
 
-			//	std::cout << "edp effector: " << instruction.instruction_type << "\n";
+		//	std::cout << "edp effector: " << instruction.instruction_type << "\n";
 
-			instruction_deserialization();
-		}
+		instruction_deserialization();
+		//	}
 
-		return instruction.instruction_type;
+		return instruction_.instruction_type;
 	}
 
 	/*!
@@ -134,13 +115,12 @@ protected:
 		if (!((reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK)))
 			reply.reply_type = real_reply_type;
 
-
-			if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
+		if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
 
 			uint64_t e = errno;
 			perror("Reply() to ECP failed");
 			msg->message(lib::SYSTEM_ERROR, e, "Reply() to ECP failed");
-			throw System_error();
+			throw exception::se();
 		}
 		real_reply_type = lib::ACKNOWLEDGE;
 	}
@@ -167,6 +147,12 @@ protected:
 	void establish_error(lib::r_buffer_base & reply, uint64_t err0, uint64_t err1);
 
 public:
+
+	/*!
+	 * \brief EDP shell
+	 */
+	shell &edp_shell;
+
 	/*!
 	 * \brief Name of the robot
 	 *
@@ -186,7 +172,7 @@ public:
 	 *
 	 * For the usage in asynchronous communication.
 	 */
-	boost::shared_ptr<lib::sr_edp> msg;
+	boost::shared_ptr <lib::sr_edp> msg;
 
 	/*!
 	 * \brief Info if the robot test mode is active.
@@ -201,14 +187,14 @@ public:
 	 * It opens the communication channels of EDP server.
 	 * TODO: this should be void and throw an exception in case of failure
 	 */
-	bool initialize_communication(void);
+	void initialize_communication(void);
 
 	/*!
 	 * \brief Constructor.
 	 *
 	 * It connects to the existing channels of UI SR.
 	 */
-	effector(lib::configurator &_config, lib::robot_name_t l_robot_name);
+	effector(shell &_shell, const lib::robot_name_t & l_robot_name);
 
 	/*!
 	 * \brief Destructor.
@@ -231,12 +217,6 @@ public:
 	 */
 	virtual void create_threads() = 0;
 
-	/*!
-	 * \brief ECP command union.
-	 *
-	 * Command sent by ECP.
-	 */
-	//lib::c_buffer instruction;
 };
 /************************ EDP_EFFECTOR ****************************/
 
@@ -245,7 +225,7 @@ public:
  *
  * It is implemented in specific effector file.
  */
-effector* return_created_efector(lib::configurator &_config);
+effector* return_created_efector(common::shell &_shell);
 
 } // namespace common
 } // namespace edp

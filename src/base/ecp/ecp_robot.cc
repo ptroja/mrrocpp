@@ -16,53 +16,83 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#ifdef __gnu_linux__
-#include <execinfo.h>
-#include <exception>
-#include <iostream>
-#endif /* __gnu_linux__ */
+#include <boost/thread.hpp>
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/configurator.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_task.h"
 
-
 #include "base/lib/messip/messip_dataport.h"
-
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 namespace robot {
 
-// konstruktor wywolywany z UI
-ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
-	robot(_robot_name), spawn_and_kill(true), communicate_with_edp(true), sr_ecp_msg(_sr_ecp_msg),
-			number_of_servos(_number_of_servos), edp_section(_edp_section)
+common_buffers_ecp_robot::common_buffers_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref) :
+		ecp_robot_base(_robot_name, _number_of_servos, _config, _sr_ecp_msg),
+		ecp_command(c_buffer_ref),
+		reply_package(r_buffer_ref)
 {
+
+}
+
+// konstruktor wywolywany z ECP
+common_buffers_ecp_robot::common_buffers_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref) :
+		ecp_robot_base(_robot_name, _number_of_servos, _ecp_object),
+		ecp_command(c_buffer_ref),
+		reply_package(r_buffer_ref)
+{
+
+}
+
+// -------------------------------------------------------------------
+common_buffers_ecp_robot::~common_buffers_ecp_robot()
+{
+
+}
+
+// konstruktor wywolywany z UI
+ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp_msg) :
+		robot(_robot_name),
+		is_created_by_ui(true),
+		communicate_with_edp(true),
+		sr_ecp_msg(_sr_ecp_msg),
+		number_of_servos(_number_of_servos),
+		is_new_data(false),
+		is_new_request(false),
+		data_ports_used(false)
+{
+	edp_section = _config.get_edp_section(robot_name);
 	connect_to_edp(_config);
 }
 
 // konstruktor wywolywany z ECP
-ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, const std::string &_edp_section, common::task::task_base& _ecp_object) :
-	robot(_robot_name), spawn_and_kill(false), communicate_with_edp(true), sr_ecp_msg(*_ecp_object.sr_ecp_msg),
-			number_of_servos(_number_of_servos), edp_section(_edp_section)
+ecp_robot_base::ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object) :
+		robot(_robot_name),
+		is_created_by_ui(false),
+		communicate_with_edp(true),
+		sr_ecp_msg(*_ecp_object.sr_ecp_msg),
+		number_of_servos(_number_of_servos),
+		is_new_data(false),
+		is_new_request(false),
+		data_ports_used(false)
 {
+	edp_section = _ecp_object.config.get_edp_section(robot_name);
 	connect_to_edp(_ecp_object.config);
 }
 
 // -------------------------------------------------------------------
-ecp_robot_base::~ecp_robot_base(void)
+ecp_robot_base::~ecp_robot_base()
 {
-
-	if (EDP_fd)
-	{
+	// Close and invalidate the connection with EDP
+	if (EDP_fd != lib::invalid_fd) {
 		messip::port_disconnect(EDP_fd);
+		EDP_fd = lib::invalid_fd;
 	}
 
-
-	if (spawn_and_kill) {
+	if (is_created_by_ui) {
 		if (kill(EDP_MASTER_Pid, SIGTERM) == -1) {
 			perror("kill()");
 		} else {
@@ -76,28 +106,27 @@ ecp_robot_base::~ecp_robot_base(void)
 
 void ecp_robot_base::connect_to_edp(lib::configurator &config)
 {
-	EDP_MASTER_Pid = (spawn_and_kill) ? config.process_spawn(edp_section) : -1;
+	EDP_MASTER_Pid = (is_created_by_ui) ? config.process_spawn(edp_section) : -1;
 
-	const std::string edp_net_attach_point =
-			config.return_attach_point_name(lib::configurator::CONFIG_SERVER, "resourceman_attach_point", edp_section);
+	const std::string edp_net_attach_point = config.get_edp_resourceman_attach_point(robot_name);
 
 	printf("connect_to_edp");
 	fflush(stdout);
 
 	unsigned int tmp = 0;
 
-	while ((EDP_fd = messip::port_connect(edp_net_attach_point)) == NULL )
+	while ((EDP_fd = messip::port_connect(edp_net_attach_point)) == NULL)
 
 	{
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			usleep(lib::CONNECT_DELAY);
+			boost::this_thread::sleep(lib::CONNECT_DELAY);
 			printf(".");
 			fflush(stdout);
 		} else {
 			int e = errno; // kod bledu systemowego
-			fprintf(stderr, "Unable to locate EDP_MASTER process at channel \"%s\": %s\n", edp_net_attach_point.c_str(), strerror(errno));
-			sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "Unable to locate EDP_MASTER process");
-			throw ECP_main_error(lib::SYSTEM_ERROR, 0);
+			fprintf(stderr, "Unable to locate EDP_MASTER process at channel \"%s\": %s\n", edp_net_attach_point.c_str(), strerror(e));
+			sr_ecp_msg.message(lib::SYSTEM_ERROR, e, ": Unable to locate EDP_MASTER process");
+			BOOST_THROW_EXCEPTION(exception::se_r());
 		}
 	}
 	printf(".done\n");
@@ -114,27 +143,13 @@ bool ecp_robot_base::is_synchronised(void) const
 	return synchronised;
 }
 
-ECP_error::ECP_error(lib::error_class_t err_cl, uint64_t err_no, uint64_t err0, uint64_t err1) :
-	error_class(err_cl), error_no(err_no)
+void ecp_robot_base::check_then_set_command_flag(bool& flag)
 {
-	error.error0 = err0;
-	error.error1 = err1;
-#ifdef __gnu_linux__
-	void * array[25];
-	int nSize = backtrace(array, 25);
-	char ** symbols = backtrace_symbols(array, nSize);
-
-	for (int i = 0; i < nSize; i++) {
-		std::cerr << symbols[i] << std::endl;
+	if (flag) {
+		BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
+	} else {
+		flag = true;
 	}
-
-	free(symbols);
-#endif /* __gnu_linux__ */
-}
-
-ECP_main_error::ECP_main_error(lib::error_class_t err_cl, uint64_t err_no) :
-	error_class(err_cl), error_no(err_no)
-{
 }
 
 }

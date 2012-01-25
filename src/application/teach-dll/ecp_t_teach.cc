@@ -32,15 +32,15 @@ using std::cerr;
 
 // KONSTRUKTORY
 teach::teach(lib::configurator &_config) :
-	task(_config)
+		task(_config)
 {
 	if (config.section_name == ECP_SECTION) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
-	} else if (config.section_name == lib::irp6p_m::ECP_SECTION) {
+	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else {
 		fprintf(stderr, "unknown robot \"%s\" in teach task\n", config.section_name.c_str());
-		throw(robot::ECP_main_error(lib::FATAL_ERROR, 0));
+		BOOST_THROW_EXCEPTION(exception::fe_r());
 	}
 
 	cout << "C++ dlopen demo\n\n";
@@ -107,7 +107,7 @@ void teach::main_task_algorithm(void)
 	tig->Move();
 	// 	 printf("w ecp for za move\n");
 	// Oczekiwanie na STOP
-	ecp_termination_notice();
+	termination_notice();
 }
 
 task_base* return_created_ecp_task(lib::configurator &_config)

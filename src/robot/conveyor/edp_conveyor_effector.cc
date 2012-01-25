@@ -50,8 +50,8 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 }
 
 // Konstruktor.
-effector::effector(lib::configurator &_config) :
-	motor_driven_effector(_config, lib::conveyor::ROBOT_NAME)
+effector::effector(common::shell &_shell) :
+		motor_driven_effector(_shell, lib::conveyor::ROBOT_NAME, instruction, reply)
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	number_of_servos = lib::conveyor::NUM_OF_SERVOS;
@@ -110,17 +110,17 @@ void effector::create_kinematic_models_for_given_robot(void)
 	add_kinematic_model(new kinematics::conveyor::model());
 	// Ustawienie aktywnego modelu.
 	set_kinematic_model(0);
-}//: create_kinematic_models_for_given_robot
+} //: create_kinematic_models_for_given_robot
 
 } // namespace conveyor
 
 namespace common {
 
 // Stworzenie obiektu edp_conveyor_effector.
-effector* return_created_efector(lib::configurator &_config)
+effector* return_created_efector(common::shell &_shell)
 {
-	return new conveyor::effector(_config);
-}//: return_created_efector
+	return new conveyor::effector(_shell);
+} //: return_created_efector
 
 } // namespace common
 } // namespace edp

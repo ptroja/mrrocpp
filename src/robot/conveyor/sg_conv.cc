@@ -24,7 +24,7 @@ namespace conveyor {
 
 /*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer(effector &_master) :
-	common::servo_buffer(_master), master(_master)
+		common::servo_buffer(_master), master(_master)
 {
 	for (int j = 0; j < lib::conveyor::NUM_OF_SERVOS; j++) {
 		axe_inc_per_revolution[j] = INC_PER_REVOLUTION;
@@ -40,9 +40,10 @@ void servo_buffer::load_hardware_interface(void)
 	// tablica pradow maksymalnych dla poszczegolnych osi
 	//int max_current[lib::conveyor::NUM_OF_SERVOS] = { AXIS_1_MAX_CURRENT };
 
-	const std::vector<std::string> ports_vector(mrrocpp::lib::conveyor::ports_strings,
-				mrrocpp::lib::conveyor::ports_strings+mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM+1);
-	hi = new hi_moxa::HI_moxa(master, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM, ports_vector);
+	const std::vector <std::string> ports_vector(mrrocpp::lib::conveyor::ports_strings, mrrocpp::lib::conveyor::ports_strings
+			+ mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM + 1);
+	hi =
+			new hi_moxa::HI_moxa(master, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::conveyor::MAX_INCREMENT);
 	hi->init();
 
 	// conveyor uruchamia sie jako zsynchronizowany - ustawic parametr na karcie sterownika
@@ -51,7 +52,7 @@ void servo_buffer::load_hardware_interface(void)
 	// utworzenie tablicy regulatorow
 
 	// Serwomechanizm 1
-	regulator_ptr[0] = new NL_regulator_1_conv(0, 0, 0.333, 6.2, 5.933, 0.35, master); // tasmociag dla irp6 postument
+	regulator_ptr[0] = new NL_regulator_1_conv(0, 0, 0, 0.333, 6.2, 5.933, 0.35, master); // tasmociag dla irp6 postument
 
 	common::servo_buffer::load_hardware_interface();
 }
@@ -68,6 +69,7 @@ void servo_buffer::synchronise(void)
 		// W.S. Tylko przy testowaniu
 		clear_reply_status();
 		clear_reply_status_tmp();
+
 		reply_to_EDP_MASTER();
 		return;
 	}
@@ -100,15 +102,6 @@ void servo_buffer::synchronise(void)
 /*-----------------------------------------------------------------------*/
 
 } // namespace conveyor
-
-namespace common {
-
-servo_buffer* return_created_servo_buffer(motor_driven_effector &_master)
-{
-	return new conveyor::servo_buffer((conveyor::effector &) (_master));
-}
-
-} // namespace common
 } // namespace edp
 } // namespace mrrocpp
 

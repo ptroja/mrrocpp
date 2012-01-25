@@ -14,29 +14,24 @@
 #include <string>
 #include <stdint.h>
 
+#include <boost/date_time/time_duration.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+
 namespace mrrocpp {
 }
 using namespace mrrocpp;
 namespace mrrocpp {
 namespace lib {
 
-// Rozmiary buforow
-const int MP_2_ECP_NEXT_STATE_STRING_SIZE = 100;
-const int MP_2_ECP_STRING_SIZE = 300;
+// Rozmiary generycznych pol do wstawiania danych zaleznych od aplikacji.
+const int MP_2_ECP_SERIALIZED_DATA_SIZE = 300;
 const int ECP_2_MP_STRING_SIZE = 300;
-const int MAX_TEXT = 100; // MAC7
-const int MAX_PROSODY = 20; // MAC7
-
 
 // Stale do komunikacji
-
-
-const unsigned int CONNECT_RETRY = 200;
-const unsigned int CONNECT_DELAY = 10000;
+const unsigned int CONNECT_RETRY = 500;
+const boost::posix_time::time_duration CONNECT_DELAY = boost::posix_time::milliseconds(20);
 
 // ----------------------- PRZYDATNE STALE ---------------------------
-typedef double frame_tab[3][4];
-
 const std::string MP_SECTION = "[mp]";
 const std::string UI_SECTION = "[ui]";
 
@@ -68,7 +63,8 @@ const std::string FORCE_SENSOR_TEST_MODE = "force_sensor_test_mode";
 
 // Stale czasowe
 
-const int QNX_MAX_PRIORITY = 30;
+const int PTHREAD_MAX_PRIORITY = 10;
+const int PTHREAD_MIN_PRIORITY = 1;
 
 // STALE PULSOW MP, ECP, READER
 
@@ -78,18 +74,11 @@ const int QNX_MAX_PRIORITY = 30;
 #define MP_RESUME (_PULSE_CODE_MINAVAIL + 4)
 #define MP_TRIGGER (_PULSE_CODE_MINAVAIL + 5)
 
-#define MP_TO_ECP_COMMUNICATION_REQUEST (_PULSE_CODE_MINAVAIL + 6)
-
 #define ECP_TRIGGER (_PULSE_CODE_MINAVAIL + 1)
 
 #define READER_START (_PULSE_CODE_MINAVAIL + 1)
 #define READER_STOP (_PULSE_CODE_MINAVAIL + 2)
 #define READER_TRIGGER (_PULSE_CODE_MINAVAIL + 3)
-
-#define ECP_WAIT_FOR_START (_PULSE_CODE_MINAVAIL + 2)
-#define ECP_WAIT_FOR_STOP (_PULSE_CODE_MINAVAIL + 3)
-#define ECP_WAIT_FOR_COMMAND (_PULSE_CODE_MINAVAIL + 4)
-#define ECP_WAIT_FOR_NEXT_STATE (_PULSE_CODE_MINAVAIL + 5)
 
 } // namespace lib
 } // namespace mrrocpp

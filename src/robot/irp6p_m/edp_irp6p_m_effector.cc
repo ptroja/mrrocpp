@@ -51,8 +51,8 @@ void effector::set_robot_model(const lib::c_buffer &instruction)
 /*--------------------------------------------------------------------------*/
 void effector::move_arm(const lib::c_buffer &instruction)
 { // przemieszczenie ramienia
-	// Wypenienie struktury danych transformera na podstawie parametrow polecenia
-	// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
+// Wypenienie struktury danych transformera na podstawie parametrow polecenia
+// otrzymanego z ECP. Zlecenie transformerowi przeliczenie wspolrzednych
 
 	manip_effector::multi_thread_move_arm(instruction);
 
@@ -63,20 +63,20 @@ void effector::move_arm(const lib::c_buffer &instruction)
 void effector::create_threads()
 {
 	// jesli wlaczono obsluge sily
-	vs = (boost::shared_ptr<sensor::force>) sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
+	vs = (boost::shared_ptr <sensor::force>) sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
 	// byY - utworzenie watku pomiarow sily
 	new boost::thread(boost::bind(&sensor::force::operator(), vs));
 
-	vs->thread_started.wait();
-
-//#endif
+	//vs->thread_started.wait();
+	//zeby miec pewnosc, ze zostal wykonany pierwszy pomiar
+	vs->edp_vsp_synchroniser.wait();
 	motor_driven_effector::hi_create_threads();
 }
 
 // Konstruktor.
-effector::effector(lib::configurator &_config) :
-	manip_effector(_config, lib::irp6p_m::ROBOT_NAME)
+effector::effector(common::shell &_shell) :
+		manip_effector(_shell, lib::irp6p_m::ROBOT_NAME, instruction, reply)
 {
 
 	number_of_servos = lib::irp6p_m::NUM_OF_SERVOS;
@@ -115,13 +115,12 @@ void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 
 } // namespace irp6p
 
-
 namespace common {
 
 // Stworzenie obiektu edp_irp6p_effector.
-effector* return_created_efector(lib::configurator &_config)
+effector* return_created_efector(common::shell &_shell)
 {
-	return new irp6p_m::effector(_config);
+	return new irp6p_m::effector(_shell);
 }
 
 } // namespace common

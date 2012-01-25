@@ -12,7 +12,7 @@
 
 #include <string>
 
-#include "base/lib/com_buf.h"
+#include "com_buf.h"
 #include "sensor_error.h"
 
 namespace mrrocpp {

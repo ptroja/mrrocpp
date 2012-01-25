@@ -7,15 +7,20 @@ This software was developed at:
 Institute of Control and Computation Engineering,
 Warsaw University of Technology, Poland
 
-Main authors:
+Main authors of first version and general concept:
 	Cezary Zielinski
 	Wojciech Szynkiewicz
+	
+Main authors of current version:
+	
 	Tomasz Winiarski
 	Tomasz Kornuta
 	Piotr Trojanek
 
 === Build instructions
 
-To build this software for QNX OS please do the following:
-mkdir build; cd build; cmake -DCMAKE_TOOLCHAIN_FILE=../Toolchain-QCC.cmake ../; cmake .
+To build follow the standard CMake build procedure
+mkdir build && cd build && cmake ../
 make && make install 
+
+

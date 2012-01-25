@@ -1,5 +1,11 @@
-#include <cstdio>
+#include <cmath>
 #include <ostream>
+
+#include <boost/tokenizer.hpp>
+#include <boost/lexical_cast.hpp>
+
+#include <Eigen/Core>
+#include <Eigen/Geometry>
 
 #include "base/lib/mrmath/mrmath.h"
 
@@ -14,22 +20,7 @@ const double Homog_matrix::ALPHA_SENSITIVITY = 0.000001;
 
 Homog_matrix::Homog_matrix()
 {
-	// Tworzy macierz jednostkowa
-	// 			| 1 0 0 0 |
-	// 			| 0 1 0 0 |
-	// 			| 0 0 1 0 |
-
-	// i - i-ta kolumna
-	// j - j-ty wiersz
-
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 3; j++) {
-			if (i == j)
-				matrix_m[j][i] = 1;
-			else
-				matrix_m[j][i] = 0;
-		}
-	}
+	setIdentity();
 }
 
 Homog_matrix::Homog_matrix(const K_vector & versor_x, const K_vector & versor_y, const K_vector & versor_z, const K_vector & angles)
@@ -58,7 +49,6 @@ Homog_matrix::Homog_matrix(const Xyz_Euler_Zyz_vector & l_vector)
 
 Homog_matrix::Homog_matrix(const Xyz_Rpy_vector & l_vector)
 {
-
 	set_from_xyz_rpy(l_vector);
 }
 
@@ -104,19 +94,6 @@ Homog_matrix::Homog_matrix(const double r[3][3], const double t[3])
 	}
 }
 
-// Utworzenie macierzy jednorodnej na podstawie zawartosci tablicy podanej jako argument.
-Homog_matrix::Homog_matrix(const frame_tab & frame)
-{
-	set_from_frame_tab(frame);
-}
-
-// kontruktor kopiujacy
-// jest on uzywany podczas inicjalizacji obiektu w momencie jego tworzenia (np. Homog_matrix B = A;)
-Homog_matrix::Homog_matrix(const Homog_matrix & wzor)
-{
-	set_from_frame_tab(wzor.matrix_m);
-}
-
 Homog_matrix::Homog_matrix(double x, double y, double z)
 {
 	// Tworzy macierz jednorodna
@@ -147,6 +124,11 @@ Homog_matrix::Homog_matrix(double r11, double r12, double r13, double t1, double
 	matrix_m[2][3] = t3;
 }
 
+Homog_matrix::Homog_matrix(const std::string & str)
+{
+	set(str);
+}
+
 Homog_matrix::Homog_matrix(const Eigen::Matrix <double, 3, 4>& eigen_matrix)
 {
 	for (int i = 0; i < 3; ++i) {
@@ -156,14 +138,75 @@ Homog_matrix::Homog_matrix(const Eigen::Matrix <double, 3, 4>& eigen_matrix)
 	}
 }
 
-void Homog_matrix::get_frame_tab(frame_tab frame) const
+Homog_matrix::Homog_matrix(const Eigen::Matrix<double, 4 , 4>& eigen_matrix)
 {
-	copy_frame_tab(frame, matrix_m);
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			matrix_m[i][j] = eigen_matrix(i, j);
+		}
+	}
 }
 
-void Homog_matrix::set_from_frame_tab(const frame_tab & frame)
+
+void Homog_matrix::setIdentity()
 {
-	copy_frame_tab(matrix_m, frame);
+	// Tworzy macierz jednostkowa
+	// 			| 1 0 0 0 |
+	// 			| 0 1 0 0 |
+	// 			| 0 0 1 0 |
+
+	// i - i-ta kolumna
+	// j - j-ty wiersz
+
+	for (int i = 0; i < 4; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (i == j)
+				matrix_m[j][i] = 1;
+			else
+				matrix_m[j][i] = 0;
+		}
+	}
+}
+
+void Homog_matrix::set(const std::string & str)
+{
+	// Prepare char-separated tokenizer
+	typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+
+	// Setup skipped skip-delimiters and kept-delimiters
+	boost::char_separator<char> sep(" \t\r\n", "[;]");
+
+	// Instantiate tokenizer
+	tokenizer tokens(str, sep);
+
+	// Setup token iterator
+	tokenizer::iterator tok_iter = tokens.begin();
+
+	// Parse matrix string
+	if(*tok_iter++ != "[") throw std::runtime_error("Opening bracket expected");
+	matrix_m[0][0] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[0][1] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[0][2] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[0][3] = boost::lexical_cast<double>(*tok_iter++);
+	if(*tok_iter++ != ";") throw std::runtime_error("1st semicolon expected");
+	matrix_m[1][0] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[1][1] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[1][2] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[1][3] = boost::lexical_cast<double>(*tok_iter++);
+	if(*tok_iter++ != ";") throw std::runtime_error("2nd semicolon expected");
+	matrix_m[2][0] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[2][1] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[2][2] = boost::lexical_cast<double>(*tok_iter++);
+	matrix_m[2][3] = boost::lexical_cast<double>(*tok_iter++);
+	if(*tok_iter++ != ";") throw std::runtime_error("3rd semicolon expected");
+	if(boost::lexical_cast<double>(*tok_iter++) != 0) throw std::runtime_error("1st zero expected");
+	if(boost::lexical_cast<double>(*tok_iter++) != 0) throw std::runtime_error("2nd zero expected");
+	if(boost::lexical_cast<double>(*tok_iter++) != 0) throw std::runtime_error("3rd zero expected");
+	if(boost::lexical_cast<double>(*tok_iter++) != 1) throw std::runtime_error("1 zero expected");
+	if(*tok_iter++ != "]") throw std::runtime_error("Closing bracket expected");
+
+	// Check if all tokens has been parsed
+	if(tok_iter != tokens.end()) throw std::runtime_error("End-of-string expected");
 }
 
 // Przeksztalcenie do formy XYZ_EULER_ZYZ i zwrocenie w tablicy.
@@ -232,6 +275,7 @@ void Homog_matrix::set_from_frame_tab(const frame_tab & frame)
  }
  */
 
+
 void Homog_matrix::get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const
 {
 	double alfa, beta, gamma; // Katy Euler'a Z-Y-Z
@@ -275,6 +319,95 @@ void Homog_matrix::get_xyz_euler_zyz(Xyz_Euler_Zyz_vector & l_vector) const
 	l_vector[5] = gamma;
 }
 
+
+void Homog_matrix::set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector)
+{
+	// Reduction of alpha and beta to <-PI, PI) makes no sense, because sin and cos are periodical with period equal to 2PI.
+	//	const double alfa = reduce(l_vector[3], -M_PI, M_PI, 2 * M_PI);
+	//	const double gamma = reduce(l_vector[5], -M_PI, M_PI, 2 * M_PI);
+
+	// The beta angle is reduced to <0,PI).
+	//	const double beta = reduce(l_vector[4], 0, M_PI, M_PI);
+	Xyz_Euler_Zyz_vector
+			l_reduced(l_vector[0], l_vector[1], l_vector[2], l_vector[3], reduce(l_vector[4], 0, M_PI, M_PI), l_vector[5]);
+
+	// Compute the homogenous matrix coefficients.
+	set_from_xyz_euler_zyz_without_limits(l_reduced);
+}
+
+
+void Homog_matrix::get_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector & l_vector, const double alpha_, const double beta_, const double gamma_) const
+{
+	double phi, theta, psi, dist;
+	double phi2, theta2, psi2, dist2;
+	const double EPS = 1.0E-10;
+
+#if(DEBUG_KINEMATICS)
+		std::cout.precision(15);
+		std::cout<<"u33 = "<< matrix_m[2][2] << endl;
+#endif
+
+	if ((matrix_m[2][2] < (1 + EPS)) && (matrix_m[2][2] > (1 - EPS))) {
+		// If u33 = 1 then theta is 0.
+		theta = 0;
+		// Infinite number of solutions: only the phi + psi value can be computed, thus we assume, that phi will equal to the previous one.
+		phi = alpha_;
+		psi = atan2(matrix_m[1][0], matrix_m[0][0]) - phi;
+		// atan2(r(2,1), r(1,1)) - phi
+#if(DEBUG_KINEMATICS)
+		std::cout.precision(15);
+		std::cout<<"CASE I: u33=1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+#endif
+		l_vector << matrix_m[0][3], matrix_m[1][3], matrix_m[2][3], phi, theta, psi;
+	} else if ((matrix_m[2][2] < (-1 + EPS)) && (matrix_m[2][2] > (-1 - EPS))) {
+		// If u33 = -1 then theta is equal to pi.
+		theta = M_PI;
+		// Infinite number of solutions: only the phi - psi value can be computed, thus we assume, that phi will equal to the previous one.
+		phi = alpha_;
+		psi = - atan2(-matrix_m[0][1], -matrix_m[0][0]) + phi;
+#if(DEBUG_KINEMATICS)
+		std::cout.precision(15);
+		std::cout<<"CASE II: u33=-1 => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+#endif
+		l_vector << matrix_m[0][3], matrix_m[1][3], matrix_m[2][3], phi, theta, psi;
+	} else {
+		// Two possible solutions.
+//		double sb = hypot(matrix_m[2][0], matrix_m[2][1]);
+
+		// First solution.
+		theta = atan2(sqrt(1 - matrix_m[2][2]*matrix_m[2][2]), matrix_m[2][2]);
+//		theta = atan2(sb, matrix_m[2][2]);
+
+		phi = atan2(matrix_m[1][2], matrix_m[0][2]);
+		psi = atan2(matrix_m[2][1], -matrix_m[2][0]);
+#if(DEBUG_KINEMATICS)
+		std::cout.precision(15);
+		std::cout<<"CASE III: atan(u33, sqrt(1-u33^3)) => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
+#endif
+		// Compute maximal delta.
+		dist = std::max(std::max(fabs(phi - alpha_), fabs(theta - beta_)), fabs(psi - gamma_));
+
+		// Second solution.
+		theta2 = atan2(-sqrt(1 - matrix_m[2][2]*matrix_m[2][2]), matrix_m[2][2]);
+//		theta = atan2(-sb, matrix_m[2,2]);
+
+		phi2 = atan2(-matrix_m[1][2], -matrix_m[0][2]);
+		psi2 = atan2(-matrix_m[2][1], matrix_m[2][0]);
+#if(DEBUG_KINEMATICS)
+		std::cout.precision(15);
+		std::cout<<"CASE IV: atan(u33, -sqrt(1-u33^3)) => ["<<phi2<<", "<<theta2<<", "<<psi2<<"]\n";
+#endif
+		// Compute maximal delta.
+		dist2 = std::max(std::max(fabs(phi2 - alpha_), fabs(theta2 - beta_)), fabs(psi2 - gamma_));
+
+		// Select best solution.
+		if (dist < dist2)
+			l_vector << matrix_m[0][3], matrix_m[1][3], matrix_m[2][3], phi, theta, psi;
+		else
+			l_vector << matrix_m[0][3], matrix_m[1][3], matrix_m[2][3], phi2, theta2, psi2;
+	}
+}
+
 void Homog_matrix::set_from_xyz_euler_zyz_without_limits(const Xyz_Euler_Zyz_vector & l_vector)
 {
 	// Compute the sines and cosines of all angles.
@@ -304,19 +437,7 @@ void Homog_matrix::set_from_xyz_euler_zyz_without_limits(const Xyz_Euler_Zyz_vec
 	matrix_m[2][3] = l_vector[2];
 }
 
-void Homog_matrix::set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector)
-{
-	// Reduction of alpha and beta to <-PI, PI) makes no sense, because sin and cos are periodical with period equal to 2PI.
-	//	const double alfa = reduce(l_vector[3], -M_PI, M_PI, 2 * M_PI);
-	//	const double gamma = reduce(l_vector[5], -M_PI, M_PI, 2 * M_PI);
 
-	// The beta angle is reduced to <0,PI).
-	//	const double beta = reduce(l_vector[4], 0, M_PI, M_PI);
-	Xyz_Euler_Zyz_vector l_reduced(l_vector[0], l_vector[1], l_vector[2], l_vector[3], reduce(l_vector[4], 0, M_PI, M_PI), l_vector[5]);
-
-	// Compute the homogenous matrix coefficients.
-	set_from_xyz_euler_zyz_without_limits(l_reduced);
-}
 
 // UWAGA ponizsze dwie funckje nie byly testowane - po pozytywnych  testach usunac komentarz
 // Przeksztalcenie do formy XYZ_RPY (rool pitch yaw) i zwrocenie w tablicy.
@@ -329,20 +450,22 @@ void Homog_matrix::get_xyz_rpy(Xyz_Rpy_vector & l_vector) const
 
 	// alfa (wokol z) , beta (wokol y), gamma (wokol x)
 	l_vector[3] = atan2(matrix_m[2][1], matrix_m[2][2]);
-	l_vector[4] = atan2(matrix_m[2][0], hypot(matrix_m[0][0], matrix_m[1][0]));
+	l_vector[4] = atan2(-matrix_m[2][0], hypot(matrix_m[0][0], matrix_m[1][0]));
 	l_vector[5] = atan2(matrix_m[1][0], matrix_m[0][0]);
+
+	// TODO: właściwa implementacja!! str. 63 craig.
 }
 
 // Wypelnienie wspolczynnikow macierzy na podstawie danych w formie XYZ_RPY.
 void Homog_matrix::set_from_xyz_rpy(const Xyz_Rpy_vector & l_vector)
 {
 	// alfa (wokol z) , beta (wokol y), gamma (wokol x)
-	const double c_alfa = cos(l_vector[4]);
-	const double s_alfa = sin(l_vector[4]);
-	const double c_beta = cos(l_vector[5]);
-	const double s_beta = sin(l_vector[5]);
-	const double c_gamma = cos(l_vector[6]);
-	const double s_gamma = sin(l_vector[6]);
+	const double c_alfa = cos(l_vector[3]);
+	const double s_alfa = sin(l_vector[3]);
+	const double c_beta = cos(l_vector[4]);
+	const double s_beta = sin(l_vector[4]);
+	const double c_gamma = cos(l_vector[5]);
+	const double s_gamma = sin(l_vector[5]);
 
 	// Obliczenie macierzy rotacji.
 	matrix_m[0][0] = c_alfa * c_beta;
@@ -381,16 +504,31 @@ void Homog_matrix::set_from_xyz_quaternion(double eta, double eps1, double eps2,
 	set_translation_vector(x, y, z);
 }
 
-void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vector) // kat wliczony w os
+void Homog_matrix::set_from_xyz_angle_axis_gamma(const Xyz_Angle_Axis_Gamma_vector & xyz_aa_gamma)
 {
-	const double alfa = sqrt(l_vector[3] * l_vector[3] + l_vector[4] * l_vector[4] + l_vector[5] * l_vector[5]);
+	// Transform into the xyz_aa representation.
+	Xyz_Angle_Axis_vector xyz_aa;
+	for (int i = 0; i < 3; i++) {
+		// The translation.
+		xyz_aa[i] = xyz_aa_gamma[i];
+		// The rotation in the form of vector multiplied by angle.
+		xyz_aa[3 + i] = xyz_aa_gamma[3 + i] * xyz_aa_gamma[6];
+	}
+
+	// Set matrix on the base of x,y,z, vx,vy,vz.
+	set_from_xyz_angle_axis(xyz_aa);
+}
+
+void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & xyz_aa)
+{
+	const double alfa = sqrt(xyz_aa[3] * xyz_aa[3] + xyz_aa[4] * xyz_aa[4] + xyz_aa[5] * xyz_aa[5]);
 
 	double kx, ky, kz;
 
 	if (alfa > ALPHA_SENSITIVITY) {
-		kx = l_vector[3] / alfa;
-		ky = l_vector[4] / alfa;
-		kz = l_vector[5] / alfa;
+		kx = xyz_aa[3] / alfa;
+		ky = xyz_aa[4] / alfa;
+		kz = xyz_aa[5] / alfa;
 	} else {
 		kx = ky = kz = 0.0;
 	}
@@ -424,10 +562,10 @@ void Homog_matrix::set_from_xyz_angle_axis(const Xyz_Angle_Axis_vector & l_vecto
 	matrix_m[2][2] = kz * kz * v_alfa + c_alfa;
 
 	// uzupelnienie macierzy
-	set_translation_vector(l_vector[0], l_vector[1], l_vector[2]);
+	set_translation_vector(xyz_aa[0], xyz_aa[1], xyz_aa[2]);
 }
 
-void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
+void Homog_matrix::get_xyz_angle_axis_gamma(Xyz_Angle_Axis_Gamma_vector & xyz_aa_gamma) const
 {
 	// przeksztalcenie macierzy jednorodnej do rozkazu w formie XYZ_ANGLE_AXIS
 	static const double EPS = 1.0E-6;
@@ -447,9 +585,9 @@ void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 		value = 1;
 
 	// kat obrotu
-	double alfa = acos(value);
+	double gamma = acos(value);
 
-	if ((alfa < M_PI + delta) && (alfa > M_PI - delta)) // kat obrotu 180 stopni = Pi radianow
+	if ((gamma < M_PI + delta) && (gamma > M_PI - delta)) // kat obrotu 180 stopni = Pi radianow
 	{
 
 		Kd[0] = sqrt((matrix_m[0][0] + 1) / (double) 2);
@@ -484,28 +622,40 @@ void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & l_vector) const
 		}
 
 	}// end kat obrotu 180 stopni
-	else if ((alfa < ALPHA_SENSITIVITY) && (alfa > -ALPHA_SENSITIVITY)) // kat obrotu 0 stopni
+	else if ((gamma < ALPHA_SENSITIVITY) && (gamma > -ALPHA_SENSITIVITY)) // kat obrotu 0 stopni
 	{
 
 		for (int i = 0; i < 3; i++)
 			Kd[i] = 0;
 
-		alfa = 0;
+		gamma = 0;
 
 	} else // standardowe obliczenia
 	{
 		// sinus kata obrotu alfa
-		const double s_alfa = sin(alfa);
+		const double s_alfa = sin(gamma);
 
 		Kd[0] = (1 / (2 * s_alfa)) * (matrix_m[2][1] - matrix_m[1][2]);
 		Kd[1] = (1 / (2 * s_alfa)) * (matrix_m[0][2] - matrix_m[2][0]);
 		Kd[2] = (1 / (2 * s_alfa)) * (matrix_m[1][0] - matrix_m[0][1]);
 	}
 
-	// Przepisanie wyniku do tablicy
+	// Write the computed values in output parameter.
+	xyz_aa_gamma << matrix_m[0][3], matrix_m[1][3], matrix_m[2][3], Kd[0], Kd[1], Kd[2], gamma;
+}
+
+void Homog_matrix::get_xyz_angle_axis(Xyz_Angle_Axis_vector & xyz_aa) const
+{
+	Xyz_Angle_Axis_Gamma_vector xyz_aa_gamma;
+	// Compute x,y,z, vx,vy,vz, gamma.
+	get_xyz_angle_axis_gamma(xyz_aa_gamma);
+
+	// Copy results to table.
 	for (int i = 0; i < 3; i++) {
-		l_vector[i] = matrix_m[i][3];
-		l_vector[3 + i] = Kd[i] * alfa;
+		// The translation.
+		xyz_aa[i] = xyz_aa_gamma[i];
+		// The rotation in the form of vector multiplied by angle.
+		xyz_aa[3 + i] = xyz_aa_gamma[3 + i] * xyz_aa_gamma[6];
 	}
 }
 
@@ -560,15 +710,6 @@ void Homog_matrix::get_xyz_quaternion(double t[7]) const
 	//	t[6]=eps3;
 	// Koniec Blad cppcheck
 
-}
-
-// operator przypisania
-Homog_matrix & Homog_matrix::operator=(const Homog_matrix & wzor)
-{
-	if (this == &wzor)
-		return *this;
-	set_from_frame_tab(wzor.matrix_m);
-	return *this;
 }
 
 Homog_matrix Homog_matrix::operator*(const Homog_matrix & m) const
@@ -684,15 +825,12 @@ bool Homog_matrix::operator==(const Homog_matrix & comp) const
 
 	Homog_matrix T(A * !B);
 
-	frame_tab t_m;
-	T.get_frame_tab(t_m);
-
 	for (int i = 0; i < 4; i++)
 		for (int j = 0; j < 3; j++) {
 			if (i == j)
-				val += ((t_m[i][i] - 1) * (t_m[i][i] - 1));
+				val += ((T.matrix_m[i][i] - 1) * (T.matrix_m[i][i] - 1));
 			else
-				val += (t_m[j][i] * t_m[j][i]);
+				val += (T.matrix_m[j][i] * T.matrix_m[j][i]);
 		}
 
 	// przekroczony eps => macierze sa rozne
@@ -856,6 +994,48 @@ void Homog_matrix::get_rotation_matrix(double r[3][3]) const
 			r[j][i] = matrix_m[j][i];
 }
 
+void Homog_matrix::get_rotation_matrix(Eigen::Matrix3d& rot) const
+{
+	for(int i=0; i<3; ++i){
+		for(int j=0; j<3; ++j){
+			rot(i,j) = this->operator ()(i, j);
+		}
+	}
+}
+
+void Homog_matrix::set_rotation_matrix(const Eigen::Matrix3d& rot)
+{
+	for(int i=0; i<3; ++i){
+		for(int j=0; j<3; ++j){
+			this->operator ()(i, j) = rot(i,j);
+		}
+	}
+}
+
+Homog_matrix Homog_matrix::interpolate(double t, const Homog_matrix& other)
+{
+	Eigen::Matrix3d rot0, rot1;
+
+	this->get_rotation_matrix(rot0);
+	other.get_rotation_matrix(rot1);
+
+	Eigen::Quaterniond q0(rot0), q1(rot1);
+
+	Eigen::Quaterniond q_p = q0.slerp(t, q1);
+
+	Homog_matrix hm_p;
+
+	double x0 = operator()(0, 3), y0 = operator()(1, 3), z0 = operator()(2, 3);
+	double x1 = other(0, 3), y1 = other(1, 3), z1 = other(2, 3);
+	double x, y, z;
+	x = x0 + t * (x1 - x0);
+	y = y0 + t * (y1 - y0);
+	z = z0 + t * (z1 - z0);
+
+	hm_p.set_translation_vector(x, y, z);
+	hm_p.set_rotation_matrix(q_p.toRotationMatrix());
+	return hm_p;
+}
+
 } // namespace lib
 } // namespace mrrocpp
-

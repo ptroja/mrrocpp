@@ -10,10 +10,10 @@
 
 #include <boost/foreach.hpp>
 
-#include "base/mp/MP_main_error.h"
+
 #include "base/mp/mp_robot.h"
 
-#include "robot/player/ecp_mp_t_player.h"
+
 #include "base/mp/generator/mp_g_send_end_motion_to_ecps.h"
 
 namespace mrrocpp {
@@ -32,10 +32,10 @@ send_end_motion_to_ecps::send_end_motion_to_ecps(task::task& _mp_task) :
 bool send_end_motion_to_ecps::first_step()
 {
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
-				{
-					robot_node.second->mp_command.command = lib::END_MOTION;
-					robot_node.second->communicate_with_ecp = true;
-				}
+	{
+		robot_node.second->mp_command.command = lib::END_MOTION;
+		robot_node.second->communicate_with_ecp = true;
+	}
 
 	return true;
 }

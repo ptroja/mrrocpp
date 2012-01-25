@@ -8,8 +8,8 @@
 #ifndef ECP_T_OBJECTFOLLOWER_PB_EIH_H_
 #define ECP_T_OBJECTFOLLOWER_PB_EIH_H_
 
-#include "base/ecp/ecp_task.h"
 #include <boost/shared_ptr.hpp>
+#include "base/ecp/ecp_task.h"
 #include "base/lib/logger.h"
 #include "application/visual_servoing/visual_servoing.h"
 
@@ -41,7 +41,6 @@ protected:
 	shared_ptr<visual_servo_regulator> reg;
 	shared_ptr<single_visual_servo_manager> sm;
 	shared_ptr<visual_servo> vs;
-	shared_ptr<termination_condition> term_cond;
 };
 
 /** @} */

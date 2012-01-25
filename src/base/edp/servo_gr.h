@@ -9,13 +9,10 @@
 #define __SERVO_GR_H
 
 #include <boost/utility.hpp>
-#ifdef __QNXNTO__
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#else
+
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
-#endif
+
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/condition_synchroniser.h"
@@ -114,9 +111,6 @@ class servo_buffer : public boost::noncopyable
 	// Bufor polecen przysylanych z EDP_MASTER dla SERVO
 	// Obiekt z algorytmem regulacji
 private:
-#ifdef __QNXNTO__
-	int edp_caller; // by 7&Y
-#endif
 
 protected:
 	boost::thread *thread_id;
@@ -133,9 +127,7 @@ protected:
 
 	// output_buffer
 	servo_group_reply servo_data; // informacja przesylana do EDP_MASTER
-#ifdef __QNXNTO__
-	name_attach_t *attach; // 7&Y
-#endif
+
 	bool send_after_last_step; // decyduje, czy po realizacji ostatniego
 	// kroku makrokroku ma byc wyslane aktualne
 	// polozenie walu silnika do EDP_MASTER
@@ -153,20 +145,19 @@ protected:
 
 	void clear_reply_status_tmp(void);
 
-#ifdef __QNXNTO__
-protected:
-	int servo_fd;
-public:
-
-	int servo_to_tt_chid;
-#else
 	bool servo_command_rdy;
 	boost::mutex servo_command_mtx;
 
 	bool sg_reply_rdy;
 	boost::mutex sg_reply_mtx;
 	boost::condition sg_reply_cond;
-#endif
+
+	//! numer kroku w makrokroku
+	//~ numeracja od 0
+	uint16_t step_number_in_macrostep;
+
+	// obliczenie statystyk pradu
+	void compute_current_measurement_statistics();
 
 public:
 	lib::condition_synchroniser thread_started;
@@ -217,7 +208,11 @@ public:
 	void Change_algorithm(void);
 
 	//! synchronizacja
+
 	virtual void synchronise(void);
+
+	//! ustawia flage w hardware interfejs powodujaca stop awaryjny
+	void set_hi_panic(void);
 
 	//! wybor osi
 	void synchro_choose_axis_to_move(common::regulator* &crp, int j);
@@ -239,6 +234,7 @@ public:
 
 	//! wydruk - do celow uruchomieniowych !!!
 	void ppp(void) const;
+
 };
 /*-----------------------------------------------------------------------*/
 

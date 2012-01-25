@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  *  Created on: Mar 3, 2010
  *      Author: mboryn
  */
@@ -16,9 +14,11 @@
 #include "visual_servo.h"
 #include "position_constraint.h"
 #include "termination_condition.h"
+#include "base/lib/logger_client/logger_client.h"
 
 #include <csignal>
 #include <ctime>
+#include <sstream>
 
 namespace mrrocpp {
 
@@ -100,6 +100,10 @@ public:
 	 * @return
 	 */
 	const std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> >& get_servos() const;
+
+	const lib::Homog_matrix& get_current_position() const;
+
+	boost::shared_ptr<logger::logger_client> log_client;
 protected:
 	visual_servo_manager(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name);
 	/**
@@ -112,14 +116,42 @@ protected:
 	 */
 	virtual void configure_all_servos() = 0;
 	std::vector <boost::shared_ptr <mrrocpp::ecp::servovision::visual_servo> > servos;
-	const lib::Homog_matrix& get_current_position() const;
+
+	/** Time for single step () */
+	static const double step_time;
+
+	double get_dt() const;
+	void set_new_motion_steps(int new_motion_steps);
+	int get_new_motion_steps() const;
+	int get_motion_steps() const;
+	int get_motion_steps_base() const;
+
+//	struct timespec current_timestamp;
+//	struct timespec prev_timestamp;
+//	std::stringstream ss;
+//	int c;
+private:
+	/** Default number of steps for macrostep. */
+	static const int motion_steps_default;
+	static const int motion_steps_min;
+	static const int motion_steps_max;
+//	static const int motion_steps_value_in_step_no;
+	int value_in_step_no;
+
+	/** Number of steps for macrostep.
+	 * If present, this value is read from config, otherwise is set to motion_steps_default
+	 */
+	int motion_steps;
+
+	int motion_steps_base;
+
+	int new_motion_steps;
 
 	/** Time between next_step() calls */
 	double dt;
-private:
+
 	lib::Homog_matrix current_position;
 	bool current_position_saved;
-	int motion_steps;
 
 	std::vector <boost::shared_ptr <servovision::position_constraint> > position_constraints;
 	std::vector <boost::shared_ptr <servovision::termination_condition> > termination_conditions;
@@ -149,6 +181,25 @@ private:
 	/** End effector acceleration */
 	Eigen::Matrix <double, 3, 1> angular_acceleration;
 
+	/** Set to true, if speed/accel was constrained by constrain_speed_accel() */
+	bool is_linear_speed_constrained;
+
+	/** Set to true, if speed/accel was constrained by constrain_speed_accel() */
+	bool is_linear_accel_constrained;
+
+	/** Set to true, if speed/accel was constrained by constrain_speed_accel() */
+	bool is_angular_speed_constrained;
+
+	/** Set to true, if speed/accel was constrained by constrain_speed_accel() */
+	bool is_angular_accel_constrained;
+
+	bool speed_constrained, accel_constrained;
+
+	/** Set to true, if position was constrained by constrain_position() */
+	bool is_position_constrained;
+
+	logger::log_message msg;
+
 	void constrain_position(lib::Homog_matrix & new_position);
 
 	/**
@@ -168,12 +219,6 @@ private:
 	 * @param position_change
 	 */
 	void constrain_speed_accel(lib::Homog_matrix & position_change);
-
-	//	timer_t timerek;
-	//	itimerspec max_t;
-	//	itimerspec curr_t;
-	//
-	//	void setup_timer();
 };
 
 /** @} */

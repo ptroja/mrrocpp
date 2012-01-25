@@ -13,21 +13,12 @@
 #include <map>
 
 #include <boost/cast.hpp>
+#include "com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
 
 class single_thread_port_manager;
-
-/*!
- * @brief Data flow status
- *
- * @ingroup lib
- */
-enum FlowStatus
-{
-	NoData, OldData, NewData
-};
 
 /*!
  * @brief single_thread_port interface class
@@ -55,7 +46,8 @@ public:
 	 * @param _name Unique port name.
 	 * @param _port_manager port manager reference.
 	 */
-	single_thread_port_interface(std::string _name, single_thread_port_manager & _port_manager);
+	single_thread_port_interface(const std::string & _name, single_thread_port_manager & _port_manager);
+
 	/**
 	 * @brief Destructor
 	 * This is a base class, so virtual destructor is recommended
@@ -65,16 +57,25 @@ public:
 	{
 	}
 
+	/*!
+	 * @brief Data flow status
+	 *
+	 * @ingroup lib
+	 */
+	enum FlowStatus
+	{
+		NoData, OldData, NewData
+	};
+
 	/**
 	 * @brief returns port name
 	 */
-	std::string get_name();
+	const std::string & get_name() const;
 
 	/**
 	 * @brief clears all flags
 	 */
-	virtual void clear_all_flags()=0;
-
+	virtual void clear_all_flags() = 0;
 };
 
 /*!
@@ -93,25 +94,38 @@ protected:
 	 */
 	bool no_data;
 
+//	T _data;
+
 public:
 	/**
 	 * @brief data stored basing on template
 	 */
 	T data;
 
+	/*
+	 T & data() {
+	 set();
+	 return _data;
+	 }
+
+	 const T & data() const
+	 {
+	 return _data;
+	 }
+	 */
+
 	/**
 	 * @brief Constructor
 	 * @param _name Unique port name.
 	 * @param _port_manager port manager reference.
 	 */
-	single_thread_port(std::string _name, single_thread_port_manager & _port_manager) :
-		single_thread_port_interface(_name, _port_manager), no_data(true)
-
+	single_thread_port(const std::string & _name, single_thread_port_manager & _port_manager) :
+			single_thread_port_interface(_name, _port_manager), no_data(true)
 	{
 	}
 
 	/**
-	 * @brief Sets the new_data flag and unset no_data flag
+	 * @brief Sets the new_data flag and unsets no_data flag
 	 */
 	virtual void set()
 	{
@@ -150,14 +164,6 @@ public:
 		clear_new_data_flag();
 	}
 
-	/**
-	 * @brief test method for test purposes
-	 */
-	void test()
-	{
-
-	}
-
 };
 
 /*!
@@ -166,7 +172,7 @@ public:
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup lib
  */
-template <class T>
+template <class T, class B = empty_t>
 class single_thread_request_port : public single_thread_port <T>
 {
 protected:
@@ -176,15 +182,18 @@ protected:
 	bool new_request;
 
 public:
+	/**
+	 * @brief data with request details set by generator basing on template
+	 */
+	B set_data;
 
 	/**
 	 * @brief Constructor
 	 * @param _name Unique port name.
 	 * @param _port_manager port manager reference.
 	 */
-	single_thread_request_port(std::string _name, single_thread_port_manager & _port_manager) :
-		single_thread_port <T> (_name, _port_manager), new_request(false)
-
+	single_thread_request_port(const std::string & _name, single_thread_port_manager & _port_manager) :
+			single_thread_port <T>(_name, _port_manager), new_request(false)
 	{
 	}
 
@@ -233,20 +242,6 @@ public:
 };
 
 /*!
- * @brief single_thread_port_interface stl map typedef
- *
- * @ingroup lib
- */
-typedef std::map <std::string, single_thread_port_interface *> single_thread_port_interface_t;
-
-/*!
- * @brief single_thread_port_interface stl map value_type typedef
- *
- * @ingroup lib
- */
-typedef single_thread_port_interface_t::value_type single_thread_port_interface_pair_t;
-
-/*!
  * @brief class to manage single_thread_port classes
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
@@ -255,6 +250,20 @@ typedef single_thread_port_interface_t::value_type single_thread_port_interface_
 class single_thread_port_manager
 {
 private:
+	/*!
+	 * @brief single_thread_port_interface stl map typedef
+	 *
+	 * @ingroup lib
+	 */
+	typedef std::map <const std::string, single_thread_port_interface *> single_thread_port_interface_t;
+
+	/*!
+	 * @brief single_thread_port_interface stl map value_type typedef
+	 *
+	 * @ingroup lib
+	 */
+	typedef single_thread_port_interface_t::value_type single_thread_port_interface_pair_t;
+
 	/**
 	 * @brief single_thread_port map
 	 */
@@ -262,15 +271,10 @@ private:
 
 public:
 	/**
-	 * @brief Constructor
-	 */
-	single_thread_port_manager();
-
-	/**
 	 * @brief adds new port to port map
-	 * @param single_thread_port_inter port interface to add
+	 * @param port_iface port interface to add
 	 */
-	void add_port(single_thread_port_interface* single_thread_port_inter);
+	void add_port(single_thread_port_interface* port_iface);
 
 	/**
 	 * @brief clears all flags of stored ports
@@ -295,6 +299,16 @@ public:
 	single_thread_request_port <T>* get_request_port(const std::string & name)
 	{
 		return boost::polymorphic_cast <single_thread_request_port <T> *>(single_thread_port_map[name]);
+	}
+
+	/**
+	 * @brief returns single_thread_request_port of given name
+	 * @param name port name
+	 */
+	template <class T, class B>
+	single_thread_request_port <T, B>* get_request_port(const std::string & name)
+	{
+		return boost::polymorphic_cast <single_thread_request_port <T, B> *>(single_thread_port_map[name]);
 	}
 };
 

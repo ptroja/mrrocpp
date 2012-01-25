@@ -8,8 +8,14 @@
 #ifndef HOMOGMATRIX_HPP_
 #define HOMOGMATRIX_HPP_
 
+#include "base/lib/mrmath/homog_matrix.h"
+
 namespace Types {
 
+// Note: this assumes, that the DisCODe type serialization conforms with the MRROC++ type
+typedef lib::Homog_matrix HomogMatrix;
+
+#if 0
 struct HomogMatrix
 {
 	double elements[3][4];
@@ -21,6 +27,7 @@ private:
 		ar & elements;
 	}
 };
+#endif
 
 } // namespace Types
 

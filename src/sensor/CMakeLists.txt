@@ -1,8 +1,11 @@
+if (NOT UBUNTU32BIT)
 # Recurse into subdirectories.
-add_subdirectory (ati3084)
-add_subdirectory (ati6284)
-add_subdirectory (ati3084MK)
-add_subdirectory (ati6284KT)
-add_subdirectory (ati6284MS)
+
 add_subdirectory (discode)
+if(ROBOTS_012)
+add_subdirectory (pcbird)
 add_subdirectory (ati6284KB)
+add_subdirectory (ati3084KB)
+endif(ROBOTS_012)
+
+endif (NOT UBUNTU32BIT)

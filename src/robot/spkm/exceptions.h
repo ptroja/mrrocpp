@@ -1,97 +1,75 @@
 /*!
- * @file
- * @brief File containing consts, types and classes related to SPKM exceptions.
+ * @file exceptions.h
+ * @brief File containing consts, types and classes related to exceptions specific for SPKM.
  *
- * @author tkornuta
+ * @author Tomasz Kornuta
  * @date 08-02-2011
  *
- * @ingroup SIF_KINEMATICS spkm
- */
-/*
- * spkm_exception.h
- *
- *  Created on:
- *      Author: tkornuta
+ * @ingroup spkm
  */
 
 #ifndef SPKM_EXCEPTION_H_
 #define SPKM_EXCEPTION_H_
 
-#include "base/lib/exception.h"
+#include <string>
+
+#include "base/edp/edp_exceptions.h"
+#include "dp_spkm.h"
 
 namespace mrrocpp {
-namespace kinematics {
+namespace edp {
 namespace spkm {
 
-//! Type of violated limit - upper.
-const std::string UPPER_LIMIT = "UPPER";
+//! Pose specification type.
+typedef boost::error_info <struct pose_specification_, mrrocpp::lib::spkm::POSE_SPECIFICATION> pose_specification;
 
-//! Type of violated limit - lower.
-const std::string LOWER_LIMIT = "LOWER";
+//! Convert exception's to human-readable string
+inline std::string to_string(pose_specification const & e)
+{
+	switch (e.value())
+	{
+		case lib::spkm::WRIST_XYZ_EULER_ZYZ:
+			return "WRIST_XYZ_EULER_ZYZ";
+		case lib::spkm::TOOL_XYZ_EULER_ZYZ:
+			return "TOOL_XYZ_EULER_ZYX";
+		case lib::spkm::JOINT:
+			return "JOINT";
+		case lib::spkm::MOTOR:
+			return "MOTOR";
+		default:
+			return "UNKNOWN";
+	}
+}
 
-
-//! Type of violated limit.
-typedef boost::error_info <struct limit, std::string> spkm_limit_type;
-
-//! Number of motor that caused the exception.
-typedef boost::error_info <struct motor_no, int> spkm_motor_number;
-
-//! Number of joint that caused the exception.
-typedef boost::error_info <struct joint_no, int> spkm_joint_number;
-
-//! Desired values that caused the exception.
-typedef boost::error_info <struct desired_value, double> spkm_desired_value;
-
+//! Number of angle that caused the exception.
+typedef boost::error_info <struct angle_number_, int> angle_number;
 
 /*!
- * \brief Exception thrown in case of motor limits violation.
- * \author tkornuta
+ * \brief Exception thrown when cartesian pose is required, but unknown.
+ * \author Tomasz Kornuta
  */
-struct spkm_motor_limit_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
-{
-	~spkm_motor_limit_error() throw () { }
-};
+REGISTER_NON_FATAL_ERROR(nfe_current_cartesian_pose_unknown, "Required current cartesian pose is unknown")
 
 /*!
- * \brief Exception thrown in case of joint limits violation.
- * \author tkornuta
+ * \brief Exception thrown when new motion command while robot motion was in progress.
+ * \author Tomasz Kornuta
  */
-struct spkm_joint_limit_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
-{
-	~spkm_joint_limit_error() throw () { }
-};
+REGISTER_NON_FATAL_ERROR(nfe_motion_in_progress, "Command cannot be performed because robot motion still is in progress")
 
 /*!
- * \brief Exception thrown in case of invalid pose specification.
- * \author tkornuta
+ * \brief Exception thrown when thyk alpha limit is exceeded.
+ * \author Tomasz Kornuta
  */
-struct spkm_pose_specification_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
-{
-	~spkm_pose_specification_error() throw () { }
-};
+REGISTER_NON_FATAL_ERROR(nfe_thyk_alpha_limit_exceeded, "Thyk alpha limit is exceeded")
 
 /*!
- * \brief Exception thrown in case of invalid motion type.
- * \author tkornuta
+ * \brief Exception thrown when thyk beta limit is exceeded.
+ * \author Tomasz Kornuta
  */
-struct spkm_motion_type_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
-{
-	~spkm_motion_type_error() throw () { }
-};
-
-/*!
- * \brief Exception thrown when in an unsychronized robot state a command requiring synchronization is received.
- * \author tkornuta
- */
-struct spkm_unsynchronized_error : mrrocpp::lib::exception::mrrocpp_non_fatal_error
-{
-	~spkm_unsynchronized_error() throw () { }
-};
-
-
+REGISTER_NON_FATAL_ERROR(nfe_thyk_beta_limit_exceeded, "Thyk beta limit is exceeded")
 
 } // namespace spkm
-} // namespace kinematic
+} // namespace edp
 } // namespace mrrocpp
 
 

@@ -180,6 +180,10 @@ messip_writev( int sockfd,
 			if ( errno == EPIPE )
 				return dcount;
 
+			// Endpoint is closed
+			if (errno == ECONNRESET)
+				return -1;
+
 			// Another errors are not expected
 			assert(0);
 		}
@@ -205,6 +209,8 @@ messip_readv( int sockfd,
 		if(dcount == -1) {
 			if(errno == EINTR)
 				continue;
+
+			// Endpoint is closed
 			if (errno == ECONNRESET)
 				return -1;
 
@@ -785,9 +791,20 @@ messip_channel_create( messip_cnx_t * cnx,
    int32_t maxnb_msg_buffered )
 {
 	messip_channel_t *ret;
-	pthread_mutex_lock(&messip_cnx_mutex);
+	int pret;
+
+	pret = pthread_mutex_lock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_lock(): %s\n", strerror(pret));
+	}
+
 	ret = messip_channel_create0(cnx, name, msec_timeout, maxnb_msg_buffered);
-	pthread_mutex_unlock(&messip_cnx_mutex);
+
+	pret = pthread_mutex_unlock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_unlock(): %s\n", strerror(pret));
+	}
+
 	return ret;
 }
 
@@ -826,7 +843,7 @@ messip_channel_delete0( messip_channel_t * ch,
 	iovec[0].iov_base = &op;
 	iovec[0].iov_len = sizeof( int32_t );
 	memset(&msgsend, 0, sizeof(msgsend));
-	msgsend.pid = getpid(  );
+	msgsend.pid = htonl(getpid(  ));
 	msgsend.tid = pthread_self(  );
 	strncpy( msgsend.name, ch->name, sizeof(msgsend.name) );
 	iovec[1].iov_base = &msgsend;
@@ -921,10 +938,20 @@ int
 messip_channel_delete( messip_channel_t * ch,
    int msec_timeout )
 {
-	int ret;
-	pthread_mutex_lock(&messip_cnx_mutex);
+	int ret, pret;
+
+	pret = pthread_mutex_lock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_lock(): %s\n", strerror(pret));
+	}
+
 	ret = messip_channel_delete0(ch, msec_timeout);
-	pthread_mutex_unlock(&messip_cnx_mutex);
+
+	pret = pthread_mutex_unlock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_unlock(): %s\n", strerror(pret));
+	}
+
 	return ret;
 }
 
@@ -1027,6 +1054,11 @@ messip_channel_connect0( messip_cnx_t * cnx,
 	if ( msgreply.ok == MESSIP_NOK )
 	{
 //		fprintf(stderr, "Locate channel has failed: %s\n", name);
+
+		// set the errno for reasonable error message
+		errno = ENOENT;
+
+		// failure exit status
 		return NULL;
 	}
 
@@ -1184,9 +1216,20 @@ messip_channel_connect( messip_cnx_t * cnx,
    int msec_timeout )
 {
 	messip_channel_t *ret;
-	pthread_mutex_lock(&messip_cnx_mutex);
+	int pret;
+
+	pret = pthread_mutex_lock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_lock(): %s\n", strerror(pret));
+	}
+
 	ret = messip_channel_connect0(cnx, name, msec_timeout);
-	pthread_mutex_unlock(&messip_cnx_mutex);
+
+	pret = pthread_mutex_unlock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_unlock(): %s\n", strerror(pret));
+	}
+
 	return ret;
 }
 
@@ -1233,6 +1276,9 @@ messip_channel_disconnect0( messip_channel_t * ch,
 		dcount = messip_writev( ch->send_sockfd, iovec, 1 );
 		LIBTRACE( ( "@messip_channel_disconnect: sendmsg dcount=%d local_fd=%d [errno=%d] \n",
 			  dcount, ch->send_sockfd, errno ) );
+		if(dcount == -1) {
+			return -1;
+		}
 		if(dcount != sizeof( messip_datasend_t )) {
 			fprintf(stderr, "error disconnecting from \"%s\" channel\n", ch->name);
 		}
@@ -1264,7 +1310,7 @@ messip_channel_disconnect0( messip_channel_t * ch,
 	iovec[0].iov_base = &op;
 	iovec[0].iov_len = sizeof( int32_t );
 	memset(&msgsend, 0, sizeof(msgsend));
-	msgsend.pid = getpid(  );
+	msgsend.pid = htonl(getpid(  ));
 	msgsend.tid = pthread_self(  );
 	strncpy( msgsend.name, ch->name, sizeof(msgsend.name) );
 	iovec[1].iov_base = &msgsend;
@@ -1355,7 +1401,7 @@ messip_channel_disconnect0( messip_channel_t * ch,
 	}
 
 	/*--- Channel deletion failed ? ---*/
-	return reply.ok;
+	return (reply.ok == MESSIP_OK) ? 0 : -1;
 
 }								// messip_channel_disconnect
 
@@ -1363,10 +1409,20 @@ int
 messip_channel_disconnect( messip_channel_t * ch,
    int msec_timeout )
 {
-	int ret;
-	pthread_mutex_lock(&messip_cnx_mutex);
+	int ret, pret;
+
+	pret = pthread_mutex_lock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_lock(): %s\n", strerror(pret));
+	}
+
 	ret = messip_channel_disconnect0(ch, msec_timeout);
-	pthread_mutex_unlock(&messip_cnx_mutex);
+
+	pret = pthread_mutex_unlock(&messip_cnx_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_unlock(): %s\n", strerror(pret));
+	}
+
 	return ret;
 }
 
@@ -1410,7 +1466,10 @@ messip_channel_ping( messip_channel_t * ch,
 	dcount = messip_writev( ch->send_sockfd, iovec, 1 );
 	LIBTRACE( ( "@messip_channel_ping: sendmsg dcount=%d local_fd=%d [errno=%d] \n",
 		  dcount, ch->send_sockfd, errno ) );
-	assert( dcount == sizeof( messip_datasend_t ) );
+	//assert( dcount == sizeof( messip_datasend_t ) );
+	if(dcount != sizeof( messip_datasend_t )) {
+		return -1;
+	}
 
 	/*--- Timeout to read ? ---*/
 	if ( msec_timeout != MESSIP_NOTIMEOUT )
@@ -1429,6 +1488,8 @@ messip_channel_ping( messip_channel_t * ch,
 		FD_ZERO( &ready );
 		FD_SET( ch->send_sockfd, &ready );
 		status = select( ch->send_sockfd+1, &ready, NULL, NULL, NULL );
+		assert(status != -1);
+		assert(FD_ISSET( ch->send_sockfd, &ready ));
 	}
 
 	/*--- Read reply from 'server' ---*/
@@ -2338,10 +2399,20 @@ messip_send( messip_channel_t *ch,
    int reply_maxlen,
    int msec_timeout )
 {
-	int ret;
-	pthread_mutex_lock(&ch->send_mutex);
+	int ret, pret;
+
+	pret = pthread_mutex_lock(&ch->send_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_lock(): %s\n", strerror(pret));
+	}
+
 	ret = messip_send0(ch, type, subtype, send_buffer, send_len, answer, reply_buffer, reply_maxlen, msec_timeout);
-	pthread_mutex_unlock(&ch->send_mutex);
+
+	pret = pthread_mutex_unlock(&ch->send_mutex);
+	if (pret != 0) {
+		fprintf(stderr, "pthread_mutex_unlock(): %s\n", strerror(pret));
+	}
+
 	return ret;
 }
 
@@ -2514,6 +2585,7 @@ messip_reply( messip_channel_t * ch,
 #endif /* __gnu_linux__ */
 			assert(0);
 			ret = -1;
+			break;
 	} /* switch */
 
 	--ch->nb_replies_pending;
@@ -2641,8 +2713,7 @@ timer_t messip_timer_create( messip_channel_t * ch,
    int32_t type,
    int32_t subtype,
    int32_t msec_1st_shot,
-   int32_t msec_rep_shot,
-   int msec_timeout )
+   int32_t msec_rep_shot )
 {
 	messip_timer_t *timer_info;
 	struct sigevent event;

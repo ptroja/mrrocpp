@@ -12,16 +12,23 @@
 #define _SMB_KIN_model
 
 #include "base/kinematics/kinematic_model.h"
+#include "dp_smb.h"
+
 
 namespace mrrocpp {
 namespace kinematics {
 namespace smb {
 
+//! Parameter for conversion of external legs rotation to degrees (in radians).
+//! * One step is equal to 60 degrees (PI/3).
+const double leg_rotational_ext2i_ratio = M_PI/3;
+
+
 /*!
  *
  * @brief Kinematic model for the SwarmItFix agent's mobile base class.
  *
- * @author yoyek
+ * @author yoyek,tkornuta
  * @date 2010.02.01
  *
  * @ingroup KINEMATICS SIF_KINEMATICS
@@ -31,6 +38,23 @@ class model : public common::kinematic_model
 protected:
 	//! Method responsible for kinematic parameters setting.
 	void set_kinematic_parameters(void);
+
+	//! Parameters related to conversion from motor positions to joints.
+	static const double mp2i_ratios[mrrocpp::lib::smb::NUM_OF_SERVOS];
+
+	//! Parameters describing the synchronization positions (in motor increments).
+	static const int32_t synchro_motor_positions[mrrocpp::lib::smb::NUM_OF_SERVOS];
+
+public:
+
+	//! Smallest values that the motor rotating the PKM can reach.
+	static const int32_t lower_pkm_motor_pos_limits;
+
+	//! Largest values that the motor rotating the PKM can reach.
+	static const int32_t upper_pkm_motor_pos_limits;
+
+	//! Constructor.
+	model(void);
 
 	/**
 	 * @brief Checks whether given motor increments are valid.
@@ -43,10 +67,6 @@ protected:
 	 * @param q Joints to be validated.
 	 */
 	void check_joints(const lib::JointArray & q) const;
-
-public:
-	//! Constructor.
-	model(void);
 
 	/**
 	 * @brief Computes internal coordinates for given the motor increments (position) values.

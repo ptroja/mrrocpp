@@ -12,7 +12,7 @@
 #include "base/lib/sr/srlib.h"
 
 #include "base/mp/mp_task.h"
-#include "base/mp/MP_main_error.h"
+
 #include "ecp_mp_t_bird_hand_test.h"
 #include "mp_t_bird_hand_test.h"
 #include "base/lib/single_thread_port.h"
@@ -55,15 +55,15 @@ void bird_hand_test::main_task_algorithm(void)
 	sr_ecp_msg->message("New bird_hand_test series");
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecps_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, 1, lib::bird_hand::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", lib::bird_hand::ROBOT_NAME);
 
 	send_end_motion_to_ecps(1, lib::bird_hand::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("4");
 
-	set_next_ecps_state(ecp_mp::bird_hand::generator::ECP_GEN_BIRD_HAND_TEST, (int) 5, "", 0, 1, lib::bird_hand::ROBOT_NAME.c_str());
+	set_next_ecp_state(ecp_mp::bird_hand::generator::ECP_GEN_BIRD_HAND_TEST, (int) 5, "", lib::bird_hand::ROBOT_NAME);
 	sr_ecp_msg->message("5");
-	run_extended_empty_gen_and_wait(1, 1, lib::bird_hand::ROBOT_NAME.c_str(), lib::bird_hand::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, 1, lib::bird_hand::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("END");
 

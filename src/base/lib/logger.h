@@ -9,7 +9,7 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
-#include "mrmath/mrmath.h"
+#include "base/lib/mrmath/homog_matrix.h"
 
 namespace logger {
 
@@ -30,7 +30,7 @@ __attribute__ ((format (printf, 1, 2)))
  * Print Homog_matrix.
  * @param hm
  */
-void log(const lib::Homog_matrix& hm);
+void log(const mrrocpp::lib::Homog_matrix & hm);
 
 /**
  * Print message to the console only if logDbgEnabled is set to true.
@@ -46,7 +46,7 @@ __attribute__ ((format (printf, 1, 2)))
  * Print Homog_matrix.
  * @param hm
  */
-void log_dbg(const lib::Homog_matrix& hm);
+void log_dbg(const mrrocpp::lib::Homog_matrix & hm);
 
 } // namespace logger
 

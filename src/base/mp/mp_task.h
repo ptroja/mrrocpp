@@ -9,39 +9,107 @@
 #ifndef MP_TASK_H_
 #define MP_TASK_H_
 
+#include <ostream>
+
 #include "base/mp/mp_typedefs.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 
-#include "base/lib/messip/messip.h"
+#include "base/lib/agent/InputBuffer.h"
+#include "base/lib/agent/OutputBuffer.h"
+
+#include "generator/mp_g_set_next_ecps_state.h"
 
 namespace mrrocpp {
 namespace mp {
 
-// forward delcaration
+// Forward declaration.
 namespace generator {
 class generator;
 }
 
 namespace task {
 
-/*
- * Two usefull mp robot addition macros
- * this is necessary to first create robot and then assign it to robot_m
- * the robot constructor can not be directly called with them associated robot_m field creation\n
+/**
+ * MP robot utilities (macros and classes).
+ * @note this is necessary to first create robot and then assign it to robot_m
+ * the robot constructor can not be directly called with them associated robot_m field creation
  * because it uses robot_m
+ * @note if the robot has been already added, then do nothing
  */
 
 #define ACTIVATE_MP_ROBOT(__robot_name) \
-		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
+	if(robot_m.find(lib::__robot_name::ROBOT_NAME) == robot_m.end()) {\
+		if (config.exists_and_true ("is_active", "[edp_" #__robot_name "]")) {\
 			robot::robot* created_robot = new robot::__robot_name(*this);\
 			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
-		}
+		}\
+	}
 
 #define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
-		if (config.value <int> ("is_" #__robot_name "_active", lib::UI_SECTION)) {\
-			robot::robot* created_robot = new robot::robot(lib::__robot_name::ROBOT_NAME, lib::__robot_name::ECP_SECTION, *this, 0);\
+	if(robot_m.find(lib::__robot_name::ROBOT_NAME) == robot_m.end()) {\
+		if (config.exists_and_true ("is_active", "[edp_" #__robot_name "]")) {\
+			robot::robot* created_robot = new robot::robot(lib::__robot_name::ROBOT_NAME, *this, 0);\
 			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
+		}\
+	}
+
+//! Macro for checking if robot is marked as activate in the config file
+#define IS_MP_ROBOT_ACTIVE(__robot_name) \
+	(config.exists_and_true ("is_active", "[edp_" #__robot_name "]"))
+
+//! Type for optionally active input data buffer
+template <class T>
+class InputPtr : private boost::shared_ptr <lib::agent::InputBuffer <T> >
+{
+	//! Underlying implementation of 'optional' concept
+	typedef boost::shared_ptr <lib::agent::InputBuffer <T> > ptrType;
+
+public:
+	//! Create input buffer and register within an agent
+	void Create(lib::agent::Agent & owner, const std::string & name, const T & default_value = T())
+	{
+		if (ptrType::get()) {
+			std::ostringstream tmp;
+			tmp << "optional Input buffer \"" << name << "\"already created";
+			throw std::runtime_error(tmp.str());
 		}
+
+		ptrType::operator=((ptrType) new lib::agent::InputBuffer<T>(owner, name, default_value));
+	}
+
+	//! Reuse access operator from the underlying 'optional' concept type
+	using ptrType::operator->;
+
+	//! Reuse getter from the underlying 'optional' concept type
+	using ptrType::get;
+};
+
+//! Type for optionally inactive output data buffer
+template <class T>
+struct OutputPtr : private boost::shared_ptr <lib::agent::OutputBuffer <T> >
+{
+	//! Underlying implementation of 'optional' concept
+	typedef boost::shared_ptr <lib::agent::OutputBuffer <T> > ptrType;
+
+public:
+	//! Create input buffer and register within an agent
+	void Create(lib::agent::RemoteAgent & owner, const std::string & name)
+	{
+		if (ptrType::get()) {
+			std::ostringstream tmp;
+			tmp << "optional Output buffer \"" << name << "\"already created";
+			throw std::runtime_error(tmp.str());
+		}
+
+		ptrType::operator=((ptrType) new lib::agent::OutputBuffer<T>(owner, name));
+	}
+
+	//! Reuse access operator from the underlying 'optional' concept type
+	using ptrType::operator->;
+
+	//! Reuse getter from the underlying 'optional' concept type
+	using ptrType::get;
+};
 
 /*!
  * @brief Base class of all mp tasks
@@ -87,10 +155,11 @@ public:
 
 	/**
 	 * @brief Enum of two possible pulse receive variants (BLOCK/NONBLOCK)
+	 * @note it is assumend, that values of this enum equals to "block?" predicate.
 	 */
 	typedef enum _MP_RECEIVE_PULSE_ENUM
 	{
-		NONBLOCK, BLOCK
+		NONBLOCK = 0, BLOCK = 1
 	} RECEIVE_PULSE_MODE;
 
 	/**
@@ -102,24 +171,26 @@ public:
 	} WAIT_FOR_NEW_PULSE_MODE;
 
 	/**
-	 * @brief sets the goal pf player controlled robot
-	 * @param robot_l robot label
-	 * @param goal motion goal
-	 */
-	void set_next_playerpos_goal(lib::robot_name_t robot_l, const lib::playerpos_goal_t &goal);
-
-	/**
 	 * @brief sets the next state of ECP
 	 * it calls dedicated generator and then sends new command in generator Move instruction
 	 * @param l_state state label sent to ECP
 	 * @param l_variant variant value sent to ECP
 	 * @param l_string optional string sent to ECP
 	 * @param str_len string length
-	 * @param number_of_robots number of robots to receive command
-	 * @param ... robots labels
+	 * @param robot_name robot to receive a command
 	 */
-	void
-			set_next_ecps_state(std::string l_state, int l_variant, const char* l_string, int str_len, int number_of_robots, ...);
+	template <typename BUFFER_TYPE>
+	void set_next_ecp_state(const std::string & l_state, int l_variant, const BUFFER_TYPE & l_data, const lib::robot_name_t & robot_name)
+	{
+		// setting the next ecps state
+		generator::set_next_ecps_state mp_snes_gen(*this);
+
+		// Copy given robots to the map container
+		mp_snes_gen.robot_m[robot_name] = robot_m[robot_name];
+
+		mp_snes_gen.configure(l_state, l_variant, l_data);
+		mp_snes_gen.Move();
+	}
 
 	/**
 	 * @brief sends end motion command to ECP's
@@ -130,44 +201,22 @@ public:
 	void send_end_motion_to_ecps(int number_of_robots, ...);
 
 	/**
+	 * @brief waits for task termination reply from set of robots ECP's
+	 * it calls dedicated generator and then sends command in generator Move instruction
+	 * @param number_of_robots number of robots to receive command
+	 * @param ... robots labels
+	 */
+	void wait_for_task_termination(bool activate_trigger, int number_of_robots, ...);
+
+	void wait_for_task_termination(bool activate_trigger, const std::vector <lib::robot_name_t> & robotSet);
+
+	/**
 	 * @brief sends end motion command to ECP's - mkisiel xml task version
 	 * it calls dedicated generator and then sends command in generator Move instruction
 	 * @param number_of_robots number of robots to receive command
 	 * @param properRobotsSet pointer to robot list
 	 */
 	void send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet);
-
-	/**
-	 * @brief runs extended empty generator
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param activate_trigger determines if mp_trigger finishes generator execution
-	 * @param number_of_robots number of robots to receive command
-	 * @param ... robots labels
-	 */
-	void run_extended_empty_gen_base(bool activate_trigger, int number_of_robots, ...);
-
-	/**
-	 * @brief runs extended empty generator and waits for task termination
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param number_of_robots_to_move determines if mp_trigger finishes generator execution
-	 * @param number_of_robots_to_wait_for_task_termin number of robots to wait for task termination
-	 * @param number_of_robots_to_move number of robots to move
-	 * @param ... robots labels - first set, then second set
-	 */
-	void
-	run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, ...);
-
-	/**
-	 * @brief runs extended empty generator and waits for task termination - mksiel xml version
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param number_of_robots_to_move determines if mp_trigger finishes generator execution
-	 * @param number_of_robots_to_wait_for_task_termin number of robots to wait for task termination
-	 * @param number_of_robots_to_move number of robots to move
-	 * @param robotsToMove robot to move list
-	 * @param robotsWaitingForTaskTermination robot to wait list
-	 */
-	void
-			run_extended_empty_gen_and_wait(int number_of_robots_to_move, int number_of_robots_to_wait_for_task_termin, lib::robot_name_t *robotsToMove, lib::robot_name_t *robotsWaitingForTaskTermination);
 
 	/**
 	 * @brief executes delay
@@ -179,34 +228,41 @@ public:
 	/**
 	 * @brief waits for START pulse from UI
 	 */
-	void wait_for_start(void);// by Y&W
+	void wait_for_start(void); // by Y&W
 
 	/**
 	 * @brief waits for STOP pulse from UI
 	 */
-	void wait_for_stop(void);// by Y&W dodany tryb
+	void wait_for_stop(void); // by Y&W dodany tryb
 
 	/**
 	 * @brief starts all ECP's
 	 * it sends special MP command
 	 */
-	void start_all(const common::robots_t & _robot_m);
+	void start_all();
+
+	/**
+	 * @brief pause all ECP's
+	 * it sends special MP command
+	 */
+	void pause_all();
+
+	/**
+	 * @brief resume all ECP's
+	 * it sends special MP command
+	 */
+	void resume_all();
 
 	/**
 	 * @brief termianted all ECP's
 	 * it sends special MP command
 	 */
-	void terminate_all(const common::robots_t & _robot_m);
+	void terminate_all();
 
 	/**
-	 * @brief sends communication request pulse to ECP
+	 * @brief waits for acknowledge reply from all robots
 	 */
-	void request_communication_with_robots(const common::robots_t & _robot_m);
-
-	/**
-	 * @brief communicates with all ECP's that are set to communicate
-	 */
-	void execute_all(const common::robots_t & _robot_m);
+	void wait_for_all_robots_acknowledge();
 
 	/**
 	 * @brief main task algorithm
@@ -222,45 +278,22 @@ public:
 	/**
 	 * @brief receives pulse from UI or ECP
 	 */
-	void mp_receive_ui_or_ecp_pulse(common::robots_t & _robot_m, generator::generator& the_generator);
-
-private:
-	friend class robot::robot;
+	void receive_ui_or_ecp_message(generator::generator& the_generator);
 
 	/**
-	 * @brief wait until ECP/UI calls name_open() to pulse channel;]
-	 * @return identifier (scoid/QNET or socket/messip) of the next connected process
+	 * @brief Check if the robot has been created and activated
+	 * @param name robot name
 	 */
-	int wait_for_name_open(void);
+	bool is_robot_activated(const lib::robot_name_t & name) const
+	{
+		return ((robot_m.find(name) != robot_m.end()) ? true : false);
+	}
 
+protected:
 	/**
-	 * @brief A server connection ID identifying UI
+	 * @brief pulse from UI
 	 */
-	int ui_scoid;
-
-	/**
-	 * @brief flag indicating opened pulse connection from UI
-	 */
-	bool ui_opened;
-
-	/**
-	 * @brief code of the pulse received from UI
-	 */
-	char ui_pulse_code;
-
-	/**
-	 * @brief new UI pulse flaf
-	 */
-	bool ui_new_pulse;
-
-	/**
-	 * @brief checks new pulses from ECP and UI that already approach and optionally waits for pulse approach
-	 * @param process_type - process type to wait for the pulses
-	 * @param desired_wait_mode - decides if the method should wait for desired pulse or not
-	 * @return desired pulse found
-	 */
-	bool
-			check_and_optional_wait_for_new_pulse(WAIT_FOR_NEW_PULSE_MODE process_type, const RECEIVE_PULSE_MODE desired_wait_mode);
+	lib::agent::InputBuffer<char> ui_pulse;
 };
 
 /**

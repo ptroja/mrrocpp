@@ -1,14 +1,9 @@
 # find the GSL
-if(NOT QNXNTO)
+
 	set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 	find_package(GSL)
 	include_directories (${GSL_INCLUDE_DIR})
-else(NOT QNXNTO)
-	find_library(GSL_LIBRARY gsl $ENV{QNX_TARGET}/mrlib/lib)
-	find_library(GSLCBLAS_LIBRARY gslcblas $ENV{QNX_TARGET}/mrlib/lib)
-	set(GSL_LIBRARIES ${GSL_LIBRARY} ${GSLCBLAS_LIBRARY})
-	# TODO: find a GSL headers
-endif(NOT QNXNTO)
+
 
 add_executable(ecp_t_axzb_eih
 	ecp_t_calib_axzb.cc
@@ -37,15 +32,15 @@ add_executable(ecp_t_axzb_force
 	ecp_st_acquisition.cc
 	ecp_t_axzb_force.cc
 	ecp_g_pcbird_nose_run.cc
-	../../sensor/pcbird/birdclient.cc
-	../../sensor/pcbird/ecp_mp_s_pcbird.cc
 )
+
+target_link_libraries(ecp_t_axzb_force pcbird_sensor)
 
 add_executable(ecp_t_kcz_test
 	ecp_t_kcz_test.cc
-	../../sensor/pcbird/birdclient.cc
-	../../sensor/pcbird/ecp_mp_s_pcbird.cc
 )
+
+target_link_libraries(ecp_t_kcz_test pcbird_sensor)
 
 SET(EXECUTABLES ecp_t_axzb_eih ecp_t_axxb_eih ecp_t_axzb_force ecp_t_kcz_test)
 FOREACH(executable ${EXECUTABLES})

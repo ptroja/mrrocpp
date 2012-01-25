@@ -19,17 +19,17 @@ namespace lib {
  *
  * @bug This should be template, parameterized with the array size, for real-time usage. Keep as a header-only class.
  */
-  class MotorArray : public Eigen::Matrix<double, Eigen::Dynamic, 1, Eigen::AutoAlign, 8>
+class MotorArray : public Eigen::Matrix <double, Eigen::Dynamic, 1, Eigen::AutoAlign, 8>
 {
 	//! Typedef for base numerical class
-	typedef Eigen::Matrix<double, Eigen::Dynamic, 1, Eigen::AutoAlign, 8> BaseClass;
+	typedef Eigen::Matrix <double, Eigen::Dynamic, 1, Eigen::AutoAlign, 8> BaseClass;
 
 public:
 	/**
 	 * Constructor
 	 */
 	MotorArray() :
-		BaseClass()
+			BaseClass()
 	{
 	}
 
@@ -38,7 +38,7 @@ public:
 	 * \param[in] size size of the array
 	 */
 	MotorArray(int size) :
-		BaseClass(size)
+			BaseClass(size)
 	{
 	}
 
@@ -48,7 +48,7 @@ public:
 	 * \param[in] n number of elements in the array
 	 */
 	MotorArray(const double *ptr, std::size_t n) :
-		BaseClass(n)
+			BaseClass(n)
 	{
 		for (unsigned int i = 0; i < n; i++) {
 			this->operator[](i) = ptr[i];
@@ -59,6 +59,9 @@ public:
 	 * Assignment operator to reuse from a base class
 	 */
 	using BaseClass::operator=;
+
+	//! Access to type of a single element
+	typedef BaseClass::Scalar value_type;
 
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

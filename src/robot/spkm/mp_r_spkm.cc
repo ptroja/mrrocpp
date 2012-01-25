@@ -6,15 +6,19 @@
  * @ingroup spkm
  */
 
-#include "robot/spkm/mp_r_spkm.h"
+#include "base/mp/mp_task.h"
 
+#include "base/lib/swarmtypes.h"
+#include "mp_r_spkm.h"
+
+#include "robot/spkm/const_spkm.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-spkm::spkm(task::task &mp_object_l) :
-	robot(lib::spkm::ROBOT_NAME, lib::spkm::ECP_SECTION, mp_object_l, lib::spkm::NUM_OF_SERVOS)
+spkm::spkm(const lib::robot_name_t & l_robot_name, task::task &mp_object_l) :
+	mp::robot::robot(l_robot_name, mp_object_l, lib::spkm::NUM_OF_SERVOS)
 {
 }
 

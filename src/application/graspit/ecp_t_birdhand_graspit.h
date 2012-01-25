@@ -15,7 +15,8 @@ namespace task {
  * \author kczajkow
  * \date Jan 05, 2010
  */
-class bird_hand_test: public common::task::task {
+class bird_hand_test : public common::task::_task <ecp::bird_hand::robot>
+{
 protected:
 	//generatory
 	common::generator::bird_hand* g_bird_hand;

@@ -29,7 +29,10 @@ const double AXIS_0_TO_5_SYNCHRO_STEP_FINE = -0.007;
 const double AXIS_6_SYNCHRO_STEP_COARSE = -0.05;
 const double AXIS_6_SYNCHRO_STEP_FINE = -0.05;
 
-const double POSTUMENT_TO_TRACK_VOLTAGE_RATIO = 0.75;
+const double POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO = 0.60;	// Preskaler dla osi 1-3
+const double POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2 = 0.40;	// Preskaler dla osi 5-7
+
+const double POSTUMENT_TO_TRACK_VOLTAGE_RATIO = 1;
 
 /*-----------------------------------------------------------------------*/
 class NL_regulator_1_irp6ot : public common::NL_regulator
@@ -38,7 +41,7 @@ class NL_regulator_1_irp6ot : public common::NL_regulator
 	// Obiekt z algorytmem regulacji
 
 public:
-			NL_regulator_1_irp6ot(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
+			NL_regulator_1_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
 
 	virtual uint8_t compute_set_value(void);
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
@@ -53,7 +56,7 @@ class NL_regulator_2_irp6ot : public common::NL_regulator
 	// Obiekt z algorytmem regulacji
 
 public:
-			NL_regulator_2_irp6ot(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
+			NL_regulator_2_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
 
 	virtual uint8_t compute_set_value(void);
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
@@ -68,7 +71,7 @@ class NL_regulator_3_irp6ot : public common::NL_regulator
 	// Obiekt z algorytmem regulacji
 
 public:
-			NL_regulator_3_irp6ot(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
+			NL_regulator_3_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
 
 	virtual uint8_t compute_set_value(void);
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
@@ -83,7 +86,7 @@ class NL_regulator_4_irp6ot : public common::NL_regulator
 	// Obiekt z algorytmem regulacji
 
 public:
-			NL_regulator_4_irp6ot(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
+			NL_regulator_4_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
 
 	virtual uint8_t compute_set_value(void);
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
@@ -100,7 +103,7 @@ class NL_regulator_5_irp6ot : public common::NL_regulator
 
 public:
 	bool first;
-			NL_regulator_5_irp6ot(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
+			NL_regulator_5_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
 
 	virtual uint8_t compute_set_value(void);
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
@@ -116,7 +119,7 @@ class NL_regulator_6_irp6ot : public common::NL_regulator
 	// Obiekt z algorytmem regulacji
 
 public:
-			NL_regulator_6_irp6ot(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
+			NL_regulator_6_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
 
 	virtual uint8_t compute_set_value(void);
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna
@@ -132,7 +135,7 @@ class NL_regulator_7_irp6ot : public common::NL_regulator
 	// Obiekt z algorytmem regulacji
 
 public:
-			NL_regulator_7_irp6ot(uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
+			NL_regulator_7_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master); // konstruktor
 
 	virtual uint8_t compute_set_value(void);
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda konkretna

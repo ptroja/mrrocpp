@@ -8,8 +8,6 @@ namespace ecp {
 namespace festival {
 namespace generator {
 
-#define MAX_FESTIVAL_PHRASE	255
-
 #define FESTIVAL_POLISH_VOICE "(voice_cstr_pl_em_diphone)"
 #define FESTIVAL_ENGLISH_VOICE "(voice_nitech_us_slt_arctic_hts)"
 
@@ -44,7 +42,7 @@ class generator : public common::generator::generator
 		int portnum;
 		std::string host;
 		
-		char phrase[MAX_FESTIVAL_PHRASE];
+		std::string phrase;
 		std::string voice;
 		
 		int test_mode;	
@@ -59,7 +57,7 @@ class generator : public common::generator::generator
 
 		enum VOICE {CURRENT_VOICE, POLISH_VOICE, ENGLISH_VOICE};
 
-		char * set_phrase(const char *text);
+		void set_phrase(const std::string & text);
 		bool set_voice(VOICE _voice);
 };
 

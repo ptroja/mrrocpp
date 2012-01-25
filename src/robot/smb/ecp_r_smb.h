@@ -11,7 +11,7 @@
 
 #include "base/ecp/ecp_robot.h"
 #include "base/kinematics/kinematics_manager.h"
-#include "robot/smb/const_smb.h"
+#include "dp_smb.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -23,36 +23,59 @@ namespace smb {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup smb
  */
-class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
+class robot : public common::robot::_ecp_robot <lib::smb::c_buffer, lib::smb::r_buffer>
+		, public kinematics::common::kinematics_manager
 {
 
 protected:
 	void create_kinematic_models_for_given_robot(void);
 
-	/**
-	 * @brief epos cubic motion command data port
-	 */
-	lib::single_thread_port <lib::epos::epos_cubic_command> epos_cubic_command_data_port;
+public:
 
 	/**
-	 * @brief epos trapezoidal motion command data port
+	 * @brief epos motor motion command data port
 	 */
-	lib::single_thread_port <lib::epos::epos_trapezoidal_command> epos_trapezoidal_command_data_port;
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_motor_command_data_port;
+
+	/**
+	 * @brief epos joint motion command data port
+	 */
+	lib::single_thread_port <lib::epos::epos_simple_command> epos_joint_command_data_port;
+
+	/**
+	 * @brief epos external motion command data port
+	 */
+	lib::single_thread_port <lib::smb::motor_command> epos_external_command_data_port;
+
+	/**
+	 * @brief epos brake command data port
+	 */
+	lib::single_thread_port <lib::empty_t> epos_brake_command_data_port;
+
+	/**
+	 * @brief epos clear fault command data port
+	 */
+	lib::single_thread_port <lib::empty_t> epos_clear_fault_data_port;
 
 	/**
 	 * @brief pin insertion command data port
 	 */
-	lib::single_thread_port <lib::smb::multi_pin_insertion_td> smb_multi_pin_insertion_data_port;
-
-	/**
-	 * @brief pin locking command data port
-	 */
-	lib::single_thread_port <lib::smb::multi_pin_locking_td> smb_multi_pin_locking_data_port;
+	lib::single_thread_port <lib::smb::festo_command_td> smb_festo_command_data_port;
 
 	/**
 	 * @brief epos motion status reply data request port
 	 */
-	lib::single_thread_request_port <lib::epos::epos_reply> epos_reply_data_request_port;
+	lib::single_thread_request_port <lib::epos::epos_reply> epos_motor_reply_data_request_port;
+
+	/**
+	 * @brief epos motion status with joint reply data request port
+	 */
+	lib::single_thread_request_port <lib::epos::epos_reply> epos_joint_reply_data_request_port;
+
+	/**
+	 * @brief epos motion status with external reply data request port
+	 */
+	lib::single_thread_request_port <lib::smb::smb_ext_epos_reply> epos_external_reply_data_request_port;
 
 	/**
 	 * @brief leg status reply data request port
@@ -60,28 +83,17 @@ protected:
 	lib::single_thread_request_port <lib::smb::multi_leg_reply_td> smb_multi_leg_reply_data_request_port;
 
 	/**
-	 * @brief EDP command buffer
-	 */
-	lib::smb::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::smb::rbuffer edp_ecp_rbuffer;
-
-public:
-	/**
 	 * @brief constructor called from UI
 	 * @param _config configuration object reference
 	 * @param _sr_ecp sr_ecp communication object reference
 	 */
-	robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp);
+	robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp);
 
 	/**
 	 * @brief constructor called from ECP
 	 * @param _ecp_object ecp tak object reference
 	 */
-	robot(common::task::task_base& _ecp_object);
+	robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object);
 
 	/**
 	 * @brief set the edp command buffer

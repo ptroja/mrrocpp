@@ -62,14 +62,16 @@ struct motor_data
 
 typedef struct _irq_data
 {
-#ifdef __QNXNTO__
-	struct sigevent event; // sygnalilzacja przerwania dla glownego watku
-#endif
+
 	common::motor_data md; // Dane przesylane z/do funkcji obslugi przerwania
 } irq_data_t;
 
 class HardwareInterface
 {
+
+protected:
+	bool hardware_panic;
+
 public:
 	HardwareInterface(motor_driven_effector &_master) :
 		master(_master)
@@ -79,6 +81,11 @@ public:
 	virtual ~HardwareInterface()
 	{
 
+	}
+
+	void set_hardware_panic()
+	{
+		hardware_panic = true;
 	}
 
 	motor_driven_effector &master;

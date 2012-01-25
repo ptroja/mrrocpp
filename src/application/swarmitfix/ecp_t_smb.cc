@@ -1,21 +1,13 @@
-#include <cstdio>
-
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
+#include <boost/foreach.hpp>
 
 #include "base/lib/sr/srlib.h"
-#include "ecp_mp_t_swarmitfix.h"
 
-#include "robot/smb/ecp_r_smb.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
-#include "generator/ecp/ecp_g_sleep.h"
-#include "ecp_g_smb.h"
+#include "robot/smb/ecp_r_smb1.h"
+#include "robot/smb/ecp_r_smb2.h"
+
 #include "ecp_t_smb.h"
-#include "generator/ecp/ecp_mp_g_transparent.h"
-#include "generator/ecp/ecp_mp_g_newsmooth.h"
-#include "generator/ecp/ecp_mp_g_sleep.h"
-#include "ecp_mp_g_smb.h"
+#include "ecp_g_smb.h"
+#include "robot/smb/dp_smb.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -24,66 +16,120 @@ namespace task {
 
 // KONSTRUKTORY
 swarmitfix::swarmitfix(lib::configurator &_config) :
-	common::task::task(_config)
+	task_t(_config),
+	nextstateBuffer(*this, lib::commandBufferId)
 {
-	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
+	// Create the robot object
+	if (config.robot_name == lib::smb1::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new smb1::robot(*this);
+	} else if (config.robot_name == lib::smb2::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new smb2::robot(*this);
+	} else {
+		throw std::runtime_error(config.robot_name + ": unknown robot");
+	}
 
-	gt = new common::generator::transparent(*this);
-	//sg = new common::generator::smooth(*this, true);
-	g_sleep = new common::generator::sleep(*this);
-	g_epos_cubic = new common::generator::epos_cubic(*this);
-	g_epos_trapezoidal = new common::generator::epos_trapezoidal(*this);
-	g_pin_lock = new generator::pin_lock(*this);
-	g_pin_unlock = new generator::pin_unlock(*this);
-	g_pin_rise = new generator::pin_rise(*this);
-	g_pin_lower = new generator::pin_lower(*this);
+	// Create task-dependent IO buffers
+	notifyBuffer = (boost::shared_ptr<lib::agent::OutputBuffer<lib::notification_t> >)
+			new lib::agent::OutputBuffer<lib::notification_t>(MP, ecp_m_robot->robot_name+lib::notifyBufferId);
 
 	sr_ecp_msg->message("ecp smb loaded");
 }
 
-void swarmitfix::mp_2_ecp_next_state_string_handler(void)
+void swarmitfix::main_task_algorithm(void)
 {
+	std::cerr << "smb> swarmitfix::main_task_algorithm" << std::endl;
 
-	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
-		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
-		gt->Move();
-
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
-		std::string path(mrrocpp_network_path);
-		path += mp_command.ecp_next_state.get_mp_2_ecp_next_state_string();
-
-		switch ((ecp_mp::task::SMOOTH_MOTION_TYPE) mp_command.ecp_next_state.mp_2_ecp_next_state_variant)
-		{
-			case ecp_mp::task::RELATIVE:
-			//	sg->set_relative();
-				break;
-			case ecp_mp::task::ABSOLUTE:
-			//	sg->set_absolute();
-				break;
-			default:
-				break;
-		}
-
-	//	sg->load_file_with_path(path.c_str());
-	//	sg->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SLEEP) {
-		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
-		g_sleep->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_EPOS_CUBIC) {
-		g_epos_cubic->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_EPOS_TRAPEZOIDAL) {
-		g_epos_trapezoidal->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_GEN_PIN_LOCK) {
-		g_pin_lock->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_GEN_PIN_UNLOCK) {
-		g_pin_unlock->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_GEN_PIN_RISE) {
-		g_pin_rise->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_GEN_PIN_LOWER) {
-		g_pin_lower->Move();
+	{
+		// Execute motion generator (defaults to OUT)
+		generator::stand_up gen(*this);
+		gen.Move();
 	}
 
+	// Loop execution coordinator's commands
+	while(true) {
+		// Wait for new coordinator's command
+		while(!nextstateBuffer.isFresh()) {
+			ReceiveSingleMessage(true);
+
+			// TODO: handle commands at control channel
+		}
+
+		try {
+			// Mark command as used
+			nextstateBuffer.markAsUsed();
+
+			// Dispatch to selected generator
+			switch(nextstateBuffer.Get().variant) {
+				case lib::smb::ACTION_LIST:
+					execute_actions(nextstateBuffer.Get().actions);
+					break;
+				default:
+				{
+					generator::quickstop gen(*this);
+					gen.Move();
+				}
+					break;
+			}
+
+		} catch (const std::exception & e) {
+			// Report problem...
+			notifyBuffer->Send(lib::NACK);
+
+			// And DO NOT re-throw exception to the process shell
+			// throw;
+		}
+
+		// Reply with acknowledgment
+		notifyBuffer->Send(lib::ACK);
+	}
+}
+
+void swarmitfix::execute_actions(const lib::smb::next_state_t::action_sequence_t & actions)
+{
+	BOOST_FOREACH(const lib::smb::action & act, actions)
+	{
+//		// Legs up
+//		if(act.getRotationPin())
+//		{
+//			// Setup EDP command
+//			lib::smb::festo_command_td cmd;
+//
+//			// All IN...
+//			cmd.leg[0] = lib::smb::IN;
+//			cmd.leg[1] = lib::smb::IN;
+//			cmd.leg[2] = lib::smb::IN;
+//
+//			// and only one OUT.
+//			cmd.leg[act.getRotationPin()-1] = lib::smb::OUT;
+//
+//			// Execute motion generator
+//			generator::stand_up gen(*this, cmd);
+//			gen.Move();
+//		}
+
+		// Rotate
+		{
+			// Setup EDP command
+			lib::smb::motor_command cmd;
+
+			// Copy parameters
+			//cmd.base_vs_bench_rotation = act.getdThetaInd();
+			cmd.pkm_vs_base_rotation = act.getdPkmTheta();
+			cmd.estimated_time = act.getDuration();
+
+			// Execute motion generator
+			generator::rotate gen(*this, cmd);
+			gen.Move();
+		}
+
+//		// Legs down
+//		if(act.getRotationPin())
+//		{
+//			// Execute motion generator (defaults to OUT)
+//			generator::stand_up gen(*this);
+//			gen.Move();
+//		}
+	}
 }
 
 }

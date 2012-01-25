@@ -28,9 +28,8 @@ namespace generator {
 //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
-
 y_edge_follow_force::y_edge_follow_force(common::task::task& _ecp_task, int step) :
-	teach_in(_ecp_task), step_no(step), tool_frame(0.0, 0.0, 0.25)
+		teach_in(_ecp_task), step_no(step), tool_frame(0.0, 0.0, 0.25)
 {
 }
 
@@ -51,10 +50,6 @@ bool y_edge_follow_force::first_step()
 			<< boost::any_cast <std::string>(ecp_t.cc_m["swarm i swarm i swarm i swarm i swarm "]) << std::endl;
 	create_pose_list_head(emptyps, 0.0, delta, 2);
 
-	td.interpolation_node_no = 1;
-	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 2;
-
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION; // arm - ORYGINAL
 	the_robot->ecp_command.set_type = ARM_DEFINITION | ROBOT_MODEL_DEFINITION;
@@ -65,10 +60,10 @@ bool y_edge_follow_force::first_step()
 	the_robot->ecp_command.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 	the_robot->ecp_command.interpolation_type = lib::TCIM;
-	the_robot->ecp_command.motion_steps = td.internode_step_no;
-	the_robot->ecp_command.value_in_step_no = td.value_in_step_no;
+	the_robot->ecp_command.motion_steps = step_no;
+	the_robot->ecp_command.value_in_step_no = step_no - 2;
 
-	tool_frame.get_frame_tab(the_robot->ecp_command.robot_model.tool_frame_def.tool_frame);
+	the_robot->ecp_command.robot_model.tool_frame_def.tool_frame = tool_frame;
 
 	for (int i = 0; i < 3; i++) {
 		the_robot->ecp_command.arm.pf_def.inertia[i] = lib::FORCE_INERTIA;
@@ -90,7 +85,6 @@ bool y_edge_follow_force::first_step()
 	return true;
 }
 // --------------------------------------------------------------------------
-
 
 // --------------------------------------------------------------------------
 bool y_edge_follow_force::next_step()
@@ -114,7 +108,7 @@ bool y_edge_follow_force::next_step()
 	for (int i = 0; i < 6; i++)
 		inc_delta[i] = -inc_delta[i];
 
-	tmp_matrix.set_from_frame_tab(the_robot->reply_package.arm.pf_def.arm_frame);
+	tmp_matrix = the_robot->reply_package.arm.pf_def.arm_frame;
 	tmp_matrix.get_xyz_euler_zyz(tmp_delta);
 
 	for (int i = 0; i < 6; i++)
@@ -171,7 +165,7 @@ bool y_edge_follow_force::next_step()
 		tool_frame = tool_frame * basic_rot_frame;
 		// basic_rot_frame.set_translation_vector(0, 0, 0.25);
 
-		tool_frame.get_frame_tab(the_robot->ecp_command.robot_model.tool_frame_def.tool_frame);
+		the_robot->ecp_command.robot_model.tool_frame_def.tool_frame = tool_frame;
 
 		//	ECPtoEDP_ref_frame.get_frame_tab(the_robot->EDP_data.ECPtoEDP_reference_frame);
 

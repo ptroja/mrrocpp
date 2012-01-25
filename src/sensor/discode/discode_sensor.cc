@@ -19,7 +19,6 @@
 #include <unistd.h>
 
 #include "discode_sensor.h"
-#include "base/lib/logger.h"
 #include "base/lib/configurator.h"
 #include "headers.h"
 
@@ -111,7 +110,7 @@ void discode_sensor::configure_sensor()
 	hostent * server = gethostbyname(discode_node_name.c_str());
 	if (server == NULL) {
 		state = DSS_ERROR;
-		throw ds_connection_exception("gethostbyname(" + discode_node_name + "): " + string(
+		throw ds_connection_exception("discode_sensor::configure_sensor(): gethostbyname(" + discode_node_name + "): " + string(
 				hstrerror(h_errno)));
 	}
 
@@ -152,7 +151,8 @@ void discode_sensor::get_reading()
 		if (is_data_available()) {
 			// reading has been received.
 			receive_buffers_from_discode();
-			state = DSS_READING_RECEIVED;
+			save_reading_received_time();
+			state = rmh.data_size > 0 ? DSS_READING_RECEIVED : DSS_CONNECTED;
 		} else {
 			// no data received - too long for receiving reading from Discode.
 			// there must be something wrong with connection to discode.
@@ -164,11 +164,13 @@ void discode_sensor::get_reading()
 		imh.data_size = 0;
 		imh.is_rpc_call = false;
 		oarchive.clear_buffer();
+		save_request_sent_time();
 		send_buffers_to_discode();
 		if (is_data_available(reading_timeout)) {
 			// reading has just been received
 			receive_buffers_from_discode();
-			state = DSS_READING_RECEIVED;
+			save_reading_received_time();
+			state = rmh.data_size > 0 ? DSS_READING_RECEIVED : DSS_CONNECTED;
 		} else {
 			// timeout, try receiving in next call to get_reading()
 			log_dbg("discode_sensor::get_reading(): timeout, state = DSS_REQUEST_SENT\n");
@@ -212,7 +214,7 @@ bool discode_sensor::is_data_available(double sec)
 	tv.tv_sec = floor(sec);
 	tv.tv_usec = round(fmod(sec, 1) * 1e6);
 
-//	log_dbg("discode_sensor::is_data_available(%g): tv.tv_sec=%ld; tv.tv_usec=%ld\n", sec, (long int)tv.tv_sec, (long int)tv.tv_usec);
+	//	log_dbg("discode_sensor::is_data_available(%g): tv.tv_sec=%ld; tv.tv_usec=%ld\n", sec, (long int)tv.tv_sec, (long int)tv.tv_usec);
 
 	retval = select(sockfd + 1, &rfds, NULL, NULL, &tv);
 
@@ -244,18 +246,9 @@ void discode_sensor::receive_buffers_from_discode()
 		throw ds_connection_exception(string("read() failed: ") + strerror(errno));
 	}
 	if (nread != rmh.data_size) {
-		throw ds_connection_exception("read() failed: nread != rmh.data_size");
-	}
-	//	if (rmh.is_rpc_call) {
-	//		throw runtime_error("void discode_sensor::receive_buffers_from_discode(): rmh.is_rpc_call");
-	//	}
-	//	logger::log("discode_sensor::receive_buffers_from_discode() 3\n");
-
-	if (rmh.data_size > 0) {
-		state = DSS_READING_RECEIVED;
-	} else {
-		//		logger::log("discode_sensor::receive_buffers_from_discode() 2: no data available.\n");
-		state = DSS_CONNECTED;
+		char txt[128];
+		sprintf(txt, "read() failed: nread(%d) != rmh.data_size(%d)", nread, rmh.data_size);
+		throw ds_connection_exception(txt);
 	}
 }
 
@@ -319,6 +312,66 @@ void discode_sensor::timer_show(const char *str)
 		fflush(stdout);
 		throw logic_error("timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
 	}
+}
+
+reading_message_header discode_sensor::get_rmh() const
+{
+	if (state != DSS_READING_RECEIVED) {
+		state = DSS_ERROR;
+		throw ds_wrong_state_exception(
+				"discode_sensor::get_rmh(): state != DSS_READING_RECEIVED");
+	}
+	return rmh;
+}
+
+struct timespec discode_sensor::get_request_sent_time() const
+{
+	return request_sent_time;
+}
+
+struct timespec discode_sensor::get_reading_received_time() const
+{
+	return reading_received_time;
+}
+
+void discode_sensor::save_request_sent_time()
+{
+	struct timespec ts;
+	if (clock_gettime(CLOCK_REALTIME, &ts) == 0) {
+		request_sent_time = ts;
+	} else {
+		request_sent_time.tv_sec = 0;
+		request_sent_time.tv_nsec = 0;
+	}
+}
+void discode_sensor::save_reading_received_time()
+{
+	struct timespec ts;
+	if (clock_gettime(CLOCK_REALTIME, &ts) == 0) {
+		reading_received_time = ts;
+	} else {
+		reading_received_time.tv_sec = 0;
+		reading_received_time.tv_nsec = 0;
+	}
+}
+
+double discode_sensor::get_mrroc_discode_time_offset() const
+{
+	int seconds, nanoseconds;
+	seconds = (reading_received_time.tv_sec + request_sent_time.tv_sec) / 2 - rmh.sendTimeSeconds;
+	nanoseconds = (reading_received_time.tv_nsec + request_sent_time.tv_nsec) / 2
+			- rmh.sendTimeNanoseconds;
+	double offset = seconds + 1e-9 * nanoseconds;
+
+	seconds = reading_received_time.tv_sec - request_sent_time.tv_sec;
+	nanoseconds = reading_received_time.tv_nsec - request_sent_time.tv_nsec;
+	double comm_time = (seconds + 1e-9 * nanoseconds);
+
+	if (comm_time > 0.01) { // check if there was communication timeout (there was one macrostep between sending request and receiving reply)
+		log_dbg("discode_sensor::get_mrroc_discode_time_offset(): comm_time > 0.01\n");
+	}
+
+	return offset;
 }
 
 } // namespace discode

@@ -34,6 +34,13 @@ public:
 protected:
 	virtual lib::Homog_matrix get_aggregated_position_change();
 	virtual void configure_all_servos();
+
+private:
+	double image_sampling_period;
+
+	bool macrostep_length_control;
+
+	void update_motion_steps(ecp_mp::sensor::discode::reading_message_header rmh);
 };
 
 /** @} */

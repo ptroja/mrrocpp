@@ -20,19 +20,7 @@ namespace sarkofag {
  * @brief Sarkofag robot label
  * @ingroup sarkofag
  */
-const robot_name_t ROBOT_NAME = "ROBOT_SARKOFAG";
-
-/*!
- * @brief configuration file EDP Sarkofag section string
- * @ingroup sarkofag
- */
-const std::string EDP_SECTION = "[edp_sarkofag]";
-
-/*!
- * @brief configuration file ECP Sarkofag section string
- * @ingroup sarkofag
- */
-const std::string ECP_SECTION = "[ecp_sarkofag]";
+const robot_name_t ROBOT_NAME = "sarkofag";
 
 /*!
  * @brief Sarkofag total number of servos
@@ -50,16 +38,21 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @brief IRp6 Sarkofag array of communication port names
  * @ingroup sarkofag
  */
-#ifndef __QNXNTO__
-const std::string ports_strings[] = {"/dev/ttyMI0"};
-#else
-const std::string ports_strings[] = {"/dev/ser2"};
-#endif
+
+const std::string ports_strings[] = { "/dev/ttyMI7" };
+//const std::string ports_strings[] = { "/dev/ttyMI15" };
+
 /*!
  * @brief Sarkofag overcurrent threshold [mA]
  * @ingroup sarkofag
  */
 const int MAX_CURRENT_0 = 20000;
+
+/*!
+ * @brief IRp6 postument two finger gripper overcurrent threshold [mA]
+ * @ingroup sarkofag
+ */
+const double MAX_INCREMENT[] = { 0 };
 
 }
 } // namespace lib

@@ -12,8 +12,7 @@ add_executable(ecp_vsdemo_conveyor_test
 )
 
 target_link_libraries(ecp_vsdemo_conveyor_test
-	ecp_r_conv
-	ecp ${COMMON_LIBRARIES}
+	ecp_robot
 )
 
 # conveyor generator: uniform acceleration
@@ -23,8 +22,9 @@ add_executable(ecp_vsdemo_conveyor_uniform_acceleration
 )
 
 target_link_libraries(ecp_vsdemo_conveyor_uniform_acceleration
-	ecp_r_conv
-	ecp ${COMMON_LIBRARIES}
+    logger_client
+	ecp_robot 
+	${COMMON_LIBRARIES}
 )
 
 

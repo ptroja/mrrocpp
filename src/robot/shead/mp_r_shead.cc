@@ -8,13 +8,12 @@
 
 #include "robot/shead/mp_r_shead.h"
 
-
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
-shead::shead(task::task &mp_object_l) :
-	robot(lib::shead::ROBOT_NAME, lib::shead::ECP_SECTION, mp_object_l, lib::shead::NUM_OF_SERVOS)
+shead::shead(const lib::robot_name_t & l_robot_name, task::task &mp_object_l) :
+	mp::robot::robot(l_robot_name, mp_object_l, lib::shead::NUM_OF_SERVOS)
 {
 }
 

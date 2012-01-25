@@ -9,7 +9,6 @@
 // Data:		17.01.2007
 // ------------------------------------------------------------------------
 
-
 #ifndef __EDP_IRP6OT_M_H
 #define __EDP_IRP6OT_M_H
 
@@ -23,7 +22,7 @@ namespace edp {
 namespace irp6ot_m {
 
 const int GRIPPER_TURN_AXE = 6;
-const double AXIS_0_TO_5_INC_PER_REVOLUTION = 682; // Liczba impulsow rezolwera na obrot walu
+const double AXIS_0_TO_5_INC_PER_REVOLUTION = 4000; // Liczba impulsow enkodera na obrot walu
 const double AXIS_6_INC_PER_REVOLUTION = 2000; // Liczba impulsow enkodera na obrot walu
 
 // Klasa reprezentujaca robota IRp-6 na torze jezdnym.
@@ -34,7 +33,7 @@ protected:
 	virtual void create_kinematic_models_for_given_robot(void);
 
 public:
-	effector(lib::configurator &_config);
+	effector(common::shell &_shell);
 
 	void set_robot_model(const lib::c_buffer &);
 	void create_threads();
@@ -44,11 +43,20 @@ public:
 	common::servo_buffer *return_created_servo_buffer();
 
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
+
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
+	lib::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
+	lib::r_buffer reply;
 };
 
 } // namespace irp6ot
 } // namespace edp
 } // namespace mrrocpp
-
 
 #endif

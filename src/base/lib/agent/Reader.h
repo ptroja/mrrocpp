@@ -1,12 +1,12 @@
 #include <iostream>
 
 #include "Agent.h"
-#include "DataBuffer.h"
+#include "InputBuffer.h"
 
 class Reader : public Agent {
 public:
-	DataBuffer<int> IntBuffer;
-	DataBuffer<double> DoubleBuffer;
+	InputBuffer<int> IntBuffer;
+	InputBuffer<double> DoubleBuffer;
 
 	Reader(const std::string & name) : Agent(name),
 		IntBuffer("integer buffer"),

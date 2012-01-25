@@ -9,63 +9,12 @@
  * @ingroup shead
  */
 
-#include "dp_shead.h"
-
 #include "base/lib/impconst.h"
 
 namespace mrrocpp {
 namespace lib {
 namespace shead {
 
-/*!
- * @brief SwarmItFix Head robot label
- * @ingroup shead
- */
-const robot_name_t ROBOT_NAME = "ROBOT_SHEAD";
-
-/*!
- * @brief SwarmItFix Head EDP command buffer variant enum
- * @ingroup shead
- */
-enum CBUFFER_VARIANT
-{
-	CBUFFER_HEAD_SOLIDIFICATION, CBUFFER_VACUUM_ACTIVATION
-};
-
-/*!
- * @brief SwarmItFix Head EDP command buffer
- * @ingroup shead
- */
-struct cbuffer
-{
-	CBUFFER_VARIANT variant;
-	union
-	{
-		lib::shead::HEAD_SOLIDIFICATION head_solidification;
-		lib::shead::VACUUM_ACTIVATION vacuum_activation;
-	};
-}__attribute__((__packed__));
-
-/*!
- * @brief SwarmItFix Head EDP reply buffer
- * @ingroup shead
- */
-struct rbuffer
-{
-	reply shead_reply;
-}__attribute__((__packed__));
-
-/*!
- * @brief configuration file EDP SwarmItFix Head section string
- * @ingroup shead
- */
-const std::string EDP_SECTION = "[edp_shead]";
-
-/*!
- * @brief configuration file ECP SwarmItFix Head section string
- * @ingroup shead
- */
-const std::string ECP_SECTION = "[ecp_shead]";
 
 /*!
  * @brief SwarmItFix Head total number of servos

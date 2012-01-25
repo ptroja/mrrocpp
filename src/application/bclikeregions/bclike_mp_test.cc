@@ -55,7 +55,6 @@ void bclike_mp_test::main_task_algorithm(void){
 	sr_ecp_msg->message("MP start");
 
 	char* tab;
-	char* tmp;
 	std::vector<double> vec;
 
 //	Set robot to start position (center)
@@ -63,9 +62,9 @@ void bclike_mp_test::main_task_algorithm(void){
 	vec.assign(ecp::common::task::left, ecp::common::task::left + VEC_SIZE);
 	tab = msg.robotPositionToString(vec);
 
-	set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
+	set_next_ecp_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, actual_robot);
 	sr_ecp_msg->message("MOVE left");
-	run_extended_empty_gen_and_wait(1, 1, actual_robot.c_str(), actual_robot.c_str());
+	wait_for_task_termination(false, 1, actual_robot.c_str());
 
 
 	int i = 0;
@@ -97,8 +96,8 @@ void bclike_mp_test::main_task_algorithm(void){
 		i++;
 		i = i % 3;
 
-		set_next_ecps_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, 1, actual_robot.c_str());
-		run_extended_empty_gen_and_wait(1, 1, actual_robot.c_str(), actual_robot.c_str());
+		set_next_ecp_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, actual_robot);
+		wait_for_task_termination(false, 1, actual_robot.c_str());
 
 		sr_ecp_msg->message("MP end loop");
 

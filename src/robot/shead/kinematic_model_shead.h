@@ -2,9 +2,6 @@
  * @file
  * @brief File containing the declaration of the kinematic model for the SwarmItFix agent's head class.
  *
- * @author tkornuta
- * @date 2010.02.01
- *
  * @ingroup KINEMATICS SIF_KINEMATICS shead
  */
 
@@ -21,16 +18,22 @@ namespace shead {
  *
  * @brief Kinematic model for the SwarmItFix agent's head class.
  *
- * @author yoyek
- * @date 2010.02.01
- *
  * @ingroup KINEMATICS SIF_KINEMATICS
  */
 class model : public common::kinematic_model
 {
-protected:
 	//! Method responsible for kinematic parameters setting.
 	void set_kinematic_parameters(void);
+
+	// Motor limits
+	static lib::MotorArray::value_type lower_motor_limit, upper_motor_limit;
+
+	// Joint limits
+	static lib::JointArray::value_type lower_joint_limit, upper_joint_limit;
+
+public:
+	//! Constructor.
+	model(void);
 
 	/**
 	 * @brief Checks whether given motor increments are valid.
@@ -43,10 +46,6 @@ protected:
 	 * @param q Joints to be validated.
 	 */
 	void check_joints(const lib::JointArray & q) const;
-
-public:
-	//! Constructor.
-	model(void);
 
 	/**
 	 * @brief Computes internal coordinates for given the motor increments (position) values.
@@ -62,6 +61,15 @@ public:
 	 */
 	void i2mp_transform(lib::MotorArray & local_desired_motor_pos_new, const lib::JointArray & local_desired_joints);
 
+	//! Getters for the UI
+    static lib::JointArray::value_type getLowerJointLimit();
+    static lib::MotorArray::value_type getLowerMotorLimit();
+    static lib::JointArray::value_type getUpperJointLimit();
+    static lib::MotorArray::value_type getUpperMotorLimit();
+
+private:
+	//! Parameter for conversion between joint and motor coordinates [rad]->[qc].
+	static const double i2m_ratio;
 };
 
 } // namespace smb

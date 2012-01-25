@@ -71,10 +71,6 @@ public:
    */
   std::vector<double> s_dec;
   /**
-   * Initial position for the pose.
-   */
-  std::vector<double> start_position;
-  /**
    * Maximal acceleration for the given segment (pose) (calculated, can be smaller or equal to a).
    */
   std::vector<double> a_r;

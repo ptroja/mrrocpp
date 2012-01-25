@@ -10,7 +10,7 @@
  */
 
 #include "base/ecp/ecp_robot.h"
-#include "robot/bird_hand/const_bird_hand.h"
+#include "dp_bird_hand.h"
 #include "base/kinematics/kinematics_manager.h"
 #include "robot/bird_hand/kinematic_model_bird_hand.h"
 
@@ -24,9 +24,13 @@ namespace bird_hand {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup bird_hand
  */
-class robot : public common::robot::ecp_robot, public kinematics::common::kinematics_manager
+class robot : public common::robot::_ecp_robot <lib::bird_hand::c_buffer, lib::bird_hand::r_buffer>, public kinematics::common::kinematics_manager
 {
 protected:
+
+	void create_kinematic_models_for_given_robot(void);
+
+public:
 
 	/**
 	 * @brief motion command data port
@@ -48,19 +52,6 @@ protected:
 	 */
 	lib::single_thread_request_port <lib::bird_hand::configuration> bird_hand_configuration_reply_data_request_port;
 
-	/**
-	 * @brief EDP command buffer
-	 */
-	lib::bird_hand::cbuffer ecp_edp_cbuffer;
-
-	/**
-	 * @brief EDP reply buffer
-	 */
-	lib::bird_hand::rbuffer edp_ecp_rbuffer;
-
-	void create_kinematic_models_for_given_robot(void);
-
-public:
 	/**
 	 * @brief constructor called from UI
 	 * @param _config configuration object reference

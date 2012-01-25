@@ -16,15 +16,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdint.h>
-#if defined(__QNXNTO__)
-#include <process.h>
-#include <sys/neutrino.h>
-#include <sys/sched.h>
-#include <hw/inout.h>
-#include <sys/iofunc.h>
-#include <sys/dispatch.h>
-#include <sys/mman.h>
-#elif defined(linux)
+#if defined(linux)
 #include <sys/io.h>
 #elif defined(__FreeBSD__)
 #include <machine/cpufunc.h>
@@ -53,27 +45,12 @@ void HI_rydz::init()
 		// domyslnie robot jest zsynchronizowany
 		irq_data.md.is_synchronised = true;
 
-		ptimer = (boost::shared_ptr<lib::periodic_timer>) new lib::periodic_timer(1000 * lib::EDP_STEP);
+		ptimer = (boost::shared_ptr <lib::periodic_timer>) new lib::periodic_timer(1000 * lib::EDP_STEP);
 	} else {
 		// domyslnie robot nie jest zsynchronizowany
 		irq_data.md.is_synchronised = false;
 
-#ifdef __QNXNTO__
-		// by YOYEK & 7 - nadanie odpowiednich uprawnien watkowi
-		// 	w celu umozliwienia komunikacji z magistral isa i obslugi przerwania
-		ThreadCtl (_NTO_TCTL_IO, NULL);
-
-		if (mmap_device_io(0xC, (hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset)) == MAP_DEVICE_FAILED) {
-			perror("mmap_device_io");
-		}
-
-		if (mmap_device_io(1, (hi_rydz::ADR_OF_SERVO_PTR + hi_isa_card_offset)) == MAP_DEVICE_FAILED) {
-			perror("mmap_device_io");
-		}
-
-		memset(&irq_data.event, 0, sizeof(irq_data.event));
-		irq_data.event.sigev_notify = SIGEV_INTR;
-#elif defined(linux)
+#if defined(linux)
 		// grant I/O port permissions to the first card region
 		if (ioperm(hi_rydz::SERVO_COMMAND1_ADR + hi_isa_card_offset, 0xC, 1) == -1) {
 			perror("ioperm()");
@@ -89,21 +66,15 @@ void HI_rydz::init()
 
 		// konieczne dla skasowania przyczyny przerwania
 		out8((hi_rydz::ADR_OF_SERVO_PTR + hi_isa_card_offset), hi_intr_generator_servo_ptr);
-		in16((hi_rydz::SERVO_REPLY_STATUS_ADR + hi_isa_card_offset)); // Odczyt stanu wylacznikow
+		in16((hi_rydz::SERVO_REPLY_STATUS_ADR + hi_isa_card_offset));
+		// Odczyt stanu wylacznikow
 		in16((hi_rydz::SERVO_REPLY_INT_ADR + hi_isa_card_offset));
 
-#ifdef __QNXNTO__
-		int irq_no = hi_irq_real; // Numer przerwania sprzetowego od karty ISA
-		if ((int_id = InterruptAttach (irq_no, int_handler, (void *) &irq_data, sizeof(irq_data), 0)) == -1)
-		{
-			perror("Unable to attach interrupt handler");
-		}
-#endif
 	}
 
 	// oczekiwanie na przerwanie
 	if (hi_int_wait(common::INT_EMPTY, 0) == -1) // jesli nie przyjdzie na czas
-	{
+			{
 		// inicjacja wystawiania przerwan
 		if (!master.robot_test_mode) {
 			// Ustawienie czestotliwosci przerwan
@@ -122,7 +93,7 @@ void HI_rydz::init()
 		robot_status[i].adr_offset_plus_2 = 0;
 		robot_status[i].adr_offset_plus_4 = 0;
 		robot_status[i].adr_offset_plus_6 = 0;
-		meassured_current[i] = 0;
+		measured_current[i] = 0;
 	}
 
 	// Zakaz pracy recznej we wszystkich osiach
@@ -152,9 +123,13 @@ void HI_rydz::init()
 
 // Konstruktor
 HI_rydz::HI_rydz(common::motor_driven_effector &_master, int _hi_irq_real, unsigned short int _hi_intr_freq_divider, unsigned int _hi_intr_timeout_high, unsigned int _hi_first_servo_ptr, unsigned int _hi_intr_generator_servo_ptr, unsigned int _hi_isa_card_offset, const int _max_current[]) :
-	HardwareInterface(_master), hi_irq_real(_hi_irq_real), hi_intr_freq_divider(_hi_intr_freq_divider),
-			hi_intr_timeout_high(_hi_intr_timeout_high), hi_first_servo_ptr(_hi_first_servo_ptr),
-			hi_isa_card_offset(_hi_isa_card_offset), hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
+		HardwareInterface(_master),
+		hi_irq_real(_hi_irq_real),
+		hi_intr_freq_divider(_hi_intr_freq_divider),
+		hi_intr_timeout_high(_hi_intr_timeout_high),
+		hi_first_servo_ptr(_hi_first_servo_ptr),
+		hi_isa_card_offset(_hi_isa_card_offset),
+		hi_intr_generator_servo_ptr(_hi_intr_generator_servo_ptr)
 {
 	for (int i = 0; i < master.number_of_servos; i++) {
 		max_current[i] = _max_current[i];
@@ -173,7 +148,7 @@ void HI_rydz::insert_set_value(int drive_number, double set_value)
 // dla wybranej osi
 int HI_rydz::get_current(int drive_number)
 { // Pobranie pradu
-	return meassured_current[drive_number];
+	return measured_current[drive_number];
 }
 
 // Pobranie przyrostu polozenia wybranej osi
@@ -232,7 +207,7 @@ uint64_t HI_rydz::read_write_hardware(void)
 	for (int i = 0; i < master.number_of_servos; i++) {
 
 		// przepisanie wartosci pradu
-		meassured_current[i] = (irq_data.md.robot_status[i].adr_offset_plus_2 & 0xFF00) >> 8;
+		measured_current[i] = (irq_data.md.robot_status[i].adr_offset_plus_2 & 0xFF00) >> 8;
 
 		current_absolute_position[i] = irq_data.md.current_absolute_position[i];
 		current_position_inc[i] = current_absolute_position[i] - previous_absolute_position[i];
@@ -247,7 +222,6 @@ uint64_t HI_rydz::read_write_hardware(void)
 	return irq_data.md.hardware_error;
 } // end: hardware_interface::read_write_hardware()
 // ------------------------------------------------------------------------
-
 
 // ------------------------------------------------------------------------
 // Zerowanie licznikow polozenia wszystkich osi
@@ -318,51 +292,12 @@ bool HI_rydz::is_hardware_error(void)
 } // end: hardware_interface::is_hardware_error ()
 // ------------------------------------------------------------------------
 
-
 int HI_rydz::hi_int_wait(common::interrupt_mode_t _interrupt_mode, int lag)
 {
 	if (!master.robot_test_mode) {
-#ifdef __QNXNTO__
-		const uint64_t int_timeout = hi_intr_timeout_high;
-		struct sigevent tim_event;
 
-		static short interrupt_error = 0;
-		static short msg_send = 0;
-
-		// TODO: this can be done passing timeout to InterruptWait()
-		tim_event.sigev_notify = SIGEV_UNBLOCK;
-		if(TimerTimeout(CLOCK_REALTIME, _NTO_TIMEOUT_INTR , &tim_event, &int_timeout, NULL ) == -1) {
-			perror("hardware_interface: TimerTimeout()");
-		}
-		irq_data.md.interrupt_mode=_interrupt_mode; // przypisanie odpowiedniego trybu oprzerwania
-		//	irq_data.md.is_power_on = true;
-		int iw_ret=InterruptWait (0, NULL);
-
-		if (iw_ret==-1) { // jesli przerwanie nie przyjdzie na czas
-			if (interrupt_error == 1) master.msg->message(lib::NON_FATAL_ERROR, "Nie odebrano przerwania - sprawdz szafe");
-			interrupt_error++;
-			master.controller_state_edp_buf.is_wardrobe_on = false;
-		} else {
-			if (interrupt_error >= 1) master.msg->message("Przywrocono obsluge przerwania");
-			interrupt_error = 0;
-			master.controller_state_edp_buf.is_wardrobe_on = true;
-			master.controller_state_edp_buf.is_power_on = irq_data.md.is_power_on;
-		}
-
-		if ((interrupt_error>2) || (!master.controller_state_edp_buf.is_power_on))
-		{
-			if ((msg_send++) == 0) master.msg->message(lib::NON_FATAL_ERROR, "Wylaczono moc - robot zablokowany");
-			irq_data.md.is_robot_blocked = true;
-		}
-
-		master.controller_state_edp_buf.is_robot_blocked = irq_data.md.is_robot_blocked;
-
-		if (lag!=0) delay(lag); // opoznienie niezbedne do przyjecia niektorych komend
-
-		return iw_ret;
-#else
 		return -1;
-#endif
+
 	} else {
 		ptimer->sleep();
 
@@ -394,7 +329,6 @@ void HI_rydz::finish_synchro(int drive_number)
 	irq_data.md.value = hi_rydz::MICROCONTROLLER_MODE;
 	hi_int_wait(common::INT_SINGLE_COMMAND, 2);
 } // end: finish_synchro()
-
 
 bool HI_rydz::in_synchro_area(int drive_number)
 {

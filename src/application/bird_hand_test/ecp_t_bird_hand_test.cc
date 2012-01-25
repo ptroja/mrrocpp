@@ -23,12 +23,13 @@ namespace task {
 
 // KONSTRUKTORY
 bird_hand_test::bird_hand_test(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::_task <ecp::bird_hand::robot>(_config)
+//		common::task::task(_config)
 {
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = (boost::shared_ptr<robot_t>) new robot(*this);
+	ecp_m_robot = (boost::shared_ptr <robot_t>) new robot(*this);
 
-	gt = new common::generator::transparent(*this);
+//	gt = new common::generator::transparent(*this);
 	g_sleep = new common::generator::sleep(*this);
 	g_bird_hand = new generator::bird_hand(*this);
 
@@ -40,11 +41,11 @@ void bird_hand_test::mp_2_ecp_next_state_string_handler(void)
 
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 
-		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.mp_2_ecp_next_state_variant;
-		gt->Move();
+//		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
+//		gt->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SLEEP) {
 
-		g_sleep->init_time(mp_command.ecp_next_state.mp_2_ecp_next_state_variant);
+		g_sleep->init_time(mp_command.ecp_next_state.variant);
 		g_sleep->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::bird_hand::generator::ECP_GEN_BIRD_HAND_TEST) {
 

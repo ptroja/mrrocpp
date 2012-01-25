@@ -4,6 +4,7 @@
  *
  * @author Piotr Trojanek <piotr.trojanek@gmail.com>
  * @author Tomasz Winiarski <tomrobotics@gmail.com>
+ * @author tkornuta <tkornuta@ia.pw.edu.com>
  *
  * @ingroup LIB
  */
@@ -14,167 +15,149 @@
 #include <stdint.h>
 #include <boost/exception/all.hpp>
 #include <boost/exception/diagnostic_information.hpp>
-//#include <exception>
+#include <boost/thread/thread_time.hpp>
+#include <boost/date_time/posix_time/time_formatters.hpp>
 
 namespace mrrocpp {
 namespace lib {
+
+// TODO: Move to the mrrocpp::lib::exception namespace.
+/*!
+ * Classes of errors in the MRROC++ framework.
+ */
+typedef enum _ERROR_CLASS_T
+{
+	NEW_MESSAGE, SYSTEM_ERROR, FATAL_ERROR, NON_FATAL_ERROR
+} error_class_t;
+
 namespace exception {
 
-//! Description used for diagnostic information in case of system errors.
-const std::string SYSTEM_ERROR = "SYSTEM ERROR";
+//! A single line description of error.
+typedef boost::error_info <struct error_description_, char const *> error_description;
 
-//! Description used for diagnostic information in case of fatal errors.
-const std::string FATAL_ERROR = "FATAL ERROR";
+//! Time when error was detected.
+typedef boost::error_info <struct timestamp, boost::system_time> error_time;
 
-//! Description used for diagnostic information in case of non fatal errors.
-const std::string NON_FATAL_ERROR = "NON FATAL ERROR";
+//! Convert exception's timestamp to human-readable string
+inline std::string to_string(error_time const & e)
+{
+	return boost::posix_time::to_simple_string(e.value());
+}
 
-//! Number of motor that caused the exception.
-typedef boost::error_info <struct limit, std::string> mrrocpp_error_type;
+//! error0 for old mrroc++ exceptions
+typedef boost::error_info <struct error0_, uint64_t> mrrocpp_error0;
+
+//! error1 for old mrroc++ exceptions
+typedef boost::error_info <struct error1_, uint64_t> mrrocpp_error1;
+
+/*!
+ * \brief Base class for all system exceptions/errors.
+ * \author tkornuta
+ * \date 12.05.2011
+ */
+template <error_class_t ercl>
+class error : virtual public std::exception, virtual public boost::exception
+{
+public:
+	/*!
+	 * Class of the error.
+	 */
+	const error_class_t error_class;
+
+	/*!
+	 * Constructor.
+	 */
+	error() :
+			error_class(ercl)
+	{
+		// Add it to diagnostic information.
+		*this << error_time(boost::get_system_time());
+	}
+
+	/*!
+	 * Destructor.
+	 */
+	~error() throw ()
+	{
+	}
+
+	/*!
+	 * Returns diagnostic information.
+	 */
+	virtual const char* what() const throw ()
+	{
+		return diagnostic_information_what(*this);
+	}
+};
 
 /*!
  * \brief Base class for all system errors.
  * \author tkornuta
+ * \date 12.05.2011
  */
-struct mrrocpp_system_error : virtual public std::exception, virtual public boost::exception
-{
-	virtual const char* what() const throw ()
-	{
-		return SYSTEM_ERROR.c_str();
-	}
-
-	~mrrocpp_system_error() throw ()
-	{
-	}
-};
-
+typedef error <SYSTEM_ERROR> system_error;
 /*!
  * \brief Base class for all fatal errors.
  * \author tkornuta
+ * \date 12.05.2011
  */
-struct mrrocpp_fatal_error : virtual public std::exception, virtual public boost::exception
-{
-	virtual const char* what() const throw ()
-	{
-		return FATAL_ERROR.c_str();
-	}
-
-	~mrrocpp_fatal_error() throw ()
-	{
-	}
-};
+typedef error <FATAL_ERROR> fatal_error;
 
 /*!
  * \brief Base class for all non fatal errors.
  * \author tkornuta
+ * \date 12.05.2011
  */
-struct mrrocpp_non_fatal_error : virtual public std::exception, virtual public boost::exception
-{
-	virtual const char* what() const throw ()
-	{
-		return NON_FATAL_ERROR.c_str();
-	}
+typedef error <NON_FATAL_ERROR> non_fatal_error;
 
-	~mrrocpp_non_fatal_error() throw ()
-	{
-	}
+/*!
+ * Macro for registration of MRROC++ system errors.
+ *
+ * \param CLASS_NAME Name of the error (class name).
+ * \param DESCRIPTION Description added to the error_description error info field.
+ *
+ * \author tkornuta
+ * \date 12.05.2011
+ */
+#define REGISTER_SYSTEM_ERROR(CLASS_NAME, DESCRIPTION) \
+struct CLASS_NAME : virtual mrrocpp::lib::exception::system_error \
+{ \
+	CLASS_NAME() { *this << mrrocpp::lib::exception::error_description(DESCRIPTION); } \
+	~CLASS_NAME() throw () { } \
 };
 
-/**
- * System error (inter-process communication, filesystem, etc.)
+/*!
+ * Macro for registration of MRROC++ fatal errors.
+ *
+ * \param CLASS_NAME Name of the error (class name).
+ * \param DESCRIPTION Description added to the error_description error info field.
+ *
+ * \author tkornuta
+ * \date 12.05.2011
  */
-class System_error
-{
+#define REGISTER_FATAL_ERROR(CLASS_NAME, DESCRIPTION) \
+struct CLASS_NAME : virtual mrrocpp::lib::exception::fatal_error \
+{ \
+	CLASS_NAME() { *this << mrrocpp::lib::exception::error_description(DESCRIPTION); } \
+	~CLASS_NAME() throw () { } \
 };
 
-/**
- * Fatal exception in framework or application
+/*!
+ * Macro for registration of MRROC++ non fatal errors.
+ *
+ * \param CLASS_NAME Name of the error (class name).
+ * \param DESCRIPTION Description added to the error_description error info field.
+ *
+ * \author tkornuta
+ * \date 12.05.2011
  */
-class Fatal_error
-{
-public:
-	//! Servo error number (1)
-	const uint64_t error0;
-
-	//! Servo error number (2)
-	const uint64_t error1;
-
-	/**
-	 * Constructor
-	 * @param err_no_0 servo error number (1)
-	 * @param err_no_1 servo error number (2)
-	 * @return
-	 */
-	Fatal_error(uint64_t err_no_0, uint64_t err_no_1);
+#define REGISTER_NON_FATAL_ERROR(CLASS_NAME, DESCRIPTION) \
+struct CLASS_NAME : virtual mrrocpp::lib::exception::non_fatal_error \
+{ \
+	CLASS_NAME() { *this << mrrocpp::lib::exception::error_description(DESCRIPTION); } \
+	~CLASS_NAME() throw () { } \
 };
 
-/**
- * Non-fatal errors (type 1)
- * @author Tomasz Winiarski <tomrobotics@gmail.com>
- */
-class NonFatal_error_1
-{
-public:
-	//! Error in coordinate calculations
-	const uint64_t error;
-
-	/**
-	 * Constructor
-	 * @param err_no error value
-	 */
-	NonFatal_error_1(uint64_t err_no);
-};
-
-/**
- * Non-fatal errors (type 2)
- * @author Tomasz Winiarski <tomrobotics@gmail.com>
- */
-class NonFatal_error_2
-{
-public:
-	//! Error in coordinate calculations
-	const uint64_t error;
-
-	/**
-	 * Constructor
-	 * @param err_no error value
-	 */
-	NonFatal_error_2(uint64_t err_no);
-};
-
-/**
- * Non-fatal errors (type 3)
- * @author Tomasz Winiarski <tomrobotics@gmail.com>
- */
-class NonFatal_error_3
-{
-public:
-	//! Error in coordinate calculations
-	const uint64_t error;
-
-	/**
-	 * Constructor
-	 * @param err_no error value
-	 */
-	NonFatal_error_3(uint64_t err_no);
-};
-
-/**
- * Non-fatal errors (type 4)
- * @author Tomasz Winiarski <tomrobotics@gmail.com>
- */
-class NonFatal_error_4
-{
-public:
-	//! Error in coordinate calculations
-	const uint64_t error;
-
-	/**
-	 * Constructor
-	 * @param err_no error value
-	 */
-	NonFatal_error_4(uint64_t err_no);
-};
 
 } // namespace exception
 } // namespace common

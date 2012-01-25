@@ -8,12 +8,13 @@
 #include "Agent.h"
 #include "RemoteAgent.h"
 
-#include "DataBuffer.h"
+#include "InputBuffer.h"
+#include "OutputBuffer.h"
 
 class IntWriter : public Agent {
 private:
 	RemoteAgent reader;
-	RemoteBuffer<int> IntBuf;
+	OutputBuffer<int> IntBuf;
 	int cnt;
 
 public:
@@ -28,8 +29,8 @@ public:
 
 	void operator()() {
 		std::cout << "Writer: " << cnt << std::endl;
-		//reader.Set("integer buffer", cnt++);
-		IntBuf.Set(cnt++);
+		//reader.Send("integer buffer", cnt++);
+		IntBuf.Send(cnt++);
 		boost::this_thread::sleep(boost::posix_time::seconds(1));
 	}
 };

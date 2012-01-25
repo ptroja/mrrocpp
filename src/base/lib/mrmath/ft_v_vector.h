@@ -4,14 +4,33 @@
 #include <Eigen/Core>
 #include <vector>
 
+#include <boost/serialization/serialization.hpp>
+
 namespace mrrocpp {
 namespace lib {
+
+// Forward declaration
+class Homog_matrix;
 
 // klasa reprezentujaca wektor sila-moment i wektora predkosci
 class Ft_v_vector : public Eigen::Matrix<double, 6, 1>
 {
 	//! Helper type for the base type
 	typedef Eigen::Matrix<double, 6, 1> BaseClass;
+
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		for(int r = 0; r < this->rows(); ++r) {
+			for(int c = 0; c < this->cols(); ++c) {
+				ar & this->operator()(r,c);
+			}
+		}
+	}
 
 public:
 	//! Copy constructor from any Eigen matrix type
@@ -78,7 +97,7 @@ public:
 
 	Xyz_Angle_Axis_vector();
 	Xyz_Angle_Axis_vector(const double t[6]);
-	Xyz_Angle_Axis_vector(double fx, double fy, double fz, double tx, double ty, double tz);
+	Xyz_Angle_Axis_vector(double x, double y, double z, double ax, double ay, double az);
 
 	//! Wektor predkosci jako odleglosc dwoch pozycji zadanych w postaci ramek
 	//! @author Sibi

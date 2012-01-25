@@ -11,8 +11,12 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "base/lib/agent/Agent.h"
 #include "base/ecp_mp/ecp_mp_task.h"
 #include "base/ecp/ecp_robot.h"
+#include "base/lib/agent/RemoteAgent.h"
+#include "base/lib/agent/InputBuffer.h"
+#include "base/lib/agent/OutputBuffer.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -54,30 +58,7 @@ private:
 	/**
 	 * @brief communication channels descriptors
 	 */
-	lib::fd_server_t ecp_attach, trigger_attach;
-
-	/**
-	 * @brief MP server communication channel descriptor to send pulses
-	 */
-	lib::fd_client_t MP_fd;
-
-	/**
-	 * @brief replies to MP message
-	 * @param caller calling MP id
-	 * @param mp_pulse_received MP pulse received flag
-	 */
-	bool reply_to_mp(int &caller, bool &mp_pulse_received);
-
-	/**
-	 * @brief sends pulse to MP to signal communication readiness
-	 */
-	void send_pulse_to_mp(int pulse_code, int pulse_value = 1);
-
-	/**
-	 * @brief Receives MP message
-	 * @return caller (MP) ID
-	 */
-	int receive_mp_message(bool block);
+	lib::fd_server_t trigger_attach;
 
 	/**
 	 * @brief Returns MP command type
@@ -89,34 +70,60 @@ private:
 	 * @brief Initializes communication channels
 	 */
 	void initialize_communication(void);
-protected:
 
+protected:
 	/**
 	 * @brief Gets next state from MP
 	 */
 	void get_next_state(void);
 
+	//! Type of the ECP to MP reply package
+	typedef lib::ECP_REPLY_PACKAGE ecp_reply_t;
+
+	//! Type of the MP to ECP command package
+	typedef lib::MP_COMMAND_PACKAGE mp_command_t;
+
+public:
+	const boost::shared_ptr<robot::ecp_robot_base> & ecp_m_robot;
+
 public:
 	// TODO: following packages should be 'protected'
 	/**
-	 * @brief Reply to MP
+	 * @brief MP server proxy
 	 */
-	lib::ECP_REPLY_PACKAGE ecp_reply;
+	lib::agent::RemoteAgent MP;
 
 	/**
-	 * @brief ECP subtasks stl map
+	 * @brief Reply to MP
+	 * @note This data type is task dependent, so it should be a parameter of a template class
 	 */
-	subtasks_t subtask_m;
+	ecp_reply_t ecp_reply;
+
+	//! Data buffer in the MP
+	lib::agent::OutputBuffer <ecp_reply_t> reply;
+
+	/**
+	 * Data buffer with command from MP
+	 *
+	 * Buffer itself is a private object. Access to the data is provided with a 'const' access reference.
+	 */
+	lib::agent::InputBuffer <mp_command_t> command;
+
+	/**
+	 * @brief buffered MP command
+	 * @note This data type is task dependent, so it should be a parameter of a template class
+	 */
+	const mp_command_t & mp_command;
 
 	/**
 	 * @brief buffered next state label sent by MP
 	 */
-	std::string mp_2_ecp_next_state_string;
+	const std::string & mp_2_ecp_next_state_string;
 
 	/**
-	 * @brief buffered MP command
+	 * @brief ECP subtasks container
 	 */
-	lib::MP_COMMAND_PACKAGE mp_command;
+	subtasks_t subtask_m;
 
 	/**
 	 * @brief continuous coordination flag
@@ -134,7 +141,7 @@ public:
 	 * @brief Constructor
 	 * @param _config configurator object reference.
 	 */
-	task_base(lib::configurator &_config);
+	task_base(lib::configurator &_config, boost::shared_ptr<robot::ecp_robot_base> & robot_ref);
 
 	/**
 	 * @brief Destructor
@@ -160,19 +167,19 @@ public:
 	virtual void ecp_stop_accepted_handler(void);
 
 	/**
-	 * @brief sends the message to MP after task execution is finished
+	 * @brief sends the message to MP after task execution is completed
 	 */
-	void ecp_termination_notice(void);
+	void termination_notice(void);
 
 	/**
 	 * @brief Waits for START command from MP
 	 */
-	void ecp_wait_for_start(void);
+	void wait_for_start(void);
 
 	/**
 	 * @brief Waits for STOP command from MP
 	 */
-	void ecp_wait_for_stop(void);
+	void wait_for_stop(void);
 
 	/**
 	 * @brief method called from main_task_algorithm to handle ecp subtasks execution
@@ -180,28 +187,27 @@ public:
 	 */
 	void subtasks_conditional_execution();
 
-	/**
-	 * @brief method to wait to receive pulses and messages from MP
-	 * it returns when message is received (randevous happens)
-	 */
-	bool wait_for_randevous_with_mp(int &caller, bool &mp_pulse_received);
-
 public:
-	// TODO: what follows should be private method
-
-	/**
-	 * @brief communicates with MP
-	 * @return true if MP sended NEXT_POSE, false if MP sended END_MOTION command
-	 */
-	bool mp_buffer_receive_and_send(void);
+	// TODO: what follows should be private method or accessible only to some friend classes
 
 	/**
 	 * @brief Sets ECP reply type before communication with MP
 	 */
 	void set_ecp_reply(lib::ECP_REPLY ecp_r);
+
+	/**
+	 * @brief Receives MP message
+	 * @return true if the END_MOTION has been received
+	 */
+	bool peek_mp_message();
+
+	/**
+	 * @brief waits for resume os stop command from MP
+	 */
+	void wait_for_resume();
 };
 
-template<typename ECP_ROBOT_T>
+template <typename ECP_ROBOT_T>
 class _task : public task_base
 {
 public:
@@ -209,14 +215,17 @@ public:
 	 * @brief Constructor
 	 * @param _config configurator object reference.
 	 */
-	_task(lib::configurator &_config) : task_base(_config)
-	{}
+	_task(lib::configurator &_config) :
+		task_base(_config, (boost::shared_ptr<robot::ecp_robot_base> &) ecp_m_robot)
+	{
+	}
 
 	/**
 	 * @brief Destructor
 	 */
 	virtual ~_task()
-	{}
+	{
+	}
 
 	/**
 	 * @brief Type of the associated robot
@@ -226,15 +235,15 @@ public:
 	/**
 	 * @brief Type of the specialized task class itself
 	 */
-	typedef _task<ECP_ROBOT_T> task_t;
+	typedef _task <ECP_ROBOT_T> task_t;
 
 	/**
-	 * @brief Associated single robot object shared pointer
+	 * @brief Associated robot object shared pointer
 	 */
 	boost::shared_ptr<ECP_ROBOT_T> ecp_m_robot;
 };
 
-typedef _task<robot::ecp_robot> task;
+typedef _task <robot::ecp_robot> task;
 
 task_base* return_created_ecp_task(lib::configurator &_config);
 

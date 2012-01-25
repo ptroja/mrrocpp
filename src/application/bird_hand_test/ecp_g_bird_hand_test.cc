@@ -10,6 +10,7 @@
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_bird_hand_test.h"
+#include "robot/bird_hand/ecp_r_bird_hand.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -17,20 +18,20 @@ namespace bird_hand {
 namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
-bird_hand::bird_hand(common::task::task& _ecp_task) :
-	common::generator::generator(_ecp_task)
+bird_hand::bird_hand(task_t & _ecp_task) :
+		generator_t(_ecp_task)
 {
-	bird_hand_command_data_port
-			= the_robot->port_manager.get_port <lib::bird_hand::command> (lib::bird_hand::COMMAND_DATA_PORT);
+	bird_hand_command_data_port =
+			the_robot->port_manager.get_port <lib::bird_hand::command>(lib::bird_hand::COMMAND_DATA_PORT);
 
-	bird_hand_configuration_command_data_port
-			= the_robot->port_manager.get_port <lib::bird_hand::configuration> (lib::bird_hand::CONFIGURATION_DATA_PORT);
+	bird_hand_configuration_command_data_port =
+			the_robot->port_manager.get_port <lib::bird_hand::configuration>(lib::bird_hand::CONFIGURATION_DATA_PORT);
 
-	bird_hand_status_reply_data_request_port
-			= the_robot->port_manager.get_request_port <lib::bird_hand::status> (lib::bird_hand::STATUS_DATA_REQUEST_PORT);
+	bird_hand_status_reply_data_request_port =
+			the_robot->port_manager.get_request_port <lib::bird_hand::status>(lib::bird_hand::STATUS_DATA_REQUEST_PORT);
 
 	bird_hand_configuration_reply_data_request_port = the_robot->port_manager.get_request_port <
-			lib::bird_hand::configuration> (lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT);
+			lib::bird_hand::configuration>(lib::bird_hand::CONFIGURATION_DATA_REQUEST_PORT);
 
 }
 
@@ -71,7 +72,7 @@ bool bird_hand::first_step()
 bool bird_hand::next_step()
 {
 
-	if (bird_hand_status_reply_data_request_port->get() == mrrocpp::lib::NewData) {
+	if (bird_hand_status_reply_data_request_port->get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 
 		std::stringstream ss(std::stringstream::in | std::stringstream::out);
 		ss << "licznik: " << bird_hand_status_reply_data_request_port->data.thumb_f[0].meassured_torque

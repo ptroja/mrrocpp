@@ -1,6 +1,4 @@
 /*
- * $Id$
- *
  *  Created on: Mar 3, 2010
  *      Author: mboryn
  */
@@ -28,10 +26,7 @@ namespace servovision {
 class visual_servo_regulator
 {
 public:
-	virtual ~visual_servo_regulator()
-	{
-	}
-	;
+	virtual ~visual_servo_regulator();
 
 	/**
 	 * Calculate control.
@@ -39,19 +34,19 @@ public:
 	 * @param dt time between calls (in miliseconds)
 	 * @return control
 	 */
-	virtual const Eigen::Matrix <double, 6, 1> & compute_control(const Eigen::Matrix <double, 6, 1> & error, double dt) = 0;
+	virtual const Eigen::Matrix <double, 6, 1>
+			& compute_control(const Eigen::Matrix <double, 6, 1> & error, double dt) = 0;
 
-	const Eigen::Matrix <double, 6, 1> & get_control()
-	{
-		return computed_control;
-	}
+	/**
+	 * Reset the regulator.
+	 * This method should reset regulator's state in case of object is not visible.
+	 */
+	virtual void reset() = 0;
+
+	const Eigen::Matrix <double, 6, 1> & get_control();
 
 protected:
-	visual_servo_regulator(const lib::configurator & config, const std::string& config_section_name) :
-		config(config), config_section_name(config_section_name)
-	{
-		computed_control.setZero();
-	}
+	visual_servo_regulator(const lib::configurator & config, const std::string& config_section_name);
 
 	const lib::configurator & config;
 

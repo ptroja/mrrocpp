@@ -35,9 +35,7 @@
 //#define USE_SRRMOD	1
 #endif /* __linux__ */
 
-#if defined(__QNXNTO__)
-//#define USE_QNXMSG	1
-#endif /* __QNXNTO__ */
+
 
 #ifdef USE_QNXMSG
 #include <sys/iofunc.h>
@@ -66,8 +64,6 @@
 #else
 #if defined(__linux__)
 #include <netinet/sctp.h>
-#elif defined(__QNXNTO__)
-#include <netinet/in.h>
 #endif
 #define MESSIP_SOCK_PROTO	IPPROTO_SCTP
 #define MESSIP_NODELAY_LEVEL	SOL_SCTP
@@ -205,7 +201,7 @@ int32_t
 		messip_buffered_send(messip_channel_t * ch, int32_t type, int32_t subtype, void *send_buffer, int send_len, int msec_timeout);
 #if !defined(__FreeBSD__) && !(__APPLE__ & __MACH__)
 timer_t
-	messip_timer_create(messip_channel_t * ch, int32_t type, int32_t subtype, int32_t msec_1st_shot, int32_t msec_rep_shot, int msec_timeout);
+	messip_timer_create(messip_channel_t * ch, int32_t type, int32_t subtype, int32_t msec_1st_shot, int32_t msec_rep_shot);
 		
 int messip_timer_delete(messip_channel_t * ch, timer_t timer_id);
 #endif

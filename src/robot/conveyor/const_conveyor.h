@@ -20,26 +20,13 @@ namespace conveyor {
  * @brief Conveyor robot label
  * @ingroup conveyor
  */
-const robot_name_t ROBOT_NAME = "ROBOT_CONVEYOR";
-
-/*!
- * @brief configuration file EDP Conveyor section string
- * @ingroup conveyor
- */
-static const std::string EDP_SECTION = "[edp_conveyor]";
-
-/*!
- * @brief configuration file ECP Conveyor section string
- * @ingroup conveyor
- */
-const std::string ECP_SECTION = "[ecp_conveyor]";
+const robot_name_t ROBOT_NAME = "conveyor";
 
 /*!
  * @brief Conveyor total number of servos
  * @ingroup conveyor
  */
 const int NUM_OF_SERVOS = 1;
-
 
 /*!
  * @brief IRp6 conveyor last Moxa port number [0..7]
@@ -51,7 +38,21 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @brief IRp6 conveyor array of communication port names
  * @ingroup conveyor
  */
-const std::string ports_strings[] = {"/dev/ser9"};
+
+const std::string ports_strings[] = { "/dev/ttyM7" };
+//{ "/dev/ttyMI15" };
+
+/*!
+ * @brief Conveyor two finger gripper overcurrent threshold [mA]
+ * @ingroup irp6p_tfg
+ */
+const int MAX_CURRENT_0 = 200;
+
+/*!
+ * @brief Conveyor max encoder increment
+ * @ingroup conveyor
+ */
+const double MAX_INCREMENT[] = { 0 };
 
 } // namespace conveyor
 } // namespace lib

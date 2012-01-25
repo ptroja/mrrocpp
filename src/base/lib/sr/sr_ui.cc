@@ -31,5 +31,7 @@ void sr_ui::interpret(char * description, error_class_t message_type, uint64_t e
 	}
 }
 
+
+
 } // namespace lib
 } // namespace mrrocpp
