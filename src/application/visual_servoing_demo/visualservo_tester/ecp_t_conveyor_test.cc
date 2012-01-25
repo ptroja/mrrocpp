@@ -35,7 +35,7 @@ ecp_t_conveyor_test::ecp_t_conveyor_test(mrrocpp::lib::configurator& config) :
 
 	log_dbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 2\n");
 
-	sinus_gen = shared_ptr <ecp_g_conveyor_sinus> (new ecp_g_conveyor_sinus(*this, "[sinus_generator]"));
+	sinus_gen = boost::shared_ptr <ecp_g_conveyor_sinus> (new ecp_g_conveyor_sinus(*this, "[sinus_generator]"));
 	log_dbg("ecp_t_conveyor_test::ecp_t_conveyor_test() 3\n");
 }
 
