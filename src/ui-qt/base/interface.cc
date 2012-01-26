@@ -603,7 +603,7 @@ int Interface::wait_for_child_termination(pid_t pid, bool hang)
 		while ((child_pid <= 0) && (iterator < 50)) {
 			child_pid = waitpid(pid, &status, WNOHANG);
 			iterator++;
-			boost::this_thread::sleep(lib::CONNECT_DELAY);
+			boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 			fprintf(stderr, ".");
 		}
 		fprintf(stderr, "\n");
