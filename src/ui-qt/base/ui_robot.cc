@@ -95,8 +95,8 @@ void UiRobot::setup_menubar()
 	robot_menu->addSeparator();
 	menuBar->menuRobot->addAction(robot_menu->menuAction());
 
-connect(EDP_Load, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
-connect(EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(EDP_Load, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Load_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
+	connect(EDP_Unload, SIGNAL(triggered(mrrocpp::ui::common::UiRobot*)), signalDispatcher, SLOT(on_EDP_Unload_triggered(mrrocpp::ui::common::UiRobot*)), Qt::AutoCompatConnection);
 }
 
 void UiRobot::zero_desired_position()
@@ -318,7 +318,8 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 	while ((state.ecp.trigger_fd = messip::port_connect(state.ecp.network_trigger_attach_point)) == NULL
 
 	) {
-		if (errno == EINTR)
+		if (errno == EINTR
+		)
 			break;
 		if ((tmp++) < lib::CONNECT_RETRY) {
 			boost::this_thread::sleep(lib::CONNECT_DELAY);
@@ -423,7 +424,7 @@ void UiRobot::EDP_slay_int()
 		close_edp_connections();
 
 		// Changed to false - the waitpid won't hang during execution.
-		interface.wait_for_child_termination((pid_t) state.edp.pid, false);
+		interface.wait_for_child_termination((pid_t) state.edp.pid, true);
 
 		interface.unblock_sigchld();
 

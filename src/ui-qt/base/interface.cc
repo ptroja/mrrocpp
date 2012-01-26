@@ -92,7 +92,7 @@ Interface::Interface() :
 
 	mw = (boost::shared_ptr <MainWindow>) new MainWindow(*this);
 
-	main_eb = (boost::shared_ptr<function_execution_buffer>) new function_execution_buffer(*this);
+	main_eb = (boost::shared_ptr <function_execution_buffer>) new function_execution_buffer(*this);
 
 	timer = (boost::shared_ptr <QTimer>) new QTimer(this);
 
@@ -104,8 +104,8 @@ Interface::Interface() :
 	ui_state = 1; // ui working
 	file_window_mode = ui::common::FSTRAJECTORY; // uczenie
 
-	all_robots = (boost::shared_ptr<AllRobots>) new AllRobots(*this);
-	mp = (boost::shared_ptr<Mp>) new Mp(*this);
+	all_robots = (boost::shared_ptr <AllRobots>) new AllRobots(*this);
+	mp = (boost::shared_ptr <Mp>) new Mp(*this);
 }
 
 Interface::~Interface()
@@ -598,7 +598,15 @@ int Interface::wait_for_child_termination(pid_t pid, bool hang)
 	int status;
 	pid_t child_pid;
 	if (hang) {
-		child_pid = waitpid(pid, &status, 0);
+		int iterator = 0;
+		child_pid = 0;
+		while ((child_pid <= 0) && (iterator < 50)) {
+			child_pid = waitpid(pid, &status, WNOHANG);
+			iterator++;
+			boost::this_thread::sleep(lib::CONNECT_DELAY);
+			fprintf(stderr, ".");
+		}
+		fprintf(stderr, "\n");
 	} else {
 		child_pid = waitpid(pid, &status, WNOHANG);
 	}
@@ -842,7 +850,7 @@ if(	uname(&sysinfo) == -1) {
 	strcat(log_file_with_dir, file_name);
 
 	// C++ new does not return 0 on failure, so there is no need to check
-	log_file_outfile = (boost::shared_ptr<std::ofstream>) new std::ofstream(log_file_with_dir, std::ios::out);
+	log_file_outfile = (boost::shared_ptr <std::ofstream>) new std::ofstream(log_file_with_dir, std::ios::out);
 
 	//ui_msg->message("closing");
 
