@@ -95,7 +95,6 @@ typedef struct _edp_state_def
 	std::string network_resourceman_attach_point;
 	std::string hardware_busy_attach_point; // do sprawdzenie czy edp juz nie istnieje o ile nie jest tryb testowy
 	std::string network_reader_attach_point;
-	int node_nr;
 	lib::fd_client_t reader_fd;
 	bool is_synchronised;
 
@@ -129,9 +128,8 @@ typedef struct
 	pid_t pid;
 	std::string node_name;
 	std::string network_pulse_attach_point;
-	int node_nr;
-	boost::shared_ptr<RemoteAgent> MP;
-	boost::shared_ptr<OutputBuffer<char> > pulse;
+	boost::shared_ptr<lib::agent::RemoteAgent> MP;
+	boost::shared_ptr<lib::agent::OutputBuffer<char> > pulse;
 	UI_MP_STATE state;
 	UI_MP_STATE last_process_control_state;
 	UI_MP_STATE last_manage_interface_state;

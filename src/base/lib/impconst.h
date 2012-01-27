@@ -14,19 +14,22 @@
 #include <string>
 #include <stdint.h>
 
+#include <boost/date_time/time_duration.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+
 namespace mrrocpp {
 }
 using namespace mrrocpp;
 namespace mrrocpp {
 namespace lib {
 
-// Rozmiary buforow
-const int MP_2_ECP_STRING_SIZE = 300;
+// Rozmiary generycznych pol do wstawiania danych zaleznych od aplikacji.
+const int MP_2_ECP_SERIALIZED_DATA_SIZE = 300;
 const int ECP_2_MP_STRING_SIZE = 300;
 
 // Stale do komunikacji
-const unsigned int CONNECT_RETRY = 1000;
-const unsigned int CONNECT_DELAY = 10000;
+const unsigned int CONNECT_RETRY = 500;
+const boost::posix_time::time_duration CONNECT_DELAY = boost::posix_time::milliseconds(20);
 
 // ----------------------- PRZYDATNE STALE ---------------------------
 const std::string MP_SECTION = "[mp]";

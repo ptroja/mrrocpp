@@ -54,30 +54,63 @@ static int preasure_translation_table[8][8] = {
 // not used
 { 2, 1, 0, 56, 57, 58, 59, 60 } };
 
-pins_buffer::pins_buffer()
+bench_state::bench_state()
 {
-
+	set_all_off();
 }
 
-void pins_buffer::set_zeros()
+void bench_state::set_all_off()
 {
 	for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-
 		pins_state[i] = 0;
 	}
 }
 
-void pins_buffer::set_value(int row, int column, bool value)
+void bench_state::set_value(int row, int column, const bool value)
 {
-	pins_state[translation_table[row][column]] = value;
+	assert(row>0 && row<9 && column>0 && column<10);
+	pins_state[translation_table[row-1][column-1]] = value;
 }
 
-bool pins_buffer::get_value(int row, int column)
-{
-	return pins_state[translation_table[row][column]];
+void bench_state::set_on(int row, int column) {
+	set_value(row, column, 1);
 }
 
-bool pins_buffer::is_any_doubled_value()
+void bench_state::set_off(int row, int column) {
+	set_value(row, column, 0);
+}
+
+void bench_state::set_on(pin pin_){
+	set_value(pin_.row, pin_.column, 1);
+}
+
+void bench_state::set_off(pin pin_) {
+	set_value(pin_.row, pin_.column, 0);
+}
+
+//! Sets on (1) given bench pose (all three pins).
+void bench_state::set_on(bench_pose pose_) {
+	set_on(pose_.pins[0]);
+	set_on(pose_.pins[1]);
+	set_on(pose_.pins[2]);
+}
+
+//! Sets on (0) given bench pose (all three pins).
+void bench_state::set_off(bench_pose pose_) {
+	set_off(pose_.pins[0]);
+	set_off(pose_.pins[1]);
+	set_off(pose_.pins[2]);
+
+}
+
+
+bool bench_state::get_value(int row, int column) const
+{
+	assert(row>0 && row<9 && column>0 && column<10);
+	return pins_state[translation_table[row-1][column-1]];
+}
+
+bool bench_state::is_any_doubled_value() const
 {
 // doubled value check
 	for (int i = 0; i < 8; i++) {
@@ -97,8 +130,8 @@ bool pins_buffer::is_any_doubled_value()
 	return false;
 }
 
-voltage_buffer::voltage_buffer() :
-		pins_buffer()
+power_supply_state::power_supply_state() :
+		bench_state()
 {
 // doubled value check
 	for (int i = 0; i < 8; i++) {
@@ -112,8 +145,8 @@ voltage_buffer::voltage_buffer() :
 	}
 }
 
-preasure_buffer::preasure_buffer() :
-		pins_buffer()
+cleaning_state::cleaning_state() :
+		bench_state()
 {
 // doubled value check
 	for (int i = 0; i < 8; i++) {

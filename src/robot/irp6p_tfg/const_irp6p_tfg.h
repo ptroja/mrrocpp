@@ -38,8 +38,8 @@ const int LAST_MOXA_PORT_NUM = 0;
  * @ingroup sarkofag
  */
 
-const std::string ports_strings[] = { "/dev/ttyM6" };
-//{ "/dev/ttyMI14" };
+const std::string ports_strings[] = //{ "/dev/ttyM6" };
+		{ "/dev/ttyMI14" };
 
 /*!
  * @brief IRp6 postument two finger gripper overcurrent threshold [mA]

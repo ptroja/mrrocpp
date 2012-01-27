@@ -188,7 +188,8 @@ long int HI_moxa::get_position(int drive_number)
 
 uint64_t HI_moxa::read_write_hardware(void)
 {
-	static int64_t receive_attempts = 0, receive_timeouts = 0;
+	static int64_t receive_attempts = 0;
+	// UNUSED: static int64_t receive_timeouts = 0;
 	static int error_msg_power_stage = 0;
 	static int error_msg_hardware_panic = 0;
 	static int error_msg_overcurrent = 0;
@@ -201,7 +202,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 	bool hardware_read_ok = true;
 	bool all_hardware_read = true;
 	std::size_t bytes_received[MOXA_SERVOS_NR];
-	fd_set rfds;
+	// UNUSED:  fd_set rfds;
 	uint64_t ret = 0;
 	uint8_t drive_number;
 	static int status_disp_cnt = 0;
@@ -416,7 +417,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 	}
 
 	if (status_disp_cnt++ == STATUS_DISP_T) {
-		const int disp_drv_no = 0;
+		// UNUSED: const int disp_drv_no = 0;
 		//		std::cout << "[info]";
 		//		std::cout << " sw1_sw2_swSynchr = " << (int) servo_data[disp_drv_no].drive_status.sw1 << "," << (int) servo_data[disp_drv_no].drive_status.sw2 << "," << (int) servo_data[disp_drv_no].drive_status.swSynchr;
 		//		std::cout << " position = " << (int) servo_data[disp_drv_no].drive_status.position;

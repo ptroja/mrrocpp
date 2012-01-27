@@ -12,6 +12,10 @@
 
 #include <boost/utility.hpp>
 
+namespace mrrocpp {
+namespace lib {
+namespace agent {
+
 /**
  * Base class for data buffers
  */
@@ -26,5 +30,9 @@ public:
 	//! get name of the buffer
 	const std::string & getName() const;
 };
+
+} // namespace agent
+} // namespace lib
+} // namespace mrrocpp
 
 #endif /* BUFFERBASE_H_ */

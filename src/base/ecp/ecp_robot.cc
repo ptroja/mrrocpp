@@ -16,11 +16,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-#ifdef __gnu_linux__
-#include <execinfo.h>
-#include <exception>
-#include <iostream>
-#endif /* __gnu_linux__ */
+#include <boost/thread.hpp>
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/configurator.h"
@@ -123,7 +119,7 @@ void ecp_robot_base::connect_to_edp(lib::configurator &config)
 
 	{
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			usleep(lib::CONNECT_DELAY);
+			boost::this_thread::sleep(lib::CONNECT_DELAY);
 			printf(".");
 			fflush(stdout);
 		} else {

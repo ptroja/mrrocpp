@@ -45,11 +45,9 @@ protected:
 	/**
 	 * @brief the number of idle macrosteps without communication with ECP
 	 */
-
 	int idle_step_counter;
 
 public:
-
 	/**
 	 * @brief Main generator method to execute transition cycle
 	 */

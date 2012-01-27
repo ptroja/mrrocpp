@@ -10,6 +10,10 @@
 #include "Agent.h"
 #include "InputBuffer.h"
 
+namespace mrrocpp {
+namespace lib {
+namespace agent {
+
 Agent::Agent(const std::string & _name) :
 	AgentBase(_name)
 {
@@ -104,3 +108,7 @@ bool Agent::ReceiveSingleMessage(bool block)
 
 	return false;
 }
+
+} // namespace agent
+} // namespace lib
+} // namespace mrrocpp

@@ -28,7 +28,7 @@ class wgt_spkm_int : public wgt_base
 	Q_OBJECT
 
 public:
-	wgt_spkm_int(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
+	wgt_spkm_int(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
 			0);
 	~wgt_spkm_int();
 
@@ -58,6 +58,7 @@ private slots:
 	void on_pushButton_import_clicked();
 	void on_pushButton_copy_clicked();
 	void on_pushButton_stop_clicked();
+	void on_pushButton_brake_clicked();
 
 	void on_pushButton_execute_clicked();
 	void on_pushButton_0l_clicked();

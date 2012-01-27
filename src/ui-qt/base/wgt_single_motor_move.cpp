@@ -7,7 +7,7 @@
 #include "../base/ui_robot.h"
 
 wgt_single_motor_move::wgt_single_motor_move(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot* _robot, QWidget *parent) :
-		wgt_base(_widget_label, _interface, parent)
+	wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
 	robot = dynamic_cast <mrrocpp::ui::single_motor::UiRobot *>(_robot);

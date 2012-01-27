@@ -1439,7 +1439,11 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_absolute"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_absolute">
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ml_left">
@@ -1450,12 +1454,16 @@ p, li { white-space: pre-wrap; }
                   </size>
                  </property>
                  <property name="text">
-                  <string>&lt;</string>
+                  <string>-</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_relative"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ml_relative">
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ml_rigth">
@@ -1466,7 +1474,7 @@ p, li { white-space: pre-wrap; }
                   </size>
                  </property>
                  <property name="text">
-                  <string>&gt;</string>
+                  <string>+</string>
                  </property>
                 </widget>
                </item>
@@ -1621,7 +1629,11 @@ p, li { white-space: pre-wrap; }
                 <number>3</number>
                </property>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_absolute"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_absolute">
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ms_left">
@@ -1632,12 +1644,16 @@ p, li { white-space: pre-wrap; }
                   </size>
                  </property>
                  <property name="text">
-                  <string>&lt;</string>
+                  <string>-</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_relative"/>
+                <widget class="QDoubleSpinBox" name="doubleSpinBox_ms_relative">
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ms_rigth">
@@ -1648,7 +1664,7 @@ p, li { white-space: pre-wrap; }
                   </size>
                  </property>
                  <property name="text">
-                  <string>&gt;</string>
+                  <string>+</string>
                  </property>
                 </widget>
                </item>

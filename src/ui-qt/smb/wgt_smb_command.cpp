@@ -7,7 +7,7 @@
 #include "../base/mainwindow.h"
 #include "../base/ui_robot.h"
 
-wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+wgt_smb_command::wgt_smb_command(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
 		wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
@@ -65,7 +65,7 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	ui.doubleSpinBox_ml_absolute->setSingleStep(10000);
 	ui.doubleSpinBox_ml_absolute->setDecimals(0);
 
-	ui.doubleSpinBox_ml_relative->setMinimum(-1200000);
+	ui.doubleSpinBox_ml_relative->setMinimum(0);
 	ui.doubleSpinBox_ml_relative->setMaximum(1200000);
 	ui.doubleSpinBox_ml_relative->setSingleStep(10000);
 	ui.doubleSpinBox_ml_relative->setDecimals(0);
@@ -75,7 +75,7 @@ wgt_smb_command::wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Int
 	ui.doubleSpinBox_ms_absolute->setSingleStep(1000);
 	ui.doubleSpinBox_ms_absolute->setDecimals(0);
 
-	ui.doubleSpinBox_ms_relative->setMinimum(-120000);
+	ui.doubleSpinBox_ms_relative->setMinimum(0);
 	ui.doubleSpinBox_ms_relative->setMaximum(120000);
 	ui.doubleSpinBox_ms_relative->setSingleStep(1000);
 	ui.doubleSpinBox_ms_relative->setDecimals(0);
@@ -195,14 +195,12 @@ void wgt_smb_command::init()
 
 void wgt_smb_command::synchro_depended_widgets_disable(bool _set_disabled)
 {
-
 	ui.pushButton_m_execute->setDisabled(_set_disabled);
 	ui.pushButton_ml_copy->setDisabled(_set_disabled);
 	ui.pushButton_ms_copy->setDisabled(_set_disabled);
 
 	for (int i = 0; i < robot->number_of_servos; i++) {
 		doubleSpinBox_m_absolute_Vector[i]->setDisabled(_set_disabled);
-
 	}
 }
 
@@ -216,7 +214,6 @@ void wgt_smb_command::timer_slot()
 
 void wgt_smb_command::get_desired_position()
 {
-
 	if (robot->state.edp.pid != -1) {
 
 		if (robot->state.edp.is_synchronised) {
@@ -241,7 +238,6 @@ void wgt_smb_command::move_it()
 
 		if (robot->state.edp.pid != -1) {
 
-			lib::epos::EPOS_MOTION_VARIANT motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 			/*
 			 motion_variant = lib::epos::NON_SYNC_TRAPEZOIDAL;
 			 motion_variant = lib::epos::SYNC_TRAPEZOIDAL;
@@ -250,11 +246,11 @@ void wgt_smb_command::move_it()
 			 */
 
 			if (ui.radioButton_m_motor->isChecked()) {
-				robot->ui_ecp_robot->move_motors(robot->desired_pos, motion_variant);
+				robot->ui_ecp_robot->move_motors(robot->desired_pos);
 			} else if (ui.radioButton_m_joint->isChecked()) {
-				robot->ui_ecp_robot->move_joints(robot->desired_pos, motion_variant);
+				robot->ui_ecp_robot->move_joints(robot->desired_pos);
 			} else if (ui.radioButton_m_ext->isChecked()) {
-				robot->ui_ecp_robot->move_external(robot->desired_pos, motion_variant, 10);
+				robot->ui_ecp_robot->move_external(robot->desired_pos, 10);
 			}
 
 			if ((robot->state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
@@ -392,7 +388,7 @@ void wgt_smb_command::on_radioButton_m_motor_toggled()
 		ui.doubleSpinBox_ml_absolute->setSingleStep(10000);
 		ui.doubleSpinBox_ml_absolute->setDecimals(0);
 
-		ui.doubleSpinBox_ml_relative->setMinimum(-1200000);
+		ui.doubleSpinBox_ml_relative->setMinimum(0);
 		ui.doubleSpinBox_ml_relative->setMaximum(1200000);
 		ui.doubleSpinBox_ml_relative->setSingleStep(10000);
 		ui.doubleSpinBox_ml_relative->setDecimals(0);
@@ -402,7 +398,7 @@ void wgt_smb_command::on_radioButton_m_motor_toggled()
 		ui.doubleSpinBox_ms_absolute->setSingleStep(1000);
 		ui.doubleSpinBox_ms_absolute->setDecimals(0);
 
-		ui.doubleSpinBox_ms_relative->setMinimum(-120000);
+		ui.doubleSpinBox_ms_relative->setMinimum(0);
 		ui.doubleSpinBox_ms_relative->setMaximum(120000);
 		ui.doubleSpinBox_ms_relative->setSingleStep(1000);
 		ui.doubleSpinBox_ms_relative->setDecimals(0);
@@ -424,23 +420,23 @@ void wgt_smb_command::on_radioButton_m_joint_toggled()
 		//	interface.ui_msg->message("on_radioButton_m_joint_clicked");
 
 		// Set decimal properties for the joint-based control.
-		ui.doubleSpinBox_ml_absolute->setMinimum(-6.2831);
-		ui.doubleSpinBox_ml_absolute->setMaximum(6.2831);
+		ui.doubleSpinBox_ml_absolute->setMinimum(-2*M_PI);
+		ui.doubleSpinBox_ml_absolute->setMaximum(2*M_PI);
 		ui.doubleSpinBox_ml_absolute->setSingleStep(0.1);
 		ui.doubleSpinBox_ml_absolute->setDecimals(4);
 
-		ui.doubleSpinBox_ml_relative->setMinimum(-6.2831);
-		ui.doubleSpinBox_ml_relative->setMaximum(6.2831);
+		ui.doubleSpinBox_ml_relative->setMinimum(0);
+		ui.doubleSpinBox_ml_relative->setMaximum(2*M_PI);
 		ui.doubleSpinBox_ml_relative->setSingleStep(0.1);
 		ui.doubleSpinBox_ml_relative->setDecimals(4);
 
-		ui.doubleSpinBox_ms_absolute->setMinimum(-3.1415);
-		ui.doubleSpinBox_ms_absolute->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_absolute->setMinimum(-M_PI);
+		ui.doubleSpinBox_ms_absolute->setMaximum(M_PI);
 		ui.doubleSpinBox_ms_absolute->setSingleStep(0.1);
 		ui.doubleSpinBox_ms_absolute->setDecimals(4);
 
-		ui.doubleSpinBox_ms_relative->setMinimum(-3.1415);
-		ui.doubleSpinBox_ms_relative->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_relative->setMinimum(0);
+		ui.doubleSpinBox_ms_relative->setMaximum(M_PI);
 		ui.doubleSpinBox_ms_relative->setSingleStep(0.1);
 		ui.doubleSpinBox_ms_relative->setDecimals(4);
 
@@ -466,18 +462,18 @@ void wgt_smb_command::on_radioButton_m_ext_toggled()
 		ui.doubleSpinBox_ml_absolute->setSingleStep(1);
 		ui.doubleSpinBox_ml_absolute->setDecimals(0);
 
-		ui.doubleSpinBox_ml_relative->setMinimum(-12);
+		ui.doubleSpinBox_ml_relative->setMinimum(0);
 		ui.doubleSpinBox_ml_relative->setMaximum(12);
 		ui.doubleSpinBox_ml_relative->setSingleStep(1);
 		ui.doubleSpinBox_ml_relative->setDecimals(0);
 
-		ui.doubleSpinBox_ms_absolute->setMinimum(-3.1415);
-		ui.doubleSpinBox_ms_absolute->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_absolute->setMinimum(-M_PI);
+		ui.doubleSpinBox_ms_absolute->setMaximum(M_PI);
 		ui.doubleSpinBox_ms_absolute->setSingleStep(0.1);
 		ui.doubleSpinBox_ms_absolute->setDecimals(4);
 
-		ui.doubleSpinBox_ms_relative->setMinimum(-3.1415);
-		ui.doubleSpinBox_ms_relative->setMaximum(3.1415);
+		ui.doubleSpinBox_ms_relative->setMinimum(0);
+		ui.doubleSpinBox_ms_relative->setMaximum(M_PI);
 		ui.doubleSpinBox_ms_relative->setSingleStep(0.1);
 		ui.doubleSpinBox_ms_relative->setDecimals(4);
 

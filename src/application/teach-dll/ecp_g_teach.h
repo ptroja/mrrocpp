@@ -87,7 +87,7 @@ public:
      // generuje kazdy nastepny krok ruchu
      // (zadanie realizowane przez klase konkretna)
 
-  lib::ECP_TO_UI_COMMAND convert(lib::ECP_POSE_SPECIFICATION ps) const;
+  lib::ECP_TO_UI_REQUEST convert(lib::ECP_POSE_SPECIFICATION ps) const;
 
 };
 

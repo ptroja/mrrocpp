@@ -58,8 +58,9 @@ void effector::initialize_communication()
 	}
 
 	/* Ustawienie priorytetu procesu */
-
-	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 2);
+	if(!robot_test_mode) {
+		lib::set_thread_priority(lib::PTHREAD_MAX_PRIORITY - 2);
+	}
 
 	msg->message("edp loaded");
 }

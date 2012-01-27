@@ -44,9 +44,6 @@ protected:
 	//! PKM axes.
 	boost::shared_ptr <maxon::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
-	//! Names of PKM axes.
-	boost::array <std::string, mrrocpp::lib::smb::NUM_OF_SERVOS> axesNames;
-
 	//! Axes container.
 	boost::array <maxon::epos *, mrrocpp::lib::smb::NUM_OF_SERVOS> axes;
 
@@ -59,6 +56,20 @@ protected:
 	//! festo shared ptr
 	boost::shared_ptr <festo::cpv> cpv10;
 
+	/*!
+	 * \brief Variable denoting whether cleaning is activated or not.
+	 *
+	 * Read from the configuration file.
+	 */
+	bool cleaning_active;
+
+	/*!
+	 * @brief Variable denoting whether rotation of the PKM (upper SMB platform) is disabled.
+	 *
+	 * @note If set, the synchronization won't be used at all.
+	 * @author tkornuta
+	 */
+	bool pkm_rotation_disabled;
 	/*!
 	 * \brief Variable storing the relative zero position of the motor rotating legs.
 	 * Set when all legs are out.
@@ -181,7 +192,7 @@ public:
 	/*!
 	 * \brief method to receive instruction from ecp of particular type
 	 */
-	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	lib::INSTRUCTION_TYPE receive_instruction();
 
 	/*!
 	 * \brief method to reply to ecp with class of particular type
@@ -197,13 +208,6 @@ public:
 	 * \brief The particular type of reply send form EDP to ECP
 	 */
 	lib::smb::r_buffer reply;
-
-	/*!
-	 * \brief bool value if the cleaning is activated
-	 *
-	 * It is taken from configuration data.
-	 */
-	bool cleaning_active;
 
 };
 
