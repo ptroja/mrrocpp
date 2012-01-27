@@ -8,7 +8,6 @@
 #ifndef __HI_LOCAL_IRP6OT_M_H
 #define __HI_LOCAL_IRP6OT_M_H
 
-#include "robot/hi_rydz/hi_rydz.h"
 #include "robot/hi_moxa/hi_moxa.h"
 
 namespace mrrocpp {
@@ -28,15 +27,14 @@ const int IN_OUT_PACKET = 0xC8;
 const int ISA_CARD_OFFSET = 0x20;
 // w zaleznosci od ustawienia na karcie isa
 
-const int AXIS_1_MAX_CURRENT = 0x2430;// ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+const int AXIS_1_MAX_CURRENT = 0x2430; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 const int AXIS_2_MAX_CURRENT = 0x2430; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 const int AXIS_3_MAX_CURRENT = 0x2430; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-const int AXIS_4_MAX_CURRENT = 0x2430;// ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
-const int AXIS_5_MAX_CURRENT = 0x2430;// ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+const int AXIS_4_MAX_CURRENT = 0x2430; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
+const int AXIS_5_MAX_CURRENT = 0x2430; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 const int AXIS_6_MAX_CURRENT = 0x2430; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 const int AXIS_7_MAX_CURRENT = 0x2410; // ustawienie pradu maksymalnego dla przedostatniej osi - obrot chwytaka
 // 13,7 j na amper
-
 
 // ------------------------------------------------------------------------
 //                HARDWARE_INTERFACE class
@@ -47,9 +45,10 @@ class hardware_interface : public hi_moxa::HI_moxa
 public:
 	hardware_interface(common::motor_driven_effector &_master); // Konstruktor
 
-}; // koniec: class hardware_interface
+};
+// koniec: class hardware_interface
 
-} // namespace irp6ot
+}// namespace irp6ot
 } // namespace edp
 } // namespace mrrocpp
 
