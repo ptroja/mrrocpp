@@ -30,7 +30,6 @@ class wgt_spkm_ext : public wgt_base
 public:
 	wgt_spkm_ext(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
 			0);
-	~wgt_spkm_ext();
 
 	QVector <QDoubleSpinBox*> doubleSpinBox_cur_Vector;
 	//QVector <QDoubleSpinBox*> doubleSpinBox_mcur_Vector;

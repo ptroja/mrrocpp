@@ -51,11 +51,6 @@ void wgt_spkm_ext::timer_slot()
 
 }
 
-wgt_spkm_ext::~wgt_spkm_ext()
-{
-
-}
-
 // slots
 
 void wgt_spkm_ext::on_pushButton_read_clicked()

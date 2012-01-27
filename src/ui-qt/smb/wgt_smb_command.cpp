@@ -89,11 +89,6 @@ wgt_smb_command::wgt_smb_command(const QString & _widget_label, mrrocpp::ui::com
 	ui.doubleSpinBox_ms_current_position->setMaximum(120000);
 }
 
-wgt_smb_command::~wgt_smb_command()
-{
-
-}
-
 void wgt_smb_command::synchro_depended_init()
 {
 	emit synchro_depended_init_signal();

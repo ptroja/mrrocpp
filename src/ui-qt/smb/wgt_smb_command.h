@@ -30,7 +30,6 @@ class wgt_smb_command : public wgt_base
 public:
 	wgt_smb_command(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
 			0);
-	~wgt_smb_command();
 
 	QVector <QCheckBox*> checkBox_fl_in_Vector;
 	QVector <QCheckBox*> checkBox_fl_out_Vector;
