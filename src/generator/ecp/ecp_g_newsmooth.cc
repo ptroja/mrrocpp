@@ -587,7 +587,7 @@ bool newsmooth::optimize_current_peaks(std::vector<double> max_current_change)
 {
     bool finish = true;
 
-    std::size_t i, j;
+    int i, j;
 
     std::vector <double> temp1;
     std::vector <double> temp2;
@@ -693,7 +693,7 @@ bool newsmooth::optimize_current_peaks(std::vector<double> max_current_change)
 bool newsmooth::optimize_energy_cost()
 {
     bool finish = false;
-    std::size_t i, j;
+    int i, j;
 
     if (debug) {
             printf("##################################### optimize #####################################\n");
@@ -716,7 +716,7 @@ bool newsmooth::optimize_energy_cost()
     {
         for (j = 0; j < axes_num; j++)
         {
-            currentSum += current_vector_iterator[j];
+            //currentSum += current_vector_iterator[j];
         }
         current_vector_iterator++;
     }
