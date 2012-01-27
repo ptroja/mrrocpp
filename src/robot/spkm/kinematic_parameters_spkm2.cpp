@@ -14,7 +14,8 @@ namespace mrrocpp {
 namespace kinematics {
 namespace spkm2 {
 
-kinematic_parameters_spkm2::kinematic_parameters_spkm2()
+kinematic_parameters_spkm2::kinematic_parameters_spkm2() :
+		mrrocpp::kinematics::spkm::kinematic_parameters_spkm()
 {
 	// Initialization of parameters describing the synchronisation positions (in joints).
 	synchro_positions[0] = 0.242;
@@ -23,6 +24,22 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	synchro_positions[3] = 0.0;
 	synchro_positions[4] = 0.0;
 	synchro_positions[5] = 0.0;
+
+	// Moog motor homing offset (in [qc]).
+	moog_motor_homing_offset = 76000;
+
+	// Moog motor homing velocity.
+	moog_motor_homing_velocity = -100;
+
+	// Home position of the Moog motor [qc].
+	moog_motor_home_position = -300000;
+
+	// Homing offset of axis 3 motor [qc].
+	axis3_motor_homing_offset = 269300;
+
+	// Homing velocity of the axis 3 motor [rpm].
+	axis3_motor_homing_velocity = -100;
+
 
 	// Initialization of parameters related to conversion from motor positions to joints.
 	// Parameters for conversion for linear DOFs are:
@@ -59,7 +76,7 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	upper_motor_pos_limits[2] = 8000;
 	// Lower wrist rotation.
 	upper_motor_pos_limits[3] = 379000;
-	upper_motor_pos_limits[4] =   2000;
+	upper_motor_pos_limits[4] = 185000;
 	// Upper wrist rotation.
 	upper_motor_pos_limits[5] = 260000;
 
@@ -91,30 +108,6 @@ kinematic_parameters_spkm2::kinematic_parameters_spkm2()
 	lower_joints_limits[3] = -2.2777;
 	lower_joints_limits[4] = -1.5708;
 	lower_joints_limits[5] = -2.43;
-
-	// Initialization of upper thyk alpha angle limit.
-	// Those values were determined experimentally.
-	upper_alpha_thyk_angle_limit[0] = 30.0;
-	upper_alpha_thyk_angle_limit[1] = 50.0;
-	upper_alpha_thyk_angle_limit[2] = 30.0;
-
-	// Initialization of lower thyk alpha angle limit.
-	// Those values were determined experimentally.
-	lower_alpha_thyk_angle_limit[0] = -30.0;
-	lower_alpha_thyk_angle_limit[1] = -50.0;
-	lower_alpha_thyk_angle_limit[2] = -30.0;
-
-	// Initialization of upper thyk beta angle limit.
-	// Those values were determined experimentally.
-	upper_beta_thyk_angle_limit[0] = 30.0;
-	upper_beta_thyk_angle_limit[1] = 50.0;
-	upper_beta_thyk_angle_limit[2] = 30.0;
-
-	// Initialization of lower thyk beta angle limit.
-	// Those values were determined experimentally.
-	lower_beta_thyk_angle_limit[0] = -30.0;
-	lower_beta_thyk_angle_limit[1] = -50.0;
-	lower_beta_thyk_angle_limit[2] = -30.0;
 
 	// Lower platform: Initialize the jb coordinate of P1A in O(ib,jb,kb).
 	lA = -0.05;

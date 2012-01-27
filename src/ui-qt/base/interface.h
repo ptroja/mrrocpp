@@ -1,10 +1,11 @@
 #ifndef __INTERFACE_H
 #define __INTERFACE_H
 
-#include <iostream>
-#include <vector>
+#include <string>
+#include <list>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
 
 #include <QMainWindow>
 #include <QTimer>
@@ -14,13 +15,17 @@
 //#include "mainwindow.h"
 #include "wgt_process_control.h"
 #include "wgt_robot_process_control.h"
-#include "ui_ecp_dialogs/wgt_yes_no.h"
-#include "ui_ecp_dialogs/wgt_swarm.h"
-#include "ui_ecp_dialogs/wgt_message.h"
-#include "ui_ecp_dialogs/wgt_input_integer.h"
-#include "ui_ecp_dialogs/wgt_input_double.h"
-#include "ui_ecp_dialogs/wgt_choose_option.h"
-#include "ui_ecp_dialogs/wgt_teaching.h"
+
+// Forward declarations
+class wgt_process_control;
+class wgt_yes_no;
+class wgt_swarm;
+class wgt_plan;
+class wgt_message;
+class wgt_input_integer;
+class wgt_input_double;
+class wgt_choose_option;
+class wgt_teaching;
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/lib/sr/sr_ui.h"
@@ -64,11 +69,11 @@ class Interface : public QObject
 {
 Q_OBJECT
 private:
-
 	void create_robots();
+
 	boost::shared_ptr <QTimer> timer;
 
-	bool html_it(std::string &_input, std::string &_output);
+	static void html_it(const std::string &_input, std::string &_output);
 
 	void setRobotsMenu();
 
@@ -109,7 +114,7 @@ public:
 	boost::shared_ptr <ecp_buffer> ui_ecp_obj;
 	boost::shared_ptr <feb_thread> meb_tid;
 
-	function_execution_buffer *main_eb;
+	boost::shared_ptr<function_execution_buffer> main_eb;
 
 	typedef std::string list_t;
 
@@ -125,12 +130,12 @@ public:
 	TEACHING_STATE_ENUM file_window_mode;
 	UI_NOTIFICATION_STATE_ENUM notification_state, next_notification;
 
-	std::ofstream *log_file_outfile;
+	boost::shared_ptr<std::ofstream> log_file_outfile;
 
 	boost::mutex process_creation_mtx;
 	boost::mutex ui_notification_state_mutex;
 	boost::shared_ptr <lib::configurator> config;
-	boost::shared_ptr <lib::sr_ui> ui_msg; // Wskaznik na obiekt do komunikacji z SR
+	boost::shared_ptr <lib::sr_ui> ui_msg; // Obiekt do komunikacji z SR
 
 	// bool is_any_edp_active;
 	bool is_mp_and_ecps_active;
@@ -201,8 +206,8 @@ public:
 	void unload_all();
 	void slay_all();
 
-	Mp *mp;
-	AllRobots *all_robots;
+	boost::shared_ptr<Mp> mp;
+	boost::shared_ptr<AllRobots> all_robots;
 
 	void open_process_control_windows();
 
@@ -216,6 +221,7 @@ public:
 	wgt_process_control* wgt_pc;
 	wgt_yes_no* wgt_yes_no_obj;
 	wgt_swarm* wgt_swarm_obj;
+	wgt_plan* wgt_plan_obj;
 	wgt_message* wgt_message_obj;
 	wgt_input_integer* wgt_input_integer_obj;
 	wgt_input_double* wgt_input_double_obj;

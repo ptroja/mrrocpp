@@ -78,7 +78,7 @@ private:
 	mrrocpp::ui::common::Interface& interface;
 	Ui::SignalDispatcher *signalDispatcher;
 
-	pthread_t main_thread_id;
+	const pthread_t main_thread_id;
 
 	wgt_base::my_open_ptr openFunctionPointer;
 

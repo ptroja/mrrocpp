@@ -14,48 +14,6 @@ effector::effector(common::shell &_shell) :
 {
 	DEBUG_METHOD;
 
-	// Set default motor velocities, accelerations and decelerations for axis 0 - leg A.
-	Vdefault[0] = 5000UL;
-	MotorVmax[0] = 5000UL;
-	Adefault[0] = 50000UL;
-	Ddefault[0] = 50000UL;
-	MotorAmax[0] = 50000UL;
-
-	// Set default motor velocities, accelerations and decelerations for axis 1 - leg B.
-	Vdefault[1] = 5000UL;
-	MotorVmax[1] = 5000UL;
-	Adefault[1] = 50000UL;
-	Ddefault[1] = 50000UL;
-	MotorAmax[1] = 50000UL;
-
-	// Set default motor velocities, accelerations and decelerations for axis 2 - leg C.
-	Vdefault[2] = 5000UL;
-	MotorVmax[2] = 5000UL;
-	Adefault[2] = 50000UL;
-	Ddefault[2] = 50000UL;
-	MotorAmax[2] = 50000UL;
-
-	// Set default motor velocities, accelerations and decelerations for axis 3 - (lower wrist rotation - "axis 1").
-	Vdefault[3] = 5000UL;
-	MotorVmax[3] = 5000UL;
-	Adefault[3] = 10000UL;
-	Ddefault[3] = 10000UL;
-	MotorAmax[3] = 10000UL;
-
-	// Set default motor velocities, accelerations and decelerations for axis 4 - (wrist rotation - "axis 2") - the MOOG motor.
-	Vdefault[4] = 4000UL;
-	MotorVmax[4] = 4000UL;
-	Adefault[4] = 9000UL;
-	Ddefault[4] = 9000UL;
-	MotorAmax[4] = 9000UL;
-
-	// Set default motor velocities, accelerations and decelerations for axis 5 - (upper wrist rotation - "axis 3").
-	Vdefault[5] = 5000UL;
-	MotorVmax[5] = 5000UL;
-	Adefault[5] = 30000UL;
-	Ddefault[5] = 30000UL;
-	MotorAmax[5] = 30000UL;
-
 	if (!robot_test_mode) {
 		// Create EPOS objects according to CAN ID-mapping.
 		axisA = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 5, "A");
@@ -66,12 +24,12 @@ effector::effector(common::shell &_shell) :
 		axis3 = (boost::shared_ptr <maxon::epos>) new maxon::epos(*gateway, 1, "3");
 
 		// Collect axes into common array container.
-		axes[0] = &(*axisA);
-		axes[1] = &(*axisB);
-		axes[2] = &(*axisC);
-		axes[3] = &(*axis1);
-		axes[4] = &(*axis2);
-		axes[5] = &(*axis3);
+		axes[0] = axisA;
+		axes[1] = axisB;
+		axes[2] = axisC;
+		axes[3] = axis1;
+		axes[4] = axis2;
+		axes[5] = axis3;
 
 		// Setup the axis array for the IPM handler
 		{
@@ -86,7 +44,7 @@ effector::effector(common::shell &_shell) :
 
 void effector::create_kinematic_models_for_given_robot(void)
 {
-DEBUG_METHOD;
+	DEBUG_METHOD;
 
 	// Add SPKM kinematics.
 	add_kinematic_model(new kinematics::spkm::kinematic_model_spkm(kinematics::spkm1::kinematic_parameters_spkm1()));

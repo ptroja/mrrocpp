@@ -6,7 +6,7 @@
 #include <QMainWindow>
 #include <QLocale>
 
-wgt_base::wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
+wgt_base::wgt_base(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
 		QWidget(parent), widget_label(_widget_label), interface(_interface)
 {
 	dwgt = new QDockWidget((QMainWindow *) interface.get_main_window());
@@ -23,7 +23,7 @@ wgt_base::wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _inter
 	interface.get_main_window()->addDockWidget(Qt::LeftDockWidgetArea, dwgt);
 }
 
-wgt_base::wgt_base(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent) :
+wgt_base::wgt_base(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent) :
 		QWidget(parent), widget_label(_widget_label), interface(_interface), robot(robo)
 {
 	dwgt = new QDockWidget((QMainWindow *) interface.get_main_window());
@@ -190,9 +190,4 @@ QPushButton* wgt_base::add_button(QString label, int x, int y, int rowSpan, int 
 void wgt_base::my_close()
 {
 	dwgt->hide();
-}
-
-wgt_base::~wgt_base()
-{
-
 }

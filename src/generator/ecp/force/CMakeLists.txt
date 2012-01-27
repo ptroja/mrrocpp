@@ -8,4 +8,6 @@ add_library(ecp_generators_force
 	ecp_g_tff_gripper_approach.cc
 )
 
+target_link_libraries(ecp_generators_force ecp_mp)
+
 install(TARGETS ecp_generators_force DESTINATION lib)

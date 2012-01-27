@@ -45,7 +45,7 @@
 
 #define SAVE_A_TYPE(T, P) \
     /** conversion for T */ \
-    xdr_oarchive &save_a_type(T const &t,boost::mpl::true_) { \
+    xdr_oarchive &save_a_type(T const &t, boost::mpl::true_) { \
         if(!P(&xdrs, (T *) &t)) THROW_SAVE_EXCEPTION; \
         return *this; \
     }
@@ -166,7 +166,7 @@ public:
      * Constructor
      * @param flags
      */
-    xdr_oarchive(unsigned int flags = 0)
+    xdr_oarchive(unsigned int flags __attribute__((unused)) = 0)
     {
         xdrmem_create(&xdrs, buffer, sizeof(buffer), XDR_ENCODE);
     }

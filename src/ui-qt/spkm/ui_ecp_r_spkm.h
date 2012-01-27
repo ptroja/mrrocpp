@@ -1,10 +1,3 @@
-// -------------------------------------------------------------------------
-//                            robot.h
-// Definicje struktur danych i metod do komunikacji UI z EDP
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
 #ifndef _UI_ECP_R_SPKM_H
 #define _UI_ECP_R_SPKM_H
 
@@ -38,6 +31,8 @@ public:
 	move_external(const double final_position[6], lib::epos::EPOS_MOTION_VARIANT motion_variant, lib::spkm::POSE_SPECIFICATION tool_variant, const double _estimated_time);
 	void clear_fault();
 	void stop_motors();
+	void brake_motors();
+	void disable_brake();
 };
 
 }

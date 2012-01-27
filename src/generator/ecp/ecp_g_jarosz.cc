@@ -489,12 +489,12 @@ bool linear_parabolic::next_step()
 				vel[i] = acc[i] * node_counter;
 
 				if (fabs(acc[i] * (1 / lib::EDP_STEP * lib::EDP_STEP)) > a_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_joint[i]);
+					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", (int)i, fabs(acc[i]), a_max_joint[i]);
 					sr_ecp_msg.message(messg);
 					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(MAX_ACCELERATION_EXCEEDED));
 				} // end : if
 				if (fabs(vel[i] * (1 / lib::EDP_STEP)) > v_max_joint[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_joint[i]);
+					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", (int)i, fabs(vel[i]), v_max_joint[i]);
 					sr_ecp_msg.message(messg);
 					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(MAX_VELOCITY_EXCEEDED));
 				} // end : if
@@ -804,7 +804,7 @@ bool cubic::next_step()
 										* the_robot->ecp_command.motion_steps));
 
 				if (fabs(acc[i]) > a_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego przyspieszenia
-					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", i, fabs(acc[i]), a_max_motor[i]);
+					sprintf(messg, "Acceleration in axis %d is %f, max. acc = %f", (int)i, fabs(acc[i]), a_max_motor[i]);
 					sr_ecp_msg.message(messg);
 					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(MAX_ACCELERATION_EXCEEDED));
 				} // end : if
@@ -813,7 +813,7 @@ bool cubic::next_step()
 						* (1.0 / (lib::EDP_STEP * the_robot->ecp_command.motion_steps));
 
 				if (fabs(vel[i]) > v_max_motor[i]) { // Sprawdzenie przekroczenia dopuszczalnego predkosci
-					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", i, fabs(vel[i]), v_max_motor[i]);
+					sprintf(messg, "Velocity in axis %d is %f, max. vel = %f", (int)i, fabs(vel[i]), v_max_motor[i]);
 					sr_ecp_msg.message(messg);
 					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(MAX_VELOCITY_EXCEEDED));
 				} // end : if
@@ -1263,7 +1263,7 @@ bool parabolic_teach_in::first_step()
 	// Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
 	// Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
-	get_pose(tip);
+	tip = get_pose();
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
@@ -1293,6 +1293,7 @@ bool parabolic_teach_in::first_step()
 			 */
 		default:
 			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
+			break;
 	} // end: switch
 
 	return true;
@@ -1416,6 +1417,7 @@ bool parabolic_teach_in::next_step()
 				 */
 			default:
 				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
+				break;
 		} // end: switch
 		the_robot->ecp_command.instruction_type = lib::SET;
 		the_robot->ecp_command.set_type = ARM_DEFINITION; // ARM
@@ -1501,6 +1503,7 @@ bool parabolic_teach_in::next_step()
 				 */
 			default:
 				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
+				break;
 		} // end: switch
 	}
 
@@ -1616,7 +1619,7 @@ void calibration::ecp_save_extended_file(operator_reaction_condition& the_condit
 		to_file << number_of_poses << '\n'; // ???
 		for (i = 0; i < number_of_poses; i++) {
 			to_file << i << ' ';
-			get_pose(tip);
+			tip = get_pose();
 			for (j = 0; j < lib::MAX_SERVOS_NR; j++)
 				to_file << tip.coordinates[j] << ' ';
 			to_file << "    ";
@@ -1652,7 +1655,7 @@ bool calibration::first_step()
 	// Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
 	// Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
-	get_pose(tip);
+	tip = get_pose();
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
@@ -2000,7 +2003,7 @@ bool cubic_spline::first_step()
 	// Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
 	// Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
-	get_pose(tip);
+	tip = get_pose();
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
@@ -2354,7 +2357,7 @@ bool smooth_cubic_spline::first_step()
 	// Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
 	// Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
-	get_pose(tip);
+	tip = get_pose();
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;
@@ -2491,11 +2494,12 @@ bool smooth_cubic_spline::next_step()
 					 */
 				default:
 					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
+					break;
 			} // end:switch
 
 			next_pose_list_ptr(); // do nastepnej pozycji na liscie
 			if (is_pose_list_element()) {
-				get_pose(tip);
+				tip = get_pose();
 			} // end : if
 
 		} // end : for (j=1; j<=pose_list_length(); j++)
@@ -2527,7 +2531,7 @@ bool smooth_cubic_spline::next_step()
 		build_coeff = false;
 		initiate_pose_list(); // powrot do pierwszej pozycji na liscie
 		if (is_pose_list_element()) {
-			get_pose(tip);
+			tip = get_pose();
 		} // end : if
 
 	} // end:if BUILD COEFF
@@ -2814,7 +2818,7 @@ bool quintic_spline::first_step()
 	// Pobranie kolejnej pozycji z listy i wstawienie danych do generatora
 	// Na podstawie odczytanej aktualnej pozycji oraz kolejnej pozycji na liscie
 	// wyznaczane beda przedzialy interpolacji, czyli makrokroki do realizacji przez EDP.
-	get_pose(tip);
+	tip = get_pose();
 	// Zaznaczenie, ze bedzie realizowany pierwszy przedzial interpolacji, wiec trzeba
 	// wyznaczyc parametry ruchu
 	first_interval = true;

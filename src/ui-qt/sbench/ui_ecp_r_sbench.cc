@@ -6,14 +6,12 @@
  * @ingroup sbench
  */
 
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-#include "../base/interface.h"
-
-#include "base/lib/sr/srlib.h"
+#include <boost/shared_ptr.hpp>
 
 #include "ui_ecp_r_sbench.h"
+#include "base/ecp/ecp_robot.h"
+
+#include "../base/ui_robot.h"
 
 namespace mrrocpp {
 namespace ui {

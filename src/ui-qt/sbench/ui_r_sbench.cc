@@ -20,6 +20,9 @@
 #include "../base/menu_bar_action.h"
 #include "../base/mp.h"
 
+#include "wgt_sbench_voltage_command.h"
+#include "wgt_sbench_preasure_command.h"
+
 namespace mrrocpp {
 namespace ui {
 namespace sbench {
@@ -74,9 +77,8 @@ void UiRobot::manage_interface()
 					default:
 						break;
 				}
-			} else // jesli robot jest niezsynchronizowany
-			{
-
+			} else {
+				// jesli robot jest niezsynchronizowany
 			}
 			break;
 		default:
@@ -113,4 +115,3 @@ void UiRobot::create_ui_ecp_robot()
 }
 } //namespace ui
 } //namespace mrrocpp
-

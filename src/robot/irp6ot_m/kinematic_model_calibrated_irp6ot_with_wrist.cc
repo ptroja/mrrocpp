@@ -15,7 +15,7 @@ namespace kinematics {
 namespace irp6ot {
 
 model_calibrated_with_wrist::model_calibrated_with_wrist(int _number_of_servos) :
-	model_with_wrist(_number_of_servos)
+		model_with_wrist(_number_of_servos)
 {
 	// Ustawienie etykiety modelu kinematycznego.
 	set_kinematic_model_label("Switching to calibrated kinematic model with active wrist");
@@ -86,8 +86,7 @@ void model_calibrated_with_wrist::set_kinematic_parameters(void)
 	synchro_joint_position[6] = synchro_motor_position[6] - gear[6] * theta[6];
 	synchro_joint_position[7] = synchro_motor_position[7] - gear[7] * theta[7];
 
-}//: set_kinematic_parameters
-
+} //: set_kinematic_parameters
 
 } // namespace irp6ot
 } // namespace kinematic

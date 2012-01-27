@@ -1,21 +1,3 @@
-// -------------------------------------------------------------------------
-//                            ui_ecp->cc
-// Metody sluzace do komunikacji UI z EDP - zlecenia dla driver'a
-//
-// Ostatnio modyfikowany: 2005
-// -------------------------------------------------------------------------
-
-/* Standard headers */
-#include <iostream>
-
-#include <cstdio>
-#include <cstdlib>
-#include <unistd.h>
-#include <cstring>
-#include <fcntl.h>
-#include <cerrno>
-#include <cmath>
-
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
@@ -78,8 +60,6 @@ void EcpRobot::move_external(const double final_position[6], lib::epos::EPOS_MOT
 
 void EcpRobot::clear_fault()
 {
-	//the_robot->epos_clear_fault_data_port.data = true;
-
 	the_robot->epos_clear_fault_data_port.set();
 
 	execute_motion();
@@ -87,9 +67,22 @@ void EcpRobot::clear_fault()
 
 void EcpRobot::stop_motors()
 {
-//	the_robot->epos_brake_command_data_port.data = true;
+	the_robot->epos_quickstop_command_data_port.set();
 
+	execute_motion();
+}
+
+
+void EcpRobot::brake_motors()
+{
 	the_robot->epos_brake_command_data_port.set();
+
+	execute_motion();
+}
+
+void EcpRobot::disable_brake()
+{
+	the_robot->epos_disable_brake_command_data_port.set();
 
 	execute_motion();
 }

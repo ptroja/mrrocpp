@@ -52,7 +52,7 @@ void tfg::mp_2_ecp_next_state_string_handler(void)
 
 		cvg->reset();
 		std::vector <double> pos(1, mp_command.ecp_next_state.sg_buf.get <double>());
-		std::vector <double> joint_velocity(1, 0.006);
+		std::vector <double> joint_velocity(1, 0.003);
 
 		cvg->set_joint_velocity_vector(joint_velocity);
 

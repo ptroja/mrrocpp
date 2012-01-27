@@ -145,10 +145,11 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 		std::string path(mrrocpp_network_path);
+
 		path += (char*) mp_command.ecp_next_state.sg_buf.data;
 
 		tig->flush_pose_list();
-		tig->load_file_with_path(path.c_str());
+		tig->load_file_with_path(path);
 		//		printf("\nTRACK ECP_GEN_TEACH_IN :%s\n\n", path1);
 		tig->initiate_pose_list();
 
@@ -157,6 +158,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH
 			|| mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_JOINT) {
 		std::string path(mrrocpp_network_path);
+
 		path += mp_command.ecp_next_state.sg_buf.get <std::string>();
 
 		switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
@@ -176,6 +178,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		sg->Move();
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_ANGLE_AXIS) {
 		std::string path(mrrocpp_network_path);
+
 		path += mp_command.ecp_next_state.sg_buf.get <std::string>();
 
 		switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)

@@ -38,8 +38,11 @@ typedef Eigen::Matrix<double, 4 , 4> Homog4d;
  *
  * @ingroup SIF_KINEMATICS
  */
-struct kinematic_parameters_spkm {
+class kinematic_parameters_spkm {
 public:
+	//! Constructor - sets the values of common PKM parameters.
+	kinematic_parameters_spkm();
+
 	//! Lower platform: jb coordinate of P1A in O(ib,jb,kb).
 	double lA;
 
@@ -70,6 +73,21 @@ public:
 	//! Parameters describing the synchronization positions (in joints).
 	double synchro_positions[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
+	//! Homing offset of the Moog motor [qc] (used in synchronization).
+	int32_t moog_motor_homing_offset;
+
+	//! Home position of the Moog motor [qc] (used in synchronization).
+	int32_t moog_motor_home_position;
+
+	//! Homing velocity of the Moog motor [rpm].
+	int32_t moog_motor_homing_velocity;
+
+	//! Homing offset of axis 3 motor [qc] (used in synchronization).
+	int32_t axis3_motor_homing_offset;
+
+	//! Homing velocity of the axis 3 motor [rpm].
+	int32_t axis3_motor_homing_velocity;
+
 	//! Parameters related to conversion from motor positions to joints.
 	double mp2i_ratios[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
@@ -88,17 +106,20 @@ public:
 	//! Smallest values that joints can reach.
 	double lower_joints_limits[mrrocpp::lib::spkm::NUM_OF_SERVOS];
 
-	//! Largest values of upper thyk alpha angle.
-	double upper_alpha_thyk_angle_limit[3];
+	//! Value  of thyk alpha angle for legs A and C (the same for both sides).
+	double alpha_thyk_angle_limit_AC;
 
-	//! Smallest values of lower thyk alpha angle.
-	double lower_alpha_thyk_angle_limit[3];
+	//! Value  of thyk alpha internal angle for leg B (the same for both sides).
+	double alpha_thyk_angle_limit_B_int;
 
-	//! Largest values of upper thyk beta angle.
-	double upper_beta_thyk_angle_limit[3];
+	//! Value  of thyk alpha external angle for leg B (the same for both sides).
+	double alpha_thyk_angle_limit_B_ext;
 
-	//! Smallest values of lower thyk beta angle.
-	double lower_beta_thyk_angle_limit[3];
+	//! Value  of thyk beta internal angle for leg B (the same for both sides).
+	double beta_thyk_angle_limit_B_int;
+
+	//! Value  of thyk beta external angle for leg B (the same for both sides).
+	double beta_thyk_angle_limit_B_ext;
 
 	// You must overload "operator new" so that it generates 16-bytes-aligned pointers.
 	EIGEN_MAKE_ALIGNED_OPERATOR_NEW
