@@ -48,6 +48,9 @@ bool newsmooth::calculate()
 		pose_vector_iterator++;
 	}
 
+        //printf("\n------------ first print pose --------------\n");
+        //print_pose_vector();
+
 	pose_vector_iterator = pose_vector.begin();
 
 	for (i = 0; i < pose_vector.size(); i++) { //this has to be done here (not in the load_trajectory_pose method) because of the potential recursive call of calculate method
@@ -232,11 +235,21 @@ void newsmooth::print_pose(vector <ecp_mp::common::trajectory_pose::bang_bang_tr
 		printf("%f\t", pose_vector_iterator->v_r[z]);
 	}
 	printf("\n");
-	printf("a_r:\t");
-	for (z = 0; z < pose_vector_iterator->a_r.size(); z++) {
-		printf("%f\t", pose_vector_iterator->a_r[z]);
-	}
-	printf("\n");
+        printf("v:\t");
+        for (z = 0; z < pose_vector_iterator->v.size(); z++) {
+                printf("%f\t", pose_vector_iterator->v[z]);
+        }
+        printf("\n");
+        printf("a_r:\t");
+        for (z = 0; z < pose_vector_iterator->a_r.size(); z++) {
+                printf("%f\t", pose_vector_iterator->a_r[z]);
+        }
+        printf("\n");
+        printf("a:\t");
+        for (z = 0; z < pose_vector_iterator->a.size(); z++) {
+                printf("%f\t", pose_vector_iterator->a[z]);
+        }
+        printf("\n");
 	printf("v_p:\t");
 	for (z = 0; z < pose_vector_iterator->v_p.size(); z++) {
 		printf("%f\t", pose_vector_iterator->v_p[z]);
@@ -568,6 +581,158 @@ bool newsmooth::load_trajectory_from_file(const char* file_name)
 	}
 
 	return true;
+}
+
+bool newsmooth::optimize_current_peaks(std::vector<double> max_current_change)
+{
+    bool finish = true;
+
+    std::size_t i, j;
+
+    std::vector <double> temp1;
+    std::vector <double> temp2;
+
+    bool toHigh[axes_num];
+
+    for (i = 0; i < axes_num; i++)
+    {
+        toHigh[i] = false;
+    }
+
+    if (debug) {
+            printf("##################################### optimize #####################################\n");
+    }
+
+    if (!optimization || current_vector.size() <= 1)
+    {
+        sr_ecp_msg.message("Optimization not performed. Lack of data.");
+        if (debug) {
+                printf("Be sure that optimization is set to true and the motion was performed with more than 1 macrosteps.");
+        }
+        return true;
+    }
+
+    double current_macrostep_in_pose = 1;
+
+    pose_vector_iterator = pose_vector.begin();
+
+    current_vector_iterator = current_vector.begin();
+
+    temp1 = (*current_vector_iterator);
+
+    current_vector_iterator++;
+
+    temp2 = (*current_vector_iterator);
+
+    for (i = 0; i < current_vector.size() - 1; i++)
+    {
+        if (current_macrostep_in_pose == pose_vector_iterator->interpolation_node_no)
+        {
+            for (j = 0; j < axes_num; j++)
+            {
+                if (toHigh[j] == true) {
+                    pose_vector_iterator->v[j] -= 0.01;
+                    pose_vector_iterator->a[j] -= 0.005;
+                    if (pose_vector_iterator->v[j] <= 0)
+                    {
+                        pose_vector_iterator->v[j] = 0.01;
+                    }
+                    if (pose_vector_iterator->a[j] <= 0)
+                    {
+                        pose_vector_iterator->a[j] = 0.005;
+                    }
+                    finish = false;
+                }
+            }
+            if (pose_vector_iterator->pos_num == pose_vector.size())
+            {
+                break;
+            }
+
+            pose_vector_iterator++;
+            current_macrostep_in_pose = 1;
+        }
+
+        //printf("Current: \t");
+
+        for (j = 0; j < axes_num; j++)
+        {
+            //test test
+            if (fabs(temp2[j] - temp1[j]) > max_current_change[j]) {
+                printf("too high: %d\t %f\n",j, temp2[j] - temp1[j]);
+                toHigh[j] = true;
+            }
+            //printf("%f\t", temp2[j]);
+            //test test end
+        }
+        //printf("\n");
+
+        current_vector_iterator++;
+
+        temp1 = temp2;
+
+        temp2 = *current_vector_iterator;
+
+        current_macrostep_in_pose++;
+    }
+
+    if (debug)
+    {
+        print_pose_vector();
+    }
+
+    if (finish == true)
+    {
+        sr_ecp_msg.message("Optimized!");
+    }
+
+    return finish;
+
+}
+
+bool newsmooth::optimize_energy_cost()
+{
+    bool finish = false;
+    std::size_t i, j;
+
+    if (debug) {
+            printf("##################################### optimize #####################################\n");
+    }
+
+    if (!optimization || current_vector.size() <= 1)
+    {
+        sr_ecp_msg.message("Optimization not performed. Lack of data.");
+        if (debug) {
+                printf("Be sure that optimization is set to true and the motion was performed with more than 1 macrosteps.");
+        }
+        return true;
+    }
+
+    current_vector_iterator = current_vector.begin();
+
+    int currentSum;
+
+    for (i = 0; i < current_vector.size() - 1; i++)
+    {
+        for (j = 0; j < axes_num; j++)
+        {
+            currentSum += current_vector_iterator[j];
+        }
+        current_vector_iterator++;
+    }
+
+    if (debug)
+    {
+        print_pose_vector();
+    }
+
+    if (finish == true)
+    {
+        sr_ecp_msg.message("Optimized!");
+    }
+
+    return finish;
+
 }
 
 //--------------- METHODS USED TO LOAD POSES END ----------------

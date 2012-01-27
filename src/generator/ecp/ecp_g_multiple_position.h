@@ -306,20 +306,22 @@ protected:
 	}
 
         /**
-          * Returns current current average modue value.
-          */
-	double getCurrentModule(int i)
+         * Returns current current average modue value.
+         */
+        /*double getCurrentModule(int i)
 	{
 		return the_robot->reply_package.arm.measured_current.average_module[i];
-	}
+        }*/
 
         /**
-          *
-          */
-	double getCurrentCubic(int i)
+         *
+         */
+        /*double getCurrentCubic(int i)
 	{
 		return the_robot->reply_package.arm.measured_current.average_cubic[i];
-	}
+        }*/
+
+
 
 public:
 	/**
@@ -512,8 +514,8 @@ public:
                                         }
 
 					if (debug) {
-						printf("%f\t", *tempIter);
-                                                printf("%f\t", currents[i]);
+                                                //printf("%f\t", *tempIter);
+                                                //printf("%f\t", currents[i]);
 					}
 					tempIter++;
 
@@ -525,7 +527,7 @@ public:
                                 }
 
 				if (debug) {
-					printf("\n");
+                                        //printf("\n");
 					flushall();
 				}
 				break;
@@ -632,7 +634,7 @@ public:
 		interpolated = interpolate();
 
 		if (debug) {
-			print_coordinate_vector();
+                        //print_coordinate_vector();
 		}
 
 		return interpolated;
@@ -664,14 +666,11 @@ public:
 	 */
 	virtual void reset()
 	{
-		//sr_ecp_msg.message("reset 1");
-		pose_vector.clear();
-		//sr_ecp_msg.message("reset 2");
 		coordinate_vector.clear();
-		//sr_ecp_msg.message("reset 3");
                 if (!optimization)
                 {
                     current_vector.clear();
+                    pose_vector.clear();
                 }
 		calculated = false;
 		interpolated = false;
@@ -679,89 +678,6 @@ public:
 		sr_ecp_msg.message("Generator reset");
 
 	}
-        /**
-         * Performs basic optimization of the motion by setting new values of maximal velocity or maximal velocity and maximal acceleration, depending on the used Pos object.
-         * Optimization is based on the contraints of the maximal current changes.
-         * @return true if optimization finished
-         */
-        virtual bool optimize(std::vector<double> max_current_change)
-        {
-            std::size_t i, j;
-
-            std::vector <double> temp1;
-            std::vector <double> temp2;
-
-            bool toHigh[axes_num];
-
-            for (i = 0; i < axes_num; i++)
-            {
-                toHigh[i] = false;
-            }
-
-            if (debug) {
-                    printf("##################################### optimize #####################################\n");
-            }
-
-            if (!optimization || current_vector.size() <= 1)
-            {
-                sr_ecp_msg.message("Optimization not performed. Lack of data.");
-                if (debug) {
-                        printf("Be sure that optimization is set to true and the motion was performed with more than 1 macrosteps.");
-                }
-                return true;
-            }
-
-            current_vector_iterator = current_vector.begin();
-
-            temp1 = (*current_vector_iterator);
-
-            current_vector_iterator++;
-
-            temp2 = (*current_vector_iterator);
-
-            for (i = 0; i < current_vector.size() - 1; i++)
-            {
-                printf("Current: \t");
-
-                for (j = 0; j < axes_num; j++)
-                {
-                    //test test
-                    if (temp2[j] - temp1[j] > max_current_change[j]) {
-                        toHigh[j] = true;
-                    }
-                    printf("%f\t", temp2[j]);
-                    //test test end
-                }
-
-                printf("\n");
-
-                current_vector_iterator++;
-
-                temp1 = temp2;
-                temp2 = *current_vector_iterator;
-            }
-
-            //test test
-
-            for (j = 0; j < pose_vector.size(); j++)
-            {
-                pose_vector_iterator = pose_vector.begin();
-
-                for (i = 0; i < axes_num; i++)
-                {
-                    if (toHigh[i] == true)
-                    {
-                        //pose_vector_iterator->v[i]
-                    }
-                }
-            }
-
-            //test test end
-
-            return true; //temporary
-
-        }
-
 	/**
 	 * Detection of possible jerks. Method scans the vector of coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.
 	 * @param max_acc maximal allowed acceleration
