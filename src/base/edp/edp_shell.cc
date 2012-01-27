@@ -34,7 +34,7 @@ namespace common {
 
 /*--------------------------------------------------------------------------*/
 shell::shell(lib::configurator &_config) :
-	config(_config), hardware_busy_file_fullpath(""), my_pid(getpid())
+		config(_config), hardware_busy_file_fullpath(""), my_pid(getpid())
 {
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg =
@@ -91,7 +91,7 @@ bool shell::detect_hardware_busy()
 				perror("Error deleting file");
 				return false;
 			} else {
-				puts("File successfully deleted");
+				//	puts("File successfully deleted");
 			}
 
 			// utworz plik i wstaw do niego pid
@@ -138,7 +138,7 @@ void shell::close_hardware_busy_file()
 {
 	if (access(hardware_busy_file_fullpath.c_str(), R_OK) == 0) {
 
-		std::cerr << "close_hardware_busy_file odczytałem: " << hardware_busy_file_fullpath << std::endl;
+		//	std::cerr << "close_hardware_busy_file odczytałem: " << hardware_busy_file_fullpath << std::endl;
 
 		pid_t file_pid;
 
@@ -158,7 +158,7 @@ void shell::close_hardware_busy_file()
 			if (remove(hardware_busy_file_fullpath.c_str()) != 0) {
 				perror("Error deleting file");
 			} else {
-				puts("File successfully deleted");
+				//	puts("File successfully deleted");
 			}
 		} else {
 			std::cerr << "Another EDP was running" << std::endl;
