@@ -1,7 +1,6 @@
 
 add_executable(edp_sarkofag
 	edp_e_sarkofag.cc
-	hi_sarkofag.cc
 	sg_sarkofag.cc
 	 regulator_sarkofag.cc
 )
