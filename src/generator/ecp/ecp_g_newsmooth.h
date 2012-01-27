@@ -143,7 +143,7 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
                  * Optimization is based on minimizing the current cost.
                  * @return true if optimization finished
                  */
-                bool optimize_energy_cost();
+                bool optimize_energy_cost(std::vector<double> max_current_change);
 };
 
 } // namespace generator

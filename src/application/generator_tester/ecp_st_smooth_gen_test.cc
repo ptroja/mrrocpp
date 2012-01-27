@@ -98,14 +98,14 @@ void sub_task_smooth_gen_test::conditional_execution()
                 sgenjoint->Move();
 
                 std::vector<double> max_current_change = std::vector<double>(6);
-                max_current_change[0] = 2000;
-                max_current_change[1] = 900;
-                max_current_change[2] = 900;
-                max_current_change[3] = 900;
-                max_current_change[4] = 900;
-                max_current_change[5] = 900;
+                max_current_change[0] = 4000;
+                max_current_change[1] = 2000;
+                max_current_change[2] = 1000;
+                max_current_change[3] = 1000;
+                max_current_change[4] = 1000;
+                max_current_change[5] = 1000;
 
-                while (!sgenjoint->optimize_current_peaks(max_current_change))
+                while (!sgenjoint->optimize_energy_cost(max_current_change))
                 {
                     sr_ecp_msg.message("Optimizing...");
                     sgenjoint->calculate_interpolate();

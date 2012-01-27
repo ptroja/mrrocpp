@@ -653,19 +653,12 @@ bool newsmooth::optimize_current_peaks(std::vector<double> max_current_change)
             current_macrostep_in_pose = 1;
         }
 
-        //printf("Current: \t");
-
         for (j = 0; j < axes_num; j++)
         {
-            //test test
             if (fabs(temp2[j] - temp1[j]) > max_current_change[j]) {
-                printf("too high: %d\t %f\n",j, temp2[j] - temp1[j]);
                 toHigh[j] = true;
             }
-            //printf("%f\t", temp2[j]);
-            //test test end
         }
-        //printf("\n");
 
         current_vector_iterator++;
 
@@ -690,10 +683,21 @@ bool newsmooth::optimize_current_peaks(std::vector<double> max_current_change)
 
 }
 
-bool newsmooth::optimize_energy_cost()
+bool newsmooth::optimize_energy_cost(std::vector<double> max_current_change)
 {
-    bool finish = false;
+    bool finish = true;
+
     int i, j;
+
+    std::vector <double> temp1;
+    std::vector <double> temp2;
+
+    bool toLow[axes_num];
+
+    for (i = 0; i < axes_num; i++)
+    {
+        toLow[i] = false;
+    }
 
     if (debug) {
             printf("##################################### optimize #####################################\n");
@@ -708,22 +712,92 @@ bool newsmooth::optimize_energy_cost()
         return true;
     }
 
+    double current_macrostep_in_pose = 1;
+
+    pose_vector_iterator = pose_vector.begin();
+
     current_vector_iterator = current_vector.begin();
 
-    int currentSum;
+    temp1 = (*current_vector_iterator);
+
+    current_vector_iterator++;
+
+    temp2 = (*current_vector_iterator);
+
+    for (i = 0; i < current_vector.size() - 1; i++)
+    {
+        if (current_macrostep_in_pose == pose_vector_iterator->interpolation_node_no)
+        {
+            for (j = 0; j < axes_num; j++)
+            {
+                if (toLow[j] == true) {
+                    pose_vector_iterator->v[j] += 0.01;
+                    pose_vector_iterator->a[j] += 0.005;
+                    if (pose_vector_iterator->v[j] >= 0.7)
+                    {
+                        pose_vector_iterator->v[j] = 0.7;
+                    }
+                    else
+                    {
+                        finish = false;
+                    }
+                    if (pose_vector_iterator->a[j] >= 0.4)
+                    {
+                        pose_vector_iterator->a[j] = 0.4;
+                    }
+                    else
+                    {
+                        finish = false;
+                    }
+                }
+                else
+                {
+                    finish = true;
+                }
+            }
+            if (pose_vector_iterator->pos_num == pose_vector.size())
+            {
+                break;
+            }
+
+            pose_vector_iterator++;
+            current_macrostep_in_pose = 1;
+        }
+
+        for (j = 0; j < axes_num; j++)
+        {
+            if (fabs(temp2[j] - temp1[j]) < max_current_change[j]) {
+                toLow[j] = true;
+            }
+        }
+
+        current_vector_iterator++;
+
+        temp1 = temp2;
+
+        temp2 = *current_vector_iterator;
+
+        current_macrostep_in_pose++;
+    }
+
+    double currentSum;
+
+    current_vector_iterator = current_vector.begin();
 
     for (i = 0; i < current_vector.size() - 1; i++)
     {
         for (j = 0; j < axes_num; j++)
         {
-            //currentSum += current_vector_iterator[j];
+            currentSum += (*current_vector_iterator)[j];
         }
         current_vector_iterator++;
     }
 
+    printf ("########### Current consumption: %f \n", currentSum);
+
     if (debug)
     {
-        print_pose_vector();
+        //print_pose_vector();
     }
 
     if (finish == true)
@@ -732,7 +806,6 @@ bool newsmooth::optimize_energy_cost()
     }
 
     return finish;
-
 }
 
 //--------------- METHODS USED TO LOAD POSES END ----------------
