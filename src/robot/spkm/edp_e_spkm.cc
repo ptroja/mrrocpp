@@ -833,7 +833,7 @@ void effector::parse_motor_command()
 					// Throw non-fatal error - this mode requires synchronization.
 					BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::nfe_robot_unsynchronized());
 
-				// Retrieve the desired homogeneous matrix on the base of received six  variables - a Euler Z-Y-Z representation.
+				// Retrieve the desired homogeneous matrix on the base of received six variables - a Euler Z-Y-Z representation.
 				desired_spkm_frame.set_from_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector(instruction.spkm.goal_pos));
 //				desired_spkm_frame.set_from_xyz_rpy(lib::Xyz_Rpy_vector(instruction.spkm.goal_pos));
 #if(DEBUG_FRAMES)
