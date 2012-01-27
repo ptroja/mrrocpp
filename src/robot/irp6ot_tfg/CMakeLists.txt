@@ -4,8 +4,6 @@ add_library(kinematicsirp6ot_tfg
 
 add_executable(edp_irp6ot_tfg
 	edp_irp6ot_tfg_effector.cc
-	hi_irp6ot_tfg.cc
-	int_hand_irp6ot_tfg.cc
 	sg_irp6ot_tfg.cc
 	regulator_irp6ot_tfg.cc
 )
