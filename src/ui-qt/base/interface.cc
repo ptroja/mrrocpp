@@ -596,11 +596,10 @@ void Interface::set_ui_state_notification(UI_NOTIFICATION_STATE_ENUM new_notifac
 int Interface::wait_for_child_termination(pid_t pid, bool hang)
 {
 	int status;
-	pid_t child_pid;
+	pid_t child_pid = 0;
 	if (hang) {
 		int iterator = 0;
-		child_pid = 0;
-		while ((child_pid <= 0) && (iterator < 50)) {
+		while ((child_pid <= 0) && (iterator < 200)) {
 			child_pid = waitpid(pid, &status, WNOHANG);
 			iterator++;
 			boost::this_thread::sleep(boost::posix_time::milliseconds(100));

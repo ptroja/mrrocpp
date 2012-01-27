@@ -193,7 +193,7 @@ int UiRobot::edp_create_int()
 
 				catch (ecp::exception::se_r & error) {
 					/* Obsluga bledow ECP */
-					close_edp_connections();
+					abort_edp();
 				} /*end: catch */
 
 			}
@@ -392,7 +392,7 @@ bool UiRobot::deactivate_ecp_trigger()
 	return false;
 }
 
-void UiRobot::close_edp_connections()
+void UiRobot::abort_edp()
 {
 
 	if (state.edp.reader_fd != lib::invalid_fd) {
@@ -421,10 +421,13 @@ void UiRobot::EDP_slay_int()
 
 		interface.block_sigchld();
 
-		close_edp_connections();
+		std::cout << "EDP_slay_int" << std::endl;
+
+		abort_edp();
 
 		// Changed to false - the waitpid won't hang during execution.
 		interface.wait_for_child_termination((pid_t) state.edp.pid, true);
+		//interface.wait_for_child_termination(-1, true);
 
 		interface.unblock_sigchld();
 
