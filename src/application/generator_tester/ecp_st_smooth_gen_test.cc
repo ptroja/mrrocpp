@@ -98,12 +98,12 @@ void sub_task_smooth_gen_test::conditional_execution()
                 sgenjoint->Move();
 
                 std::vector<double> max_current_change = std::vector<double>(6);
-                max_current_change[0] = 4000;
-                max_current_change[1] = 2000;
-                max_current_change[2] = 1000;
-                max_current_change[3] = 1000;
-                max_current_change[4] = 1000;
-                max_current_change[5] = 1000;
+                max_current_change[0] = 3000;
+                max_current_change[1] = 1500;
+                max_current_change[2] = 800;
+                max_current_change[3] = 800;
+                max_current_change[4] = 800;
+                max_current_change[5] = 600;
 
                 while (!sgenjoint->optimize_energy_cost(max_current_change))
                 {
@@ -112,6 +112,8 @@ void sub_task_smooth_gen_test::conditional_execution()
                     sgenjoint->Move();
                 }
         }
+
+        sgenjoint->print_energy_cost();
 
         sgenjoint->set_optimization(false);
         sgenjoint->reset();

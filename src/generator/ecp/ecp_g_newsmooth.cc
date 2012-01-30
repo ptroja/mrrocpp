@@ -63,6 +63,9 @@ bool newsmooth::calculate()
 		pose_vector_iterator++;
 	}
 
+        //printf("\n------------ second print pose --------------\n");
+        //print_pose_vector();
+
 	pose_vector_iterator = pose_vector.begin();
 	if (pose_spec == lib::ECP_XYZ_ANGLE_AXIS && motion_type == lib::ABSOLUTE) {
 
@@ -649,6 +652,11 @@ bool newsmooth::optimize_current_peaks(std::vector<double> max_current_change)
                 break;
             }
 
+            for (i = 0; i < axes_num; i++)
+            {
+                toHigh[i] = false;
+            }
+
             pose_vector_iterator++;
             current_macrostep_in_pose = 1;
         }
@@ -724,6 +732,8 @@ bool newsmooth::optimize_energy_cost(std::vector<double> max_current_change)
 
     temp2 = (*current_vector_iterator);
 
+    printf("---- pose %d\n", pose_vector_iterator->pos_num);
+
     for (i = 0; i < current_vector.size() - 1; i++)
     {
         if (current_macrostep_in_pose == pose_vector_iterator->interpolation_node_no)
@@ -733,15 +743,18 @@ bool newsmooth::optimize_energy_cost(std::vector<double> max_current_change)
                 if (toHigh[j] == false) {
                     pose_vector_iterator->v[j] += 0.01;
                     pose_vector_iterator->a[j] += 0.005;
-                    if (pose_vector_iterator->v[j] >= 0.7)
-                    {
-                        pose_vector_iterator->v[j] = 0.7;
-                    }
-                    if (pose_vector_iterator->a[j] >= 0.4)
-                    {
-                        pose_vector_iterator->a[j] = 0.4;
-                    }
                     finish = false;
+                    if (pose_vector_iterator->v[j] >= 0.5)
+                    {
+                        pose_vector_iterator->v[j] = 0.5;
+                        finish = true;
+                    }
+                    if (pose_vector_iterator->a[j] >= 0.3)
+                    {
+                        pose_vector_iterator->a[j] = 0.3;
+                        finish = true;
+                    }
+
                 }
             }
             if (pose_vector_iterator->pos_num == pose_vector.size())
@@ -749,7 +762,15 @@ bool newsmooth::optimize_energy_cost(std::vector<double> max_current_change)
                 break;
             }
 
+            for (i = 0; i < axes_num; i++)
+            {
+                toHigh[i] = false;
+            }
+
             pose_vector_iterator++;
+
+            printf("---- pose %d\n", pose_vector_iterator->pos_num);
+
             current_macrostep_in_pose = 1;
         }
 
@@ -757,6 +778,8 @@ bool newsmooth::optimize_energy_cost(std::vector<double> max_current_change)
         {
             if (fabs(temp2[j] - temp1[j]) > max_current_change[j]) {
                 toHigh[j] = true;
+                printf("to high: %d\n", j);
+                flushall();
             }
         }
 
@@ -781,6 +804,8 @@ bool newsmooth::optimize_energy_cost(std::vector<double> max_current_change)
         }
         current_vector_iterator++;
     }
+
+    energy_cost.push_back(currentSum);
 
     printf ("########### Current consumption: %f \n", currentSum);
 

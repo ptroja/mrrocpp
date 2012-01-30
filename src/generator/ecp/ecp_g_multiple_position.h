@@ -115,6 +115,10 @@ protected:
 	 * Set to true if trajectory was specified in angle axis absolute coordinates and the interpolation is performed on poses transformed into relative vectors.
 	 */
 	bool angle_axis_absolute_transformed_into_relative;
+        /**
+         * Energy cost during consecutive optimization iterations.
+         */
+        std::vector<double> energy_cost;
 
 	//--------- VELOCITY AND ACCELERATION VECTORS ---------
 	/**
@@ -345,6 +349,18 @@ public:
 	{
 
 	}
+        /**
+         * Prints energy cost vector.
+         */
+        void print_energy_cost()
+        {
+            printf("############## Energy cost ##############");
+            for (int i = 0; i < energy_cost.size(); i++)
+            {
+                printf("%f\n", energy_cost[i]);
+            }
+        }
+
 	/**
 	 * Set debug variable.
 	 */
@@ -671,6 +687,7 @@ public:
                 {
                     current_vector.clear();
                     pose_vector.clear();
+                    energy_cost.clear();
                 }
 		calculated = false;
 		interpolated = false;
