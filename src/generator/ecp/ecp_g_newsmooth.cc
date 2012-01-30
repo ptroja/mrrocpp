@@ -692,11 +692,11 @@ bool newsmooth::optimize_energy_cost(std::vector<double> max_current_change)
     std::vector <double> temp1;
     std::vector <double> temp2;
 
-    bool toLow[axes_num];
+    bool toHigh[axes_num];
 
     for (i = 0; i < axes_num; i++)
     {
-        toLow[i] = false;
+        toHigh[i] = false;
     }
 
     if (debug) {
@@ -730,29 +730,18 @@ bool newsmooth::optimize_energy_cost(std::vector<double> max_current_change)
         {
             for (j = 0; j < axes_num; j++)
             {
-                if (toLow[j] == true) {
+                if (toHigh[j] == false) {
                     pose_vector_iterator->v[j] += 0.01;
                     pose_vector_iterator->a[j] += 0.005;
                     if (pose_vector_iterator->v[j] >= 0.7)
                     {
                         pose_vector_iterator->v[j] = 0.7;
                     }
-                    else
-                    {
-                        finish = false;
-                    }
                     if (pose_vector_iterator->a[j] >= 0.4)
                     {
                         pose_vector_iterator->a[j] = 0.4;
                     }
-                    else
-                    {
-                        finish = false;
-                    }
-                }
-                else
-                {
-                    finish = true;
+                    finish = false;
                 }
             }
             if (pose_vector_iterator->pos_num == pose_vector.size())
@@ -766,8 +755,8 @@ bool newsmooth::optimize_energy_cost(std::vector<double> max_current_change)
 
         for (j = 0; j < axes_num; j++)
         {
-            if (fabs(temp2[j] - temp1[j]) < max_current_change[j]) {
-                toLow[j] = true;
+            if (fabs(temp2[j] - temp1[j]) > max_current_change[j]) {
+                toHigh[j] = true;
             }
         }
 
