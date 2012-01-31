@@ -105,7 +105,23 @@ void sub_task_smooth_gen_test::conditional_execution()
                 max_current_change[4] = 800;
                 max_current_change[5] = 600;
 
-                while (!sgenjoint->optimize_energy_cost(max_current_change))
+                std::vector<double> max_velocity = std::vector<double>(6);
+                max_velocity[0] = 0.5;
+                max_velocity[1] = 0.5;
+                max_velocity[2] = 0.5;
+                max_velocity[3] = 0.5;
+                max_velocity[4] = 0.5;
+                max_velocity[5] = 0.5;
+
+                std::vector<double> max_acceleration = std::vector<double>(6);
+                max_acceleration[0] = 0.3;
+                max_acceleration[1] = 0.3;
+                max_acceleration[2] = 0.3;
+                max_acceleration[3] = 0.3;
+                max_acceleration[4] = 0.3;
+                max_acceleration[5] = 0.3;
+
+                while (!sgenjoint->optimize_energy_cost(max_current_change, max_velocity, max_acceleration))
                 {
                     sr_ecp_msg.message("Optimizing...");
                     sgenjoint->calculate_interpolate();

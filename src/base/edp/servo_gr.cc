@@ -63,6 +63,8 @@ void servo_buffer::compute_current_measurement_statistics()
 		total_power += axis_power;
 	}
 
+        printf("total power: %f\n", total_power);
+
 	// zakladam spadek napiecia 2V na 100W mocy
 
 	for (int k = 0; k < master.number_of_servos; k++) {

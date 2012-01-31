@@ -67,6 +67,14 @@ protected:
          * Current vector iterator.
          */
         std::vector <std::vector <double> >::iterator current_vector_iterator;
+        /**
+         * Vector of read energy. (used in optimization)
+         */
+        std::vector <std::vector<double> > energy_vector;
+        /**
+         * Energy vector iterator.
+         */
+        std::vector <std::vector <double> >::iterator energy_vector_iterator;
 	/**
 	 * Type of the commanded motion (absolute or relative)
 	 */
@@ -357,7 +365,7 @@ public:
             printf("############## Energy cost ##############");
             for (int i = 0; i < energy_cost.size(); i++)
             {
-                printf("%f\n", energy_cost[i]);
+                printf("%d: %f\n",i, energy_cost[i]);
             }
         }
 
@@ -474,6 +482,7 @@ public:
 		}
 
                 current_vector.clear();
+                energy_vector.clear();
 		coordinate_vector_iterator = coordinate_vector.begin();
 		sr_ecp_msg.message("Moving...");
 		return true;
@@ -510,9 +519,11 @@ public:
 		double coordinates[axes_num];
                 //std::vector<double> currents;
                 std::vector<double> currents;
+                std::vector<double> energy;
                 if (optimization)
                 {
                     currents = std::vector<double>(axes_num);
+                    energy = std::vector<double>(axes_num);
                 }
 
 		switch (pose_spec)
@@ -527,6 +538,7 @@ public:
                                         if (optimization)
                                         {
                                             currents[i] = sqrt(the_robot->reply_package.arm.measured_current.average_square[i]);
+                                            energy[i] = the_robot->reply_package.arm.measured_current.energy[i];
                                         }
 
 					if (debug) {
@@ -540,6 +552,7 @@ public:
                                 if (optimization)
                                 {
                                     current_vector.push_back(currents);
+                                    energy_vector.push_back(energy);
                                 }
 
 				if (debug) {
@@ -686,6 +699,7 @@ public:
                 if (!optimization)
                 {
                     current_vector.clear();
+                    energy_vector.clear();
                     pose_vector.clear();
                     energy_cost.clear();
                 }
