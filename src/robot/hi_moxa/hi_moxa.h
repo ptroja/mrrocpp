@@ -38,6 +38,8 @@ const int MAX_PARAM_SET_ATTEMPTS = 3;
 const int MAX_COMM_TIMEOUTS = 3;
 const int FIRST_HARDWARE_READS_WITH_ZERO_INCREMENT = 4;
 
+const int VOLTAGE = 48.0;
+
 const unsigned long COMMCYCLE_TIME_NS = 2000000;
 
 /*!
@@ -57,7 +59,7 @@ public:
 	 * @param ports				vector of serial port names
 	 * @param *max_increments	tab of max allowed motor increments
 	 */
-	HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector<std::string> ports, const double* max_increments); // Konstruktor
+	HI_moxa(common::motor_driven_effector &_master, int last_drive_n, std::vector <std::string> ports, const double* max_increments); // Konstruktor
 	/**
 	 * @brief destructor
 	 */
@@ -79,6 +81,13 @@ public:
 	 * @param drive_number		number of drive
 	 */
 	virtual int get_current(int drive_number);
+
+	/**
+	 * @brief read voltage aplitude
+	 * @param drive_number		number of drive
+	 */
+	virtual float get_voltage(int drive_number);
+
 	/**
 	 * @brief read motor increment from communication buffer
 	 * @param drive_number		number of drive
@@ -102,7 +111,7 @@ public:
 	 * @param parameter			parameter type
 	 * @param new_value			parameter value
 	 */
-	virtual int  set_parameter(int drive_number, const int parameter, uint32_t new_value);
+	virtual int set_parameter(int drive_number, const int parameter, uint32_t new_value);
 	/**
 	 * @brief reset all motor positions and position increments in communication buffer
 	 */
@@ -146,15 +155,15 @@ public:
 
 private:
 	/// communication baud rate (bps)
-	#if defined(B921600)
+#if defined(B921600)
 	static const speed_t BAUD = B921600;
-	#else
+#else
 	static const speed_t BAUD = 921600;
-	#endif
+#endif
 	/// (number of drives)-1
 	const std::size_t last_drive_number;
 	/// vector of serial port names
-	std::vector<std::string> port_names;
+	std::vector <std::string> port_names;
 	/// tab of max allowed motor position increments
 	const double* ridiculous_increment;
 	/// tab of port designators
@@ -165,9 +174,10 @@ private:
 
 	/// periodic timer used for generating read_write_hardware time base
 	lib::periodic_timer ptimer;
-}; // endof: class hardware_interface
+};
+// endof: class hardware_interface
 
-} // namespace hi_moxa
+}// namespace hi_moxa
 } // namespace edp
 } // namespace mrrocpp
 

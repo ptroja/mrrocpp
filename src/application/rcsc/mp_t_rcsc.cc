@@ -766,6 +766,12 @@ void rubik_cube_solver::approach_op(int mode)
 
 	 //wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	 */
+
+	wait_ms(500);
+
+	//wlaczenie generatora do konfiguracji czujnika w EDP w obydwu robotach
+	configure_edp_force_sensor(true, false);
+
 	// docisniecie chwytaka tracka do kostki
 	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", lib::irp6ot_m::ROBOT_NAME);
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());

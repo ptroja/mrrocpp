@@ -140,6 +140,13 @@ int regulator::get_measured_current(void) const
 	return measured_current;
 }
 
+double regulator::get_previous_pwm(void) const
+{
+	// odczytanie wypelnienia pwm dla poprzedniego kroku
+	return set_value_old;
+}
+
+
 int regulator::get_PWM_value(void) const
 {
 	// odczytanie zadanego wypelnienia PWM - metoda abstrakcyjna

@@ -60,7 +60,6 @@ protected:
 	double delta_eint; // przyrost calki uchybu
 	double delta_eint_old; // przyrost calki uchybu w poprzednim kroku
 
-
 	int PWM_value; // zadane wypelnienie PWM
 	uint8_t algorithm_no; // przeslany numer algorytmu
 	uint8_t current_algorithm_no; // numer aktualnie uzywanego algorytmu
@@ -92,6 +91,8 @@ public:
 	void insert_measured_current(int measured_current_l);
 
 	double return_new_step() const;
+
+	double get_previous_pwm() const;
 
 	void insert_new_pos_increment(double inc);
 
@@ -125,7 +126,6 @@ class NL_regulator : public regulator
 {
 	/* Klasa regulatorow konkretnych */
 	// Obiekt z algorytmem regulacji
-
 protected:
 	// zmienne lokalne klasy oraz funkcje wykorzystywane jedynie
 	//  wewnatrz tej klasy, tzn. przez algorytm regulacji
@@ -141,7 +141,7 @@ protected:
 
 public:
 
-			NL_regulator(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, motor_driven_effector &_master);
+	NL_regulator(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, motor_driven_effector &_master);
 
 	virtual uint8_t compute_set_value(void) = 0;
 	// obliczenie nastepnej wartosci zadanej dla napedu - metoda abstrakcyjna
@@ -150,8 +150,7 @@ public:
 };
 // ----------------------------------------------------------------------
 
-
-} // namespace common
+}// namespace common
 } // namespace edp
 } // namespace mrrocpp
 

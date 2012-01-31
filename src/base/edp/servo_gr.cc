@@ -52,7 +52,10 @@ void servo_buffer::compute_current_measurement_statistics()
 	// dla  kazdej z osi
 	for (int k = 0; k < master.number_of_servos; k++) {
 		// pomiar pradu dla osi
-		int measured_current = hi->get_current(k);
+		int measured_current = regulator_ptr[k]->get_measured_current();
+		double previous_pwm = regulator_ptr[k]->get_previous_pwm();
+		float voltage = hi->get_voltage(k);
+		float step_energy = abs(measured_current) * abs(previous_pwm) * voltage;
 
 		// dla pierwszego kroku
 		if (step_number == 1) {
@@ -61,6 +64,10 @@ void servo_buffer::compute_current_measurement_statistics()
 			master.reply.arm.measured_current.average_square[k] = pow(measured_current, 2);
 			master.reply.arm.measured_current.maximum_module[k] = abs(measured_current);
 			master.reply.arm.measured_current.minimum_module[k] = abs(measured_current);
+
+			// RAFAL TULWIN
+			master.reply.arm.measured_current.energy[k] = step_energy;
+
 			// dla pozostalych krokow
 		} else {
 			//			printf(">>>>current for %d : %d\n", k, measured_current);
@@ -87,6 +94,9 @@ void servo_buffer::compute_current_measurement_statistics()
 			master.reply.arm.measured_current.average_square[k] = average_square;
 			master.reply.arm.measured_current.maximum_module[k] = maximum_module;
 			master.reply.arm.measured_current.minimum_module[k] = minimum_module;
+
+			// RAFAL TULWIN
+			master.reply.arm.measured_current.energy[k] += step_energy;
 		}
 	}
 }
@@ -227,7 +237,7 @@ void servo_buffer::operator()()
 		exit(EXIT_SUCCESS);
 	}
 
-	if(!master.robot_test_mode) {
+	if (!master.robot_test_mode) {
 		lib::set_thread_priority(lib::PTHREAD_MAX_PRIORITY + 10);
 	}
 

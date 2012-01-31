@@ -163,6 +163,14 @@ int HI_moxa::get_current(int drive_number)
 	return ret;
 }
 
+
+float HI_moxa::get_voltage(int drive_number)
+{
+	float ret = VOLTAGE;
+
+	return ret;
+}
+
 double HI_moxa::get_increment(int drive_number)
 {
 	double ret;
@@ -215,23 +223,23 @@ uint64_t HI_moxa::read_write_hardware(void)
 	} // end test mode
 
 	/* YOYKA
-	if (hardware_panic) {
+	 if (hardware_panic) {
 
-		if (error_msg_hardware_panic < 10) {
-			for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
-				set_parameter(drive_number, PARAM_DRIVER_MODE, PARAM_DRIVER_MODE_ERROR);
-		}
+	 if (error_msg_hardware_panic < 10) {
+	 for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
+	 set_parameter(drive_number, PARAM_DRIVER_MODE, PARAM_DRIVER_MODE_ERROR);
+	 }
 
-		if (error_msg_hardware_panic == 0) {
-			master.msg->message(lib::FATAL_ERROR, "Hardware panic");
-			std::cout << "[error] hardware panic" << std::endl;
+	 if (error_msg_hardware_panic == 0) {
+	 master.msg->message(lib::FATAL_ERROR, "Hardware panic");
+	 std::cout << "[error] hardware panic" << std::endl;
 
-		}
-		error_msg_hardware_panic++;
-		ptimer.sleep();
-		return ret;
-	}
-	*/
+	 }
+	 error_msg_hardware_panic++;
+	 ptimer.sleep();
+	 return ret;
+	 }
+	 */
 	/* OLD
 	 if (hardware_panic) {
 	 for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
@@ -258,10 +266,9 @@ uint64_t HI_moxa::read_write_hardware(void)
 			std::cout << "[error] hardware panic" << std::endl;
 			error_msg_hardware_panic++;
 		}
-	//	ptimer.sleep();
-	//	return ret;
-	}
-	else {
+		//	ptimer.sleep();
+		//	return ret;
+	} else {
 		for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
 			//	write(fd[drive_number], "  ", 2);
 			write(fd[drive_number], servo_data[drive_number].buf, WRITE_BYTES);
@@ -269,7 +276,7 @@ uint64_t HI_moxa::read_write_hardware(void)
 			bytes_received[drive_number] = 0;
 		}
 	}
-	
+
 	receive_attempts++;
 
 	struct timespec delay;
@@ -277,23 +284,25 @@ uint64_t HI_moxa::read_write_hardware(void)
 	delay.tv_sec = 0;
 
 	nanosleep(&delay, NULL);
-	
+
 	// Tu kiedys byl SELECT
 
 	// If Hardware Panic, read answers received from motors drivers, wait till the end of comm cycle and return.
-	if(hardware_panic) {
+	if (hardware_panic) {
 		for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
-				bytes_received[drive_number] = read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status)), READ_BYTES);
+			bytes_received[drive_number] =
+					read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status)), READ_BYTES);
 		}
 		ptimer.sleep();
 		return ret;
 	}
-	
+
 	all_hardware_read = true;
 	for (drive_number = 0; drive_number <= last_drive_number; drive_number++) {
-		bytes_received[drive_number] = read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status)), READ_BYTES);
+		bytes_received[drive_number] =
+				read(fd[drive_number], (char*) (&(servo_data[drive_number].drive_status)), READ_BYTES);
 		if (bytes_received[drive_number] < READ_BYTES) {
-			comm_timeouts[drive_number] ++;			
+			comm_timeouts[drive_number]++;
 			if (all_hardware_read) {
 				all_hardware_read = false;
 				std::cout << "[error] timeout in " << (int) receive_attempts << " communication cycle on drives";
@@ -304,12 +313,11 @@ uint64_t HI_moxa::read_write_hardware(void)
 	if (all_hardware_read) {
 		for (drive_number = 0; drive_number <= last_drive_number; drive_number++)
 			comm_timeouts[drive_number] = 0;
-	}
-	else {
+	} else {
 		std::cout << std::endl;
 		hardware_read_ok = false;
 	}
-		
+
 	// Inicjalizacja flag
 	robot_synchronized = true;
 	power_fault = false;
