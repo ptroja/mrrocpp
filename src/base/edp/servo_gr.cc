@@ -50,11 +50,27 @@ void servo_buffer::compute_current_measurement_statistics()
 	uint16_t step_number = step_number_in_macrostep + 1;
 	//		printf("\n---------------measurements statistics for: %d------------------\n", step_number);
 	// dla  kazdej z osi
+
+	// wyznaczenie napiecia chwilowego na podstawie pomiary mocy i napiecia referencyjnego
+
+	float total_power = 0.0;
+
+	for (int k = 0; k < master.number_of_servos; k++) {
+		// pomiar pradu dla osi
+		int measured_current = regulator_ptr[k]->get_measured_current();
+		float axis_power = ((float) abs(measured_current)) / 1000.0 * fabs(regulator_ptr[k]->get_previous_pwm() / 255.0)
+				* hi->get_voltage(k);
+		total_power += axis_power;
+	}
+
+	// zakladam spadek napiecia 2V na 100W mocy
+
 	for (int k = 0; k < master.number_of_servos; k++) {
 		// pomiar pradu dla osi
 		int measured_current = regulator_ptr[k]->get_measured_current();
 		float step_energy = ((float) abs(measured_current)) / 1000.0
-				* fabs(regulator_ptr[k]->get_previous_pwm() / 255.0) * hi->get_voltage(k) * ((float) lib::EDP_STEP);
+				* fabs(regulator_ptr[k]->get_previous_pwm() / 255.0) * (hi->get_voltage(k) - (total_power / 50.0))
+				* ((float) lib::EDP_STEP);
 
 		// dla pierwszego kroku
 		if (step_number == 1) {
