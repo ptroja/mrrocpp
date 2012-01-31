@@ -53,9 +53,8 @@ void servo_buffer::compute_current_measurement_statistics()
 	for (int k = 0; k < master.number_of_servos; k++) {
 		// pomiar pradu dla osi
 		int measured_current = regulator_ptr[k]->get_measured_current();
-		double previous_pwm = regulator_ptr[k]->get_previous_pwm();
-		float voltage = hi->get_voltage(k);
-		float step_energy = abs(measured_current) * abs(previous_pwm) * voltage;
+		float step_energy = ((float) abs(measured_current)) / 1000.0
+				* fabs(regulator_ptr[k]->get_previous_pwm() / 255.0) * hi->get_voltage(k) * ((float) lib::EDP_STEP);
 
 		// dla pierwszego kroku
 		if (step_number == 1) {
