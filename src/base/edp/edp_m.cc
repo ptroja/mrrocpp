@@ -40,10 +40,10 @@ namespace edp {
 namespace common {
 
 // Bufor polecen i odpowiedzi EDP_MASTER
-boost::shared_ptr<effector> master;
+boost::shared_ptr <effector> master;
 
 // obiekt do wykrywania obecnosci drugiego edp jeszcze przed powolaniem klasy efectora
-boost::shared_ptr<shell> edp_shell;
+boost::shared_ptr <shell> edp_shell;
 
 /* Przechwycenie sygnalu */
 void catch_signal(int sig)
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 		// create configuration object
 		lib::configurator _config(argv[1], argv[2], argv[3]);
 
-		edp::common::edp_shell = (boost::shared_ptr<edp::common::shell>) new edp::common::shell(_config);
+		edp::common::edp_shell = (boost::shared_ptr <edp::common::shell>) new edp::common::shell(_config);
 
 		if (!edp::common::edp_shell->detect_hardware_busy()) {
 			throw std::runtime_error("hardware busy while loading, closing automatically ...");
@@ -105,11 +105,14 @@ int main(int argc, char *argv[])
 
 		lib::set_process_sched();
 
-		edp::common::master = (boost::shared_ptr<edp::common::effector>) edp::common::return_created_efector(*(edp::common::edp_shell));
+		edp::common::master =
+				(boost::shared_ptr <edp::common::effector>) edp::common::return_created_efector(*(edp::common::edp_shell));
+
+		edp::common::master->initialize_communication();
 
 		edp::common::master->create_threads();
 
-		edp::common::master->initialize_communication();
+		edp::common::master->msg->message("edp loaded");
 
 		//	printf("1\n");
 		//	delay (20000);

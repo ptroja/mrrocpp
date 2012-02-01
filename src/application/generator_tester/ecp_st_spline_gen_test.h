@@ -18,16 +18,15 @@ class sub_task_spline_gen_test : public sub_task
 {
 
 private:
-        generator::spline* cvgenjoint;
-        generator::spline* cvgenmotor;
-        generator::spline* cvgeneuler;
-        generator::spline* cvgenangle;
+        generator::spline* spgenjoint;
+        generator::spline* spgenmotor;
+        generator::spline* spgeneuler;
+        generator::spline* spgenangle;
 
         bool track;
         bool postument;
-        bool poly;
         bool conv;
-
+        std::string network_path;
 
 public:
         sub_task_spline_gen_test(task::task & _ecp_t);

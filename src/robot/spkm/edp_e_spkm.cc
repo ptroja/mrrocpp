@@ -571,13 +571,6 @@ void effector::synchronise(void)
 }
 
 
-void effector::synchronise_moog_motor(maxon::epos & epos_, int32_t velocity_, int32_t offset_)
-{
-
-}
-
-
-
 void effector::move_arm(const lib::c_buffer &instruction_)
 {
 	DEBUG_METHOD;

@@ -1,7 +1,6 @@
 
 add_executable(edp_irp6p_tfg
 	edp_irp6p_tfg_effector.cc
-	hi_irp6p_tfg.cc
 	sg_irp6p_tfg.cc
 	 regulator_irp6p_tfg.cc
 )

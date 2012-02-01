@@ -26,7 +26,7 @@ namespace common {
 namespace generator {
 
 tff_gripper_approach::tff_gripper_approach(common::task::task& _ecp_task, int step) :
-	common::generator::generator(_ecp_task), speed(0.0), motion_time(1), force_level(-10.0), step_no(step)
+		common::generator::generator(_ecp_task), speed(0.0), motion_time(1), force_level(-10.0), step_no(step)
 {
 }
 
@@ -97,13 +97,23 @@ bool tff_gripper_approach::next_step()
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 
+	static int high_force = 0;
+
 	if (node_counter == 1) {
 
 	} else {
+
+		std::cout << the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[2] << std::endl;
+
 		if (node_counter > motion_time) {
 			return false;
 		}
 		if ((force_level > 0) && (the_robot->reply_package.arm.pf_def.force_xyz_torque_xyz[2] > force_level)) {
+			high_force++;
+		} else {
+			high_force = 0;
+		}
+		if (high_force > 10) {
 			return false;
 		}
 	}

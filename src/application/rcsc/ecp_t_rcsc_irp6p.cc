@@ -9,7 +9,7 @@
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
-#include "generator/ecp/force/ecp_mp_g_tff_rubik_grab.h"
+
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
 //#include "generator/ecp/ecp_g_smooth.h"
@@ -23,7 +23,6 @@
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
-#include "subtask/ecp_mp_st_gripper_opening.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -38,7 +37,6 @@ rcsc::rcsc(lib::configurator &_config) :
 	ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 
 	gt = new common::generator::transparent(*this);
-	rgg = new common::generator::tff_rubik_grab(*this, 8);
 	gag = new common::generator::tff_gripper_approach(*this, 8);
 	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
 	tig = new common::generator::teach_in(*this);
@@ -47,8 +45,6 @@ rcsc::rcsc(lib::configurator &_config) :
 	sg->set_debug(true);
 	sgaa = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	sgaa->set_debug(true);
-
-	go_st = new common::sub_task::gripper_opening(*this);
 
 	// utworzenie podzadan
 	{
@@ -72,35 +68,6 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
 		gt->Move();
-
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
-		switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.variant)
-		{
-			case ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0:
-				rgg->configure(0.072, 0.00005, 0, false);
-				break;
-			case ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_1:
-				rgg->configure(0.057, 0.00005, 0);
-				break;
-			case ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_2:
-				rgg->configure(0.057, 0.00005, 50);
-				break;
-			case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_1:
-				rgg->configure(0.072, 0.00005, 0, false);
-				break;
-			case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_2:
-				rgg->configure(0.065, 0.00005, 0);
-				break;
-			case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_3:
-				rgg->configure(0.057, 0.00005, 0);
-				break;
-			case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_4:
-				rgg->configure(0.057, 0.00005, 50);
-				break;
-			default:
-				break;
-		}
-		rgg->Move();
 
 	}
 
@@ -127,21 +94,6 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 				break;
 		}
 		rfrg->Move();
-
-	} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
-		switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.variant)
-		{
-			case ecp_mp::task::RCSC_GO_VAR_1:
-				go_st->configure(0.002, 1000);
-				go_st->execute();
-				break;
-			case ecp_mp::task::RCSC_GO_VAR_2:
-				go_st->configure(0.02, 1000);
-				go_st->execute();
-				break;
-			default:
-				break;
-		}
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 		std::string path(mrrocpp_network_path);

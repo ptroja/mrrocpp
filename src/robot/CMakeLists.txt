@@ -22,6 +22,7 @@ if(ROBOTS_SWARMITFIX)
 endif(ROBOTS_SWARMITFIX)
 
 if(ROBOTS_012)
+if(NOT UBUNTU32BIT)
 add_subdirectory (sarkofag)
 add_subdirectory (conveyor)
 add_subdirectory (festival)
@@ -30,8 +31,8 @@ add_subdirectory (irp6p_tfg)
 add_subdirectory (irp6_tfg)
 add_subdirectory (irp6ot_m)
 add_subdirectory (irp6p_m)
-#add_subdirectory (hi_rydz)
 add_subdirectory (hi_moxa)
+endif(NOT UBUNTU32BIT)
 endif(ROBOTS_012)
 
 add_library(mp_robots

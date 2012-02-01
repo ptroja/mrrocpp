@@ -688,11 +688,16 @@ typedef struct r_buffer_arm
 		 */
 		float average_cubic[lib::MAX_SERVOS_NR];
 
+		/*!
+		 *  energy
+		 * For the whole macrostep sum of measured currents for current step multiplied by pwm for previous step
+		 */
+		float energy[lib::MAX_SERVOS_NR];
+
 	} measured_current;
 
 	/*!
-	 *  Stan w ktorym znajduje sie regulator chwytaka.
-	 *  @todo Translate to English.
+         *  State of grippers regutor
 	 */
 	int16_t gripper_reg_state;
 
@@ -724,6 +729,7 @@ private:
 		ar & measured_current.maximum_module;
 		ar & measured_current.average_square;
 		ar & measured_current.average_cubic;
+		ar & measured_current.energy;
 
 	}
 } r_buffer_arm_t;

@@ -132,6 +132,18 @@ ecp::common::generator::velocity_profile_calculator::bang_bang_profile> {
 		 * @param trajectory to load
 		 */
 		bool load_relative_pose(ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose & trajectory_pose);
+                /**
+                 * Performs basic optimization of the motion by setting new values of maximal velocity and maximal acceleration separately on each trajectory segment.
+                 * Optimization is based on the contraints of the maximal current changes (current peaks).
+                 * @return true if optimization finished
+                 */
+                bool optimize_current_peaks(std::vector<double> max_current_change);
+                /**
+                 * Performs basic optimization of the motion by setting new values of maximal velocity and maximal acceleration separately on each trajectory segment.
+                 * Optimization is based on minimizing the current cost.
+                 * @return true if optimization finished
+                 */
+                bool optimize_energy_cost(std::vector<double> max_current_change, std::vector<double> max_velocity, std::vector<double> max_acceleration);
 };
 
 } // namespace generator

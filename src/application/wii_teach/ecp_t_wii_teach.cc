@@ -117,6 +117,15 @@ int wii_teach::load_trajectory()
 
 bool wii_teach::get_filenames(void)
 {
+	char newFilename[20], newPath[80];
+	sprintf(newFilename,"test_traj.trj");
+	sprintf(newPath,"/home/hh7/workspace/");
+
+	strncpy(path, newPath, 79);
+	strncpy(filename, newFilename, 19);
+
+	return true;
+
 	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
 	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
 	uint64_t e; // Kod bledu systemowego
@@ -518,7 +527,8 @@ void wii_teach::main_task_algorithm(void)
 	}
 
 	uint8_t response = 0;
-	if (!trajectory.count) {
+	if(!trajectory.count)
+	{
 		response = choose_option("Pose specification: [1] Angle Axis, [2] Joint", 2);
 	}
 

@@ -200,10 +200,10 @@ void model_with_wrist::set_kinematic_parameters(void)
 	synchro_motor_position[0] = 0; // tor [m]
 	synchro_motor_position[1] = -10.819; // kolumna [rad]
 	//synchro_motor_position[1]= -7.5;		// kolumna [rad]
-	synchro_motor_position[2] = -5.012; // ramie d. [rad]
-	synchro_motor_position[3] = -4.219; // ramie g. [rad]
-	synchro_motor_position[4] = 155.997; // kisc T [rad]
-	synchro_motor_position[5] = 476.5; // kisc V [rad] poprawne front position w motorach (6 os z kolei oznaczona jako 5) + 320.25
+	synchro_motor_position[2] = -4.012; // ramie d. [rad]
+	synchro_motor_position[3] = -6.219; // ramie g. [rad]
+	synchro_motor_position[4] = 158.997; // kisc T [rad]
+	synchro_motor_position[5] = 479.5; // kisc V [rad] poprawne front position w motorach (6 os z kolei oznaczona jako 5) + 320.25
 	synchro_motor_position[6] = 769.7; // kisc N [rad]
 	synchro_motor_position[7] = 4830; // chwytak [-]
 
