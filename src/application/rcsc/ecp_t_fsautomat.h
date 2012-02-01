@@ -18,7 +18,7 @@
 #include "base/ecp/ecp_g_transparent.h"
 #include "generator/ecp/force/ecp_g_weight_measure.h"
 #include "generator/ecp/force/ecp_g_tff_nose_run.h"
-#include "generator/ecp/force/ecp_g_tff_rubik_grab.h"
+
 #include "generator/ecp/force/ecp_g_tff_rubik_face_rotate.h"
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "base/lib/trajectory_pose/trajectory_pose.h"
@@ -39,7 +39,7 @@ protected:
 	common::generator::newsmooth* sg; //changed askubis
 	common::generator::transparent* gt;
 	common::generator::tff_nose_run* nrg;
-	common::generator::tff_rubik_grab* rgg;
+
 	common::generator::tff_gripper_approach* gag;
 	common::generator::tff_rubik_face_rotate* rfrg;
 	common::generator::teach_in* tig;

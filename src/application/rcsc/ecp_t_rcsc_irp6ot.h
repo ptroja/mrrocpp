@@ -6,7 +6,7 @@
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_g_transparent.h"
 #include "generator/ecp/force/ecp_g_weight_measure.h"
-#include "generator/ecp/force/ecp_g_tff_rubik_grab.h"
+
 #include "generator/ecp/force/ecp_g_tff_rubik_face_rotate.h"
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
@@ -36,7 +36,6 @@ protected:
 	//generatory
 	common::generator::transparent* gt;
 
-	common::generator::tff_rubik_grab* rgg;
 	common::generator::tff_gripper_approach* gag;
 	common::generator::tff_rubik_face_rotate* rfrg;
 	common::generator::teach_in* tig;

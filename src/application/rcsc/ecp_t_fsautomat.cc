@@ -34,7 +34,7 @@
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
-#include "generator/ecp/force/ecp_mp_g_tff_rubik_grab.h"
+
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "ecp_t_fsautomat.h"
@@ -81,15 +81,7 @@ void ecp_gripper_opening (task& _ecp_task, double gripper_increment, int motion_
 #endif
 // KONSTRUKTORY
 fsautomat::fsautomat(lib::configurator &_config) :
-		common::task::task(_config),
-		gt(NULL),
-		nrg(NULL),
-		rgg(NULL),
-		gag(NULL),
-		rfrg(NULL),
-		tig(NULL),
-		befg(NULL),
-		wmg(NULL)
+		common::task::task(_config), gt(NULL), nrg(NULL), gag(NULL), rfrg(NULL), tig(NULL), befg(NULL), wmg(NULL)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
@@ -154,11 +146,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 											ecpst = new sub_task::tff_nose_run(*this);
 											subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
 										}
-										xmlFree(argument);
-									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_rubik_grab_gen")) {
-										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											rgg = new common::generator::tff_rubik_grab(*this, atoi((char *) argument));
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_gripper_approach_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
@@ -294,14 +281,6 @@ void fsautomat::main_task_algorithm(void)
 			nrg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE) {
 			befg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
-			double gen_args[4];
-			int size = lib::setValuesInArray(gen_args, (char*) mp_command.ecp_next_state.sg_buf.data);
-			if (size > 3)
-				rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2], (bool) gen_args[3]);
-			else
-				rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2]);
-			rgg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
 			double gen_args[1];
 			lib::setValuesInArray(gen_args, (char*) mp_command.ecp_next_state.sg_buf.data);

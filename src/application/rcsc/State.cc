@@ -14,7 +14,6 @@
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
-#include "generator/ecp/force/ecp_mp_g_tff_rubik_grab.h"
 
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
@@ -97,8 +96,6 @@ void State::setGeneratorType(const std::string & genType)
 		this->generatorType = ecp_mp::generator::ECP_GEN_TEACH_IN;
 	else if (genType == "ECP_GEN_NEWSMOOTH")
 		this->generatorType = ecp_mp::generator::ECP_GEN_NEWSMOOTH;
-	else if (genType == "ECP_GEN_TFF_RUBIK_GRAB")
-		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB;
 	else if (genType == "ECP_GEN_TFF_RUBIK_FACE_ROTATE")
 		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE;
 	else if (genType == "ECP_GEN_TFF_GRIPPER_APPROACH")

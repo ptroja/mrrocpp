@@ -9,7 +9,7 @@
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
-#include "generator/ecp/force/ecp_mp_g_tff_rubik_grab.h"
+
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
 //#include "generator/ecp/ecp_g_smooth.h"
@@ -37,7 +37,6 @@ rcsc::rcsc(lib::configurator &_config) :
 	ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 
 	gt = new common::generator::transparent(*this);
-	rgg = new common::generator::tff_rubik_grab(*this, 8);
 	gag = new common::generator::tff_gripper_approach(*this, 8);
 	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
 	tig = new common::generator::teach_in(*this);
@@ -69,35 +68,6 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
 		gt->Move();
-
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
-		switch ((ecp_mp::task::RCSC_RUBIK_GRAB_PHASES) mp_command.ecp_next_state.variant)
-		{
-			case ecp_mp::task::RCSC_RG_FACE_TURN_PHASE_0:
-				rgg->configure(0.072, 0.00005, 0, false);
-				break;
-			case ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_1:
-				rgg->configure(0.057, 0.00005, 0);
-				break;
-			case ecp_mp::task::RCSC_RG_FROM_OPEARTOR_PHASE_2:
-				rgg->configure(0.057, 0.00005, 50);
-				break;
-			case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_1:
-				rgg->configure(0.072, 0.00005, 0, false);
-				break;
-			case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_2:
-				rgg->configure(0.065, 0.00005, 0);
-				break;
-			case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_3:
-				rgg->configure(0.057, 0.00005, 0);
-				break;
-			case ecp_mp::task::RCSC_RG_FCHANGE_PHASE_4:
-				rgg->configure(0.057, 0.00005, 50);
-				break;
-			default:
-				break;
-		}
-		rgg->Move();
 
 	}
 
