@@ -436,14 +436,10 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 		default:
 			break;
 	}
-
-	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
-
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.089, lib::irp6p_tfg::ROBOT_NAME);
 
-	// oczekiwania na zakonczenie ruchu chwytaka
-	wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
+	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
+	wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6p_tfg::ROBOT_NAME.c_str());
 
 	// zblizenie chwytaka tracka do nieruchomego chwytaka postumenta
 
@@ -580,13 +576,10 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 			break;
 	}
 
-	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
-
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.089, lib::irp6ot_tfg::ROBOT_NAME);
 
-	// oczekiwania na zakonczenie ruchu chwytaka
-	wait_for_task_termination(false, 1, lib::irp6ot_tfg::ROBOT_NAME.c_str());
+	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
+	wait_for_task_termination(false, 3, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str(), lib::irp6ot_tfg::ROBOT_NAME.c_str());
 
 	switch (turn_angle)
 	{
@@ -839,6 +832,10 @@ void rubik_cube_solver::approach_op(int mode)
 
 	//zakonczenie generatora traka
 	send_end_motion_to_ecps(1, lib::irp6ot_m::ROBOT_NAME.c_str());
+
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) 0, "", lib::irp6ot_m::ROBOT_NAME);
+	// uruchomienie generatora empty_gen
+	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// uruchomienie tff_nose run dla traka z podatnoscia w dwoch osiach
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, ecp_mp::sub_task::behaviour_specification_data_type(true, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);

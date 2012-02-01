@@ -151,7 +151,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		rgg->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
-		gag->configure(0.01, 1000, -10);
+		gag->configure(0.01, 1000, 2);
 		gag->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
