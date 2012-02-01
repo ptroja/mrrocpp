@@ -338,8 +338,7 @@ void Homog_matrix::set_from_xyz_euler_zyz(const Xyz_Euler_Zyz_vector & l_vector)
 
 void Homog_matrix::get_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector & l_vector, const double alpha_, const double beta_, const double gamma_) const
 {
-	double phi, theta, psi, dist;
-	double phi2, theta2, psi2, dist2;
+	double phi, theta, psi;
 	const double EPS = 1.0E-10;
 
 #if(DEBUG_KINEMATICS)
@@ -385,20 +384,20 @@ void Homog_matrix::get_xyz_euler_zyz_without_limits(Xyz_Euler_Zyz_vector & l_vec
 		std::cout<<"CASE III: atan(u33, sqrt(1-u33^3)) => ["<<phi<<", "<<theta<<", "<<psi<<"]\n";
 #endif
 		// Compute maximal delta.
-		dist = std::max(std::max(fabs(phi - alpha_), fabs(theta - beta_)), fabs(psi - gamma_));
+		const double dist = std::max(std::max(fabs(phi - alpha_), fabs(theta - beta_)), fabs(psi - gamma_));
 
 		// Second solution.
-		theta2 = atan2(-sqrt(1 - matrix_m[2][2]*matrix_m[2][2]), matrix_m[2][2]);
+		const double theta2 = atan2(-sqrt(1 - matrix_m[2][2]*matrix_m[2][2]), matrix_m[2][2]);
 //		theta = atan2(-sb, matrix_m[2,2]);
 
-		phi2 = atan2(-matrix_m[1][2], -matrix_m[0][2]);
-		psi2 = atan2(-matrix_m[2][1], matrix_m[2][0]);
+		const double phi2 = atan2(-matrix_m[1][2], -matrix_m[0][2]);
+		const double psi2 = atan2(-matrix_m[2][1], matrix_m[2][0]);
 #if(DEBUG_KINEMATICS)
 		std::cout.precision(15);
 		std::cout<<"CASE IV: atan(u33, -sqrt(1-u33^3)) => ["<<phi2<<", "<<theta2<<", "<<psi2<<"]\n";
 #endif
 		// Compute maximal delta.
-		dist2 = std::max(std::max(fabs(phi2 - alpha_), fabs(theta2 - beta_)), fabs(psi2 - gamma_));
+		const double dist2 = std::max(std::max(fabs(phi2 - alpha_), fabs(theta2 - beta_)), fabs(psi2 - gamma_));
 
 		// Select best solution.
 		if (dist < dist2)

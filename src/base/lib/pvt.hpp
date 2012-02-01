@@ -102,7 +102,9 @@ double ppm(
 		const T VTriangle = amax*std::sqrt(2*delta*dmax/(amax*(dmax-amax)));
 		//const T VTriangle = std::sqrt(2*delta*amax*dmax/(dmax-amax));
 
+#if 0
 		std::cout << "VTriangle(" << l << ") = " << VTriangle << std::endl;
+#endif
 
 		const bool TriangularProfile = (VTriangle <= vmax);
 

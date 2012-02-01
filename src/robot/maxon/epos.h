@@ -200,7 +200,7 @@ public:
 	static bool isRemoteOperationEnabled(canopen::WORD status);
 
 	//! \brief Utility routine to pretty print device state
-	static const char * stateDescription(int state);
+	static const char * stateDescription(actual_state_t state);
 
 	//! \brief Change the state of the remote (CAN) operation, required for the PDO requests
 	void setRemoteOperation(bool enable);
