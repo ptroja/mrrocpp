@@ -28,17 +28,19 @@ public:
 	wgt_base(const QString & _widget_label, mrrocpp::ui::common::Interface & _interface, QWidget *parent = 0);
 	wgt_base(const QString & _widget_label, mrrocpp::ui::common::Interface & _interface, mrrocpp::ui::common::UiRobot *robo, QWidget *parent);
 
+	virtual ~wgt_base();
+
 	virtual void my_open(bool set_on_top = false);
+
 	void my_close();
 
 	QString widget_label;
+
 	QDockWidget* dwgt;
 
 	virtual void synchro_depended_init();
 	virtual void init_and_copy();
-	virtual void synchro_depended_widgets_disable(bool set_disabled)
-	{
-	}
+	virtual void synchro_depended_widgets_disable(bool set_disabled);
 
 	typedef void (wgt_base::*my_open_ptr)(bool set_on_top);
 
@@ -73,15 +75,11 @@ protected:
 	void init_and_copy_signal();
 
 public slots:
-	virtual void inc_move_left_button_clicked(int button)
-	{
-	}
-	virtual void inc_move_right_button_clicked(int button)
-	{
-	}
-	virtual void init_and_copy_slot()
-	{
-	}
+	virtual void inc_move_left_button_clicked(int button);
+
+	virtual void inc_move_right_button_clicked(int button);
+
+	virtual void init_and_copy_slot();
 
 private slots:
 	void synchro_depended_init_slot();

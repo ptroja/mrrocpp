@@ -43,6 +43,31 @@ wgt_base::wgt_base(const QString & _widget_label, mrrocpp::ui::common::Interface
 	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
 }
 
+wgt_base::~wgt_base()
+{
+	// Empty.
+}
+
+void wgt_base::synchro_depended_widgets_disable(bool set_disabled)
+{
+	// Empty.
+}
+
+void wgt_base::inc_move_left_button_clicked(int button)
+{
+	// Empty.
+}
+
+void wgt_base::inc_move_right_button_clicked(int button)
+{
+	// Empty.
+}
+
+void wgt_base::init_and_copy_slot()
+{
+	// Empty.
+}
+
 void wgt_base::my_open(bool set_on_top)
 {
 	if (!dwgt->isVisible() && interface.wgt_pc->dwgt != dwgt)
