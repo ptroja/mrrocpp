@@ -26,7 +26,7 @@ namespace common {
 namespace generator {
 
 tff_rubik_face_rotate::tff_rubik_face_rotate(common::task::task& _ecp_task, int step) :
-	common::generator::generator(_ecp_task), step_no(step)
+		common::generator::generator(_ecp_task), step_no(step)
 {
 }
 
@@ -92,7 +92,7 @@ bool tff_rubik_face_rotate::first_step()
 
 		the_robot->ecp_command.arm.pf_def.reciprocal_damping[5] = lib::TORQUE_RECIPROCAL_DAMPING;
 		the_robot->ecp_command.arm.pf_def.behaviour[5] = lib::CONTACT;
-		the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[5] = copysign(5.0, turn_angle);
+		the_robot->ecp_command.arm.pf_def.force_xyz_torque_xyz[5] = copysign(2.5, turn_angle);
 	}
 
 	return true;
@@ -141,13 +141,13 @@ bool tff_rubik_face_rotate::next_step()
 			current_frame.get_xyz_euler_zyz(xyz_eul_zyz);
 			double current_gamma = xyz_eul_zyz[5];
 			if (!range_change) {
-				if ((turn_angle < 0.0 && stored_gamma > current_gamma) || (turn_angle > 0.0 && stored_gamma
-						< current_gamma)) {
+				if ((turn_angle < 0.0 && stored_gamma > current_gamma)
+						|| (turn_angle > 0.0 && stored_gamma < current_gamma)) {
 					return false;
 				}
 			} else {
-				if ((turn_angle < 0.0 && stored_gamma < current_gamma) || (turn_angle > 0.0 && stored_gamma
-						> current_gamma)) {
+				if ((turn_angle < 0.0 && stored_gamma < current_gamma)
+						|| (turn_angle > 0.0 && stored_gamma > current_gamma)) {
 					range_change = false;
 				}
 			}
