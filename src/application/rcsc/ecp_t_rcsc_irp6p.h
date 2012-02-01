@@ -7,7 +7,6 @@
 #include "generator/ecp/force/ecp_g_tff_rubik_grab.h"
 #include "generator/ecp/force/ecp_g_tff_rubik_face_rotate.h"
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
-#include "subtask/ecp_st_go.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 
 namespace mrrocpp {
@@ -25,12 +24,10 @@ protected:
 	common::generator::tff_gripper_approach* gag;
 	common::generator::tff_rubik_face_rotate* rfrg;
 	common::generator::teach_in* tig;
-        common::generator::newsmooth* sg;
-        common::generator::newsmooth* sgaa;
+	common::generator::newsmooth* sg;
+	common::generator::newsmooth* sgaa;
 
 	common::generator::weight_measure* wmg;
-	//podzadania
-	common::sub_task::gripper_opening* go_st;
 
 public:
 	// KONSTRUKTORY

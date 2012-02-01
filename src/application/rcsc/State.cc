@@ -21,14 +21,12 @@
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 
-#include "subtask/ecp_mp_st_gripper_opening.h"
-
 namespace mrrocpp {
 namespace mp {
 namespace common {
 
-State::State()
-	: numArgument(0)
+State::State() :
+		numArgument(0)
 {
 }
 
@@ -46,7 +44,7 @@ const char* State::getStateID() const
 
 void State::setNumArgument(const std::string & numArgument)
 {
-	this->numArgument = boost::lexical_cast<int>(numArgument);
+	this->numArgument = boost::lexical_cast <int>(numArgument);
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -105,8 +103,6 @@ void State::setGeneratorType(const std::string & genType)
 		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE;
 	else if (genType == "ECP_GEN_TFF_GRIPPER_APPROACH")
 		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH;
-	else if (genType == "ECP_ST_GRIPPER_OPENING")
-		this->generatorType = ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING;
 	else if (genType == "ECP_GEN_BIAS_EDP_FORCE")
 		this->generatorType = ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE;
 	else if (genType == "ECP_ST_BIAS_EDP_FORCE")
@@ -168,8 +164,7 @@ const std::list <Transition> & State::getTransitions() const
 const char * State::returnNextStateID(StateHeap &sh)
 {
 	for (std::list <Transition>::iterator it = stateTransitions.begin(); it != stateTransitions.end(); ++it) {
-		if ((*it).getConditionResult())
-		{
+		if ((*it).getConditionResult()) {
 			const char * str = (*it).getTargetID(sh);
 			return str;
 		}
@@ -181,18 +176,20 @@ const char * State::returnNextStateID(StateHeap &sh)
 
 void State::showStateContent() const
 {
-	std::cout << id << std::endl << type << std::endl << robot << std::endl << generatorType << std::endl;//<<stringArgument<<std::endl;
+	std::cout << id << std::endl << type << std::endl << robot << std::endl << generatorType << std::endl; //<<stringArgument<<std::endl;
 	if (robotSet.is_initialized()) {
 		std::cout << "\nFirst set count: " << robotSet->firstSet.size() << " = ";
-		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->firstSet) {
-			std::cout << name << "; ";
-		}
+		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->firstSet)
+				{
+					std::cout << name << "; ";
+				}
 		std::cout << std::endl;
 
 		std::cout << "\nSecond set count: " << robotSet->secondSet.size() << " = ";
-		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->secondSet) {
-			std::cout << name << "; ";
-		}
+		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->secondSet)
+				{
+					std::cout << name << "; ";
+				}
 		std::cout << std::endl;
 	}
 	std::cout << "Transitions count: " << stateTransitions.size() << std::endl;
@@ -204,5 +201,4 @@ void State::showStateContent() const
 } // namespace common
 } // namespace mp
 } // namespace mrrocpp
-
 

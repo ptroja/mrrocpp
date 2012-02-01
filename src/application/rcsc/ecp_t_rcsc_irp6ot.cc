@@ -21,7 +21,7 @@
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
-#include "subtask/ecp_mp_st_gripper_opening.h"
+
 /*
  #include "application/servovision/ecp_mp_g_single_visual_servo_manager.h"
 
@@ -78,8 +78,6 @@ rcsc::rcsc(lib::configurator &_config) :
 		 */
 	}
 
-	go_st = new common::sub_task::gripper_opening(*this);
-
 	// utworzenie podzadan
 	{
 		common::sub_task::sub_task* ecpst;
@@ -108,7 +106,6 @@ rcsc::~rcsc()
 	delete sg;
 	delete sgaa;
 	delete wmg;
-	delete go_st;
 }
 
 void rcsc::mp_2_ecp_next_state_string_handler(void)
@@ -173,21 +170,6 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 				break;
 		}
 		rfrg->Move();
-
-	} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
-		switch ((ecp_mp::task::RCSC_GRIPPER_OP) mp_command.ecp_next_state.variant)
-		{
-			case ecp_mp::task::RCSC_GO_VAR_1:
-				go_st->configure(0.002, 1000);
-				go_st->execute();
-				break;
-			case ecp_mp::task::RCSC_GO_VAR_2:
-				go_st->configure(0.02, 1000);
-				go_st->execute();
-				break;
-			default:
-				break;
-		}
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 		std::string path(mrrocpp_network_path);
