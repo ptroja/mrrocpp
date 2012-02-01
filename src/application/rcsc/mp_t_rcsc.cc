@@ -99,7 +99,7 @@ void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie s
 			{ common::CL_0, common::CL_0, common::CL_180, common::CL_0, common::CL_180, common::CL_0 };
 
 	for (int k = 0; k < 6; k++) {
-		face_turn_op(common::CCL_90);
+		face_turn_op(common::CL_0);
 
 		//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "oglo~dam kolory na s~ciance", 0, lib::festival::ROBOT_NAME);
 
