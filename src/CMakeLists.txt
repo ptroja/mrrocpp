@@ -44,7 +44,6 @@ if (UBUNTU32BIT)
 
 	# Boost is provided by mrlib repository
 	set(BOOST_ROOT "${MRLIB}")
-	find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
 
 	# FIXME: define libxml2 libraries to use
 	find_library(LIBXML2_LIBRARY xml2 "${MRLIB}/lib")
@@ -115,20 +114,24 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter -Wno-sign-compare -Werror=return-type")
 endif(CMAKE_COMPILER_IS_GNUCXX)	
 
-# Enable C++0x extensions
-if(CMAKE_COMPILER_IS_GNUCXX)
-    # TODO: check against differrent Boost versions
-    if(${Boost_VERSION} LESS 104601)
-        message(STATUS "Applying C++0x Boost configuration fix")
-	    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_COMPILER_CONFIG=\"\\\"gcc-boost-c++0x.hpp\\\"\"")
-    endif(${Boost_VERSION} LESS 104601)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-endif(CMAKE_COMPILER_IS_GNUCXX)
-
 # Boost is a common requirements for all the platforms
 find_package(Boost 1.41 COMPONENTS thread serialization filesystem system date_time)
 
+# Enable C++0x extensions
+if(CMAKE_COMPILER_IS_GNUCXX)
+    # TODO: check against differrent Boost versions
+    if("${Boost_VERSION}" LESS "104601")
+        message(STATUS "Applying C++0x Boost configuration fix")
+	   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBOOST_COMPILER_CONFIG=\"\\\"gcc-boost-c++0x.hpp\\\"\"")
+    else("${Boost_VERSION}" LESS "104601")
+        message(STATUS "C++0x Boost configuration fix not required")
+    endif("${Boost_VERSION}" LESS "104601")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+endif(CMAKE_COMPILER_IS_GNUCXX)
+
 include(FindComedi)
+include(FindXSD)
+include(FindXerces)
 
 # Make sure the compiler can find include files
 include_directories (${MRROCPP_SOURCE_DIR}/src) 

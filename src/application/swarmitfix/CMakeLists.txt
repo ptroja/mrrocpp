@@ -1,6 +1,3 @@
-include(FindXSD)
-include(FindXerces)
-
 if(XSD_FOUND AND XERCES_FOUND)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/../swarmitfix_plan) # for the "plan.hxx"

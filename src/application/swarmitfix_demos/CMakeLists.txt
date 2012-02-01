@@ -35,17 +35,20 @@ add_executable(mp_agent1_demo
 )
 target_link_libraries(mp_agent1_demo mp)
 
+if(XSD_FOUND AND XERCES_FOUND)
+
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/../swarmitfix_plan) # for the "plan.hxx"
 
 add_executable(mp_single_agent_plan
 	mp_t_demo_base.cc
 	mp_t_single_agent_plan.cc
 )
+
 target_link_libraries(mp_single_agent_plan mp plan)
 
+install(TARGETS mp_single_agent_plan DESTINATION bin)
 
-
-
+endif(XSD_FOUND AND XERCES_FOUND)
 
 ## SMB *transparent* process. 
 add_executable(ecp_smb_transparent
@@ -89,5 +92,4 @@ mp_smb_test
 mp_sbench_test
 mp_smb_powered_from_bench_test
 mp_agent1_demo
-mp_single_agent_plan
 DESTINATION bin)

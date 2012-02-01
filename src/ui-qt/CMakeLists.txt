@@ -66,7 +66,6 @@ SET(GUI_CXX_SRCS
     base/ui_ecp_dialogs/wgt_choose_option.cpp
     base/ui_ecp_dialogs/wgt_teaching.cpp
     base/ui_ecp_dialogs/wgt_swarm.cpp
-    base/ui_ecp_dialogs/wgt_plan.cpp
     base/ui_ecp_dialogs/xmlsyntaxhighlighter.cpp
    	base/menu_bar.cpp
 	base/allrobots.cpp
@@ -161,7 +160,6 @@ SET(GUI_MOC_SRCS
 	base/wgt_robot_process_control.h
     base/ui_ecp_dialogs/wgt_yes_no.h
     base/ui_ecp_dialogs/wgt_swarm.h
-    base/ui_ecp_dialogs/wgt_plan.h
     base/ui_ecp_dialogs/wgt_message.h
     base/ui_ecp_dialogs/wgt_input_integer.h
     base/ui_ecp_dialogs/wgt_input_double.h
@@ -239,7 +237,6 @@ SET(GUI_UI
     base/wgt_robot_process_control.ui
     base/ui_ecp_dialogs/wgt_yes_no.ui
     base/ui_ecp_dialogs/wgt_swarm.ui
-    base/ui_ecp_dialogs/wgt_plan.ui   
     base/ui_ecp_dialogs/wgt_message.ui
     base/ui_ecp_dialogs/wgt_input_integer.ui
     base/ui_ecp_dialogs/wgt_input_double.ui
@@ -282,6 +279,21 @@ SET(GUI_UI
 endif(ROBOTS_012)
 
 
+if(XSD_FOUND AND XERCES_FOUND)
+SET(GUI_CXX_SRCS
+    ${GUI_CXX_SRCS}
+    base/ui_ecp_dialogs/wgt_plan.cpp
+)
+SET(GUI_MOC_SRCS
+    ${GUI_MOC_SRCS}
+    base/ui_ecp_dialogs/wgt_plan.h
+)
+SET(GUI_UI
+    ${GUI_UI}
+    base/ui_ecp_dialogs/wgt_plan.ui   
+)
+endif(XSD_FOUND AND XERCES_FOUND)
+
 # Generate UI include files
 QT4_WRAP_UI(GUI_CXX_SRCS ${GUI_UI})
 
@@ -298,8 +310,11 @@ TARGET_LINK_LIBRARIES(
 	${QT_LIBRARIES}
 	${COMMON_LIBRARIES}
     ${Boost_REGEX_LIBRARY}
-    plan    
 )
+
+if(XSD_FOUND AND XERCES_FOUND)
+TARGET_LINK_LIBRARIES(ui-qt plan)
+endif(XSD_FOUND AND XERCES_FOUND)
 
 install(
   TARGETS ui-qt
