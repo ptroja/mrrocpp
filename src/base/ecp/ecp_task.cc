@@ -30,7 +30,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-task_base::task_base(lib::configurator &_config, boost::shared_ptr<robot::ecp_robot_base> & robot_ref) :
+task_base::task_base(lib::configurator &_config, boost::shared_ptr <robot::ecp_robot_base> & robot_ref) :
 		ecp_mp::task::task(_config),
 		ecp_m_robot(robot_ref),
 		MP(lib::MP_SECTION),
@@ -52,7 +52,7 @@ void task_base::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 
-		subtasks_conditional_execution();
+		subtasks_and_generators_dispather();
 
 		mp_2_ecp_next_state_string_handler();
 
@@ -134,8 +134,16 @@ void task_base::termination_notice(void)
 	}
 }
 
-void task_base::subtasks_conditional_execution()
+void task_base::subtasks_and_generators_dispather()
 {
+
+	BOOST_FOREACH(const generator_pair_t & generator_node, generator_m)
+			{
+				if (mp_2_ecp_next_state_string == generator_node.first) {
+					generator_node.second->conditional_execution();
+				}
+			}
+
 	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtask_m)
 			{
 				if (mp_2_ecp_next_state_string == subtask_node.first) {

@@ -30,6 +30,10 @@ namespace sub_task {
 class sub_task_base;
 }
 
+namespace generator {
+class generator_base;
+}
+
 namespace task {
 
 /**
@@ -45,6 +49,20 @@ typedef std::map <std::string, sub_task::sub_task_base *> subtasks_t;
  * @ingroup ecp
  */
 typedef subtasks_t::value_type subtask_pair_t;
+
+/**
+ * @brief Container type for storing ecp_generator objects.
+ *
+ * @ingroup ecp
+ */
+typedef std::map <std::string, generator::generator_base *> generators_t;
+
+/**
+ * @brief Type for Items from generators_t container.
+ *
+ * @ingroup ecp
+ */
+typedef generators_t::value_type generator_pair_t;
 
 /*!
  * @brief Base class of all ecp tasks
@@ -84,7 +102,7 @@ protected:
 	typedef lib::MP_COMMAND_PACKAGE mp_command_t;
 
 public:
-	const boost::shared_ptr<robot::ecp_robot_base> & ecp_m_robot;
+	const boost::shared_ptr <robot::ecp_robot_base> & ecp_m_robot;
 
 public:
 	// TODO: following packages should be 'protected'
@@ -126,6 +144,11 @@ public:
 	subtasks_t subtask_m;
 
 	/**
+	 * @brief ECP generators container
+	 */
+	generators_t generator_m;
+
+	/**
 	 * @brief continuous coordination flag
 	 * influences generator Move method behavior
 	 */
@@ -141,7 +164,7 @@ public:
 	 * @brief Constructor
 	 * @param _config configurator object reference.
 	 */
-	task_base(lib::configurator &_config, boost::shared_ptr<robot::ecp_robot_base> & robot_ref);
+	task_base(lib::configurator &_config, boost::shared_ptr <robot::ecp_robot_base> & robot_ref);
 
 	/**
 	 * @brief Destructor
@@ -185,7 +208,7 @@ public:
 	 * @brief method called from main_task_algorithm to handle ecp subtasks execution
 	 * it can be reimplemented in inherited classes
 	 */
-	void subtasks_conditional_execution();
+	void subtasks_and_generators_dispather();
 
 public:
 	// TODO: what follows should be private method or accessible only to some friend classes
@@ -216,7 +239,7 @@ public:
 	 * @param _config configurator object reference.
 	 */
 	_task(lib::configurator &_config) :
-		task_base(_config, (boost::shared_ptr<robot::ecp_robot_base> &) ecp_m_robot)
+			task_base(_config, (boost::shared_ptr <robot::ecp_robot_base> &) ecp_m_robot)
 	{
 	}
 
@@ -240,7 +263,7 @@ public:
 	/**
 	 * @brief Associated robot object shared pointer
 	 */
-	boost::shared_ptr<ECP_ROBOT_T> ecp_m_robot;
+	boost::shared_ptr <ECP_ROBOT_T> ecp_m_robot;
 };
 
 typedef _task <robot::ecp_robot> task;

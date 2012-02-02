@@ -232,7 +232,7 @@ void fsautomat::main_task_algorithm(void)
 		std::cout << "po_next_state" << std::endl;
 		sr_ecp_msg->message("Order received");
 
-		subtasks_conditional_execution();
+		subtasks_and_generators_dispather();
 		std::cout << "NEXT STATE STRING OGOLNY        " << mp_2_ecp_next_state_string << std::endl;
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);
@@ -336,8 +336,7 @@ void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeN
 
 	xmlDocPtr doc = xmlParseFile(fileName);
 	xmlXIncludeProcess(doc);
-	if (doc == NULL)
-	{
+	if (doc == NULL) {
 		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
 	}
 
