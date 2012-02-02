@@ -36,9 +36,9 @@
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
 
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "ecp_t_fsautomat.h"
-#include "subtask/ecp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
@@ -171,17 +171,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											;
 										befg = new common::generator::bias_edp_force(*this);
-										xmlFree(argument);
-									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "bias_edp_force_st")) {
-
-										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											;
-										{
-											sub_task::sub_task* ecpst;
-											ecpst = new sub_task::bias_edp_force(*this);
-											subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
-										}
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_smooth_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);

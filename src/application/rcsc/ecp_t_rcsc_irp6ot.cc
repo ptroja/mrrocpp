@@ -12,10 +12,9 @@
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 
 #include "ecp_t_rcsc_irp6ot.h"
-#include "subtask/ecp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"
 
-#include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
@@ -75,13 +74,10 @@ rcsc::rcsc(lib::configurator &_config) :
 		 sm->configure();
 		 */
 	}
+	// utworzenie generatorow do uruchamiania dispatcherem
+	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new common::generator::bias_edp_force(*this);
 
 	// utworzenie podzadan
-	{
-		common::sub_task::sub_task* ecpst;
-		ecpst = new common::sub_task::bias_edp_force(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
-	}
 
 	{
 		common::sub_task::tff_nose_run* ecpst;

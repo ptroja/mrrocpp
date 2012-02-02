@@ -5,8 +5,8 @@
 #include "ecp_t_block_move.h"
 
 #include "subtask/ecp_st_smooth_file_from_mp.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
-#include "subtask/ecp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_g_bias_edp_force.h"
+
 //#include "subtask/ecp_mp_st_gripper_opening.h"
 
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
@@ -21,7 +21,7 @@ namespace task {
 
 // KONSTRUKTORY
 block_move::block_move(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::task(_config)
 {
 	if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
@@ -33,10 +33,15 @@ block_move::block_move(lib::configurator &_config) :
 	gtga = new common::generator::tff_gripper_approach(*this, 8);
 	//stgo = new common::sub_task::gripper_opening(*this);
 
+	// utworzenie generatorow do uruchamiania dispatcherem
+	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
+
 	// utworzenie podzadan
-	subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = new sub_task::bias_edp_force(*this);;
-	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
-	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] = new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
+
+	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] =
+			new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
+	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
+			new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
 
 	sr_ecp_msg->message("ecp BLOCK MOVE loaded");
 }

@@ -19,10 +19,8 @@
 #include "ecp_t_spring_contact.h"
 
 #include "ecp_st_spring_contact.h"
-#include "subtask/ecp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"
-
-#include "subtask/ecp_mp_st_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -42,14 +40,14 @@ spring_contact::spring_contact(lib::configurator &_config) :
 		// TODO: throw
 	}
 
+	// utworzenie generatorow do uruchamiania dispatcherem
+	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
+
 	// utworzenie podzadan
 	{
 		sub_task::sub_task* ecpst;
 		ecpst = new sub_task::spring_contact(*this);
 		subtask_m[ecp_mp::sub_task::SPRING_CONTACT] = ecpst;
-
-		ecpst = new sub_task::bias_edp_force(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 
 	{

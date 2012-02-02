@@ -19,10 +19,10 @@
 #include "ecp_t_edge_follow_mr.h"
 
 #include "ecp_st_edge_follow.h"
-#include "subtask/ecp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "subtask/ecp_st_tff_nose_run.h"
 
-#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -31,16 +31,19 @@ namespace task {
 
 // KONSTRUKTORY
 edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::task(_config)
 {
 	// the robot is choose depending on the section of configuration file sent as argv[4]
 	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw
 	}
+
+	// utworzenie generatorow do uruchamiania dispatcherem
+	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
 
 	// utworzenie podzadan
 	{
@@ -48,8 +51,6 @@ edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 		ecpst = new sub_task::edge_follow(*this);
 		subtask_m[ecp_mp::sub_task::EDGE_FOLLOW] = ecpst;
 
-		ecpst = new sub_task::bias_edp_force(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
 	}
 
 	{

@@ -17,7 +17,7 @@
 #include "robot/irp6_tfg/dp_tfg.h"
 
 #include "application/edge_follow/ecp_mp_st_edge_follow.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "subtask/ecp_mp_st_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_tfg.h"
 
@@ -108,7 +108,7 @@ void edge_follow_mr::main_task_algorithm(void)
 	 */
 
 	// sekwencja generator na wybranym manipulatorze
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", manipulator_name);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE, (int) 5, "", manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
