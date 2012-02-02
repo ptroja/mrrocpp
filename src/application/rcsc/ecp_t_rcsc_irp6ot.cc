@@ -46,8 +46,6 @@ rcsc::rcsc(lib::configurator &_config) :
 	sgaa = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	sgaa->set_debug(true);
 
-	wmg = new common::generator::weight_measure(*this, 1);
-
 	char fradia_config_section_name[] = { "[fradia_object_follower]" };
 	if (config.exists("fradia_task", fradia_config_section_name)) {
 		Eigen::Matrix <double, 3, 1> p1, p2;
@@ -82,6 +80,7 @@ rcsc::rcsc(lib::configurator &_config) :
 		generator_m[ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN] = ecp_gen;
 	}
 
+	generator_m[ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE] = new common::generator::weight_measure(*this, 1);
 	// utworzenie podzadan
 
 	sr_ecp_msg->message("ecp loaded");
@@ -98,16 +97,12 @@ rcsc::~rcsc()
 	//	delete befg;
 	delete sg;
 	delete sgaa;
-	delete wmg;
 }
 
 void rcsc::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
-
-		wmg->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
 		gt->Move();
 
