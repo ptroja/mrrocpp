@@ -13,4 +13,4 @@ add_library(ecp_mp_generators
 
 target_link_libraries(ecp_generators_force ecp_mp_generators ecp_mp)
 
-install(TARGETS ecp_generators_force DESTINATION lib)
+install(TARGETS ecp_generators_force ecp_mp_generators DESTINATION lib)
