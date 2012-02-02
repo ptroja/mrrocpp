@@ -22,7 +22,6 @@
 
 //#include "../ecp_mp_g_visual_servo_tester.h"
 
-#include "../edge_follow/ecp_st_edge_follow.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_g_tff_nose_run.h"
 
@@ -68,12 +67,6 @@ mm_test::mm_test(lib::configurator &_config) :
 	}
 	/***/
 	// utworzenie podzadan
-	{
-		sub_task::sub_task* ecpst;
-		ecpst = new sub_task::edge_follow(*this);
-		subtask_m[ecp_mp::sub_task::EDGE_FOLLOW] = ecpst;
-
-	}
 
 	sr_ecp_msg->message("ecp edge_follow_MR loaded");
 	/***/

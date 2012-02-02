@@ -18,9 +18,9 @@
 
 #include "ecp_t_edge_follow_mr.h"
 
-#include "ecp_st_edge_follow.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_g_tff_nose_run.h"
+#include "ecp_g_edge_follow.h"
 
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 
@@ -51,12 +51,9 @@ edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 		generator_m[ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN] = ecp_gen;
 	}
 
+	generator_m[ecp_mp::generator::EDGE_FOLLOW] = new generator::y_edge_follow_force(*this, 8);
+
 	// utworzenie podzadan
-	{
-		sub_task::sub_task* ecpst;
-		ecpst = new sub_task::edge_follow(*this);
-		subtask_m[ecp_mp::sub_task::EDGE_FOLLOW] = ecpst;
-	}
 
 	sr_ecp_msg->message("ecp edge_follow_MR loaded");
 }

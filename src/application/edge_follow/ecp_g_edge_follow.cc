@@ -15,7 +15,7 @@
 
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
-#include "application/edge_follow/ecp_g_edge_follow.h"
+#include "ecp_g_edge_follow.h"
 
 namespace mrrocpp {
 namespace ecp {

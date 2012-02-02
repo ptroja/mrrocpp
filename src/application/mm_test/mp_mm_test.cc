@@ -16,7 +16,6 @@
 
 #include "robot/irp6_tfg/dp_tfg.h"
 
-#include "application/edge_follow/ecp_mp_st_edge_follow.h"
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_tfg.h"

@@ -16,7 +16,7 @@
 
 #include "robot/irp6_tfg/dp_tfg.h"
 
-#include "application/edge_follow/ecp_mp_st_edge_follow.h"
+#include "ecp_mp_g_edge_follow.h"
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_tfg.h"
@@ -116,7 +116,7 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
-	set_next_ecp_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", manipulator_name);
+	set_next_ecp_state(ecp_mp::generator::EDGE_FOLLOW, (int) 0, "", manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 

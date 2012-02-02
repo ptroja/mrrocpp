@@ -1,7 +1,6 @@
 add_executable(ecp_edge_follow_mr
 	ecp_g_edge_follow.cc
 	ecp_t_edge_follow_mr.cc
-	ecp_st_edge_follow.cc
 )
 
 target_link_libraries(ecp_edge_follow_mr ecp_robot)
