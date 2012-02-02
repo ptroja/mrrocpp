@@ -18,7 +18,7 @@
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
-#include "generator/ecp/force/ecp_g_tff_nose_run.h"
+#include "ecp_g_tff_nose_run.h"
 
 namespace mrrocpp {
 namespace ecp {
