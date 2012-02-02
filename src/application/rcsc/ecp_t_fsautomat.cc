@@ -39,7 +39,7 @@
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "ecp_t_fsautomat.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
-#include "subtask/ecp_st_tff_nose_run.h"
+
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
@@ -138,14 +138,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											nrg = new common::generator::tff_nose_run(*this, atoi((char *) argument));
-										xmlFree(argument);
-									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_nose_run_st")) {
-										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) "")) {
-											sub_task::tff_nose_run* ecpst;
-											ecpst = new sub_task::tff_nose_run(*this);
-											subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
-										}
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_gripper_approach_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);

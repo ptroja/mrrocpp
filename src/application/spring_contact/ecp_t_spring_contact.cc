@@ -20,7 +20,7 @@
 
 #include "ecp_st_spring_contact.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
-#include "subtask/ecp_st_tff_nose_run.h"
+#include "generator/ecp/force/ecp_g_tff_nose_run.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -43,19 +43,18 @@ spring_contact::spring_contact(lib::configurator &_config) :
 	// utworzenie generatorow do uruchamiania dispatcherem
 	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
 
+	{
+		generator::tff_nose_run *ecp_gen = new generator::tff_nose_run(*this, 8);
+		ecp_gen->configure_pulse_check(true);
+		ecp_gen->configure_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION);
+		generator_m[ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN] = ecp_gen;
+	}
+
 	// utworzenie podzadan
 	{
 		sub_task::sub_task* ecpst;
 		ecpst = new sub_task::spring_contact(*this);
 		subtask_m[ecp_mp::sub_task::SPRING_CONTACT] = ecpst;
-	}
-
-	{
-		sub_task::tff_nose_run* ecpst;
-		ecpst = new sub_task::tff_nose_run(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
-		ecpst->nrg->configure_pulse_check(true);
-		ecpst->nrg->configure_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION);
 	}
 
 	sr_ecp_msg->message("ecp spring_contact loaded");

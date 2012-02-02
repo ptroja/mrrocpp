@@ -24,7 +24,7 @@
 
 #include "../edge_follow/ecp_st_edge_follow.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
-#include "subtask/ecp_st_tff_nose_run.h"
+#include "generator/ecp/force/ecp_g_tff_nose_run.h"
 
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 
@@ -61,7 +61,11 @@ mm_test::mm_test(lib::configurator &_config) :
 
 	// utworzenie generatorow do uruchamiania dispatcherem
 	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
-
+	{
+		generator::tff_nose_run *ecp_gen = new generator::tff_nose_run(*this, 8);
+		ecp_gen->configure_pulse_check(true);
+		generator_m[ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN] = ecp_gen;
+	}
 	/***/
 	// utworzenie podzadan
 	{
@@ -69,13 +73,6 @@ mm_test::mm_test(lib::configurator &_config) :
 		ecpst = new sub_task::edge_follow(*this);
 		subtask_m[ecp_mp::sub_task::EDGE_FOLLOW] = ecpst;
 
-	}
-
-	{
-		sub_task::tff_nose_run* ecpst;
-		ecpst = new sub_task::tff_nose_run(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
-		ecpst->nrg->configure_pulse_check(true);
 	}
 
 	sr_ecp_msg->message("ecp edge_follow_MR loaded");
