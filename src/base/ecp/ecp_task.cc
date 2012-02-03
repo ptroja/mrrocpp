@@ -45,16 +45,25 @@ task_base::task_base(lib::configurator &_config, boost::shared_ptr <robot::ecp_r
 
 void task_base::register_generator(generator::generator_base* _gen)
 {
-	// dodac sprawdzanei czy etykieta sie nie powtarza
-	subtask_generator_m[_gen->subtask_generator_name] = _gen;
-	generator_m[_gen->subtask_generator_name] = _gen;
+
+	if (_gen->subtask_generator_name != EMPTY_SUBTASK_GENERATOR_NAME) {
+		// dodac sprawdzanei czy etykieta sie nie powtarza
+		subtask_generator_m[_gen->subtask_generator_name] = _gen;
+		generator_m[_gen->subtask_generator_name] = _gen;
+	} else {
+		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for generator");
+	}
 }
 
 void task_base::register_subtask(sub_task::sub_task_base* _st)
 {
-	// dodac sprawdzanei czy etykieta sie nie powtarza
-	subtask_generator_m[_st->subtask_generator_name] = _st;
-	subtask_m[_st->subtask_generator_name] = _st;
+	if (_st->subtask_generator_name != EMPTY_SUBTASK_GENERATOR_NAME) {
+		// dodac sprawdzanei czy etykieta sie nie powtarza
+		subtask_generator_m[_st->subtask_generator_name] = _st;
+		subtask_m[_st->subtask_generator_name] = _st;
+	} else {
+		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for subtask");
+	}
 }
 
 void task_base::main_task_algorithm(void)
@@ -151,7 +160,16 @@ void task_base::termination_notice(void)
 void task_base::subtasks_and_generators_dispather()
 {
 	bool command_recognized = 0;
-	BOOST_FOREACH(const generator_pair_t & generator_node, generator_m)
+// TEMPORARILY DISABLED
+	/*
+	 BOOST_FOREACH(const subtask_generator_pair_t & subtask_generator_node, subtask_generator_m)
+	 {
+	 if ((mp_2_ecp_next_state_string == subtask_generator_node.first) && (!command_recognized)) {
+	 command_recognized++;
+	 subtask_generator_node.second->conditional_execution();
+	 }
+	 }
+	 */BOOST_FOREACH(const generator_pair_t & generator_node, generator_m)
 			{
 				if ((mp_2_ecp_next_state_string == generator_node.first) && (!command_recognized)) {
 					command_recognized++;

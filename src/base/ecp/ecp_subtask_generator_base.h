@@ -33,7 +33,7 @@ public:
 	/**
 	 * @brief Unique class name
 	 */
-	const lib::ecp_subtask_generator_name_t subtask_generator_name; // by Y - nazwa robota (track, postument etc.)
+	lib::ecp_subtask_generator_name_t subtask_generator_name; // by Y - nazwa robota (track, postument etc.)
 
 	subtask_generator_base() :
 			subtask_generator_name(EMPTY_SUBTASK_GENERATOR_NAME)
@@ -45,11 +45,6 @@ public:
 	 * @brief executed by disptecher
 	 */
 	virtual void conditional_execution() = 0;
-
-	/**
-	 * @brief registers unique class name
-	 */
-	virtual void register_name() = 0;
 
 };
 

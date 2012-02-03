@@ -48,12 +48,6 @@ public:
 			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), subtask_generator_base(), ecp_t(_ecp_task)
 	{
 	}
-
-	virtual void register_name()
-	{
-
-	}
-
 };
 
 /*!

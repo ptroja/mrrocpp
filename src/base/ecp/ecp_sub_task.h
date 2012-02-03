@@ -40,10 +40,6 @@ public:
 	{
 	}
 
-	virtual void register_name()
-	{
-
-	}
 };
 
 template <typename ECP_ROBOT_T = robot::ecp_robot>
