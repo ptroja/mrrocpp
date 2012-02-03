@@ -12,6 +12,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "base/ecp_mp/ecp_mp_generator.h"
+#include "ecp_subtask_generator_base.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_task.h"
 
@@ -27,7 +28,7 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp
  */
-class generator_base : public ecp_mp::generator::generator
+class generator_base : public ecp_mp::generator::generator, public subtask_generator_base
 {
 
 protected:
@@ -44,14 +45,10 @@ protected:
 public:
 
 	generator_base(task_t & _ecp_task) :
-			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), ecp_t(_ecp_task)
+			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), subtask_generator_base(), ecp_t(_ecp_task)
 	{
 	}
 
-	/**
-	 * @brief executed by disptecher
-	 */
-	virtual void conditional_execution() = 0;
 };
 
 /*!
