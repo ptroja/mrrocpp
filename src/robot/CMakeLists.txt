@@ -31,12 +31,7 @@ add_subdirectory (irp6_tfg)
 add_subdirectory (irp6ot_m)
 add_subdirectory (irp6p_m)
 add_subdirectory (hi_moxa)
-<<<<<<< HEAD
-endif(NOT UBUNTU32BIT)
-endif(ROBOTS_012)
-=======
 endif(ROBOTS_012 AND NOT UBUNTU32BIT)
->>>>>>> wut-rcprg/master
 
 add_library(mp_robots
 	../base/mp/mp_robot.cc
