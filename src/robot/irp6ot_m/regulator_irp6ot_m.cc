@@ -1469,8 +1469,8 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 	// Przyrost calki uchybu, czyli cuhyb polozenia
 //	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new)
 //			- 0.980 * (step_old_pulse - position_increment_old);
-	delta_eint = delta_eint_old + 1.010 * (step_new_pulse - position_increment_new)
-			- 0.990 * (step_old_pulse - position_increment_old);
+	delta_eint = delta_eint_old + 1.005 * (step_new_pulse - position_increment_new)
+			- 0.995 * (step_old_pulse - position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
