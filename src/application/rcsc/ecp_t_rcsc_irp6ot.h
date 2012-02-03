@@ -42,8 +42,7 @@ protected:
 	common::generator::newsmooth* sg;
 	common::generator::newsmooth* sgaa;
 
-	common::generator::weight_measure* wmg;
-	/*
+		/*
 	 shared_ptr <single_visual_servo_manager> sm;
 	 shared_ptr <visual_servo> vs;
 	 shared_ptr <visual_servo_regulator> reg;

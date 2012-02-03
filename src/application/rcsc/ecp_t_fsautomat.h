@@ -46,7 +46,7 @@ protected:
 	common::generator::bias_edp_force* befg;
 	common::generator::weight_measure* wmg;
 
-	bang_trajectories_map * trjMap;
+	bang_trajectories_map trjMap;
 	int axes_num;
 
 	void load_trajectory_from_xml(std::pair <std::vector <ecp_mp::common::trajectory_pose::bang_bang_trajectory_pose *>,

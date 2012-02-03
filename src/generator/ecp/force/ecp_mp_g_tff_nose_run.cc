@@ -1,16 +1,16 @@
 /*!
  * @file
- * @brief File contains bias_edp_force definition
+ * @brief File contains ecp mp tff nose run definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup subtasks
+ * @ingroup generators
  */
 
-#include "ecp_mp_st_tff_nose_run.h"
+#include "ecp_mp_g_tff_nose_run.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace sub_task {
+namespace generator {
 
 void behaviour_specification_data_type::set_compliance(bool x, bool y, bool z, bool ax, bool ay, bool az)
 {
@@ -61,6 +61,6 @@ behaviour_specification_data_type::behaviour_specification_data_type()
 	set_compliance(true, true, true, true, true, true);
 }
 
-} // namespace common
-} // namespace ecp
+} // namespace generator
+} // namespace ecp_mp
 } // namespace mrrocpp

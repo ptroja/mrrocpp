@@ -18,7 +18,7 @@
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
-#include "generator/ecp/force/ecp_g_tff_nose_run.h"
+#include "ecp_g_tff_nose_run.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -36,6 +36,26 @@ tff_nose_run::tff_nose_run(common::task::task& _ecp_task, int step) :
 	configure_reciprocal_damping(lib::FORCE_RECIPROCAL_DAMPING, lib::FORCE_RECIPROCAL_DAMPING, lib::FORCE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING, lib::TORQUE_RECIPROCAL_DAMPING);
 	configure_inertia(lib::FORCE_INERTIA, lib::FORCE_INERTIA, lib::FORCE_INERTIA, lib::TORQUE_INERTIA, lib::TORQUE_INERTIA, lib::TORQUE_INERTIA);
 
+}
+
+void tff_nose_run::conditional_execution()
+{
+	ecp_mp::generator::behaviour_specification_data_type beh;
+
+	switch ((ecp_mp::generator::communication_type) ecp_t.mp_command.ecp_next_state.variant)
+	{
+		case ecp_mp::generator::behaviour_specification:
+			ecp_t.mp_command.ecp_next_state.sg_buf.get(beh);
+			break;
+		case ecp_mp::generator::no_data:
+			break;
+		default:
+			break;
+	}
+
+	configure_behaviour(beh.behaviour[0], beh.behaviour[1], beh.behaviour[2], beh.behaviour[3], beh.behaviour[4], beh.behaviour[5]);
+
+	Move();
 }
 
 void tff_nose_run::set_force_meassure(bool fm)

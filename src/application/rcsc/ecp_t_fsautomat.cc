@@ -36,10 +36,10 @@
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
 
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "ecp_t_fsautomat.h"
-#include "subtask/ecp_st_bias_edp_force.h"
-#include "subtask/ecp_st_tff_nose_run.h"
+#include "generator/ecp/force/ecp_g_bias_edp_force.h"
+
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
@@ -139,14 +139,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											nrg = new common::generator::tff_nose_run(*this, atoi((char *) argument));
 										xmlFree(argument);
-									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_nose_run_st")) {
-										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) "")) {
-											sub_task::tff_nose_run* ecpst;
-											ecpst = new sub_task::tff_nose_run(*this);
-											subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
-										}
-										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_gripper_approach_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
@@ -171,17 +163,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											;
 										befg = new common::generator::bias_edp_force(*this);
-										xmlFree(argument);
-									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "bias_edp_force_st")) {
-
-										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											;
-										{
-											sub_task::sub_task* ecpst;
-											ecpst = new sub_task::bias_edp_force(*this);
-											subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
-										}
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_smooth_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
@@ -222,7 +203,7 @@ void fsautomat::main_task_algorithm(void)
 		std::cout << "trajectorymap" << std::endl;
 		std::cout << "!!!" << std::endl;
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
-		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
+		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap.size());
 	}
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
@@ -232,7 +213,7 @@ void fsautomat::main_task_algorithm(void)
 		std::cout << "po_next_state" << std::endl;
 		sr_ecp_msg->message("Order received");
 
-		subtasks_conditional_execution();
+		subtasks_and_generators_dispather();
 		std::cout << "NEXT STATE STRING OGOLNY        " << mp_2_ecp_next_state_string << std::endl;
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);
@@ -250,7 +231,7 @@ void fsautomat::main_task_algorithm(void)
 					std::cout << "armtype in fsautomat: " << (char*) mp_command.ecp_next_state.sg_buf.data << std::endl;
 					std::cout << "NAZWASTANUUUUUUUUUUUU: " << (char*) mp_command.ecp_next_state.sg_buf.data
 							<< std::endl;
-					load_trajectory_from_xml((*trjMap)[(std::string) (char*) mp_command.ecp_next_state.sg_buf.data]);
+					load_trajectory_from_xml(trjMap[(std::string) (char*) mp_command.ecp_next_state.sg_buf.data]);
 				} else {
 					std::string path(mrrocpp_network_path);
 					path += fileName;
@@ -336,8 +317,7 @@ void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeN
 
 	xmlDocPtr doc = xmlParseFile(fileName);
 	xmlXIncludeProcess(doc);
-	if (doc == NULL)
-	{
+	if (doc == NULL) {
 		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
 	}
 

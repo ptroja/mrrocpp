@@ -21,8 +21,8 @@
 #include "robot/festival/ecp_mp_t_festival.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
-#include "subtask/ecp_mp_st_tff_nose_run.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_constant_velocity.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
@@ -99,7 +99,7 @@ void rubik_cube_solver::identify_colors() //DO WIZJI (przekladanie i ogladanie s
 			{ common::CL_0, common::CL_0, common::CL_180, common::CL_0, common::CL_180, common::CL_0 };
 
 	for (int k = 0; k < 6; k++) {
-		face_turn_op(common::CCL_90);
+		face_turn_op(common::CL_0);
 
 		//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "oglo~dam kolory na s~ciance", 0, lib::festival::ROBOT_NAME);
 
@@ -469,7 +469,7 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	configure_edp_force_sensor(true, true);
 
 	// uruchomienie tff_nose run dla traka z podatnoscia w jednej osi
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, ecp_mp::sub_task::behaviour_specification_data_type(false, true, false, false, false, false), lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) ecp_mp::generator::behaviour_specification, ecp_mp::generator::behaviour_specification_data_type(false, true, false, false, false, false), lib::irp6p_m::ROBOT_NAME);
 
 	// uruchomienie zaciskania chwytaka traka do pozycji zadanej odpowiadajacej zacisnieciu na kostce z pol centymentrowym luzem
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.068, lib::irp6p_tfg::ROBOT_NAME);
@@ -481,7 +481,7 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	send_end_motion_to_ecps(1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 	// uruchomienie tff_nose run dla traka z podatnoscia w dwoch osiach
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, ecp_mp::sub_task::behaviour_specification_data_type(true, true, false, false, false, false), lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) ecp_mp::generator::behaviour_specification, ecp_mp::generator::behaviour_specification_data_type(true, true, false, false, false, false), lib::irp6p_m::ROBOT_NAME);
 
 	// uruchomienie zaciskania chwytaka traka do pozycji zadanej odpowiadajacej calkowitemu zacisnieciu na kostce bez luzu
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.055, lib::irp6p_tfg::ROBOT_NAME);
@@ -608,7 +608,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	configure_edp_force_sensor(true, true);
 
 	// uruchomienie tff_nose run dla traka z podatnoscia w jednej osi
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, ecp_mp::sub_task::behaviour_specification_data_type(false, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) ecp_mp::generator::behaviour_specification, ecp_mp::generator::behaviour_specification_data_type(false, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
 
 	// uruchomienie zaciskania chwytaka traka do pozycji zadanej odpowiadajacej zacisnieciu na kostce z pol centymentrowym luzem
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.072, lib::irp6ot_tfg::ROBOT_NAME);
@@ -620,7 +620,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	send_end_motion_to_ecps(1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// uruchomienie tff_nose run dla traka z podatnoscia w dwoch osiach
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, ecp_mp::sub_task::behaviour_specification_data_type(true, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) ecp_mp::generator::behaviour_specification, ecp_mp::generator::behaviour_specification_data_type(true, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
 
 	// uruchomienie zaciskania chwytaka traka do pozycji zadanej odpowiadajacej calkowitemu zacisnieciu na kostce bez luzu
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.065, lib::irp6ot_tfg::ROBOT_NAME);
@@ -649,7 +649,7 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	// zacisniecie tracka na kostce
 
 	// uruchomienie tff_nose run dla traka z podatnoscia w dwoch osiach
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, ecp_mp::sub_task::behaviour_specification_data_type(true, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) ecp_mp::generator::behaviour_specification, ecp_mp::generator::behaviour_specification_data_type(true, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
 
 	// uruchomienie zaciskania chwytaka traka do pozycji zadanej odpowiadajacej calkowitemu zacisnieciu na kostce bez luzu
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.057, lib::irp6ot_tfg::ROBOT_NAME);
@@ -734,11 +734,11 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 void rubik_cube_solver::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 {
 	if (configure_track) {
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", lib::irp6ot_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE, 0, "", lib::irp6ot_m::ROBOT_NAME);
 	}
 
 	if (configure_postument) {
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE, 0, "", lib::irp6p_m::ROBOT_NAME);
 	}
 
 	if ((configure_track) && (!configure_postument)) {
@@ -770,7 +770,7 @@ void rubik_cube_solver::approach_op(int mode)
 	if (config.exists_and_true("irp6p_compliant")) {
 		// wlaczenie genrator tff_nose_run_generator w postumencie
 
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, 0, "", lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, 0, "", lib::irp6p_m::ROBOT_NAME);
 
 		// uruchomienie generatora empty_gen
 		wait_for_task_termination(true, 1, lib::irp6p_m::ROBOT_NAME.c_str());
@@ -781,7 +781,7 @@ void rubik_cube_solver::approach_op(int mode)
 		sr_ecp_msg->message("trak podatny");
 		// wlaczenie genrator tff_nose_run_generator w tracku
 
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, ecp_mp::sub_task::behaviour_specification_data_type(true, true, true, true, true, true), lib::irp6ot_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) ecp_mp::generator::behaviour_specification, ecp_mp::generator::behaviour_specification_data_type(true, true, true, true, true, true), lib::irp6ot_m::ROBOT_NAME);
 
 		// uruchomienie generatora empty_gen
 		wait_for_task_termination(true, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
@@ -821,7 +821,7 @@ void rubik_cube_solver::approach_op(int mode)
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	//podnoszenie o 2 milimetry nad kostke
 	// uruchomienie tff_nose run dla traka z podatnoscia w jednej osi
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, ecp_mp::sub_task::behaviour_specification_data_type(false, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) ecp_mp::generator::behaviour_specification, ecp_mp::generator::behaviour_specification_data_type(false, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
 
 	// uruchomienie zaciskania chwytaka traka do pozycji zadanej odpowiadajacej zacisnieciu na kostce z pol centymentrowym luzem
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.068, lib::irp6ot_tfg::ROBOT_NAME);
@@ -837,7 +837,7 @@ void rubik_cube_solver::approach_op(int mode)
 	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// uruchomienie tff_nose run dla traka z podatnoscia w dwoch osiach
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) ecp_mp::sub_task::behaviour_specification, ecp_mp::sub_task::behaviour_specification_data_type(true, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) ecp_mp::generator::behaviour_specification, ecp_mp::generator::behaviour_specification_data_type(true, true, false, false, false, false), lib::irp6ot_m::ROBOT_NAME);
 
 	// uruchomienie zaciskania chwytaka traka do pozycji zadanej odpowiadajacej calkowitemu zacisnieciu na kostce bez luzu
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.055, lib::irp6ot_tfg::ROBOT_NAME);

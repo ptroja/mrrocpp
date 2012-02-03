@@ -1,26 +1,23 @@
-#if !defined(_ECP_MP_ST_BIAS_EDP_FORCE_H)
-#define _ECP_MP_ST_BIAS_EDP_FORCE_H
+#if !defined(_ECP_MP_ST_H)
+#define _ECP_MP_ST_TFF_H
 
 /*!
  * @file
- * @brief File contains ECP_ST_BIAS_EDP_FORCE definition
+ * @brief File contains ECP_ST_TFF_NOSE_RUN definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup subtasks
  */
 
+#include "../base/lib/com_buf.h"
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace sub_task {
 
-/*!
- * @brief bias edp force ecp subtask label
- */
-const std::string ECP_ST_BIAS_EDP_FORCE = "ECP_ST_BIAS_EDP_FORCE";
 
 } // namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp
-
 
 #endif

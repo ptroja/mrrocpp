@@ -14,7 +14,7 @@
 #include <cmath>
 
 // for MacOS compatibility, where isnan() is implemented as a function in the std:: namespace
-using std::isnan;
+// using std::isnan;
 
 #include "base/lib/com_buf.h"
 #include "robot/irp6ot_m/kinematic_model_irp6ot_with_wrist.h"

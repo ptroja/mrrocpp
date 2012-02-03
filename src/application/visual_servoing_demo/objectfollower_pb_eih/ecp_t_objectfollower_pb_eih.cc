@@ -45,22 +45,22 @@ ecp_t_objectfollower_pb_eih::ecp_t_objectfollower_pb_eih(mrrocpp::lib::configura
 		log_enabled = true;
 		log_dbg_enabled = true;
 
-		shared_ptr <position_constraint> cube(new cubic_constraint(config, config_section_name));
+		boost::shared_ptr <position_constraint> cube(new cubic_constraint(config, config_section_name));
 
 		if(config.exists_and_true("use_pid_regulator", config_section_name)){
 			sr_ecp_msg->message("Using PID regulator");
-			reg = shared_ptr <visual_servo_regulator> (new regulator_pid(config, config_section_name));
+			reg = boost::shared_ptr <visual_servo_regulator> (new regulator_pid(config, config_section_name));
 		} else {
 			sr_ecp_msg->message("Using P regulator");
-			reg = shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));
+			reg = boost::shared_ptr <visual_servo_regulator> (new regulator_p(config, config_section_name));
 		}
 
 		sr_ecp_msg->message("Creating DisCODe sensor");
 		boost::shared_ptr <discode_sensor> ds = boost::shared_ptr <discode_sensor>(new discode_sensor(config, config_section_name));
-		vs = shared_ptr <visual_servo> (new pb_eih_visual_servo(reg, ds, config_section_name, config));
+		vs = boost::shared_ptr <visual_servo> (new pb_eih_visual_servo(reg, ds, config_section_name, config));
 
 		log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 3\n");
-		sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
+		sm = boost::shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
 		log_dbg("ecp_t_objectfollower_pb::ecp_t_objectfollower_pb(): 4\n");
 		sm->add_position_constraint(cube);
 		log_dbg("ecp_t_objectfollower_pb: configuring visual_servo_manager\n");
