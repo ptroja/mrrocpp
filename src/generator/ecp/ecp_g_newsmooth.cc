@@ -751,7 +751,7 @@ bool newsmooth::optimize_energy_cost(std::vector<double> max_current_change, std
                 //pose_vector_iterator->v[j] += 0.01;
                 //pose_vector_iterator->a[j] += 0.005;
 
-                if (control[j] < 0)
+                if (control[j] < 0 && pose_vector_iterator->v[j] != 0.005 && pose_vector_iterator->a[j] != 0.005)
                 {
                     max_current_change_exceeded = true;
                 }
