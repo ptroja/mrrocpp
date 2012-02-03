@@ -27,8 +27,42 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp
  */
+class generator_base : public ecp_mp::generator::generator
+{
+
+protected:
+	/**
+	 * @brief ECP task object type
+	 */
+	typedef common::task::task_base task_t;
+
+	/**
+	 * @brief ECP task object reference
+	 */
+	task_t & ecp_t;
+
+public:
+
+	generator_base(task_t & _ecp_task) :
+			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), ecp_t(_ecp_task)
+	{
+	}
+
+	/**
+	 * @brief executed by disptecher
+	 */
+	virtual void conditional_execution() = 0;
+};
+
+/*!
+ * @brief Base class of all ecp generators (template)
+ * The generator both generates command and checks terminal condition
+ *
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ * @ingroup ecp
+ */
 template <typename ECP_ROBOT_T>
-class _generator : public ecp_mp::generator::generator
+class _generator : public generator_base
 {
 private:
 	/**
@@ -59,19 +93,9 @@ protected:
 	typedef ECP_ROBOT_T robot_t;
 
 	/**
-	 * @brief ECP task object type
-	 */
-	typedef common::task::task_base task_t;
-
-	/**
 	 * @brief ECP generator itself object type
 	 */
 	typedef _generator <ECP_ROBOT_T> generator_t;
-
-	/**
-	 * @brief ECP task object reference
-	 */
-	task_t & ecp_t;
 
 	/**
 	 * @brief communicates with EDP
@@ -82,6 +106,14 @@ protected:
 	}
 
 public:
+	/**
+	 * @brief executed by disptecher
+	 */
+	virtual void conditional_execution()
+	{
+		Move();
+	}
+
 	/**
 	 * @brief Main generator method to execute transition cycle
 	 */
@@ -152,9 +184,7 @@ public:
 	 * @param _ecp_task ecp task object reference.
 	 */
 	_generator(task_t & _ecp_task) :
-			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)),
-			ecp_t(_ecp_task),
-			the_robot(boost::shared_dynamic_cast <ECP_ROBOT_T>(ecp_t.ecp_m_robot))
+			generator_base(_ecp_task), the_robot(boost::shared_dynamic_cast <ECP_ROBOT_T>(ecp_t.ecp_m_robot))
 	{
 	}
 

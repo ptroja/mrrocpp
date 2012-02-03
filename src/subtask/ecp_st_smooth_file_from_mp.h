@@ -19,7 +19,7 @@ namespace sub_task {
 class sub_task_smooth_file_from_mp : public sub_task
 {
 private:
-	boost::shared_ptr<generator::newsmooth> sgen;
+	boost::shared_ptr <generator::newsmooth> sgen;
 	std::string path;
 	const bool detect_jerks;
 
@@ -33,6 +33,5 @@ public:
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
-
 
 #endif

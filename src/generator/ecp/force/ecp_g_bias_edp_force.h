@@ -9,6 +9,7 @@
  * @ingroup generators
  */
 
+#include "ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/ecp_g_teach_in.h"
 #include "base/lib/mrmath/mrmath.h"
 

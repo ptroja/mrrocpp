@@ -12,10 +12,9 @@
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 
 #include "ecp_t_rcsc_irp6ot.h"
-#include "subtask/ecp_st_bias_edp_force.h"
-#include "subtask/ecp_st_tff_nose_run.h"
+#include "generator/ecp/force/ecp_g_bias_edp_force.h"
+#include "generator/ecp/force/ecp_g_tff_nose_run.h"
 
-#include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
@@ -47,8 +46,6 @@ rcsc::rcsc(lib::configurator &_config) :
 	sgaa = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	sgaa->set_debug(true);
 
-	wmg = new common::generator::weight_measure(*this, 1);
-
 	char fradia_config_section_name[] = { "[fradia_object_follower]" };
 	if (config.exists("fradia_task", fradia_config_section_name)) {
 		Eigen::Matrix <double, 3, 1> p1, p2;
@@ -75,19 +72,16 @@ rcsc::rcsc(lib::configurator &_config) :
 		 sm->configure();
 		 */
 	}
+	// utworzenie generatorow do uruchamiania dispatcherem
+	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new common::generator::bias_edp_force(*this);
 
+	{
+		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
+		generator_m[ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN] = ecp_gen;
+	}
+
+	generator_m[ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE] = new common::generator::weight_measure(*this, 1);
 	// utworzenie podzadan
-	{
-		common::sub_task::sub_task* ecpst;
-		ecpst = new common::sub_task::bias_edp_force(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
-	}
-
-	{
-		common::sub_task::tff_nose_run* ecpst;
-		ecpst = new common::sub_task::tff_nose_run(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
-	}
 
 	sr_ecp_msg->message("ecp loaded");
 }
@@ -103,16 +97,12 @@ rcsc::~rcsc()
 	//	delete befg;
 	delete sg;
 	delete sgaa;
-	delete wmg;
 }
 
 void rcsc::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE) {
-
-		wmg->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
 		gt->Move();
 
