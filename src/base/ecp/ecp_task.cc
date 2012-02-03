@@ -43,6 +43,41 @@ task_base::task_base(lib::configurator &_config, boost::shared_ptr <robot::ecp_r
 	initialize_communication();
 }
 
+void task_base::register_generator(generator::generator_base* _gen)
+{
+	std::string gen_name = _gen->subtask_generator_name;
+	if (gen_name != EMPTY_SUBTASK_GENERATOR_NAME) {
+		if (subtask_generator_m.find(gen_name) == subtask_generator_m.end()) {
+			subtask_generator_m[gen_name] = _gen;
+			generator_m[gen_name] = _gen;
+		} else {
+			std::stringstream ss(std::stringstream::in | std::stringstream::out);
+			ss << "Generator name already registered: " << gen_name;
+			sr_ecp_msg->message(lib::FATAL_ERROR, ss.str().c_str());
+		}
+	} else {
+		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for generator");
+	}
+}
+
+void task_base::register_subtask(sub_task::sub_task_base* _st)
+{
+	std::string subtask_name = _st->subtask_generator_name;
+
+	if (subtask_name != EMPTY_SUBTASK_GENERATOR_NAME) {
+		if (subtask_generator_m.find(subtask_name) == subtask_generator_m.end()) {
+			subtask_generator_m[subtask_name] = _st;
+			subtask_m[subtask_name] = _st;
+		} else {
+			std::stringstream ss(std::stringstream::in | std::stringstream::out);
+			ss << "Subtask name already registered: " << subtask_name;
+			sr_ecp_msg->message(lib::FATAL_ERROR, ss.str().c_str());
+		}
+	} else {
+		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for subtask");
+	}
+}
+
 void task_base::main_task_algorithm(void)
 {
 	for (;;) {
@@ -137,21 +172,15 @@ void task_base::termination_notice(void)
 void task_base::subtasks_and_generators_dispather()
 {
 	bool command_recognized = 0;
-	BOOST_FOREACH(const generator_pair_t & generator_node, generator_m)
+
+	BOOST_FOREACH(const subtask_generator_pair_t & subtask_generator_node, subtask_generator_m)
 			{
-				if ((mp_2_ecp_next_state_string == generator_node.first) && (!command_recognized)) {
+				if ((mp_2_ecp_next_state_string == subtask_generator_node.first) && (!command_recognized)) {
 					command_recognized++;
-					generator_node.second->conditional_execution();
+					subtask_generator_node.second->conditional_execution();
 				}
 			}
 
-	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtask_m)
-			{
-				if ((mp_2_ecp_next_state_string == subtask_node.first) && (!command_recognized)) {
-					command_recognized++;
-					subtask_node.second->conditional_execution();
-				}
-			}
 	if (command_recognized == 0) {
 		//	sr_ecp_msg->message(lib::FATAL_ERROR, "ecp dispatcher failure (label not recognized)");
 	} else if (command_recognized > 1) {

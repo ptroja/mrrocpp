@@ -45,14 +45,12 @@ rcsc::rcsc(lib::configurator &_config) :
 	sgaa = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	sgaa->set_debug(true);
 
-	// utworzenie generatorow do uruchamiania dispatcherem
-	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new common::generator::bias_edp_force(*this);
+	register_generator(new common::generator::bias_edp_force(*this));
 
 	{
 		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
-		generator_m[ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN] = ecp_gen;
+		register_generator(ecp_gen);
 	}
-	// utworzenie podzadan
 
 	sr_ecp_msg->message("ecp loaded");
 }

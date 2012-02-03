@@ -72,16 +72,15 @@ rcsc::rcsc(lib::configurator &_config) :
 		 sm->configure();
 		 */
 	}
-	// utworzenie generatorow do uruchamiania dispatcherem
-	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new common::generator::bias_edp_force(*this);
+
+	register_generator(new common::generator::bias_edp_force(*this));
 
 	{
 		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
-		generator_m[ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN] = ecp_gen;
+		register_generator(ecp_gen);
 	}
 
-	generator_m[ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE] = new common::generator::weight_measure(*this, 1);
-	// utworzenie podzadan
+	register_generator(new common::generator::weight_measure(*this, 1));
 
 	sr_ecp_msg->message("ecp loaded");
 }
@@ -107,7 +106,7 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		gt->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
-		gag->configure(0.01, 1000, 2);
+		gag->configure(0.01, 1000, 3);
 		gag->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
