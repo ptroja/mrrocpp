@@ -173,13 +173,9 @@ void task_base::subtasks_and_generators_dispather()
 {
 	bool command_recognized = 0;
 
-	BOOST_FOREACH(const subtask_generator_pair_t & subtask_generator_node, subtask_generator_m)
-			{
-				if ((mp_2_ecp_next_state_string == subtask_generator_node.first) && (!command_recognized)) {
-					command_recognized++;
-					subtask_generator_node.second->conditional_execution();
-				}
-			}
+	if (subtask_generator_m.find(mp_2_ecp_next_state_string) != subtask_generator_m.end()) {
+		subtask_generator_m.at(mp_2_ecp_next_state_string)->conditional_execution();
+	}
 
 	if (command_recognized == 0) {
 		//	sr_ecp_msg->message(lib::FATAL_ERROR, "ecp dispatcher failure (label not recognized)");
