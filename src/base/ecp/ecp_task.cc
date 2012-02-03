@@ -43,6 +43,20 @@ task_base::task_base(lib::configurator &_config, boost::shared_ptr <robot::ecp_r
 	initialize_communication();
 }
 
+void task_base::register_generator(generator::generator_base* _gen)
+{
+	// dodac sprawdzanei czy etykieta sie nie powtarza
+	subtask_generator_m[_gen->subtask_generator_name] = _gen;
+	generator_m[_gen->subtask_generator_name] = _gen;
+}
+
+void task_base::register_subtask(sub_task::sub_task_base* _st)
+{
+	// dodac sprawdzanei czy etykieta sie nie powtarza
+	subtask_generator_m[_st->subtask_generator_name] = _st;
+	subtask_m[_st->subtask_generator_name] = _st;
+}
+
 void task_base::main_task_algorithm(void)
 {
 	for (;;) {
