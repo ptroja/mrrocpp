@@ -160,30 +160,15 @@ void task_base::termination_notice(void)
 void task_base::subtasks_and_generators_dispather()
 {
 	bool command_recognized = 0;
-// TEMPORARILY DISABLED
-	/*
-	 BOOST_FOREACH(const subtask_generator_pair_t & subtask_generator_node, subtask_generator_m)
-	 {
-	 if ((mp_2_ecp_next_state_string == subtask_generator_node.first) && (!command_recognized)) {
-	 command_recognized++;
-	 subtask_generator_node.second->conditional_execution();
-	 }
-	 }
-	 */BOOST_FOREACH(const generator_pair_t & generator_node, generator_m)
+
+	BOOST_FOREACH(const subtask_generator_pair_t & subtask_generator_node, subtask_generator_m)
 			{
-				if ((mp_2_ecp_next_state_string == generator_node.first) && (!command_recognized)) {
+				if ((mp_2_ecp_next_state_string == subtask_generator_node.first) && (!command_recognized)) {
 					command_recognized++;
-					generator_node.second->conditional_execution();
+					subtask_generator_node.second->conditional_execution();
 				}
 			}
 
-	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtask_m)
-			{
-				if ((mp_2_ecp_next_state_string == subtask_node.first) && (!command_recognized)) {
-					command_recognized++;
-					subtask_node.second->conditional_execution();
-				}
-			}
 	if (command_recognized == 0) {
 		//	sr_ecp_msg->message(lib::FATAL_ERROR, "ecp dispatcher failure (label not recognized)");
 	} else if (command_recognized > 1) {
