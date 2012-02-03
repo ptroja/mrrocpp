@@ -1809,12 +1809,21 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 
 		// Start monitoring after some interval for acceleration.
 		boost::system_time wakeup = boost::get_system_time();
+<<<<<<< HEAD
 
 		// Display velocity values during acceleration.
 		for(int i = 0; i < 10; ++i) {
 			// Increment the next wakeup time.
 			wakeup += boost::posix_time::milliseconds(5);
 
+=======
+
+		// Display velocity values during acceleration.
+		for(int i = 0; i < 10; ++i) {
+			// Increment the next wakeup time.
+			wakeup += boost::posix_time::milliseconds(5);
+
+>>>>>>> wut-rcprg/master
 			// Wait for device state to change.
 			boost::thread::sleep(wakeup);
 
