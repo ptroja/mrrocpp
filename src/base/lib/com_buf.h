@@ -697,7 +697,7 @@ typedef struct r_buffer_arm
 	} measured_current;
 
 	/*!
-         *  State of grippers regutor
+	 *  State of grippers regutor
 	 */
 	int16_t gripper_reg_state;
 
@@ -828,7 +828,7 @@ public:
 	/*!
 	 * \brief template method to put data into the memory (serialize)
 	 */
-	template <typename BUFFER_TYPE>
+template	<typename BUFFER_TYPE>
 	void set(const BUFFER_TYPE & buffer)
 	{
 		xdr_oarchive <> oa;

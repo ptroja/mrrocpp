@@ -3,17 +3,13 @@
 
 /*!
  * @file
- * @brief File contains ecp base generator declaration
+ * @brief File contains ecp subtask generator declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup ecp
  */
 
-#include <boost/shared_ptr.hpp>
-
-#include "base/ecp_mp/ecp_mp_generator.h"
-#include "base/ecp/ecp_robot.h"
-#include "base/ecp/ecp_task.h"
+#include "base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -26,19 +22,35 @@ namespace common {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp
  */
+
+const std::string EMPTY_SUBTASK_GENERATOR_NAME = "EMPTY_SUBTASK_GENERATOR_NAME";
+
 class subtask_generator_base
 {
 
 public:
 
-	subtask_generator_base()
+	/**
+	 * @brief Unique class name
+	 */
+	const lib::ecp_subtask_generator_name_t subtask_generator_name; // by Y - nazwa robota (track, postument etc.)
+
+	subtask_generator_base() :
+			subtask_generator_name(EMPTY_SUBTASK_GENERATOR_NAME)
 	{
+
 	}
 
 	/**
 	 * @brief executed by disptecher
 	 */
 	virtual void conditional_execution() = 0;
+
+	/**
+	 * @brief registers unique class name
+	 */
+	virtual void register_name() = 0;
+
 };
 
 } // namespace common

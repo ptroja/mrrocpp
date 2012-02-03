@@ -38,6 +38,10 @@ public:
 	sub_task_base() :
 			subtask_generator_base()
 	{
+	}
+
+	virtual void register_name()
+	{
 
 	}
 };

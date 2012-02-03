@@ -49,6 +49,11 @@ public:
 	{
 	}
 
+	virtual void register_name()
+	{
+
+	}
+
 };
 
 /*!
