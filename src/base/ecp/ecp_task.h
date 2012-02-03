@@ -34,6 +34,8 @@ namespace generator {
 class generator_base;
 }
 
+class subtask_generator_base;
+
 namespace task {
 
 /**
@@ -41,7 +43,7 @@ namespace task {
  *
  * @ingroup ecp
  */
-typedef std::map <std::string, sub_task::sub_task_base *> subtasks_t;
+typedef std::map <lib::ecp_subtask_generator_name_t, sub_task::sub_task_base *> subtasks_t;
 
 /**
  * @brief Type for Items from subtasks_t container.
@@ -55,7 +57,7 @@ typedef subtasks_t::value_type subtask_pair_t;
  *
  * @ingroup ecp
  */
-typedef std::map <std::string, generator::generator_base *> generators_t;
+typedef std::map <lib::ecp_subtask_generator_name_t, generator::generator_base *> generators_t;
 
 /**
  * @brief Type for Items from generators_t container.
@@ -63,6 +65,20 @@ typedef std::map <std::string, generator::generator_base *> generators_t;
  * @ingroup ecp
  */
 typedef generators_t::value_type generator_pair_t;
+
+/**
+ * @brief Container type for storing subtask_generator_base objects.
+ *
+ * @ingroup ecp
+ */
+typedef std::map <lib::ecp_subtask_generator_name_t, subtask_generator_base *> subtasks_generators_t;
+
+/**
+ * @brief Type for Items from subtask_generator_base container.
+ *
+ * @ingroup ecp
+ */
+typedef subtasks_generators_t::value_type subtask_generator_pair_t;
 
 /*!
  * @brief Base class of all ecp tasks
@@ -149,10 +165,25 @@ public:
 	generators_t generator_m;
 
 	/**
+	 * @brief ECP subtasks and generators container
+	 */
+	subtasks_generators_t subtask_generator_m;
+
+	/**
 	 * @brief continuous coordination flag
 	 * influences generator Move method behavior
 	 */
 	bool continuous_coordination;
+
+	/**
+	 * @brief registers generator in generator_m and subtask_generator_m
+	 */
+	void register_generator(generator::generator_base* _gen);
+
+	/**
+	 * @brief registers subtask in subtask_m and subtask_generator_m
+	 */
+	void register_subtask(sub_task::sub_task_base* _st);
 
 	/**
 	 * @brief checks if new pulse arrived from UI on trigger channel

@@ -8,6 +8,7 @@
  *
  * @ingroup generators
  */
+#include "ecp_mp_g_weight_measure.h"
 
 #include "generator/ecp/ecp_g_teach_in.h"
 #include "base/lib/mrmath/mrmath.h"
@@ -119,6 +120,8 @@ public:
 
 	bool first_step();
 	bool next_step();
+
+	void register_name();
 
 };
 

@@ -72,16 +72,15 @@ rcsc::rcsc(lib::configurator &_config) :
 		 sm->configure();
 		 */
 	}
-	// utworzenie generatorow do uruchamiania dispatcherem
-	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new common::generator::bias_edp_force(*this);
+
+	register_generator(new common::generator::bias_edp_force(*this));
 
 	{
 		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
-		generator_m[ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN] = ecp_gen;
+		register_generator(ecp_gen);
 	}
 
-	generator_m[ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE] = new common::generator::weight_measure(*this, 1);
-	// utworzenie podzadan
+	register_generator(new common::generator::weight_measure(*this, 1));
 
 	sr_ecp_msg->message("ecp loaded");
 }

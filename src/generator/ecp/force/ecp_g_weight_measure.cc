@@ -31,11 +31,16 @@ namespace generator {
 //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
-
 weight_measure::weight_measure(common::task::task& _ecp_task, double _weight_difference, double _catch_time) :
-	common::generator::generator(_ecp_task), weight_difference(_weight_difference), current_buffer_pointer(0), initial_weight(0.0),
-			initial_weight_counted(false), catch_time(_catch_time), terminate_state_recognized(false)
+		common::generator::generator(_ecp_task),
+		weight_difference(_weight_difference),
+		current_buffer_pointer(0),
+		initial_weight(0.0),
+		initial_weight_counted(false),
+		catch_time(_catch_time),
+		terminate_state_recognized(false)
 {
+	subtask_generator_name = ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE;
 	clear_buffer();
 }
 
@@ -94,7 +99,7 @@ bool weight_measure::first_step()
 
 bool weight_measure::next_step()
 {
-	usleep( USLEEP_TIME);
+	usleep(USLEEP_TIME);
 
 	if (check_and_null_trigger()) {
 		return false;
@@ -128,7 +133,7 @@ bool weight_measure::next_step()
 		if (((weight_difference > 0) && (check_average_weight_in_buffer() - initial_weight) > weight_difference)
 				|| ((weight_difference < 0) && (check_average_weight_in_buffer() - initial_weight) < weight_difference))
 
-		{
+				{
 			// wszytkie potwierdzenia warunku koncowego musza wystapic pod rzad
 			if (!terminate_state_recognized) {
 				catch_lag = initial_catch_lag;

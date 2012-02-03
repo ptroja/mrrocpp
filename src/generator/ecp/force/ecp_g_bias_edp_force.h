@@ -36,6 +36,7 @@ public:
 
 	virtual bool first_step();
 	virtual bool next_step();
+
 };
 
 } // namespace generator
