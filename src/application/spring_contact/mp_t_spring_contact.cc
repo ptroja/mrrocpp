@@ -16,7 +16,7 @@
 
 #include "robot/irp6_tfg/dp_tfg.h"
 
-#include "ecp_mp_st_spring_contact.h"
+#include "ecp_mp_g_spring_contact.h"
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_tfg.h"
@@ -62,7 +62,7 @@ void spring_contact::main_task_algorithm(void)
 
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-		set_next_ecp_state(ecp_mp::sub_task::SPRING_CONTACT, (int) 5, "", lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::SPRING_CONTACT, (int) 0, "", lib::irp6p_m::ROBOT_NAME);
 
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 	}

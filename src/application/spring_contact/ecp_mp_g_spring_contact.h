@@ -2,8 +2,8 @@
 //                            ecp_st_go.h
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_MP_SUB_TASK_SPRING_CONTACT_H)
-#define _ECP_MP_SUB_TASK_SPRING_CONTACT_H
+#if !defined(_ECP_MP_GEN_SPRING_CONTACT_H)
+#define _ECP_MP_GEN_SPRING_CONTACT_H
 
 /*!
  * @file
@@ -15,7 +15,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace sub_task {
+namespace generator {
 
 /*!
  * @brief spring_contact ecp subtask label
