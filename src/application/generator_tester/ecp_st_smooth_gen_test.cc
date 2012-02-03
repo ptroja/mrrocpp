@@ -81,6 +81,8 @@ sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 void sub_task_smooth_gen_test::conditional_execution()
 {
 
+        sgenjoint->set_optimization(false);
+        sgenjoint->reset();
 	std::vector <double> coordinates1(6); //postument
 	std::vector <double> coordinates2(7); //track
 
@@ -98,12 +100,12 @@ void sub_task_smooth_gen_test::conditional_execution()
                 sgenjoint->Move();
 
                 std::vector<double> max_current_change = std::vector<double>(6);
-                max_current_change[0] = 3000;
-                max_current_change[1] = 1500;
-                max_current_change[2] = 800;
-                max_current_change[3] = 800;
-                max_current_change[4] = 800;
-                max_current_change[5] = 600;
+                max_current_change[0] = 4000;
+                max_current_change[1] = 3000;
+                max_current_change[2] = 2500;
+                max_current_change[3] = 1500;
+                max_current_change[4] = 1500;
+                max_current_change[5] = 800;
 
                 std::vector<double> max_velocity = std::vector<double>(6);
                 max_velocity[0] = 0.5;
@@ -114,12 +116,12 @@ void sub_task_smooth_gen_test::conditional_execution()
                 max_velocity[5] = 0.5;
 
                 std::vector<double> max_acceleration = std::vector<double>(6);
-                max_acceleration[0] = 0.3;
-                max_acceleration[1] = 0.3;
-                max_acceleration[2] = 0.3;
-                max_acceleration[3] = 0.3;
-                max_acceleration[4] = 0.3;
-                max_acceleration[5] = 0.3;
+                max_acceleration[0] = 0.15;
+                max_acceleration[1] = 0.15;
+                max_acceleration[2] = 0.15;
+                max_acceleration[3] = 0.15;
+                max_acceleration[4] = 0.15;
+                max_acceleration[5] = 0.15;
 
                 while (!sgenjoint->optimize_energy_cost(max_current_change, max_velocity, max_acceleration))
                 {
@@ -128,8 +130,6 @@ void sub_task_smooth_gen_test::conditional_execution()
                     sgenjoint->Move();
                 }
         }
-
-        sgenjoint->print_energy_cost();
 
         sgenjoint->set_optimization(false);
         sgenjoint->reset();

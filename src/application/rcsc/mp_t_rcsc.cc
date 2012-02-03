@@ -900,52 +900,65 @@ void rubik_cube_solver::main_task_algorithm(void)
 
 	initiate(common::read_cube_color(cube_initial_state[0]), common::read_cube_color(cube_initial_state[1]), common::read_cube_color(cube_initial_state[2]), common::read_cube_color(cube_initial_state[3]), common::read_cube_color(cube_initial_state[4]), common::read_cube_color(cube_initial_state[5]));
 
+        approach_op(vis_servoing);
+
+        face_turn_op(common::CL_0);
+        face_change_op(common::CL_0);
+        face_turn_op(common::CL_90);
+        face_change_op(common::CL_90);
+        face_turn_op(common::CL_180);
+        face_change_op(common::CL_180);
+        face_turn_op(common::CCL_90);
+        face_change_op(common::CCL_90);
+
+        departure_op();
+
 	// Zlecenie wykonania kolejnego makrokroku
 	// printf("po start all \n");
-	for (;;) {
-		sr_ecp_msg->message("Nowa seria");
-
-		if (vis_servoing) {
-			//printf("if vis servoing\n");
-			flushall();
-			BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m)
-					{
-						sensor_item.second->configure_sensor();
-					}
-		}
-
-		// przechwycenie kostki
-		approach_op(vis_servoing);
-
-		// IDENTIFY COLORS
-		identify_colors();
-
-		if (vis_servoing) {
-			//printf("if vis servoing 2\n");
-			flushall();
-			if (communicate_with_windows_solver()) {
-				break;
-			}
-		}
-
-		if ((vis_servoing) && (manipulation_sequence_computed)) {
-			//printf("trzeci if\n");
-			flushall();
-
-			// wykonanie sekwencji manipulacji
-			face_turn_op(common::CL_0);
-
-			execute_manipulation_sequence();
-
-			// zakonczenie zadania
-			face_change_op(common::CL_0);
-		}
-
-		departure_op();
-
-		break;
-
-	} // koniec: for(;;) - zewnetrzna petla
+//	for (;;) {
+//		sr_ecp_msg->message("Nowa seria");
+//
+//		if (vis_servoing) {
+//			//printf("if vis servoing\n");
+//			flushall();
+//			BOOST_FOREACH(ecp_mp::sensor_item_t & sensor_item, sensor_m)
+//					{
+//						sensor_item.second->configure_sensor();
+//					}
+//		}
+//
+//		// przechwycenie kostki
+//		approach_op(vis_servoing);
+//
+//		// IDENTIFY COLORS
+//		identify_colors();
+//
+//		if (vis_servoing) {
+//			//printf("if vis servoing 2\n");
+//			flushall();
+//			if (communicate_with_windows_solver()) {
+//				break;
+//			}
+//		}
+//
+//		if ((vis_servoing) && (manipulation_sequence_computed)) {
+//			//printf("trzeci if\n");
+//			flushall();
+//
+//			// wykonanie sekwencji manipulacji
+//			face_turn_op(common::CL_0);
+//
+//			execute_manipulation_sequence();
+//
+//			// zakonczenie zadania
+//			face_change_op(common::CL_0);
+//		}
+//
+//		departure_op();
+//
+//		break;
+//
+//	} // koniec: for(;;) - zewnetrzna petla
 }
 
 // powolanie robotow w zaleznosci od zawartosci pliku konfiguracyjnego
