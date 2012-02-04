@@ -71,8 +71,11 @@ struct helper {
 class foo_iface : public iface {
 	template<typename... Args>
 	struct dummy {
+		typedef dummy<Args...> type;
+
 		dummy() {
-			std::cout << "dummy(" << sizeof...(Args) << ")" << std::endl;
+			std::cout << "dummy(" << sizeof...(Args) << "),"
+					" sizeof(" << sizeof(type) << ")" << std::endl;
 		}
 
 		~dummy() {
@@ -80,6 +83,7 @@ class foo_iface : public iface {
 		}
 
 	};
+
 public:
 	foo_iface() : iface(this) {
 	}
@@ -90,7 +94,7 @@ public:
 
 	template <typename F, typename... Fargs>
 	void
-	untuple(boost::archive::text_iarchive & ia, F & f, const dummy< > &&, Fargs... fargs)
+	untuple(boost::archive::text_iarchive & ia, F & f, const dummy< > &&, Fargs&... fargs)
 	{
 		std::cout << "Final." << std::endl;
 
@@ -99,7 +103,7 @@ public:
 
 	template <typename F, typename Targ, typename... Targs, typename... Fargs>
 	void
-	untuple(boost::archive::text_iarchive & ia, F & f, const dummy<Targ, Targs...> &&, Fargs... fargs)
+	untuple(boost::archive::text_iarchive & ia, F & f, const dummy<Targ, Targs...> &&, Fargs&... fargs)
 	{
 		std::cout << "Partial." << std::endl;
 
