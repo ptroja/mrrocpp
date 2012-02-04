@@ -84,6 +84,11 @@ class foo_iface : public iface {
 
 	};
 
+	template<typename C, typename... Args>
+	int arity(void (C::* op)(Args...)) {
+		return sizeof...(Args);
+	}
+
 public:
 	foo_iface() : iface(this) {
 	}
