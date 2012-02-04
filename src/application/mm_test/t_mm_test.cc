@@ -67,7 +67,6 @@ mm_test::mm_test(lib::configurator &_config) :
 	}
 	/***/
 	// utworzenie podzadan
-
 	sr_ecp_msg->message("ecp edge_follow_MR loaded");
 	/***/
 
@@ -143,7 +142,7 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 {
 	sr_ecp_msg->message("IN HENDLER");
 
-	ecp_reply.recognized_command[0] = '0';
+	ecp_reply.sg_buf.get <std::string>()[0] = '0';
 
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH) {
 		//get_next_state();
@@ -220,7 +219,7 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 		gen->configure(mp_args[0], mp_args[1]);
 
 		gen->Move();
-		ecp_reply.recognized_command[0] = gen->GEN_REPLY;
+		ecp_reply.sg_buf.get <std::string>()[0] = gen->GEN_REPLY;
 		sr_ecp_msg->message("My gen move end");
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_G_ROTATE) {
 		double mp_args[1];
@@ -229,7 +228,7 @@ void mm_test::mp_2_ecp_next_state_string_handler(void)
 		rot->configure(mp_args[0]);
 
 		rot->Move();
-		ecp_reply.recognized_command[0] = rot->GEN_REPLY;
+		ecp_reply.sg_buf.get <std::string>()[0] = rot->GEN_REPLY;
 		sr_ecp_msg->message("My rot_gen move end");
 	}
 
