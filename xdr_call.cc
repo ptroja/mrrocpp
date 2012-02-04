@@ -29,6 +29,32 @@ protected:
 		return sizeof...(Args);
 	}
 
+	template <typename F, typename... Fargs>
+	void
+	unpack(boost::archive::text_iarchive & ia, F & f, const dummy< > &&, Fargs&... fargs)
+	{
+		std::cout << "Final: " << sizeof...(Fargs) << "/" << arity(f) << std::endl;
+
+		(this ->* f)(fargs...);
+	}
+
+	template <typename F, typename Targ, typename... Targs, typename... Fargs>
+	void
+	unpack(boost::archive::text_iarchive & ia, F & f, const dummy<Targ, Targs...> &&, Fargs&... fargs)
+	{
+		std::cout << "Partial: " << sizeof...(Fargs) << "/" << arity(f) << std::endl;
+
+		Targ t;
+		ia >> t;
+
+		std::cout
+			<< "unpack(" << boost::units::detail::demangle(typeid(Targ).name())
+			<< ") = " << t << std::endl;
+
+		unpack(ia, f, dummy<Targs...>(), fargs..., t);
+	}
+
+
 public:
 	template<typename T>
 	iface(const T * me)
@@ -81,31 +107,6 @@ public:
 	virtual void operator()(int a, int b, int c, int d) = 0;
 
 	virtual ~foo_iface() {};
-
-	template <typename F, typename... Fargs>
-	void
-	unpack(boost::archive::text_iarchive & ia, F & f, const dummy< > &&, Fargs&... fargs)
-	{
-		std::cout << "Final: " << sizeof...(Fargs) << "/" << arity(f) << std::endl;
-
-		(this ->* f)(fargs...);
-	}
-
-	template <typename F, typename Targ, typename... Targs, typename... Fargs>
-	void
-	unpack(boost::archive::text_iarchive & ia, F & f, const dummy<Targ, Targs...> &&, Fargs&... fargs)
-	{
-		std::cout << "Partial: " << sizeof...(Fargs) << "/" << arity(f) << std::endl;
-
-		Targ t;
-		ia >> t;
-
-		std::cout
-			<< "unpack(" << boost::units::detail::demangle(typeid(Targ).name())
-			<< ") = " << t << std::endl;
-
-		unpack(ia, f, dummy<Targs...>(), fargs..., t);
-	}
 
 	template<typename C, typename... Args>
 	void
