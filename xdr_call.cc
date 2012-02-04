@@ -85,7 +85,7 @@ class foo_iface : public iface {
 	};
 
 	template<typename C, typename... Args>
-	int arity(void (C::* op)(Args...)) {
+	std::size_t arity(void (C::* op)(Args...)) const {
 		return sizeof...(Args);
 	}
 
@@ -101,7 +101,7 @@ public:
 	void
 	untuple(boost::archive::text_iarchive & ia, F & f, const dummy< > &&, Fargs&... fargs)
 	{
-		std::cout << "Final." << std::endl;
+		std::cout << "Final: " << sizeof...(Fargs) << "/" << arity(f) << std::endl;
 
 		(this ->* f)(fargs...);
 	}
@@ -110,7 +110,7 @@ public:
 	void
 	untuple(boost::archive::text_iarchive & ia, F & f, const dummy<Targ, Targs...> &&, Fargs&... fargs)
 	{
-		std::cout << "Partial." << std::endl;
+		std::cout << "Partial: " << sizeof...(Fargs) << "/" << arity(f) << std::endl;
 
 		std::cout
 			<< "untuple(" << boost::units::detail::demangle(typeid(Targ).name())
