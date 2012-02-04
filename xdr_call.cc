@@ -13,16 +13,21 @@
 
 #include <boost/units/detail/utility.hpp>
 
-#include <boost/bind.hpp>
-#include <boost/function.hpp>
-
-#include <boost/type_traits/function_traits.hpp>
-
 std::string buffer;
 
 class iface {
 private:
 	std::string id;
+
+protected:
+	template<typename... Args>
+	struct dummy {
+	};
+
+	template<typename C, typename... Args>
+	std::size_t arity(void (C::* op)(Args...)) const {
+		return sizeof...(Args);
+	}
 
 public:
 	template<typename T>
@@ -69,26 +74,6 @@ struct helper {
 };
 
 class foo_iface : public iface {
-	template<typename... Args>
-	struct dummy {
-		typedef dummy<Args...> type;
-
-		dummy() {
-			std::cout << "dummy(" << sizeof...(Args) << "),"
-					" sizeof(" << sizeof(type) << ")" << std::endl;
-		}
-
-		~dummy() {
-			std::cout << "~dummy(" << sizeof...(Args) << ")" << std::endl;
-		}
-
-	};
-
-	template<typename C, typename... Args>
-	std::size_t arity(void (C::* op)(Args...)) const {
-		return sizeof...(Args);
-	}
-
 public:
 	foo_iface() : iface(this) {
 	}
@@ -99,7 +84,7 @@ public:
 
 	template <typename F, typename... Fargs>
 	void
-	untuple(boost::archive::text_iarchive & ia, F & f, const dummy< > &&, Fargs&... fargs)
+	unpack(boost::archive::text_iarchive & ia, F & f, const dummy< > &&, Fargs&... fargs)
 	{
 		std::cout << "Final: " << sizeof...(Fargs) << "/" << arity(f) << std::endl;
 
@@ -108,38 +93,31 @@ public:
 
 	template <typename F, typename Targ, typename... Targs, typename... Fargs>
 	void
-	untuple(boost::archive::text_iarchive & ia, F & f, const dummy<Targ, Targs...> &&, Fargs&... fargs)
+	unpack(boost::archive::text_iarchive & ia, F & f, const dummy<Targ, Targs...> &&, Fargs&... fargs)
 	{
 		std::cout << "Partial: " << sizeof...(Fargs) << "/" << arity(f) << std::endl;
-
-		std::cout
-			<< "untuple(" << boost::units::detail::demangle(typeid(Targ).name())
-			<< ") = " << std::endl;
 
 		Targ t;
 		ia >> t;
 
-		untuple(ia, f, dummy<Targs...>(), fargs..., t);
-	}
+		std::cout
+			<< "unpack(" << boost::units::detail::demangle(typeid(Targ).name())
+			<< ") = " << t << std::endl;
 
+		unpack(ia, f, dummy<Targs...>(), fargs..., t);
+	}
 
 	template<typename C, typename... Args>
 	void
 	call_me(boost::archive::text_iarchive & ia, void (C::* op)(Args...))
 	{
-		std::cout << "operator()::arity = " << boost::function_traits<void(Args...)>::arity << std::endl;
+		std::cout << "operator()::arity = " << arity(op) << std::endl;
 
-		untuple(ia, op, dummy<Args...>() );
-	}
-
-	void
-	call(boost::archive::text_iarchive & ia)
-	{
-		call_me(ia, &foo_iface::operator());
+		unpack(ia, op, dummy<Args...>() );
 	}
 };
 
-class foo : public foo_iface {
+class foo_impl : public foo_iface {
 public:
 	void operator()(int a, int b, int c, int d) {
 		std::cout << a << "+" << b << "+" << c << "+" << d << std::endl;
@@ -169,9 +147,9 @@ int main()
 
 		boost::archive::text_iarchive ia(is);
 
-		foo fo;
+		foo_impl fo;
 
-		fo.call(ia);
+		fo.call_me(ia, &foo_iface::operator());
 	}
 
 	return 0;
