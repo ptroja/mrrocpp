@@ -19,7 +19,7 @@ class iface {
 private:
 	std::string id;
 
-protected:
+private:
 	template<typename... Args>
 	struct dummy {
 	};
@@ -29,13 +29,18 @@ protected:
 		return sizeof...(Args);
 	}
 
+	template<typename C, typename... Args>
+	C * caller_cast(void (C::* op)(Args...)) {
+		return dynamic_cast<C *>(this);
+	};
+
 	template <typename F, typename... Fargs>
 	void
 	unpack(boost::archive::text_iarchive & ia, F & f, const dummy< > &&, Fargs&... fargs)
 	{
 		std::cout << "Final: " << sizeof...(Fargs) << "/" << arity(f) << std::endl;
 
-		(this ->* f)(fargs...);
+		(caller_cast(f) ->* f)(fargs...);
 	}
 
 	template <typename F, typename Targ, typename... Targs, typename... Fargs>
@@ -54,13 +59,23 @@ protected:
 		unpack(ia, f, dummy<Targs...>(), fargs..., t);
 	}
 
-
 public:
 	template<typename T>
 	iface(const T * me)
 	{
 		id = (boost::units::detail::demangle(typeid(T).name()));
 		std::cout << id << std::endl;
+	}
+
+	virtual ~iface() {};
+
+	template<typename C, typename... Args>
+	void
+	call_me(boost::archive::text_iarchive & ia, void (C::* op)(Args...))
+	{
+		std::cout << "operator()::arity = " << arity(op) << std::endl;
+
+		unpack(ia, op, dummy<Args...>() );
 	}
 };
 
@@ -105,17 +120,6 @@ public:
 	}
 
 	virtual void operator()(int a, int b, int c, int d) = 0;
-
-	virtual ~foo_iface() {};
-
-	template<typename C, typename... Args>
-	void
-	call_me(boost::archive::text_iarchive & ia, void (C::* op)(Args...))
-	{
-		std::cout << "operator()::arity = " << arity(op) << std::endl;
-
-		unpack(ia, op, dummy<Args...>() );
-	}
 };
 
 class foo_impl : public foo_iface {
