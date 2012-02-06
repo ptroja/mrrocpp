@@ -24,7 +24,6 @@ public:
 	void main_task_algorithm(void);
 	/// utworzenie robotow
 	void create_robots(void);
-	virtual ~stats();
 };
 
 } //task
