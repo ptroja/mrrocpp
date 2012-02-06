@@ -173,12 +173,12 @@ bool AndroidTeach::get_filenames(void)
 //begin by OL
 //	return false;
 
-	char newFilename[20], newPath[80];
-	sprintf(newFilename,"test_traj.trj");
-	sprintf(newPath,"/home/hh7/workspace/");
+        char newFilename[20], newPath[80];
+        sprintf(newFilename,"test_traj.trj");
+        sprintf(newPath,"/home/oleszczy/workspace/");
 
-	strncpy(path, newPath, 79);
-	strncpy(filename, newFilename, 19);
+        strncpy(path, newPath, 79);
+        strncpy(filename, newFilename, 19);
 
 //    char buffer[100];
 //
@@ -196,35 +196,35 @@ bool AndroidTeach::get_filenames(void)
 
 //// end by OL
 //
-//	lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
-//	lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
-//	uint64_t e; // Kod bledu systemowego
+//        lib::ECP_message ecp_to_ui_msg; // Przesylka z ECP do UI
+//        lib::UI_reply ui_to_ecp_rep; // Odpowiedz UI do ECP
+//        uint64_t e; // Kod bledu systemowego
 //
 ////	ecp_to_ui_msg.ecp_message = lib::SAVE_FILE; // Polecenie wprowadzenia nazwy pliku
 ////	strcpy(ecp_to_ui_msg.string, "*.trj"); // Wzorzec nazwy pliku
 //
-//	// if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
+//        // if ( Send (UI_pid, &ecp_to_ui_msg, &ui_to_ecp_rep, sizeof(lib::ECP_message), sizeof(lib::UI_reply)) == -1) {
 //
-//	if(messip::port_send(this->UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) // by Y&W
-//	{
-//		e = errno;
-//		perror("ecp: Send() to UI failed");
-//		sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
-//		throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
-//	}
-//	else  //begin by OL
-//	{
-//		perror("ecp: Send() to UI succed");
-//	}	// end by OL
+//        if(messip::port_send(this->UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) // by Y&W
+//        {
+//                e = errno;
+//                perror("ecp: Send() to UI failed");
+//                sr_ecp_msg->message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");
+//                throw common::robot::ECP_error(lib::SYSTEM_ERROR, 0);
+//        }
+//        else  //begin by OL
+//        {
+//                perror("ecp: Send() to UI succed");
+//        }	// end by OL
 //
-//	if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
-//	{
-//		perror("ecp: Send() to UI reply QUIT");  // by OL
-//		return false;
-//	}
+//        if (ui_to_ecp_rep.reply == lib::QUIT) // Nie wybrano nazwy pliku lub zrezygnowano z zapisu
+//        {
+//                perror("ecp: Send() to UI reply QUIT");  // by OL
+//                return false;
+//        }
 //
-//	strncpy(path, ui_to_ecp_rep.path, 79);
-//	strncpy(filename, ui_to_ecp_rep.filename, 19);
+//        strncpy(path, ui_to_ecp_rep.path, 79);
+//        strncpy(filename, ui_to_ecp_rep.filename, 19);
 
 	return true;
 }
