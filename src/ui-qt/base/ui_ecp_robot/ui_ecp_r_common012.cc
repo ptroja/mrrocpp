@@ -136,7 +136,7 @@ void EcpRobot::move_joints(const double final_position[])
 	// Odczyt aktualnego polozenia
 	read_joints(current_position);
 
-	for (int j = 0; j < ecp->number_of_servos; j++) {
+	for (int j = 0; j < ecp->number_of_servos; ++j) {
 		temp = fabs(final_position[j] - current_position[j]);
 		nr_tmp = (int) ceil(temp / JOINT_STEP[j]);
 		nr_of_steps = (nr_of_steps > nr_tmp) ? nr_of_steps : nr_tmp;
@@ -152,8 +152,6 @@ void EcpRobot::move_joints(const double final_position[])
 	ecp->ecp_command.interpolation_type = lib::MIM;
 	ecp->ecp_command.motion_steps = nr_of_steps;
 	ecp->ecp_command.value_in_step_no = nr_of_steps;
-
-	// cprintf("NOS=%u\n",ecp_command.motion_steps);
 
 	if (nr_of_steps < 1) // Nie wykowywac bo zadano ruch do aktualnej pozycji
 		return;
