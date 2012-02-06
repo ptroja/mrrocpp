@@ -179,7 +179,7 @@ bool AndroidTeach::get_filenames(void)
 
         strncpy(path, newPath, 79);
         strncpy(filename, newFilename, 19);
-
+//
 //    char buffer[100];
 //
 //    sprintf(buffer,"traj_filename");
