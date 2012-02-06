@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_SK_H)
-#define _ECP_T_SK_H
+#if !defined(_ECP_T_TIME_H)
+#define _ECP_T_TIME_H
 
 #include "base/ecp/ecp_task.h"
 #include "ecp_g_time.h"
@@ -26,4 +26,4 @@ public:
 } // namespace ecp
 } // namespace mrrocpp
 
-#endif /* _ECP_T_SK_H */
+#endif /* _ECP_T_TIME_H */

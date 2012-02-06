@@ -1,13 +1,5 @@
-// -------------------------------------------------------------------------
-//                            ecp.h dla QNX6
-// Deklaracje struktur danych i metod dla procesow ECP 
-// 
-// -------------------------------------------------------------------------
-
-//   tdes.arm_type = lib::XYZ_EULER_ZYZ;
-
-#if !defined(_ECP_GEN_PLOT_H)
-#define _ECP_GEN_PLOT_H
+#if !defined(_ECP_GEN_TIME_H)
+#define _ECP_GEN_TIME_H
 
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
@@ -48,4 +40,4 @@ public:
 } // namespace ecp
 } // namespace mrrocpp
 
-#endif
+#endif /* _ECP_GEN_TIME_H */
