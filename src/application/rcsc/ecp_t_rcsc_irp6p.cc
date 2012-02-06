@@ -15,11 +15,10 @@
 //#include "generator/ecp/ecp_g_smooth.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "ecp_t_rcsc_irp6p.h"
-#include "subtask/ecp_st_bias_edp_force.h"
-#include "subtask/ecp_st_tff_nose_run.h"
+#include "generator/ecp/force/ecp_g_bias_edp_force.h"
+#include "generator/ecp/force/ecp_g_tff_nose_run.h"
 
 #include "generator/ecp/ecp_mp_g_transparent.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
@@ -46,17 +45,11 @@ rcsc::rcsc(lib::configurator &_config) :
 	sgaa = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	sgaa->set_debug(true);
 
-	// utworzenie podzadan
-	{
-		common::sub_task::sub_task* ecpst;
-		ecpst = new common::sub_task::bias_edp_force(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
-	}
+	register_generator(new common::generator::bias_edp_force(*this));
 
 	{
-		common::sub_task::tff_nose_run* ecpst;
-		ecpst = new common::sub_task::tff_nose_run(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
+		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
+		register_generator(ecp_gen);
 	}
 
 	sr_ecp_msg->message("ecp loaded");

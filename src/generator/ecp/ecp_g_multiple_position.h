@@ -362,7 +362,7 @@ public:
          */
         void print_energy_cost()
         {
-            printf("############## Energy cost ##############");
+            printf("############## Energy cost ##############\n");
             for (int i = 0; i < energy_cost.size(); i++)
             {
                 printf("%d: %f\n",i, energy_cost[i]);
@@ -542,7 +542,7 @@ public:
                                         }
 
 					if (debug) {
-                                                //printf("%f\t", *tempIter);
+                                                printf("%f\t", *tempIter);
                                                 //printf("%f\t", currents[i]);
 					}
 					tempIter++;
@@ -556,7 +556,7 @@ public:
                                 }
 
 				if (debug) {
-                                        //printf("\n");
+                                        printf("\n");
 					flushall();
 				}
 				break;
@@ -657,13 +657,13 @@ public:
 		}
 
 		if (debug) {
-			print_pose_vector();
+                        print_pose_vector();
 		}
 
 		interpolated = interpolate();
 
 		if (debug) {
-                        //print_coordinate_vector();
+                        print_coordinate_vector();
 		}
 
 		return interpolated;

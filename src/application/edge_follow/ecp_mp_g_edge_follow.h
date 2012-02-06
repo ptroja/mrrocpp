@@ -2,25 +2,25 @@
 //                            ecp_st_go.h
 // -------------------------------------------------------------------------
 
-#if !defined(_ECP_MP_SUB_TASK_SPRING_CONTACT_H)
-#define _ECP_MP_SUB_TASK_SPRING_CONTACT_H
+#if !defined(_ECP_MP_GEN_EDGE_FOLLOW_H)
+#define _ECP_MP_GEN_EDGE_FOLLOW_H
 
 /*!
  * @file
- * @brief File contains edge_follow subtask label definition
+ * @brief File contains edge_follow subtask label definition of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup spring_contact
+ * @ingroup edge_follow
  */
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace sub_task {
+namespace generator {
 
 /*!
- * @brief spring_contact ecp subtask label
+ * @brief edge_follow ecp subtask label
  */
-const std::string SPRING_CONTACT = "SPRING_CONTACT";
+const std::string EDGE_FOLLOW = "EDGE_FOLLOW";
 
 } // namespace task
 } // namespace ecp_mp

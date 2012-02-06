@@ -140,6 +140,9 @@ public:
 	bool first_step();
 	bool next_step();
 
+	void conditional_execution();
+
+
 };
 // end : class ecp_tff_nose_run_generator
 

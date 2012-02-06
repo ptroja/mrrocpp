@@ -697,7 +697,7 @@ typedef struct r_buffer_arm
 	} measured_current;
 
 	/*!
-         *  State of grippers regutor
+	 *  State of grippers regutor
 	 */
 	int16_t gripper_reg_state;
 
@@ -902,7 +902,6 @@ private:
 		ar & next_state;
 		ar & variant;
 		ar & sg_buf;
-		// ar & playerpos_goal; // this is not used at this moment
 	}
 };
 
@@ -948,7 +947,8 @@ struct ECP_REPLY_PACKAGE
 
 	// TODO: this should be rather union, but it is not possible to union non-POD objects
 	r_buffer reply_package;
-	char recognized_command[ECP_2_MP_STRING_SIZE];
+	int variant;
+	seter_geter_buffer_t sg_buf;
 
 private:
 	//! Give access to boost::serialization framework
@@ -960,7 +960,8 @@ private:
 	{
 		ar & reply;
 		ar & reply_package;
-		ar & recognized_command; // TODO: this should be handled in better way...
+		ar & variant;
+		ar & sg_buf;
 	}
 };
 // ------------------------------------------------------------------------

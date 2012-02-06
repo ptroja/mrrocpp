@@ -18,11 +18,11 @@
 
 #include "ecp_t_edge_follow_mr.h"
 
-#include "ecp_st_edge_follow.h"
-#include "subtask/ecp_st_bias_edp_force.h"
-#include "subtask/ecp_st_tff_nose_run.h"
+#include "generator/ecp/force/ecp_g_bias_edp_force.h"
+#include "generator/ecp/force/ecp_g_tff_nose_run.h"
+#include "ecp_g_edge_follow.h"
 
-#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -31,33 +31,30 @@ namespace task {
 
 // KONSTRUKTORY
 edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
-	common::task::task(_config)
+		common::task::task(_config)
 {
 	// the robot is choose depending on the section of configuration file sent as argv[4]
 	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6ot_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
 	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ecp_m_robot = (boost::shared_ptr<robot_t>) new irp6p_m::robot(*this);
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else {
 		// TODO: throw
 	}
 
+	// utworzenie generatorow do uruchamiania dispatcherem
+
+	register_generator(new common::generator::bias_edp_force(*this));
+
+	{
+		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
+		ecp_gen->configure_pulse_check(true);
+		register_generator(ecp_gen);
+	}
+
+	register_generator(new generator::y_edge_follow_force(*this, 8));
+
 	// utworzenie podzadan
-	{
-		sub_task::sub_task* ecpst;
-		ecpst = new sub_task::edge_follow(*this);
-		subtask_m[ecp_mp::sub_task::EDGE_FOLLOW] = ecpst;
-
-		ecpst = new sub_task::bias_edp_force(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
-	}
-
-	{
-		sub_task::tff_nose_run* ecpst;
-		ecpst = new sub_task::tff_nose_run(*this);
-		subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
-		ecpst->nrg->configure_pulse_check(true);
-	}
 
 	sr_ecp_msg->message("ecp edge_follow_MR loaded");
 }
