@@ -109,11 +109,6 @@ public:
 };
 
 
-template<typename C, typename... Args>
-struct helper {
-	typedef C class_type;
-};
-
 class foo_iface : public iface {
 public:
 	foo_iface() : iface(this) {
