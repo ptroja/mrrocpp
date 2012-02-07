@@ -46,4 +46,3 @@ if(ROBOTS_SWARMITFIX)
 add_subdirectory (swarm_demo_single_agent)
 add_subdirectory (swarmitfix)
 endif(ROBOTS_SWARMITFIX)
->>>>>>> wut-rcprg/master

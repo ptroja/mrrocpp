@@ -106,8 +106,10 @@ void ecp_en_labyrinth::mp_2_ecp_next_state_string_handler(void)
 			}
 
 			smooth_generator->reset();
+			smooth_generator->set_debug(true);
 			smooth_generator->set_absolute();
-			smooth_generator->load_relative_euler_zyz_trajectory_pose(position_vec);
+			smooth_generator->load_relative_angle_axis_trajectory_pose(position_vec);
+			//smooth_generator->load_relative_euler_zyz_trajectory_pose(position_vec);
 			if(smooth_generator->calculate_interpolate())
 			{
 				smooth_generator->Move();

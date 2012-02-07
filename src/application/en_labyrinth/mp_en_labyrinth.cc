@@ -115,7 +115,7 @@ void mp_en_labyrinth::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Moving to first point");
 
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "ABSOLUTE_JOIN 0.407 -1.633 0.107 -0.036 4.67 -2.679", lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "ABSOLUTE_JOIN 1.117 -1.636 0.11 -0.041 4.669 -1.816", lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 

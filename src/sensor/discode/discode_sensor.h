@@ -205,6 +205,15 @@ RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
 	if(is_data_available(rpc_call_timeout)){
 		receive_buffers_from_discode();
 		RECEIVED_T received;
+
+		for(int i=0; i<rmh.data_size; ++i){
+			unsigned char c = iarchive.get_buffer()[i];
+			logger::log("%02X ", (unsigned int)c);
+		}
+		logger::log("\n");
+
+		logger::log("discode_sensor::call_remote_procedure() rmh.data_size: %d\n", rmh.data_size);
+		logger::log("discode_sensor::call_remote_procedure() iarchive.size: %d\n", iarchive.getArchiveSize());
 		iarchive >> received;
 		if(!rmh.is_rpc_call){
 			state = DSS_ERROR;
