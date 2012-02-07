@@ -12,7 +12,7 @@
 #include <list>
 
 #include "base/lib/com_buf.h"
-#include "base/lib/sr/srlib.h"
+#include "base/ecp_mp/ecp_ui_msg.h"
 #include "base/lib/condition_synchroniser.h"
 
 #include "ui.h"
@@ -29,9 +29,11 @@ private:
 	Interface& interface;
 	boost::thread thread_id;
 
+	lib::ECP_message _ecp_to_ui_msg;
+
 public:
 	UI_ECP_COMMUNICATION_STATE communication_state;
-	lib::ECP_message ecp_to_ui_msg;
+	const lib::ECP_message & ecp_to_ui_msg;
 	lib::UI_reply ui_rep;
 
 	//! main thread loop

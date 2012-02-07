@@ -1,0 +1,67 @@
+#ifndef WGT_SBENCH_PREASURE_COMMAND_H
+#define WGT_SBENCH_PREASURE_COMMAND_H
+
+/*!
+ * @file
+ * @brief File contains wgt_sbench_preasure_command class declaration for SwarmItFix Bench
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sbench
+ */
+
+#include <QtGui/QWidget>
+#include <QVBoxLayout>
+#include <QDockWidget>
+#include "wgt_sbench_command.h"
+
+namespace mrrocpp {
+namespace ui {
+namespace sbench {
+/*!
+ * @brief window identificator
+ */
+const std::string WGT_SBENCH_PREASURE_COMMAND = "WGT_SBENCH_PREASURE_COMMAND";
+}
+}
+}
+
+/*!
+ * @class
+ * @brief class of sbench preasure (chips cleaning) command window
+ * @author yoyek
+ *
+ *  @ingroup sbench
+ */
+class wgt_sbench_preasure_command : public wgt_sbench_command
+{
+	Q_OBJECT
+
+public:
+	/**
+	 * @brief constructor
+	 * @param _widget_label widget label
+	 * @param _interface Interface object reference
+	 * @param _robot UiRobot object pointer
+	 * @param parent pointer to parent widget
+	 */
+	wgt_sbench_preasure_command(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
+			0);
+
+	/**
+	 * @brief executes the command (i.e. sends it to robot)
+	 */
+	void execute();
+
+	/**
+	 * @brief sets the window state taking the info about robot state
+	 */
+	void read_and_set();
+
+	/*!
+	 * @brief Refreshes the checkboxes and underlines depending on the current state.
+	 * @author tkornuta
+	 */
+	void reshresh_widgets();
+};
+
+#endif

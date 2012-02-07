@@ -1,10 +1,3 @@
-// -------------------------------------------------------------------------
-//                            robot.h
-// Definicje struktur danych i metod do komunikacji UI z EDP
-//
-// Ostatnia modyfikacja: 16.04.98
-// -------------------------------------------------------------------------
-
 #ifndef _UI_ECP_R_SPKM2_H
 #define _UI_ECP_R_SPKM2_H
 
@@ -34,4 +27,3 @@ public:
 } //namespace mrrocpp
 
 #endif
-

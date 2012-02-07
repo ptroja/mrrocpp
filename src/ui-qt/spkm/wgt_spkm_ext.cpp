@@ -9,7 +9,7 @@
 #include "../base/mainwindow.h"
 #include "../base/ui_robot.h"
 
-wgt_spkm_ext::wgt_spkm_ext(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+wgt_spkm_ext::wgt_spkm_ext(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
 		wgt_base(_widget_label, _interface, parent), current_pose_specification(lib::spkm::WRIST_XYZ_EULER_ZYZ)
 {
 	ui.setupUi(this);
@@ -63,7 +63,7 @@ void wgt_spkm_ext::on_pushButton_read_clicked()
 	init();
 }
 
-int wgt_spkm_ext::init()
+void wgt_spkm_ext::init()
 {
 
 	try {
@@ -112,12 +112,9 @@ int wgt_spkm_ext::init()
 	} // end try
 	CATCH_SECTION_UI_PTR
 
-	return 1;
 }
 
-int wgt_spkm_ext::set_single_axis(int axis,
-// QDoubleSpinBox* qdsb_mcur,
-QAbstractButton* qab_mip)
+void wgt_spkm_ext::set_single_axis(int axis, QAbstractButton* qab_mip)
 {
 	lib::spkm::spkm_ext_epos_reply &ser = robot->ui_ecp_robot->the_robot->epos_external_reply_data_request_port.data;
 //	qdsb_mcur->setValue(er.epos_controller[axis].current);
@@ -127,8 +124,6 @@ QAbstractButton* qab_mip)
 	} else {
 		qab_mip->setChecked(false);
 	}
-
-	return 1;
 }
 
 void wgt_spkm_ext::on_pushButton_import_clicked()
@@ -238,7 +233,12 @@ void wgt_spkm_ext::on_pushButton_stop_clicked()
 	robot->execute_stop_motor();
 }
 
-int wgt_spkm_ext::copy()
+void wgt_spkm_ext::on_pushButton_brake_clicked()
+{
+	robot->execute_brake_motor();
+}
+
+void wgt_spkm_ext::copy()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -256,8 +256,6 @@ int wgt_spkm_ext::copy()
 		}
 
 	}
-
-	return 1;
 }
 
 void wgt_spkm_ext::on_pushButton_execute_clicked()
@@ -350,7 +348,7 @@ void wgt_spkm_ext::on_pushButton_5r_clicked()
 	move_it();
 }
 
-int wgt_spkm_ext::get_desired_position()
+void wgt_spkm_ext::get_desired_position()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -367,10 +365,9 @@ int wgt_spkm_ext::get_desired_position()
 			}
 		}
 	}
-	return 1;
 }
 
-int wgt_spkm_ext::move_it()
+void wgt_spkm_ext::move_it()
 {
 
 	// wychwytania ew. bledow ECP::robot
@@ -414,8 +411,6 @@ int wgt_spkm_ext::move_it()
 	} // end try
 
 	CATCH_SECTION_UI_PTR
-
-	return 1;
 }
 
 void wgt_spkm_ext::on_radioButton_no_tool_toggled()
@@ -433,7 +428,6 @@ void wgt_spkm_ext::on_radioButton_tool_oriented_toggled()
 		init();
 	}
 }
-
 
 void wgt_spkm_ext::showEvent(QShowEvent * event)
 {

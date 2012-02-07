@@ -20,7 +20,8 @@
 #include <boost/foreach.hpp>
 
 MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *parent) :
-		QMainWindow(parent), ui(new Ui::MainWindow), interface(_interface)
+		QMainWindow(parent), ui(new Ui::MainWindow), interface(_interface),
+		main_thread_id(pthread_self())
 {
 	ui->setupUi(this);
 
@@ -43,7 +44,6 @@ MainWindow::MainWindow(mrrocpp::ui::common::Interface& _interface, QWidget *pare
 	//robotsSignalMapper = new QSignalMapper();
 
 	//open_new_window_signal(wgt_base *window);
-	main_thread_id = pthread_self();
 
 	//while(menuBar->actionirp6ot_m_EDP_Load==NULL)
 	//{printf("wait");}

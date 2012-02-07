@@ -9,9 +9,17 @@
  * @ingroup smb
  */
 
+#include <cmath>
+
+#include <boost/throw_exception.hpp>
+
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/vector.hpp>
+
 #include "robot/maxon/dp_epos.h"
 #include "const_smb.h"
-#include "../../base/lib/com_buf.h"
+#include "base/lib/exception.h"
+#include "base/lib/com_buf.h"
 
 namespace mrrocpp {
 namespace lib {
@@ -29,6 +37,8 @@ const std::string FESTO_COMMAND_DATA_PORT = "FESTO_COMMAND_DATA_PORT";
  */
 const std::string MULTI_LEG_REPLY_DATA_REQUEST_PORT = "MULTI_LEG_REPLY_DATA_REQUEST_PORT";
 
+REGISTER_NON_FATAL_ERROR(action_parameter_error, "SMB action parameters error")
+
 /*!
  * @brief SwarmItFix Epos simple external command data port
  * @ingroup smb
@@ -41,26 +51,57 @@ const std::string EPOS_EXTERNAL_COMMAND_DATA_PORT = "EPOS_EXTERNAL_COMMAND_DATA_
  */
 const std::string EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT = "EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT";
 
-/*!
- * @brief SwarmItFix Mobile Base mp to ecp command
- * @ingroup smb
- */
-struct mp_to_ecp_parameters
-{
-	int locking_device_clamp_number;
-	epos::EPOS_GEN_PROFILE motion_type;
-	epos::mp_to_ecp_cubic_trapezoidal_parameters cubic_trapezoidal[NUM_OF_SERVOS];
-};
+
 
 /*!
- * @brief SwarmItFix Mobile Base single leg status
+ * @brief SwarmItFix Mobile Base action
  * @ingroup smb
  */
-struct leg_reply
+class action
 {
-	bool is_in;
-	bool is_out;
-	bool is_attached;
+public:
+	//! Constructor with reasonable defaults
+	action();
+
+	//! Get motion duration parameter
+    double getDuration() const;
+
+    //! Get PKM rotation
+    double getdPkmTheta() const;
+
+    //! Get rotation pin
+    unsigned int getRotationPin() const;
+
+    //! Get mobile base transrotation
+    int getdThetaInd() const;
+
+    //! Set motion duration parameter
+    void setDuration(double duration);
+
+    //! Set PKM relative rotation
+    void setdPkmTheta(double dPkmTheta);
+
+    //! Set PIN to rotate about
+    void setRotationPin(unsigned int rotationPin);
+
+    //! Set mobile base relative rotation
+    void setdThetaInd(int dThetaInd);
+
+private:
+	//! Pin around which to rotate {0,1,2,3}
+	unsigned int rotationPin;
+
+	//! Rotation around pin {-5..+5}
+	int dThetaInd;
+
+	//! Rotation of PKM around mobile base
+	double dPkmTheta;
+
+	//! Allowed time for the motion in seconds.
+	//! If 0, then the time will be limited by the motor limits.
+	//! If > 0 and greater than a limit imposed by the motors, then the motion will be slowed down.
+	//! In another case, the NACK will be replied.
+	double duration;
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -69,12 +110,62 @@ struct leg_reply
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & is_in;
-		ar & is_out;
-		ar & is_attached;
+		ar & BOOST_SERIALIZATION_NVP(rotationPin);
+		// Check if rotating around the pin
+		if(rotationPin) {
+			ar & BOOST_SERIALIZATION_NVP(dThetaInd);
+		}
+		ar & BOOST_SERIALIZATION_NVP(dPkmTheta);
+		// Check if executing motion at all
+		if((rotationPin && dThetaInd) || dPkmTheta) {
+			ar & BOOST_SERIALIZATION_NVP(duration);
+		}
+	}
+};
+
+/**
+ * ECP command variant
+ */
+typedef enum _command_variant { ACTION_LIST, STOP } command_variant;
+
+/*!
+ *  Command for ECP agent
+ */
+typedef struct _next_state_t
+{
+	//! Command variant
+	command_variant variant;
+
+	//! Type for sequence of actions ofmobile base
+	typedef std::vector<action> action_sequence_t;
+
+	//! Sequence of actions for mobile base
+	action_sequence_t actions;
+
+	//! Constructor with safe defaults
+	_next_state_t(command_variant _variant = STOP) :
+		variant(_variant)
+	{
 	}
 
-};
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & variant;
+		switch (variant) {
+			case ACTION_LIST:
+				ar & actions;
+				break;
+			default:
+				break;
+		}
+	}
+} next_state_t;
 
 /*!
  * @brief SwarmItFix Mobile Base single leg festo command
@@ -84,9 +175,6 @@ enum FESTO_LEG
 {
 	IN, OUT
 };
-// namespace mrrocpp
-
-// namespace mrrocpp
 
 /*!
  * @brief SwarmItFix Mobile Base multi pin insertion command
@@ -97,6 +185,10 @@ struct festo_command_td
 	FESTO_LEG leg[LEG_CLAMP_NUMBER];
 	bool undetachable[LEG_CLAMP_NUMBER];
 
+	//! Initialize "safe" command
+	festo_command_td();
+
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -111,27 +203,6 @@ struct festo_command_td
 };
 
 /*!
- * @brief SwarmItFix Mobile Base multi leg reply
- * @ingroup smb
- */
-struct multi_leg_reply_td
-{
-
-	leg_reply leg[LEG_CLAMP_NUMBER];
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & leg;
-	}
-
-};
-
-/*!
  * @brief SwarmItFix Epos all controllers status
  * @ingroup epos
  */
@@ -140,6 +211,7 @@ struct smb_ext_epos_reply
 	lib::Homog_matrix current_frame;
 	lib::epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -156,24 +228,28 @@ struct smb_ext_epos_reply
  * @brief SwarmItFix Epos motor and joint and external command, called from UI
  * @ingroup smb
  */
-struct smb_epos_simple_command
+struct motor_command
 {
-	lib::epos::EPOS_MOTION_VARIANT motion_variant;
-
-	// external
+	//! Rotation of the legs (in external values -6, -5, ..., 5, 6).
 	int base_vs_bench_rotation;
+
+	//! Desired rotation of the upper SMP by given angle [radians].
 	double pkm_vs_base_rotation;
 
+	//! FIXME: Estimated time of motion (UNUSED!).
 	double estimated_time;
 
-	//! Give access to boost::serialization framework
+	//! Constructor to initialize "safe" command.
+	motor_command();
+
+private:
+	//! Give access to boost::serialization framework.
 	friend class boost::serialization::access;
 
-	//! Serialization of the data structure
+	//! Serialization of the data structure.
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & motion_variant;
 		ar & base_vs_bench_rotation;
 		ar & pkm_vs_base_rotation;
 		ar & estimated_time;
@@ -197,18 +273,16 @@ struct cbuffer
 	//! Pose specification type
 	POSE_SPECIFICATION get_pose_specification;
 
-	//! Motion interpolation variant
-	lib::epos::EPOS_MOTION_VARIANT motion_variant;
-
-	//! Motion time - used in the Interpolated Position Mode.
-	double estimated_time;
-
+	//! Two-element vector containing desired motor positions.
 	int32_t motor_pos[NUM_OF_SERVOS];
 
+	//! Two-element vector containing desired joint positions.
 	double joint_pos[NUM_OF_SERVOS];
 
-	// external
+	// Desired external legs rotation.
 	int base_vs_bench_rotation;
+
+	// Desired external PKM rotation.
 	double pkm_vs_base_rotation;
 
 	//! Allowed time for the motion in seconds.
@@ -217,12 +291,7 @@ struct cbuffer
 	//! In another case, the NACK will be replied.
 	double duration;
 
-	//! True if the contact is expected during the motion.
-	//! The NACK will be replied if:
-	//! - the contact was expected and did not happened
-	//! - OR the contact was NOT expected and did happened.
-	bool guarded_motion;
-
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -250,8 +319,6 @@ struct cbuffer
 						ar & motor_pos;
 						break;
 				}
-				ar & motion_variant;
-				ar & estimated_time;
 				break;
 			default:
 				break;
@@ -264,6 +331,7 @@ struct c_buffer : lib::c_buffer
 {
 	cbuffer smb;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -278,6 +346,52 @@ struct c_buffer : lib::c_buffer
 };
 
 /*!
+ * @brief SwarmItFix Mobile Base single leg status
+ * @ingroup smb
+ */
+struct leg_reply
+{
+	bool is_in;
+	bool is_out;
+	bool is_attached;
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & is_in;
+		ar & is_out;
+		ar & is_attached;
+	}
+
+};
+
+/*!
+ * @brief SwarmItFix Mobile Base multi leg reply
+ * @ingroup smb
+ */
+struct multi_leg_reply_td
+{
+	leg_reply leg[LEG_CLAMP_NUMBER];
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & leg;
+	}
+
+};
+
+/*!
  * @brief SwarmItFix Mobile Base EDP reply buffer
  * @ingroup smb
  */
@@ -286,6 +400,7 @@ struct rbuffer
 	multi_leg_reply_td multi_leg_reply;
 	epos::single_controller_epos_reply epos_controller[NUM_OF_SERVOS];
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -296,13 +411,13 @@ struct rbuffer
 		ar & multi_leg_reply;
 		ar & epos_controller;
 	}
-
 };
 
 struct r_buffer : lib::r_buffer
 {
 	rbuffer smb;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -310,7 +425,7 @@ struct r_buffer : lib::r_buffer
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		// serialize base class informationZ
+		// serialize base class information
 		ar & boost::serialization::base_object <lib::r_buffer>(*this);
 		ar & smb;
 	}

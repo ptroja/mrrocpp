@@ -11,6 +11,7 @@
 
 #include <boost/tokenizer.hpp>
 #include <boost/foreach.hpp>
+#include <boost/thread/thread.hpp>
 
 #include "wgt_robot_process_control.h"
 #include "menu_bar.h"
@@ -21,6 +22,8 @@
 #include "../base/menu_bar_action.h"
 #include "../base/mp.h"
 
+#include "ui_ecp_robot/ui_ecp_r_base.h"
+
 namespace mrrocpp {
 namespace ui {
 namespace common {
@@ -30,6 +33,12 @@ namespace common {
 // KLASA UiRobot
 //
 //
+
+void UiRobot::delete_ui_ecp_robot()
+{
+	delete ui_ecp_robot;
+
+}
 
 UiRobot::UiRobot(Interface& _interface, lib::robot_name_t _robot_name, int _number_of_servos) :
 		interface(_interface), tid(NULL), eb(_interface), robot_name(_robot_name), number_of_servos(_number_of_servos)
@@ -124,6 +133,11 @@ wgt_robot_process_control * UiRobot::get_wgt_robot_pc()
 	return wgt_robot_pc;
 }
 
+void UiRobot::ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l)
+{
+	ui_ecp_robot->get_controller_state(robot_controller_initial_state_l);
+}
+
 int UiRobot::edp_create_int()
 {
 	interface.set_ui_state_notification(UI_N_PROCESS_CREATION);
@@ -136,7 +150,6 @@ int UiRobot::edp_create_int()
 
 			if (interface.check_node_existence(state.edp.node_name, robot_name)) {
 
-				state.edp.node_nr = interface.config->return_node_number(state.edp.node_name);
 				{
 					boost::unique_lock <boost::mutex> lock(interface.process_creation_mtx);
 					try {
@@ -145,8 +158,6 @@ int UiRobot::edp_create_int()
 
 					catch (ecp::exception::se_r & error) {
 						/* Obsluga bledow ECP */
-
-						null_ui_ecp_robot();
 
 						throw error;
 
@@ -182,8 +193,7 @@ int UiRobot::edp_create_int()
 
 				catch (ecp::exception::se_r & error) {
 					/* Obsluga bledow ECP */
-					close_edp_connections();
-					null_ui_ecp_robot();
+					abort_edp();
 				} /*end: catch */
 
 			}
@@ -250,7 +260,7 @@ void UiRobot::connect_to_reader()
 
 	while ((state.edp.reader_fd = messip::port_connect(state.edp.network_reader_attach_point)) == lib::invalid_fd) {
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			usleep(lib::CONNECT_DELAY);
+			boost::this_thread::sleep(lib::CONNECT_DELAY);
 		} else {
 			perror("blad odwolania do READER");
 			break;
@@ -312,7 +322,7 @@ void UiRobot::connect_to_ecp_pulse_chanell()
 		)
 			break;
 		if ((tmp++) < lib::CONNECT_RETRY) {
-			usleep(lib::CONNECT_DELAY);
+			boost::this_thread::sleep(lib::CONNECT_DELAY);
 		} else {
 			perror("blad odwolania do ECP_TRIGGER");
 		}
@@ -382,7 +392,7 @@ bool UiRobot::deactivate_ecp_trigger()
 	return false;
 }
 
-void UiRobot::close_edp_connections()
+void UiRobot::abort_edp()
 {
 
 	if (state.edp.reader_fd != lib::invalid_fd) {
@@ -411,10 +421,16 @@ void UiRobot::EDP_slay_int()
 
 		interface.block_sigchld();
 
-		close_edp_connections();
+		std::cout << "EDP_slay_int" << std::endl;
 
+		abort_edp();
+
+		// Changed to false - the waitpid won't hang during execution.
 		interface.wait_for_child_termination((pid_t) state.edp.pid, true);
+		//interface.wait_for_child_termination(-1, true);
+
 		interface.unblock_sigchld();
+
 		abort_thread();
 	}
 
@@ -469,6 +485,11 @@ void UiRobot::open_c_motor_window()
 bool UiRobot::is_edp_loaded()
 {
 	return ((state.edp.state == UI_EDP_WAITING_TO_START_READER) || (state.edp.state == UI_EDP_WAITING_TO_STOP_READER));
+}
+
+int UiRobot::ui_get_edp_pid()
+{
+	return ui_ecp_robot->ecp->get_EDP_pid();
 }
 
 void UiRobot::manage_interface()

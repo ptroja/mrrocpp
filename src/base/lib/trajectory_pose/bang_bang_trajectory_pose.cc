@@ -72,14 +72,6 @@ bang_bang_trajectory_pose::bang_bang_trajectory_pose(const bang_bang_trajectory_
 	this->t=trj.t;
 	this->pos_num=trj.pos_num;
 	this->axes_num=trj.axes_num;
-
-
-
-}
-
-bang_bang_trajectory_pose::~bang_bang_trajectory_pose()
-{
-
 }
 
 } // namespace trajectory_pose

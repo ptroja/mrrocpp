@@ -13,7 +13,7 @@
 // Klasa edp_conveyor_effector.
 #include "robot/conveyor/edp_conveyor_effector.h"
 // Klasa hardware_interface.
-#include "robot/conveyor/hi_conv.h"
+#include "robot/hi_moxa/hi_moxa.h"
 // Klasa servo_buffer.
 #include "robot/conveyor/sg_conv.h"
 #include "robot/conveyor/regulator_conv.h"

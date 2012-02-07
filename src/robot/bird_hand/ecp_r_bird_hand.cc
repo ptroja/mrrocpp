@@ -25,6 +25,7 @@ robot::robot(lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 robot::robot(common::task::task_base& _ecp_object) :
@@ -40,17 +41,11 @@ robot::robot(common::task::task_base& _ecp_object) :
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 void robot::create_command()
 {
-
-	// checks if any data_port is set
-	bool is_new_data = false;
-
-	// cheks if any data_request_posrt is set
-	bool is_new_request = false;
-
 	// NOWE PORTY
 	ecp_command.get_type = NOTHING_DEFINITION;
 
@@ -103,17 +98,6 @@ void robot::create_command()
 		}
 
 		is_new_data = true;
-	}
-
-	communicate_with_edp = true;
-	if (is_new_data && is_new_request) {
-		ecp_command.instruction_type = lib::SET_GET;
-	} else if (is_new_data) {
-		ecp_command.instruction_type = lib::SET;
-	} else if (is_new_request) {
-		ecp_command.instruction_type = lib::GET;
-	} else {
-		communicate_with_edp = false;
 	}
 
 }

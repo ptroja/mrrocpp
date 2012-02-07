@@ -14,15 +14,31 @@ namespace mrrocpp {
 namespace kinematics {
 namespace spkm1 {
 
-kinematic_parameters_spkm1::kinematic_parameters_spkm1()
+kinematic_parameters_spkm1::kinematic_parameters_spkm1() :
+		mrrocpp::kinematics::spkm::kinematic_parameters_spkm()
 {
 	// Initialization of parameters describing the synchronisation positions (in joints).
 	synchro_positions[0] = 0.242;
 	synchro_positions[1] = 0.2435;
 	synchro_positions[2] = 0.242;
-	synchro_positions[3] = 0;
+	synchro_positions[3] = 0.0;
 	synchro_positions[4] = 0.0;
-	synchro_positions[5] = 0;
+	synchro_positions[5] = 0.0;
+
+	// Moog motor homing offset (in [qc]).
+	moog_motor_homing_offset = 83000;
+
+	// Moog motor homing velocity.
+	moog_motor_homing_velocity = -100;
+
+	//! Home position of the Moog motor [qc].
+	moog_motor_home_position = -300000;
+
+	// Homing offset of axis 3 motor [qc].
+	axis3_motor_homing_offset = 269300;
+
+	// Homing velocity of the axis 3 motor [rpm].
+	axis3_motor_homing_velocity = -100;
 
 	// Initialization of the encoder resolution. Equals to the Counts Per Turn (CPT) x 4.
 	encoder_resolution[0] = 500*4;
@@ -59,18 +75,18 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	upper_motor_pos_limits[1] = 8000;
 	upper_motor_pos_limits[2] = 8000;
 	// Lower wrist rotation.
-	upper_motor_pos_limits[3] = 300000;
+	upper_motor_pos_limits[3] = 383000;
 	upper_motor_pos_limits[4] = 190000;
 	// Upper wrist rotation.
 	upper_motor_pos_limits[5] = 260000;
 
 	// Initialization of lower motors limits vector.
 	// Those are the "unsafe" (in terms that robot can hit its "shell" from inside) values.;
-	lower_motor_pos_limits[0] = -350000;
-	lower_motor_pos_limits[1] = -350000;
-	lower_motor_pos_limits[2] = -350000;
+	lower_motor_pos_limits[0] = -500000;
+	lower_motor_pos_limits[1] = -500000;
+	lower_motor_pos_limits[2] = -500000;
 	// Lower wrist rotation.
-	lower_motor_pos_limits[3] = -440000;
+	lower_motor_pos_limits[3] = -352000;
 	lower_motor_pos_limits[4] = -380000;
 	// Upper wrist rotation.
 	lower_motor_pos_limits[5] = -270000;
@@ -92,30 +108,6 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1()
 	lower_joints_limits[3] = -2.2777;
 	lower_joints_limits[4] = -1.5708;
 	lower_joints_limits[5] = -2.43;
-
-	// Initialization of upper thyk alpha angle limit.
-	// Those values were determined experimentally.
-	upper_alpha_thyk_angle_limit[0] = 30.0;
-	upper_alpha_thyk_angle_limit[1] = 50.0;
-	upper_alpha_thyk_angle_limit[2] = 30.0;
-
-	// Initialization of lower thyk alpha angle limit.
-	// Those values were determined experimentally.
-	lower_alpha_thyk_angle_limit[0] = -30.0;
-	lower_alpha_thyk_angle_limit[1] = -50.0;
-	lower_alpha_thyk_angle_limit[2] = -30.0;
-
-	// Initialization of upper thyk beta angle limit.
-	// Those values were determined experimentally.
-	upper_beta_thyk_angle_limit[0] = 40.0;
-	upper_beta_thyk_angle_limit[1] = 50.0;
-	upper_beta_thyk_angle_limit[2] = 40.0;
-
-	// Initialization of lower thyk beta angle limit.
-	// Those values were determined experimentally.
-	lower_beta_thyk_angle_limit[0] = -30.0;
-	lower_beta_thyk_angle_limit[1] = -50.0;
-	lower_beta_thyk_angle_limit[2] = -30.0;
 
 	// Lower platform: Initialize the jb coordinate of P1A in O(ib,jb,kb).
 	lA = -0.05;

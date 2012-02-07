@@ -78,12 +78,10 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
-	step_new_pulse = step_new * AXIS_7_INC_PER_REVOLUTION / (2 * M_PI);//*AXE_7_POSTUMENT_TO_TRACK_RATIO);
+	step_new_pulse = step_new * AXIS_7_INC_PER_REVOLUTION / (2 * M_PI); //*AXE_7_POSTUMENT_TO_TRACK_RATIO);
 	//position_increment_new= position_increment_new/AXE_7_POSTUMENT_TO_TRACK_RATIO;
-
 
 	// if (step_new!=0.0) printf(" 8 reg:%f\n", step_new);
 
@@ -100,8 +98,6 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	//  fff++;
 	//  if (fff == 9) fff=0;
 	// }
-
-
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
 	 if (fabs(position_increment_new) > common::MAX_INC)
@@ -111,14 +107,12 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	// kumulacja przyrostu polozenia w tym makrokroku // ORIGINAL
 	// pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO;
 	// servo_pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO; // by Y
-
 	// kumulacja przyrostu polozenia w tym makrokroku
 	//pos_increment_new_sum += root_position_increment_new;
 	// servo_pos_increment_new_sum += root_position_increment_new;// by Y
-
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new) - 0.980 * (step_old_pulse
-			- position_increment_old);
+	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new)
+			- 0.980 * (step_old_pulse - position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
@@ -275,7 +269,6 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 				//				 		std::cout << " set_value_new = " << set_value_new << ",";
 				//				 		std::cout << std::endl;
 
-
 				//  display = 0;
 				//printf("khm... joint 7:  current_desired = %f,  measured_current = %f, int_current_error = %f,  set_value_new = %f \n",	 current_desired,   current_measured, int_current_error, set_value_new);
 			}
@@ -367,8 +360,6 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	 */
 
 	//   if (set_value_new!=0.0) printf ("aa: %f\n", set_value_new);
-
-
 	// scope-locked reader data update
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
@@ -391,8 +382,8 @@ uint8_t NL_regulator_8_irp6ot::compute_set_value(void)
 	set_value_very_old = set_value_old;
 
 	PWM_value = (int) set_value_new;
-
-	//	printf("CC: PWM: %d, %d, %d, %d\n", PWM_value, measured_current, reg_state, kk);
+	// DEBUGOWE WYPISUYWAIE PWM I ZMIERZONEGO PZYROSTU POOLOZENIA
+	// printf("position_increment_new: set_value_new: %f, %f\n", position_increment_new, set_value_new);
 
 	// AUTOMAT ZABEZPIECZAJACY SILNIK CHWYTAKA PRZED PRZEGRZANIEM
 	/*

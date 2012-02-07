@@ -21,7 +21,7 @@
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 
 #include "subtask/ecp_mp_st_smooth_file_from_mp.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
@@ -59,8 +59,8 @@ void swarm_demo::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Both Bias");
 
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", lib::irp6ot_m::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 5, "", lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE, 5, "", lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE, 5, "", lib::irp6p_m::ROBOT_NAME);
 	wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Postument Angle axis");

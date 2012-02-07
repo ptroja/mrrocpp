@@ -44,15 +44,15 @@ logger_server::~logger_server()
 
 void logger_server::setup_server()
 {
-	if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+	if ((fd = ::socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		throw runtime_error("socket() failed: " + string(strerror(errno)));
 	}
 
 	int on = 1;
-	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (const char*) &on, sizeof(on)) < 0) {
+	if (::setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (const char*) &on, sizeof(on)) < 0) {
 		throw runtime_error("setsockopt() failed: " + string(strerror(errno)));
 	}
-	if (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &on, sizeof(int))) {
+	if (::setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &on, sizeof(int))) {
 		throw std::runtime_error("setsockopt(): " + std::string(strerror(errno)));
 	}
 
@@ -61,11 +61,11 @@ void logger_server::setup_server()
 	m_addr.sin_addr.s_addr = INADDR_ANY;
 	m_addr.sin_port = htons(port);
 
-	if (bind(fd, (struct sockaddr*) &m_addr, sizeof(m_addr)) < 0) {
+	if (::bind(fd, (struct sockaddr*) &m_addr, sizeof(m_addr)) < 0) {
 		throw runtime_error("bind() failed: " + string(strerror(errno)));
 	}
 
-	if (listen(fd, 1) < 0) {
+	if (::listen(fd, 1) < 0) {
 		throw runtime_error("listen() failed: " + string(strerror(errno)));
 	}
 }
@@ -73,7 +73,7 @@ void logger_server::setup_server()
 void logger_server::teardown_server()
 {
 	if (fd >= 0) {
-		close(fd);
+		::close(fd);
 		fd = -1;
 	}
 }
@@ -82,7 +82,7 @@ void logger_server::accept_connection(){
 	sockaddr_in m_addr;
 	int addr_length = sizeof(m_addr);
 
-	int acceptedFd = accept(fd, (sockaddr *) &m_addr, (socklen_t *) &addr_length);
+	int acceptedFd = ::accept(fd, (sockaddr *) &m_addr, (socklen_t *) &addr_length);
 
 	if (acceptedFd < 0) {
 		throw runtime_error("accept() failed: " + string(strerror(errno)));
@@ -117,7 +117,7 @@ void logger_server::main_loop()
 
 		tv.tv_sec = 1;
 		tv.tv_usec = 0;
-		int ret = select(maxFd + 1, &rfds, NULL, NULL, &tv);
+		int ret = ::select(maxFd + 1, &rfds, NULL, NULL, &tv);
 		if(ret < 0 && errno == EINTR){
 			terminate_now = true;
 		}else if(ret < 0){

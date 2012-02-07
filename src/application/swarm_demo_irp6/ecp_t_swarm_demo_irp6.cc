@@ -4,8 +4,8 @@
 #include "base/ecp/ecp_task.h"
 #include "ecp_t_swarm_demo_irp6.h"
 #include "subtask/ecp_st_smooth_file_from_mp.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
-#include "subtask/ecp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 
 #include "robot/irp6p_m/const_irp6p_m.h"
@@ -32,9 +32,10 @@ swarm_demo::swarm_demo(lib::configurator &_config) :
 	// utworzenie generatorow
 	gag = new common::generator::tff_gripper_approach(*this, 8);
 
-	// utworzenie podzadan
-	subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = new sub_task::bias_edp_force(*this);
+	// utworzenie generatorow do uruchamiania dispatcherem
+	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
 
+	// utworzenie podzadan
 	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] =
 			new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
 	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =

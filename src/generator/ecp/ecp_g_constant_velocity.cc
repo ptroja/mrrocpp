@@ -7,6 +7,7 @@
 
 #include "base/ecp/ecp_exceptions.h"
 #include "ecp_g_constant_velocity.h"
+#include "base/lib/datastr.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -267,6 +268,129 @@ bool constant_velocity::load_trajectory_pose(const vector<double> & coordinates,
 	sr_ecp_msg.message("Pose loaded");
 
 	return true;
+}
+
+bool constant_velocity::load_trajectory_from_file(const char* file_name)
+{
+
+        sr_ecp_msg.message(file_name);
+
+        char coordinate_type_desc[80]; //description of pose specification read from the file
+        char motion_type_desc[80]; //description of motion type read from the file
+        lib::ECP_POSE_SPECIFICATION ps; //pose specification read from the file
+        lib::MOTION_TYPE mt; //type of the commanded motion (relative or absolute)
+        int number_of_poses = 0; //number of poses to be read
+        int i, j; //loop counters
+
+        std::ifstream from_file(file_name); // open the file
+        if (!from_file.good()) {
+                //perror(file_name);
+                BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
+                return false;
+        }
+
+        if (!(from_file >> coordinate_type_desc)) {
+                BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
+                return false;
+        }
+
+        //removing spaces and tabs
+        i = 0;
+        j = 0;
+        while (coordinate_type_desc[i] == ' ' || coordinate_type_desc[i] == '\t')
+                i++;
+        while (coordinate_type_desc[i] != ' ' && coordinate_type_desc[i] != '\t' && coordinate_type_desc[i] != '\n'
+                        && coordinate_type_desc[i] != '\r' && coordinate_type_desc[j] != '\0') {
+                coordinate_type_desc[j] = toupper(coordinate_type_desc[i]);
+                i++;
+                j++;
+        }
+        coordinate_type_desc[j] = '\0';
+
+        if (!strcmp(coordinate_type_desc, "MOTOR")) {
+                ps = lib::ECP_MOTOR;
+        } else if (!strcmp(coordinate_type_desc, "JOINT")) {
+                ps = lib::ECP_JOINT;
+        } else if (!strcmp(coordinate_type_desc, "XYZ_EULER_ZYZ")) {
+                ps = lib::ECP_XYZ_EULER_ZYZ;
+        } else if (!strcmp(coordinate_type_desc, "XYZ_ANGLE_AXIS")) {
+                ps = lib::ECP_XYZ_ANGLE_AXIS;
+        } else {
+                BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_TRAJECTORY_FILE));
+                return false;
+        }
+
+        if (!(from_file >> number_of_poses)) {
+                BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
+                return false;
+        }
+
+        flushall();
+        if (!(from_file >> motion_type_desc)) {
+                BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
+                return false;
+        }
+
+        if (!strcmp(motion_type_desc, "ABSOLUTE")) {
+                mt = lib::ABSOLUTE;
+        } else if (!strcmp(motion_type_desc, "RELATIVE")) {
+                mt = lib::RELATIVE;
+        } else {
+                BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_TRAJECTORY_FILE));
+                return false;
+        }
+
+        double tab[10];
+        int pos = from_file.tellg();
+        char line[80];
+        int dlugosc;
+        do {
+                from_file.getline(line, 80);
+                dlugosc = strlen(line);
+        } while (dlugosc < 5);
+        int num = lib::setValuesInArray(tab, line);
+        this->set_axes_num(num);
+        from_file.seekg(pos);
+
+        std::vector <double> v(axes_num); //vector of read velocities
+        std::vector <double> a(axes_num); //vector of read accelerations
+        std::vector <double> coordinates(axes_num); //vector of read coordinates
+
+        for (i = 0; i < number_of_poses; i++) {
+                for (j = 0; j < axes_num; j++) {
+                        if (!(from_file >> v[j])) { //protection before the non-numerical data
+                                BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
+                                return false;
+                        }
+                }
+                from_file.ignore(std::numeric_limits <std::streamsize>::max(), '\n');
+                for (j = 0; j < axes_num; j++) {
+                        if (!(from_file >> a[j])) { //protection before the non-numerical data
+                                BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
+                                return false;
+                        }
+                }
+                from_file.ignore(std::numeric_limits <std::streamsize>::max(), '\n');
+                for (j = 0; j < axes_num; j++) {
+                        if (!(from_file >> coordinates[j])) { //protection before the non-numerical data
+                                BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
+                                return false;
+                        }
+                }
+                from_file.ignore(std::numeric_limits <std::streamsize>::max(), '\n');
+
+                if (ps == lib::ECP_MOTOR) {
+                        load_trajectory_pose(coordinates, mt, ps, v, motor_max_velocity);
+                } else if (ps == lib::ECP_JOINT) {
+                        load_trajectory_pose(coordinates, mt, ps, v, joint_max_velocity);
+                } else if (ps == lib::ECP_XYZ_EULER_ZYZ) {
+                        load_trajectory_pose(coordinates, mt, ps, v, euler_zyz_max_velocity);
+                } else if (ps == lib::ECP_XYZ_ANGLE_AXIS) {
+                        load_trajectory_pose(coordinates, mt, ps, v, angle_axis_max_velocity);
+                }
+        }
+
+        return true;
 }
 //--------------- METHODS USED TO LOAD POSES END ----------------
 

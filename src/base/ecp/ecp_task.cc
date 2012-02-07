@@ -30,7 +30,7 @@ namespace ecp {
 namespace common {
 namespace task {
 
-task_base::task_base(lib::configurator &_config, boost::shared_ptr<robot::ecp_robot_base> & robot_ref) :
+task_base::task_base(lib::configurator &_config, boost::shared_ptr <robot::ecp_robot_base> & robot_ref) :
 		ecp_mp::task::task(_config),
 		ecp_m_robot(robot_ref),
 		MP(lib::MP_SECTION),
@@ -43,6 +43,41 @@ task_base::task_base(lib::configurator &_config, boost::shared_ptr<robot::ecp_ro
 	initialize_communication();
 }
 
+void task_base::register_generator(generator::generator_base* _gen)
+{
+	std::string gen_name = _gen->subtask_generator_name;
+	if (gen_name != EMPTY_SUBTASK_GENERATOR_NAME) {
+		if (subtask_generator_m.find(gen_name) == subtask_generator_m.end()) {
+			subtask_generator_m[gen_name] = _gen;
+			generator_m[gen_name] = _gen;
+		} else {
+			std::stringstream ss(std::stringstream::in | std::stringstream::out);
+			ss << "Generator name already registered: " << gen_name;
+			sr_ecp_msg->message(lib::FATAL_ERROR, ss.str().c_str());
+		}
+	} else {
+		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for generator");
+	}
+}
+
+void task_base::register_subtask(sub_task::sub_task_base* _st)
+{
+	std::string subtask_name = _st->subtask_generator_name;
+
+	if (subtask_name != EMPTY_SUBTASK_GENERATOR_NAME) {
+		if (subtask_generator_m.find(subtask_name) == subtask_generator_m.end()) {
+			subtask_generator_m[subtask_name] = _st;
+			subtask_m[subtask_name] = _st;
+		} else {
+			std::stringstream ss(std::stringstream::in | std::stringstream::out);
+			ss << "Subtask name already registered: " << subtask_name;
+			sr_ecp_msg->message(lib::FATAL_ERROR, ss.str().c_str());
+		}
+	} else {
+		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for subtask");
+	}
+}
+
 void task_base::main_task_algorithm(void)
 {
 	for (;;) {
@@ -52,7 +87,7 @@ void task_base::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 
-		subtasks_conditional_execution();
+		subtasks_and_generators_dispather();
 
 		mp_2_ecp_next_state_string_handler();
 
@@ -134,14 +169,20 @@ void task_base::termination_notice(void)
 	}
 }
 
-void task_base::subtasks_conditional_execution()
+void task_base::subtasks_and_generators_dispather()
 {
-	BOOST_FOREACH(const subtask_pair_t & subtask_node, subtask_m)
-			{
-				if (mp_2_ecp_next_state_string == subtask_node.first) {
-					subtask_node.second->conditional_execution();
-				}
-			}
+	bool command_recognized = 0;
+
+	if (subtask_generator_m.find(mp_2_ecp_next_state_string) != subtask_generator_m.end()) {
+		subtask_generator_m.at(mp_2_ecp_next_state_string)->conditional_execution();
+	}
+
+	if (command_recognized == 0) {
+		//	sr_ecp_msg->message(lib::FATAL_ERROR, "ecp dispatcher failure (label not recognized)");
+	} else if (command_recognized > 1) {
+		sr_ecp_msg->message(lib::FATAL_ERROR, "ecp dispatcher failure (2 dispathers for single label)");
+	}
+
 }
 
 // Petla odbierania wiadomosci.

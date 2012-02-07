@@ -1,15 +1,27 @@
+/*!
+ * @file
+ * @brief File containing the definition of edp::sbench::effector class.
+ *
+ * @author yoyek
+ *
+ * @ingroup sbench
+ */
+
 #include <cstdio>
+
+#include <comedilib.h>
+
+#include "robot/canopen/gateway_epos_usb.h"
+#include "robot/canopen/gateway_socketcan.h"
 
 #include "base/lib/typedefs.h"
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-// Klasa edp_irp6ot_effector.
 #include "edp_e_sbench.h"
 #include "base/edp/reader.h"
-// Kinematyki.
-#include "robot/sbench/kinematic_model_sbench.h"
+
 #include "base/edp/manip_trans_t.h"
 #include "base/edp/vis_server.h"
 
@@ -20,162 +32,348 @@ namespace mrrocpp {
 namespace edp {
 namespace sbench {
 
+#include "base/lib/debug.hpp"
+
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
 	motor_driven_effector::single_thread_master_order(nm_task, nm_tryb);
 }
 
-// Konstruktor.
 effector::effector(common::shell &_shell) :
-		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME, instruction, reply), dev_name("/dev/comedi0")
+		motor_driven_effector(_shell, lib::sbench::ROBOT_NAME, instruction, reply),
+		dev_name("/dev/comedi0")
 {
-
-	number_of_servos = lib::sbench::NUM_OF_SERVOS;
-	//  Stworzenie listy dostepnych kinematyk.
-	create_kinematic_models_for_given_robot();
-
-	reset_variables();
-
-	if (!robot_test_mode) {
-
-		// initiate hardware
-		device = comedi_open(dev_name.c_str());
-
-		if (!device) {
-
-			throw std::runtime_error("Could not open device");
-		}
-
-	} else {
-		current_pins_buf.set_zeros();
-	}
-
-}
-
-void effector::get_controller_state(lib::c_buffer &instruction)
-{
+	DEBUG_METHOD;
 
 	if (robot_test_mode) {
-		controller_state_edp_buf.is_synchronised = true;
+		// If robot test mode - deactivate both flags modes automatically.
+		power_supply = 0;
+		cleaning  = 0;
 	} else {
-		controller_state_edp_buf.is_synchronised = true;
+		// Read values from config file.
+		power_supply = config.exists_and_true("power_supply");
+		cleaning = config.exists_and_true("cleaning");
 	}
 
-	//printf("get_controller_state: %d\n", controller_state_edp_buf.is_synchronised); fflush(stdout);
-	reply.controller_state = controller_state_edp_buf;
 
-	/*
-	 // aktualizacja pozycji robota
-	 // Uformowanie rozkazu odczytu dla SERVO_GROUP
-	 sb->servo_command.instruction_code = lib::READ;
-	 // Wyslanie rozkazu do SERVO_GROUP
-	 // Pobranie z SERVO_GROUP aktualnej pozycji silnikow
-	 //	printf("get_arm_position read_hardware\n");
 
-	 sb->send_to_SERVO_GROUP();
-	 */
-	// dla pierwszego wypelnienia current_joints
-	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	// TODO: what for??
+	number_of_servos = lib::sbench::NUM_OF_SERVOS;
 
-	{
-		boost::mutex::scoped_lock lock(effector_mutex);
+	// Initialize power and pressure supplies.
+	power_supply_init();
+	cleaning_init();
+}
 
-		// Ustawienie poprzedniej wartosci zadanej na obecnie odczytane polozenie walow silnikow
-		for (int i = 0; i < number_of_servos; i++) {
-			servo_current_motor_pos[i] = desired_motor_pos_new[i] = desired_motor_pos_old[i] = current_motor_pos[i];
-			desired_joints[i] = current_joints[i];
+
+
+effector::~effector()
+{
+	DEBUG_METHOD;
+	if(power_supply_active()) {
+		// Detach from hardware
+		if (power_supply_device) {
+			if(comedi_close(power_supply_device) == -1) {
+				// TODO: print error message
+			}
 		}
 	}
 }
 
-/*--------------------------------------------------------------------------*/
-void effector::move_arm(const lib::c_buffer &instruction)
+
+bool effector::cleaning_active()
 {
+	return cleaning;
+}
 
-	lib::sbench::c_buffer & local_instruction = (lib::sbench::c_buffer&) instruction;
+bool effector::power_supply_active()
+{
+	return power_supply;
+}
 
-	msg->message("move_arm");
+
+void effector::power_supply_init()
+{
+	DEBUG_METHOD;
+	if (!power_supply_active()) {
+		msg->message("Power supply of relays will not used - test mode activated");
+		// NULL pointer just for safety.
+		power_supply_device = NULL;
+		current_pins_buf.voltage_buf.set_all_off();
+	} else {
+		// Initialize the hardware controlling the power supply.
+		power_supply_device = comedi_open(dev_name.c_str());
+		if (!power_supply_device) {
+			throw std::runtime_error("Could not open the power supply device.");
+		}
+	}
+}
+
+
+void effector::cleaning_init()
+{
+	DEBUG_METHOD;
+
+	// Inform the user about the configuration.
+	if (!cleaning_active()) {
+		msg->message("FESTO hardware will not used for cleaning - test mode activated");
+		current_pins_buf.preasure_buf.set_all_off();
+	} else {
+		// Initialize the can connection.
+		gateway = (boost::shared_ptr <canopen::gateway>) new canopen::gateway_epos_usb();
+
+		// Connect to the gateway.
+		gateway->open();
+
+		// Create festo node.
+		cpv10 = (boost::shared_ptr <festo::cpv>) new festo::cpv(*gateway, FESTO_ADRESS);
+
+		festo::U32 DeviceType = cpv10->getDeviceType();
+		printf("Device type = 0x%08X\n", DeviceType);
+
+		festo::U8 ErrorRegister = cpv10->getErrorRegister();
+		printf("Error register = 0x%02X\n", ErrorRegister);
+
+		festo::U32 ManufacturerStatusRegister = cpv10->getManufacturerStatusRegister();
+		printf("Manufacturer status register = 0x%08X\n", ManufacturerStatusRegister);
+
+		festo::U8 NumberOfErrorsInDiagnosticMemeory = cpv10->getNumberOfErrorsInDiagnosticMemeory();
+		printf("Number of errors in diagnostic memory = %d\n", NumberOfErrorsInDiagnosticMemeory);
+		if (NumberOfErrorsInDiagnosticMemeory > 0) {
+			cpv10->clearErrorsInDiagnosticMemeory();
+		}
+
+		printf("Status byte = 0x%02x\n", cpv10->getStatusByte());
+
+		uint8_t NumberOfOutputGroups = cpv10->getNumberOf8OutputGroups();
+		printf("Number of 8-output groups = %d\n", NumberOfOutputGroups);
+
+		uint8_t Outputs07 = cpv10->getOutputs(1);
+		printf("Status of outputs 0..7 = 0x%02x\n", Outputs07);
+
+		gateway->SendNMTService(FESTO_ADRESS, canopen::gateway::Start_Remote_Node);
+		//gateway->SendNMTService(FESTO_ADRESS, canopen::gateway::Reset_Node);
+
+		current_pins_buf.preasure_buf.set_all_off();
+	}
+}
+
+void effector::get_controller_state(lib::c_buffer &instruction_)
+{
+	DEBUG_METHOD;
+
+	controller_state_edp_buf.is_synchronised = true;
+	reply.controller_state = controller_state_edp_buf;
+}
+
+void effector::move_arm(const lib::c_buffer &instruction_)
+{
+	DEBUG_METHOD;
+
+	switch (instruction.sbench.variant)
+	{
+		case lib::sbench::POWER_SUPPLY:
+			DEBUG_COMMAND("VOLTAGE");
+			power_supply_command();
+			break;
+		case lib::sbench::CLEANING:
+			DEBUG_COMMAND("PREASURE");
+			cleaning_command();
+			break;
+	}
+
+}
+
+void effector::power_supply_command()
+{
+	DEBUG_METHOD;
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 
-	lib::sbench::pins_buffer pins_buf;
+	lib::sbench::power_supply_state voltage_buf = instruction.sbench.voltage_buf;
 
-	memcpy(&pins_buf, &(local_instruction.sbench.pins_buf), sizeof(pins_buf));
+	// Check working mode.
+	if (!power_supply_active()) {
 
-	if (robot_test_mode) {
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			if (pins_buf.pins_state[i]) {
+			if (voltage_buf.pins_state[i]) {
 				ss << "1";
 			} else {
 				ss << "0";
 			}
 		}
-		current_pins_buf = pins_buf;
+		current_pins_buf.voltage_buf = voltage_buf;
 		ss << std::endl;
 		msg->message(ss.str());
 	} else {
-
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			comedi_dio_write(device, (int) (i / 32), (i%32), pins_buf.pins_state[i]);
-			//	current_pins_state[i] = pins_state[i];
-		} // send command to hardware
+			if (voltage_buf.pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+		current_pins_buf.voltage_buf = voltage_buf;
+		ss << std::endl;
+		msg->message(ss.str());
+
+		int total_number_of_pins_activated = 0;
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (voltage_buf.pins_state[i]) {
+				total_number_of_pins_activated++;
+			}
+		}
+
+		if (total_number_of_pins_activated <= VOLTAGE_PINS_ACTIVATED_LIMIT) {
+			for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+				comedi_dio_write(power_supply_device, (unsigned int) (i / 32), (unsigned int) (i % 32), (unsigned int) voltage_buf.pins_state[i]);
+				//	comedi_dio_write(voltage_device, (int) (i / 32), (i % 32), 0);
+			} // send command to hardware
+		} else {
+			// TODO throw
+			msg->message(lib::NON_FATAL_ERROR, "voltage_command total_number_of_pins_activated exceeded");
+		}
+
 	}
 
 }
 
-			/*--------------------------------------------------------------------------*/
-
-			/*--------------------------------------------------------------------------*/
-void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction)
+void effector::cleaning_command()
 {
-	msg->message("get_arm");
-
-	//lib::JointArray desired_joints_tmp(lib::MAX_SERVOS_NR); // Wspolrzedne wewnetrzne -
-	//	printf(" GET ARM\n");
-	//	flushall();
-	static int licznikaaa = (-11);
+	DEBUG_METHOD;
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	ss << "get_arm_position: " << licznikaaa;
-	msg->message(ss.str().c_str());
-	//	printf("%s\n", ss.str().c_str());
 
-	if (!robot_test_mode) {
+	lib::sbench::cleaning_state preasure_buf = instruction.sbench.preasure_buf;
 
-		// read pin_state from hardware
+	// Check working mode.
+	if (!cleaning_active()) {
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			if (preasure_buf.pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+
+		ss << std::endl;
+		msg->message(ss.str());
+		current_pins_buf.preasure_buf = preasure_buf;
+	} else {
+		msg->message("preasure_command hardware mode");
 
 		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
-			unsigned int current_read;
-			comedi_dio_read(device, (int) (i / 32), (i%32), &current_read);
-			current_pins_buf.pins_state[i] = current_read;
-		} // send command to hardware
+			if (preasure_buf.pins_state[i]) {
+				ss << "1";
+			} else {
+				ss << "0";
+			}
+		}
+
+		ss << std::endl;
+		msg->message(ss.str());
+
+		int total_number_of_pins_activated = 0;
+
+		// prepare the desired output
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			for (int j = 0; j < 8; j++) {
+				desired_output[i + 1][j] = preasure_buf.pins_state[i * 8 + j];
+				if (preasure_buf.pins_state[i * 8 + j]) {
+					total_number_of_pins_activated++;
+				}
+			}
+		}
+
+		// checks if the limit was exceded
+		if (total_number_of_pins_activated <= CLEANING_PINS_ACTIVATED_LIMIT) {
+			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+				cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+			}
+		} else {
+			// TODO throw
+			msg->message(lib::NON_FATAL_ERROR, "preasure_command total_number_of_pins_activated exceeded");
+		}
+
+//		for (int k = 0; k < 20; k++) {
+//			// send the command
+//			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+//				//	cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+//				cpv10->setOutputs(i + 1, (uint8_t) 0xAA);
+//			}delay(1000);
+//
+//			// send the command
+//			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+//				//	cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+//				cpv10->setOutputs(i + 1, (uint8_t) 0x55);
+//			}delay(1000);
+//
+//			// send the command
+//			for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+//				//	cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+//				cpv10->setOutputs(i + 1, (uint8_t) 0x00);
+//			}
+//			delay(1000);
+//		}
+
+		//current_pins_buf.preasure_buf = preasure_buf;
 
 	}
-	reply.sbench.pins_buf = current_pins_buf;
 
+}
+
+void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
+{
+	DEBUG_METHOD;
+
+	power_supply_reply();
+	cleaning_reply();
+	reply.sbench = current_pins_buf;
 	reply.servo_step = step_counter;
 }
-/*--------------------------------------------------------------------------*/
 
-// Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
-void effector::create_kinematic_models_for_given_robot(void)
+void effector::power_supply_reply()
 {
-	// Stworzenie wszystkich modeli kinematyki.
-	add_kinematic_model(new kinematics::sbench::model());
-	// Ustawienie aktywnego modelu.
-	set_kinematic_model(0);
+	DEBUG_METHOD;
+
+	DEBUG_COMMAND("VOLTAGE");
+	if (power_supply_active()) {
+		// read pin_state from hardware
+		for (int i = 0; i < lib::sbench::NUM_OF_PINS; i++) {
+			unsigned int current_read;
+			comedi_dio_read(power_supply_device, (int) (i / 32), (i % 32), &current_read);
+			current_pins_buf.voltage_buf.pins_state[i] = current_read;
+		} // send command to hardware
+	}
 }
 
-/*--------------------------------------------------------------------------*/
+void effector::cleaning_reply()
+{
+	DEBUG_METHOD;
+
+	DEBUG_COMMAND("PREASURE");
+	if (cleaning_active()) {
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			current_output[i + 1] = cpv10->getOutputs(i + 1);
+		}
+
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			for (int j = 0; j < 8; j++) {
+				current_pins_buf.preasure_buf.pins_state[i * 8 + j] = current_output[i + 1][j];
+			}
+		}
+
+	}
+}
+
 void effector::create_threads()
 {
 	rb_obj = (boost::shared_ptr <common::reader_buffer>) new common::reader_buffer(*this);
-	vis_obj = (boost::shared_ptr <common::vis_server>) new common::vis_server(*this);
 }
 
-lib::INSTRUCTION_TYPE effector::variant_receive_instruction()
+lib::INSTRUCTION_TYPE effector::receive_instruction()
 {
-	return receive_instruction(instruction);
+	return common::effector::receive_instruction(instruction);
 }
 
 void effector::variant_reply_to_instruction()
@@ -183,7 +381,13 @@ void effector::variant_reply_to_instruction()
 	reply_to_instruction(reply);
 }
 
-} // namespace smb
+void effector::create_kinematic_models_for_given_robot(void)
+{
+	// There are no kinematic models.
+}
+
+
+} // namespace sbench
 
 namespace common {
 

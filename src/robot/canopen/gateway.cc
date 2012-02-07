@@ -18,7 +18,7 @@ namespace canopen {
  */
 
 /* check the global variable E_error for EPOS error code */
-void gateway::checkEPOSerror(DWORD E_error)
+void gateway::checkCanOpenError(DWORD E_error)
 {
 	const char *msg;
 	switch (E_error) {
@@ -56,13 +56,52 @@ void gateway::checkEPOSerror(DWORD E_error)
 		case 0x0F00FFB9: msg = "Error CAN ID: Wrong CAN ID"; break;
 
 		default:
-			msg = "unknown EPOS error code"; //TODO: %x\n", E_error);
-			printf("EPOS error code: 0x%08x\n", E_error);
+			msg = "unknown CanOpen error code"; //TODO: %x\n", E_error);
+			printf("CanOpen error code: 0x%08x\n", E_error);
 			break;
 	}
 
 	BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(msg));
 }
+
+#if 0
+std::string gateway::ReadObjectStringValue(uint8_t nodeId, canopen::WORD index, canopen::BYTE subindex)
+{
+	canopen::WORD answer[8];
+
+	std::string str;
+
+	try {
+		unsigned int r = this->ReadObject(answer, 8, nodeId, index, subindex);
+
+		for (unsigned int i = 0; i < r; ++i) {
+			char c = (answer[3 + i] & 0x00FF);
+
+			if (c == 0x00) {
+				break;
+			} else {
+				str += c;
+			}
+
+			c = ((answer[3 + i] & 0xFF00) >> 8);
+
+			if (c == 0x00) {
+				break;
+			} else {
+				str += c;
+			}
+		}
+
+	} catch (boost::exception & e) {
+		e << dictionary_index(index);
+		e << dictionary_subindex(subindex);
+		e << canId(nodeId);
+		throw;
+	}
+
+	return str;
+}
+#endif
 
 /* copied from EPOS Communication Guide, p.8 */
 WORD gateway::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
@@ -101,6 +140,11 @@ WORD gateway::CalcFieldCRC(const WORD *pDataArray, WORD numberOfWords)
 		printf("checksum == %#06x\n", CRC);
 	}
 	return CRC;
+}
+
+void gateway::setDebugLevel(int level)
+{
+	debug = level;
 }
 
 } /* namespace epos */

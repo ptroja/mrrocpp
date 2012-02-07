@@ -2,8 +2,6 @@
 
 add_executable(edp_irp6ot_m
 	edp_irp6ot_m_effector.cc
-	hi_irp6ot_m.cc
-	int_hand_irp6ot_m.cc
 	sg_irp6ot_m.cc
 	regulator_irp6ot_m.cc 
 )

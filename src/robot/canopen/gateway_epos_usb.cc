@@ -7,6 +7,8 @@
 
 #include <cstdio>
 
+#include <boost/throw_exception.hpp>
+
 #include "gateway_epos_usb.h"
 
 namespace mrrocpp {
@@ -17,7 +19,7 @@ gateway_epos_usb::gateway_epos_usb(int _vendor, int _product, unsigned int _inde
 	vendor(_vendor), product(_product), index(_index)
 {
 	if (ftdi_init(&ftdic) < 0) {
-		fprintf(stderr, "ftdi_init failed\n");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("ftdi_init failed"));
 	}
 	// Set the timeouts to 1 sec (the libftdi defaults to 5 sec)
 	ftdic.usb_read_timeout = 1000;
@@ -37,49 +39,49 @@ void gateway_epos_usb::open()
 
 	if ((ret = ftdi_usb_open(&ftdic, vendor, product)) < 0) {
 		fprintf(stderr, "unable to open ftdi device: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(ftdi_get_error_string(&ftdic)));
 	}
 
 	//! reset FTDI device
 	if ((ret = ftdi_usb_reset(&ftdic)) < 0) {
 		fprintf(stderr, "unable to reset ftdi device: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(ftdi_get_error_string(&ftdic)));
 	}
 
 	if ((ret = ftdi_set_line_property(&ftdic, BITS_8, STOP_BIT_1, NONE)) < 0) {
 		fprintf(stderr, "unable to set ftdi line property: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-        throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+        BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(ftdi_get_error_string(&ftdic)));
     }
 
 	//! set flow control
 	if ((ret = ftdi_setflowctrl(&ftdic, SIO_DISABLE_FLOW_CTRL)) < 0) {
 	//if ((ret = ftdi_setflowctrl(&ftdic, SIO_RTS_CTS_HS)) < 0) {
 		fprintf(stderr, "unable to set ftdi flow control: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-        throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+        BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(ftdi_get_error_string(&ftdic)));
     }
 
 	//! set latency timer
 	if ((ret = ftdi_set_latency_timer(&ftdic, 1)) < 0) {
 		fprintf(stderr, "unable to set ftdi latency timer: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(ftdi_get_error_string(&ftdic)));
 	}
 
 	//! set baud rate
 	if ((ret = ftdi_set_baudrate(&ftdic, 1000000)) < 0) {
 		fprintf(stderr, "unable to set ftdi baudrate: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(ftdi_get_error_string(&ftdic)));
 	}
 #if 0
 	//! set write data chunk size
 	if ((ret = ftdi_write_data_set_chunksize(&ftdic, 512)) < 0) {
 		fprintf(stderr, "unable to set ftdi write chunksize: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(ftdi_get_error_string(&ftdic)));
 	}
 
 	//! set read data chunk size
 	if ((ret = ftdi_read_data_set_chunksize(&ftdic, 512)) < 0) {
 		fprintf(stderr, "unable to set ftdi read chunksize: %d (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(ftdi_get_error_string(&ftdic)));
 	}
 #endif
 
@@ -89,7 +91,7 @@ void gateway_epos_usb::open()
 void gateway_epos_usb::close()
 {
 	if(ftdi_usb_close(&ftdic)) {
-		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(ftdi_get_error_string(&ftdic)));
 	}
 
 	device_opened = false;
@@ -116,9 +118,9 @@ unsigned int gateway_epos_usb::readAnswer(WORD *ans, unsigned int ans_len)
 
 	if (ret < 0) {
 		fprintf(stderr, "ftdi device read failed (%d): (%s)\n", ret, ftdi_get_error_string(&ftdic));
-		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(ftdi_get_error_string(&ftdic)));
 	} else if (ret == 0) {
-		throw fe_canopen_error() << reason("no data returned");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("no data returned"));
 	}
 
 	if (debug) {
@@ -131,24 +133,24 @@ unsigned int gateway_epos_usb::readAnswer(WORD *ans, unsigned int ans_len)
 
 	// check DLE
 	if (buf[0] != DLE) {
-		throw fe_canopen_error() << reason("Datagram error (DLE expected)");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Datagram error (DLE expected)"));
 	}
 
 	// check STX
 	if (buf[1] != STX) {
-		throw fe_canopen_error() << reason("Datagram error (STX expected)");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Datagram error (STX expected)"));
 	}
 
 	// read OpCode
 	if (buf[2] != 0x00) {
-		throw fe_canopen_error() << reason("Datagram error (0x00 Answer OpCode expected)");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("Datagram error (0x00 Answer OpCode expected)"));
 	}
 
 	// frame length
 	WORD framelen = buf[3];
 
 	if (ans_len < framelen) {
-		throw fe_canopen_error() << reason("output buffer to short for a message");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("output buffer to short for a message"));
 	}
 
 	ans[0] = (framelen << 8);
@@ -187,7 +189,7 @@ unsigned int gateway_epos_usb::readAnswer(WORD *ans, unsigned int ans_len)
 #endif
 	} else {
 		fprintf(stderr, "CRC: %04x != %04x\n", crc, ans[framelen + 1]);
-		throw fe_canopen_error() << reason("CRC test FAILED");
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("CRC test FAILED"));
 	}
 
 	/* check for error code */
@@ -264,7 +266,7 @@ void gateway_epos_usb::sendCommand(WORD *frame)
 
 	if (w != (int) idx) {
 		fprintf(stderr, "ftdi device write failed (%d/%d chars written): (%s)\n", w, idx, ftdi_get_error_string(&ftdic));
-		throw fe_canopen_error() << reason(ftdi_get_error_string(&ftdic));
+		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason(ftdi_get_error_string(&ftdic)));
 	}
 }
 
@@ -287,7 +289,7 @@ unsigned int gateway_epos_usb::ReadObject(WORD *ans, unsigned int ans_len, uint8
 	unsigned int ret = readAnswer(ans, ans_len);
 
 	// check error code
-	checkEPOSerror(E_error);
+	checkCanOpenError(E_error);
 
 	return ret;
 }
@@ -350,9 +352,8 @@ void gateway_epos_usb::WriteObject(uint8_t nodeId, WORD index, BYTE subindex, ui
 		WORD answer[8];
 		readAnswer(answer, 8);
 
-		checkEPOSerror(E_error);
-	}
-	catch (fe_canopen_error & e) {
+		checkCanOpenError(E_error);
+	} catch (boost::exception & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -379,11 +380,11 @@ void gateway_epos_usb::InitiateSementedWrite(uint8_t nodeId, WORD index, BYTE su
 		WORD answer[8];
 		readAnswer(answer, 8);
 
-		checkEPOSerror(E_error);
+		checkCanOpenError(E_error);
 
 		toggle = true;
 	}
-	catch (fe_canopen_error & e) {
+	catch (boost::exception & e) {
 		e << dictionary_index(index);
 		e << dictionary_subindex(subindex);
 		e << canId(nodeId);
@@ -410,12 +411,11 @@ void gateway_epos_usb::SegmentedWrite(uint8_t nodeId, BYTE * ptr, std::size_t le
 		WORD answer[8];
 		readAnswer(answer, 8);
 
-		checkEPOSerror(E_error);
+		checkCanOpenError(E_error);
 
 		// change the toggle flag value
 		toggle = (toggle) ? false : true;
-	}
-	catch (fe_canopen_error & e) {
+	} catch (boost::exception & e) {
 		e << canId(nodeId);
 		throw;
 	}
@@ -436,7 +436,7 @@ void gateway_epos_usb::SendNMTService(uint8_t nodeId, NMT_COMMAND_t CmdSpecifier
 	WORD answer[8];
 	readAnswer(answer, 8);
 
-	checkEPOSerror(E_error);
+	checkCanOpenError(E_error);
 }
 
 void gateway_epos_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Data[8])
@@ -469,7 +469,12 @@ void gateway_epos_usb::SendCANFrame(WORD Identifier, WORD Length, const BYTE Dat
 		BOOST_THROW_EXCEPTION(fe_canopen_error() << reason("unexpected answer"));
 	}
 
-	checkEPOSerror(E_error);
+	checkCanOpenError(E_error);
+}
+
+BYTE gateway_epos_usb::getCanID()
+{
+	return ReadObjectValue <WORD>(0, 0x2000, 0x00);
 }
 
 } /* namespace canopen */

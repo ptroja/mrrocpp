@@ -33,7 +33,6 @@ namespace spkm {
 class effector : public common::manip_effector
 {
 private:
-
 	/*!
 	 * \brief "Desired" joint values that were required by previously received SET command.
 	 *
@@ -49,7 +48,7 @@ private:
 	 * \brief Tool transformation (SHEAD).
 	 * \author tkornuta
 	 */
-	lib::Homog_matrix spkm_frame;
+	lib::Homog_matrix shead_frame;
 
 	/*!
 	 * \brief Desired tool frame (pose of the SHEAD tip in the PKM base reference frame).
@@ -67,6 +66,8 @@ private:
 	void check_controller_state();
 
 protected:
+	//! Extension added to both positive and negative limits of every epos controller.
+	static const uint32_t limit_extension;
 
 	//! Default axis velocity [rpm]
 	uint32_t Vdefault[mrrocpp::lib::spkm::NUM_OF_SERVOS];
@@ -89,23 +90,24 @@ protected:
 	//! PKM axes.
 	boost::shared_ptr <maxon::epos> axisA, axisB, axisC, axis1, axis2, axis3;
 
-	//! Names of PKM axes.
-	boost::array <std::string, mrrocpp::lib::spkm::NUM_OF_SERVOS> axesNames;
-
 	//! Axes container.
-	boost::array <maxon::epos *, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
+	boost::array <boost::shared_ptr<maxon::epos>, mrrocpp::lib::spkm::NUM_OF_SERVOS> axes;
 
 	//! Handler for the asynchronous execution of the interpolated profile motion
 	maxon::ipm_executor <lib::spkm::NUM_OF_MOTION_SEGMENTS, lib::spkm::NUM_OF_SERVOS> ipm_handler;
 
 public:
-
 	/*!
-	 * @brief class constructor
+	 * @brief Constructor.
 	 *
 	 * The attributes are initialized here.
 	 */
 	effector(common::shell &_shell, lib::robot_name_t l_robot_name);
+
+	/*!
+	 * @brief Destructor.
+	 */
+	~effector();
 
 	/*!
 	 * @brief motors synchronization
@@ -115,6 +117,16 @@ public:
 	void synchronise();
 
 	/*!
+	 * @brief Disable (thus apply brake) the MOOG motor.
+	 */
+	void disable_moog_motor();
+
+	/*!
+	 * @brief Disable brake of the MOOG motor.
+	 */
+	void enable_moog_brake(bool state);
+
+	/*!
 	 * @brief method to create threads other then EDP master thread.
 	 *
 	 * Here there is only one extra thread - reader_thread.
@@ -122,11 +134,13 @@ public:
 	void create_threads();
 
 	/*!
-	 * @brief method to move robot arm
+	 * \brief Executes the *move_arm* command.
 	 *
-	 * it chooses the single thread variant from the manip_effector
+	 * It chooses the single thread variant from the motor_driven_effector.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void move_arm(const lib::c_buffer &instruction);
+	void move_arm(const lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief Method responsible for parsing of the command for motors controlling the legs and SPKM rotation.
@@ -138,7 +152,7 @@ public:
 	 * \brief Method responsible for motion of motors controlling the legs and SPKM rotation.
 	 * \author tkornuta
 	 */
-	void execute_motor_motion();
+	void execute_motion();
 
 	/*!
 	 * \brief Method responsible for interpolated motion in the operational space.
@@ -149,15 +163,17 @@ public:
 	/*!
 	 * \brief Method initializes all SPKM variables (including motors, joints and frames), depending on working mode (robot_test_mode) and robot state.
 	 * Called only once after process creation.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void get_controller_state(lib::c_buffer &instruction);
+	void get_controller_state(lib::c_buffer &instruction_);
 
 	/*!
 	 * @brief method to get position of the arm
 	 *
-	 * Here it calls common::manip_effector::get_arm_position_get_arm_type_switch
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void get_arm_position(bool read_hardware, lib::c_buffer &instruction);
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction_);
 
 	/*!
 	 * @brief method to choose master_order variant
@@ -169,7 +185,7 @@ public:
 	/*!
 	 * \brief method to receive instruction from ecp of particular type
 	 */
-	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	lib::INSTRUCTION_TYPE receive_instruction();
 
 	/*!
 	 * \brief method to reply to ecp with class of particular type

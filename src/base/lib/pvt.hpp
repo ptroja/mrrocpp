@@ -15,6 +15,10 @@
 #include <iostream>
 #include <cassert>
 
+#include <stdexcept>
+
+#include <boost/exception/exception.hpp>
+
 // import most common Eigen types
 USING_PART_OF_NAMESPACE_EIGEN
 
@@ -71,68 +75,95 @@ double pvt(
  * @param Vnew corrected velocity limit vector
  * @param Anew corrected acceleration limit vector
  * @param Dnew corrected deceleration limit vector
+ * @param requestedMotionTime allowed/requested time for motion (if positive)
  * @return time to execute the motion
  */
-template <unsigned int N>
+template <unsigned int N, typename T>
 double ppm(
-		const Matrix<double,N,1> & Delta,
-		const Matrix<double,N,1> & Vmax,
-		const Matrix<double,N,1> & Amax,
-		Matrix<double,N,1> & Vnew,
-		Matrix<double,N,1> & Anew,
-		Matrix<double,N,1> & Dnew
+		const Matrix<T,N,1> & Delta,
+		const Matrix<T,N,1> & Vmax,
+		const Matrix<T,N,1> & Amax,
+		Matrix<T,N,1> & Vnew,
+		Matrix<T,N,1> & Anew,
+		Matrix<T,N,1> & Dnew,
+		T requestedMotionTime = 0
 		)
 {
-	Matrix<double,N,3> Time;
+	Matrix<T,N,3> Times;
 
 	// Iterate over axes
 	for(unsigned int l = 0; l < N; ++l) {
-		const double delta = Delta(l,0),	// motor position delta
+		const T delta = Delta(l,0),	// motor position delta
 			vmax = Vmax(l,0),				// maximal velocity
 			amax = Amax(l,0),				// maximal acceleration
 			dmax = -Amax(l,0);				// maximal deceleration
 
 		// Velocity value, when the velocity profile is triangular (eq. 3.32)
-		const double VTriangle = amax*std::sqrt(2*delta*dmax/(amax*(dmax-amax)));
+		const T VTriangle = amax*std::sqrt(2*delta*dmax/(amax*(dmax-amax)));
+		//const T VTriangle = std::sqrt(2*delta*amax*dmax/(dmax-amax));
+
+#if 0
+		std::cout << "VTriangle(" << l << ") = " << VTriangle << std::endl;
+#endif
 
 		const bool TriangularProfile = (VTriangle <= vmax);
 
 		if(TriangularProfile) {
 			// tt: total motion time (eq. 3.33)
-			Time(l,2) = std::sqrt(2*delta*(dmax-amax)/(amax*dmax));
+			Times(l,2) = std::sqrt(2*delta*(dmax-amax)/(amax*dmax));
 			// acceleration and deceleration phase treated as a half of the total motion time
-			Time(l,0) = Time(l,1) = Time(l,2)/2;
+			Times(l,0) = Times(l,1) = Times(l,2)/2;
 		} else {
 			// ta: time to stop accelerate (eq. 3.35)
-			Time(l,0) = vmax/amax;
+			Times(l,0) = vmax/amax;
 
 			// td: time to start deceleration (eq. 3.42)
-			Time(l,1) = delta/vmax + vmax/(2*amax) + vmax/(2*dmax);
+			Times(l,1) = delta/vmax + vmax/(2*amax) + vmax/(2*dmax);
+
+			// Numerically stable version:
+			//Time(l,1) = (2*delta*amax*dmax+vmax*vmax*amax+vmax*vmax*dmax)/(2*vmax*amax*dmax);
 
 			// tt: total motion time (eq. 3.40)
-			Time(l,2) = delta/vmax + vmax/(2*amax) - vmax/(2*dmax);
+			Times(l,2) = delta/vmax + vmax/(2*amax) - vmax/(2*dmax);
+
+			// Numerically stable version:
+			//Time(l,2) = (2*delta*amax*dmax+vmax*vmax*dmax-vmax*vmax*amax)/(2*vmax*amax*dmax);
 		}
 
 //		std::cerr << "VLimit[" << l << "]: " << VTriangle <<
 //				" => " << (TriangularProfile ? "triangular" : "trapezoidal") << std::endl <<
-//				"Time[" << l << "]: " << Time(l,0) << " " << Time(l,1) << " " << Time(l,2) <<
+//				"Time[" << l << "]: " << Times(l,0) << " " << Times(l,1) << " " << Times(l,2) <<
 //				std::endl;
 	}
 
-	Matrix<double,1,3> maxTime = Time.colwise().maxCoeff();
+	Matrix<T,1,3> maxTimes = Times.colwise().maxCoeff();
 
-//	std::cerr << "maxTime: " << maxTime << std::endl;
-//	std::cerr << "(maxTime.col(2)-maxTime.col(1): " << (maxTime.col(2)-maxTime.col(1)) << std::endl;
+//	std::cerr << "maxTimes: " << maxTimes << std::endl;
 
-	// total time
-	double tt = maxTime.col(2).maxCoeff();
-	// acceleration interval
-	const double ta = maxTime.col(0).maxCoeff();
+	// max of acceleration intervals
+	const T ta = maxTimes(0);
+
+	// max of constant velocity intervals
+	const T tV = (Times.col(1)-Times.col(0)).maxCoeff();
+
+	// max of deceleration intervals
+	const T tD = (Times.col(2)-Times.col(1)).maxCoeff();
+
 	// deceleration interval
-	const double td = tt - (maxTime.col(2)-maxTime.col(1)).maxCoeff();
+	const T td = ta + tV;
+
+	T tt = ta + tV + tD;
 
 	if (ta > td) {
 		tt += (ta - td);
+	}
+
+	// Make the motion longer
+	if(requestedMotionTime > 0) {
+		if(tt > requestedMotionTime) {
+			throw std::runtime_error("requested motion time too short");
+		}
+		tt = requestedMotionTime;
 	}
 
 //	std::cout
@@ -143,15 +174,18 @@ double ppm(
 
 	// If the total time is zero there will be no motion
 	if(tt > 0) {
+
 		// I guess this can be implemented as a single matrix calculation
 		for(unsigned int l = 0; l < N; ++l) {
-			const double delta = Delta(l,0);
+			const T delta = Delta(l,0);
 
 			// Calculate new parameters if there is motion along an axis
 			if(delta) {
 				Anew(l,0) = 2*delta/(ta*(tt+td-ta));
 				Dnew(l,0) = - (-2*delta/((tt+td-ta)*(tt-td))); // deceleration value (without sign)
+				//Dnew(l,0) = (2*delta)/(tt*tt-tt*ta+td*ta-td*td); // Numerically stable (?) version
 				Vnew(l,0) = Anew(l,0)*ta;
+				//Vnew(l,0) = (2*delta)/(tt+td-ta); // Numerically stable (?) version
 			} else {
 				Anew(l,0) = Amax(l,0);
 				Dnew(l,0) = Amax(l,0);
@@ -166,7 +200,7 @@ double ppm(
 	// These assertions fail because of floating point inequalities
 	//assert(Dnew(l,0)<=Amax(l,0));
 	//assert(Anew(l,0)<=Amax(l,0));
-	//assert(Vnew(l,0)<=Vmax(l,0));
+	//assert(Vnew(l,0)<=Vmax(l,0));;
 
 
 //	std::cerr <<
@@ -174,6 +208,8 @@ double ppm(
 //		"Anew:\n" << Anew << std::endl <<
 //		"Dnew:\n" << Dnew << std::endl <<
 //		std::endl;
+
+//	std::cerr << "tt: " << tt << std::endl;
 
 	return tt;
 }

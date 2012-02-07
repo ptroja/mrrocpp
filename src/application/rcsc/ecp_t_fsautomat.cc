@@ -34,17 +34,16 @@
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
-#include "generator/ecp/force/ecp_mp_g_tff_rubik_grab.h"
+
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "ecp_t_fsautomat.h"
-#include "subtask/ecp_st_bias_edp_force.h"
-#include "subtask/ecp_st_tff_nose_run.h"
+#include "generator/ecp/force/ecp_g_bias_edp_force.h"
+
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
-#include "subtask/ecp_mp_st_gripper_opening.h"
 #include "../../base/ecp_mp/ecp_mp_task.h"
 
 #include "base/lib/datastr.h"
@@ -82,7 +81,7 @@ void ecp_gripper_opening (task& _ecp_task, double gripper_increment, int motion_
 #endif
 // KONSTRUKTORY
 fsautomat::fsautomat(lib::configurator &_config) :
-		common::task::task(_config), gt(NULL), nrg(NULL), rgg(NULL), gag(NULL), rfrg(NULL), tig(NULL), befg(NULL), wmg(NULL), go_st(NULL)
+		common::task::task(_config), gt(NULL), nrg(NULL), gag(NULL), rfrg(NULL), tig(NULL), befg(NULL), wmg(NULL)
 {
 	// the robot is choose dependendant on the section of configuration file sent as argv[4]
 	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
@@ -140,19 +139,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											nrg = new common::generator::tff_nose_run(*this, atoi((char *) argument));
 										xmlFree(argument);
-									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_nose_run_st")) {
-										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) "")) {
-											sub_task::tff_nose_run* ecpst;
-											ecpst = new sub_task::tff_nose_run(*this);
-											subtask_m[ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN] = ecpst;
-										}
-										xmlFree(argument);
-									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_rubik_grab_gen")) {
-										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											rgg = new common::generator::tff_rubik_grab(*this, atoi((char *) argument));
-										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_tff_gripper_approach_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
@@ -178,17 +164,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 											;
 										befg = new common::generator::bias_edp_force(*this);
 										xmlFree(argument);
-									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "bias_edp_force_st")) {
-
-										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											;
-										{
-											sub_task::sub_task* ecpst;
-											ecpst = new sub_task::bias_edp_force(*this);
-											subtask_m[ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE] = ecpst;
-										}
-										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_smooth_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) "")) {
@@ -201,12 +176,6 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
 										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
 											wmg = new common::generator::weight_measure(*this, atoi((char *) argument));
-										xmlFree(argument);
-									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "gripper_opening")) {
-										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											;
-										go_st = new common::sub_task::gripper_opening(*this);
 										xmlFree(argument);
 									}
 								}
@@ -234,7 +203,7 @@ void fsautomat::main_task_algorithm(void)
 		std::cout << "trajectorymap" << std::endl;
 		std::cout << "!!!" << std::endl;
 		trjMap = loadTrajectories(fileName.c_str(), ecp_m_robot->robot_name, axes_num);
-		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap->size());
+		printf("Lista %s zawiera: %zd elementow\n", lib::toString(ecp_m_robot->robot_name).c_str(), trjMap.size());
 	}
 	for (;;) {
 		sr_ecp_msg->message("Waiting for MP order");
@@ -244,7 +213,7 @@ void fsautomat::main_task_algorithm(void)
 		std::cout << "po_next_state" << std::endl;
 		sr_ecp_msg->message("Order received");
 
-		subtasks_conditional_execution();
+		subtasks_and_generators_dispather();
 		std::cout << "NEXT STATE STRING OGOLNY        " << mp_2_ecp_next_state_string << std::endl;
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);
@@ -260,8 +229,9 @@ void fsautomat::main_task_algorithm(void)
 			if (trjConf) {
 				if (ecpLevel) {
 					std::cout << "armtype in fsautomat: " << (char*) mp_command.ecp_next_state.sg_buf.data << std::endl;
-					std::cout << "NAZWASTANUUUUUUUUUUUU: " << (char*) mp_command.ecp_next_state.sg_buf.data << std::endl;
-					load_trajectory_from_xml((*trjMap)[(std::string) (char*) mp_command.ecp_next_state.sg_buf.data]);
+					std::cout << "NAZWASTANUUUUUUUUUUUU: " << (char*) mp_command.ecp_next_state.sg_buf.data
+							<< std::endl;
+					load_trajectory_from_xml(trjMap[(std::string) (char*) mp_command.ecp_next_state.sg_buf.data]);
 				} else {
 					std::string path(mrrocpp_network_path);
 					path += fileName;
@@ -292,14 +262,6 @@ void fsautomat::main_task_algorithm(void)
 			nrg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE) {
 			befg->Move();
-		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB) {
-			double gen_args[4];
-			int size = lib::setValuesInArray(gen_args, (char*) mp_command.ecp_next_state.sg_buf.data);
-			if (size > 3)
-				rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2], (bool) gen_args[3]);
-			else
-				rgg->configure(gen_args[0], gen_args[1], (unsigned int) gen_args[2]);
-			rgg->Move();
 		} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
 			double gen_args[1];
 			lib::setValuesInArray(gen_args, (char*) mp_command.ecp_next_state.sg_buf.data);
@@ -317,11 +279,6 @@ void fsautomat::main_task_algorithm(void)
 			gag->Move();
 			//std::cout<<"gag_configured moved"<<std::endl;
 			//lib::STOP czyli 2 powinien byc a jest 4...
-		} else if (mp_2_ecp_next_state_string == ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING) {
-			double gen_args[2];
-			lib::setValuesInArray(gen_args, (char*) mp_command.ecp_next_state.sg_buf.data);
-			go_st->configure(gen_args[0], (int) gen_args[1]);
-			go_st->execute();
 		}
 
 		termination_notice();
@@ -360,8 +317,7 @@ void fsautomat::load_trajectory_from_xml(const char* fileName, const char* nodeN
 
 	xmlDocPtr doc = xmlParseFile(fileName);
 	xmlXIncludeProcess(doc);
-	if (doc == NULL)
-	{
+	if (doc == NULL) {
 		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
 	}
 

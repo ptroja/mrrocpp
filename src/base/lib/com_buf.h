@@ -25,8 +25,6 @@
 
 #include "base/lib/messip/messip.h"
 
-#define SWARM_STRING_SIZE 1024
-
 namespace mrrocpp {
 namespace lib {
 
@@ -69,257 +67,6 @@ enum POSE_SPECIFICATION
 enum ECP_POSE_SPECIFICATION
 {
 	ECP_INVALID_END_EFFECTOR, ECP_XYZ_ANGLE_AXIS, ECP_XYZ_EULER_ZYZ, ECP_JOINT, ECP_MOTOR, ECP_PF_VELOCITY
-};
-
-//------------------------------------------------------------------------------
-/*!
- *  Reply types from UI to ECP and commands from UI (pressing a button).
- */
-enum UI_TO_ECP_COMMAND
-{
-	NEXT,
-	QUIT,
-	ANSWER_YES,
-	ANSWER_NO,
-	FILE_LOADED,
-	FILE_SAVED,
-
-	/*! Commands from Force Control window. */
-	FC_ADD_MACROSTEP,
-	FC_CALIBRATE_SENSOR,
-	FC_CHANGE_CONTROL,
-	FC_MOVE_ROBOT,
-	FC_SAVE_TRAJECTORY,
-	FC_NEW_TRAJECTORY,
-	FC_EXIT,
-	FC_GET_DATA,
-
-	/*! Commands from Trajectory Render window. */
-	TR_LOAD_TRAJECTORY,
-	TR_PAUSE_MOVE,
-	TR_START_MOVE,
-	TR_STOP_MOVE,
-	TR_EXIT,
-	TR_ZERO_POSITION,
-	TR_SAVE_READINGS,
-	TR_CALIBRATE_DIGITAL_SCALES_SENSOR,
-	TR_CALIBRATE_FORCE_SENSOR,
-	TR_TRY_MOVE_AGAIN,
-
-	/*! Replies from the options window. */
-	OPTION_ONE,
-	OPTION_TWO,
-	OPTION_THREE,
-	OPTION_FOUR,
-
-	/*!
-	 *  Commands from the window
-	 *  MAM_wnd_manual_moves_automatic_measures.
-	 */
-	MAM_START,
-	MAM_STOP,
-	MAM_CLEAR,
-	MAM_SAVE,
-	MAM_EXIT,
-	MAM_CALIBRATE,
-
-	//! Swarm-related entries
-	PLAN_PREV,
-	PLAN_NEXT,
-	PLAN_EXEC,
-	PLAN_SAVE
-};
-
-//------------------------------------------------------------------------------
-/*!
- *  Types of ECP to UI commands.
- */
-enum ECP_TO_UI_COMMAND
-{
-	C_INVALID_END_EFFECTOR,
-	C_FRAME,
-	C_XYZ_ANGLE_AXIS,
-	C_XYZ_EULER_ZYZ,
-	C_JOINT,
-	C_MOTOR,
-	YES_NO,
-	DOUBLE_NUMBER,
-	INTEGER_NUMBER,
-	SAVE_FILE,
-	LOAD_FILE,
-	MESSAGE,
-	OPEN_FORCE_SENSOR_MOVE_WINDOW,
-	OPEN_TRAJECTORY_REPRODUCE_WINDOW,
-	TR_REFRESH_WINDOW,
-	TR_DANGEROUS_FORCE_DETECTED,
-	CHOOSE_OPTION,
-	MAM_OPEN_WINDOW,
-	MAM_REFRESH_WINDOW,
-
-	//! Swarm-related entries
-	PLAN_STEP_MODE
-};
-
-//------------------------------------------------------------------------------
-/*! Length of a message sent from ECP to MP or UI */
-#define MSG_LENGTH 60
-
-//------------------------------------------------------------------------------
-/*!
- *  ECP to UI message.
- */
-struct ECP_message
-{
-	/*! Type of message. */
-	ECP_TO_UI_COMMAND ecp_message;
-
-	/*! Robot name. */
-	robot_name_t robot_name;
-
-	/*! Number of options - from 2 to 4 - - for CHOOSE_OPTION mode. */
-	uint8_t nr_of_options;
-
-	//----------------------------------------------------------
-
-	/*! A comment for the command. */
-	char string[MSG_LENGTH];
-
-	//------------------------------------------------------
-	struct
-	{
-		double robot_position[lib::MAX_SERVOS_NR];
-		double sensor_reading[lib::MAX_SERVOS_NR];
-	}
-	/*! Robot positions + Sensor readings. */
-	RS;
-	//------------------------------------------------------
-	struct
-	{
-		double robot_position[lib::MAX_SERVOS_NR];
-		double digital_scales_sensor_reading[6];
-		double force_sensor_reading[6];
-	}
-	/*! Robot positions + 2 * (Sensor readings). */
-	R2S;
-	//------------------------------------------------------
-	struct
-	{
-		double robot_position[lib::MAX_SERVOS_NR];
-		double sensor_reading[6];
-		int32_t measure_number;
-	}
-	/*! Robot positions + Sensor readings + Measure number. */
-	MAM;
-
-	//! XML string with current plan item
-	//std::string plan_item;
-	char plan_item[SWARM_STRING_SIZE];
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & ecp_message;
-
-		switch (ecp_message)
-		{
-			case PLAN_STEP_MODE:
-				ar & plan_item;
-				break;
-			default:
-				ar & robot_name;
-				ar & nr_of_options;
-
-				ar & string;
-
-				ar & RS.robot_position;
-				ar & RS.sensor_reading;
-
-				ar & R2S.robot_position;
-				ar & R2S.digital_scales_sensor_reading;
-				ar & R2S.force_sensor_reading;
-
-				ar & MAM.robot_position;
-				ar & MAM.sensor_reading;
-				ar & MAM.measure_number;
-				break;
-		}
-	}
-};
-
-//------------------------------------------------------------------------------
-/*!
- *  UI to ECP reply.
- */
-struct UI_reply
-{
-	UI_TO_ECP_COMMAND reply;
-	int32_t integer_number;
-	double double_number;
-	double coordinates[lib::MAX_SERVOS_NR];
-	char path[80];
-	char filename[20];
-
-	UI_reply()
-	{
-		path[0] = '\0';
-		filename[0] = '\0';
-	}
-
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! XML string with current plan item
-	char plan_item[SWARM_STRING_SIZE];
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & reply;
-
-		switch (reply)
-		{
-			case PLAN_EXEC:
-				ar & plan_item;
-				break;
-			case PLAN_PREV:
-			case PLAN_NEXT:
-			case PLAN_SAVE:
-				break;
-			default:
-				ar & integer_number;
-				ar & double_number;
-				ar & coordinates;
-				ar & path;
-				ar & filename;
-				break;
-		}
-	}
-};
-
-//------------------------------------------------------------------------------
-/*!
- *  Message from UI to ECP.
- */
-struct UI_ECP_message
-{
-	UI_TO_ECP_COMMAND command;
-
-	union
-	{
-		/*! The name of the file. */
-		char filename[100];
-		/*! Time of the robot's motion. */
-		int motion_time;
-		/*! (axis - 1..6) && (+/- left/right). */
-		short move_type;
-		/*! Change of control type. */
-		POSE_SPECIFICATION ps;
-	};
 };
 
 //------------------------------------------------------------------------------
@@ -603,6 +350,7 @@ struct edp_error
 	uint64_t error0;
 	uint64_t error1;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -657,6 +405,7 @@ _robot_model
 		double weight;
 	} force_tool;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -712,6 +461,7 @@ typedef struct c_buffer_arm
 	} pf_def;
 	//----------------------------------------------------------
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -786,28 +536,6 @@ struct c_buffer
 	//                      METHODS
 	//-----------------------------------------------------
 
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & instruction_type;
-		ar & set_type;
-		ar & get_type;
-		ar & get_robot_model_type;
-		ar & set_arm_type;
-		ar & get_arm_type;
-		ar & output_values;
-		ar & interpolation_type;
-		ar & motion_type;
-		ar & motion_steps;
-		ar & value_in_step_no;
-		ar & robot_model;
-		ar & arm;
-	}
-
 	c_buffer(void); // by W odkomentowane
 	/*!
 	 *  Oczytac wejscia?
@@ -844,6 +572,29 @@ struct c_buffer
 	 *  @todo Translate to English.
 	 */
 	bool is_set_arm() const;
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
+	//! Serialization of the data structure
+	template <class Archive>
+	void serialize(Archive & ar, const unsigned int version)
+	{
+		ar & instruction_type;
+		ar & set_type;
+		ar & get_type;
+		ar & get_robot_model_type;
+		ar & set_arm_type;
+		ar & get_arm_type;
+		ar & output_values;
+		ar & interpolation_type;
+		ar & motion_type;
+		ar & motion_steps;
+		ar & value_in_step_no;
+		ar & robot_model;
+		ar & arm;
+	}
 };
 
 //------------------------------------------------------------------------------
@@ -866,6 +617,7 @@ typedef struct _controller_state_t
 	//! Flag informing whewher robot is in fault state or not.
 	bool robot_in_fault_state;
 
+private:
 	//! Give access to boost::serialization framework.
 	friend class boost::serialization::access;
 
@@ -936,16 +688,20 @@ typedef struct r_buffer_arm
 		 */
 		float average_cubic[lib::MAX_SERVOS_NR];
 
+		/*!
+		 *  energy
+		 * For the whole macrostep sum of measured currents for current step multiplied by pwm for previous step
+		 */
+		float energy[lib::MAX_SERVOS_NR];
+
 	} measured_current;
 
 	/*!
-	 *  Stan w ktorym znajduje sie regulator chwytaka.
-	 *  @todo Translate to English.
+	 *  State of grippers regutor
 	 */
 	int16_t gripper_reg_state;
 
-	//----------------------------------------------------------
-
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -973,6 +729,7 @@ typedef struct r_buffer_arm
 		ar & measured_current.maximum_module;
 		ar & measured_current.average_square;
 		ar & measured_current.average_cubic;
+		ar & measured_current.energy;
 
 	}
 } r_buffer_arm_t;
@@ -988,6 +745,10 @@ struct r_buffer_base
 
 	//! Set default values
 	r_buffer_base();
+
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
 
 	//! Serialization of the data structure
 	template <class Archive>
@@ -1026,8 +787,9 @@ struct r_buffer : r_buffer_base
 	//-----------------------------------------------------
 	//                      METHODS
 	//-----------------------------------------------------
-	r_buffer(void); // W odkomentowane
+	r_buffer(void);
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -1061,7 +823,7 @@ public:
 	/*!
 	 * \brief memory to store data
 	 */
-	uint32_t data[MP_2_ECP_STRING_SIZE / sizeof(uint32_t)];
+	uint32_t data[MP_2_ECP_SERIALIZED_DATA_SIZE / sizeof(uint32_t)];
 
 	/*!
 	 * \brief template method to put data into the memory (serialize)
@@ -1071,8 +833,9 @@ public:
 	{
 		xdr_oarchive <> oa;
 		oa << buffer;
+
 		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
-		assert(MP_2_ECP_STRING_SIZE > oa.getArchiveSize());
+		assert(MP_2_ECP_SERIALIZED_DATA_SIZE > oa.getArchiveSize());
 
 		// serializacja
 		memcpy(data, oa.get_buffer(), oa.getArchiveSize());
@@ -1084,11 +847,8 @@ public:
 	template <typename BUFFER_TYPE>
 	void get(BUFFER_TYPE & buffer) const
 	{
-		//sprawdza wielkosc czy nie przekracza wielkosci bufora z assert
-		assert(MP_2_ECP_STRING_SIZE > sizeof(buffer));
-
 		// deserializacja
-		xdr_iarchive <> ia((const char *) data, (std::size_t) MP_2_ECP_STRING_SIZE);
+		xdr_iarchive <> ia((const char *) data, (std::size_t) MP_2_ECP_SERIALIZED_DATA_SIZE);
 
 		ia >> buffer;
 	}
@@ -1128,6 +888,7 @@ struct ecp_next_state_t
 	std::string next_state;
 
 	int variant;
+
 	seter_geter_buffer_t sg_buf;
 
 private:
@@ -1141,7 +902,6 @@ private:
 		ar & next_state;
 		ar & variant;
 		ar & sg_buf;
-		// ar & playerpos_goal; // this is not used at this moment
 	}
 };
 
@@ -1187,8 +947,10 @@ struct ECP_REPLY_PACKAGE
 
 	// TODO: this should be rather union, but it is not possible to union non-POD objects
 	r_buffer reply_package;
-	char recognized_command[ECP_2_MP_STRING_SIZE];
+	int variant;
+	seter_geter_buffer_t sg_buf;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -1198,7 +960,8 @@ struct ECP_REPLY_PACKAGE
 	{
 		ar & reply;
 		ar & reply_package;
-		ar & recognized_command; // TODO: this should be handled in better way...
+		ar & variant;
+		ar & sg_buf;
 	}
 };
 // ------------------------------------------------------------------------
@@ -1208,6 +971,7 @@ struct ECP_REPLY_PACKAGE
  */
 typedef struct _empty
 {
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
