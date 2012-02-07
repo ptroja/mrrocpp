@@ -129,9 +129,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
+# Check for external libraries.
 include(FindComedi)
 include(FindXSD)
 include(FindXerces)
+pkg_check_modules(ZeroMQ REQUIRED libzmq)
 
 # Make sure the compiler can find include files
 include_directories (${MRROCPP_SOURCE_DIR}/src) 
@@ -139,16 +141,12 @@ include_directories (SYSTEM ${LIBXML2_INCLUDE_DIR})
 include_directories (SYSTEM ${Boost_INCLUDE_DIR})
 include_directories (SYSTEM ${EIGEN2_INCLUDE_DIRS})
 
-
 include_directories (${PROJECT_SOURCE_DIR}/src/lib/messip)
-set(COMMON_LIBRARIES messip)
 
-set(COMMON_LIBRARIES mrrocpp ${COMMON_LIBRARIES}
+set(COMMON_LIBRARIES mrrocpp messip
 	${Boost_THREAD_LIBRARY}
 	${COMPATIBILITY_LIBRARIES}
 )
-
-
 
 if(ROBOT_BIRD_HAND)
 set (R_BIRD_HAND 1)
@@ -162,13 +160,11 @@ else(ROBOTS_SWARMITFIX)
 set (R_SWARMITFIX 0)
 endif(ROBOTS_SWARMITFIX)
 
-
 if(ROBOTS_012)
 set (R_012 1)
 else(ROBOTS_012)
 set (R_012 0)
 endif(ROBOTS_012)
-
 
 # configure a header file to pass some of the CMake settings
 # to the source code
@@ -176,9 +172,9 @@ configure_file (
   "${PROJECT_SOURCE_DIR}/src/config.h.in"
   "${PROJECT_BINARY_DIR}/src/config.h"
 )
+
 # add include path to the generated config file
 include_directories (${MRROCPP_BINARY_DIR}/src) 
-
 
 # Recurse into subdirectories.
 add_subdirectory (base)
