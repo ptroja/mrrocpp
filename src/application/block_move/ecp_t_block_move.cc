@@ -45,10 +45,10 @@ namespace task {
 
 // KONSTRUKTORY
 block_move::block_move(lib::configurator &_config) :
-		common::task::task(_config)
+	common::task::task(_config)
 {
 	if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
-		ecp_m_robot = shared_ptr <robot_t> (new irp6p_m::robot(*this));
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else {
 		throw std::runtime_error("Robot not supported");
 	}
@@ -59,10 +59,10 @@ block_move::block_move(lib::configurator &_config) :
 	gtga = new common::generator::tff_gripper_approach(*this, 8);
 	sg = new common::generator::newsmooth(*this,lib::ECP_XYZ_ANGLE_AXIS, 6);
 	gp = new common::generator::get_position(*this,lib::ECP_XYZ_ANGLE_AXIS, 6);
-	//stgo = new common::sub_task::gripper_opening(*this);
 
 	// utworzenie generatorow do uruchamiania dispatcherem
-	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
+	//generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
+	register_generator(new common::generator::bias_edp_force(*this));
 
 	// utworzenie podzadan
 
@@ -70,11 +70,13 @@ block_move::block_move(lib::configurator &_config) :
 			new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
 	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
 			new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
+	//register_subtask(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true));
+	//register_subtask(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true));
 
 	//sensor rpc
 	sr_ecp_msg->message("Creating discode sensor...");
 	ds_config_section_name = "[discode_sensor]";
-	ds_rpc = shared_ptr <discode_sensor> (new discode_sensor(config, ds_config_section_name));
+	ds_rpc = (boost::shared_ptr <discode_sensor>) new discode_sensor(config, ds_config_section_name);
 	ds_rpc->configure_sensor();
 
 	//get position compute parameters
@@ -96,15 +98,15 @@ block_move::block_move(lib::configurator &_config) :
 		vs_config_section_name = "[board_localization_servovision]";
 	}
 
-	shared_ptr <position_constraint> cube(new cubic_constraint(config, vs_config_section_name));
-	reg = shared_ptr <visual_servo_regulator> (new regulator_p(config, vs_config_section_name));
-	ds = shared_ptr <discode_sensor> (new discode_sensor(config, vs_config_section_name));
-	vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, ds, vs_config_section_name, config));
-	object_reached_term_cond = shared_ptr <termination_condition> (new object_reached_termination_condition(config, vs_config_section_name));
-	timeout_term_cond = shared_ptr <termination_condition> (new timeout_termination_condition(tm));
+	boost::shared_ptr <position_constraint> cube(new cubic_constraint(config, vs_config_section_name));
+	reg = (boost::shared_ptr <visual_servo_regulator>) new regulator_p(config, vs_config_section_name);
+	ds = (boost::shared_ptr <discode_sensor>) new discode_sensor(config, vs_config_section_name);
+	vs = (boost::shared_ptr <visual_servo>) new ib_eih_visual_servo(reg, ds, vs_config_section_name, config);
+	object_reached_term_cond =  (boost::shared_ptr <termination_condition>) new object_reached_termination_condition(config, vs_config_section_name);
+	timeout_term_cond = (boost::shared_ptr <termination_condition>) new timeout_termination_condition(tm);
 
 	//utworzenie generatora ruchu
-	sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, vs_config_section_name.c_str(), vs));
+	sm = (boost::shared_ptr <single_visual_servo_manager>) new single_visual_servo_manager(*this, vs_config_section_name.c_str(), vs);
 	sm->add_position_constraint(cube);
 	sm->configure();
 
@@ -161,7 +163,7 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 		//obsługa warunku zakończenia pracy - warunek stopu
 		if(object_reached_term_cond->is_condition_met()) {
 			sr_ecp_msg->message("object_reached_term_cond is met");
-			ecp_reply.recognized_command[0] = 'Y';
+			ecp_reply.variant = 1;
 
 			if(param == BOARD_COLOR) {
 
@@ -187,7 +189,7 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 		//obsługa warunku zakończenia pracy - timeout
 		if(timeout_term_cond->is_condition_met()) {
 			sr_ecp_msg->message("timeout_term_cond is met");
-			ecp_reply.recognized_command[0] = 'N';
+			ecp_reply.variant = 0;
 		}
 		else {
 			sr_ecp_msg->message("timeout_term_cond IS NOT MET");
