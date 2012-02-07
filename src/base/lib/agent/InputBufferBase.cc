@@ -8,6 +8,10 @@
 #include "InputBufferBase.h"
 #include "Agent.h"
 
+namespace mrrocpp {
+namespace lib {
+namespace agent {
+
 InputBufferBase::InputBufferBase(Agent & _owner, const std::string & _name)
 	: BufferBase(_name), owner(_owner)
 {
@@ -18,3 +22,7 @@ InputBufferBase::~InputBufferBase()
 {
 	owner.unregisterBuffer(*this);
 }
+
+} // namespace agent
+} // namespace lib
+} // namespace mrrocpp

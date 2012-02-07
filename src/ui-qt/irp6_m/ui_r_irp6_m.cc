@@ -6,7 +6,7 @@
 #include "../irp6_m/wgt_irp6_m_joints.h"
 
 #include "ui_r_irp6_m.h"
-#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common012.h"
 
 #include "../base/interface.h"
 
@@ -94,16 +94,6 @@ UiRobot::UiRobot(common::Interface& _interface, lib::robot_name_t _robot_name, i
 {
 }
 
-void UiRobot::delete_ui_ecp_robot()
-{
-	delete ui_ecp_robot;
-}
-
-void UiRobot::null_ui_ecp_robot()
-{
-	ui_ecp_robot = NULL;
-
-}
 
 void UiRobot::manage_interface()
 {

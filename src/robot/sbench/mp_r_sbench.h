@@ -3,21 +3,22 @@
 
 /*!
  * @file
- * @brief File contains mp robot class declaration for SwarmItFix Head
+ * @brief File contains mp robot class declaration for SwarmItFix Bench
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup sbench
  */
 
 #include "base/mp/mp_robot.h"
-#include "robot/sbench/const_sbench.h"
+#include "dp_sbench.h"
+#include "const_sbench.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace robot {
 
 /*!
- * @brief SwarmItFix Head mp robot class
+ * @brief SwarmItFix Bench mp robot class
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup sbench
@@ -29,7 +30,7 @@ public:
 	 * @brief constructor
 	 * @param mp_object_l mp task object reference
 	 */
-	sbench(const lib::robot_name_t & l_robot_name, task::task &mp_object_l);
+	sbench(task::task &mp_object_l);
 };
 
 } // namespace robot

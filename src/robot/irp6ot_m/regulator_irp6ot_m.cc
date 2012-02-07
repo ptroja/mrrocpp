@@ -14,7 +14,6 @@
 //#include "base/edp/irp6_on_track/hi_irp6ot.h"
 // Klasa servo_buffer.
 
-
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6ot_m/regulator_irp6ot_m.h"
 #include "robot/irp6ot_m/edp_irp6ot_m_effector.h"
@@ -25,7 +24,7 @@ namespace irp6ot_m {
 
 /*-----------------------------------------------------------------------*/
 NL_regulator_1_irp6ot::NL_regulator_1_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+		NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
@@ -36,7 +35,7 @@ NL_regulator_1_irp6ot::NL_regulator_1_irp6ot(uint8_t _axis_number, uint8_t reg_n
 
 /*-----------------------------------------------------------------------*/
 NL_regulator_2_irp6ot::NL_regulator_2_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+		NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
@@ -47,7 +46,7 @@ NL_regulator_2_irp6ot::NL_regulator_2_irp6ot(uint8_t _axis_number, uint8_t reg_n
 
 /*-----------------------------------------------------------------------*/
 NL_regulator_3_irp6ot::NL_regulator_3_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+		NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
@@ -58,7 +57,7 @@ NL_regulator_3_irp6ot::NL_regulator_3_irp6ot(uint8_t _axis_number, uint8_t reg_n
 
 /*-----------------------------------------------------------------------*/
 NL_regulator_4_irp6ot::NL_regulator_4_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+		NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
@@ -69,7 +68,7 @@ NL_regulator_4_irp6ot::NL_regulator_4_irp6ot(uint8_t _axis_number, uint8_t reg_n
 
 /*-----------------------------------------------------------------------*/
 NL_regulator_5_irp6ot::NL_regulator_5_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+		NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
@@ -81,7 +80,7 @@ NL_regulator_5_irp6ot::NL_regulator_5_irp6ot(uint8_t _axis_number, uint8_t reg_n
 
 /*-----------------------------------------------------------------------*/
 NL_regulator_6_irp6ot::NL_regulator_6_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+		NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
@@ -92,7 +91,7 @@ NL_regulator_6_irp6ot::NL_regulator_6_irp6ot(uint8_t _axis_number, uint8_t reg_n
 
 /*-----------------------------------------------------------------------*/
 NL_regulator_7_irp6ot::NL_regulator_7_irp6ot(uint8_t _axis_number, uint8_t reg_no, uint8_t reg_par_no, double aa, double bb0, double bb1, double k_ff, common::motor_driven_effector &_master) :
-	NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
+		NL_regulator(_axis_number, reg_no, reg_par_no, aa, bb0, bb1, k_ff, _master)
 {
 	desired_velocity_limit = 0.5;
 	// Konstruktor regulatora konkretnego
@@ -138,7 +137,6 @@ uint8_t NL_regulator_1_irp6ot::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
 	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
@@ -168,18 +166,15 @@ uint8_t NL_regulator_1_irp6ot::compute_set_value(void)
 	// kumulacja przyrostu polozenia w tym makrokroku // ORIGINAL
 	// pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO;
 	// servo_pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO; // by Y
-
 	// kumulacja przyrostu polozenia w tym makrokroku
 	//pos_increment_new_sum += root_position_increment_new;
 	//servo_pos_increment_new_sum += root_position_increment_new;// by Y
-
 	// kumulacja przyrostu polozenia w tym makrokroku
 	// pos_increment_new_sum += position_increment_new;
 	// servo_pos_increment_new_sum += position_increment_new;// by Y
-
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.010 * (step_new_pulse - position_increment_new) - 0.990 * (step_old_pulse
-			- position_increment_old);
+	delta_eint = delta_eint_old + 1.010 * (step_new_pulse - position_increment_new)
+			- 0.990 * (step_old_pulse - position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
@@ -266,8 +261,8 @@ uint8_t NL_regulator_1_irp6ot::compute_set_value(void)
 			break;
 		case 1: // algorytm nr 1
 			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
-					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old
+					+ b0 * (step_new_pulse - position_increment_new) - b1 * (step_old_pulse - position_increment_old);
 			break;
 		case 2: // algorytm nr 2 - sterowanie pradowe
 			// DUNG START
@@ -295,11 +290,11 @@ uint8_t NL_regulator_1_irp6ot::compute_set_value(void)
 	{
 		boost::mutex::scoped_lock lock(master.rb_obj->reader_mutex);
 
-		master.rb_obj->step_data.desired_inc[0] = (float) step_new_pulse; // pozycja osi 0
-		master.rb_obj->step_data.current_inc[0] = (short int) position_increment_new;
-		master.rb_obj->step_data.pwm[0] = (float) set_value_new;
-		master.rb_obj->step_data.uchyb[0] = (float) (step_new_pulse - position_increment_new);
-		master.rb_obj->step_data.measured_current[0] = measured_current;
+		master.rb_obj->step_data.desired_inc[6] = (float) step_new_pulse; // pozycja osi 0
+		master.rb_obj->step_data.current_inc[6] = (short int) position_increment_new;
+		master.rb_obj->step_data.pwm[6] = (float) set_value_new;
+		master.rb_obj->step_data.uchyb[6] = (float) (step_new_pulse - position_increment_new);
+		master.rb_obj->step_data.measured_current[6] = measured_current;
 	}
 
 	//  	set_value_new=set_value_new;
@@ -361,7 +356,6 @@ uint8_t NL_regulator_2_irp6ot::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
 	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
@@ -391,18 +385,15 @@ uint8_t NL_regulator_2_irp6ot::compute_set_value(void)
 	// kumulacja przyrostu polozenia w tym makrokroku // ORIGINAL
 	// pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO;
 	// servo_pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO; // by Y
-
 	// kumulacja przyrostu polozenia w tym makrokroku
 	//pos_increment_new_sum += root_position_increment_new;
 	//servo_pos_increment_new_sum += root_position_increment_new;// by Y
-
 	// kumulacja przyrostu polozenia w tym makrokroku
 	// pos_increment_new_sum += position_increment_new;
 	// servo_pos_increment_new_sum += position_increment_new;// by Y
-
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.010 * (step_new_pulse - position_increment_new) - 0.990 * (step_old_pulse
-			- position_increment_old);
+	delta_eint = delta_eint_old + 1.010 * (step_new_pulse - position_increment_new)
+			- 0.990 * (step_old_pulse - position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
@@ -489,8 +480,8 @@ uint8_t NL_regulator_2_irp6ot::compute_set_value(void)
 			break;
 		case 1: // algorytm nr 1
 			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
-					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old
+					+ b0 * (step_new_pulse - position_increment_new) - b1 * (step_old_pulse - position_increment_old);
 			break;
 		case 2: // algorytm nr 2 - sterowanie pradowe
 			// DUNG START
@@ -583,14 +574,12 @@ uint8_t NL_regulator_3_irp6ot::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
 	step_new_pulse = step_new * AXIS_0_TO_5_INC_PER_REVOLUTION / (2 * M_PI);
 	///position_increment_new= position_increment_new;
 
 	// if (step_new!=0.0) printf(" 3 reg:%f\n", step_new);
-
 
 	/*
 	 if (!ccc)
@@ -606,7 +595,6 @@ uint8_t NL_regulator_3_irp6ot::compute_set_value(void)
 	//  ccc++;
 	//  if (ccc == 9) ccc=0;
 	// }
-
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
 	 if (fabs(position_increment_new) > common::MAX_INC)
@@ -616,14 +604,12 @@ uint8_t NL_regulator_3_irp6ot::compute_set_value(void)
 	// kumulacja przyrostu polozenia w tym makrokroku // ORIGINAL
 	// pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO;
 	// servo_pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO; // by Y
-
 	// kumulacja przyrostu polozenia w tym makrokroku
 	// pos_increment_new_sum += root_position_increment_new;
 	// servo_pos_increment_new_sum += root_position_increment_new;// by Y
-
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.008 * (step_new_pulse - position_increment_new) - 0.992 * (step_old_pulse
-			- position_increment_old);
+	delta_eint = delta_eint_old + 1.008 * (step_new_pulse - position_increment_new)
+			- 0.992 * (step_old_pulse - position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
@@ -709,8 +695,8 @@ uint8_t NL_regulator_3_irp6ot::compute_set_value(void)
 			break;
 		case 1: // algorytm nr 1
 			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
-					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old
+					+ b0 * (step_new_pulse - position_increment_new) - b1 * (step_old_pulse - position_increment_old);
 			break;
 		case 2: // algorytm nr 2 - sterowanie pradowe
 			// DUNG START
@@ -800,9 +786,7 @@ uint8_t NL_regulator_4_irp6ot::compute_set_value(void)
 	double current_measured;
 	//
 
-
 	// double root_position_increment_new=position_increment_new;
-
 
 	//
 
@@ -828,7 +812,6 @@ uint8_t NL_regulator_4_irp6ot::compute_set_value(void)
 	//  ddd++;
 	//  if (ddd == 9) ddd=0;
 	// }
-
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
 	 if (fabs(position_increment_new) > common::MAX_INC)
@@ -838,14 +821,12 @@ uint8_t NL_regulator_4_irp6ot::compute_set_value(void)
 	// kumulacja przyrostu polozenia w tym makrokroku // ORIGINAL
 	// pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO;
 	// servo_pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO; // by Y
-
 	// kumulacja przyrostu polozenia w tym makrokroku
 	//pos_increment_new_sum += root_position_increment_new;
 	// servo_pos_increment_new_sum += root_position_increment_new;// by Y
-
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.008 * (step_new_pulse - position_increment_new) - 0.992 * (step_old_pulse
-			- position_increment_old);
+	delta_eint = delta_eint_old + 1.008 * (step_new_pulse - position_increment_new)
+			- 0.992 * (step_old_pulse - position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
@@ -930,8 +911,8 @@ uint8_t NL_regulator_4_irp6ot::compute_set_value(void)
 			break;
 		case 1: // algorytm nr 1
 			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
-					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old
+					+ b0 * (step_new_pulse - position_increment_new) - b1 * (step_old_pulse - position_increment_old);
 			break;
 		case 2: // algorytm nr 2 - sterowanie pradowe
 			// DUNG START
@@ -1019,11 +1000,9 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 	double current_measured;
 	//
 
-
 	alg_par_status = common::ALGORITHM_AND_PARAMETERS_OK;
 
 	// double root_position_increment_new=position_increment_new;
-
 
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*IRP6_POSTUMENT_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
@@ -1042,8 +1021,6 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 	//  eee++;
 	//  if (eee == 9) eee=0;
 	// }
-
-
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
 	 if (fabs(position_increment_new) > common::MAX_INC)
@@ -1053,14 +1030,12 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 	// kumulacja przyrostu polozenia w tym makrokroku // ORIGINAL
 	// pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO;
 	// servo_pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO; // by Y
-
 	// kumulacja przyrostu polozenia w tym makrokroku
 	// pos_increment_new_sum += root_position_increment_new;
 	// servo_pos_increment_new_sum += root_position_increment_new;// by Y
-
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.010 * (step_new_pulse - position_increment_new) - 0.990 * (step_old_pulse
-			- position_increment_old);
+	delta_eint = delta_eint_old + 1.010 * (step_new_pulse - position_increment_new)
+			- 0.990 * (step_old_pulse - position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
@@ -1137,7 +1112,6 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 	b0 = 1.576266 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //9.244959545156;
 	b1 = 1.468599 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //8.613484947882;
 
-
 	switch (algorithm_no)
 	{
 		case 0: // algorytm nr 0
@@ -1146,8 +1120,8 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 			break;
 		case 1: // algorytm nr 1
 			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
-					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old
+					+ b0 * (step_new_pulse - position_increment_new) - b1 * (step_old_pulse - position_increment_old);
 			break;
 		case 2: // algorytm nr 2 - sterowanie pradowe
 			// DUNG START
@@ -1195,7 +1169,6 @@ uint8_t NL_regulator_5_irp6ot::compute_set_value(void)
 	//     step_old_pulse, set_value_very_old, set_value_old);
 	// first = false;
 	// }
-
 
 	// przepisanie nowych wartosci zmiennych do zmiennych przechowujacych wartosci poprzednie
 	position_increment_old = position_increment_new;
@@ -1265,8 +1238,6 @@ uint8_t NL_regulator_6_irp6ot::compute_set_value(void)
 	//  fff++;
 	//  if (fff == 9) fff=0;
 	// }
-
-
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
 	 if (fabs(position_increment_new) > common::MAX_INC)
@@ -1276,14 +1247,13 @@ uint8_t NL_regulator_6_irp6ot::compute_set_value(void)
 	// kumulacja przyrostu polozenia w tym makrokroku // ORIGINAL
 	// pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO;
 	// servo_pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO; // by Y
-
 	// kumulacja przyrostu polozenia w tym makrokroku
 	pos_increment_new_sum += root_position_increment_new;
-	servo_pos_increment_new_sum += root_position_increment_new;// by Y
+	servo_pos_increment_new_sum += root_position_increment_new; // by Y
 
 	// Przyrost calki uchybu
-	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new) - 0.980 * (step_old_pulse
-			- position_increment_old);
+	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new)
+			- 0.980 * (step_old_pulse - position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
@@ -1360,7 +1330,6 @@ uint8_t NL_regulator_6_irp6ot::compute_set_value(void)
 	b0 = 1.114648 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //6.537527839644;
 	b1 = 1.021348 * POSTUMENT35V_TO_POSTUMENT_VOLTAGE_RATIO_2; //5.990311804009;
 
-
 	switch (algorithm_no)
 	{
 		case 0: // algorytm nr 0
@@ -1369,8 +1338,8 @@ uint8_t NL_regulator_6_irp6ot::compute_set_value(void)
 			break;
 		case 1: // algorytm nr 1
 			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
-					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old
+					+ b0 * (step_new_pulse - position_increment_new) - b1 * (step_old_pulse - position_increment_old);
 			break;
 		case 2: // algorytm nr 2 - sterowanie pradowe
 			// DUNG START
@@ -1465,7 +1434,6 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 
 	// double root_position_increment_new=position_increment_new;
 
-
 	// przeliczenie radianow na impulsy
 	// step_new_pulse = step_new*AXIS_6_INC_PER_REVOLUTION/(2*M_PI); // ORIGINAL
 	step_new_pulse = step_new * AXIS_6_INC_PER_REVOLUTION / (2 * M_PI);
@@ -1486,8 +1454,6 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 	//  fff++;
 	//  if (fff == 9) fff=0;
 	// }
-
-
 	/* // by Y - bez sensu
 	 // Jesli rzeczywisty przyrost jest wiekszy od dopuszczalnego
 	 if (fabs(position_increment_new) > common::MAX_INC)
@@ -1497,14 +1463,14 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 	// kumulacja przyrostu polozenia w tym makrokroku // ORIGINAL
 	// pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO;
 	// servo_pos_increment_new_sum += position_increment_new*POSTUMENT_TO_TRACK_RATIO; // by Y
-
 	// kumulacja przyrostu polozenia w tym makrokroku
 	//pos_increment_new_sum += root_position_increment_new;
 	//servo_pos_increment_new_sum += root_position_increment_new;// by Y
-
 	// Przyrost calki uchybu, czyli cuhyb polozenia
-	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new) - 0.980 * (step_old_pulse
-			- position_increment_old);
+//	delta_eint = delta_eint_old + 1.020 * (step_new_pulse - position_increment_new)
+//			- 0.980 * (step_old_pulse - position_increment_old);
+	delta_eint = delta_eint_old + 1.005 * (step_new_pulse - position_increment_new)
+			- 0.995 * (step_old_pulse - position_increment_old);
 
 	// Sprawdzenie czy numer algorytmu lub zestawu parametrow sie zmienil?
 	// Jezeli tak, to nalezy dokonac uaktualnienia numerow (ewentualnie wykryc niewlasciwosc numerow)
@@ -1596,8 +1562,8 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 			break;
 		case 1: // algorytm nr 1
 			// obliczenie nowej wartosci wypelnienia PWM algorytm PD + I
-			set_value_new = (1 + a) * set_value_old - a * set_value_very_old + b0 * (step_new_pulse
-					- position_increment_new) - b1 * (step_old_pulse - position_increment_old);
+			set_value_new = (1 + a) * set_value_old - a * set_value_very_old
+					+ b0 * (step_new_pulse - position_increment_new) - b1 * (step_old_pulse - position_increment_old);
 			break;
 		case 2: // algorytm nr 2 - sterowanie pradoweb0 =
 			// DUNG START
@@ -1629,7 +1595,6 @@ uint8_t NL_regulator_7_irp6ot::compute_set_value(void)
 		set_value_new = -MAX_PWM;
 
 	// if (set_value_new!=0.0) printf ("aa: %f\n", set_value_new);
-
 
 	// scope-locked reader data update
 	{

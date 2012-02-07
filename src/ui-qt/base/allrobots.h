@@ -2,6 +2,7 @@
 #define ALLROBOTS_H_
 
 #include <boost/shared_ptr.hpp>
+
 #include "ui.h"
 
 class MainWindow;
@@ -16,7 +17,7 @@ class Mp;
 class AllRobots
 {
 public:
-	AllRobots(Interface *iface);
+	AllRobots(Interface & iface);
 
 	void EDP_all_robots_create();
 	void EDP_all_robots_slay();
@@ -58,7 +59,7 @@ public:
 
 private:
 	boost::shared_ptr <MainWindow> mw;
-	Interface *interface;
+	Interface & interface;
 
 };
 

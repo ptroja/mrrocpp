@@ -17,31 +17,22 @@ namespace ecp {
 namespace smb {
 
 robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-		ecp::common::robot::_ecp_robot <lib::smb::c_buffer, lib::smb::r_buffer>(_robot_name, lib::smb::NUM_OF_SERVOS, _config, _sr_ecp)
-		,
-		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_external_command_data_port(lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
-		,
+		ecp::common::robot::_ecp_robot <lib::smb::c_buffer, lib::smb::r_buffer>(_robot_name, lib::smb::NUM_OF_SERVOS, _config, _sr_ecp),
+		epos_motor_command_data_port(lib::epos::EPOS_MOTOR_COMMAND_DATA_PORT, port_manager),
+		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager),
+		epos_external_command_data_port(lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager),
+		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager),
+		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager),
 
-		smb_festo_command_data_port(lib::smb::FESTO_COMMAND_DATA_PORT, port_manager)
-		,
-		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager)
-		,
-		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager)
-		,
-		epos_external_reply_data_request_port(lib::smb::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager)
-		,
+		smb_festo_command_data_port(lib::smb::FESTO_COMMAND_DATA_PORT, port_manager),
+		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager),
+		epos_joint_reply_data_request_port(lib::epos::EPOS_JOINT_REPLY_DATA_REQUEST_PORT, port_manager),
+		epos_external_reply_data_request_port(lib::smb::EPOS_EXTERNAL_REPLY_DATA_REQUEST_PORT, port_manager),
 		smb_multi_leg_reply_data_request_port(lib::smb::MULTI_LEG_REPLY_DATA_REQUEST_PORT, port_manager)
 {
 
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object) :
@@ -53,7 +44,7 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 		,
 		epos_external_command_data_port(lib::smb::EPOS_EXTERNAL_COMMAND_DATA_PORT, port_manager)
 		,
-		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager)
+		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager)
 		,
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
 		,
@@ -69,6 +60,7 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 {
 
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
@@ -83,12 +75,6 @@ void robot::create_kinematic_models_for_given_robot(void)
 void robot::create_command()
 {
 
-	// checks if any data_port is set
-	bool is_new_data = false;
-
-	// cheks if any data_request_posrt is set
-	bool is_new_request = false;
-
 	sr_ecp_msg.message("create_command");
 
 	if (epos_motor_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
@@ -101,9 +87,6 @@ void robot::create_command()
 		ecp_command.smb.variant = lib::smb::POSE;
 
 		ecp_command.smb.set_pose_specification = lib::smb::MOTOR;
-
-		ecp_command.smb.motion_variant = epos_motor_command_data_port.data.motion_variant;
-		ecp_command.smb.estimated_time = epos_motor_command_data_port.data.estimated_time;
 
 		for (int i = 0; i < lib::smb::NUM_OF_SERVOS; ++i) {
 			ecp_command.smb.motor_pos[i] = epos_motor_command_data_port.data.desired_position[i];
@@ -119,8 +102,6 @@ void robot::create_command()
 
 		ecp_command.smb.set_pose_specification = lib::smb::JOINT;
 
-		ecp_command.smb.motion_variant = epos_joint_command_data_port.data.motion_variant;
-		ecp_command.smb.estimated_time = epos_joint_command_data_port.data.estimated_time;
 		for (int i = 0; i < lib::smb::NUM_OF_SERVOS; ++i) {
 			ecp_command.smb.joint_pos[i] = epos_joint_command_data_port.data.desired_position[i];
 		}
@@ -134,9 +115,6 @@ void robot::create_command()
 		ecp_command.smb.variant = lib::smb::POSE;
 
 		ecp_command.smb.set_pose_specification = lib::smb::EXTERNAL;
-
-		ecp_command.smb.motion_variant = epos_external_command_data_port.data.motion_variant;
-		ecp_command.smb.estimated_time = epos_external_command_data_port.data.estimated_time;
 
 		ecp_command.smb.base_vs_bench_rotation = epos_external_command_data_port.data.base_vs_bench_rotation;
 		ecp_command.smb.pkm_vs_base_rotation = epos_external_command_data_port.data.pkm_vs_base_rotation;
@@ -180,11 +158,7 @@ void robot::create_command()
 
 		ecp_command.smb.festo_command = smb_festo_command_data_port.data;
 
-		if (is_new_data) {
-			BOOST_THROW_EXCEPTION(exception::nfe_r() << lib::exception::mrrocpp_error0(INVALID_COMMAND_TO_EDP));
-		} else {
-			is_new_data = true;
-		}
+		check_then_set_command_flag(is_new_data);
 	}
 
 	if (epos_motor_reply_data_request_port.is_new_request()) {
@@ -210,22 +184,6 @@ void robot::create_command()
 	}
 
 	is_new_request = is_new_request || smb_multi_leg_reply_data_request_port.is_new_request();
-
-	communicate_with_edp = true;
-
-	if (is_new_data && is_new_request) {
-		ecp_command.instruction_type = lib::SET_GET;
-	} else if (is_new_data) {
-		ecp_command.instruction_type = lib::SET;
-	} else if (is_new_request) {
-		ecp_command.instruction_type = lib::GET;
-	} else {
-		communicate_with_edp = false;
-	}
-
-	if (is_new_request) {
-		ecp_command.get_type = ARM_DEFINITION;
-	}
 
 }
 

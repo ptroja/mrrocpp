@@ -133,6 +133,21 @@ public:
 	lib::fd_client_t EDP_fd;
 
 	/**
+	 * @brief states if any data_port is set
+	 */
+	bool is_new_data;
+
+	/**
+	 * @brief states if any data_request_port is set
+	 */
+	bool is_new_request;
+
+	/**
+	 * @brief states if any data_ports_are_used
+	 */
+	bool data_ports_used;
+
+	/**
 	 * @brief executed the communication sequence with EDP: set and query with error handling
 	 *
 	 * it can be reimplemented to maintain new error handling e.g.: in nose_run force generator
@@ -187,10 +202,57 @@ public:
 	 * @brief returns synchronised flag - synchronisation status
 	 */
 	bool is_synchronised(void) const;
+
+};
+
+class common_buffers_ecp_robot : public ecp_robot_base
+{
+
+public:
+	friend class ecp::common::generator::transparent;
+
+	/**
+	 * @brief constructor called from UI
+	 * @param _robot_name robot label
+	 * @param _number_of_servos number of robot servos (joints)
+	 * @param _edp_section associated EDP configuration file section
+	 * @param _config configuration object reference
+	 * @param _sr_ecp sr_ecp communication object reference
+	 */
+	common_buffers_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref);
+
+	/**
+	 * @brief constructor called from ECP
+	 * @param _robot_name robot label
+	 * @param _number_of_servos number of robot servos (joints)
+	 * @param _edp_section associated EDP configuration file section
+	 * @param _ecp_object ecp tak object reference
+	 */
+	common_buffers_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object, lib::c_buffer & c_buffer_ref, lib::r_buffer & r_buffer_ref);
+
+	/**
+	 * @brief desctructor
+	 */
+	virtual ~common_buffers_ecp_robot();
+
+	/*!
+	 * \brief Reference to base types of instruction
+	 *
+	 * The particular type is the field of derived classes
+	 */
+	lib::c_buffer & ecp_command;
+
+	/*!
+	 * \brief Reference to base types of reply
+	 *
+	 * The particular type is the field of derived classes
+	 */
+	lib::r_buffer & reply_package;
+
 };
 
 template <typename ROBOT_COMMAND_T = lib::c_buffer, typename ROBOT_REPLY_T = lib::r_buffer>
-class _ecp_robot : public ecp_robot_base
+class _ecp_robot : public common_buffers_ecp_robot
 {
 public:
 	friend class ecp::common::generator::transparent;
@@ -228,7 +290,7 @@ public:
 	 * @param _sr_ecp sr_ecp communication object reference
 	 */
 	_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, lib::configurator &_config, lib::sr_ecp &_sr_ecp) :
-			ecp_robot_base(_robot_name, _number_of_servos, _config, _sr_ecp)
+			common_buffers_ecp_robot(_robot_name, _number_of_servos, _config, _sr_ecp, ecp_command, reply_package)
 	{
 	}
 
@@ -240,7 +302,7 @@ public:
 	 * @param _ecp_object ecp tak object reference
 	 */
 	_ecp_robot(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object) :
-			ecp_robot_base(_robot_name, _number_of_servos, _ecp_object)
+			common_buffers_ecp_robot(_robot_name, _number_of_servos, _ecp_object, ecp_command, reply_package)
 	{
 	}
 
@@ -351,6 +413,29 @@ public:
 			return false;
 		}
 	}
+
+	/**
+	 * @brief finalizes the robot command in data port variant
+	 */
+	void finalize_data_port_command()
+	{
+		communicate_with_edp = true;
+
+		if (is_new_data && is_new_request) {
+			ecp_command.instruction_type = lib::SET_GET;
+		} else if (is_new_data) {
+			ecp_command.instruction_type = lib::SET;
+		} else if (is_new_request) {
+			ecp_command.instruction_type = lib::GET;
+		} else {
+			communicate_with_edp = false;
+		}
+
+		if (is_new_request) {
+			ecp_command.get_type = ARM_DEFINITION;
+		}
+	}
+
 };
 
 typedef _ecp_robot <> ecp_robot;

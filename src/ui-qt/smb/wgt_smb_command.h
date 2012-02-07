@@ -25,10 +25,10 @@ const std::string WGT_SMB_COMMAND = "WGT_SMB_COMMAND";
 
 class wgt_smb_command : public wgt_base
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
-	wgt_smb_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
+	wgt_smb_command(const QString & _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent =
 			0);
 	~wgt_smb_command();
 
@@ -55,16 +55,16 @@ private:
 	Ui::wgt_smb_commandClass ui;
 	mrrocpp::ui::smb::UiRobot* robot;
 
-	int init();
+	void init();
 
-	int synchro_depended_widgets_disable(bool _set_disabled);
+	void synchro_depended_widgets_disable(bool _set_disabled);
 
-	int get_desired_position();
-	int move_it();
+	void get_desired_position();
+	void move_it();
 
 	boost::shared_ptr <QTimer> timer;
 
-signals:
+	signals:
 	void synchro_depended_init_signal();
 
 private slots:

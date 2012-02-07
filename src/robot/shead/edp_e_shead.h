@@ -71,13 +71,18 @@ protected:
 		;
 	} virtual_state;
 
-	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	/*!
 	 * \brief method,  creates a list of available kinematic models for shead effector.
 	 *
 	 * It will be used if any motor will be commanded to move. Then motor to joint transform will be implemented in kinematics.
 	 */
 	virtual void create_kinematic_models_for_given_robot(void);
+
+	//! Homing velocity [rpm] (initialized to zero for safety reasons).
+	int32_t homing_velocity;
+
+	//! Homing offset [qc] (initialized to zero for safety reasons).
+	int32_t homing_offset;
 
 public:
 
@@ -87,6 +92,11 @@ public:
 	 * The attributes are initialized here.
 	 */
 	effector(common::shell &_shell, lib::robot_name_t l_robot_name);
+
+	/*!
+	 * @brief Destructor.
+	 */
+	~effector();
 
 	/*!
 	 * \brief method to create threads other then EDP master thread.
@@ -102,22 +112,31 @@ public:
 	 */
 	void synchronise();
 
-	void get_controller_state(lib::c_buffer &instruction);
+	/*
+	 * \brief Initializes the controller.
+	 * Called only once after process creation.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
+	 */
+	void get_controller_state(lib::c_buffer &instruction_);
 
 	/*!
-	 * \brief method to set position of the motors or joints
+	 * \brief Executes the *move_arm* command.
 	 *
-	 * It will be used if there will be any motor used.
+	 * It chooses the single thread variant from the motor_driven_effector.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-	void move_arm(const lib::c_buffer &instruction); // przemieszczenie ramienia
+	void move_arm(const lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief method to get position of the motors or joints
 	 *
 	 * It will be used if there will be any motor used.
+	 *
+	 * \param [in] instruction_ - Received command. Parameter UNUSED! due to the fact, that this is a single threaded driver.
 	 */
-
-	void get_arm_position(bool read_hardware, lib::c_buffer &instruction); // odczytanie pozycji ramienia
+	void get_arm_position(bool read_hardware, lib::c_buffer &instruction_);
 
 	/*!
 	 * \brief method to choose master_order variant
@@ -126,10 +145,24 @@ public:
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	/*!
+	 * \brief method to receive instruction from ecp of particular type
+	 */
+	lib::INSTRUCTION_TYPE receive_instruction();
+
+	/*!
+	 * \brief method to reply to ecp with class of particular type
+	 */
 	void variant_reply_to_instruction();
 
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
 	lib::shead::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
 	lib::shead::r_buffer reply;
 
 };

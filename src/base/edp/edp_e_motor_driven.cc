@@ -216,10 +216,9 @@ motor_driven_effector::motor_driven_effector(shell &_shell, const lib::robot_nam
 
 	// is_get_arm_read_hardware=false;
 
-	//#ifdef DOCENT_SENSOR
 	startedCallbackRegistered_ = false;
 	stoppedCallbackRegistered_ = false;
-	//#endif
+
 	float _velocity_limit_global_factor;
 
 	if (config.exists("velocity_limit_global_factor")) {
@@ -824,7 +823,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 			{
 				case GET_STATE:
 					// wstepna interpretacja nadeslanego polecenia w celu wykrycia nieprawidlowosci
-					switch (variant_receive_instruction())
+					switch (receive_instruction())
 					{
 						case lib::GET:
 							// potwierdzenie przyjecia polecenia (dla ECP)
@@ -857,7 +856,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 					next_state = WAIT;
 					break;
 				case WAIT:
-					if (variant_receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
+					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
 						// zle jej wykonanie, czyli wyslij odpowiedz
 						variant_reply_to_instruction();
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
@@ -993,7 +992,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 			{
 				case GET_SYNCHRO:
 					/* Oczekiwanie na zlecenie synchronizacji robota */
-					switch (variant_receive_instruction())
+					switch (receive_instruction())
 					{
 						case lib::SYNCHRO:
 							// instrukcja wlasciwa => zle jej wykonanie
@@ -1039,7 +1038,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 					break;
 				case SYNCHRO_TERMINATED:
 					/* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
-					if (variant_receive_instruction() == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
+					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
 						// Budowa adekwatnej odpowiedzi
 						reply.reply_type = lib::SYNCHRO_OK;
 						msg->message("Robot is synchronized");
@@ -1052,7 +1051,7 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 					break;
 				case WAIT_Q:
 					/* Oczekiwanie na zapytanie od ECP o status zakonczenia synchronizacji (QUERY) */
-					if (variant_receive_instruction() == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
+					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa => zle jej wykonanie
 						// Budowa adekwatnej odpowiedzi
 						variant_reply_to_instruction();
 						next_state = GET_SYNCHRO;
@@ -1175,12 +1174,12 @@ void motor_driven_effector::synchro_loop(STATE& next_state)
 				error1 = *tmp;
 			}
 
-			if (variant_receive_instruction() != lib::QUERY) {
+			if (receive_instruction() != lib::QUERY) {
 				// blad: powinna byla nadejsc instrukcja QUERY
 				establish_error(reply, QUERY_EXPECTED, OK);
 				variant_reply_to_instruction();
 				printf("QQQ\n");
-				variant_receive_instruction();
+				receive_instruction();
 			}
 			reply.reply_type = lib::ERROR;
 			establish_error(reply, error0, error1);
@@ -1203,7 +1202,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 			{
 				case GET_INSTRUCTION:
 					// wstepna interpretacja nadesanego polecenia w celu wykrycia nieprawidlowosci
-					switch (variant_receive_instruction())
+					switch (receive_instruction())
 					{
 						case lib::SET:
 						case lib::GET:
@@ -1240,7 +1239,7 @@ void motor_driven_effector::post_synchro_loop(STATE& next_state)
 					next_state = WAIT;
 					break;
 				case WAIT:
-					if (variant_receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
+					if (receive_instruction() == lib::QUERY) { // instrukcja wlasciwa =>
 						// zlec jej wykonanie, czyli wyslij odpowiedz
 						variant_reply_to_instruction();
 					} else { // blad: powinna byla nadejsc instrukcja QUERY
@@ -1358,17 +1357,15 @@ void motor_driven_effector::main_loop()
 	post_synchro_loop(next_state);
 }
 
-lib::INSTRUCTION_TYPE motor_driven_effector::variant_receive_instruction()
+lib::INSTRUCTION_TYPE motor_driven_effector::receive_instruction()
 {
-	return receive_instruction(instruction);
+	return common::effector::receive_instruction(instruction);
 }
 
 void motor_driven_effector::variant_reply_to_instruction()
 {
 	reply_to_instruction(reply);
 }
-
-//#ifdef DOCENT_SENSOR
 
 void motor_driven_effector::registerReaderStartedCallback(boost::function <void()> startedCallback)
 {
@@ -1394,8 +1391,7 @@ void motor_driven_effector::onReaderStopped()
 		stoppedCallback_();
 	}
 }
-//#endif
 
-}// namespace common
+} // namespace common
 } // namespace edp
 } // namespace mrrocpp

@@ -23,14 +23,14 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 		,
 		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager)
 		,
-		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager)
+		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager)
 		,
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
 		,
 
-		shead_head_soldification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager)
+		solidification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager)
 		,
-		shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager)
+		vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager)
 		,
 
 		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager)
@@ -42,6 +42,7 @@ robot::robot(const lib::robot_name_t & _robot_name, lib::configurator &_config, 
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ecp_object) :
@@ -51,14 +52,14 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 		,
 		epos_joint_command_data_port(lib::epos::EPOS_JOINT_COMMAND_DATA_PORT, port_manager)
 		,
-		epos_brake_command_data_port(lib::epos::EPOS_BRAKE_COMMAND_DATA_PORT, port_manager)
+		epos_brake_command_data_port(lib::epos::EPOS_QUICKSTOP_COMMAND_DATA_PORT, port_manager)
 		,
 		epos_clear_fault_data_port(lib::epos::EPOS_CLEAR_FAULT_DATA_PORT, port_manager)
 		,
 
-		shead_head_soldification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager)
+		solidification_data_port(lib::shead::SOLIDIFICATION_ACTIVATION_DATA_PORT, port_manager)
 		,
-		shead_vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager)
+		vacuum_activation_data_port(lib::shead::VACUUM_ACTIVATION_DATA_PORT, port_manager)
 		,
 
 		epos_motor_reply_data_request_port(lib::epos::EPOS_MOTOR_REPLY_DATA_REQUEST_PORT, port_manager)
@@ -70,6 +71,7 @@ robot::robot(const lib::robot_name_t & _robot_name, common::task::task_base& _ec
 {
 	//  Stworzenie listy dostepnych kinematyk.
 	create_kinematic_models_for_given_robot();
+	data_ports_used = true;
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.
@@ -83,12 +85,6 @@ void robot::create_kinematic_models_for_given_robot(void)
 
 void robot::create_command()
 {
-	// checks if any data_port is set
-	bool is_new_data = false;
-
-	// cheks if any data_request_posrt is set
-	bool is_new_request = false;
-
 	if (epos_motor_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 		if (!is_synchronised()) {
@@ -148,7 +144,7 @@ void robot::create_command()
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (shead_head_soldification_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
+	if (solidification_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
 		// generator command interpretation
@@ -156,12 +152,12 @@ void robot::create_command()
 
 		ecp_command.shead.variant = lib::shead::SOLIDIFICATION;
 
-		ecp_command.shead.head_solidification = shead_head_soldification_data_port.data;
+		ecp_command.shead.head_solidification = solidification_data_port.data;
 
 		check_then_set_command_flag(is_new_data);
 	}
 
-	if (shead_vacuum_activation_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
+	if (vacuum_activation_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;
 
 		// generator command interpretation
@@ -169,7 +165,7 @@ void robot::create_command()
 
 		ecp_command.shead.variant = lib::shead::VACUUM;
 
-		ecp_command.shead.vacuum_activation = shead_vacuum_activation_data_port.data;
+		ecp_command.shead.vacuum_activation = vacuum_activation_data_port.data;
 
 		check_then_set_command_flag(is_new_data);
 
@@ -191,22 +187,6 @@ void robot::create_command()
 	}
 
 	is_new_request = is_new_request || shead_reply_data_request_port.is_new_request();
-
-	communicate_with_edp = true;
-
-	if (is_new_data && is_new_request) {
-		ecp_command.instruction_type = lib::SET_GET;
-	} else if (is_new_data) {
-		ecp_command.instruction_type = lib::SET;
-	} else if (is_new_request) {
-		ecp_command.instruction_type = lib::GET;
-	} else {
-		communicate_with_edp = false;
-	}
-
-	if (is_new_request) {
-		ecp_command.get_type = ARM_DEFINITION;
-	}
 
 }
 

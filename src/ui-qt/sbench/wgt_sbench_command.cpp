@@ -1,3 +1,11 @@
+/*!
+ * @file
+ * @brief File contains wgt_sbench_command class definition for SwarmItFix Bench
+ * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
+ *
+ * @ingroup sbench
+ */
+
 #include "../sbench/ui_ecp_r_sbench.h"
 #include "../sbench/ui_r_sbench.h"
 #include "robot/sbench/const_sbench.h"
@@ -9,24 +17,21 @@
 
 #include <QFont>
 
-wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::common::Interface& _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
+wgt_sbench_command::wgt_sbench_command(const QString & _widget_label, mrrocpp::ui::common::Interface & _interface, mrrocpp::ui::common::UiRobot *_robot, QWidget *parent) :
 		wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
 	robot = dynamic_cast <mrrocpp::ui::sbench::UiRobot *>(_robot);
 
 	// utworzenie list widgetow
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			int k = (i + 1) % 2;
-
-			QCheckBox *tmp_checkbox;
-			tmp_checkbox = new QCheckBox(this);
+	for (int row = 0; row < SBENCH_MAX_ROW; ++row) {
+		for (int column = 0; column < SBENCH_MAX_COL; ++column) {
+			QCheckBox *tmp_checkbox = new QCheckBox(this);
 
 			std::stringstream tmp_stringsteam;
-			tmp_stringsteam << i + 1 << "-";
+			tmp_stringsteam << row + 1 << "-";
 
-			switch (j)
+			switch (column)
 			{
 				case 0:
 					tmp_stringsteam << "I";
@@ -68,19 +73,20 @@ wgt_sbench_command::wgt_sbench_command(QString _widget_label, mrrocpp::ui::commo
 			 tmp_checkbox->update();
 			 */
 
-			ui.gridLayout->addWidget(tmp_checkbox, i, (2 * j) + k);
-		//	checkBox_Vector.append(tmp_checkbox);
 
-			docks[i][j] = tmp_checkbox;
+			int shift = (row + 1) % 2;
+
+			ui.gridLayout->addWidget(tmp_checkbox, SBENCH_MAX_ROW-1-row, 2*SBENCH_MAX_COL - (2 * column) - shift);
+			//	checkBox_Vector.append(tmp_checkbox);
+
+			docks[row][column] = tmp_checkbox;
 
 			// unused docks are disabled
-			if (((k == 0) && (i > 6)) || ((k == 1) && (j > 6))) {
+			if (((shift == 0) && (row > 6)) || ((shift == 1) && (column > 6))) {
 				tmp_checkbox->setDisabled(true);
 			}
-
 		}
 	}
-
 }
 
 wgt_sbench_command::~wgt_sbench_command()
@@ -88,25 +94,60 @@ wgt_sbench_command::~wgt_sbench_command()
 
 }
 
+void wgt_sbench_command::init()
+{
+	robot->ui_ecp_robot->the_robot->data_request_port.set_request();
+	robot->ui_ecp_robot->execute_motion();
+	robot->ui_ecp_robot->the_robot->data_request_port.get();
+
+	reshresh_widgets();
+}
+
 void wgt_sbench_command::on_pushButton_read_clicked()
 {
-	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.set_request();
-	robot->ui_ecp_robot->execute_motion();
-	robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.get();
+	init();
+}
 
-	QFont font;
-	QPalette pal;
+void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
+{
+	read_and_set();
+}
 
-//	int sum = 0;
+void wgt_sbench_command::set(const lib::sbench::bench_state & state)
+{
 
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			if (robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j)) {
+	for (int row = 0; row < SBENCH_MAX_ROW; ++row) {
+		for (int column = 0; column < SBENCH_MAX_COL; ++column) {
+			docks[row][column]->setChecked(state.get_value(row + 1, column + 1));
+		}
+	}
+
+}
+
+void wgt_sbench_command::get(lib::sbench::bench_state & state)
+{
+
+	for (int row = 0; row < SBENCH_MAX_ROW; ++row) {
+		for (int column = 0; column < SBENCH_MAX_COL; ++column) {
+			state.set_value(row + 1, column + 1, docks[row][column]->isChecked());
+		}
+	}
+
+}
+
+void wgt_sbench_command::refresh_dock_widgets(const lib::sbench::bench_state & state)
+{
+	for (int row = 0; row < SBENCH_MAX_ROW; ++row) {
+		for (int column = 0; column < SBENCH_MAX_COL; ++column) {
+			QFont font;
+			QPalette pal;
+
+			if (state.get_value(row + 1, column + 1)) {
 
 				font.setUnderline(true);
 
-				pal.setColor(QPalette::WindowText, Qt::blue);
-				pal.setColor(QPalette::Background, Qt::blue);
+				pal.setColor(QPalette::WindowText, Qt::red);
+				pal.setColor(QPalette::Background, Qt::red);
 			} else {
 
 				font.setUnderline(false);
@@ -114,26 +155,8 @@ void wgt_sbench_command::on_pushButton_read_clicked()
 				pal.setColor(QPalette::WindowText, Qt::black);
 				pal.setColor(QPalette::Background, Qt::black);
 			}
-			docks[i][j]->setFont(font);
-			docks[i][j]->setPalette(pal);
-			//	checkBox_Vector[sum]->setFont(font);
-			//	checkBox_Vector[sum]->setPalette(pal);
-			//	sum++;
-		}
-	}
-
-}
-
-void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
-{
-	on_pushButton_read_clicked();
-//	int sum = 0;
-
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			docks[i][j]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j));
-			//checkBox_Vector[sum]->setChecked(robot->ui_ecp_robot->the_robot->sbench_reply_data_request_port.data.get_value(i, j));
-			//sum++;
+			docks[row][column]->setFont(font);
+			docks[row][column]->setPalette(pal);
 		}
 	}
 
@@ -142,34 +165,20 @@ void wgt_sbench_command::on_pushButton_read_and_copy_clicked()
 void wgt_sbench_command::on_pushButton_clear_clicked()
 {
 
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			docks[i][j]->setChecked(false);
-
+	for (int row = 0; row < SBENCH_MAX_ROW; ++row) {
+		for (int column = 0; column < SBENCH_MAX_COL; ++column) {
+			docks[row][column]->setChecked(false);
 		}
 	}
-	/*
-	 for (int i; i < SBENCH_MAX_EL; i++) {
-	 checkBox_Vector[i]->setChecked(false);
-	 }
-	 */
+
 }
 
 void wgt_sbench_command::on_pushButton_execute_clicked()
 {
-//	int sum = 0;
-
-	for (int i = 0; i < SBENCH_MAX_ROW; i++) {
-		for (int j = 0; j < SBENCH_MAX_COL; j++) {
-			robot->ui_ecp_robot->the_robot->sbench_command_data_port.data.set_value(i, j, docks[i][j]->isChecked());
-			//	sum++;
-		}
-	}
-
-	robot->ui_ecp_robot->the_robot->sbench_command_data_port.set();
-
-	robot->ui_ecp_robot->execute_motion();
-
-	on_pushButton_read_clicked();
+	execute();
 }
 
+void wgt_sbench_command::showEvent(QShowEvent * event)
+{
+	init();
+}

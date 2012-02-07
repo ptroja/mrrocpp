@@ -56,19 +56,19 @@ ecp_t_pid_tuning_pb_eih::ecp_t_pid_tuning_pb_eih(mrrocpp::lib::configurator& con
 		log_enabled = true;
 		log_dbg_enabled = true;
 
-		shared_ptr <position_constraint> cube(new cubic_constraint(config, config_section_name));
+		boost::shared_ptr <position_constraint> cube(new cubic_constraint(config, config_section_name));
 
-		reg = shared_ptr <regulator_p> (new regulator_p(config, config_section_name));
+		reg = boost::shared_ptr <regulator_p> (new regulator_p(config, config_section_name));
 
 		sr_ecp_msg->message("Creating DisCODe sensor");
 		boost::shared_ptr <discode_sensor> ds = boost::shared_ptr <discode_sensor>(new discode_sensor(config, config_section_name));
-		vs = shared_ptr <visual_servo> (new pb_eih_visual_servo(reg, ds, config_section_name, config));
+		vs = boost::shared_ptr <visual_servo> (new pb_eih_visual_servo(reg, ds, config_section_name, config));
 
-		obj_reached_term_cond = shared_ptr <object_reached_termination_condition> (new object_reached_termination_condition(config, config_section_name));
-		timeout_term_cond = shared_ptr <timeout_termination_condition> (new timeout_termination_condition(config.value<double>("vs_timeout", config_section_name)));
+		obj_reached_term_cond = boost::shared_ptr <object_reached_termination_condition> (new object_reached_termination_condition(config, config_section_name));
+		timeout_term_cond = boost::shared_ptr <timeout_termination_condition> (new timeout_termination_condition(config.value<double>("vs_timeout", config_section_name)));
 
 		log_dbg("ecp_t_pid_tuning_pb_eih::ecp_t_pid_tuning_pb_eih(): 3\n");
-		sm = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
+		sm = boost::shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, config_section_name, vs));
 		log_dbg("ecp_t_pid_tuning_pb_eih::ecp_t_pid_tuning_pb_eih(): 4\n");
 		sm->add_position_constraint(cube);
 

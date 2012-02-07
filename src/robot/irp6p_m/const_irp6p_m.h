@@ -41,8 +41,8 @@ const int LAST_MOXA_PORT_NUM = 5;
  */
 
 const std::string ports_strings[] =
-		{ "/dev/ttyM0", "/dev/ttyM1", "/dev/ttyM2", "/dev/ttyM3", "/dev/ttyM4", "/dev/ttyM5" };
-//		{ "/dev/ttyMI8", "/dev/ttyMI9", "/dev/ttyMI10", "/dev/ttyMI11", "/dev/ttyMI12", "/dev/ttyMI13" };
+//		{ "/dev/ttyM0", "/dev/ttyM1", "/dev/ttyM2", "/dev/ttyM3", "/dev/ttyM4", "/dev/ttyM5" };
+		{ "/dev/ttyMI8", "/dev/ttyMI9", "/dev/ttyMI10", "/dev/ttyMI11", "/dev/ttyMI12", "/dev/ttyMI13" };
 
 /*!
  * @brief IRp6 postument overcurrent threshold [mA]

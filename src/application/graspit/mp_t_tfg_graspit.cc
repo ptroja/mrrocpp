@@ -37,7 +37,6 @@
 #include "robot/smb/mp_r_smb.h"
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
-#include "robot/player/const_player.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -127,8 +126,8 @@ void graspit::main_task_algorithm(void)
 		// TODO: throw
 	}
 
-	char tmp_string1[lib::MP_2_ECP_STRING_SIZE];
-	char tmp_string2[lib::MP_2_ECP_STRING_SIZE];
+	char tmp_string1[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
+	char tmp_string2[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
 
 	struct _irp6
 	{
@@ -143,11 +142,11 @@ void graspit::main_task_algorithm(void)
 	memcpy(tmp_string1, &mp_ecp_command, sizeof(mp_ecp_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), gripper_name);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, gripper_name);
 
 	wait_for_task_termination(false, 1, gripper_name.c_str());
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), manipulator_name);
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
@@ -158,11 +157,11 @@ void graspit::main_task_algorithm(void)
 	memcpy(tmp_string1, &mp_ecp_command, sizeof(mp_ecp_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), manipulator_name);
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, sizeof(mp_ecp_command), gripper_name);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, gripper_name);
 
 	wait_for_task_termination(false, 1, gripper_name.c_str());
 

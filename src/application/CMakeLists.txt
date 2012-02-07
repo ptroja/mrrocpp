@@ -1,5 +1,5 @@
 # Recurse into subdirectories.
-if(ROBOTS_012)
+if(ROBOTS_012 AND NOT UBUNTU32BIT)
 #add_subdirectory (bclikeregions)
 add_subdirectory (ball)
 add_subdirectory (block_move)
@@ -15,17 +15,11 @@ add_subdirectory (haptic)
 add_subdirectory (haptic_stiffness)
 add_subdirectory (mm_test)
 add_subdirectory (mp_common)
-add_subdirectory (multiplayer)
 add_subdirectory (neuron)
 add_subdirectory (playerjoy)
 add_subdirectory (pnml)
 add_subdirectory (rcsc)
 add_subdirectory (swarm_demo_irp6)
-
-
-
-
-
 add_subdirectory (tcim_bug)
 add_subdirectory (teach)
 add_subdirectory (teach-dll)
@@ -33,20 +27,23 @@ add_subdirectory (time)
 add_subdirectory (visual_servoing)
 add_subdirectory (visual_servoing_demo)
 add_subdirectory (wii_teach)
+add_subdirectory (android_teach)
 add_subdirectory (trajectory_stats)
-endif(ROBOTS_012)
+endif(ROBOTS_012 AND NOT UBUNTU32BIT)
 
-if(ROBOT_BIRD_HAND)
+if(ROBOT_BIRD_HAND AND NOT UBUNTU32BIT)
+
 add_subdirectory (bird_hand_test)
-endif(ROBOT_BIRD_HAND)
 
-if(ROBOT_BIRD_HAND)
-if(ROBOTS_012)
+endif(ROBOT_BIRD_HAND AND NOT UBUNTU32BIT)
+
+if(ROBOT_BIRD_HAND AND ROBOTS_012  AND NOT UBUNTU32BIT)
 add_subdirectory (graspit)
-endif(ROBOTS_012)
-endif(ROBOT_BIRD_HAND)
+endif(ROBOT_BIRD_HAND AND ROBOTS_012 AND NOT UBUNTU32BIT)
 
-if(ROBOTS_SWARMITFIX)
-add_subdirectory (swarm_demo_single_agent)
+if(ROBOTS_SWARMITFIX AND NOT UBUNTU32BIT)
+add_subdirectory (swarmitfix_plan)
+add_subdirectory (swarmitfix_demos)
 add_subdirectory (swarmitfix)
-endif(ROBOTS_SWARMITFIX)
+endif(ROBOTS_SWARMITFIX AND NOT UBUNTU32BIT)
+

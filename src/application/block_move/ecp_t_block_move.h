@@ -18,7 +18,6 @@
 
 #include "base/ecp/ecp_task.h"
 #include "subtask/ecp_mp_st_smooth_file_from_mp.h"
-#include "subtask/ecp_st_go.h"
 
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"

@@ -3,7 +3,7 @@
 
 /*!
  * @file
- * @brief File contains ecp robot class declaration for SwarmItFix Head
+ * @brief File contains ecp robot class declaration for SwarmItFix Bench
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup sbench
@@ -11,37 +11,36 @@
 
 #include "base/ecp/ecp_robot.h"
 #include "dp_sbench.h"
-#include "base/kinematics/kinematics_manager.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace sbench {
 
 /*!
- * @brief SwarmItFix Head gripper ecp robot class
+ * @brief SwarmItFix Bench robot class.
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup sbench
  */
 
 class robot : public common::robot::_ecp_robot <lib::sbench::c_buffer, lib::sbench::r_buffer>
-		, public kinematics::common::kinematics_manager
 {
-protected:
-
-	void create_kinematic_models_for_given_robot(void);
-
 public:
 
 	/**
-	 * @brief head soldification command data port
+	 * @brief Bench power supply command data port
 	 */
-	lib::single_thread_port <lib::sbench::pins_buffer> sbench_command_data_port;
+	lib::single_thread_port <lib::sbench::power_supply_state> power_supply_data_port;
 
 	/**
-	 * @brief Head state reply data request port
+	 * @brief Bench pressure command data port
 	 */
-	lib::single_thread_request_port <lib::sbench::pins_buffer> sbench_reply_data_request_port;
+	lib::single_thread_port <lib::sbench::cleaning_state> cleaning_state_data_port;
+
+	/**
+	 * @brief Bench state reply data request port
+	 */
+	lib::single_thread_request_port <lib::sbench::rbuffer> data_request_port;
 
 	/**
 	 * @brief constructor called from UI

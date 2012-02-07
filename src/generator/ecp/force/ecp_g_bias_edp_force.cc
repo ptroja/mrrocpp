@@ -31,10 +31,10 @@ namespace generator {
 //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
-
 bias_edp_force::bias_edp_force(common::task::task& _ecp_task) :
-	common::generator::generator(_ecp_task)
+		common::generator::generator(_ecp_task)
 {
+	subtask_generator_name = ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE;
 }
 
 bool bias_edp_force::first_step()
@@ -50,7 +50,6 @@ bool bias_edp_force::first_step()
 }
 
 // --------------------------------------------------------------------------
-
 
 // --------------------------------------------------------------------------
 bool bias_edp_force::next_step()

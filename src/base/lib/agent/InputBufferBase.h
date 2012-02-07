@@ -14,6 +14,10 @@
 
 #include "BufferBase.h"
 
+namespace mrrocpp {
+namespace lib {
+namespace agent {
+
 class Agent;
 
 /**
@@ -37,5 +41,9 @@ public:
 	//! This is required to make a class polimorphic
 	virtual ~InputBufferBase();
 };
+
+} // namespace agent
+} // namespace lib
+} // namespace mrrocpp
 
 #endif /* DATABUFFERBASE_H_ */

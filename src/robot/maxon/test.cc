@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 			}
 
 			// Change to the operational mode
-			node->reset();
+			node->enable();
 		}
 
 		clock_gettime(CLOCK_MONOTONIC, &t1);

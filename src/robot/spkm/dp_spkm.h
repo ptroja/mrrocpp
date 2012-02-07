@@ -63,6 +63,10 @@ typedef struct _segment
 	//! Constructor with reasonable defaults
 	_segment(const lib::Homog_matrix & _goal = lib::Homog_matrix());
 
+private:
+	//! Give access to boost::serialization framework
+	friend class boost::serialization::access;
+
 	//! Serialization of the data structure
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
@@ -75,11 +79,11 @@ typedef struct _segment
 } segment_t;
 
 /**
- * ECP variant variant
+ * ECP command variant
  */
 typedef enum _command_variant
 {
-	POSE_LIST, STOP
+	GOAL_POSE, STOP
 } command_variant;
 
 /*!
@@ -87,13 +91,11 @@ typedef enum _command_variant
  */
 typedef struct _next_state_t
 {
+	//! Command variant
 	command_variant variant;
 
-	//! Type for sequence of motions of SPKM robot
-	typedef std::vector <spkm::segment_t> segment_sequence_t;
-
-	//! Sequence of motion segments for SPKM robot
-	segment_sequence_t segments;
+	//! Motion segment for SPKM
+	spkm::segment_t segment;
 
 	//! Constructor with safe defaults
 	_next_state_t(command_variant _variant = STOP) :
@@ -112,8 +114,8 @@ private:
 		ar & variant;
 		switch (variant)
 		{
-			case POSE_LIST:
-				ar & segments;
+			case GOAL_POSE:
+				ar & segment;
 				break;
 			default:
 				break;
@@ -127,7 +129,7 @@ private:
  */
 enum CBUFFER_VARIANT
 {
-	POSE, QUICKSTOP, CLEAR_FAULT
+	POSE, QUICKSTOP, CLEAR_FAULT, BRAKE, DISABLE_BRAKE
 };
 
 /*!
@@ -154,6 +156,7 @@ struct spkm_ext_epos_reply
 
 	bool contact;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -180,6 +183,7 @@ struct spkm_epos_simple_command
 
 	double estimated_time;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -236,6 +240,7 @@ struct cbuffer
 	//! - OR the contact was NOT expected and did happened.
 	bool guarded_motion;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 
@@ -306,6 +311,7 @@ struct rbuffer
 
 	bool contact;
 
+private:
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
 

@@ -95,14 +95,28 @@ public:
 	/*!
 	 * \brief method to choose master_order variant
 	 *
-	 * IHere the single thread variant is chosen
+	 * Here the single thread variant is chosen
 	 */
 	void master_order(common::MT_ORDER nm_task, int nm_tryb);
 
-	lib::INSTRUCTION_TYPE variant_receive_instruction();
+	/*!
+	 * \brief method to receive instruction from ecp of particular type
+	 */
+	lib::INSTRUCTION_TYPE receive_instruction();
+
+	/*!
+	 * \brief method to reply to ecp with class of particular type
+	 */
 	void variant_reply_to_instruction();
 
+	/*!
+	 * \brief The particular type of instruction send form ECP to EDP
+	 */
 	lib::bird_hand::c_buffer instruction;
+
+	/*!
+	 * \brief The particular type of reply send form EDP to ECP
+	 */
 	lib::bird_hand::r_buffer reply;
 
 private:

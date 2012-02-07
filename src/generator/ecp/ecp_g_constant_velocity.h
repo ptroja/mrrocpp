@@ -107,6 +107,11 @@ class constant_velocity : public multiple_position<ecp_mp::common::trajectory_po
 		 * @param trajectory_pose pose to load
 		 */
 		bool load_relative_pose(ecp_mp::common::trajectory_pose::constant_velocity_trajectory_pose & trajectory_pose);
+                /**
+                 * Loads the whole trajectory chain (possibly more than one position) stored in a text file.
+                 * @param file_name name of the file with the trajectory
+                 */
+                bool load_trajectory_from_file(const char* file_name);
 
 	private:
 		/**

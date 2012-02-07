@@ -14,7 +14,7 @@
 #include <cmath>
 
 // for MacOS compatibility, where isnan() is implemented as a function in the std:: namespace
-using std::isnan;
+// using std::isnan;
 
 #include "base/lib/com_buf.h"
 #include "robot/irp6p_m/kinematic_model_irp6p_with_wrist.h"
@@ -209,7 +209,7 @@ void model_with_wrist::set_kinematic_parameters(void)
 	synchro_motor_position[1] = -5; // ramie d. [rad]
 	synchro_motor_position[2] = -8.527; // ramie g. [rad]
 	synchro_motor_position[3] = 151.31; // kisc T [rad]
-	synchro_motor_position[4] = 432.25; // kisc V [rad]
+	synchro_motor_position[4] = 435.25; // kisc V [rad]
 	synchro_motor_position[5] = 791.0; // kisc N [rad]
 	synchro_motor_position[6] = 4830; // chwytak [-]
 

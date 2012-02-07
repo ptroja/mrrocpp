@@ -475,6 +475,7 @@ bool bang_bang_profile::set_model(vector<ecp_mp::common::trajectory_pose::bang_b
 		it-> model[i] = 4;
 	} else {
 		printf("###################### undetermined model #######################\n");
+                printf("v_p: %f\t v_r: %f\t v_k: %f\n", it->v_p[i], it->v_r[i], it->v_k[i]);
 		fflush(stdout);
 		it->model[i] = -1;
 		return false;
@@ -662,7 +663,7 @@ bool bang_bang_profile::calculate_v_r_a_r_pose(vector<ecp_mp::common::trajectory
 		if (calculate_v_r_a_r(it, i) == false) {
 			trueFlag = false;
 		}
-	}
+        }
 
 	return trueFlag;
 }
@@ -689,6 +690,8 @@ void bang_bang_profile::clean_up_pose(std::vector<ecp_mp::common::trajectory_pos
 		it->v_p[i] = 0;
 		it->uni[i] = 0;
 		it->k[i] = 0;
+                it->times[i] = 0;
+                it->s[i] = 0;
 	}
 }
 

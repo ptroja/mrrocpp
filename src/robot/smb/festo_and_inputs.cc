@@ -7,6 +7,8 @@
  *
  */
 
+#include <cstdio>
+
 #include "base/edp/edp_e_motor_driven.h"
 #include "const_smb.h"
 #include "edp_e_smb.h"
@@ -20,10 +22,6 @@
 namespace mrrocpp {
 namespace edp {
 namespace smb {
-
-//#define CLEANING_ACTIVE 1
-
-using namespace std;
 
 festo_and_inputs::festo_and_inputs(effector &_master) :
 		master(_master),
@@ -48,11 +46,13 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 		uint8_t Outputs07 = cpv10->getOutputs(1);
 		printf("Status of outputs 0..7 = 0x%02x\n", Outputs07);
 
-		master.gateway->SendNMTService(10, canopen::gateway::Start_Remote_Node);
+		master.gateway->SendNMTService(effector::FESTO_ADRESS, canopen::gateway::Start_Remote_Node);
 
 		determine_legs_state();
-		desired_output[1] = current_output[1];
-		desired_output[2] = current_output[2];
+
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			desired_output[i + 1] = current_output[i + 1];
+		}
 
 		// stan poczatkowy wyspy
 
@@ -101,22 +101,20 @@ void festo_and_inputs::set_all_legs_unchecked()
 
 bool festo_and_inputs::is_upper_halotron_active(int leg_number)
 {
-
 	switch (leg_number)
 	{
 		case 1:
 			return epos_inputs[EPOS_L1_HAL_UP];
-			break;
 		case 2:
 			return epos_inputs[EPOS_L2_HAL_UP];
-			break;
 		case 3:
 			return epos_inputs[EPOS_L3_HAL_UP];
-			break;
 		default:
+			BOOST_THROW_EXCEPTION(unexpected_case_within_switch());
 			break;
 	}
-//	return epos_inputs[2 * leg_number + 9];
+
+	// Safe fallback value.
 	return false;
 }
 
@@ -126,17 +124,17 @@ bool festo_and_inputs::is_lower_halotron_active(int leg_number)
 	{
 		case 1:
 			return epos_inputs[EPOS_L1_HAL_DOWN];
-			break;
 		case 2:
 			return epos_inputs[EPOS_L2_HAL_DOWN];
-			break;
 		case 3:
 			return epos_inputs[EPOS_L3_HAL_DOWN];
 			break;
 		default:
+			BOOST_THROW_EXCEPTION(unexpected_case_within_switch());
 			break;
 	}
-	//return epos_inputs[2 * leg_number + 8];
+
+	// Safe fallback value.
 	return false;
 }
 
@@ -157,17 +155,13 @@ void festo_and_inputs::set_detach(int leg_number, bool value)
 	{
 		case 1:
 			desired_output[FESTO_C1_GROUP][FESTO_C1_BIT_TO_SET] = value;
-
 			break;
 		case 2:
 			desired_output[FESTO_C2_GROUP][FESTO_C2_BIT_TO_SET] = value;
-
 			break;
 		case 3:
 			desired_output[FESTO_C3_GROUP][FESTO_C3_BIT_TO_SET] = value;
-
 			break;
-
 		default:
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
@@ -180,21 +174,16 @@ void festo_and_inputs::set_move_in(int leg_number, bool value)
 	{
 		case 1:
 			desired_output[FESTO_CY11_GROUP][FESTO_CY11_BIT_TO_SET] = value;
-
 			break;
 		case 2:
 			desired_output[FESTO_CY21_GROUP][FESTO_CY21_BIT_TO_SET] = value;
-
 			break;
 		case 3:
 			desired_output[FESTO_CY31_GROUP][FESTO_CY31_BIT_TO_SET] = value;
-
 			break;
-
 		default:
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
-
 	}
 }
 
@@ -204,48 +193,39 @@ void festo_and_inputs::set_move_out(int leg_number, bool value)
 	{
 		case 1:
 			desired_output[FESTO_CY12_GROUP][FESTO_CY12_BIT_TO_SET] = value;
-
 			break;
 		case 2:
 			desired_output[FESTO_CY22_GROUP][FESTO_CY22_BIT_TO_SET] = value;
-
 			break;
 		case 3:
 			desired_output[FESTO_CY32_GROUP][FESTO_CY32_BIT_TO_SET] = value;
-
 			break;
-
 		default:
 			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
 			break;
-
 	}
 }
 
 void festo_and_inputs::set_clean(int leg_number, bool value)
 {
-#ifdef CLEANING_ACTIVE
-	switch (leg_number)
-	{
-		case 1:
-		desired_output[FESTO_CH1_GROUP][FESTO_CH1_BIT_TO_SET] = value;
+	if (master.cleaning_active) {
 
-		break;
-		case 2:
-		desired_output[FESTO_CH2_GROUP][FESTO_CH2_BIT_TO_SET] = value;
-
-		break;
-		case 3:
-		desired_output[FESTO_CH3_GROUP][FESTO_CH3_BIT_TO_SET] = value;
-
-		break;
-
-		default:
-		BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
-		break;
-
+		switch (leg_number)
+		{
+			case 1:
+				desired_output[FESTO_CH1_GROUP][FESTO_CH1_BIT_TO_SET] = value;
+				break;
+			case 2:
+				desired_output[FESTO_CH2_GROUP][FESTO_CH2_BIT_TO_SET] = value;
+				break;
+			case 3:
+				desired_output[FESTO_CH3_GROUP][FESTO_CH3_BIT_TO_SET] = value;
+				break;
+			default:
+				BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_MOTION_PARAMETERS));
+				break;
+		}
 	}
-#endif
 }
 
 void festo_and_inputs::determine_legs_state()
@@ -277,9 +257,7 @@ void festo_and_inputs::determine_legs_state()
 				break;
 			default:
 				break;
-
 		}
-
 	}
 }
 
@@ -287,13 +265,13 @@ void festo_and_inputs::determine_legs_state()
 
 void festo_and_inputs::command()
 {
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-
-	master.msg->message("FESTO");
+	master.msg->message("festo_and_inputs::command()");
 
 	festo_command = master.instruction.smb.festo_command;
 
 	if (robot_test_mode) {
+		std::stringstream ss(std::stringstream::in | std::stringstream::out);
+
 		ss << festo_command.leg[2];
 
 		master.msg->message(ss.str().c_str());
@@ -308,7 +286,6 @@ void festo_and_inputs::command()
 		if (festo_command.leg[i] == lib::smb::IN) {
 			number_of_legs_in++;
 		}
-
 	}
 
 	switch (number_of_legs_in)
@@ -327,7 +304,6 @@ void festo_and_inputs::command()
 			break;
 		default:
 			break;
-
 	}
 
 	// checks if the next_legs_state is valid taking into account current_legs_state
@@ -349,7 +325,6 @@ void festo_and_inputs::command()
 			break;
 		default:
 			break;
-
 	}
 
 	determine_legs_state();
@@ -363,6 +338,9 @@ void festo_and_inputs::command()
 
 void festo_and_inputs::move_one_or_two_out()
 {
+#ifdef COMMAND_ONE_OR_TWO_OUT_SIMULTANEOUS
+	// HIGH PRESSURE VERSION WITH SIMULATNOUS LEG MOTION
+
 	// detach all legs that are up to prepare them to go down
 
 	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
@@ -443,11 +421,80 @@ void festo_and_inputs::move_one_or_two_out()
 
 	// attach legs
 	execute_command();
+
+#else
+	// LOW PRESSURE VERSION WITH SERIAL LEG MOTION
+
+	// detach legs that are up to prepare them to go down
+//	master.msg->message(lib::NON_FATAL_ERROR, "move_one_or_two_out");
+
+	for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+
+		if (!is_lower_halotron_active(i + 1)) {
+			set_detach(i + 1, true);
+			execute_command();
+			delay(500);
+			set_clean(i + 1, true);
+			execute_command();
+			//	delay(500);
+		}
+
+		// for safety reasons
+		if (is_lower_halotron_active(i + 1)) {
+
+			set_detach(i + 1, false);
+			set_clean(i + 1, false);
+			execute_command();
+			continue;
+		}
+
+		// move the leg out
+		set_move_out(i + 1, true);
+		set_move_in(i + 1, false);
+
+		execute_command();
+
+		// waits until leg go down
+		for (int iteration = 0; true; iteration++) {
+
+			delay(FAI_SINGLE_DELAY);
+
+			if (iteration > FAI_DELAY_MAX_ITERATION) {
+				master.msg->message(lib::NON_FATAL_ERROR, "LEGS MOTION WAIT TIMEOUT");
+
+				break;
+			}
+			//	master.msg->message("iteration");
+			read_state();
+
+			if ((is_lower_halotron_active(i + 1))) {
+				// delay(2000);
+				// attach leg
+				set_detach(i + 1, false);
+				// stop cleaning
+				set_clean(i + 1, false);
+				execute_command();
+
+				//	master.msg->message(lib::NON_FATAL_ERROR, "iteration end");
+
+				break;
+			}
+
+		}
+
+	}
+	// wait a while in case the legs are still in motion
+	delay(500);
+
+	// attach legs
+	execute_command();
+#endif
 }
 
 void festo_and_inputs::command_all_out()
 {
-	master.msg->message("command_all_out");
+	master.msg->message("festo_and_inputs::command_all_out()");
+
 	switch (current_legs_state)
 	{
 		case lib::smb::ALL_OUT:
@@ -468,7 +515,7 @@ void festo_and_inputs::command_all_out()
 			}
 
 			break;
-		case lib::smb::ALL_IN: {
+		case lib::smb::ALL_IN:
 			master.msg->message("ALL_UP");
 			if (!test_mode_set_reply()) {
 
@@ -511,11 +558,9 @@ void festo_and_inputs::command_all_out()
 					}
 				}
 			}
-		}
 			break;
 		default:
 			break;
-
 	}
 }
 
@@ -598,32 +643,32 @@ void festo_and_inputs::move_one_or_two_in()
 
 void festo_and_inputs::command_one_in_two_out()
 {
+	master.msg->message("festo_and_inputs::command_one_in_two_out()");
 
 	switch (current_legs_state)
 	{
 		case lib::smb::ALL_OUT:
 			move_one_or_two_in();
-
 			break;
 		case lib::smb::ONE_IN_TWO_OUT:
 		case lib::smb::ALL_IN:
 		case lib::smb::TWO_IN_ONE_OUT:
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ONE_IN_TWO_OUT));
-
 			break;
 		default:
+			BOOST_THROW_EXCEPTION(unexpected_case_within_switch());
 			break;
-
 	}
 }
 
 void festo_and_inputs::command_two_in_one_out()
 {
+	master.msg->message("festo_and_inputs::command_two_in_one_out()");
 
 #ifdef command_two_in_one_out_SIMULTANEOUS
 	// HIGH PRESSURE VERSION WITH SIMULATNOUS LEG MOTION
 	switch(current_legs_state) {
-		case lib::smb::ALL_OUT: {
+		case lib::smb::ALL_OUT:
 			if (!test_mode_set_reply()) {
 
 				// detaches the leg that are to move up
@@ -679,18 +724,14 @@ void festo_and_inputs::command_two_in_one_out()
 
 				execute_command();
 			}
-		}
-
-		break;
+			break;
 		case lib::smb::ONE_IN_TWO_OUT:
 		case lib::smb::TWO_IN_ONE_OUT:
 		case lib::smb::ALL_IN:
-		BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
-
-		break;
+			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
+			break;
 		default:
-		break;
-
+			break;
 	}
 
 # else
@@ -699,29 +740,27 @@ void festo_and_inputs::command_two_in_one_out()
 	{
 		case lib::smb::ALL_OUT:
 			move_one_or_two_in();
-
 			break;
 		case lib::smb::ONE_IN_TWO_OUT:
 		case lib::smb::ALL_IN:
-			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
-			break;
 		case lib::smb::TWO_IN_ONE_OUT:
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::TWO_IN_ONE_OUT));
 			break;
 		default:
+			BOOST_THROW_EXCEPTION(unexpected_case_within_switch());
 			break;
-
 	}
-
 #endif
 
 }
 
 void festo_and_inputs::command_all_in()
 {
+	master.msg->message("festo_and_inputs::command_all_in()");
+
 	switch (current_legs_state)
 	{
-		case lib::smb::ALL_OUT: {
+		case lib::smb::ALL_OUT:
 			if (!test_mode_set_reply()) {
 
 				// move all legs up and do not detach them;
@@ -762,20 +801,17 @@ void festo_and_inputs::command_all_in()
 					}
 				}
 			}
-		}
-
 			break;
 		case lib::smb::ONE_IN_TWO_OUT:
 		case lib::smb::TWO_IN_ONE_OUT:
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_IN));
-
 			break;
 		case lib::smb::ALL_IN:
-
+			// Do nothing.
 			break;
 		default:
+			BOOST_THROW_EXCEPTION(unexpected_case_within_switch());
 			break;
-
 	}
 }
 
@@ -790,7 +826,6 @@ bool festo_and_inputs::test_mode_set_reply()
 				master.reply.smb.multi_leg_reply.leg[i].is_in = false;
 				master.reply.smb.multi_leg_reply.leg[i].is_out = true;
 			}
-
 		}
 	}
 	return robot_test_mode;
@@ -798,18 +833,17 @@ bool festo_and_inputs::test_mode_set_reply()
 
 void festo_and_inputs::read_state()
 {
-	if (!(robot_test_mode)) {
+	if (!robot_test_mode) {
 		epos_inputs = epos_di_node->getDInput();
-		cout << "epos_inputs: " << hex << epos_inputs << endl;
-
-		current_output[1] = cpv10->getOutputs(1);
-		current_output[2] = cpv10->getOutputs(2);
+		std::cout << "epos_inputs: " << std::hex << epos_inputs << std::endl;
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; ++i) {
+			current_output[i + 1] = cpv10->getOutputs(i + 1);
+		}
 	}
 }
 
 void festo_and_inputs::create_reply()
 {
-
 	determine_legs_state();
 
 	if (!robot_test_mode) {
@@ -819,24 +853,24 @@ void festo_and_inputs::create_reply()
 			master.reply.smb.multi_leg_reply.leg[i].is_in = is_upper_halotron_active(i + 1);
 			master.reply.smb.multi_leg_reply.leg[i].is_attached = is_attached(i + 1);
 		}
-		//std::cout << "epos digital inputs = " << epos_digits << std::endl;
+		//	std::cout << "epos digital inputs = " << epos_inputs << std::endl;
 	}
 }
 
 void festo_and_inputs::execute_command()
 {
 	if (!robot_test_mode) {
-		cpv10->setOutputs(1, (uint8_t) desired_output[1].to_ulong());
-		cpv10->setOutputs(2, (uint8_t) desired_output[2].to_ulong());
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			cpv10->setOutputs(i + 1, (uint8_t) desired_output[i + 1].to_ulong());
+		}
 		//	std::cout << "desired_output = " << desired_output[2] << std::endl;
 		read_state();
-		desired_output[1] = current_output[1];
-		desired_output[2] = current_output[2];
-
+		for (int i = 0; i < NUMBER_OF_FESTO_GROUPS; i++) {
+			desired_output[i + 1] = current_output[i + 1];
+		}
 	}
 }
 
 } // namespace smb
 } // namespace edp
 } // namespace mrrocpp
-

@@ -13,7 +13,6 @@
 #include "base/ecp/ecp_task.h"
 #include "ecp_g_conveyor_uniform_acceleration.h"
 
-using boost::shared_ptr;
 using mrrocpp::ecp::common::generator::ecp_g_conveyor_uniform_acceleration;
 
 namespace mrrocpp {

@@ -17,7 +17,6 @@
 using mrrocpp::ecp::common::generator::single_visual_servo_manager;
 using mrrocpp::ecp::common::generator::visual_servo_manager;
 using namespace mrrocpp::ecp::servovision;
-using boost::shared_ptr;
 
 namespace mrrocpp {
 
@@ -39,11 +38,11 @@ public:
 	void main_task_algorithm(void);
 
 protected:
-	shared_ptr<regulator_p> reg;
-	shared_ptr<single_visual_servo_manager> sm;
-	shared_ptr<visual_servo> vs;
-	shared_ptr<object_reached_termination_condition> obj_reached_term_cond;
-	shared_ptr<timeout_termination_condition> timeout_term_cond;
+	boost::shared_ptr<regulator_p> reg;
+	boost::shared_ptr<single_visual_servo_manager> sm;
+	boost::shared_ptr<visual_servo> vs;
+	boost::shared_ptr<object_reached_termination_condition> obj_reached_term_cond;
+	boost::shared_ptr<timeout_termination_condition> timeout_term_cond;
 
 private:
 	// gains for P regulator

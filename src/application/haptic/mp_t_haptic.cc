@@ -11,14 +11,13 @@
 
 #include "base/lib/sr/srlib.h"
 
-
 #include "base/mp/mp_robot.h"
 #include "base/mp/mp_task.h"
 #include "application/haptic/mp_g_haptic.h"
 
 #include "application/haptic/mp_t_haptic.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
+#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_transparent.h"
 
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
@@ -51,11 +50,11 @@ void haptic::create_robots()
 void haptic::configure_edp_force_sensor(bool configure_track, bool configure_postument)
 {
 	if (configure_track) {
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE, 0, "", lib::irp6ot_m::ROBOT_NAME);
 	}
 
 	if (configure_postument) {
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE, 0, "", lib::irp6p_m::ROBOT_NAME);
 	}
 
 	if ((configure_track) && (!configure_postument)) {
@@ -81,8 +80,8 @@ void haptic::main_task_algorithm(void)
 	//	sr_ecp_msg->message("set_next_ecp_state");
 
 	// wlaczenie generatora transparentnego w obu robotach
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, lib::irp6ot_m::ROBOT_NAME);
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", 0, lib::irp6p_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", lib::irp6ot_m::ROBOT_NAME);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TRANSPARENT, (int) 0, "", lib::irp6p_m::ROBOT_NAME);
 
 	// mp_h_gen.sensor_m = sensor_m;
 

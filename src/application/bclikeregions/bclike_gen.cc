@@ -332,7 +332,7 @@ bool bclike_gen::codesIntersect(task::mrrocpp_regions& c1, task::mrrocpp_regions
 
 bool bclike_gen::sendNextPart(){
 
-	char* ret = new char[lib::MP_2_ECP_STRING_SIZE];
+	char* ret = new char[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
 	double *tab = reinterpret_cast<double*>(ret);
 
 	//Write to matrix number of elements which will be written to
@@ -344,7 +344,7 @@ bool bclike_gen::sendNextPart(){
 
 	int i = 1;
 	//Rewrite vector elements to matrix
-	for(std::vector<double>::iterator it = vec.begin(); (it != vec.end()) && (i < lib::MP_2_ECP_STRING_SIZE/sizeof(double)); ++it, ++i){
+	for(std::vector<double>::iterator it = vec.begin(); (it != vec.end()) && (i < lib::MP_2_ECP_SERIALIZED_DATA_SIZE/sizeof(double)); ++it, ++i){
 		tab[i] = *it;
 	}
 
@@ -352,7 +352,7 @@ bool bclike_gen::sendNextPart(){
 
 	tab[i] = 0;
 
-	for(it = readings.begin(); it != readings.end() && ((i + 5 * tab[i] + 1) * sizeof(double) < lib::MP_2_ECP_STRING_SIZE); ++it){
+	for(it = readings.begin(); it != readings.end() && ((i + 5 * tab[i] + 1) * sizeof(double) < lib::MP_2_ECP_SERIALIZED_DATA_SIZE); ++it){
 		if(!(*it).second){
 			tab[i + 3 * (int)tab[i] + 1] = (*it).first.x;
 			tab[i + 3 * (int)tab[i] + 2] = (*it).first.y;
@@ -364,7 +364,7 @@ bool bclike_gen::sendNextPart(){
 
 
 	if(tab[i] > 0){
-		memcpy(ecp_t.ecp_reply.recognized_command, ret, sizeof(char) * lib::MP_2_ECP_STRING_SIZE);
+		memcpy(ecp_t.ecp_reply.recognized_command, ret, sizeof(char) * lib::MP_2_ECP_SERIALIZED_DATA_SIZE);
 		delete(ret);
 		return true;
 	}else{

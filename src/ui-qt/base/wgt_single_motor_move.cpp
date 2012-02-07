@@ -1,4 +1,4 @@
-#include "../base/ui_ecp_robot/ui_ecp_r_common.h"
+#include "../base/ui_ecp_robot/ui_ecp_r_common012.h"
 #include "../base/ui_r_single_motor.h"
 
 #include "wgt_single_motor_move.h"
@@ -10,7 +10,7 @@ wgt_single_motor_move::wgt_single_motor_move(QString _widget_label, mrrocpp::ui:
 	wgt_base(_widget_label, _interface, parent)
 {
 	ui.setupUi(this);
-	robot = dynamic_cast<mrrocpp::ui::single_motor::UiRobot *>(_robot);
+	robot = dynamic_cast <mrrocpp::ui::single_motor::UiRobot *>(_robot);
 	connect(this, SIGNAL(synchro_depended_init_signal()), this, SLOT(synchro_depended_init_slot()), Qt::QueuedConnection);
 	connect(this, SIGNAL(init_and_copy_signal()), this, SLOT(init_and_copy_slot()), Qt::QueuedConnection);
 
@@ -39,7 +39,7 @@ void wgt_single_motor_move::init_and_copy()
 	emit init_and_copy_signal();
 }
 
-int wgt_single_motor_move::synchro_depended_widgets_disable(bool _set_disabled)
+void wgt_single_motor_move::synchro_depended_widgets_disable(bool _set_disabled)
 {
 	ui.pushButton_execute_mr->setDisabled(_set_disabled);
 	ui.pushButton_read_mr->setDisabled(_set_disabled);
@@ -58,7 +58,6 @@ int wgt_single_motor_move::synchro_depended_widgets_disable(bool _set_disabled)
 	ui.pushButton_l_si->setDisabled(_set_disabled);
 	ui.pushButton_r_si->setDisabled(_set_disabled);
 
-	return 1;
 }
 
 void wgt_single_motor_move::init_and_copy_slot()
@@ -107,7 +106,7 @@ void wgt_single_motor_move::copy_mr_and_si()
 	copy_si();
 }
 
-int wgt_single_motor_move::init_mr()
+void wgt_single_motor_move::init_mr()
 {
 
 	try {
@@ -130,8 +129,6 @@ int wgt_single_motor_move::init_mr()
 
 	} // end try
 	CATCH_SECTION_UI_PTR
-
-	return 1;
 }
 
 void wgt_single_motor_move::on_pushButton_import_mr_clicked()
@@ -157,7 +154,7 @@ void wgt_single_motor_move::on_pushButton_copy_mr_clicked()
 	copy_mr();
 }
 
-int wgt_single_motor_move::copy_mr()
+void wgt_single_motor_move::copy_mr()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -173,8 +170,6 @@ int wgt_single_motor_move::copy_mr()
 		}
 
 	}
-
-	return 1;
 }
 
 void wgt_single_motor_move::on_pushButton_execute_mr_clicked()
@@ -197,7 +192,7 @@ void wgt_single_motor_move::on_pushButton_r_mr_clicked()
 	move_it_mr();
 }
 
-int wgt_single_motor_move::get_desired_position_mr()
+void wgt_single_motor_move::get_desired_position_mr()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -212,10 +207,9 @@ int wgt_single_motor_move::get_desired_position_mr()
 
 		}
 	}
-	return 1;
 }
 
-int wgt_single_motor_move::move_it_mr()
+void wgt_single_motor_move::move_it_mr()
 {
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -235,8 +229,6 @@ int wgt_single_motor_move::move_it_mr()
 	} // end try
 
 	CATCH_SECTION_UI_PTR
-
-	return 1;
 }
 
 /***************************
@@ -248,7 +240,7 @@ void wgt_single_motor_move::on_pushButton_read_si_clicked()
 	init_mr_and_si();
 }
 
-int wgt_single_motor_move::init_si()
+void wgt_single_motor_move::init_si()
 {
 
 	try {
@@ -264,7 +256,6 @@ int wgt_single_motor_move::init_si()
 				//
 				//				set_single_axis(0, ui.doubleSpinBox_mcur_0, ui.doubleSpinBox_cur_p0, ui.radioButton_mip_0);
 
-
 				robot->ui_ecp_robot->read_joints(robot->current_pos); // Odczyt polozenia walow silnikow
 				ui.doubleSpinBox_cur_si->setValue(robot->current_pos[0]);
 
@@ -278,8 +269,6 @@ int wgt_single_motor_move::init_si()
 
 	} // end try
 	CATCH_SECTION_UI_PTR
-
-	return 1;
 }
 
 void wgt_single_motor_move::on_pushButton_import_si_clicked()
@@ -305,7 +294,7 @@ void wgt_single_motor_move::on_pushButton_copy_si_clicked()
 	copy_si();
 }
 
-int wgt_single_motor_move::copy_si()
+void wgt_single_motor_move::copy_si()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -321,8 +310,6 @@ int wgt_single_motor_move::copy_si()
 		}
 
 	}
-
-	return 1;
 }
 
 void wgt_single_motor_move::on_pushButton_execute_si_clicked()
@@ -345,7 +332,7 @@ void wgt_single_motor_move::on_pushButton_r_si_clicked()
 	move_it_si();
 }
 
-int wgt_single_motor_move::get_desired_position_si()
+void wgt_single_motor_move::get_desired_position_si()
 {
 
 	if (robot->state.edp.pid != -1) {
@@ -360,10 +347,9 @@ int wgt_single_motor_move::get_desired_position_si()
 
 		}
 	}
-	return 1;
 }
 
-int wgt_single_motor_move::move_it_si()
+void wgt_single_motor_move::move_it_si()
 {
 	// wychwytania ew. bledow ECP::robot
 	try {
@@ -383,6 +369,4 @@ int wgt_single_motor_move::move_it_si()
 	} // end try
 
 	CATCH_SECTION_UI_PTR
-
-	return 1;
 }

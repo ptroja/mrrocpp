@@ -6,28 +6,32 @@ add_subdirectory (bird_hand)
 endif(ROBOT_BIRD_HAND)
 
 if(ROBOTS_SWARMITFIX)
-add_subdirectory (shead)
-add_subdirectory (smb)
-add_subdirectory (spkm)
-add_subdirectory (sbench)
-add_subdirectory (canopen)
-add_subdirectory (maxon)
-add_subdirectory (festo)
+    # Hardware interface.
+    add_subdirectory (canopen)
+    add_subdirectory (maxon)
+    add_subdirectory (festo)
+    
+    # Robots for the agents.
+    add_subdirectory (shead)
+    add_subdirectory (smb)
+    add_subdirectory (spkm)
+    
+    if(NOT UBUNTU32BIT)
+        add_subdirectory (sbench)
+    endif(NOT UBUNTU32BIT)
 endif(ROBOTS_SWARMITFIX)
 
-if(ROBOTS_012)
+if(ROBOTS_012 AND NOT UBUNTU32BIT)
 add_subdirectory (sarkofag)
 add_subdirectory (conveyor)
 add_subdirectory (festival)
-add_subdirectory (player)
 add_subdirectory (irp6ot_tfg)
 add_subdirectory (irp6p_tfg)
 add_subdirectory (irp6_tfg)
 add_subdirectory (irp6ot_m)
 add_subdirectory (irp6p_m)
-add_subdirectory (hi_rydz)
 add_subdirectory (hi_moxa)
-endif(ROBOTS_012)
+endif(ROBOTS_012 AND NOT UBUNTU32BIT)
 
 add_library(mp_robots
 	../base/mp/mp_robot.cc

@@ -15,7 +15,7 @@
 
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
-#include "application/edge_follow/ecp_g_edge_follow.h"
+#include "ecp_g_edge_follow.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -31,6 +31,7 @@ namespace generator {
 y_edge_follow_force::y_edge_follow_force(common::task::task& _ecp_task, int step) :
 		teach_in(_ecp_task), step_no(step), tool_frame(0.0, 0.0, 0.25)
 {
+	subtask_generator_name = ecp_mp::generator::EDGE_FOLLOW;
 }
 
 bool y_edge_follow_force::first_step()

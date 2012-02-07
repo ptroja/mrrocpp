@@ -62,21 +62,21 @@
       <item>
        <widget class="QPushButton" name="pushButton_read">
         <property name="text">
-         <string>Read</string>
+         <string>Read hardware state</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_read_and_copy">
         <property name="text">
-         <string>Read and Copy</string>
+         <string>Read state and set</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="pushButton_clear">
         <property name="text">
-         <string>Clear</string>
+         <string>Clear selection</string>
         </property>
        </widget>
       </item>

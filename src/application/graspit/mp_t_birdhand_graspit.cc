@@ -29,7 +29,6 @@
 #include "robot/smb/mp_r_smb.h"
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
-#include "robot/player/const_player.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -53,11 +52,6 @@ void graspit::create_robots()
 	ACTIVATE_MP_ROBOT(irp6ot_m);
 	ACTIVATE_MP_ROBOT(irp6p_tfg);
 	ACTIVATE_MP_ROBOT(irp6p_m);
-	ACTIVATE_MP_ROBOT(sarkofag);
-
-	ACTIVATE_MP_DEFAULT_ROBOT(electron);
-	ACTIVATE_MP_DEFAULT_ROBOT(speechrecognition);
-	ACTIVATE_MP_DEFAULT_ROBOT(festival);
 }
 
 void graspit::main_task_algorithm(void)
@@ -125,8 +119,8 @@ void graspit::main_task_algorithm(void)
 		// TODO: throw
 	}
 
-	char tmp_string1[lib::MP_2_ECP_STRING_SIZE];
-	char tmp_string2[lib::MP_2_ECP_STRING_SIZE];
+	char tmp_string1[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
+	char tmp_string2[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
 
 	struct _irp6
 	{
@@ -150,11 +144,11 @@ void graspit::main_task_algorithm(void)
 	memcpy(tmp_string1, &mp_ecp_bird_hand_command, sizeof(mp_ecp_bird_hand_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, sizeof(mp_ecp_bird_hand_command), gripper_name);
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, gripper_name);
 
 	wait_for_task_termination(false, 1, gripper_name.c_str());
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), manipulator_name);
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
@@ -185,11 +179,11 @@ void graspit::main_task_algorithm(void)
 	memcpy(tmp_string1, &mp_ecp_bird_hand_command, sizeof(mp_ecp_bird_hand_command));
 	memcpy(tmp_string2, &mp_ecp_irp6_command, sizeof(mp_ecp_irp6_command));
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, sizeof(mp_ecp_irp6_command), manipulator_name);
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, manipulator_name);
 
 	wait_for_task_termination(false, 1, manipulator_name.c_str());
 
-	set_next_ecp_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, sizeof(mp_ecp_bird_hand_command), gripper_name);
+	set_next_ecp_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, gripper_name);
 
 	wait_for_task_termination(false, 1, gripper_name.c_str());
 

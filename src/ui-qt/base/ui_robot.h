@@ -27,6 +27,8 @@ namespace mrrocpp {
 namespace ui {
 namespace common {
 
+class EcpRobot;
+
 const std::string WGT_ROBOT_PC = "WGT_ROBOT_PC";
 
 #define CATCH_SECTION_IN_ROBOT catch (ecp::exception::se_r & error) { \
@@ -91,9 +93,11 @@ class Interface;
 
 class UiRobot : public QObject
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
+
+	EcpRobot *ui_ecp_robot;
 	Interface& interface;
 
 	const lib::robot_name_t getName();
@@ -161,14 +165,13 @@ public:
 	void pulse_ecp(void);
 	void close_all_windows();
 	void EDP_slay_int();
-	void close_edp_connections();
+	void abort_edp();
 	void connect_to_reader(void);
 	void connect_to_ecp_pulse_chanell(void); //TODO: channel, nie chanell
 	void pulse_ecp_execute(int code, int value);
-	virtual void delete_ui_ecp_robot() = 0;
-	virtual void null_ui_ecp_robot() = 0;
-	virtual int ui_get_edp_pid() = 0;
-	virtual void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l) = 0;
+	virtual void delete_ui_ecp_robot();
+	int ui_get_edp_pid();
+	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 	virtual void manage_interface();
 	virtual void setup_menubar();
 	virtual int execute_clear_fault()

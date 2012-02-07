@@ -54,11 +54,11 @@ private:
 
 public:
 	//! Remote agent proxy
-	RemoteAgent ecp;
+	lib::agent::RemoteAgent ecp;
 
 private:
 	//! Remote agent's data buffer
-	OutputBuffer <lib::MP_COMMAND_PACKAGE> command;
+	lib::agent::OutputBuffer <lib::MP_COMMAND_PACKAGE> command;
 
 	/**
 	 * @brief reference to sr_ecp object for sending messages to UI_SR console
@@ -112,7 +112,7 @@ public:
 
 	//! Data buffer with messages from the ECP
 	//! TODO: users should not use this data directly, only the 'const ecp_reply_package'.
-	InputBuffer <lib::ECP_REPLY_PACKAGE> reply;
+	lib::agent::InputBuffer <lib::ECP_REPLY_PACKAGE> reply;
 
 	/**
 	 * @brief reply buffer from ecp
