@@ -18,7 +18,7 @@
 
 #include "ecp_mp_g_spring_contact.h"
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
-#include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
+#include "generator/ecp/tff_nose_run/ecp_mp_g_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_tfg.h"
 
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"

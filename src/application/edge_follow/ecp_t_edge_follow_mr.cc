@@ -19,7 +19,7 @@
 #include "ecp_t_edge_follow_mr.h"
 
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
-#include "generator/ecp/force/ecp_g_tff_nose_run.h"
+#include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
 #include "ecp_g_edge_follow.h"
 
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
