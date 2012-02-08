@@ -1,0 +1,36 @@
+include_directories(include)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+add_library(Reflexxes
+	TypeIIRML/ReflexxesAPI.cpp
+	TypeIIRML/TypeIIRMLCalculatePositionalExtrems.cpp
+	TypeIIRML/TypeIIRMLDecisionTree1A.cpp
+	TypeIIRML/TypeIIRMLDecisionTree1B.cpp
+	TypeIIRML/TypeIIRMLDecisionTree1C.cpp
+	TypeIIRML/TypeIIRMLDecisionTree2.cpp
+	TypeIIRML/TypeIIRMLDecisions.cpp
+	TypeIIRML/TypeIIRMLFallBackStrategy.cpp
+	TypeIIRML/TypeIIRMLIsPhaseSynchronizationPossible.cpp
+	TypeIIRML/TypeIIRMLPolynomial.cpp
+	TypeIIRML/TypeIIRMLPosition.cpp
+	TypeIIRML/TypeIIRMLQuicksort.cpp
+	TypeIIRML/TypeIIRMLSetupModifiedSelectionVector.cpp
+	TypeIIRML/TypeIIRMLStep1.cpp
+	TypeIIRML/TypeIIRMLStep1IntermediateProfiles.cpp
+	TypeIIRML/TypeIIRMLStep1Profiles.cpp
+	TypeIIRML/TypeIIRMLStep2.cpp
+	TypeIIRML/TypeIIRMLStep2IntermediateProfiles.cpp
+	TypeIIRML/TypeIIRMLStep2PhaseSynchronization.cpp
+	TypeIIRML/TypeIIRMLStep2Profiles.cpp
+	TypeIIRML/TypeIIRMLStep2WithoutSynchronization.cpp
+	TypeIIRML/TypeIIRMLStep3.cpp
+	TypeIIRML/TypeIIRMLVelocity.cpp
+	TypeIIRML/TypeIIRMLVelocityCalculatePositionalExtrems.cpp
+	TypeIIRML/TypeIIRMLVelocityFallBackStrategy.cpp
+	TypeIIRML/TypeIIRMLVelocityIsPhaseSynchronizationPossible.cpp
+	TypeIIRML/TypeIIRMLVelocityMethods.cpp
+	TypeIIRML/TypeIIRMLVelocitySetupPhaseSyncSelectionVector.cpp
+)
+
+install(TARGETS Reflexxes DESTINATION lib)

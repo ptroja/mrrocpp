@@ -81,10 +81,6 @@ void stats::main_task_algorithm(void)
 	sr_ecp_msg->message("END");
 }
 
-stats::~stats()
-{
-}
-
 } //task
 } //mp
 } //mrrocpp

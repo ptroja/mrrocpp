@@ -43,7 +43,7 @@ namespace task {
  *
  * @ingroup ecp
  */
-typedef std::map <lib::ecp_subtask_generator_name_t, sub_task::sub_task_base *> subtasks_t;
+typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, sub_task::sub_task_base *> subtasks_t;
 
 /**
  * @brief Type for Items from subtasks_t container.
@@ -57,7 +57,7 @@ typedef subtasks_t::value_type subtask_pair_t;
  *
  * @ingroup ecp
  */
-typedef std::map <lib::ecp_subtask_generator_name_t, generator::generator_base *> generators_t;
+typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, generator::generator_base *> generators_t;
 
 /**
  * @brief Type for Items from generators_t container.
@@ -71,7 +71,7 @@ typedef generators_t::value_type generator_pair_t;
  *
  * @ingroup ecp
  */
-typedef std::map <lib::ecp_subtask_generator_name_t, subtask_generator_base *> subtasks_generators_t;
+typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, subtask_generator_base *> subtasks_generators_t;
 
 /**
  * @brief Type for Items from subtask_generator_base container.

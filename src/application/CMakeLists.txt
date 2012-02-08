@@ -29,6 +29,7 @@ add_subdirectory (visual_servoing_demo)
 add_subdirectory (wii_teach)
 add_subdirectory (android_teach)
 add_subdirectory (trajectory_stats)
+add_subdirectory (reflexxes)
 endif(ROBOTS_012 AND NOT UBUNTU32BIT)
 
 if(ROBOT_BIRD_HAND AND NOT UBUNTU32BIT)

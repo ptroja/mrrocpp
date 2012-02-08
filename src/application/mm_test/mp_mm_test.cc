@@ -358,7 +358,7 @@ void mmtest::main_task_algorithm(void)
 				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E') {
+				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.sg_buf.get <std::string>()[0] != 'E') {
 					sprintf(temp_str, "%lf %lf", 3.0, K_MAX); //direction, duration in k in arg in frames in time
 					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 					wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
@@ -369,7 +369,7 @@ void mmtest::main_task_algorithm(void)
 				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E') {
+				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.sg_buf.get <std::string>()[0] != 'E') {
 					sprintf(temp_str, "%lf %lf", 1.0, K_MAX); //direction, duration in k in arg in frames in time
 					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 					wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
@@ -381,7 +381,7 @@ void mmtest::main_task_algorithm(void)
 				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E') {
+				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.sg_buf.get <std::string>()[0] != 'E') {
 					sprintf(temp_str, "%lf %lf", 2.0, K_MAX); //direction, duration in k in arg in frames in time
 					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 					wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
@@ -392,14 +392,14 @@ void mmtest::main_task_algorithm(void)
 				set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_ROTATE, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
-				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] != 'E') {
+				if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.sg_buf.get <std::string>()[0] != 'E') {
 					sprintf(temp_str, "%lf %lf", 0.0, K_MAX); //direction, duration in k in arg in frames in time
 					set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_MM_TEST, (int) 5, temp_str, lib::irp6p_m::ROBOT_NAME);
 					wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 				}
 			}
 
-			if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.recognized_command[0] == 'E') {
+			if (robot_m[manipulator_name/*actual_robot*/]->ecp_reply_package.sg_buf.get <std::string>()[0] == 'E') {
 				std::cout << "EEEEEE BLAD EEEEEEEE" << std::endl;
 				ERROR = true;
 				param = param + 1.0;
