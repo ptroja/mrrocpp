@@ -18,11 +18,6 @@
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/force/ecp_mp_g_weight_measure.h"
 
-/*
- #include "application/servovision/ecp_mp_g_single_visual_servo_manager.h"
-
- using namespace mrrocpp::ecp::servovision;
- */
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -45,7 +40,6 @@ rcsc::rcsc(lib::configurator &_config) :
 	gt = new generator::transparent(*this);
 	gag = new generator::tff_gripper_approach(*this, 8);
 	rfrg = new generator::tff_rubik_face_rotate(*this, 8);
-	tig = new generator::teach_in(*this);
 
 	sg = new generator::newsmooth(*this, lib::ECP_JOINT, ecp_m_robot->number_of_servos);
 	sg->set_debug(true);
@@ -67,12 +61,9 @@ rcsc::rcsc(lib::configurator &_config) :
 rcsc::~rcsc()
 {
 	delete gt;
-	//	delete nrg;
-
 	delete gag;
 	delete rfrg;
-	delete tig;
-	//	delete befg;
+
 	delete sg;
 	delete sgaa;
 }
@@ -107,17 +98,6 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 				break;
 		}
 		rfrg->Move();
-
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
-		std::string path(mrrocpp_network_path);
-		path += (char*) mp_command.ecp_next_state.sg_buf.data;
-
-		tig->flush_pose_list();
-		tig->load_file_with_path(path);
-		//		printf("\nTRACK ECP_GEN_TEACH_IN :%s\n\n", path1);
-		tig->initiate_pose_list();
-
-		tig->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH
 			|| mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_JOINT) {
