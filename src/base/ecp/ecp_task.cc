@@ -173,18 +173,15 @@ void task_base::termination_notice(void)
 
 void task_base::subtasks_and_generators_dispather()
 {
-	bool command_recognized = 0;
 
 	if (subtask_generator_m.find(mp_2_ecp_next_state_string) != subtask_generator_m.end()) {
 		subtask_generator_m.at(mp_2_ecp_next_state_string)->conditional_execution();
-	}
-
-	if (command_recognized == 0) {
+	} else {
 		if (!mp_2_ecp_next_state_string_handler_active) {
-			sr_ecp_msg->message(lib::FATAL_ERROR, "ecp dispatcher failure (label not recognized)");
+			std::stringstream ss(std::stringstream::in | std::stringstream::out);
+			ss << "ecp dispatcher failure (label not recognized): " << mp_2_ecp_next_state_string;
+			sr_ecp_msg->message(lib::FATAL_ERROR, ss.str().c_str());
 		}
-	} else if (command_recognized > 1) {
-		sr_ecp_msg->message(lib::FATAL_ERROR, "ecp dispatcher failure (2 dispatchers for single label)");
 	}
 
 }
