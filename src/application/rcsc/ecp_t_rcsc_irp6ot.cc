@@ -9,8 +9,6 @@
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
 
-#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
-
 #include "ecp_t_rcsc_irp6ot.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_g_tff_nose_run.h"
@@ -27,23 +25,31 @@
  */
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot_m {
+namespace common {
 namespace task {
 
 rcsc::rcsc(lib::configurator &_config) :
 		common::task::task(_config)
 {
-	// the robot is choose dependendat on the section of configuration file sent as argv[4]
-	ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
 
-	gt = new common::generator::transparent(*this);
-	gag = new common::generator::tff_gripper_approach(*this, 8);
-	rfrg = new common::generator::tff_rubik_face_rotate(*this, 8);
-	tig = new common::generator::teach_in(*this);
+	// the robot is choose dependently on the section of configuration file sent as argv[4]
+	if (config.robot_name == lib::irp6ot_m::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6ot_m::robot(*this);
+	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
+		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
+	} else {
+		// TODO: throw
+		throw std::runtime_error("Robot not supported");
+	}
 
-	sg = new common::generator::newsmooth(*this, lib::ECP_JOINT, 7);
+	gt = new generator::transparent(*this);
+	gag = new generator::tff_gripper_approach(*this, 8);
+	rfrg = new generator::tff_rubik_face_rotate(*this, 8);
+	tig = new generator::teach_in(*this);
+
+	sg = new generator::newsmooth(*this, lib::ECP_JOINT, ecp_m_robot->number_of_servos);
 	sg->set_debug(true);
-	sgaa = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
+	sgaa = new generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	sgaa->set_debug(true);
 
 	char fradia_config_section_name[] = { "[fradia_object_follower]" };
@@ -73,14 +79,14 @@ rcsc::rcsc(lib::configurator &_config) :
 		 */
 	}
 
-	register_generator(new common::generator::bias_edp_force(*this));
+	register_generator(new generator::bias_edp_force(*this));
 
 	{
 		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
 		register_generator(ecp_gen);
 	}
 
-	register_generator(new common::generator::weight_measure(*this, 1));
+	register_generator(new generator::weight_measure(*this, 1));
 
 	sr_ecp_msg->message("ecp loaded");
 }
@@ -191,7 +197,7 @@ namespace task {
 
 task_base* return_created_ecp_task(lib::configurator &_config)
 {
-	return new irp6ot_m::task::rcsc(_config);
+	return new common::task::rcsc(_config);
 }
 
 }

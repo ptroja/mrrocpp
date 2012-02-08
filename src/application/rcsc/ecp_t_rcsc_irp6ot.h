@@ -3,6 +3,9 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
+
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_g_transparent.h"
 #include "generator/ecp/force/ecp_g_weight_measure.h"
@@ -27,22 +30,22 @@ using boost::shared_ptr;
 
 namespace mrrocpp {
 namespace ecp {
-namespace irp6ot_m {
+namespace common {
 namespace task {
 
 class rcsc : public common::task::task
 {
 protected:
 	//generatory
-	common::generator::transparent* gt;
+	generator::transparent* gt;
 
-	common::generator::tff_gripper_approach* gag;
-	common::generator::tff_rubik_face_rotate* rfrg;
-	common::generator::teach_in* tig;
-	common::generator::newsmooth* sg;
-	common::generator::newsmooth* sgaa;
+	generator::tff_gripper_approach* gag;
+	generator::tff_rubik_face_rotate* rfrg;
+	generator::teach_in* tig;
+	generator::newsmooth* sg;
+	generator::newsmooth* sgaa;
 
-		/*
+	/*
 	 shared_ptr <single_visual_servo_manager> sm;
 	 shared_ptr <visual_servo> vs;
 	 shared_ptr <visual_servo_regulator> reg;
