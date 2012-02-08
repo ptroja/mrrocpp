@@ -66,15 +66,7 @@ void wgt_irp6_m_joints::move_it()
 
 		if (robot->state.edp.pid != -1) {
 
-			//robot->ui_ecp_robot->move_motors(robot->desired_pos);
-
-			//robot->ui_ecp_robot->move_motors(robot->desired_pos);
 			specyficrobot->ui_ecp_robot->move_joints(robot->desired_pos);
-
-			//robot->ui_ecp_robot->interface.irp6_m->ui_ecp_robot->move_joints(robot->desired_pos);
-			//interface.irp6_m->ui_ecp_robot->move_motors(interface.irp6_m->desired_pos);
-			//interface.irp6_m->ui_ecp_robot->move_joints(interface.irp6_m->desired_pos);
-			//robot->ui_ecp_robot->move_motors(robot->desired_pos);
 
 			if ((robot->state.edp.is_synchronised) /* TR && (is_open)*/) { // by Y o dziwo nie dziala poprawnie 	 if (robot->state.edp.is_synchronised)
 				std::cout << "move it ok" << std::endl;
@@ -84,8 +76,8 @@ void wgt_irp6_m_joints::move_it()
 
 				init();
 			}
-		} // end if (robot->state.edp.pid!=-1)
-	} // end try
+		}
+	}
 
 	CATCH_SECTION_UI_PTR
 }
