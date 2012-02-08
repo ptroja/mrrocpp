@@ -17,10 +17,9 @@ add_executable(mp_fsautomat
 
 add_executable(ecp_irp6ot_rcsc
 	ecp_t_rcsc.cc
-#	../../ecp/irp6_on_track/generator/ecp_g_vis_ib_eih_object_tracker_irp6ot.cc
 )
 add_executable(ecp_irp6p_rcsc
-	ecp_t_rcsc_irp6p.cc
+	ecp_t_rcsc.cc
 )
 
 
