@@ -18,7 +18,7 @@
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
-#include "generator/ecp/force/ecp_g_bias_edp_force.h"
+#include "ecp_g_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace ecp {

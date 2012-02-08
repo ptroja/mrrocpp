@@ -30,15 +30,15 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 
-#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
 
-#include "generator/ecp/force/ecp_g_bias_edp_force.h"
-#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 #include "ecp_t_fsautomat.h"
-#include "generator/ecp/force/ecp_g_bias_edp_force.h"
+#include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 
 #include "generator/ecp/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"

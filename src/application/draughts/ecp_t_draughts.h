@@ -4,7 +4,7 @@
 #include "base/ecp/ecp_task.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 
-#include "generator/ecp/force/ecp_g_bias_edp_force.h"
+#include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "base/lib/com_buf.h"
 #include "subtask/ecp_st_go.h"
