@@ -1,5 +1,5 @@
 
-add_subdirectory (force)
+add_subdirectory (weight_measure)
 add_subdirectory (bias_edp_force)
 add_subdirectory (force_tool_change)
 add_subdirectory (tff_gripper_approach)
@@ -39,7 +39,7 @@ add_library(ecp_generators
 )
 
 target_link_libraries(ecp_generators 
-ecp_generators_force 
+ecp_g_weight_measure
 ecp_g_bias_edp_force 
 ecp_g_force_tool_change
 ecp_g_tff_gripper_approach

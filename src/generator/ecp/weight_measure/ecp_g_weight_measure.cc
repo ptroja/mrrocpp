@@ -18,7 +18,7 @@
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
-#include "generator/ecp/force/ecp_g_weight_measure.h"
+#include "generator/ecp/weight_measure/ecp_g_weight_measure.h"
 
 namespace mrrocpp {
 namespace ecp {
