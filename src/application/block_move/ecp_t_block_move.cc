@@ -34,14 +34,10 @@ block_move::block_move(lib::configurator &_config) :
 	//stgo = new common::sub_task::gripper_opening(*this);
 
 	// utworzenie generatorow do uruchamiania dispatcherem
-	generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
-
+	register_generator(new common::generator::bias_edp_force(*this));
 	// utworzenie podzadan
-
-	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] =
-			new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
-	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
-			new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
+	register_subtask(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
+	register_subtask(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
 
 	sr_ecp_msg->message("ecp BLOCK MOVE loaded");
 }
