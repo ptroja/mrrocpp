@@ -121,7 +121,6 @@ public:
 	bool first_step();
 	bool next_step();
 
-	void register_name();
 
 };
 

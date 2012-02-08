@@ -10,6 +10,7 @@
  */
 
 #include "base/ecp/ecp_generator.h"
+#include "ecp_mp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -47,6 +48,9 @@ public:
 	 * reimplemented here to handle kinematic exceptions
 	 */
 	void execute_motion(void);
+
+	void conditional_execution();
+
 };
 
 } // namespace generator

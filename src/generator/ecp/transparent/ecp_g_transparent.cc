@@ -16,9 +16,10 @@ namespace common {
 namespace generator {
 
 transparent::transparent(common::task::task& _ecp_task) :
-	common::generator::generator(_ecp_task)
+		common::generator::generator(_ecp_task)
 {
 	throw_kinematics_exceptions = true;
+	subtask_generator_name = ecp_mp::generator::ECP_GEN_TRANSPARENT;
 }
 
 // ----------------------------------------------------------------------------------------------
@@ -99,6 +100,13 @@ void transparent::execute_motion(void)
 
 		} /* end: switch */
 	}
+}
+
+void transparent::conditional_execution()
+{
+	throw_kinematics_exceptions = (bool) ecp_t.mp_command.ecp_next_state.variant;
+
+	Move();
 }
 
 } // namespace generator

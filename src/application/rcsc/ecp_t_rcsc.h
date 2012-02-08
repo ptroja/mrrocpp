@@ -24,15 +24,11 @@ namespace task {
 class rcsc : public common::task::task
 {
 protected:
-	//generatory
-	generator::transparent* gt;
 
 public:
 	rcsc(lib::configurator &_config);
 	virtual ~rcsc();
 
-	// methods for ECP template to redefine in concrete classes
-	void mp_2_ecp_next_state_string_handler(void);
 };
 
 }

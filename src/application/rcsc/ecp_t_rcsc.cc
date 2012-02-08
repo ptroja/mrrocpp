@@ -38,8 +38,7 @@ rcsc::rcsc(lib::configurator &_config) :
 		throw std::runtime_error("Robot not supported");
 	}
 
-	gt = new generator::transparent(*this);
-
+	register_generator(new generator::transparent(*this));
 	register_generator(new generator::bias_edp_force(*this));
 	register_generator(new generator::tff_gripper_approach(*this, 8));
 	register_generator(new generator::tff_rubik_face_rotate(*this, 8));
@@ -58,18 +57,6 @@ rcsc::rcsc(lib::configurator &_config) :
 
 rcsc::~rcsc()
 {
-	delete gt;
-
-}
-
-void rcsc::mp_2_ecp_next_state_string_handler(void)
-{
-
-	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
-		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
-		gt->Move();
-
-	}
 
 }
 
