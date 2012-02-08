@@ -14,14 +14,15 @@
 namespace mrrocpp {
 namespace ecp_mp {
 namespace generator {
-
-/**
- * @brief Enum to define mp to ecp communication variants
- */
+namespace tff_nose_run {
 enum communication_type
 {
 	no_data = 0, behaviour_specification = 1
 };
+
+/**
+ * @brief Enum to define mp to ecp communication variants
+ */
 
 class behaviour_specification_data_type
 {
@@ -46,7 +47,7 @@ public:
 	}
 
 };
-
+}
 /*!
  * @brief tff nose run generator label
  */

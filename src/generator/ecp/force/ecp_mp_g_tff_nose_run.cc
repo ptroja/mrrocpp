@@ -11,6 +11,7 @@
 namespace mrrocpp {
 namespace ecp_mp {
 namespace generator {
+namespace tff_nose_run {
 
 void behaviour_specification_data_type::set_compliance(bool x, bool y, bool z, bool ax, bool ay, bool az)
 {
@@ -56,11 +57,13 @@ behaviour_specification_data_type::behaviour_specification_data_type(bool x, boo
 {
 	set_compliance(x, y, z, ax, ay, az);
 }
+
 behaviour_specification_data_type::behaviour_specification_data_type()
 {
 	set_compliance(true, true, true, true, true, true);
 }
 
+}
 } // namespace generator
 } // namespace ecp_mp
 } // namespace mrrocpp

@@ -42,14 +42,14 @@ tff_nose_run::tff_nose_run(common::task::task& _ecp_task, int step) :
 
 void tff_nose_run::conditional_execution()
 {
-	ecp_mp::generator::behaviour_specification_data_type beh;
+	ecp_mp::generator::tff_nose_run::behaviour_specification_data_type beh;
 
-	switch ((ecp_mp::generator::communication_type) ecp_t.mp_command.ecp_next_state.variant)
+	switch ((ecp_mp::generator::tff_nose_run::communication_type) ecp_t.mp_command.ecp_next_state.variant)
 	{
-		case ecp_mp::generator::behaviour_specification:
+		case ecp_mp::generator::tff_nose_run::behaviour_specification:
 			ecp_t.mp_command.ecp_next_state.sg_buf.get(beh);
 			break;
-		case ecp_mp::generator::no_data:
+		case ecp_mp::generator::tff_nose_run::no_data:
 			break;
 		default:
 			break;
