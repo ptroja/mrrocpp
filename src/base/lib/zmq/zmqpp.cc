@@ -70,7 +70,7 @@ locator::locator()
 
 void locator::register_name(const std::string & name, int port)
 {
-	int pid = (int) getpid();
+	location me;
 
 	char hostname[256];
 
@@ -78,55 +78,53 @@ void locator::register_name(const std::string & name, int port)
 		throw std::runtime_error("Could not get hostname");
 	}
 
-	std::stringstream ss;
+	me.type = location::REGISTER;
+	me.host = hostname;
+	me.name = name;
+	me.pid = (int) getpid();
+	me.port = port;
 
-	ss << "R:" << name << "@" << hostname << ":" << port << "/" << pid ;
+	send(sock, me);
 
-	zmq::message_t request(ss.str().size());
+	recv(sock, me);
 
-	memcpy(request.data(), ss.str().c_str(), ss.str().size());
-
-	sock.send(request);
-
-	zmq::message_t reply;
-
-	sock.recv(&reply);
+	if(me.type != location::ACK) {
+		throw std::runtime_error("Failed to register name");
+	}
 }
 
 void locator::unregister_name(const std::string & name)
 {
-	std::stringstream ss;
+	location me;
 
-	ss << "U:" << name;
+	me.type = location::UNREGISTER;
+	me.name = name;
 
-	zmq::message_t request(ss.str().size());
+	send(sock, me);
 
-	memcpy(request.data(), ss.str().c_str(), ss.str().size());
+	recv(sock, me);
 
-	sock.send(request);
-
-	zmq::message_t reply;
-
-	sock.recv(&reply);
+	if(me.type != location::ACK) {
+		throw std::runtime_error("Failed to unregister name");
+	}
 }
 
-std::string locator::locate_name(const std::string & name)
+location locator::locate_name(const std::string & name)
 {
-	std::stringstream ss;
+	location target;
 
-	ss << "?:" << name;
+	target.type = location::QUERY;
+	target.name = name;
 
-	zmq::message_t request(ss.str().size());
+	send(sock, target);
 
-	memcpy(request.data(), ss.str().c_str(), ss.str().size());
+	recv(sock, target);
 
-	sock.send(request);
+	if(target.type != location::ACK) {
+		throw std::runtime_error("Failed to locate name");
+	}
 
-	zmq::message_t reply;
-
-	sock.recv(&reply);
-
-	return std::string((char *) reply.data());
+	return target;
 }
 
 //  This port range is defined by IANA for dynamic or private ports
@@ -141,7 +139,7 @@ std::string locator::locate_name(const std::string & name)
 //  bind succeeded with the specified port number. Always returns the
 //  port number if successful.
 
-int bind_ephemeral(zmq::socket_t & sock)
+int bind_ephemeral_tcp(zmq::socket_t & sock)
 {
 	//  Ephemeral port needs 4 additional characters
 	char endpoint [256 + 4];
@@ -160,19 +158,53 @@ int bind_ephemeral(zmq::socket_t & sock)
 }
 
 receiver::receiver(const std::string & name)
-	: my_name(name), sock(context::instance().get(), ZMQ_SUB)
+	: my_name(name),
+	  tcp_sock(context::instance().get(), ZMQ_SUB),
+	  ipc_sock(context::instance().get(), ZMQ_SUB),
+	  inproc_sock(context::instance().get(), ZMQ_SUB)
 {
-	port = bind_ephemeral(sock);
+	port = bind_ephemeral_tcp(tcp_sock);
 
 	locator::instance().register_name(my_name, port);
+}
+
+receiver::~receiver()
+{
+	locator::instance().unregister_name(my_name);
 }
 
 sender::sender(const std::string & name)
 	: remote_name(name), sock(context::instance().get(), ZMQ_PUB)
 {
-	locator::instance().locate_name(remote_name);
+	// Get own location.
+	char hostname[256];
 
-	bind_ephemeral(sock);
+	if(gethostname(hostname, 256) == -1) {
+		throw std::runtime_error("Could not get hostname");
+	}
+
+	location remote = locator::instance().locate_name(remote_name);
+
+	// Build address with string stream.
+	std::ostringstream os;
+
+	// Check if we are on the same machine.
+	if(remote.host == hostname) {
+		// Check if we are within the same process.
+		if(remote.pid == (int) getpid()) {
+			// Connect with INPROC transport.
+			os << "inproc://" << remote_name;
+		} else {
+			// Connect with IPC transport.
+			os << "ipc://tmp/" << remote.pid << "/" << remote_name;
+		}
+	} else {
+		// Connect with TCP transport.
+		os << "tcp://" << remote.host << ":" << remote.port;
+	}
+
+	// Connect.
+	sock.connect(os.str().c_str());
 }
 
 }

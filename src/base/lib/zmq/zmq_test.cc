@@ -12,7 +12,12 @@
 int
 main(int argc, char *argv[])
 {
-	zmqpp::receiver r("foo");
+	while(true) {
+		{
+			zmqpp::receiver r("foo");
+		}
+		sleep(1);
+	}
 
 	return 0;
 }
