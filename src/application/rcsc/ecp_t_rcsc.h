@@ -27,7 +27,7 @@ protected:
 	//generatory
 	generator::transparent* gt;
 
-	generator::tff_gripper_approach* gag;
+
 	generator::tff_rubik_face_rotate* rfrg;
 
 public:

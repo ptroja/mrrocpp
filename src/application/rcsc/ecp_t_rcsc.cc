@@ -39,11 +39,10 @@ rcsc::rcsc(lib::configurator &_config) :
 	}
 
 	gt = new generator::transparent(*this);
-	gag = new generator::tff_gripper_approach(*this, 8);
 	rfrg = new generator::tff_rubik_face_rotate(*this, 8);
 
 	register_generator(new generator::bias_edp_force(*this));
-
+	register_generator(new generator::tff_gripper_approach(*this, 8));
 	{
 		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
 		register_generator(ecp_gen);
@@ -60,9 +59,7 @@ rcsc::rcsc(lib::configurator &_config) :
 rcsc::~rcsc()
 {
 	delete gt;
-	delete gag;
 	delete rfrg;
-
 }
 
 void rcsc::mp_2_ecp_next_state_string_handler(void)
@@ -71,10 +68,6 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
 		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
 		gt->Move();
-
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
-		gag->configure(0.01, 1000, 3);
-		gag->Move();
 
 	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE) {
 		switch ((ecp_mp::task::RCSC_TURN_ANGLES) mp_command.ecp_next_state.variant)
