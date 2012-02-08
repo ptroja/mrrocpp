@@ -7,7 +7,7 @@
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
 #include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_g_transparent.h"
+#include "generator/ecp/ecp_g_transparent.h"
 #include "generator/ecp/weight_measure/ecp_g_weight_measure.h"
 
 #include "generator/ecp/tff_rubik_face_rotate/ecp_g_tff_rubik_face_rotate.h"

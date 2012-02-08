@@ -13,7 +13,7 @@
 
 #include "base/ecp_mp/ecp_ui_msg.h"
 #include "base/ecp/ecp_generator.h"
-#include "base/ecp/ecp_taught_in_pose.h"
+#include "ecp_taught_in_pose.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -2,7 +2,7 @@
 #define _ECP_T_SPKM_BIRD_HAND_TEST_H
 
 #include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_g_transparent.h"
+#include "generator/ecp/ecp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {

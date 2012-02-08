@@ -15,7 +15,7 @@
 #include <libxml/xinclude.h>
 
 #include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_g_transparent.h"
+#include "generator/ecp/ecp_g_transparent.h"
 #include "generator/ecp/weight_measure/ecp_g_weight_measure.h"
 #include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
 

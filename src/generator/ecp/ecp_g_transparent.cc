@@ -8,7 +8,7 @@
 
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
-#include "base/ecp/ecp_g_transparent.h"
+#include "ecp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {

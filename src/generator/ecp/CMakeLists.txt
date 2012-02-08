@@ -18,8 +18,8 @@ ecp_mp_g_tff_gripper_approach
 )
 
 add_library(ecp_generators
-	../../base/ecp/ecp_taught_in_pose.cc
-	../../base/ecp/ecp_g_transparent.cc
+	ecp_taught_in_pose.cc
+	ecp_g_transparent.cc
 	ecp_g_teach_in.cc
 	ecp_g_delta.cc
 	ecp_g_operator_reaction_condition.cc
