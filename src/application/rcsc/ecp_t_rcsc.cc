@@ -5,7 +5,8 @@
 #include "base/lib/com_buf.h"
 
 #include "base/lib/sr/srlib.h"
-#include "application/rcsc/ecp_mp_t_rcsc.h"
+#include "ecp_mp_t_rcsc.h"
+#include "subtask/ecp_st_smooth_file_from_mp.h"
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
 
@@ -41,11 +42,6 @@ rcsc::rcsc(lib::configurator &_config) :
 	gag = new generator::tff_gripper_approach(*this, 8);
 	rfrg = new generator::tff_rubik_face_rotate(*this, 8);
 
-	sg = new generator::newsmooth(*this, lib::ECP_JOINT, ecp_m_robot->number_of_servos);
-	sg->set_debug(true);
-	sgaa = new generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
-	sgaa->set_debug(true);
-
 	register_generator(new generator::bias_edp_force(*this));
 
 	{
@@ -54,6 +50,9 @@ rcsc::rcsc(lib::configurator &_config) :
 	}
 
 	register_generator(new generator::weight_measure(*this, 1));
+
+	register_subtask(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
+	register_subtask(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
 
 	sr_ecp_msg->message("ecp loaded");
 }
@@ -64,8 +63,6 @@ rcsc::~rcsc()
 	delete gag;
 	delete rfrg;
 
-	delete sg;
-	delete sgaa;
 }
 
 void rcsc::mp_2_ecp_next_state_string_handler(void)
@@ -99,45 +96,6 @@ void rcsc::mp_2_ecp_next_state_string_handler(void)
 		}
 		rfrg->Move();
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH
-			|| mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_JOINT) {
-		std::string path(mrrocpp_network_path);
-		path += mp_command.ecp_next_state.sg_buf.get <std::string>();
-
-		switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
-		{
-			case lib::RELATIVE:
-				sg->set_relative();
-				break;
-			case lib::ABSOLUTE:
-				sg->set_absolute();
-				break;
-			default:
-				break;
-		}
-		sg->reset();
-		sg->load_trajectory_from_file(path.c_str());
-		sg->calculate_interpolate();
-		sg->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_NEWSMOOTH_ANGLE_AXIS) {
-		std::string path(mrrocpp_network_path);
-		path += mp_command.ecp_next_state.sg_buf.get <std::string>();
-
-		switch ((lib::MOTION_TYPE) mp_command.ecp_next_state.variant)
-		{
-			case lib::RELATIVE:
-				sgaa->set_relative();
-				break;
-			case lib::ABSOLUTE:
-				sgaa->set_absolute();
-				break;
-			default:
-				break;
-		}
-		sgaa->reset();
-		sgaa->load_trajectory_from_file(path.c_str());
-		sgaa->calculate_interpolate();
-		sgaa->Move();
 	}
 
 }

@@ -30,9 +30,6 @@ protected:
 	generator::tff_gripper_approach* gag;
 	generator::tff_rubik_face_rotate* rfrg;
 
-	generator::newsmooth* sg;
-	generator::newsmooth* sgaa;
-
 public:
 	rcsc(lib::configurator &_config);
 	virtual ~rcsc();
