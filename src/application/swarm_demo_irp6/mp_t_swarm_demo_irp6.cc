@@ -87,7 +87,6 @@ void swarm_demo::main_task_algorithm(void)
 
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) ecp_mp::generator::tff_gripper_approach::behaviour_specification, ecp_mp::generator::tff_gripper_approach::behaviour_specification_data_type(0.02, 300, 3), lib::irp6ot_m::ROBOT_NAME);
 
-	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, 0, "", lib::irp6ot_m::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	sr_ecp_msg->message("Postument angle axis2");
