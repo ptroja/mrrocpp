@@ -20,12 +20,12 @@ class behaviour_specification_data_type
 {
 public:
 
-	lib::BEHAVIOUR_SPECIFICATION behaviour[6];
-
-	void set_compliance(bool x, bool y, bool z, bool ax, bool ay, bool az);
+	double speed;
+	unsigned int motion_time;
+	double force_level;
 
 	behaviour_specification_data_type();
-	behaviour_specification_data_type(bool x, bool y, bool z, bool ax, bool ay, bool az);
+	behaviour_specification_data_type(double l_speed, unsigned int l_motion_time, double l_force_level);
 
 	//! Give access to boost::serialization framework
 	friend class boost::serialization::access;
@@ -35,7 +35,9 @@ public:
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		// serialize base class information
-		ar & behaviour;
+		ar & speed;
+		ar & motion_time;
+		ar & force_level;
 	}
 
 };

@@ -130,13 +130,13 @@ void tff_gripper_approach::conditional_execution()
 	{
 		case ecp_mp::generator::tff_gripper_approach::behaviour_specification:
 			ecp_t.mp_command.ecp_next_state.sg_buf.get(beh);
+			configure(beh.speed, beh.motion_time, beh.force_level);
 			break;
 		case ecp_mp::generator::tff_gripper_approach::no_data:
 			break;
 		default:
 			break;
 	}
-
 	Move();
 }
 
