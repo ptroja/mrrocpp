@@ -19,7 +19,6 @@
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_tff_rubik_face_rotate.h"
-#include "../../../application/rcsc/ecp_mp_t_rcsc.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -163,18 +162,18 @@ bool tff_rubik_face_rotate::next_step()
 void tff_rubik_face_rotate::conditional_execution()
 {
 
-	switch ((ecp_mp::task::RCSC_TURN_ANGLES) ecp_t.mp_command.ecp_next_state.variant)
+	switch ((ecp_mp::generator::RCSC_TURN_ANGLES) ecp_t.mp_command.ecp_next_state.variant)
 	{
-		case ecp_mp::task::RCSC_CCL_90:
+		case ecp_mp::generator::RCSC_CCL_90:
 			configure(-90.0);
 			break;
-		case ecp_mp::task::RCSC_CL_0:
+		case ecp_mp::generator::RCSC_CL_0:
 			configure(0.0);
 			break;
-		case ecp_mp::task::RCSC_CL_90:
+		case ecp_mp::generator::RCSC_CL_90:
 			configure(90.0);
 			break;
-		case ecp_mp::task::RCSC_CL_180:
+		case ecp_mp::generator::RCSC_CL_180:
 			configure(180.0);
 			break;
 		default:

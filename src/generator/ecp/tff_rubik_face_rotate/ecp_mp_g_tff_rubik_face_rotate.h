@@ -11,9 +11,13 @@ namespace generator {
 
 const std::string ECP_GEN_TFF_RUBIK_FACE_ROTATE = "ECP_GEN_TFF_RUBIK_FACE_ROTATE";
 
-}// namespace generator
+enum RCSC_TURN_ANGLES
+{
+	RCSC_CCL_90, RCSC_CL_0, RCSC_CL_90, RCSC_CL_180
+};
+
+} // namespace generator
 } // namespace ecp_mp
 } // namespace mrrocpp
-
 
 #endif

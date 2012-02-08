@@ -8,6 +8,8 @@
 #ifndef __ECP_MP_T_RCSC_H
 #define __ECP_MP_T_RCSC_H
 
+#include "../../generator/ecp/tff_rubik_face_rotate/ecp_mp_g_tff_rubik_face_rotate.h"
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
@@ -31,12 +33,8 @@ enum RCSC_GRIPPER_OP
 /**
  *
  */
-enum RCSC_TURN_ANGLES
-{
-	RCSC_CCL_90, RCSC_CL_0, RCSC_CL_90, RCSC_CL_180
-};
 
-} // namespace task
+}// namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp
 
