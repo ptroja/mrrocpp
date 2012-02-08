@@ -38,7 +38,8 @@ task_base::task_base(lib::configurator &_config, boost::shared_ptr <robot::ecp_r
 		command(*this, "MP_COMMAND"),
 		mp_command(command.access),
 		mp_2_ecp_next_state_string(mp_command.ecp_next_state.next_state),
-		continuous_coordination(false)
+		continuous_coordination(false),
+		mp_2_ecp_next_state_string_handler_active(true)
 {
 	initialize_communication();
 }
@@ -87,9 +88,9 @@ void task_base::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Order received");
 
-		subtasks_and_generators_dispather();
-
 		mp_2_ecp_next_state_string_handler();
+
+		subtasks_and_generators_dispather();
 
 		termination_notice();
 	} //end for
@@ -97,6 +98,7 @@ void task_base::main_task_algorithm(void)
 
 void task_base::mp_2_ecp_next_state_string_handler(void)
 {
+	mp_2_ecp_next_state_string_handler_active = false;
 }
 
 void task_base::ecp_stop_accepted_handler(void)
@@ -178,9 +180,11 @@ void task_base::subtasks_and_generators_dispather()
 	}
 
 	if (command_recognized == 0) {
-		//	sr_ecp_msg->message(lib::FATAL_ERROR, "ecp dispatcher failure (label not recognized)");
+		if (!mp_2_ecp_next_state_string_handler_active) {
+			sr_ecp_msg->message(lib::FATAL_ERROR, "ecp dispatcher failure (label not recognized)");
+		}
 	} else if (command_recognized > 1) {
-		sr_ecp_msg->message(lib::FATAL_ERROR, "ecp dispatcher failure (2 dispathers for single label)");
+		sr_ecp_msg->message(lib::FATAL_ERROR, "ecp dispatcher failure (2 dispatchers for single label)");
 	}
 
 }

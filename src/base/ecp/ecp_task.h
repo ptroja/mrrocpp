@@ -256,9 +256,15 @@ public:
 	bool peek_mp_message();
 
 	/**
-	 * @brief waits for resume os stop command from MP
+	 * @brief waits for resume or stop command from MP
 	 */
 	void wait_for_resume();
+
+	/**
+	 * @brief informs if mp_2_ecp_next_state_string_handler is reimplemented in derrived classed
+	 */
+	bool mp_2_ecp_next_state_string_handler_active;
+
 };
 
 template <typename ECP_ROBOT_T>
