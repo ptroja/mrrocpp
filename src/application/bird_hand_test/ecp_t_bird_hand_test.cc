@@ -12,7 +12,7 @@
 #include "generator/ecp/ecp_g_sleep.h"
 #include "ecp_g_bird_hand_test.h"
 #include "ecp_t_bird_hand_test.h"
-#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/transparent/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_sleep.h"
 #include "ecp_mp_g_bird_hand_test.h"
 

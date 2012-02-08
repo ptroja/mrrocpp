@@ -12,7 +12,7 @@
 #include "mp_t_demo_base.h"
 #include "base/lib/single_thread_port.h"
 #include "base/lib/mrmath/mrmath.h"
-#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/transparent/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_spkm.h"
 #include "ecp_mp_g_smb.h"
 #include "ecp_mp_g_shead.h"
