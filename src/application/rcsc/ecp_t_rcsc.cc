@@ -9,7 +9,7 @@
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
 
-#include "ecp_t_rcsc_irp6ot.h"
+#include "ecp_t_rcsc.h"
 #include "generator/ecp/force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/force/ecp_g_tff_nose_run.h"
 
@@ -51,33 +51,6 @@ rcsc::rcsc(lib::configurator &_config) :
 	sg->set_debug(true);
 	sgaa = new generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	sgaa->set_debug(true);
-
-	char fradia_config_section_name[] = { "[fradia_object_follower]" };
-	if (config.exists("fradia_task", fradia_config_section_name)) {
-		Eigen::Matrix <double, 3, 1> p1, p2;
-		p1(0, 0) = 0.6;
-		p1(1, 0) = -0.4;
-		p1(2, 0) = 0.1;
-
-		p2(0, 0) = 0.95;
-		p2(1, 0) = 0.4;
-		p2(2, 0) = 0.3;
-
-		//shared_ptr <position_constraint> cube(new cubic_constraint(p1, p2));
-		/*
-		 reg = shared_ptr <visual_servo_regulator> (new regulator_p(_config, fradia_config_section_name));
-		 vs = shared_ptr <visual_servo> (new ib_eih_visual_servo(reg, fradia_config_section_name, _config));
-		 term_cond
-		 = shared_ptr <termination_condition> (new servovision::object_reached_termination_condition(_config, fradia_config_section_name));
-		 sm
-		 = shared_ptr <single_visual_servo_manager> (new single_visual_servo_manager(*this, fradia_config_section_name, vs));
-		 */
-		//sm->add_position_constraint(cube);
-		/*
-		 sm->add_termination_condition(term_cond);
-		 sm->configure();
-		 */
-	}
 
 	register_generator(new generator::bias_edp_force(*this));
 
