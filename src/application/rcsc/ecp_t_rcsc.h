@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_RCSC_IRP6OT_H)
-#define _ECP_T_RCSC_IRP6OT_H
+#if !defined(_ECP_T_RCSC_H)
+#define _ECP_T_RCSC_H
 
 #include <boost/shared_ptr.hpp>
 
