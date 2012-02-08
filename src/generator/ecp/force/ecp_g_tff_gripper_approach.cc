@@ -18,7 +18,7 @@
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
-#include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
+#include "ecp_g_tff_gripper_approach.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -28,6 +28,7 @@ namespace generator {
 tff_gripper_approach::tff_gripper_approach(common::task::task& _ecp_task, int step) :
 		common::generator::generator(_ecp_task), speed(0.0), motion_time(1), force_level(-10.0), step_no(step)
 {
+	subtask_generator_name = ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH;
 }
 
 void tff_gripper_approach::configure(double l_speed, unsigned int l_motion_time, double l_force_level)
@@ -119,6 +120,24 @@ bool tff_gripper_approach::next_step()
 	}
 
 	return true;
+}
+
+void tff_gripper_approach::conditional_execution()
+{
+	ecp_mp::generator::tff_gripper_approach::behaviour_specification_data_type beh;
+
+	switch ((ecp_mp::generator::tff_gripper_approach::communication_type) ecp_t.mp_command.ecp_next_state.variant)
+	{
+		case ecp_mp::generator::tff_gripper_approach::behaviour_specification:
+			ecp_t.mp_command.ecp_next_state.sg_buf.get(beh);
+			break;
+		case ecp_mp::generator::tff_gripper_approach::no_data:
+			break;
+		default:
+			break;
+	}
+
+	Move();
 }
 
 } // namespace generator

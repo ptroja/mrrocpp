@@ -9,6 +9,7 @@ add_library(ecp_generators_force
 
 add_library(ecp_mp_generators
 	ecp_mp_g_tff_nose_run.cc
+	ecp_mp_g_tff_gripper_approach.cc
 	)
 
 target_link_libraries(ecp_generators_force ecp_mp_generators ecp_mp)
