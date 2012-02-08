@@ -1,6 +1,8 @@
 
 add_subdirectory (force)
 add_subdirectory (bias_edp_force)
+add_subdirectory (force_tool_change)
+
 
 add_library(ecp_generators
 	../../base/ecp/ecp_taught_in_pose.cc
@@ -23,6 +25,9 @@ add_library(ecp_generators
         trajectory_interpolator/spline_interpolator.cc
 )
 
-target_link_libraries(ecp_generators ecp_generators_force ecp_g_bias_edp_force)
+target_link_libraries(ecp_generators 
+ecp_generators_force 
+ecp_g_bias_edp_force 
+ecp_g_force_tool_change)
 
 install(TARGETS ecp_generators DESTINATION lib)

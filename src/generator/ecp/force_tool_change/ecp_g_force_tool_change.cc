@@ -18,7 +18,7 @@
 
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
-#include "generator/ecp/force/ecp_g_force_tool_change.h"
+#include "ecp_g_force_tool_change.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -32,7 +32,7 @@ namespace generator {
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
 force_tool_change::force_tool_change(common::task::task& _ecp_task) :
-	common::generator::generator(_ecp_task)
+		common::generator::generator(_ecp_task)
 {
 	set_tool_parameters(-0.18, 0.0, 0.25, 0);
 }
