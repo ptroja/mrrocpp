@@ -20,7 +20,7 @@
 #include "generator/ecp/force/ecp_g_tff_nose_run.h"
 
 #include "generator/ecp/force/ecp_g_tff_rubik_face_rotate.h"
-#include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
+#include "generator/ecp/tff_gripper_approach/ecp_g_tff_gripper_approach.h"
 #include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include "base/lib/datastr.h"

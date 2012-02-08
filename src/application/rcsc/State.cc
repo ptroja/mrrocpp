@@ -11,7 +11,7 @@
 
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/force_tool_change/ecp_mp_g_force_tool_change.h"
-#include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
+#include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
 #include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
 

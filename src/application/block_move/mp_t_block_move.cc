@@ -18,7 +18,7 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/srlib.h"
 
-#include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
+#include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 
 #include "subtask/ecp_mp_st_smooth_file_from_mp.h"
 //#include "subtask/ecp_mp_st_gripper_opening.h"

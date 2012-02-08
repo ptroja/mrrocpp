@@ -2,7 +2,17 @@
 add_subdirectory (force)
 add_subdirectory (bias_edp_force)
 add_subdirectory (force_tool_change)
+add_subdirectory (tff_gripper_approach)
 
+add_library(ecp_mp_generators
+ecp_mp_g_common.cc
+)
+
+
+target_link_libraries(ecp_mp_generators 
+ecp_mp_generators_force
+ecp_mp_g_tff_gripper_approach
+)
 
 add_library(ecp_generators
 	../../base/ecp/ecp_taught_in_pose.cc
@@ -28,6 +38,10 @@ add_library(ecp_generators
 target_link_libraries(ecp_generators 
 ecp_generators_force 
 ecp_g_bias_edp_force 
-ecp_g_force_tool_change)
+ecp_g_force_tool_change
+ecp_g_tff_gripper_approach
+)
 
-install(TARGETS ecp_generators DESTINATION lib)
+
+
+install(TARGETS ecp_generators ecp_mp_generators DESTINATION lib)
