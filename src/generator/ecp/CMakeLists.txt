@@ -4,6 +4,8 @@ add_subdirectory (bias_edp_force)
 add_subdirectory (force_tool_change)
 add_subdirectory (tff_gripper_approach)
 add_subdirectory (tff_nose_run)
+add_subdirectory (tff_rubik_face_rotate)
+
 
 add_library(ecp_mp_generators
 ecp_mp_g_common.cc
@@ -42,6 +44,7 @@ ecp_g_bias_edp_force
 ecp_g_force_tool_change
 ecp_g_tff_gripper_approach
 ecp_g_tff_nose_run
+ecp_g_tff_rubik_face_rotate
 )
 
 

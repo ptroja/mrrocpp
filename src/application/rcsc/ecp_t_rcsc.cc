@@ -8,7 +8,7 @@
 #include "ecp_mp_t_rcsc.h"
 #include "subtask/ecp_st_smooth_file_from_mp.h"
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
-#include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
+#include "generator/ecp/tff_rubik_face_rotate/ecp_mp_g_tff_rubik_face_rotate.h"
 
 #include "ecp_t_rcsc.h"
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"

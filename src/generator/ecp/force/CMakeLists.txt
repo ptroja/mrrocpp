@@ -1,6 +1,5 @@
 add_library(ecp_generators_force 
 	ecp_g_weight_measure.cc
-	ecp_g_tff_rubik_face_rotate.cc
 )
 
 target_link_libraries(ecp_generators_force ecp_mp_generators ecp_mp)
