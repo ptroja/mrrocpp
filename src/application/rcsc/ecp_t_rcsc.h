@@ -27,9 +27,6 @@ protected:
 	//generatory
 	generator::transparent* gt;
 
-
-	generator::tff_rubik_face_rotate* rfrg;
-
 public:
 	rcsc(lib::configurator &_config);
 	virtual ~rcsc();

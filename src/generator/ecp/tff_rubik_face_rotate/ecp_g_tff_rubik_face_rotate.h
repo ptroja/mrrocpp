@@ -11,6 +11,7 @@
 
 #include "generator/ecp/ecp_g_teach_in.h"
 #include "base/lib/mrmath/mrmath.h"
+#include "ecp_mp_g_tff_rubik_face_rotate.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -41,10 +42,12 @@ public:
 	bool first_step();
 	bool next_step();
 
-}; // end : class ecp_tff_rubik_face_rotate_generator
+	void conditional_execution();
 
+};
+// end : class ecp_tff_rubik_face_rotate_generator
 
-} // namespace generator
+}// namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
