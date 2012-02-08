@@ -13,7 +13,7 @@
 #include "ecp_t_rcsc.h"
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
-
+#include "generator/ecp/sleep/ecp_g_sleep.h"
 #include "generator/ecp/transparent/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
@@ -38,6 +38,7 @@ rcsc::rcsc(lib::configurator &_config) :
 		throw std::runtime_error("Robot not supported");
 	}
 
+	register_generator(new common::generator::sleep(*this));
 	register_generator(new generator::transparent(*this));
 	register_generator(new generator::bias_edp_force(*this));
 	register_generator(new generator::tff_gripper_approach(*this, 8));

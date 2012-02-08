@@ -6,6 +6,7 @@ add_subdirectory (tff_gripper_approach)
 add_subdirectory (tff_nose_run)
 add_subdirectory (tff_rubik_face_rotate)
 add_subdirectory (transparent)
+add_subdirectory (sleep)
 
 add_library(ecp_mp_generators
 ecp_mp_g_common.cc
@@ -24,7 +25,6 @@ add_library(ecp_generators
 	ecp_g_operator_reaction_condition.cc
 	ecp_g_visual_servo_manager.cc
 	ecp_g_visual_servo.cc
-	ecp_g_sleep.cc
 	ecp_g_get_position.cc
 	ecp_g_constant_velocity.cc
 	ecp_g_newsmooth.cc
@@ -45,6 +45,7 @@ ecp_g_tff_gripper_approach
 ecp_g_tff_nose_run
 ecp_g_tff_rubik_face_rotate
 ecp_g_transparent
+ecp_g_sleep
 )
 
 

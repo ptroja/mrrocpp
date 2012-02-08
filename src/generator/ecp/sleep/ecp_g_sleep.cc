@@ -7,7 +7,7 @@
 #include <cstdio>
 
 #include "base/ecp/ecp_robot.h"
-#include "generator/ecp/ecp_g_sleep.h"
+#include "ecp_g_sleep.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -16,7 +16,7 @@ namespace generator {
 
 //constructor with parameters: task and time to sleep [s]
 sleep::sleep(task_t & _ecp_task, double s) :
-	generator_t(_ecp_task)
+		generator_t(_ecp_task)
 {
 	if (the_robot)
 		the_robot->communicate_with_edp = false; //do not communicate with edp
@@ -64,6 +64,13 @@ bool sleep::next_step()
 		nanosleep(&sleeptime, NULL);
 		return true;
 	}
+}
+
+void sleep::conditional_execution()
+{
+	init_time(ecp_t.mp_command.ecp_next_state.variant);
+
+	Move();
 }
 
 } // namespace generator
