@@ -32,18 +32,8 @@ namespace sub_task {
  * @ingroup ecp
  */
 
-class sub_task_base : public subtask_generator_base
-{
-public:
-	sub_task_base() :
-			subtask_generator_base()
-	{
-	}
-
-};
-
 template <typename ECP_ROBOT_T = robot::ecp_robot>
-class _sub_task : public sub_task_base
+class _sub_task : public subtask_generator_base
 {
 protected:
 	/**
@@ -62,7 +52,7 @@ public:
 	 * @param _ecp_t ecp task object reference.
 	 */
 	_sub_task(task::_task <ECP_ROBOT_T> &_ecp_t) :
-			sub_task_base(), ecp_t(_ecp_t), sr_ecp_msg(*(_ecp_t.sr_ecp_msg))
+			subtask_generator_base(), ecp_t(_ecp_t), sr_ecp_msg(*(_ecp_t.sr_ecp_msg))
 	{
 	}
 

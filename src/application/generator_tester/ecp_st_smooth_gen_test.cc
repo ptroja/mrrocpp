@@ -10,6 +10,7 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 
 #include "robot/conveyor/const_conveyor.h"
+//#include "ecp_mp_st_smooth_gen_test.h"
 
 #include "base/ecp/ecp_task.h"
 
@@ -22,6 +23,7 @@ sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 		sub_task(_ecp_t)
 {
 
+        subtask_generator_name = mrrocpp::ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST;
 	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 6);
 		sgenjoint->set_debug(true);

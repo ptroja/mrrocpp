@@ -38,20 +38,20 @@ rcsc::rcsc(lib::configurator &_config) :
 		throw std::runtime_error("Robot not supported");
 	}
 
-	register_generator(new common::generator::sleep(*this));
-	register_generator(new generator::transparent(*this));
-	register_generator(new generator::bias_edp_force(*this));
-	register_generator(new generator::tff_gripper_approach(*this, 8));
-	register_generator(new generator::tff_rubik_face_rotate(*this, 8));
+	register_sg(new common::generator::sleep(*this));
+	register_sg(new generator::transparent(*this));
+	register_sg(new generator::bias_edp_force(*this));
+	register_sg(new generator::tff_gripper_approach(*this, 8));
+	register_sg(new generator::tff_rubik_face_rotate(*this, 8));
 	{
 		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
-		register_generator(ecp_gen);
+		register_sg(ecp_gen);
 	}
 
-	register_generator(new generator::weight_measure(*this, 1));
+	register_sg(new generator::weight_measure(*this, 1));
 
-	register_subtask(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
-	register_subtask(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
+	register_sg(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
+	register_sg(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
 
 	sr_ecp_msg->message("ecp loaded");
 }

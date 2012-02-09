@@ -29,7 +29,7 @@ bird_hand_test::bird_hand_test(lib::configurator &_config) :
 	// the robot is choose dependendat on the section of configuration file sent as argv[4]
 	ecp_m_robot = (boost::shared_ptr <robot_t>) new robot(*this);
 
-	register_generator(new common::generator::sleep(*this));
+	register_sg(new common::generator::sleep(*this));
 	g_bird_hand = new generator::bird_hand(*this);
 
 	sr_ecp_msg->message("ecp BIRD HAND TEST loaded");

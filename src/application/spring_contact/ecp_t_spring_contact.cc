@@ -41,16 +41,16 @@ spring_contact::spring_contact(lib::configurator &_config) :
 	}
 
 	// utworzenie generatorow do uruchamiania dispatcherem
-	register_generator(new common::generator::bias_edp_force(*this));
+	register_sg(new common::generator::bias_edp_force(*this));
 
 	{
 		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
 		ecp_gen->configure_pulse_check(true);
 		ecp_gen->configure_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION, lib::UNGUARDED_MOTION);
-		register_generator(ecp_gen);
+		register_sg(ecp_gen);
 	}
 
-	register_generator(new generator::spring_contact(*this, 5));
+	register_sg(new generator::spring_contact(*this, 5));
 
 	sr_ecp_msg->message("ecp spring_contact loaded");
 }
