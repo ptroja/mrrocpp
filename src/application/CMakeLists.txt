@@ -39,9 +39,5 @@ if(ROBOT_BIRD_HAND AND ROBOTS_012  AND NOT UBUNTU32BIT)
 add_subdirectory (graspit)
 endif(ROBOT_BIRD_HAND AND ROBOTS_012 AND NOT UBUNTU32BIT)
 
-if(ROBOTS_SWARMITFIX AND NOT UBUNTU32BIT)
-add_subdirectory (swarmitfix_plan)
-add_subdirectory (swarmitfix_demos)
-add_subdirectory (swarmitfix)
-endif(ROBOTS_SWARMITFIX AND NOT UBUNTU32BIT)
+
 
