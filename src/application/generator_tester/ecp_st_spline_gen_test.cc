@@ -15,6 +15,8 @@
 
 #include "base/ecp/ecp_task.h"
 
+//#include "ecp_mp_st_spline_gen_test.h"
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
@@ -24,6 +26,7 @@ sub_task_spline_gen_test::sub_task_spline_gen_test(task::task & _ecp_t) :
 		sub_task(_ecp_t)
 {
 
+        subtask_generator_name = mrrocpp::ecp_mp::sub_task::ECP_ST_SPLINE_GEN_TEST;
         if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
                 spgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 6);
                 spgenjoint->set_debug(true);

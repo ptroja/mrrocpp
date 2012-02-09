@@ -19,9 +19,10 @@
 #include "base/lib/sr/srlib.h"
 
 #include "ecp_mp_t_gen_test.h"
-#include "application/generator_tester/ecp_mp_st_const_vel_gen_test.h"
+
 #include "application/generator_tester/ecp_mp_st_smooth_gen_test.h"
 #include "application/generator_tester/ecp_mp_st_spline_gen_test.h"
+#include "application/generator_tester/ecp_mp_st_const_vel_gen_test.h"
 
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"

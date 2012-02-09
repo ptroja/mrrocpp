@@ -5,7 +5,7 @@ namespace mrrocpp {
 namespace ecp_mp {
 namespace sub_task {
 
-const std::string ECP_ST_SPLINE_GEN_TEST = "ECP_ST_SPLINE_GEN_TEST";
+    const std::string ECP_ST_SPLINE_GEN_TEST = "ECP_ST_SPLINE_GEN_TEST";
 
 } // namespace task
 } // namespace ecp_mp
