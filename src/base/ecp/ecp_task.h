@@ -39,34 +39,6 @@ class subtask_generator_base;
 namespace task {
 
 /**
- * @brief Container type for storing ecp_subtask objects.
- *
- * @ingroup ecp
- */
-typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, sub_task::sub_task_base *> subtasks_t;
-
-/**
- * @brief Type for Items from subtasks_t container.
- *
- * @ingroup ecp
- */
-typedef subtasks_t::value_type subtask_pair_t;
-
-/**
- * @brief Container type for storing ecp_generator objects.
- *
- * @ingroup ecp
- */
-typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, generator::generator_base *> generators_t;
-
-/**
- * @brief Type for Items from generators_t container.
- *
- * @ingroup ecp
- */
-typedef generators_t::value_type generator_pair_t;
-
-/**
  * @brief Container type for storing subtask_generator_base objects.
  *
  * @ingroup ecp
@@ -153,16 +125,6 @@ public:
 	 * @brief buffered next state label sent by MP
 	 */
 	const std::string & mp_2_ecp_next_state_string;
-
-	/**
-	 * @brief ECP subtasks container
-	 */
-	subtasks_t subtask_m;
-
-	/**
-	 * @brief ECP generators container
-	 */
-	generators_t generator_m;
 
 	/**
 	 * @brief ECP subtasks and generators container

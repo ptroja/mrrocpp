@@ -50,7 +50,7 @@ void task_base::register_generator(generator::generator_base* _gen)
 	if (gen_name != EMPTY_SUBTASK_GENERATOR_NAME) {
 		if (subtask_generator_m.find(gen_name) == subtask_generator_m.end()) {
 			subtask_generator_m[gen_name] = _gen;
-			generator_m[gen_name] = _gen;
+			//	generator_m[gen_name] = _gen;
 		} else {
 			std::stringstream ss(std::stringstream::in | std::stringstream::out);
 			ss << "Generator name already registered: " << gen_name;
@@ -68,7 +68,7 @@ void task_base::register_subtask(sub_task::sub_task_base* _st)
 	if (subtask_name != EMPTY_SUBTASK_GENERATOR_NAME) {
 		if (subtask_generator_m.find(subtask_name) == subtask_generator_m.end()) {
 			subtask_generator_m[subtask_name] = _st;
-			subtask_m[subtask_name] = _st;
+			//		subtask_m[subtask_name] = _st;
 		} else {
 			std::stringstream ss(std::stringstream::in | std::stringstream::out);
 			ss << "Subtask name already registered: " << subtask_name;
