@@ -63,7 +63,7 @@ void task_base::register_generator(generator::generator_base* _gen)
 
 void task_base::register_subtask(sub_task::sub_task_base* _st)
 {
-	std::string subtask_name = _st->subtask_generator_name;
+	const std::string & subtask_name = _st->subtask_generator_name;
 
 	if (subtask_name != EMPTY_SUBTASK_GENERATOR_NAME) {
 		if (subtask_generator_m.find(subtask_name) == subtask_generator_m.end()) {
