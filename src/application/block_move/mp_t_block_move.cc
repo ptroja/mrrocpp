@@ -176,7 +176,7 @@ block_position_list block_move::create_plan(block_position_list l)
 
 	sr_ecp_msg->message("Creating plan end");
 
-	return l;
+	return plan;
 }
 
 void block_move::main_task_algorithm(void)
@@ -263,7 +263,7 @@ void block_move::main_task_algorithm(void)
 			wait_ms(1000);
 
 			sr_ecp_msg->message("Force approach");
-			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) ecp_mp::generator::tff_gripper_approach::behaviour_specification, ecp_mp::generator::tff_gripper_approach::behaviour_specification_data_type(0.03, 800, 3), lib::irp6p_m::ROBOT_NAME);
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) ecp_mp::generator::tff_gripper_approach::behaviour_specification, ecp_mp::generator::tff_gripper_approach::behaviour_specification_data_type(0.03, 800, 5), lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 			wait_ms(1000);
