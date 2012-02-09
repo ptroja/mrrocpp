@@ -1,6 +1,3 @@
-if(ROBOTS_012)
-
-
 add_executable(ecp_tfg
 	ecp_g_tfg.cc
 	ecp_t_tfg.cc
@@ -13,4 +10,3 @@ target_link_libraries(ecp_tfg
 
 install(TARGETS ecp_tfg DESTINATION bin)
 
-endif(ROBOTS_012)
