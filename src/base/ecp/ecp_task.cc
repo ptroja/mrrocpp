@@ -44,38 +44,19 @@ task_base::task_base(lib::configurator &_config, boost::shared_ptr <robot::ecp_r
 	initialize_communication();
 }
 
-void task_base::register_generator(generator::generator_base* _gen)
+void task_base::register_sg(subtask_generator_base* _sg)
 {
-	std::string gen_name = _gen->subtask_generator_name;
+	std::string gen_name = _sg->subtask_generator_name;
 	if (gen_name != EMPTY_SUBTASK_GENERATOR_NAME) {
 		if (subtask_generator_m.find(gen_name) == subtask_generator_m.end()) {
-			subtask_generator_m[gen_name] = _gen;
-			//	generator_m[gen_name] = _gen;
+			subtask_generator_m[gen_name] = _sg;
 		} else {
 			std::stringstream ss(std::stringstream::in | std::stringstream::out);
-			ss << "Generator name already registered: " << gen_name;
+			ss << "subtask or Generator name already registered: " << gen_name;
 			sr_ecp_msg->message(lib::FATAL_ERROR, ss.str().c_str());
 		}
 	} else {
-		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for generator");
-	}
-}
-
-void task_base::register_subtask(sub_task::sub_task_base* _st)
-{
-	std::string subtask_name = _st->subtask_generator_name;
-
-	if (subtask_name != EMPTY_SUBTASK_GENERATOR_NAME) {
-		if (subtask_generator_m.find(subtask_name) == subtask_generator_m.end()) {
-			subtask_generator_m[subtask_name] = _st;
-			//		subtask_m[subtask_name] = _st;
-		} else {
-			std::stringstream ss(std::stringstream::in | std::stringstream::out);
-			ss << "Subtask name already registered: " << subtask_name;
-			sr_ecp_msg->message(lib::FATAL_ERROR, ss.str().c_str());
-		}
-	} else {
-		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for subtask");
+		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for subtask or generator");
 	}
 }
 

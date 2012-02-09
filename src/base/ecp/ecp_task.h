@@ -25,15 +25,6 @@ namespace common {
 //namespace robot {
 //class ecp_robot;
 //}
-
-namespace sub_task {
-class sub_task_base;
-}
-
-namespace generator {
-class generator_base;
-}
-
 class subtask_generator_base;
 
 namespace task {
@@ -138,14 +129,9 @@ public:
 	bool continuous_coordination;
 
 	/**
-	 * @brief registers generator in generator_m and subtask_generator_m
+	 * @brief registers subtask or generator in subtask_generator_m
 	 */
-	void register_generator(generator::generator_base* _gen);
-
-	/**
-	 * @brief registers subtask in subtask_m and subtask_generator_m
-	 */
-	void register_subtask(sub_task::sub_task_base* _st);
+	void register_sg(subtask_generator_base* _sg);
 
 	/**
 	 * @brief checks if new pulse arrived from UI on trigger channel
