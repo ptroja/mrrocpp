@@ -13,7 +13,7 @@
 #include "base/lib/sr/srlib.h"
 
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
-#include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
+#include "generator/ecp/tff_gripper_approach/ecp_g_tff_gripper_approach.h"
 #include "sensor/discode/discode_sensor.h"
 
 #include "base/ecp/ecp_task.h"

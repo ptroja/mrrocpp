@@ -9,11 +9,11 @@
 #include "ecp_t_block_move.h"
 
 #include "subtask/ecp_st_smooth_file_from_mp.h"
-#include "generator/ecp/force/ecp_g_bias_edp_force.h"
+#include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 
 //#include "subtask/ecp_mp_st_gripper_opening.h"
 
-#include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
+#include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_multiple_position.h"
