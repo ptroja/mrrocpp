@@ -4,7 +4,7 @@
 #include "base/ecp/ecp_task.h"
 
 #include "ecp_g_tfg.h"
-#include "generator/ecp/ecp_g_constant_velocity.h"
+#include "ecp_g_constant_velocity_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -17,14 +17,11 @@ protected:
 	//generatory
 
 	bool save_activated;
-	common::generator::constant_velocity* cvg;
 
 public:
 	// KONSTRUKTORY
 	tfg(lib::configurator &_config);
 
-	// methods for ECP template to redefine in concrete classes
-	void mp_2_ecp_next_state_string_handler(void);
 };
 
 }
