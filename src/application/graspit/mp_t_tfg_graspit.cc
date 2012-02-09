@@ -23,7 +23,7 @@
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
 #include "robot/irp6p_tfg/const_irp6p_tfg.h"
-#include "generator/ecp/ecp_mp_g_tfg.h"
+#include "application/irp6_tfg/ecp_mp_g_tfg.h"
 
 #include "robot/conveyor/mp_r_conveyor.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"

@@ -15,7 +15,7 @@ class tfg : public common::task::task
 {
 protected:
 	//generatory
-	generator::tfg* tfgg;
+
 	bool save_activated;
 	common::generator::constant_velocity* cvg;
 

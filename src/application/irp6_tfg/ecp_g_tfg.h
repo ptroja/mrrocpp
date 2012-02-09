@@ -4,7 +4,6 @@
 //
 // -------------------------------------------------------------------------
 
-
 #if !defined(_ECP_GEN_TFG_H)
 #define _ECP_GEN_TFG_H
 
@@ -14,6 +13,7 @@
 #include "generator/ecp/ecp_g_teach_in.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "robot/irp6_tfg/dp_tfg.h"
+#include "ecp_mp_g_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -32,7 +32,6 @@ protected:
 	const int step_no;
 	lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
 
-
 public:
 	void create_ecp_mp_reply();
 	void get_mp_ecp_command();
@@ -44,13 +43,13 @@ public:
 
 	virtual bool next_step();
 
-}; // end:
+};
+// end:
 ///
 
 /** @} */// end of edge_following
 
-
-} // namespace generator
+}// namespace generator
 } // namespace irp6_tfg
 } // namespace ecp
 } // namespace mrrocpp

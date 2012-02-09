@@ -11,7 +11,7 @@
 #include "robot/irp6p_tfg/ecp_r_irp6p_tfg.h"
 
 #include "ecp_t_tfg.h"
-#include "generator/ecp/ecp_mp_g_tfg.h"
+#include "ecp_mp_g_tfg.h"
 #include "generator/ecp/ecp_mp_g_constant_velocity.h"
 #include "vector"
 
@@ -33,7 +33,7 @@ tfg::tfg(lib::configurator &_config) :
 		// TODO: throw
 	}
 
-	tfgg = new generator::tfg(*this, 10);
+	register_sg(new generator::tfg(*this, 10));
 
 	cvg = new common::generator::constant_velocity(*this, lib::ECP_JOINT, 1);
 	cvg->set_debug(true);
@@ -44,11 +44,7 @@ tfg::tfg(lib::configurator &_config) :
 void tfg::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFG) {
-
-		tfgg->Move();
-
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY) {
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY) {
 
 		cvg->reset();
 		std::vector <double> pos(1, mp_command.ecp_next_state.sg_buf.get <double>());
