@@ -57,19 +57,14 @@ common::task::task(_config)
 	log_dbg_enabled = true;
 
 	// utworzenie generatorow
-	gtga = new common::generator::tff_gripper_approach(*this, 8);
 	sg = new common::generator::newsmooth(*this,lib::ECP_XYZ_ANGLE_AXIS, 6);
 	gp = new common::generator::get_position(*this,lib::ECP_XYZ_ANGLE_AXIS, 6);
 
 	// utworzenie generatorow do uruchamiania dispatcherem
-	//generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
+	register_sg(new common::generator::tff_gripper_approach(*this, 8));
 	register_sg(new common::generator::bias_edp_force(*this));
 
 	// utworzenie podzadan
-	//subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] =
-	//new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
-	//subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
-	//new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
 	register_sg(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
 	register_sg(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
 

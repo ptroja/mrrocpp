@@ -151,29 +151,29 @@ block_position_list block_move::create_plan(block_position_list l)
 {
 	sr_ecp_msg->message("Creating plan");
 
-/*
+
 	l.sort();
 
 	cout << "Plan:" << endl;
 	for(block_position_list::iterator it = l.begin(); it != l.end(); ++it) {
 		(*it).print();
 	}
-*/
+
 
 	block_position_list plan;
 
-	//BlockPlanner* bp = new BlockPlanner(WIDTH, l.size(), l);
+	BlockPlanner* bp = new BlockPlanner(WIDTH, l.size(), l);
 
 	sr_ecp_msg->message("Building tree");
 
-	//DFS<BlockPlanner> e(bp);
+	DFS<BlockPlanner> e(bp);
 
 	sr_ecp_msg->message("Printing solution");
-/*
+
 	bp->print();
 	plan = bp->getPlan();
 	delete bp;
-*/
+
 	sr_ecp_msg->message("Creating plan end");
 
 	return l;
