@@ -45,7 +45,8 @@ void tff_nose_run::conditional_execution()
 	ecp_mp::generator::tff_nose_run::behaviour_specification_data_type beh;
 
 	switch ((ecp_mp::generator::tff_nose_run::communication_type) ecp_t.mp_command.ecp_next_state.variant)
-	{
+        {
+
 		case ecp_mp::generator::tff_nose_run::behaviour_specification:
 			ecp_t.mp_command.ecp_next_state.sg_buf.get(beh);
 			break;

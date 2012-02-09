@@ -446,16 +446,24 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	{
 		case common::CL_90:
 			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, (int) lib::ABSOLUTE, "../../src/application/rcsc/trj/irp6ot_sm_fturn_ap_cl_90_phase_2.trj", lib::irp6ot_m::ROBOT_NAME);
+                        wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+                        set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, (int) lib::RELATIVE, "../../src/application/rcsc/trj/irp6ot_cube_approach.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
 			break;
 		case common::CL_0:
 			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, (int) lib::ABSOLUTE, "../../src/application/rcsc/trj/irp6ot_sm_fturn_ap_cl_0_phase_2.trj", lib::irp6ot_m::ROBOT_NAME);
+                        wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+                        set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, (int) lib::RELATIVE, "../../src/application/rcsc/trj/irp6ot_cube_approach.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
 			break;
 		case common::CCL_90:
 			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, (int) lib::ABSOLUTE, "../../src/application/rcsc/trj/irp6ot_sm_fturn_ap_ccl_90_phase_2.trj", lib::irp6ot_m::ROBOT_NAME);
-			break;
+                        wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+                        set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, (int) lib::RELATIVE, "../../src/application/rcsc/trj/irp6ot_cube_approach.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
+                        break;
 		case common::CL_180:
 			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, (int) lib::ABSOLUTE, "../../src/application/rcsc/trj/irp6ot_sm_fturn_ap_cl_180_phase_2.trj", lib::irp6ot_m::ROBOT_NAME);
-			break;
+                        wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+                        set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, (int) lib::RELATIVE, "../../src/application/rcsc/trj/irp6ot_cube_approach.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
+                        break;
 		default:
 			break;
 	}
@@ -584,15 +592,23 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	{
 		case common::CL_90:
 			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, (int) lib::ABSOLUTE, "../../src/application/rcsc/trj/irp6ot_sm_fchange_ap_cl_90_phase_2.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
+                        wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+                        set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, (int) lib::RELATIVE, "../../src/application/rcsc/trj/irp6ot_cube_approach.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
 			break;
 		case common::CL_0:
 			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, (int) lib::ABSOLUTE, "../../src/application/rcsc/trj/irp6ot_sm_fchange_ap_cl_0_phase_2.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
+                        wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+                        set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, (int) lib::RELATIVE, "../../src/application/rcsc/trj/irp6ot_cube_approach.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
 			break;
 		case common::CCL_90:
 			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, (int) lib::ABSOLUTE, "../../src/application/rcsc/trj/irp6ot_sm_fchange_ap_ccl_90_phase_2.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
+                        //wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+                        //set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, (int) lib::RELATIVE, "../../src/application/rcsc/trj/irp6ot_cube_approach.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
 			break;
 		case common::CL_180:
 			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, (int) lib::ABSOLUTE, "../../src/application/rcsc/trj/irp6ot_sm_fchange_ap_cl_180_phase_2.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
+                        wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+                        set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, (int) lib::RELATIVE, "../../src/application/rcsc/trj/irp6ot_cube_approach.trj", lib::irp6ot_m::ROBOT_NAME.c_str());
 			break;
 		default:
 			break;
