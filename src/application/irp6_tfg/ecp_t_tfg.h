@@ -3,7 +3,7 @@
 
 #include "base/ecp/ecp_task.h"
 
-#include "robot/irp6_tfg/ecp_g_tfg.h"
+#include "ecp_g_tfg.h"
 #include "generator/ecp/ecp_g_constant_velocity.h"
 
 namespace mrrocpp {
@@ -17,7 +17,7 @@ protected:
 	//generatory
 	generator::tfg* tfgg;
 	bool save_activated;
-        common::generator::constant_velocity* cvg;
+	common::generator::constant_velocity* cvg;
 
 public:
 	// KONSTRUKTORY
