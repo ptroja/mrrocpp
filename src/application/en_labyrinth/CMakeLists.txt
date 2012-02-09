@@ -4,9 +4,7 @@ add_executable(mp_en_labyrinth
 
 add_executable(ecp_en_labyrinth
 	ecp_en_labyrinth.cc
-	../edge_follow/ecp_st_edge_follow.cc
-    ../edge_follow/ecp_g_edge_follow.cc
-    g_en_labyrinth.cc
+    ecp_g_en_labyrinth.cc
 )
 
 target_link_libraries(ecp_en_labyrinth 
@@ -21,6 +19,6 @@ target_link_libraries(ecp_en_labyrinth
 
 target_link_libraries(mp_en_labyrinth mp discode_sensor)
 
-
 install(TARGETS mp_en_labyrinth ecp_en_labyrinth DESTINATION bin)
+
 

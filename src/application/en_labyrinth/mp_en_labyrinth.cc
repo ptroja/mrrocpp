@@ -9,25 +9,18 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
+#include "generator/ecp/transparent/ecp_mp_g_transparent.h"
 
 
 #include "base/mp/mp_task.h"
-//#include "base/mp/MP_main_error.h"
-//#include "../edge_follow/mp_t_edge_follow_mr.h"
 #include "base/lib/mrmath/mrmath.h"
-
 #include "robot/irp6_tfg/dp_tfg.h"
-
-#include "application/edge_follow/ecp_mp_st_edge_follow.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
-#include "subtask/ecp_mp_st_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_tfg.h"
-
+#include "ecp_mp_g_en_labyrinth.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
-
-#include "ecp_mp_g_g_en_labyrinth.h"
-//#include "ecp_mp_g_g_rotate_en_labyrinth.h"
 
 #include "sensor/discode/discode_sensor.h"
 #include <boost/shared_ptr.hpp>
@@ -36,8 +29,6 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include "EN_Labyrinth_Reading.hpp"
-
-#define K_MAX 0.0365
 
 using mrrocpp::ecp_mp::sensor::discode::discode_sensor;
 
@@ -113,9 +104,11 @@ void mp_en_labyrinth::main_task_algorithm(void)
 		manipulator_name = lib::irp6p_m::ROBOT_NAME;
 		gripper_name = lib::irp6p_tfg::ROBOT_NAME;
 
+
 		sr_ecp_msg->message("Moving to first point");
 
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "ABSOLUTE_JOIN 1.117 -1.636 0.11 -0.041 4.669 -1.816", lib::irp6p_m::ROBOT_NAME);
+
+		set_next_ecp_state(ecp_mp::generator::ECP_GEN_EN_LABYRINTH, (int) 5, "ABSOLUTE_JOIN 1.117 -1.636 0.11 -0.041 4.669 -1.816", lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 
@@ -145,26 +138,10 @@ void mp_en_labyrinth::main_task_algorithm(void)
 					sr_ecp_msg->message("Path reading from DisCODe contains error in direction description!");
 				break;
 			}
-			set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, relative_move, lib::irp6p_m::ROBOT_NAME);
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_EN_LABYRINTH, (int) 5, relative_move, lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 		}
 
-//		char data[64];
-//		sprintf (data, "%i %lf", 0, K_MAX);
-//		set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_EN_LAB, (int) 5, data, lib::irp6p_m::ROBOT_NAME);
-//		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-//
-//
-//
-//		sprintf (data, "%i %lf", 2, K_MAX);
-//		set_next_ecp_state(ecp_mp::generator::ECP_GEN_G_EN_LAB, (int) 5, data, lib::irp6p_m::ROBOT_NAME);
-//		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-
-
-
-//		sr_ecp_msg->message("Returning from the labyrinth");
-//		set_next_ecp_state(ecp_mp::generator::ECP_GEN_NEWSMOOTH, (int) 5, "../src/application/mm_test/w_gore.trj", 0, lib::irp6p_m::ROBOT_NAME);
-//		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 //	}
 
 	sr_ecp_msg->message("mp end");
