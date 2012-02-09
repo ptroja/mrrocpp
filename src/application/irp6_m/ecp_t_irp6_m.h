@@ -1,5 +1,5 @@
-#if !defined(_ECP_T_IRP6M_COMMON_H)
-#define _ECP_T_IRP6M_COMMON_H
+#if !defined(_ECP_T_IRP6_M_H)
+#define _ECP_T_IRP6_M_H
 
 #include <boost/shared_ptr.hpp>
 
@@ -21,13 +21,13 @@ namespace ecp {
 namespace common {
 namespace task {
 
-class rcsc : public common::task::task
+class irp6_m : public common::task::task
 {
 protected:
 
 public:
-	rcsc(lib::configurator &_config);
-	virtual ~rcsc();
+	irp6_m(lib::configurator &_config);
+	virtual ~irp6_m();
 
 };
 

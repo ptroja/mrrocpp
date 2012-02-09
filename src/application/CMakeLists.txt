@@ -2,7 +2,7 @@
 if(ROBOTS_012)
 #add_subdirectory (bclikeregions)
 add_subdirectory (ball)
-add_subdirectory (irp6m_common)
+add_subdirectory (irp6_m)
 add_subdirectory (block_move)
 #add_subdirectory (calibration)
 #add_subdirectory (draughts)
@@ -28,13 +28,10 @@ add_subdirectory (wii_teach)
 add_subdirectory (android_teach)
 add_subdirectory (trajectory_stats)
 add_subdirectory (en_labyrinth)
-
 endif(ROBOTS_012)
 
 if(ROBOT_BIRD_HAND)
-
 add_subdirectory (bird_hand_test)
-
 endif(ROBOT_BIRD_HAND)
 
 if(ROBOT_BIRD_HAND AND ROBOTS_012)
