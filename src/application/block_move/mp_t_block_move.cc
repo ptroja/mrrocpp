@@ -22,11 +22,19 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
+<<<<<<< HEAD
 #include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 
 #include "subtask/ecp_mp_st_smooth_file_from_mp.h"
+=======
+#include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
+
+#include "subtask/ecp_mp_st_smooth_file_from_mp.h"
+//#include "subtask/ecp_mp_st_gripper_opening.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
+>>>>>>> ee0992028b29a1018e5f0fde0c8ebf8075a0da27
 
 #include "../visual_servoing/visual_servoing.h"
 #include "../visual_servoing_demo/ecp_mp_g_visual_servo_tester.h"

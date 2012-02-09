@@ -1,7 +1,8 @@
 # Recurse into subdirectories.
-if(ROBOTS_012 AND NOT UBUNTU32BIT)
+if(ROBOTS_012)
 #add_subdirectory (bclikeregions)
 add_subdirectory (ball)
+add_subdirectory (irp6m_common)
 add_subdirectory (block_move)
 #add_subdirectory (calibration)
 #add_subdirectory (draughts)
@@ -10,7 +11,6 @@ add_subdirectory (ecp_transparent)
 add_subdirectory (edge_follow)
 add_subdirectory (spring_contact)
 add_subdirectory (generator_tester)
-#add_subdirectory (haar)
 add_subdirectory (haptic)
 add_subdirectory (haptic_stiffness)
 add_subdirectory (mp_common)
@@ -27,21 +27,17 @@ add_subdirectory (visual_servoing_demo)
 add_subdirectory (wii_teach)
 add_subdirectory (android_teach)
 add_subdirectory (trajectory_stats)
-endif(ROBOTS_012 AND NOT UBUNTU32BIT)
+endif(ROBOTS_012)
 
-if(ROBOT_BIRD_HAND AND NOT UBUNTU32BIT)
+if(ROBOT_BIRD_HAND)
 
 add_subdirectory (bird_hand_test)
 
-endif(ROBOT_BIRD_HAND AND NOT UBUNTU32BIT)
+endif(ROBOT_BIRD_HAND)
 
-if(ROBOT_BIRD_HAND AND ROBOTS_012  AND NOT UBUNTU32BIT)
+if(ROBOT_BIRD_HAND AND ROBOTS_012)
 add_subdirectory (graspit)
-endif(ROBOT_BIRD_HAND AND ROBOTS_012 AND NOT UBUNTU32BIT)
+endif(ROBOT_BIRD_HAND AND ROBOTS_012)
 
-if(ROBOTS_SWARMITFIX AND NOT UBUNTU32BIT)
-add_subdirectory (swarmitfix_plan)
-add_subdirectory (swarmitfix_demos)
-add_subdirectory (swarmitfix)
-endif(ROBOTS_SWARMITFIX AND NOT UBUNTU32BIT)
+
 

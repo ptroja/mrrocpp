@@ -18,10 +18,10 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/sr/srlib.h"
 
-#include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
+#include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 
 #include "subtask/ecp_mp_st_smooth_file_from_mp.h"
-#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"

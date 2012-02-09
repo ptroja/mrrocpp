@@ -16,8 +16,8 @@
 #include "application/haptic_stiffness/mp_g_haptic_stiffness.h"
 #include "application/haptic_stiffness/mp_t_haptic_stiffness.h"
 #include "application/rcsc/ecp_mp_t_rcsc.h"
-#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
-#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/transparent/ecp_mp_g_transparent.h"
 
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"

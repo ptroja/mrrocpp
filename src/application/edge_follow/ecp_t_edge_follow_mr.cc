@@ -18,11 +18,11 @@
 
 #include "ecp_t_edge_follow_mr.h"
 
-#include "generator/ecp/force/ecp_g_bias_edp_force.h"
-#include "generator/ecp/force/ecp_g_tff_nose_run.h"
+#include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
+#include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
 #include "ecp_g_edge_follow.h"
 
-#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -44,15 +44,15 @@ edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 
 	// utworzenie generatorow do uruchamiania dispatcherem
 
-	register_generator(new common::generator::bias_edp_force(*this));
+	register_sg(new common::generator::bias_edp_force(*this));
 
 	{
 		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
 		ecp_gen->configure_pulse_check(true);
-		register_generator(ecp_gen);
+		register_sg(ecp_gen);
 	}
 
-	register_generator(new generator::y_edge_follow_force(*this, 8));
+	register_sg(new generator::y_edge_follow_force(*this, 8));
 
 	// utworzenie podzadan
 

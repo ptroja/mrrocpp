@@ -22,18 +22,18 @@
 #include "robot/festival/ecp_mp_t_festival.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
-#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
-#include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/tff_nose_run/ecp_mp_g_tff_nose_run.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_constant_velocity.h"
-#include "generator/ecp/force/ecp_mp_g_weight_measure.h"
+#include "generator/ecp/weight_measure/ecp_mp_g_weight_measure.h"
 #include "robot/festival/const_festival.h"
 
-#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
-#include "generator/ecp/force/ecp_mp_g_force_tool_change.h"
-#include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
-#include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
-#include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/force_tool_change/ecp_mp_g_force_tool_change.h"
+#include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
+#include "generator/ecp/tff_nose_run/ecp_mp_g_tff_nose_run.h"
+#include "generator/ecp/tff_rubik_face_rotate/ecp_mp_g_tff_rubik_face_rotate.h"
 
 #include "robot/conveyor/mp_r_conveyor.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
@@ -497,7 +497,7 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	{
 		case common::CL_90:
 			//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
-			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CL_90, "", lib::irp6ot_m::ROBOT_NAME);
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::generator::RCSC_CL_90, "", lib::irp6ot_m::ROBOT_NAME);
 			// uruchomienie generatora empty_gen
 			wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 			// wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
@@ -506,14 +506,14 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 			break;
 		case common::CCL_90:
 			//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
-			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CCL_90, "", lib::irp6ot_m::ROBOT_NAME);
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::generator::RCSC_CCL_90, "", lib::irp6ot_m::ROBOT_NAME);
 			// uruchomienie generatora empty_gen
 			wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 			//wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
 			break;
 		case common::CL_180:
 			//set_next_ecp_state(ecp_mp::task::ECP_GEN_FESTIVAL, 0, "obracam kostke~", 0, lib::festival::ROBOT_NAME);
-			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::task::RCSC_CL_180, "", lib::irp6ot_m::ROBOT_NAME);
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE, (int) ecp_mp::generator::RCSC_CL_180, "", lib::irp6ot_m::ROBOT_NAME);
 			// uruchomienie generatora empty_gen
 			wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 			//wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::festival::ROBOT_NAME.c_str());
@@ -632,11 +632,11 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	send_end_motion_to_ecps(1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_1, "", lib::irp6ot_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::generator::RCSC_RG_FCHANGE_PHASE_1, "", lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_2, "", lib::irp6ot_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::generator::RCSC_RG_FCHANGE_PHASE_2, "", lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
@@ -663,14 +663,14 @@ void rubik_cube_solver::face_change_op(common::CUBE_TURN_ANGLE turn_angle)
 	send_end_motion_to_ecps(1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
 	// wstepne rozwarcie chwytaka postumenta
-	//set_next_ecp_state ((int) ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, (int) ecp_mp::task::RCSC_GO_VAR_1, "",  lib::irp6p_m::ROBOT_NAME);
+	//set_next_ecp_state ((int) ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, (int) ecp_mp::generator::RCSC_GO_VAR_1, "",  lib::irp6p_m::ROBOT_NAME);
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::RELATIVE, 0.002, lib::irp6p_tfg::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
 
 	// ostateczne zacisniecie tracka na kostce
 	// wlaczenie generatora zacisku na kostce w robocie irp6ot
-	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::task::RCSC_RG_FCHANGE_PHASE_4, "", lib::irp6ot_m::ROBOT_NAME);
+	//set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB, (int) ecp_mp::generator::RCSC_RG_FCHANGE_PHASE_4, "", lib::irp6ot_m::ROBOT_NAME);
 	// uruchomienie generatora empty_gen
 	//wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
 
@@ -902,6 +902,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 
 	initiate(common::read_cube_color(cube_initial_state[0]), common::read_cube_color(cube_initial_state[1]), common::read_cube_color(cube_initial_state[2]), common::read_cube_color(cube_initial_state[3]), common::read_cube_color(cube_initial_state[4]), common::read_cube_color(cube_initial_state[5]));
 
+	// ---- tester ----
 	approach_op(vis_servoing);
 
 	face_turn_op(common::CL_0);
@@ -914,6 +915,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 	face_change_op(common::CCL_90);
 
 	departure_op();
+	// ---- tester ----
 
 	// Zlecenie wykonania kolejnego makrokroku
 	// printf("po start all \n");

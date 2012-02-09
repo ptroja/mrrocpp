@@ -15,12 +15,12 @@
 #include <libxml/xinclude.h>
 
 #include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_g_transparent.h"
-#include "generator/ecp/force/ecp_g_weight_measure.h"
-#include "generator/ecp/force/ecp_g_tff_nose_run.h"
+#include "generator/ecp/transparent/ecp_g_transparent.h"
+#include "generator/ecp/weight_measure/ecp_g_weight_measure.h"
+#include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
 
-#include "generator/ecp/force/ecp_g_tff_rubik_face_rotate.h"
-#include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
+#include "generator/ecp/tff_rubik_face_rotate/ecp_g_tff_rubik_face_rotate.h"
+#include "generator/ecp/tff_gripper_approach/ecp_g_tff_gripper_approach.h"
 #include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "base/lib/trajectory_pose/bang_bang_trajectory_pose.h"
 #include "base/lib/datastr.h"

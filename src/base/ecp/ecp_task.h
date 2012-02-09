@@ -25,46 +25,9 @@ namespace common {
 //namespace robot {
 //class ecp_robot;
 //}
-
-namespace sub_task {
-class sub_task_base;
-}
-
-namespace generator {
-class generator_base;
-}
-
 class subtask_generator_base;
 
 namespace task {
-
-/**
- * @brief Container type for storing ecp_subtask objects.
- *
- * @ingroup ecp
- */
-typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, sub_task::sub_task_base *> subtasks_t;
-
-/**
- * @brief Type for Items from subtasks_t container.
- *
- * @ingroup ecp
- */
-typedef subtasks_t::value_type subtask_pair_t;
-
-/**
- * @brief Container type for storing ecp_generator objects.
- *
- * @ingroup ecp
- */
-typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, generator::generator_base *> generators_t;
-
-/**
- * @brief Type for Items from generators_t container.
- *
- * @ingroup ecp
- */
-typedef generators_t::value_type generator_pair_t;
 
 /**
  * @brief Container type for storing subtask_generator_base objects.
@@ -155,16 +118,6 @@ public:
 	const std::string & mp_2_ecp_next_state_string;
 
 	/**
-	 * @brief ECP subtasks container
-	 */
-	subtasks_t subtask_m;
-
-	/**
-	 * @brief ECP generators container
-	 */
-	generators_t generator_m;
-
-	/**
 	 * @brief ECP subtasks and generators container
 	 */
 	subtasks_generators_t subtask_generator_m;
@@ -176,14 +129,9 @@ public:
 	bool continuous_coordination;
 
 	/**
-	 * @brief registers generator in generator_m and subtask_generator_m
+	 * @brief registers subtask or generator in subtask_generator_m
 	 */
-	void register_generator(generator::generator_base* _gen);
-
-	/**
-	 * @brief registers subtask in subtask_m and subtask_generator_m
-	 */
-	void register_subtask(sub_task::sub_task_base* _st);
+	void register_sg(subtask_generator_base* _sg);
 
 	/**
 	 * @brief checks if new pulse arrived from UI on trigger channel
@@ -256,9 +204,15 @@ public:
 	bool peek_mp_message();
 
 	/**
-	 * @brief waits for resume os stop command from MP
+	 * @brief waits for resume or stop command from MP
 	 */
 	void wait_for_resume();
+
+	/**
+	 * @brief informs if mp_2_ecp_next_state_string_handler is reimplemented in derrived classed
+	 */
+	bool mp_2_ecp_next_state_string_handler_active;
+
 };
 
 template <typename ECP_ROBOT_T>

@@ -41,6 +41,10 @@ public:
 
 	}
 
+	virtual ~subtask_generator_base()
+	{
+	}
+
 	/**
 	 * @brief executed by disptecher
 	 */

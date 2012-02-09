@@ -19,7 +19,7 @@
 #include "base/lib/mrmath/mrmath.h"
 #include "robot/bird_hand/dp_bird_hand.h"
 #include "robot/bird_hand/const_bird_hand.h"
-#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/transparent/ecp_mp_g_transparent.h"
 #include "ecp_mp_g_bird_hand_test.h"
 
 #include "robot/bird_hand/mp_r_bird_hand.h"

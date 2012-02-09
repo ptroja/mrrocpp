@@ -27,13 +27,13 @@ gen_test::gen_test(lib::configurator &_config) :
 
 	sub_task::sub_task* ecpst;
 	ecpst = new sub_task::sub_task_const_vel_gen_test(*this);
-	subtask_m[ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST] = ecpst;
+//	subtask_m[ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST] = ecpst;
 
 	ecpst = new sub_task::sub_task_smooth_gen_test(*this);
-	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST] = ecpst;
+//	subtask_m[ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST] = ecpst;
 
 	ecpst = new sub_task::sub_task_spline_gen_test(*this);
-	subtask_m[ecp_mp::sub_task::ECP_ST_SPLINE_GEN_TEST] = ecpst;
+//	subtask_m[ecp_mp::sub_task::ECP_ST_SPLINE_GEN_TEST] = ecpst;
 
 	sr_ecp_msg->message("ecp GEN_TEST loaded");
 }

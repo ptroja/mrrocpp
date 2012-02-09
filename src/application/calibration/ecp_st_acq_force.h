@@ -3,7 +3,7 @@
 
 #include "base/ecp/ecp_sub_task.h"
 #include "ecp_g_pcbird_nose_run.h"
-#include "generator/ecp/force/ecp_g_bias_edp_force.h"
+#include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 #include "ecp_st_acquisition.h"
 
 namespace mrrocpp {
