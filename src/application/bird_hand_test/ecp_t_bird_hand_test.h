@@ -2,7 +2,7 @@
 #define _ECP_T_SPKM_BIRD_HAND_TEST_H
 
 #include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_g_transparent.h"
+#include "generator/ecp/transparent/ecp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -14,7 +14,7 @@ class bird_hand_test : public common::task::_task <ecp::bird_hand::robot>
 protected:
 	//generatory
 //	common::generator::transparent* gt;
-	common::generator::sleep* g_sleep;
+
 	generator::bird_hand* g_bird_hand;
 
 public:

@@ -24,7 +24,7 @@ private:
 	const bool detect_jerks;
 
 public:
-	sub_task_smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec, bool _detect_jerks = true);
+	sub_task_smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec, std::string _LABEL, bool _detect_jerks = true);
 
 	void conditional_execution();
 };

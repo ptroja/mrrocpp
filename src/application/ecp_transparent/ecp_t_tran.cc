@@ -22,7 +22,7 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 
 #include "ecp_t_tran.h"
-#include "base/ecp/ecp_g_transparent.h"
+#include "generator/ecp/transparent/ecp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {
