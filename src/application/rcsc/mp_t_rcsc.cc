@@ -902,6 +902,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 
 	initiate(common::read_cube_color(cube_initial_state[0]), common::read_cube_color(cube_initial_state[1]), common::read_cube_color(cube_initial_state[2]), common::read_cube_color(cube_initial_state[3]), common::read_cube_color(cube_initial_state[4]), common::read_cube_color(cube_initial_state[5]));
 
+	// ---- tester ----
 	approach_op(vis_servoing);
 
 	face_turn_op(common::CL_0);
@@ -914,6 +915,7 @@ void rubik_cube_solver::main_task_algorithm(void)
 	face_change_op(common::CCL_90);
 
 	departure_op();
+	// ---- tester ----
 
 	// Zlecenie wykonania kolejnego makrokroku
 	// printf("po start all \n");
