@@ -5,12 +5,12 @@
 #include "base/lib/com_buf.h"
 
 #include "base/lib/sr/srlib.h"
-#include "ecp_mp_t_rcsc.h"
+//#include "ecp_mp_t_rcsc.h"
 #include "subtask/ecp_st_smooth_file_from_mp.h"
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/tff_rubik_face_rotate/ecp_mp_g_tff_rubik_face_rotate.h"
 
-#include "ecp_t_rcsc.h"
+#include "ecp_t_irp6m_common.h"
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
 #include "generator/ecp/sleep/ecp_g_sleep.h"

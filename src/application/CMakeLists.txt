@@ -2,6 +2,7 @@
 if(ROBOTS_012)
 #add_subdirectory (bclikeregions)
 add_subdirectory (ball)
+add_subdirectory (irp6m_common)
 add_subdirectory (block_move)
 #add_subdirectory (calibration)
 #add_subdirectory (draughts)

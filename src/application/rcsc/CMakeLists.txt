@@ -15,9 +15,6 @@ add_executable(mp_fsautomat
 	Transition.cc
 )
 
-add_executable(ecp_irp6m_rcsc
-	ecp_t_rcsc.cc
-)
 
 
 add_executable(ecp_fsautomat
@@ -27,14 +24,10 @@ add_executable(ecp_fsautomat
 target_link_libraries(mp_rcsc mp)
 target_link_libraries(mp_fsautomat mp)
 
-target_link_libraries(ecp_irp6m_rcsc
-    ecp_robot
-	)
 
 target_link_libraries(ecp_fsautomat ecp_robot)
 
 install(TARGETS
 	mp_fsautomat ecp_fsautomat
 	mp_rcsc
-	ecp_irp6m_rcsc
 	DESTINATION bin)
