@@ -6,7 +6,7 @@ add_subdirectory (bird_hand)
 endif(ROBOT_BIRD_HAND)
 
 
-if(ROBOTS_012 AND NOT UBUNTU32BIT)
+if(ROBOTS_012)
 add_subdirectory (sarkofag)
 add_subdirectory (conveyor)
 add_subdirectory (festival)
@@ -16,7 +16,7 @@ add_subdirectory (irp6_tfg)
 add_subdirectory (irp6ot_m)
 add_subdirectory (irp6p_m)
 add_subdirectory (hi_moxa)
-endif(ROBOTS_012 AND NOT UBUNTU32BIT)
+endif(ROBOTS_012)
 
 add_library(mp_robots
 	../base/mp/mp_robot.cc
