@@ -144,11 +144,11 @@ void graspit::main_task_algorithm(void)
 
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, gripper_name);
 
-	wait_for_task_termination(false, 1, gripper_name.c_str());
+	wait_for_task_termination(false, gripper_name);
 
 	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, manipulator_name);
 
-	wait_for_task_termination(false, 1, manipulator_name.c_str());
+	wait_for_task_termination(false, manipulator_name);
 
 	for (int i = 0; i < 6; ++i)
 		mp_ecp_irp6_command.joint[i] = trgraspit->from_va.grasp_joint[i + 6];
@@ -159,11 +159,11 @@ void graspit::main_task_algorithm(void)
 
 	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, manipulator_name);
 
-	wait_for_task_termination(false, 1, manipulator_name.c_str());
+	wait_for_task_termination(false, manipulator_name);
 
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFG, (int) 5, tmp_string1, gripper_name);
 
-	wait_for_task_termination(false, 1, gripper_name.c_str());
+	wait_for_task_termination(false, gripper_name);
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
 	for (int i = 6; i < 13; ++i)

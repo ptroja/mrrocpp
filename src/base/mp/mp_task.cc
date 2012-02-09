@@ -115,25 +115,10 @@ void task::send_end_motion_to_ecps(int number_of_robots, ...)
 	mp_semte_gen.Move();
 }
 
-// send_end_motion
-void task::wait_for_task_termination(bool activate_trigger, int number_of_robots, ...)
+void task::wait_for_task_termination(bool activate_trigger, const lib::robot_name_t & robot_name)
 {
-	generator::wait_for_task_termination wtf_gen(*this);
-
-	va_list arguments; // A place to store the list of arguments
-
-	va_start(arguments, number_of_robots);
-	// Initializing arguments to store all values after num
-
-	// Copy given robots to the map container
-	va_to_robot_map(number_of_robots, arguments, robot_m, wtf_gen.robot_m);
-
-	va_end(arguments);
-	// Cleans up the list
-
-	wtf_gen.configure(activate_trigger);
-
-	wtf_gen.Move();
+	// Forward call to the vectorized variant.
+	wait_for_task_termination(activate_trigger, {robot_name});
 }
 
 void task::wait_for_task_termination(bool activate_trigger, const std::vector <lib::robot_name_t> & robotSet)

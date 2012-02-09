@@ -56,13 +56,13 @@ void block_move::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Start position for searching");
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/pos_search_area_start.trj", lib::irp6p_m::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 	wait_ms(4000);
 
 	sr_ecp_msg->message("Final position for searching");
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/pos_search_area_final.trj", lib::irp6p_m::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 	//Tutaj powinno być przekazanie parametru i dojście
 
@@ -74,7 +74,7 @@ void block_move::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Reach the block");
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/block_reaching.trj", lib::irp6p_m::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 	//sr_ecp_msg->message("Zwarcie szczek");
 	//set_next_ecp_state();
@@ -84,13 +84,13 @@ void block_move::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Get the block");
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/up_to_p0.trj", lib::irp6p_m::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 	wait_ms(4000);
 
 	sr_ecp_msg->message("Start position for building");
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/pos_build_start.trj", lib::irp6p_m::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 	//Tutaj powinno byc przekazanie parametru i dojscie - ruch sklada sie z dwoch czesci
 
@@ -98,21 +98,21 @@ void block_move::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Put the block in its place");
 	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/build.trj", lib::irp6p_m::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 	//sr_ecp_msg->message("Rozwarcie szczek");
 	//set_next_ecp_state(ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING, 0, NULL, 0, lib::irp6p_tfg::ROBOT_NAME);
-	//wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
+	//wait_for_task_termination(false, lib::irp6p_tfg::ROBOT_NAME);
 
 	//wait_ms(4000);
 
 	//sr_ecp_msg->message("Final position for building");
 	//set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/pos_build_final.trj", 0, lib::irp6p_m::ROBOT_NAME);
-	//wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	//wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 	//sr_ecp_msg->message("Zwarcie szczek");
 	//set_next_ecp_state();
-	//wait_for_task_termination(false, 1, lib::irp6p_tfg::ROBOT_NAME.c_str());
+	//wait_for_task_termination(false, lib::irp6p_tfg::ROBOT_NAME);
 
 	wait_ms(4000);
 

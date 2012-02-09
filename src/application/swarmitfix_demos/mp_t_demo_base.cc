@@ -101,7 +101,7 @@ void demo_base::smb_pull_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, 
 	mp_ecp_festo_command.leg[2] = l3_;
 
 	set_next_ecp_state(ecp_mp::smb::generator::ECP_LEGS_COMMAND, 0, mp_ecp_festo_command, smb_robot_name);
-	wait_for_task_termination(false, 1, smb_robot_name.c_str());
+	wait_for_task_termination(false, smb_robot_name);
 
 }
 
@@ -115,7 +115,7 @@ void demo_base::smb_rotate_external(int legs_rotation_, double pkm_rotation_)
 	mp_ecp_smb_epos_simple_command.pkm_vs_base_rotation = pkm_rotation_;
 
 	set_next_ecp_state(ecp_mp::smb::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_smb_epos_simple_command, smb_robot_name);
-	wait_for_task_termination(false, 1, smb_robot_name.c_str());
+	wait_for_task_termination(false, smb_robot_name);
 
 }
 
@@ -127,7 +127,7 @@ void demo_base::move_shead_joints(double joint_)
 	mp_ecp_shead_epos_simple_command.desired_position[0] = joint_;
 
 	set_next_ecp_state(ecp_mp::shead::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_shead_epos_simple_command, shead_robot_name);
-	wait_for_task_termination(false, 1, shead_robot_name.c_str());
+	wait_for_task_termination(false, shead_robot_name);
 
 }
 
@@ -144,7 +144,7 @@ void demo_base::move_spkm_joints(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_
 	mp_ecp_spkm_epos_simple_command.desired_position[5] = wrist3_;
 
 	set_next_ecp_state(ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND, 0, mp_ecp_spkm_epos_simple_command, spkm_robot_name);
-	wait_for_task_termination(false, 1, spkm_robot_name.c_str());
+	wait_for_task_termination(false, spkm_robot_name);
 
 }
 
@@ -165,7 +165,7 @@ void demo_base::move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motio
 	std::cout<<" spkm_robot_name:" << spkm_robot_name <<" -> set_next_ecp_state\n";
 	set_next_ecp_state(ecp_mp::spkm::generator::ECP_EXTERNAL_EPOS_COMMAND, 0, mp_ecp_spkm_epos_simple_command, spkm_robot_name);
 	std::cout<<" spkm_robot_name:" << spkm_robot_name <<" -> wait_for_task_termination\n";
-	wait_for_task_termination(false, 1, spkm_robot_name.c_str());
+	wait_for_task_termination(false, spkm_robot_name);
 	std::cout<<" spkm_robot_name:" << spkm_robot_name <<" -> !done!\n";
 }
 
@@ -173,7 +173,7 @@ void demo_base::control_bench_power_supply(const mrrocpp::lib::sbench::power_sup
 	this->sr_ecp_msg->message("demo_base::control_bench_power_supply");
 	this->sr_ecp_msg->message(ps_.display());
 	set_next_ecp_state(mrrocpp::ecp_mp::sbench::generator::POWER_SUPPLY_COMMAND, 0, ps_, lib::sbench::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::sbench::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, lib::sbench::ROBOT_NAME);
 	wait_ms(delay_);
 }
 
@@ -181,7 +181,7 @@ void demo_base::control_bench_cleaning(const mrrocpp::lib::sbench::cleaning_stat
 	this->sr_ecp_msg->message("demo_base::control_bench_cleaning");
 	this->sr_ecp_msg->message(cs_.display());
 	set_next_ecp_state(mrrocpp::ecp_mp::sbench::generator::CLEANING_COMMAND, 0, cs_, lib::sbench::ROBOT_NAME);
-	wait_for_task_termination(false, 1, lib::sbench::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, lib::sbench::ROBOT_NAME);
 	wait_ms(delay_);
 }
 

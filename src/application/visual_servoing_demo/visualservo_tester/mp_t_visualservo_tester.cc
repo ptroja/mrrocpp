@@ -87,7 +87,7 @@ void visualservo_tester::main_task_algorithm(void)
 		sr_ecp_msg->message("Conveyor started.");
 	}
 
-	wait_for_task_termination(false, 2, robot_name.c_str(), lib::conveyor::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, {robot_name, lib::conveyor::ROBOT_NAME});
 
 	log("visualservo_tester::main_task_algorithm() 4\n");
 }
