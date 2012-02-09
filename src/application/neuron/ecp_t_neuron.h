@@ -13,7 +13,7 @@
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_constant_velocity.h"
 #include "ecp_g_neuron_generator.h"
-#include "generator/ecp/ecp_g_sleep.h"
+#include "generator/ecp/sleep/ecp_g_sleep.h"
 
 namespace mrrocpp {
 namespace ecp {

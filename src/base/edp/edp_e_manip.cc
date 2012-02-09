@@ -206,6 +206,7 @@ void manip_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruc
 			break;
 		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
 			motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
+			break;
 	}
 }
 

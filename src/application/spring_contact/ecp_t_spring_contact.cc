@@ -19,8 +19,8 @@
 #include "ecp_t_spring_contact.h"
 
 #include "ecp_g_spring_contact.h"
-#include "generator/ecp/force/ecp_g_bias_edp_force.h"
-#include "generator/ecp/force/ecp_g_tff_nose_run.h"
+#include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
+#include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
 
 namespace mrrocpp {
 namespace ecp {
