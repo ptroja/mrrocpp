@@ -1,5 +1,10 @@
-#if !defined(_ECP_T_RCSC_IRP6P_H)
-#define _ECP_T_RCSC_IRP6P_H
+#if !defined(_ECP_T_RCSC_H)
+#define _ECP_T_RCSC_H
+
+#include <boost/shared_ptr.hpp>
+
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_g_transparent.h"
@@ -9,35 +14,32 @@
 #include "generator/ecp/force/ecp_g_tff_gripper_approach.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 
+using boost::shared_ptr;
+
 namespace mrrocpp {
 namespace ecp {
-namespace irp6p_m {
+namespace common {
 namespace task {
 
 class rcsc : public common::task::task
 {
 protected:
 	//generatory
-	common::generator::transparent* gt;
+	generator::transparent* gt;
 
-	common::generator::tff_gripper_approach* gag;
-	common::generator::tff_rubik_face_rotate* rfrg;
-	common::generator::teach_in* tig;
-	common::generator::newsmooth* sg;
-	common::generator::newsmooth* sgaa;
 
-	common::generator::weight_measure* wmg;
+	generator::tff_rubik_face_rotate* rfrg;
 
 public:
-	// KONSTRUKTORY
 	rcsc(lib::configurator &_config);
+	virtual ~rcsc();
 
 	// methods for ECP template to redefine in concrete classes
 	void mp_2_ecp_next_state_string_handler(void);
 };
 
 }
-} // namespace irp6p
+} // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
 

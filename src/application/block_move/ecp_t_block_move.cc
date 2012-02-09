@@ -115,32 +115,7 @@ common::task::task(_config)
 
 void block_move::mp_2_ecp_next_state_string_handler(void)
 {
-	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH) {
-
-		sr_ecp_msg->message("configurate tff_gripper_approach...");
-
-		switch(mp_command.ecp_next_state.variant) {
-
-			case BLOCK_REACHING:
-			sr_ecp_msg->message("reaching the block...");
-			gtga->configure(0.03, 800, 3);
-			gtga->Move();
-			break;
-
-			case BUILDING:
-			sr_ecp_msg->message("reaching the platform...");
-			gtga->configure(0.02, 600, 2);
-			gtga->Move();
-			break;
-
-			default:
-			sr_ecp_msg->message("unknown task for tff_gripper_approach...");
-			break;
-		}
-
-		sr_ecp_msg->message("tff_gripper_approach end");
-	}
-	else if(mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST) {
+	if(mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST) {
 
 		sr_ecp_msg->message("configurate sensor...");
 

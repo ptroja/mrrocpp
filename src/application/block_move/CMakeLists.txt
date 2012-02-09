@@ -23,4 +23,4 @@ add_executable(mp_block_move
 
 target_link_libraries(mp_block_move mp gecodesearch gecodeint gecodekernel gecodesupport)
 
-install(TARGETS ecp_block_move mp_block_move DESTINATION bin)
+install(TARGETS mp_block_move DESTINATION bin)
