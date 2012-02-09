@@ -64,7 +64,7 @@ void bclike_mp_test::main_task_algorithm(void){
 
 	set_next_ecp_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, actual_robot);
 	sr_ecp_msg->message("MOVE left");
-	wait_for_task_termination(false, 1, actual_robot.c_str());
+	wait_for_task_termination(false, actual_robot);
 
 
 	int i = 0;
@@ -97,7 +97,7 @@ void bclike_mp_test::main_task_algorithm(void){
 		i = i % 3;
 
 		set_next_ecp_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, actual_robot);
-		wait_for_task_termination(false, 1, actual_robot.c_str());
+		wait_for_task_termination(false, actual_robot);
 
 		sr_ecp_msg->message("MP end loop");
 

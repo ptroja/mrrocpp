@@ -93,7 +93,7 @@ void gen_test::main_task_algorithm(void)
 		//------------------- SMOOTH GENERATOR -------------------
 		set_next_ecp_state(ecp_mp::subtask::ECP_ST_SMOOTH_GEN_TEST, (int) 5, "", lib::irp6p_m::ROBOT_NAME);
 
-                wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+                wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 		//------------------- SMOOTH GENERATOR END -------------------
 
                 //------------------- SPLINE GENERATOR -------------------

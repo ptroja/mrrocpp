@@ -305,7 +305,7 @@ void block_move::main_task_algorithm(void)
 
 		sr_ecp_msg->message("Raising up...");
 		set_next_ecp_state(ecp_mp::subtask::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_after_pushing.trj", lib::irp6p_m::ROBOT_NAME);
-		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 		wait_ms(1000);
 
