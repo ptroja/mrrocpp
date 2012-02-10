@@ -17,7 +17,6 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <cerrno>
-#include <pthread.h>
 
 #include <boost/bind.hpp>
 #include <boost/thread/thread.hpp>
