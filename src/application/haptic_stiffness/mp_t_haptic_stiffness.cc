@@ -58,7 +58,7 @@ void haptic_stiffness::configure_edp_force_sensor(bool configure_track, bool con
 	} else if ((!configure_track) && (configure_postument)) {
 		wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 	} else if ((configure_track) && (configure_postument)) {
-		wait_for_task_termination(false, {lib::irp6ot_m::ROBOT_NAME, lib::irp6p_m::ROBOT_NAME});
+		wait_for_task_termination(false, lib::irp6ot_m::ROBOT_NAME, lib::irp6p_m::ROBOT_NAME);
 	}
 }
 
@@ -81,7 +81,7 @@ void haptic_stiffness::main_task_algorithm(void)
 	sr_ecp_msg->message("Track podatny do czasu wcisniecia mp_trigger");
 	mp_h_gen.Move();
 
-	send_end_motion_to_ecps(2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+	send_end_motion_to_ecps(lib::irp6ot_m::ROBOT_NAME, lib::irp6p_m::ROBOT_NAME);
 }
 
 } // namespace task

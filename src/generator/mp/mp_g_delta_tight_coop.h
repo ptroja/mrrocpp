@@ -11,8 +11,6 @@
 
 #include "base/mp/generator/mp_generator.h"
 
-// generator for setting the next ecps state
-
 namespace mrrocpp {
 namespace mp {
 namespace generator {

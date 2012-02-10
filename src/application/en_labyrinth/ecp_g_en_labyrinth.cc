@@ -34,7 +34,7 @@ void en_labyrinth::conditional_execution()
 {
 	std::string position_string = ecp_t.mp_command.ecp_next_state.sg_buf.get <std::string>();
 
-	std::cout << std::endl << "Reading position from MP: " << position_string << std::endl << std::endl;
+	std::cout << std::endl << "Reading position from MP: " << position_string << std::endl;
 	std::string first_value, buffer;
 	std::stringstream position_ss(position_string);
 

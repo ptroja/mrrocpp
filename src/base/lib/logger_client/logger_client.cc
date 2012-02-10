@@ -82,8 +82,12 @@ void logger_client::operator()()
 					cond.wait(lock);
 				}
 				if(connect_now){
-					buffer.clear();
-					connect();
+					try{
+						buffer.clear();
+						connect();
+					}catch(exception& ex){
+						// do nothing
+					}
 					connect_now = false;
 					connect_cond.notify_one();
 				} else if(disconnect_now){
@@ -174,10 +178,10 @@ void logger_client::set_connect()
 	connect_now = true;
 	cond.notify_one();
 	//printf("logger_client::set_connect() 3\n");
-	while(!connected){
+	//while(!connected){
 		//printf("logger_client::set_connect() 5\n");
 		connect_cond.wait(lock);
-	}
+	//}
 	//printf("logger_client::set_connect() 6\n");
 }
 void logger_client::set_disconnect()

@@ -25,19 +25,15 @@ namespace common {
 namespace generator {
 class generator_base;
 }
-//namespace robot {
-//class ecp_robot;
-//}
-class subtask_generator_base;
 
 namespace task {
 
 /**
  * @brief Container type for storing ecp_generator objects.
+ * @todo use boost::ptr_unrdered_map container
  *
  * @ingroup ecp
  */
-//typedef boost::ptr_unordered_map <lib::ecp_generator_name_t, generator::generator_base *> generators_t;
 typedef boost::unordered_map <lib::generator_name_t, generator::generator_base *> generators_t;
 
 /**
@@ -163,8 +159,9 @@ public:
 	/**
 	 * @brief method called from main_task_algorithm to handle next_state command from MP
 	 * it can be reimplemented in inherited classes
+	 * @todo remove this call together with deprecated attribute
 	 */
-	virtual void mp_2_ecp_next_state_string_handler(void);
+	virtual void mp_2_ecp_next_state_string_handler(void) __attribute__ ((deprecated));
 
 	/**
 	 * @brief method called from main_task_algorithm to handle stop command from MP

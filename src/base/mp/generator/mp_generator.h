@@ -16,6 +16,7 @@ namespace mrrocpp {
 namespace mp {
 
 namespace task {
+class task_base;
 class task;
 } // namespace task
 
@@ -34,7 +35,7 @@ private:
 	/**
 	 * @brief mp task object reference
 	 */
-	task::task& mp_t;
+	task::task_base & mp_t;
 
 	/**
 	 * @brief communicates with all ECP's that are set to communicate
@@ -67,7 +68,7 @@ public:
 	 * @brief Constructor
 	 * @param _mp_task mp task object reference.
 	 */
-	generator(task::task& _mp_task);
+	generator(task::task_base& _mp_task);
 };
 
 } // namespace common
