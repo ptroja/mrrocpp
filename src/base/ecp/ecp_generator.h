@@ -131,7 +131,7 @@ public:
 			}
 
 			// zlecenie przygotowania danych przez czujniki
-			ecp_t.all_sensors_initiate_reading(sensor_m);
+			initiate_sensors_readings();
 
 			if (the_robot) {
 
@@ -159,7 +159,7 @@ public:
 			}
 
 			// odczytanie danych z wszystkich czujnikow
-			ecp_t.all_sensors_get_reading(sensor_m);
+			get_sensors_readings();
 
 			node_counter++;
 			if (ecp_t.pulse_check()) {

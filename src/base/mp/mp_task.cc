@@ -160,7 +160,6 @@ void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *prop
 //     2) peak for UI pulse and eventually react for in in pause/resume/stop/trigger cycle
 void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 {
-
 	// najpierw kasujemy znacznik swiezosci buforow
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 			{
@@ -207,8 +206,8 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 					case MP_STOP:
 						terminate_all();
 						BOOST_THROW_EXCEPTION(exception::nfe() << lib::exception::mrrocpp_error0(ECP_STOP_ACCEPTED));
+						break;
 					case MP_PAUSE:
-
 						mp_state = MP_PAUSED;
 						pause_all();
 						ui_exit_from_while = false;

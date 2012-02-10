@@ -142,20 +142,6 @@ public:
 	bool show_message(const char* message);
 
 	/**
-	 * @brief calls initiate reading method for sensor from sensor map
-	 * @param _sensor_m stl map of sensors
-	 */
-	void all_sensors_initiate_reading(sensors_t & _sensor_m);
-
-	/**
-	 * @brief calls get reading method for sensor from sensor map
-	 * @param _sensor_m stl map of sensors
-	 */
-	void all_sensors_get_reading(sensors_t & _sensor_m);
-
-	//ecp_mp::common::Trajectory * createTrajectory(xmlNodePtr actNode, xmlChar *stateID);
-
-	/**
 	 * @brief creates trajectory
 	 * @param fileName actNode xml_node
 	 * @param stateID task state id

@@ -8,8 +8,6 @@
 //#include "ecp_mp_t_rcsc.h"
 #include "subtask/ecp_st_smooth_file_from_mp.h"
 
-#include "ecp_t_rcsc.h"
-
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
