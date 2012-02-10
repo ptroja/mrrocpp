@@ -1,6 +1,6 @@
 /**
  * \file ecp_st_scan_move.h
- * \brief Scanning move subtask class
+ * \brief Scanning move sub_task class
  * \date 02.09.2010
  * \author Kacper Szkudlarek
  */
@@ -44,7 +44,7 @@ public:
 	virtual ~ecp_st_scan_move();
 
 	/**
-	 * Method called by parent task to start execution of subtask
+	 * Method called by parent task to start execution of sub_task
 	 */
 	void conditional_execution();
 

@@ -69,7 +69,7 @@ void neuron::create_robots()
 
 /*===============================main_task_algorithm======================*//**
  * @brief Main taks algorithm.
- * @details It initializes neuron subtask.
+ * @details It initializes neuron sub_task.
  */
 void neuron::main_task_algorithm(void)
 {

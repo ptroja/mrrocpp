@@ -3,7 +3,7 @@
  * @brief File contains bias_edp_force definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup subtasks
+ * @ingroup sub_tasks
  */
 
 #include "ecp_mp_st.h"

@@ -33,7 +33,7 @@ public:
 	virtual ~bclike_mp_test();
 
 	/**
-	 * Class main method responsible for switching between subtask
+	 * Class main method responsible for switching between sub_task
 	 * depending on received data
 	 */
 	void main_task_algorithm(void);

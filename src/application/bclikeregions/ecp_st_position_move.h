@@ -1,6 +1,6 @@
 /**
  * \file ecp_st_position_move.h
- * \brief Position move subtask class
+ * \brief Position move sub_task class
  * \date 02.09.2010
  * \author Kacper Szkudlarek
  */
@@ -45,7 +45,7 @@ public:
 	 */
 	virtual ~ecp_st_position_move();
 	/**
-	 * Method called by parent task to start execution of subtask
+	 * Method called by parent task to start execution of sub_task
 	 */
 	void conditional_execution();
 

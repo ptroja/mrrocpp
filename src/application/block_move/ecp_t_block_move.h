@@ -17,7 +17,7 @@
 #include "sensor/discode/discode_sensor.h"
 
 #include "base/ecp/ecp_task.h"
-#include "subtask/ecp_mp_st_smooth_file_from_mp.h"
+#include "sub_task/ecp_mp_st_smooth_file_from_mp.h"
 
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"

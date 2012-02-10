@@ -69,7 +69,7 @@ void stats::create_robots()
 
 /*===============================main_task_algorithm======================*//**
  * @brief Main taks algorithm.
- * @details It initializes stats subtask.
+ * @details It initializes stats sub_task.
  */
 void stats::main_task_algorithm(void)
 {

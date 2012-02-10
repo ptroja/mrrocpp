@@ -6,7 +6,7 @@
  * @brief File contains ECP_ST_TFF_NOSE_RUN definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup subtasks
+ * @ingroup sub_tasks
  */
 
 #include "../base/lib/com_buf.h"

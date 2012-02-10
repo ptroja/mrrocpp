@@ -1,6 +1,6 @@
 /**
  * \file bclike_gen.h
- * \brief Scanning subtask generator class header file
+ * \brief Scanning sub_task generator class header file
  * \date 02.09.2010
  * \author Kacper Szkudlarek
  */

@@ -15,7 +15,7 @@ namespace sub_task {
 sub_task_smooth_file_from_mp::sub_task_smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec, std::string _LABEL, bool _detect_jerks) :
 		sub_task(_ecp_t), detect_jerks(_detect_jerks)
 {
-	subtask_generator_name = _LABEL;
+	sub_task_generator_name = _LABEL;
 	switch (pose_spec)
 	{
 		case lib::ECP_JOINT:

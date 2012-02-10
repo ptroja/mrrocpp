@@ -19,7 +19,7 @@ transparent::transparent(common::task::task& _ecp_task) :
 		common::generator::generator(_ecp_task)
 {
 	throw_kinematics_exceptions = true;
-	subtask_generator_name = ecp_mp::generator::ECP_GEN_TRANSPARENT;
+	sub_task_generator_name = ecp_mp::generator::ECP_GEN_TRANSPARENT;
 }
 
 // ----------------------------------------------------------------------------------------------

@@ -26,27 +26,27 @@ namespace common {
 //namespace robot {
 //class ecp_robot;
 //}
-class subtask_generator_base;
+class sub_task_generator_base;
 
 namespace task {
 
 /**
- * @brief Container type for storing subtask_generator_base objects.
+ * @brief Container type for storing sub_task_generator_base objects.
  *
  * @ingroup ecp
  */
 // Nie dzialalo poprawnie
-//typedef boost::ptr_unordered_map <lib::ecp_subtask_generator_name_t, subtask_generator_base *> subtasks_generators_t;
+//typedef boost::ptr_unordered_map <lib::ecp_sub_task_generator_name_t, sub_task_generator_base *> sub_tasks_generators_t;
 
-typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, subtask_generator_base *> subtasks_generators_t;
+typedef boost::unordered_map <lib::ecp_sub_task_generator_name_t, sub_task_generator_base *> sub_tasks_generators_t;
 
 
 /**
- * @brief Type for Items from subtask_generator_base container.
+ * @brief Type for Items from sub_task_generator_base container.
  *
  * @ingroup ecp
  */
-typedef subtasks_generators_t::value_type subtask_generator_pair_t;
+typedef sub_tasks_generators_t::value_type sub_task_generator_pair_t;
 
 /*!
  * @brief Base class of all ecp tasks
@@ -123,9 +123,9 @@ public:
 	const std::string & mp_2_ecp_next_state_string;
 
 	/**
-	 * @brief ECP subtasks and generators container
+	 * @brief ECP sub_tasks and generators container
 	 */
-	subtasks_generators_t subtask_generator_m;
+	sub_tasks_generators_t sub_task_generator_m;
 
 	/**
 	 * @brief continuous coordination flag
@@ -134,9 +134,9 @@ public:
 	bool continuous_coordination;
 
 	/**
-	 * @brief registers subtask or generator in subtask_generator_m
+	 * @brief registers sub_task or generator in sub_task_generator_m
 	 */
-	void register_sg(subtask_generator_base* _sg);
+	void register_sg(sub_task_generator_base* _sg);
 
 	/**
 	 * @brief checks if new pulse arrived from UI on trigger channel
@@ -189,10 +189,10 @@ public:
 	void wait_for_stop(void);
 
 	/**
-	 * @brief method called from main_task_algorithm to handle ecp subtasks execution
+	 * @brief method called from main_task_algorithm to handle ecp sub_tasks execution
 	 * it can be reimplemented in inherited classes
 	 */
-	void subtasks_and_generators_dispatcher();
+	void sub_tasks_and_generators_dispatcher();
 
 public:
 	// TODO: what follows should be private method or accessible only to some friend classes

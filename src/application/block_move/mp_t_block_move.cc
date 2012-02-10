@@ -26,12 +26,12 @@
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 
-#include "subtask/ecp_mp_st_smooth_file_from_mp.h"
+#include "sub_task/ecp_mp_st_smooth_file_from_mp.h"
 
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 
-#include "subtask/ecp_mp_st_smooth_file_from_mp.h"
-//#include "subtask/ecp_mp_st_gripper_opening.h"
+#include "sub_task/ecp_mp_st_smooth_file_from_mp.h"
+//#include "sub_task/ecp_mp_st_gripper_opening.h"
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 
 #include "../visual_servoing/visual_servoing.h"

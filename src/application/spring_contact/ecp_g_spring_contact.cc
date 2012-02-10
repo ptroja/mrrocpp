@@ -31,7 +31,7 @@ namespace generator {
 spring_contact::spring_contact(common::task::task& _ecp_task, int step) :
 		common::generator::generator(_ecp_task), step_no(step), tool_frame(0.0, 0.0, 0.25)
 {
-	subtask_generator_name = ecp_mp::generator::SPRING_CONTACT;
+	sub_task_generator_name = ecp_mp::generator::SPRING_CONTACT;
 }
 
 bool spring_contact::first_step()

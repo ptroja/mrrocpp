@@ -1,6 +1,6 @@
 /**
  * \file ecp_st_position_move.cc
- * \brief Position move subtask method definition
+ * \brief Position move sub_task method definition
  * \date 02.09.2010
  * \author Kacper Szkudlarek
  */

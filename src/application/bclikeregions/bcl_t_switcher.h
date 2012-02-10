@@ -70,7 +70,7 @@ class bcl_t_switcher: public common::task::task {
 public:
 	/**
 	 * Class constructor, creating FraDIA sensor, smooth generator, insance
-	 * of robot object. Also take care about creating subtasks
+	 * of robot object. Also take care about creating sub_tasks
 	 * @param _config reference to configuration file parser object
 	 */
 	bcl_t_switcher(lib::configurator &_config);
@@ -85,7 +85,7 @@ public:
     void mp_2_ecp_next_state_string_handler(void);
 
     /**
-     * Method used by subtask to get access to FraDIA sensor
+     * Method used by sub_task to get access to FraDIA sensor
      * @return pointer to fradia sensor structure
      */
     virtual bcl_fradia_sensor* get_vsp_fradia();

@@ -18,7 +18,7 @@ namespace generator {
 sleep::sleep(task_t & _ecp_task, double s) :
 		generator_t(_ecp_task)
 {
-	subtask_generator_name = ecp_mp::generator::ECP_GEN_SLEEP;
+	sub_task_generator_name = ecp_mp::generator::ECP_GEN_SLEEP;
 	if (the_robot)
 		the_robot->communicate_with_edp = false; //do not communicate with edp
 	waittime = s * 1000; //wait time[ns] conversting from given seconds to nanoseconds

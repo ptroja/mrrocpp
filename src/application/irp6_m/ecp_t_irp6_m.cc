@@ -6,7 +6,7 @@
 
 #include "base/lib/sr/srlib.h"
 //#include "ecp_mp_t_rcsc.h"
-#include "subtask/ecp_st_smooth_file_from_mp.h"
+#include "sub_task/ecp_st_smooth_file_from_mp.h"
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/tff_rubik_face_rotate/ecp_mp_g_tff_rubik_face_rotate.h"
 

@@ -3,7 +3,7 @@
 
 /*!
  * @file
- * @brief File contains ecp subtask generator declaration
+ * @brief File contains ecp sub_task generator declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup ecp
@@ -25,7 +25,7 @@ namespace common {
 
 const std::string EMPTY_SUBTASK_GENERATOR_NAME = "EMPTY_SUBTASK_GENERATOR_NAME";
 
-class subtask_generator_base
+class sub_task_generator_base
 {
 
 public:
@@ -33,15 +33,15 @@ public:
 	/**
 	 * @brief Unique class name
 	 */
-	lib::ecp_subtask_generator_name_t subtask_generator_name; // by Y - nazwa robota (track, postument etc.)
+	lib::ecp_sub_task_generator_name_t sub_task_generator_name; // by Y - nazwa robota (track, postument etc.)
 
-	subtask_generator_base() :
-			subtask_generator_name(EMPTY_SUBTASK_GENERATOR_NAME)
+	sub_task_generator_base() :
+			sub_task_generator_name(EMPTY_SUBTASK_GENERATOR_NAME)
 	{
 
 	}
 
-	virtual ~subtask_generator_base()
+	virtual ~sub_task_generator_base()
 	{
 	}
 

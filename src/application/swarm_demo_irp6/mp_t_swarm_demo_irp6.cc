@@ -20,7 +20,7 @@
 
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 
-#include "subtask/ecp_mp_st_smooth_file_from_mp.h"
+#include "sub_task/ecp_mp_st_smooth_file_from_mp.h"
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"

@@ -36,7 +36,7 @@ const std::string UI_SECTION = "[ui]";
 
 typedef std::string robot_name_t;
 typedef std::string TRANSMITTER_t;
-typedef std::string ecp_subtask_generator_name_t;
+typedef std::string ecp_sub_task_generator_name_t;
 
 const robot_name_t ROBOT_UNDEFINED = "ROBOT_UNDEFINED";
 

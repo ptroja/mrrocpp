@@ -22,7 +22,7 @@ constant_velocity::constant_velocity(common::task::task& _ecp_task, lib::ECP_POS
 				ecp::common::generator::velocity_profile_calculator::constant_velocity_profile>(_ecp_task)
 {
 
-	subtask_generator_name = ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY;
+	sub_task_generator_name = ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY;
 
 	this->pose_spec = pose_spec;
 	this->axes_num = axes_num;

@@ -213,7 +213,7 @@ void fsautomat::main_task_algorithm(void)
 		std::cout << "po_next_state" << std::endl;
 		sr_ecp_msg->message("Order received");
 
-		subtasks_and_generators_dispatcher();
+		sub_tasks_and_generators_dispatcher();
 		std::cout << "NEXT STATE STRING OGOLNY        " << mp_2_ecp_next_state_string << std::endl;
 		if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TEACH_IN) {
 			std::string path(mrrocpp_network_path);

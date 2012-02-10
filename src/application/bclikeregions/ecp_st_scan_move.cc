@@ -1,6 +1,6 @@
 /**
  * \file ecp_st_scan_move.cc
- * \brief Scanning move subtask class methods definition
+ * \brief Scanning move sub_task class methods definition
  * \date 02.09.2010
  * \author Kacper Szkudlarek
  */
