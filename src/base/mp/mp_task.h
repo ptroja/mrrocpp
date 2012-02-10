@@ -154,23 +154,6 @@ public:
 	void stop_and_terminate(void);
 
 	/**
-	 * @brief Enum of two possible pulse receive variants (BLOCK/NONBLOCK)
-	 * @note it is assumend, that values of this enum equals to "block?" predicate.
-	 */
-	typedef enum _MP_RECEIVE_PULSE_ENUM
-	{
-		NONBLOCK = 0, BLOCK = 1
-	} RECEIVE_PULSE_MODE;
-
-	/**
-	 * @brief Enum of three possible variants of pulse origin processes
-	 */
-	typedef enum _WAIT_FOR_NEW_PULSE_ENUM
-	{
-		NEW_ECP_PULSE, NEW_UI_PULSE, NEW_UI_OR_ECP_PULSE
-	} WAIT_FOR_NEW_PULSE_MODE;
-
-	/**
 	 * @brief sets the next state of ECP
 	 * it calls dedicated generator and then sends new command in generator Move instruction
 	 * @param l_state state label sent to ECP
@@ -278,7 +261,7 @@ public:
 	 */
 	bool is_robot_activated(const lib::robot_name_t & name) const
 	{
-		return ((robot_m.find(name) != robot_m.end()) ? true : false);
+		return (robot_m.find(name) != robot_m.end());
 	}
 
 protected:
