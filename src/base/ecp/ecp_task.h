@@ -25,19 +25,15 @@ namespace common {
 namespace generator {
 class generator_base;
 }
-//namespace robot {
-//class ecp_robot;
-//}
-class subtask_generator_base;
 
 namespace task {
 
 /**
  * @brief Container type for storing ecp_generator objects.
+ * @todo use boost::ptr_unrdered_map container
  *
  * @ingroup ecp
  */
-//typedef boost::ptr_unordered_map <lib::ecp_generator_name_t, generator::generator_base *> generators_t;
 typedef boost::unordered_map <lib::generator_name_t, generator::generator_base *> generators_t;
 
 /**

@@ -347,7 +347,7 @@ void fsautomat::configureProperTransmitter(const char *propTrans)
 void fsautomat::stopProperGen(const common::State &state)
 {
 	if (!state.robotSet)
-		send_end_motion_to_ecps(1, (state.getRobot()).c_str());
+		send_end_motion_to_ecps(state.getRobot());
 	// TODO
 	//send_end_motion_to_ecps(state.robotSet->firstSet.size(), state.robotSet->firstSet);
 }

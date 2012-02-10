@@ -8,7 +8,7 @@
 #if !defined(__MP_T_HAPTIC_H)
 #define __MP_T_HAPTIC_H
 
-
+#include "base/mp/mp_task.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -34,7 +34,7 @@ public:
 	void main_task_algorithm(void);
 };
 
-/** @} */ // end of edge_following
+/** @} */ // end of ball
 
 } // namespace task
 } // namespace mp
