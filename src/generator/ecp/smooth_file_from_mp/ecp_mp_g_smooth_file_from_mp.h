@@ -3,7 +3,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace subtask {
+namespace generator {
 
 const std::string ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP = "ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP";
 const std::string ECP_ST_SMOOTH_JOINT_FILE_FROM_MP = "ECP_ST_SMOOTH_JOINT_FILE_FROM_MP";
@@ -11,6 +11,5 @@ const std::string ECP_ST_SMOOTH_JOINT_FILE_FROM_MP = "ECP_ST_SMOOTH_JOINT_FILE_F
 } // namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp
-
 
 #endif

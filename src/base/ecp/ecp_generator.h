@@ -48,6 +48,17 @@ public:
 			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), subtask_generator_base(), ecp_t(_ecp_task)
 	{
 	}
+
+	bool first_step(void)
+	{
+		return next_step();
+	}
+
+	bool next_step(void)
+	{
+		return false;
+	}
+
 };
 
 /*!

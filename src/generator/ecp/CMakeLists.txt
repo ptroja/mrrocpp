@@ -48,6 +48,7 @@ ecp_g_tff_nose_run
 ecp_g_tff_rubik_face_rotate
 ecp_g_transparent
 ecp_g_sleep
+ecp_g_smooth_file_from_mp
 )
 
 
