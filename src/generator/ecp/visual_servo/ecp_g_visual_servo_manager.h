@@ -16,7 +16,7 @@
 #if !defined(EA_372F46B1_372D_4660_A605_52297559E64B__INCLUDED_)
 #define EA_372F46B1_372D_4660_A605_52297559E64B__INCLUDED_
 
-#include "generator/ecp/ecp_g_visual_servo.h"
+#include "ecp_g_visual_servo.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -37,7 +37,7 @@ public:
 	/*!
 	 * Constructor.
 	 */
-	ecp_visual_servo_manager(common::task::task& _ecp_task, int step=0);
+	ecp_visual_servo_manager(common::task::task& _ecp_task, int step = 0);
 	/*!
 	 * Destructor.
 	 */

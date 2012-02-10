@@ -14,7 +14,7 @@
  */
 
 #include "base/ecp/ecp_robot.h"
-#include "generator/ecp/ecp_g_visual_servo.h"
+#include "ecp_g_visual_servo.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -22,51 +22,62 @@ namespace common {
 namespace generator {
 
 ecp_visual_servo::ecp_visual_servo(common::task::task& _ecp_task, int step) :
-	common::generator::generator(_ecp_task) {
+		common::generator::generator(_ecp_task)
+{
 }
 
-ecp_visual_servo::~ecp_visual_servo() {
+ecp_visual_servo::~ecp_visual_servo()
+{
 
 }
 
-void ecp_visual_servo::retrieve_parameters() {
+void ecp_visual_servo::retrieve_parameters()
+{
 
 }
 
-bool ecp_visual_servo::next_step(void) {
+bool ecp_visual_servo::next_step(void)
+{
 	if (next_step_without_constraints()) {
 		limit_step();
 		return true;
-	}//: if
+	} //: if
 	return false;
 }
 
-void ecp_visual_servo::set_constraints() {
+void ecp_visual_servo::set_constraints()
+{
 
 }
 
-void ecp_visual_servo::get_constraints() {
+void ecp_visual_servo::get_constraints()
+{
 
 }
 
-void ecp_visual_servo::set_entities() {
+void ecp_visual_servo::set_entities()
+{
 
 }
 
-void ecp_visual_servo::get_entities() {
+void ecp_visual_servo::get_entities()
+{
 
 }
 
-void ecp_visual_servo::set_opartions() {
+void ecp_visual_servo::set_opartions()
+{
 
 }
 
-void ecp_visual_servo::get_operations() {
+void ecp_visual_servo::get_operations()
+{
 
 }
 
 #if 1
-void ecp_visual_servo::limit_step() {
+void ecp_visual_servo::limit_step()
+{
 	// roznica w kroku -> docelowo predkosc
 	for (int i = 0; i < 6; i++)
 		O_r_Ep_d[0][i] = O_r_Ep[0][i] - O_r_E[0][i];
@@ -77,8 +88,7 @@ void ecp_visual_servo::limit_step() {
 
 	//ograniczenie przyspieszenia (opoznienie zalatwia regulator proporcjonalny)
 	for (int i = 0; i < 6; i++) {
-		if ((fabs(O_r_Ep_d2[0][i]) >= d2_u_max[i]) && (fabs(O_r_Ep_d[0][i])
-				>= fabs(O_r_Ep_d[1][i]))) {
+		if ((fabs(O_r_Ep_d2[0][i]) >= d2_u_max[i]) && (fabs(O_r_Ep_d[0][i]) >= fabs(O_r_Ep_d[1][i]))) {
 			if (O_r_Ep_d[0][i] >= 0) {
 				O_r_Ep_d[0][i] = O_r_Ep_d[1][i] + d2_u_max[i];
 				O_r_Ep[0][i] = O_r_E[0][i] + O_r_Ep_d[0][i];
@@ -109,8 +119,7 @@ void ecp_visual_servo::limit_step() {
 	//std::cout << "ecp Ep: ";
 
 	for (int i = 0; i < 6; i++) {
-		the_robot->ecp_command.arm.pf_def.arm_coordinates[i]
-				= O_r_Ep[0][i];
+		the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = O_r_Ep[0][i];
 		//	std::cout << O_r_Ep[0][i] << " ";
 	}
 	/*
@@ -125,13 +134,11 @@ void ecp_visual_servo::limit_step() {
 	 std::cout << std::endl;
 	 */
 	for (int i = 0; i < 1; i++) {
-		the_robot->ecp_command.arm.pf_def.arm_coordinates[i]
-				= O_r_E1[i];
+		the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = O_r_E1[i];
 	}
 
 	for (int i = 2; i < 6; i++) {
-		the_robot->ecp_command.arm.pf_def.arm_coordinates[i]
-				= O_r_E1[i];
+		the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = O_r_E1[i];
 	}
 
 }

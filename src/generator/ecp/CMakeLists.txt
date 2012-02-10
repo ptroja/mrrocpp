@@ -12,6 +12,9 @@ add_subdirectory (newsmooth)
 add_subdirectory (get_position)
 add_subdirectory (constant_velocity)
 add_subdirectory (spline)
+add_subdirectory (visual_servo)
+
+
 
 add_library(ecp_mp_generators
 ecp_mp_g_common.cc
@@ -30,7 +33,6 @@ add_library(ecp_smooth_base
 	trajectory_interpolator/constant_velocity_interpolator.cc
 	trajectory_interpolator/bang_bang_interpolator.cc
     trajectory_interpolator/spline_interpolator.cc
-    ecp_g_visual_servo.cc
 )
 
 
@@ -39,7 +41,6 @@ add_library(ecp_generators
 	ecp_g_teach_in.cc
 	ecp_g_delta.cc
 	ecp_g_operator_reaction_condition.cc
-	ecp_g_visual_servo_manager.cc
 )
 
 target_link_libraries(ecp_generators 
@@ -57,6 +58,7 @@ ecp_smooth_base
 ecp_g_constant_velocity
 ecp_g_get_position
 ecp_g_spline
+ecp_g_visual_servo
 )
 target_link_libraries(ecp_smooth_base ecp_g_get_position)
 
