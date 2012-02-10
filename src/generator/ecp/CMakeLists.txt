@@ -27,6 +27,7 @@ ecp_mp_g_tff_gripper_approach
 
 
 add_library(ecp_generators
+	ecp_g_common.cc
 	ecp_g_delta.cc
 	ecp_g_operator_reaction_condition.cc
 )
