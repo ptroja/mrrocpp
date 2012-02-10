@@ -13,7 +13,6 @@ add_subdirectory (constant_velocity)
 add_subdirectory (spline)
 add_subdirectory (visual_servo)
 add_subdirectory (teach_in)
-add_subdirectory (delta)
 add_subdirectory (operator_reaction_condition)
 
 
@@ -33,7 +32,6 @@ add_library(ecp_generators
 )
 
 target_link_libraries(ecp_generators 
-ecp_g_delta
 ecp_g_operator_reaction_condition
 ecp_g_teach_in
 ecp_g_weight_measure
