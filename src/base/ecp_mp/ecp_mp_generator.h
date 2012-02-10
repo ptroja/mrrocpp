@@ -41,6 +41,16 @@ protected:
 	 */
 	lib::sr_ecp& sr_ecp_msg;
 
+	/**
+	 * @brief calls initiate reading method for sensor from sensor map
+	 */
+	void initiate_sensors_readings();
+
+	/**
+	 * @brief calls get reading method for sensor from sensor map
+	 */
+	void get_sensors_readings();
+
 public:
 	/**
 	 * @brief Constructor
