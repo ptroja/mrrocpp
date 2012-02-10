@@ -24,7 +24,7 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/tff_nose_run/ecp_mp_g_tff_nose_run.h"
-#include "generator/ecp/ecp_mp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_constant_velocity.h"
 #include "generator/ecp/weight_measure/ecp_mp_g_weight_measure.h"
 #include "robot/festival/const_festival.h"

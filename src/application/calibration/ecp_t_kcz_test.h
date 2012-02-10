@@ -2,7 +2,7 @@
 #define _ECP_T_KCZ_TEST_H
 
 #include "base/ecp/ecp_task.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 
 namespace mrrocpp {
 

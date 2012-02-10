@@ -10,7 +10,7 @@
 #define ECP_T_NEURON_H_
 
 #include "base/ecp/ecp_task.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_constant_velocity.h"
 #include "ecp_g_neuron_generator.h"
 #include "generator/ecp/sleep/ecp_g_sleep.h"

@@ -14,7 +14,7 @@
 #include "base/ecp/ecp_generator.h"
 #include "application/android_teach/sensor/EcpMpAndroid.h"
 #include "application/android_teach/AndroidState.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 
 namespace mrrocpp {
 namespace ecp {

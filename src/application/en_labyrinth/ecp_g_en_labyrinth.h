@@ -10,7 +10,7 @@
 #include <ctime>
 
 #include "base/ecp/ecp_generator.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 #include "ecp_mp_g_en_labyrinth.h"
 
 namespace mrrocpp {

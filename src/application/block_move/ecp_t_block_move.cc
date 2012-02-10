@@ -14,8 +14,8 @@
 //#include "subtask/ecp_mp_st_gripper_opening.h"
 
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
-#include "generator/ecp/ecp_mp_g_newsmooth.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_mp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_multiple_position.h"
 
 #include "sensor/discode/discode_sensor.h"
@@ -56,26 +56,14 @@ block_move::block_move(lib::configurator &_config) :
 	log_dbg_enabled = true;
 
 	// utworzenie generatorow
-	gtga = new common::generator::tff_gripper_approach(*this, 8);
 	sg = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 	gp = new common::generator::get_position(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
 
 	// utworzenie generatorow do uruchamiania dispatcherem
-	//generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
+	register_generator(new common::generator::tff_gripper_approach(*this, 8));
 	register_generator(new common::generator::bias_edp_force(*this));
-
-	// utworzenie podzadan
-	//subtask_m[ecp_mp::generator::ECP_GEN_SMOOTH_JOINT_FILE_FROM_MP] =
-	//new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
-	//subtask_m[ecp_mp::generator::ECP_GEN_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
-	//new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
-
 	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::generator::ECP_GEN_SMOOTH_JOINT_FILE_FROM_MP, true));
 	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_GEN_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
-
-	// TEMPORARY REMOVAL
-	//register_generator(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::generator::ECP_GEN_SMOOTH_JOINT_FILE_FROM_MP, true));
-	//register_generator(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_GEN_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
 
 	//sensor rpc
 	sr_ecp_msg->message("Creating discode sensor...");

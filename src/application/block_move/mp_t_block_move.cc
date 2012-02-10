@@ -24,7 +24,7 @@
 
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
-#include "generator/ecp/ecp_mp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_mp_g_newsmooth.h"
 
 #include "generator/ecp/smooth_file_from_mp/ecp_mp_g_smooth_file_from_mp.h"
 
@@ -146,32 +146,35 @@ block_position_list block_move::create_plan(block_position_list l)
 {
 	sr_ecp_msg->message("Creating plan");
 
-	/*
-	 l.sort();
+	l.sort();
 
-	 cout << "Plan:" << endl;
-	 for(block_position_list::iterator it = l.begin(); it != l.end(); ++it) {
-	 (*it).print();
-	 }
-	 */
+	cout << "Plan:" << endl;
+	for(block_position_list::iterator it = l.begin(); it != l.end(); ++it) {
+		(*it).print();
+	}
 
 	block_position_list plan;
 
-	//BlockPlanner* bp = new BlockPlanner(WIDTH, l.size(), l);
+#ifdef USE_GECODE
 
-	sr_ecp_msg->message("Building tree");
+	BlockPlanner* bp = new BlockPlanner(WIDTH, l.size(), l);	//definition of CSP
 
-	//DFS<BlockPlanner> e(bp);
+	DFS<BlockPlanner> e(bp);									//searching for solution
 
-	sr_ecp_msg->message("Printing solution");
-	/*
-	 bp->print();
-	 plan = bp->getPlan();
-	 delete bp;
-	 */
+	bp->print();												//printing solution
+	plan = bp->getPlan();										//getting a solution
+	delete bp;
+
 	sr_ecp_msg->message("Creating plan end");
 
+	return plan;
+
+#else
+
 	return l;
+
+#endif
+
 }
 
 void block_move::main_task_algorithm(void)
@@ -257,8 +260,10 @@ void block_move::main_task_algorithm(void)
 			wait_ms(1000);
 
 			sr_ecp_msg->message("Force approach");
+
 			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) ecp_mp::generator::tff_gripper_approach::behaviour_specification, ecp_mp::generator::tff_gripper_approach::behaviour_specification_data_type(0.03, 800, 3), lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
+
 
 			wait_ms(1000);
 

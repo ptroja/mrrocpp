@@ -37,7 +37,7 @@
 #include "StateHeap.h"
 
 #include "base/lib/datastr.h"
-#include "generator/ecp/ecp_mp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 #include "cube_face.h"
 #include "CubeState.h"

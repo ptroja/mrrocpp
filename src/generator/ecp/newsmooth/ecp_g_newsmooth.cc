@@ -8,7 +8,7 @@
 #include <fstream>
 
 #include "base/ecp/ecp_exceptions.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 
 namespace mrrocpp {
 namespace ecp {
