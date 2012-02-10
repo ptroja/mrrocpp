@@ -71,7 +71,7 @@ void task_base::main_task_algorithm(void)
 
 		mp_2_ecp_next_state_string_handler();
 
-		subtasks_and_generators_dispather();
+		subtasks_and_generators_dispatcher();
 
 		termination_notice();
 	} //end for
@@ -152,10 +152,11 @@ void task_base::termination_notice(void)
 	}
 }
 
-void task_base::subtasks_and_generators_dispather()
+void task_base::subtasks_and_generators_dispatcher()
 {
 
 	if (subtask_generator_m.find(mp_2_ecp_next_state_string) != subtask_generator_m.end()) {
+		//sr_ecp_msg->message(lib::NON_FATAL_ERROR, mp_2_ecp_next_state_string);
 		subtask_generator_m.at(mp_2_ecp_next_state_string)->conditional_execution();
 	} else {
 		if (!mp_2_ecp_next_state_string_handler_active) {

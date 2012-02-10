@@ -46,7 +46,7 @@ public:
 	}
 
 	/**
-	 * @brief executed by disptecher
+	 * @brief executed by dispatcher
 	 */
 	virtual void conditional_execution() = 0;
 

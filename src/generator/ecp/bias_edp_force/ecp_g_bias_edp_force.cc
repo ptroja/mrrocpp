@@ -59,6 +59,12 @@ bool bias_edp_force::next_step()
 	return false;
 }
 
+/*
+ void bias_edp_force::conditional_execution()
+ {
+ Move();
+ }
+ */
 } // namespace generator
 } // namespace common
 } // namespace ecp

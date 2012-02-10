@@ -9,6 +9,7 @@
  * @ingroup ecp
  */
 
+#include <boost/ptr_container/ptr_unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include "base/lib/agent/Agent.h"
@@ -34,7 +35,11 @@ namespace task {
  *
  * @ingroup ecp
  */
+// Nie dzialalo poprawnie
+//typedef boost::ptr_unordered_map <lib::ecp_subtask_generator_name_t, subtask_generator_base *> subtasks_generators_t;
+
 typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, subtask_generator_base *> subtasks_generators_t;
+
 
 /**
  * @brief Type for Items from subtask_generator_base container.
@@ -187,7 +192,7 @@ public:
 	 * @brief method called from main_task_algorithm to handle ecp subtasks execution
 	 * it can be reimplemented in inherited classes
 	 */
-	void subtasks_and_generators_dispather();
+	void subtasks_and_generators_dispatcher();
 
 public:
 	// TODO: what follows should be private method or accessible only to some friend classes
