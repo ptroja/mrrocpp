@@ -24,7 +24,7 @@
 
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
-#include "generator/ecp/ecp_mp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_mp_g_newsmooth.h"
 
 #include "generator/ecp/smooth_file_from_mp/ecp_mp_g_smooth_file_from_mp.h"
 

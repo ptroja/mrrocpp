@@ -12,7 +12,7 @@
 #include "base/ecp/ecp_task.h"
 #include "base/lib/logger.h"
 #include "application/visual_servoing/visual_servoing.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 
 using mrrocpp::ecp::common::generator::single_visual_servo_manager;
 using mrrocpp::ecp::common::generator::visual_servo_manager;

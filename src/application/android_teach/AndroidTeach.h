@@ -9,7 +9,7 @@
 #define ANDROIDTEACH_H_
 
 #include "base/ecp_mp/ecp_mp_task.h"
-//#include "generator/ecp/ecp_g_newsmooth.h"
+//#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 #include "application/android_teach/generator/EcpGAndroidJoint.h"
 #include "application/android_teach/sensor/EcpMpAndroid.h"
 #include "application/android_teach/generator/EcpSmoothGAndroid.h"

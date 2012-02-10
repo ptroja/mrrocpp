@@ -12,7 +12,7 @@ add_executable(ecp_block_move
     ../../sensor/discode/discode_sensor.cc
 )
 
-target_link_libraries(ecp_block_move ecp_robot visual_servoing)
+target_link_libraries(ecp_block_move ecp_generators visual_servoing)
 
 include_directories(/usr/local/include/gecode)
 

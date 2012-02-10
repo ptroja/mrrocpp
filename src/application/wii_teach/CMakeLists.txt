@@ -8,7 +8,7 @@ add_executable(ecp_wii_teach
 )
 
 target_link_libraries(ecp_wii_teach
-	ecp_robot
+	ecp_generators
 )
 
 install(TARGETS ecp_wii_teach DESTINATION bin)

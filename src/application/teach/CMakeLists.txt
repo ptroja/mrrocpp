@@ -3,7 +3,7 @@ add_executable(ecp_teach
 )
 
 target_link_libraries(ecp_teach
-	ecp_robot
+	ecp_generators
 )
 
 install(TARGETS ecp_teach DESTINATION bin)

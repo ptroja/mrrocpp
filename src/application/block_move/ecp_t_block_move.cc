@@ -14,8 +14,8 @@
 //#include "subtask/ecp_mp_st_gripper_opening.h"
 
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
-#include "generator/ecp/ecp_mp_g_newsmooth.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_mp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_g_multiple_position.h"
 
 #include "sensor/discode/discode_sensor.h"

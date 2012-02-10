@@ -4,7 +4,7 @@ add_executable(ecp_neuron
 	ecp_g_neuron_generator.cc
 )
 
-target_link_libraries(ecp_neuron ecp_robot)
+target_link_libraries(ecp_neuron ecp_generators)
 
 add_executable(mp_neuron
 	mp_t_neuron.cc

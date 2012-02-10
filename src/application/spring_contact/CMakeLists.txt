@@ -3,7 +3,7 @@ add_executable(ecp_spring_contact
 	ecp_t_spring_contact.cc
 )
 
-target_link_libraries(ecp_spring_contact ecp_robot)
+target_link_libraries(ecp_spring_contact ecp_generators)
 
 add_executable(mp_spring_contact
 	mp_t_spring_contact.cc

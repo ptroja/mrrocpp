@@ -15,7 +15,7 @@
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "base/ecp/ecp_subtask.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 #include "generator/ecp/transparent/ecp_g_transparent.h"
 
 #include "ecp_g_eih_nose_run.h"
