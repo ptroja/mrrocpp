@@ -11,6 +11,7 @@
 
 #include "generator/ecp/teach_in/ecp_g_teach_in.h"
 #include "base/lib/mrmath/mrmath.h"
+#include "ecp_mp_g_force_tool_change.h"
 
 namespace mrrocpp {
 namespace ecp {
