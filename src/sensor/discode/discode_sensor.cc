@@ -60,7 +60,7 @@ ds_wrong_state_exception::ds_wrong_state_exception(const string& arg) :
 }
 
 discode_sensor::discode_sensor(mrrocpp::lib::configurator& config, const std::string& section_name) :
-	state(DSS_ERROR), timer_print_enabled(false)
+	state(DSS_ERROR)
 {
 	base_period = current_period = 1;
 
@@ -76,7 +76,6 @@ discode_sensor::discode_sensor(mrrocpp::lib::configurator& config, const std::st
 	header_oarchive.clear_buffer();
 
 	state = DSS_NOT_CONNECTED;
-	timer_init();
 }
 
 discode_sensor::~discode_sensor()
@@ -86,8 +85,6 @@ discode_sensor::~discode_sensor()
 
 void discode_sensor::configure_sensor()
 {
-	timer_show("discode_sensor::configure_sensor() begin");
-
 	if (state != DSS_NOT_CONNECTED) {
 		state = DSS_ERROR;
 		throw ds_wrong_state_exception("state != DSS_NOT_CONNECTED");
@@ -132,19 +129,14 @@ void discode_sensor::configure_sensor()
 
 	// connected to discode
 	state = DSS_CONNECTED;
-
-	timer_show("discode_sensor::configure_sensor() end");
 }
 
 void discode_sensor::initiate_reading()
 {
-	timer_show("discode_sensor::initiate_reading()");
 }
 
 void discode_sensor::get_reading()
 {
-	timer_show("discode_sensor::get_reading() begin");
-
 	if (state == DSS_REQUEST_SENT) {
 		// in last call to get_reading() request was sent, but no reading was received,
 		// so try receiving reading now.
@@ -184,7 +176,6 @@ void discode_sensor::get_reading()
 		state = DSS_ERROR;
 		throw ds_wrong_state_exception(ss.str());
 	}
-	timer_show("discode_sensor::get_reading() end");
 }
 
 void discode_sensor::terminate()
@@ -277,41 +268,6 @@ void discode_sensor::send_buffers_to_discode()
 	}
 
 	oarchive.clear_buffer();
-}
-
-void discode_sensor::timer_init()
-{
-	if (timer.start() != mrrocpp::lib::timer::TIMER_STARTED) {
-		timer.print_last_status();
-		fflush(stdout);
-		throw logic_error(
-				"discode_sensor::configure_sensor(): timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
-	}
-}
-
-void discode_sensor::timer_show(const char *str)
-{
-	if (timer.stop() != mrrocpp::lib::timer::TIMER_STOPPED) {
-		timer.print_last_status();
-		fflush(stdout);
-		throw logic_error("timer.stop() != mrrocpp::lib::timer::TIMER_STOPPED");
-	}
-	float seconds;
-	if (timer.get_time(seconds) != mrrocpp::lib::timer::TIME_RETRIVED) {
-		timer.print_last_status();
-		fflush(stdout);
-		throw logic_error("timer.get_time(seconds) != mrrocpp::lib::timer::TIME_RETRIVED");
-	}
-
-	if (timer_print_enabled) {
-		log_dbg("Time elapsed (in %s): %g s\n", str, seconds);
-	}
-
-	if (timer.start() != mrrocpp::lib::timer::TIMER_STARTED) {
-		timer.print_last_status();
-		fflush(stdout);
-		throw logic_error("timer.start() != mrrocpp::lib::timer::TIMER_STARTED");
-	}
 }
 
 reading_message_header discode_sensor::get_rmh() const

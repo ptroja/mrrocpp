@@ -34,8 +34,6 @@ namespace mrrocpp {
 namespace mp {
 namespace task {
 
-lib::fd_server_t task::mp_pulse_attach = lib::invalid_fd;
-
 //! Utility function to put robot from va_list to STL map
 static void va_to_robot_map(int num, va_list arguments, const common::robots_t & from, common::robots_t & to)
 {
@@ -67,14 +65,6 @@ task::~task()
 			{
 				delete robot_node.second;
 			}
-
-	// TODO: check for error
-	if (mp_pulse_attach != lib::invalid_fd) {
-
-		messip::port_delete(mp_pulse_attach);
-
-		mp_pulse_attach = lib::invalid_fd;
-	}
 }
 
 void task::stop_and_terminate()
@@ -89,7 +79,7 @@ void task::stop_and_terminate()
 }
 
 // delay MP replacement
-void task::wait_ms(int _ms_delay) // zamiast delay
+void task::wait_ms(unsigned int _ms_delay) // zamiast delay
 {
 	generator::delay_ms_condition mp_ds_ms(*this, _ms_delay);
 
@@ -260,8 +250,6 @@ void task::initialize_communication()
 
 	// Obiekt do komuniacji z SR
 	sr_ecp_msg = (boost::shared_ptr <lib::sr_ecp>) new lib::sr_ecp(lib::MP, "mp", sr_net_attach_point); // Obiekt do komuniacji z SR
-
-	const std::string mp_pulse_attach_point = config.get_mp_pulse_attach_point();
 }
 
 void task::wait_for_start()
