@@ -37,8 +37,8 @@ namespace task {
  *
  * @ingroup ecp
  */
-//typedef boost::ptr_unordered_map <lib::ecp_subtask_generator_name_t, generator::generator_base *> generators_t;
-typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, generator::generator_base *> generators_t;
+//typedef boost::ptr_unordered_map <lib::ecp_generator_name_t, generator::generator_base *> generators_t;
+typedef boost::unordered_map <lib::generator_name_t, generator::generator_base *> generators_t;
 
 /**
  * @brief Type for Items from generators_t container.

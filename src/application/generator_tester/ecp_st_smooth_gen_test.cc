@@ -23,7 +23,7 @@ subtask_smooth_gen_test::subtask_smooth_gen_test(task::task & _ecp_t) :
 		subtask(_ecp_t)
 {
 
-	subtask_generator_name = mrrocpp::ecp_mp::subtask::ECP_ST_SMOOTH_GEN_TEST;
+	generator_name = mrrocpp::ecp_mp::subtask::ECP_ST_SMOOTH_GEN_TEST;
 	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 6);
 		sgenjoint->set_debug(true);

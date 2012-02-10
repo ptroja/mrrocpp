@@ -15,7 +15,7 @@ namespace generator {
 smooth_file_from_mp::smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec, std::string _LABEL, bool _detect_jerks) :
 		common::generator::generator(_ecp_t), detect_jerks(_detect_jerks)
 {
-	subtask_generator_name = _LABEL;
+	generator_name = _LABEL;
 	switch (pose_spec)
 	{
 		case lib::ECP_JOINT:

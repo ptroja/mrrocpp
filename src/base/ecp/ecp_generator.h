@@ -12,13 +12,13 @@
 #include <boost/shared_ptr.hpp>
 
 #include "base/ecp_mp/ecp_mp_generator.h"
-#include "ecp_subtask_generator_base.h"
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
+const std::string EMPTY_SUBTASK_GENERATOR_NAME = "EMPTY_SUBTASK_GENERATOR_NAME";
 namespace generator {
 
 /*!
@@ -28,7 +28,7 @@ namespace generator {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp
  */
-class generator_base : public ecp_mp::generator::generator, public subtask_generator_base
+class generator_base : public ecp_mp::generator::generator
 {
 
 protected:
@@ -44,8 +44,15 @@ protected:
 
 public:
 
+	/**
+	 * @brief Unique class name
+	 */
+	lib::generator_name_t generator_name;
+
 	generator_base(task_t & _ecp_task) :
-			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)), subtask_generator_base(), ecp_t(_ecp_task)
+			ecp_mp::generator::generator(*(_ecp_task.sr_ecp_msg)),
+			ecp_t(_ecp_task),
+			generator_name(EMPTY_SUBTASK_GENERATOR_NAME)
 	{
 	}
 
@@ -58,6 +65,11 @@ public:
 	{
 		return false;
 	}
+
+	/**
+	 * @brief executed by dispatcher
+	 */
+	virtual void conditional_execution() = 0;
 
 };
 
