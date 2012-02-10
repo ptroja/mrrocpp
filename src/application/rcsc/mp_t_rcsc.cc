@@ -438,7 +438,7 @@ void rubik_cube_solver::face_turn_op(common::CUBE_TURN_ANGLE turn_angle)
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_CONSTANT_VELOCITY, (int) lib::ABSOLUTE, 0.089, lib::irp6p_tfg::ROBOT_NAME);
 
 	// uruchomienie generatora empty_gen i oczekiwanie na zakonczenie obydwu generatorow ECP
-	wait_for_task_termination(false, { lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME, lib::irp6p_tfg::ROBOT_NAME });
+	wait_for_task_termination(false, { lib::irp6ot_m::ROBOT_NAME, lib::irp6p_m::ROBOT_NAME, lib::irp6p_tfg::ROBOT_NAME });
 
 	// zblizenie chwytaka tracka do nieruchomego chwytaka postumenta
 
