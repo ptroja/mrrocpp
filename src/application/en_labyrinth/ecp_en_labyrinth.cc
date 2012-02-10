@@ -30,7 +30,7 @@ ecp_en_labyrinth::ecp_en_labyrinth(lib::configurator &_config): common::task::ta
 
 	ecp_m_robot = (boost::shared_ptr<robot_t>) new ecp::irp6p_m::robot(*this);
 
-	register_sg(new common::generator::en_labyrinth(*this));
+	register_generator(new common::generator::en_labyrinth(*this));
 
 	sr_ecp_msg->message("ECP en_labyrinth");
 };

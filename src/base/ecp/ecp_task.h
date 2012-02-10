@@ -47,21 +47,6 @@ typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, generator::gene
  */
 typedef generators_t::value_type generator_pair_t;
 
-/**
- * @brief Container type for storing subtask_generator_base objects.
- *
- * @ingroup ecp
- */
-// Nie dzialalo poprawnie
-typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, subtask_generator_base *> subtasks_generators_t;
-
-/**
- * @brief Type for Items from subtask_generator_base container.
- *
- * @ingroup ecp
- */
-typedef subtasks_generators_t::value_type subtask_generator_pair_t;
-
 /*!
  * @brief Base class of all ecp tasks
  *
@@ -142,20 +127,10 @@ public:
 	generators_t generator_m;
 
 	/**
-	 * @brief ECP subtasks and generators container
-	 */
-	subtasks_generators_t subtask_generator_m;
-
-	/**
 	 * @brief continuous coordination flag
 	 * influences generator Move method behavior
 	 */
 	bool continuous_coordination;
-
-	/**
-	 * @brief registers subtask or generator in subtask_generator_m
-	 */
-	void register_sg(subtask_generator_base* _sg);
 
 	/**
 	 * @brief registers generator in generator_m
