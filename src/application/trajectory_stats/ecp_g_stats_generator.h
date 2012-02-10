@@ -14,7 +14,7 @@
 #include "base/lib/com_buf.h"
 #include "base/lib/mrmath/mrmath.h"
 
-#include "generator/ecp/ecp_g_teach_in.h"
+#include "generator/ecp/teach_in/ecp_g_teach_in.h"
 #include <vector>
 #include <string>
 

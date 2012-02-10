@@ -10,7 +10,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "generator/ecp/ecp_g_teach_in.h"
+#include "generator/ecp/teach_in/ecp_g_teach_in.h"
 #include "base/lib/mrmath/mrmath.h"
 #include "robot/irp6_tfg/dp_tfg.h"
 #include "ecp_mp_g_tfg.h"

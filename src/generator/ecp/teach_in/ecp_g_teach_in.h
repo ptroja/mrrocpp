@@ -121,8 +121,8 @@ public:
 	 * @param extra_info optional additional information stored with position
 	 */
 	void
-			set_pose(lib::ECP_POSE_SPECIFICATION ps, double motion_time, double coordinates[lib::MAX_SERVOS_NR], int extra_info =
-					0);
+	set_pose(lib::ECP_POSE_SPECIFICATION ps, double motion_time, double coordinates[lib::MAX_SERVOS_NR], int extra_info =
+			0);
 
 	/**
 	 * @brief checks if pose_list_iterator reached the pose list end
@@ -144,8 +144,8 @@ public:
 	 * @param extra_info optional additional information stored with position
 	 */
 	void
-			create_pose_list_head(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info =
-					0);
+	create_pose_list_head(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info =
+			0);
 
 	/**
 	 * @brief sets pose of the element pointed by pose list iterator and the increments iterator
@@ -155,8 +155,8 @@ public:
 	 * @param extra_info optional additional information stored with position
 	 */
 	void
-			insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info =
-					0);
+	insert_pose_list_element(lib::ECP_POSE_SPECIFICATION ps, double motion_time, const double coordinates[lib::MAX_SERVOS_NR], int extra_info =
+			0);
 
 	/**
 	 * @brief checks number of pose list elements

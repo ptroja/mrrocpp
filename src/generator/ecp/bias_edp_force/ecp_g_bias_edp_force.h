@@ -10,7 +10,7 @@
  */
 
 #include "ecp_mp_g_bias_edp_force.h"
-#include "generator/ecp/ecp_g_teach_in.h"
+#include "generator/ecp/teach_in/ecp_g_teach_in.h"
 #include "base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
@@ -36,7 +36,6 @@ public:
 
 	virtual bool first_step();
 	virtual bool next_step();
-
 
 //	void conditional_execution();
 

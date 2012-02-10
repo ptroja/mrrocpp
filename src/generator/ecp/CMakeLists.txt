@@ -12,7 +12,7 @@ add_subdirectory (get_position)
 add_subdirectory (constant_velocity)
 add_subdirectory (spline)
 add_subdirectory (visual_servo)
-
+add_subdirectory (teach_in)
 
 
 add_library(ecp_mp_generators
@@ -27,13 +27,12 @@ ecp_mp_g_tff_gripper_approach
 
 
 add_library(ecp_generators
-	ecp_taught_in_pose.cc
-	ecp_g_teach_in.cc
 	ecp_g_delta.cc
 	ecp_g_operator_reaction_condition.cc
 )
 
 target_link_libraries(ecp_generators 
+ecp_g_teach_in
 ecp_g_weight_measure
 ecp_g_bias_edp_force 
 ecp_g_force_tool_change

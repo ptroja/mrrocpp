@@ -19,7 +19,7 @@
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 
-#include "generator/ecp/ecp_g_teach_in.h"
+#include "ecp_g_teach_in.h"
 
 #include "base/lib/messip/messip_dataport.h"
 
@@ -172,8 +172,7 @@ bool teach_in::load_file_from_ui()
 
 	ecp_to_ui_msg.ecp_message = lib::LOAD_FILE; // Polecenie wprowadzenia nazwy odczytywanego pliku
 
-	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0)
-	{ // by Y&W
+	if (messip::port_send(ecp_t.UI_fd, 0, 0, ecp_to_ui_msg, ui_to_ecp_rep) < 0) { // by Y&W
 		int e = errno;
 		perror("ecp: Send() to UI failed");
 		sr_ecp_msg.message(lib::SYSTEM_ERROR, e, "ecp: Send() to UI failed");

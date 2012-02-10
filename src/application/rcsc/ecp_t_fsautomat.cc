@@ -42,7 +42,7 @@
 
 #include "generator/ecp/transparent/ecp_mp_g_transparent.h"
 #include "generator/ecp/newsmooth/ecp_mp_g_newsmooth.h"
-#include "generator/ecp/ecp_mp_g_teach_in.h"
+#include "generator/ecp/teach_in/ecp_mp_g_teach_in.h"
 #include "generator/ecp/weight_measure/ecp_mp_g_weight_measure.h"
 #include "../../base/ecp_mp/ecp_mp_task.h"
 
