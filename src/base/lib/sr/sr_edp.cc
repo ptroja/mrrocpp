@@ -198,7 +198,7 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 					strcat(description, "BEYOND_UPPER_RIGHT_LIMIT");
 					break;
 				case BEYOND_UPPER_THETA3_LIMIT:
-					strcat(description, "BEYOND_Q4_LIMIT_RANGE");
+					strcat(description, "BEYOND_Q4_LIMIT_RANGE (BEYOND_UPPER_THETA3_LIMIT)");
 					break;
 				case BEYOND_UPPER_THETA4_LIMIT:
 					strcat(description, "BEYOND_UPPER_Q5_LIMIT");
@@ -222,7 +222,7 @@ void sr_edp::interpret(char * description, error_class_t message_type, uint64_t 
 					strcat(description, "BEYOND_LOWER_RIGHT_LIMIT");
 					break;
 				case BEYOND_LOWER_THETA3_LIMIT:
-					strcat(description, "BEYOND_Q4_LIMIT_RANGE");
+					strcat(description, "BEYOND_Q4_LIMIT_RANGE (BEYOND_LOWER_THETA3_LIMIT)");
 					break;
 				case BEYOND_LOWER_THETA4_LIMIT:
 					strcat(description, "BEYOND_LOWER_Q5_LIMIT");
