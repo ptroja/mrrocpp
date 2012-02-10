@@ -125,34 +125,24 @@ private:
 	 */
 	void initialize_communication(void);
 
-public:
 	/**
-	 * @brief communication channels descriptors
+	 * @brief waits for acknowledge reply from all robots
 	 */
-	static lib::fd_server_t mp_pulse_attach;
+	void wait_for_all_robots_acknowledge();
 
 	/**
-	 * @brief Constructor
-	 * @param _config configurator object reference.
+	 * @brief pause all ECP's
+	 * it sends special MP command
 	 */
-	task(lib::configurator &_config);
+	void pause_all();
 
 	/**
-	 * @brief Destructor
+	 * @brief resume all ECP's
+	 * it sends special MP command
 	 */
-	virtual ~task(void);
+	void resume_all();
 
-	/**
-	 * @brief pure virtual method to create robots
-	 * it have to be reimplemented in inherited classes
-	 */
-	virtual void create_robots(void) = 0;
-
-	/**
-	 * @brief Waits for stop pulse from UI and terminated all ECP's
-	 */
-	void stop_and_terminate(void);
-
+protected:
 	/**
 	 * @brief sets the next state of ECP
 	 * it calls dedicated generator and then sends new command in generator Move instruction
@@ -198,17 +188,39 @@ public:
 	 * it calls dedicated generator and then sends command in generator Move instruction
 	 * @param _ms_delay delay time
 	 */
-	void wait_ms(int _ms_delay); // zamiast delay
+	void wait_ms(unsigned int _ms_delay);
+
+	/**
+	 * @brief Check if the robot has been created and activated
+	 * @param name robot name
+	 */
+	bool is_robot_activated(const lib::robot_name_t & name) const
+	{
+		return (robot_m.find(name) != robot_m.end());
+	}
+
+public:
+	/**
+	 * @brief Constructor
+	 * @param _config configurator object reference.
+	 */
+	task(lib::configurator &_config);
+
+	/**
+	 * @brief Destructor
+	 */
+	virtual ~task(void);
+
+	/**
+	 * @brief pure virtual method to create robots
+	 * it have to be reimplemented in inherited classes
+	 */
+	virtual void create_robots(void) = 0;
 
 	/**
 	 * @brief waits for START pulse from UI
 	 */
-	void wait_for_start(void); // by Y&W
-
-	/**
-	 * @brief waits for STOP pulse from UI
-	 */
-	void wait_for_stop(void); // by Y&W dodany tryb
+	void wait_for_start(void);
 
 	/**
 	 * @brief starts all ECP's
@@ -217,27 +229,20 @@ public:
 	void start_all();
 
 	/**
-	 * @brief pause all ECP's
-	 * it sends special MP command
+	 * @brief waits for STOP pulse from UI
 	 */
-	void pause_all();
+	void wait_for_stop(void);
 
 	/**
-	 * @brief resume all ECP's
-	 * it sends special MP command
+	 * @brief Waits for stop pulse from UI and terminated all ECP's
 	 */
-	void resume_all();
+	void stop_and_terminate(void);
 
 	/**
 	 * @brief termianted all ECP's
 	 * it sends special MP command
 	 */
 	void terminate_all();
-
-	/**
-	 * @brief waits for acknowledge reply from all robots
-	 */
-	void wait_for_all_robots_acknowledge();
 
 	/**
 	 * @brief main task algorithm
@@ -254,15 +259,6 @@ public:
 	 * @brief receives pulse from UI or ECP
 	 */
 	void receive_ui_or_ecp_message(generator::generator& the_generator);
-
-	/**
-	 * @brief Check if the robot has been created and activated
-	 * @param name robot name
-	 */
-	bool is_robot_activated(const lib::robot_name_t & name) const
-	{
-		return (robot_m.find(name) != robot_m.end());
-	}
 
 protected:
 	/**
