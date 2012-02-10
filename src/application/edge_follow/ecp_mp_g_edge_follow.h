@@ -7,7 +7,7 @@
 
 /*!
  * @file
- * @brief File contains edge_follow sub_task label definition of unknown contour following application.
+ * @brief File contains edge_follow subtask label definition of unknown contour following application.
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup edge_follow
@@ -18,7 +18,7 @@ namespace ecp_mp {
 namespace generator {
 
 /*!
- * @brief edge_follow ecp sub_task label
+ * @brief edge_follow ecp subtask label
  */
 const std::string EDGE_FOLLOW = "EDGE_FOLLOW";
 

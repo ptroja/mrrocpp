@@ -26,10 +26,10 @@ void axxb_eih::main_task_algorithm(void)
 	std::string M_file_path = config.value <std::string> ("M_file_path");
 	std::string mm_file_path = config.value <std::string> ("mm_file_path");
 
-	//run a sub_task to get the data if needed
+	//run a subtask to get the data if needed
 	if (config.value <int> ("acquire")) {
 		// TODO: acq_eih jest do poprawy, patrz konstruktor
-		sub_task::acq_eih* acq_task = new sub_task::acq_eih(*this);
+		subtask::acq_eih* acq_task = new subtask::acq_eih(*this);
 		acq_task->write_data(K_file_path, kk_file_path, M_file_path, mm_file_path, ofp.number_of_measures);
 		delete acq_task;
 	}

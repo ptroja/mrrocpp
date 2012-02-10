@@ -11,7 +11,7 @@ ENDMACRO(ADD_ECP_ROBOT_WITH_KINEMATICS)
 add_library(ecp
 	ecp_m.cc
 	ecp_task.cc
-	ecp_sub_task.cc
+	ecp_subtask.cc
 	ecp_robot.cc
 )
 

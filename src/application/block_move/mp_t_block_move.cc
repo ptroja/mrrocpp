@@ -26,12 +26,12 @@
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 
-#include "sub_task/ecp_mp_st_smooth_file_from_mp.h"
+#include "subtask/ecp_mp_st_smooth_file_from_mp.h"
 
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 
-#include "sub_task/ecp_mp_st_smooth_file_from_mp.h"
-//#include "sub_task/ecp_mp_st_gripper_opening.h"
+#include "subtask/ecp_mp_st_smooth_file_from_mp.h"
+//#include "subtask/ecp_mp_st_gripper_opening.h"
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 
 #include "../visual_servoing/visual_servoing.h"
@@ -195,7 +195,7 @@ void block_move::main_task_algorithm(void)
 
 			sr_ecp_msg->message("Reaching building place...");
 
-			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", lib::irp6p_m::ROBOT_NAME);
+			set_next_ecp_state(ecp_mp::subtask::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 			wait_ms(1000);
@@ -224,7 +224,7 @@ void block_move::main_task_algorithm(void)
 		(*i).print();
 
 		sr_ecp_msg->message("Start position");
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::subtask::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		//Zerowanie czujników
@@ -242,7 +242,7 @@ void block_move::main_task_algorithm(void)
 				wait_ms(1000);
 
 				sr_ecp_msg->message("Start position");
-				set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", lib::irp6p_m::ROBOT_NAME);
+				set_next_ecp_state(ecp_mp::subtask::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_search_area_start.trj", lib::irp6p_m::ROBOT_NAME);
 				wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 				wait_ms(1000);
@@ -269,14 +269,14 @@ void block_move::main_task_algorithm(void)
 			wait_ms(1000);
 
 			sr_ecp_msg->message("Go up");
-			set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_to_p0.trj", lib::irp6p_m::ROBOT_NAME);
+			set_next_ecp_state(ecp_mp::subtask::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_to_p0.trj", lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 			wait_ms(1000);
 		}
 
 		sr_ecp_msg->message("Reaching building place...");
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::subtask::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/pos_build_start.trj", lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		wait_ms(1000);
@@ -296,7 +296,7 @@ void block_move::main_task_algorithm(void)
 		wait_ms(4000);
 
 		sr_ecp_msg->message("Raising up...");
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/build.trj", lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::subtask::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/build.trj", lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		sr_ecp_msg->message("Force approach");
@@ -304,7 +304,7 @@ void block_move::main_task_algorithm(void)
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		sr_ecp_msg->message("Raising up...");
-		set_next_ecp_state(ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_after_pushing.trj", lib::irp6p_m::ROBOT_NAME);
+		set_next_ecp_state(ecp_mp::subtask::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, 5, "../../src/application/block_move/trjs/up_after_pushing.trj", lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
 
 		wait_ms(1000);

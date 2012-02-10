@@ -91,7 +91,7 @@ void bclike_mp_i::main_task_algorithm(void){
 				vec[0] = (*it).first.x;
 				vec[1] = (*it).first.y;
 				//TODO: Przelaczyc Task we FraDIA
-				//TODO: Wywolac sub_task Marcina
+				//TODO: Wywolac subtask Marcina
 				(*it).second = true;
 
 				//Go to code

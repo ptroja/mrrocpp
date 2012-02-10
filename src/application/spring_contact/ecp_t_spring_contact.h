@@ -18,7 +18,7 @@ namespace task {
 
 /*!
  * @brief task to execute edge_following.
- * it executes two sub_tasks EDGE_FOLLOW and ECP_ST_BIAS_EDP_FORCE
+ * it executes two subtasks EDGE_FOLLOW and ECP_ST_BIAS_EDP_FORCE
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup edge_follow

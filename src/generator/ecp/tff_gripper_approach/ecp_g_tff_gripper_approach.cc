@@ -28,7 +28,7 @@ namespace generator {
 tff_gripper_approach::tff_gripper_approach(common::task::task& _ecp_task, int step) :
 		common::generator::generator(_ecp_task), speed(0.0), motion_time(1), force_level(-10.0), step_no(step)
 {
-	sub_task_generator_name = ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH;
+	subtask_generator_name = ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH;
 }
 
 void tff_gripper_approach::configure(double l_speed, unsigned int l_motion_time, double l_force_level)

@@ -7,7 +7,7 @@
 
 /*!
  * @file
- * @brief File contains edge_follow sub_task label definition
+ * @brief File contains edge_follow subtask label definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup spring_contact
@@ -18,7 +18,7 @@ namespace ecp_mp {
 namespace generator {
 
 /*!
- * @brief spring_contact ecp sub_task label
+ * @brief spring_contact ecp subtask label
  */
 const std::string SPRING_CONTACT = "SPRING_CONTACT";
 

@@ -1,9 +1,9 @@
-#if !defined(_ECP_SUB_TASK_H)
-#define _ECP_SUB_TASK_H
+#if !defined(_ECP_SUBTASK_H)
+#define _ECP_SUBTASK_H
 
 /*!
  * @file
- * @brief File contains ecp base sub_task declaration
+ * @brief File contains ecp base subtask declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup ecp
@@ -12,7 +12,7 @@
 #include "base/ecp/ecp_robot.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp_mp/ecp_mp_task.h"
-#include "ecp_sub_task_generator_base.h"
+#include "ecp_subtask_generator_base.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -24,7 +24,7 @@ namespace common {
 //class task;
 //}
 
-namespace sub_task {
+namespace subtask {
 /*!
  * @brief Base class of all ecp sub tasks
  *
@@ -33,7 +33,7 @@ namespace sub_task {
  */
 
 template <typename ECP_ROBOT_T = robot::ecp_robot>
-class _sub_task : public sub_task_generator_base
+class _subtask : public subtask_generator_base
 {
 protected:
 	/**
@@ -51,17 +51,17 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_t ecp task object reference.
 	 */
-	_sub_task(task::_task <ECP_ROBOT_T> &_ecp_t) :
-			sub_task_generator_base(), ecp_t(_ecp_t), sr_ecp_msg(*(_ecp_t.sr_ecp_msg))
+	_subtask(task::_task <ECP_ROBOT_T> &_ecp_t) :
+			subtask_generator_base(), ecp_t(_ecp_t), sr_ecp_msg(*(_ecp_t.sr_ecp_msg))
 	{
 	}
 
 	typedef ECP_ROBOT_T robot_t;
 };
 
-typedef _sub_task <> sub_task;
+typedef _subtask <> subtask;
 
-} // namespace sub_task
+} // namespace subtask
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

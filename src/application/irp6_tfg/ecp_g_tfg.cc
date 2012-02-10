@@ -48,7 +48,7 @@ namespace generator {
 tfg::tfg(common::task::task& _ecp_task, int step) :
 		common::generator::generator(_ecp_task), step_no(step)
 {
-	sub_task_generator_name = ecp_mp::generator::ECP_GEN_TFG;
+	subtask_generator_name = ecp_mp::generator::ECP_GEN_TFG;
 }
 
 bool tfg::first_step()

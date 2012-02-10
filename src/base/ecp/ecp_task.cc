@@ -18,7 +18,7 @@
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "ecp_task.h"
-#include "ecp_sub_task.h"
+#include "ecp_subtask.h"
 #include "ecp_robot.h"
 #include "ecp_exceptions.h"
 #include "ecp_generator.h"
@@ -44,19 +44,19 @@ task_base::task_base(lib::configurator &_config, boost::shared_ptr <robot::ecp_r
 	initialize_communication();
 }
 
-void task_base::register_sg(sub_task_generator_base* _sg)
+void task_base::register_sg(subtask_generator_base* _sg)
 {
-	std::string gen_name = _sg->sub_task_generator_name;
+	std::string gen_name = _sg->subtask_generator_name;
 	if (gen_name != EMPTY_SUBTASK_GENERATOR_NAME) {
-		if (sub_task_generator_m.find(gen_name) == sub_task_generator_m.end()) {
-			sub_task_generator_m[gen_name] = _sg;
+		if (subtask_generator_m.find(gen_name) == subtask_generator_m.end()) {
+			subtask_generator_m[gen_name] = _sg;
 		} else {
 			std::stringstream ss(std::stringstream::in | std::stringstream::out);
-			ss << "sub_task or Generator name already registered: " << gen_name;
+			ss << "subtask or Generator name already registered: " << gen_name;
 			sr_ecp_msg->message(lib::FATAL_ERROR, ss.str().c_str());
 		}
 	} else {
-		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for sub_task or generator");
+		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for subtask or generator");
 	}
 }
 
@@ -71,7 +71,7 @@ void task_base::main_task_algorithm(void)
 
 		mp_2_ecp_next_state_string_handler();
 
-		sub_tasks_and_generators_dispatcher();
+		subtasks_and_generators_dispatcher();
 
 		termination_notice();
 	} //end for
@@ -152,12 +152,12 @@ void task_base::termination_notice(void)
 	}
 }
 
-void task_base::sub_tasks_and_generators_dispatcher()
+void task_base::subtasks_and_generators_dispatcher()
 {
 
-	if (sub_task_generator_m.find(mp_2_ecp_next_state_string) != sub_task_generator_m.end()) {
+	if (subtask_generator_m.find(mp_2_ecp_next_state_string) != subtask_generator_m.end()) {
 		//sr_ecp_msg->message(lib::NON_FATAL_ERROR, mp_2_ecp_next_state_string);
-		sub_task_generator_m.at(mp_2_ecp_next_state_string)->conditional_execution();
+		subtask_generator_m.at(mp_2_ecp_next_state_string)->conditional_execution();
 	} else {
 		if (!mp_2_ecp_next_state_string_handler_active) {
 			std::stringstream ss(std::stringstream::in | std::stringstream::out);

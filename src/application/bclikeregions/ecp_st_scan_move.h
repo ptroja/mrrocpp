@@ -1,6 +1,6 @@
 /**
  * \file ecp_st_scan_move.h
- * \brief Scanning move sub_task class
+ * \brief Scanning move subtask class
  * \date 02.09.2010
  * \author Kacper Szkudlarek
  */
@@ -9,7 +9,7 @@
 #define ECP_ST_SCAN_MOVE_H_
 
 #include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_sub_task.h"
+#include "base/ecp/ecp_subtask.h"
 #include "bcl_types.h"
 #include <boost/shared_ptr.hpp>
 #include "bclike_gen.h"
@@ -29,9 +29,9 @@ class bcl_t_switcher;
 
 }
 
-namespace sub_task {
+namespace subtask {
 
-class ecp_st_scan_move : public sub_task {
+class ecp_st_scan_move : public subtask {
 public:
 	/**
 	 * Subtask constructor
@@ -44,7 +44,7 @@ public:
 	virtual ~ecp_st_scan_move();
 
 	/**
-	 * Method called by parent task to start execution of sub_task
+	 * Method called by parent task to start execution of subtask
 	 */
 	void conditional_execution();
 

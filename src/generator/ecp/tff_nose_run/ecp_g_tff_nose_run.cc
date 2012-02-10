@@ -28,7 +28,7 @@ namespace generator {
 tff_nose_run::tff_nose_run(common::task::task& _ecp_task, int step) :
 		common::generator::generator(_ecp_task), pulse_check_activated(false), force_meassure(false), step_no(step)
 {
-	sub_task_generator_name = ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN;
+	subtask_generator_name = ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN;
 
 	// domyslnie wszytkie osie podatne a pulse_check nieaktywne
 	configure_behaviour(lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT, lib::CONTACT);

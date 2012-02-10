@@ -17,7 +17,7 @@
 #include "sensor/discode/discode_sensor.h"
 
 #include "base/ecp/ecp_task.h"
-#include "sub_task/ecp_mp_st_smooth_file_from_mp.h"
+#include "subtask/ecp_mp_st_smooth_file_from_mp.h"
 
 #include "generator/ecp/ecp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
@@ -55,7 +55,7 @@ protected:
 	common::generator::newsmooth* sg;
 	common::generator::get_position* gp;
 
-	//common::sub_task::gripper_opening* stgo;
+	//common::subtask::gripper_opening* stgo;
 
 	shared_ptr<single_visual_servo_manager> sm;
 	shared_ptr<visual_servo> vs;

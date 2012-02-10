@@ -6,7 +6,7 @@
 
 #include "base/lib/sr/srlib.h"
 //#include "ecp_mp_t_rcsc.h"
-#include "sub_task/ecp_st_smooth_file_from_mp.h"
+#include "subtask/ecp_st_smooth_file_from_mp.h"
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/tff_rubik_face_rotate/ecp_mp_g_tff_rubik_face_rotate.h"
 
@@ -50,8 +50,8 @@ irp6_m::irp6_m(lib::configurator &_config) :
 
 	register_sg(new generator::weight_measure(*this, 1));
 
-	register_sg(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
-	register_sg(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
+	register_sg(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::subtask::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
+	register_sg(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::subtask::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
 
 	sr_ecp_msg->message("ecp loaded");
 }

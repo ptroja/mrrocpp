@@ -17,13 +17,13 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace sub_task {
+namespace subtask {
 
-sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
-		sub_task(_ecp_t)
+subtask_smooth_gen_test::subtask_smooth_gen_test(task::task & _ecp_t) :
+		subtask(_ecp_t)
 {
 
-        sub_task_generator_name = mrrocpp::ecp_mp::sub_task::ECP_ST_SMOOTH_GEN_TEST;
+        subtask_generator_name = mrrocpp::ecp_mp::subtask::ECP_ST_SMOOTH_GEN_TEST;
 	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 6);
 		sgenjoint->set_debug(true);
@@ -80,7 +80,7 @@ sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 	network_path = std::string(ecp_t.mrrocpp_network_path);
 }
 
-void sub_task_smooth_gen_test::conditional_execution()
+void subtask_smooth_gen_test::conditional_execution()
 {
 
         sgenjoint->set_optimization(false);
@@ -657,7 +657,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	 // ANGLE AXIS RELATIVE END*/
 }
 
-sub_task_smooth_gen_test::~sub_task_smooth_gen_test()
+subtask_smooth_gen_test::~subtask_smooth_gen_test()
 {
 	delete sgenjoint;
 	delete sgenmotor;

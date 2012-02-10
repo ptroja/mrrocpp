@@ -1,6 +1,6 @@
 /**
  * \file bclike_gen.cc
- * \brief Scanning sub_task generator class methods definition file
+ * \brief Scanning subtask generator class methods definition file
  * \date 02.09.2010
  * \author Kacper Szkudlarek
  */

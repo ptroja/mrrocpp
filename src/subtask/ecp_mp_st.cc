@@ -3,14 +3,14 @@
  * @brief File contains bias_edp_force definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup sub_tasks
+ * @ingroup subtasks
  */
 
 #include "ecp_mp_st.h"
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace sub_task {
+namespace subtask {
 
 } // namespace common
 } // namespace ecp

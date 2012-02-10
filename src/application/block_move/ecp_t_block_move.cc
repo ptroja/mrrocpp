@@ -8,10 +8,10 @@
 #include "BReading.h"
 #include "ecp_t_block_move.h"
 
-#include "sub_task/ecp_st_smooth_file_from_mp.h"
+#include "subtask/ecp_st_smooth_file_from_mp.h"
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 
-//#include "sub_task/ecp_mp_st_gripper_opening.h"
+//#include "subtask/ecp_mp_st_gripper_opening.h"
 
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
@@ -66,12 +66,12 @@ common::task::task(_config)
 	register_sg(new common::generator::bias_edp_force(*this));
 
 	// utworzenie podzadan
-	//sub_task_m[ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] =
-	//new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
-	//sub_task_m[ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
-	//new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
-	register_sg(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
-	register_sg(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
+	//subtask_m[ecp_mp::subtask::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] =
+	//new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
+	//subtask_m[ecp_mp::subtask::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
+	//new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
+	register_sg(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::subtask::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
+	register_sg(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::subtask::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
 
 	//sensor rpc
 	sr_ecp_msg->message("Creating discode sensor...");

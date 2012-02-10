@@ -1,6 +1,6 @@
 /**
  * \file ecp_st_position_move.cc
- * \brief Position move sub_task method definition
+ * \brief Position move subtask method definition
  * \date 02.09.2010
  * \author Kacper Szkudlarek
  */
@@ -15,11 +15,11 @@ namespace ecp {
 
 namespace common {
 
-namespace sub_task {
+namespace subtask {
 
 
 ecp_st_position_move::ecp_st_position_move(task::task & _ecp_t):
-	sub_task(_ecp_t),
+	subtask(_ecp_t),
 	bcl_ecp((task::bcl_t_switcher &)ecp_t){
 
 	std::cout << "ECP_ST_POSITION_MOVE" << std::endl;
