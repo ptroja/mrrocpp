@@ -44,6 +44,22 @@ task_base::task_base(lib::configurator &_config, boost::shared_ptr <robot::ecp_r
 	initialize_communication();
 }
 
+void task_base::register_generator(generator::generator_base* _gen)
+{
+	std::string gen_name = _gen->subtask_generator_name;
+	if (gen_name != EMPTY_SUBTASK_GENERATOR_NAME) {
+		if (generator_m.find(gen_name) == generator_m.end()) {
+			generator_m[gen_name] = _gen;
+		} else {
+			std::stringstream ss(std::stringstream::in | std::stringstream::out);
+			ss << "Generator name already registered: " << gen_name;
+			sr_ecp_msg->message(lib::FATAL_ERROR, ss.str().c_str());
+		}
+	} else {
+		sr_ecp_msg->message(lib::FATAL_ERROR, "No name specified for generator");
+	}
+}
+
 void task_base::register_sg(subtask_generator_base* _sg)
 {
 	std::string gen_name = _sg->subtask_generator_name;

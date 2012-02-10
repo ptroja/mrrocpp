@@ -22,7 +22,9 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-
+namespace generator {
+class generator_base;
+}
 //namespace robot {
 //class ecp_robot;
 //}
@@ -31,15 +33,27 @@ class subtask_generator_base;
 namespace task {
 
 /**
+ * @brief Container type for storing ecp_generator objects.
+ *
+ * @ingroup ecp
+ */
+//typedef boost::ptr_unordered_map <lib::ecp_subtask_generator_name_t, generator::generator_base *> generators_t;
+typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, generator::generator_base *> generators_t;
+
+/**
+ * @brief Type for Items from generators_t container.
+ *
+ * @ingroup ecp
+ */
+typedef generators_t::value_type generator_pair_t;
+
+/**
  * @brief Container type for storing subtask_generator_base objects.
  *
  * @ingroup ecp
  */
 // Nie dzialalo poprawnie
-//typedef boost::ptr_unordered_map <lib::ecp_subtask_generator_name_t, subtask_generator_base *> subtasks_generators_t;
-
 typedef boost::unordered_map <lib::ecp_subtask_generator_name_t, subtask_generator_base *> subtasks_generators_t;
-
 
 /**
  * @brief Type for Items from subtask_generator_base container.
@@ -123,6 +137,11 @@ public:
 	const std::string & mp_2_ecp_next_state_string;
 
 	/**
+	 * @brief ECP generators container
+	 */
+	generators_t generator_m;
+
+	/**
 	 * @brief ECP subtasks and generators container
 	 */
 	subtasks_generators_t subtask_generator_m;
@@ -137,6 +156,11 @@ public:
 	 * @brief registers subtask or generator in subtask_generator_m
 	 */
 	void register_sg(subtask_generator_base* _sg);
+
+	/**
+	 * @brief registers generator in generator_m
+	 */
+	void register_generator(generator::generator_base* _gen);
 
 	/**
 	 * @brief checks if new pulse arrived from UI on trigger channel
