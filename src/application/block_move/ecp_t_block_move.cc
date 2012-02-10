@@ -8,7 +8,7 @@
 #include "BReading.h"
 #include "ecp_t_block_move.h"
 
-#include "subtask/ecp_st_smooth_file_from_mp.h"
+#include "generator/ecp/smooth_file_from_mp/ecp_g_smooth_file_from_mp.h"
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 
 //#include "subtask/ecp_mp_st_gripper_opening.h"

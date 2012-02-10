@@ -11,7 +11,7 @@
 #include "base/lib/sr/srlib.h"
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
-#include "subtask/ecp_mp_st_smooth_file_from_mp.h"
+#include "generator/ecp/smooth_file_from_mp/ecp_mp_g_smooth_file_from_mp.h"
 
 #include "base/mp/mp_task.h"
 #include "base/mp/generator/mp_g_wait_for_task_termination.h"

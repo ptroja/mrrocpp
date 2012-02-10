@@ -13,7 +13,6 @@ target_link_libraries(ecp_en_labyrinth
 	ecp ${COMMON_LIBRARIES}
 	visual_servoing
 	ecp_generators
-	ecp_subtasks
 	discode_sensor
 )
 

@@ -7,6 +7,8 @@ add_subdirectory (tff_nose_run)
 add_subdirectory (tff_rubik_face_rotate)
 add_subdirectory (transparent)
 add_subdirectory (sleep)
+add_subdirectory (smooth_file_from_mp)
+
 
 add_library(ecp_mp_generators
 ecp_mp_g_common.cc
