@@ -6,7 +6,8 @@
  * @ingroup mp
  */
 
-#include <unistd.h>
+#include <boost/thread/thread.hpp>
+#include <boost/thread/thread_time.hpp>
 
 #include "base/mp/mp_task.h"
 #include "base/mp/generator/mp_g_delay_ms_condition.h"
@@ -15,38 +16,33 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-// condition to wait for desired time in ms
-
-delay_ms_condition::delay_ms_condition(task::task& _mp_task, int _ms_delay) :
+delay_ms_condition::delay_ms_condition(task::task& _mp_task, unsigned int _ms_delay) :
 	generator(_mp_task)
 {
 	configure(_ms_delay);
 }
 
-void delay_ms_condition::configure(int _ms_delay)
+void delay_ms_condition::configure(unsigned int _ms_delay)
 {
 	ms_delay = _ms_delay;
 }
 
 bool delay_ms_condition::first_step()
 {
-	local_timer.start();
+	timeout = boost::get_system_time() + boost::posix_time::milliseconds(ms_delay);
+
 	return true;
 }
 
 bool delay_ms_condition::next_step()
 {
-	float sec;
-	local_timer.stop();
-	local_timer.get_time(sec);
-	if (1000 * sec > (float) ms_delay)
-		return false;
-	usleep (20*1000);
-	local_timer.stop();
-	local_timer.get_time(sec);
-	if (1000 * sec > (float) ms_delay)
-		return false;
-	return true;
+	if (boost::get_system_time() < timeout) {
+		boost::this_thread::sleep(boost::posix_time::milliseconds(20));
+
+		return true;
+	}
+
+	return false;
 }
 
 } // namespace generator
