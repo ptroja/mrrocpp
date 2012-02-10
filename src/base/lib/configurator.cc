@@ -244,12 +244,14 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 	} else {
 
 		std::string spawned_node_name = value <std::string>("node_name", _section_name);
-
-		if (spawned_node_name == sysinfo.nodename) {
-			rsh_spawn_node = "localhost";
-		} else {
-			rsh_spawn_node = spawned_node_name;
-		}
+		/*
+		 if (spawned_node_name == sysinfo.nodename) {
+		 rsh_spawn_node = "localhost";
+		 } else {
+		 rsh_spawn_node = spawned_node_name;
+		 }
+		 */
+		rsh_spawn_node = spawned_node_name;
 	}
 
 	bool use_ssh;
