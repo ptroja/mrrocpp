@@ -63,7 +63,7 @@ void bird_hand_test::main_task_algorithm(void)
 
 	set_next_ecp_state(ecp_mp::bird_hand::generator::ECP_GEN_BIRD_HAND_TEST, (int) 5, "", lib::bird_hand::ROBOT_NAME);
 	sr_ecp_msg->message("5");
-	wait_for_task_termination(false, 1, lib::bird_hand::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, lib::bird_hand::ROBOT_NAME);
 
 	sr_ecp_msg->message("END");
 

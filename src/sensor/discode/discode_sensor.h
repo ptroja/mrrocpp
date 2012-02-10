@@ -16,7 +16,6 @@
 
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "base/lib/configurator.h"
-#include "base/lib/timer.h"
 #include "base/lib/xdr/xdr_iarchive.hpp"
 #include "base/lib/xdr/xdr_oarchive.hpp"
 #include "base/lib/logger.h"
@@ -158,12 +157,6 @@ private:
 
 	void save_request_sent_time();
 	void save_reading_received_time();
-
-	// timer stuff, TODO: remove after discode_sensor is considered bug-free.
-	mrrocpp::lib::timer timer;
-	bool timer_print_enabled;
-	void timer_init();
-	void timer_show(const char *str = "");
 }; // class discode_sensor
 
 template<typename READING_T>
@@ -205,6 +198,15 @@ RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
 	if(is_data_available(rpc_call_timeout)){
 		receive_buffers_from_discode();
 		RECEIVED_T received;
+
+		for(int i=0; i<rmh.data_size; ++i){
+			unsigned char c = iarchive.get_buffer()[i];
+			logger::log("%02X ", (unsigned int)c);
+		}
+		logger::log("\n");
+
+		logger::log("discode_sensor::call_remote_procedure() rmh.data_size: %d\n", rmh.data_size);
+		logger::log("discode_sensor::call_remote_procedure() iarchive.size: %d\n", iarchive.getArchiveSize());
 		iarchive >> received;
 		if(!rmh.is_rpc_call){
 			state = DSS_ERROR;

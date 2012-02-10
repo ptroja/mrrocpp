@@ -9,7 +9,7 @@
 #define ECP_ST_POSITION_MOVE_H_
 
 #include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_sub_task.h"
+#include "base/ecp/ecp_subtask.h"
 #include "bcl_types.h"
 #include <boost/shared_ptr.hpp>
 #include "ecp_mp_message.h"
@@ -29,11 +29,11 @@ class bcl_t_switcher;
 
 }
 
-namespace sub_task {
+namespace subtask {
 
 
 
-class ecp_st_position_move : public sub_task {
+class ecp_st_position_move : public subtask {
 public:
 	/**
 	 * Subtask constructor

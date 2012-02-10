@@ -28,7 +28,7 @@ namespace generator {
 tff_rubik_face_rotate::tff_rubik_face_rotate(common::task::task& _ecp_task, int step) :
 		common::generator::generator(_ecp_task), step_no(step)
 {
-	subtask_generator_name = ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE;
+	generator_name = ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE;
 }
 
 void tff_rubik_face_rotate::configure(double l_turn_angle)

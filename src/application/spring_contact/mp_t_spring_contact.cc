@@ -19,7 +19,6 @@
 #include "ecp_mp_g_spring_contact.h"
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 #include "generator/ecp/tff_nose_run/ecp_mp_g_tff_nose_run.h"
-#include "generator/ecp/ecp_mp_g_tfg.h"
 
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
@@ -54,17 +53,17 @@ void spring_contact::main_task_algorithm(void)
 	// sekwencja generator na wybranym manipulatorze
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE, (int) 5, "", lib::irp6p_m::ROBOT_NAME);
 
-	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+	wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 	for (;;) {
 
 		set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) 0, "", lib::irp6p_m::ROBOT_NAME);
 
-		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 		set_next_ecp_state(ecp_mp::generator::SPRING_CONTACT, (int) 0, "", lib::irp6p_m::ROBOT_NAME);
 
-		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 	}
 
 	sr_ecp_msg->message("END");

@@ -1,7 +1,7 @@
-#if !defined(_ECP_SUB_TASK_SPLINE_GEN_TEST_H)
-#define _ECP_SUB_TASK_SPLINE_GEN_TEST_H
+#if !defined(_ECP_SUBTASK_SPLINE_GEN_TEST_H)
+#define _ECP_SUBTASK_SPLINE_GEN_TEST_H
 
-#include "base/ecp/ecp_sub_task.h"
+#include "base/ecp/ecp_subtask.h"
 #include "application/generator_tester/ecp_mp_st_spline_gen_test.h"
 
 namespace mrrocpp {
@@ -12,9 +12,9 @@ namespace generator {
 class spline;
 }
 
-namespace sub_task {
+namespace subtask {
 
-class sub_task_spline_gen_test : public sub_task
+class subtask_spline_gen_test : public subtask
 {
 
 private:
@@ -29,8 +29,8 @@ private:
         std::string network_path;
 
 public:
-        sub_task_spline_gen_test(task::task & _ecp_t);
-        ~sub_task_spline_gen_test();
+        subtask_spline_gen_test(task::task & _ecp_t);
+        ~subtask_spline_gen_test();
 
         void conditional_execution();
 };
