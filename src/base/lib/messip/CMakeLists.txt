@@ -6,7 +6,7 @@ target_link_libraries (messip ${COMPATIBILITY_LIBRARIES})
 
 install(TARGETS messip DESTINATION lib)
 
-if(NOT UBUNTU32BIT)
+
 
 add_executable(messip_mgr messip_mgr.c)
 target_link_libraries (messip_mgr messip
@@ -18,7 +18,6 @@ target_link_libraries (messip_sin messip
 	${CMAKE_THREAD_LIBS_INIT} ${COMPATIBILITY_LIBRARIES} pthread)
 install(TARGETS messip_sin DESTINATION bin)
 
-endif(NOT UBUNTU32BIT)
 
 #add_executable(server server.c)
 #target_link_libraries (server messip ${COMPATIBILITY_LIBRARIES})

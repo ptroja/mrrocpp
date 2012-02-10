@@ -58,4 +58,4 @@ ecp_smooth_base
 
 target_link_libraries(ecp_generators ecp)
 
-install(TARGETS ecp_generators ecp_mp_generators ecp_smooth_base DESTINATION lib)
+install(TARGETS ecp_generators ecp_smooth_base ecp_mp_generators DESTINATION lib)
