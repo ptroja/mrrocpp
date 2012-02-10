@@ -115,25 +115,10 @@ void task::send_end_motion_to_ecps(int number_of_robots, ...)
 	mp_semte_gen.Move();
 }
 
-// send_end_motion
-void task::wait_for_task_termination(bool activate_trigger, int number_of_robots, ...)
+void task::wait_for_task_termination(bool activate_trigger, const lib::robot_name_t & robot_name)
 {
-	generator::wait_for_task_termination wtf_gen(*this);
-
-	va_list arguments; // A place to store the list of arguments
-
-	va_start(arguments, number_of_robots);
-	// Initializing arguments to store all values after num
-
-	// Copy given robots to the map container
-	va_to_robot_map(number_of_robots, arguments, robot_m, wtf_gen.robot_m);
-
-	va_end(arguments);
-	// Cleans up the list
-
-	wtf_gen.configure(activate_trigger);
-
-	wtf_gen.Move();
+	// Forward call to the vectorized variant.
+	wait_for_task_termination(activate_trigger, {robot_name});
 }
 
 void task::wait_for_task_termination(bool activate_trigger, const std::vector <lib::robot_name_t> & robotSet)
@@ -150,20 +135,6 @@ void task::wait_for_task_termination(bool activate_trigger, const std::vector <l
 	wtf_gen.Move();
 }
 
-// send_end_motion
-void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet)
-{
-	generator::send_end_motion_to_ecps mp_semte_gen(*this);
-
-	for (int x = 0; x < number_of_robots; x++) // Loop until all numbers are added
-			{
-		lib::robot_name_t robot_l = properRobotsSet[x]; // Adds the next value in argument list to sum.
-		mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
-	}
-
-	mp_semte_gen.Move();
-}
-
 //
 // funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 //
@@ -175,7 +146,6 @@ void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *prop
 //     2) peak for UI pulse and eventually react for in in pause/resume/stop/trigger cycle
 void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 {
-
 	// najpierw kasujemy znacznik swiezosci buforow
 	BOOST_FOREACH(const common::robot_pair_t & robot_node, robot_m)
 			{
@@ -222,8 +192,8 @@ void task::receive_ui_or_ecp_message(generator::generator & the_generator)
 					case MP_STOP:
 						terminate_all();
 						BOOST_THROW_EXCEPTION(exception::nfe() << lib::exception::mrrocpp_error0(ECP_STOP_ACCEPTED));
+						break;
 					case MP_PAUSE:
-
 						mp_state = MP_PAUSED;
 						pause_all();
 						ui_exit_from_while = false;

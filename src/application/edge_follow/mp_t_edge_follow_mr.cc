@@ -110,15 +110,15 @@ void edge_follow_mr::main_task_algorithm(void)
 	// sekwencja generator na wybranym manipulatorze
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE, (int) 5, "", manipulator_name);
 
-	wait_for_task_termination(false, 1, manipulator_name.c_str());
+	wait_for_task_termination(false, manipulator_name);
 
 	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) 0, "", manipulator_name);
 
-	wait_for_task_termination(false, 1, manipulator_name.c_str());
+	wait_for_task_termination(false, manipulator_name);
 
 	set_next_ecp_state(ecp_mp::generator::EDGE_FOLLOW, (int) 0, "", manipulator_name);
 
-	wait_for_task_termination(false, 1, manipulator_name.c_str());
+	wait_for_task_termination(false, manipulator_name);
 
 	sr_ecp_msg->message("END");
 

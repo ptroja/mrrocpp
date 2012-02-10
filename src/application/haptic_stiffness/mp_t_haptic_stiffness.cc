@@ -54,11 +54,11 @@ void haptic_stiffness::configure_edp_force_sensor(bool configure_track, bool con
 	}
 
 	if ((configure_track) && (!configure_postument)) {
-		wait_for_task_termination(false, 1, lib::irp6ot_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, lib::irp6ot_m::ROBOT_NAME);
 	} else if ((!configure_track) && (configure_postument)) {
-		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 	} else if ((configure_track) && (configure_postument)) {
-		wait_for_task_termination(false, 2, lib::irp6ot_m::ROBOT_NAME.c_str(), lib::irp6p_m::ROBOT_NAME.c_str());
+		wait_for_task_termination(false, {lib::irp6ot_m::ROBOT_NAME, lib::irp6p_m::ROBOT_NAME});
 	}
 }
 
