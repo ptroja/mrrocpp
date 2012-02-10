@@ -159,8 +159,9 @@ public:
 	/**
 	 * @brief method called from main_task_algorithm to handle next_state command from MP
 	 * it can be reimplemented in inherited classes
+	 * @todo remove this call together with deprecated attribute
 	 */
-	virtual void mp_2_ecp_next_state_string_handler(void);
+	virtual void mp_2_ecp_next_state_string_handler(void) __attribute__ ((deprecated));
 
 	/**
 	 * @brief method called from main_task_algorithm to handle stop command from MP
