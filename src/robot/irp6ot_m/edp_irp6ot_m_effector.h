@@ -17,6 +17,8 @@
 #include "base/edp/edp_e_manip.h"
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 
+#include <boost/thread.hpp>
+
 namespace mrrocpp {
 namespace edp {
 namespace irp6ot_m {
@@ -32,8 +34,12 @@ protected:
 	// Metoda tworzy modele kinematyczne dla robota IRp-6 na postumencie.
 	virtual void create_kinematic_models_for_given_robot(void);
 
+	boost::thread thread_id;
+
 public:
 	effector(common::shell &_shell);
+
+	~effector();
 
 	void set_robot_model(const lib::c_buffer &);
 	void create_threads();

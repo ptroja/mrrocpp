@@ -17,13 +17,13 @@ class motor_driven_effector;
 
 class manip_trans_t : public trans_t<>
 {
+public:
+    manip_trans_t(motor_driven_effector& _master);
+
 private:
     motor_driven_effector &master;
 
     void operator()();
-
-public:
-    manip_trans_t(motor_driven_effector& _master);
 };
 
 } // namespace common

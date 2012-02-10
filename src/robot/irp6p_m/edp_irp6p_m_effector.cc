@@ -66,7 +66,7 @@ void effector::create_threads()
 	vs = (boost::shared_ptr <sensor::force>) sensor::return_created_edp_force_sensor(*this); //!< czujnik wirtualny
 
 	// byY - utworzenie watku pomiarow sily
-	new boost::thread(boost::bind(&sensor::force::operator(), vs));
+	thread_id = boost::thread(boost::bind(&sensor::force::operator(), vs));
 
 	//vs->thread_started.wait();
 	//zeby miec pewnosc, ze zostal wykonany pierwszy pomiar
@@ -84,6 +84,12 @@ effector::effector(common::shell &_shell) :
 	create_kinematic_models_for_given_robot();
 
 	reset_variables();
+}
+
+effector::~effector()
+{
+	thread_id.interrupt();
+	thread_id.join();
 }
 
 // Stworzenie modeli kinematyki dla robota IRp-6 na postumencie.

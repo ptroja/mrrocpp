@@ -126,14 +126,15 @@ uint8_t servo_buffer::Move_a_step(void)
 	Move_1_step();
 	if (master.is_synchronised()) { // by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
 		// by Y - do dokonczenia
-		for (int i = 0; i < master.number_of_servos; i++) {
-			if (!(master.robot_test_mode)) {
-				master.update_servo_current_motor_pos_abs(hi->get_position(i) * (2 * M_PI) / axe_inc_per_revolution[i], i);
+		if (!(master.robot_test_mode)) {
+			for (int i = 0; i < master.number_of_servos; i++) {
+					master.update_servo_current_motor_pos_abs(hi->get_position(i) * (2 * M_PI) / axe_inc_per_revolution[i], i);
 			}
 		}
 
 		master.compute_servo_joints_and_frame(); // by Y - aktualizacja trasformatora
 	}
+
 	return convert_error();
 }
 /*-----------------------------------------------------------------------*/
@@ -242,10 +243,8 @@ void servo_buffer::operator()()
 	//	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer()); // bufor do komunikacji z EDP_MASTER
 
 	try {
-
 		load_hardware_interface();
 	}
-
 	catch (std::exception & e) {
 		printf("servo group exception: %s\n", e.what());
 		master.msg->message(lib::FATAL_ERROR, e.what());
@@ -262,7 +261,7 @@ void servo_buffer::operator()()
 	master.sb_loaded.wait();
 	/* BEGIN SERVO_GROUP */
 
-	for (;;) {
+	while(!boost::this_thread::interruption_requested()) {
 		// komunikacja z transformation
 		if (!get_command()) {
 			// scoped-locked reader data update
@@ -616,6 +615,8 @@ void servo_buffer::ppp(void) const
 /*-----------------------------------------------------------------------*/
 servo_buffer::~servo_buffer(void)
 {
+	thread_id.interrupt();
+	thread_id.join();
 
 	// Destruktor grupy regulatorow
 	// Zniszcyc regulatory

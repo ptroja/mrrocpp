@@ -112,8 +112,6 @@ class servo_buffer : public boost::noncopyable
 	// Bufor polecen przysylanych z EDP_MASTER dla SERVO
 	// Obiekt z algorytmem regulacji
 protected:
-	boost::thread thread_id;
-
 	HardwareInterface* hi; // obiekt odpowiedzialny za kontakt ze sprzetem
 
 	// regulator_group
@@ -159,6 +157,8 @@ protected:
 	void compute_current_measurement_statistics();
 
 public:
+	boost::thread thread_id;
+
 	lib::condition_synchroniser thread_started;
 
 	edp_master_command command; // polecenie z EDP_MASTER dla SERVO

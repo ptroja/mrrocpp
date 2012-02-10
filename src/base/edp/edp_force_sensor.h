@@ -127,9 +127,6 @@ public:
 
 	common::FORCE_ORDER command;
 
-	//! zakonczenie obydwu watkow
-	bool TERMINATE;
-
 	//! czy czujnik skonfigurowany?
 	bool is_sensor_configured;
 
