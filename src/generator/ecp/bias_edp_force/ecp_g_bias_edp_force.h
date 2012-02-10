@@ -37,6 +37,9 @@ public:
 	virtual bool first_step();
 	virtual bool next_step();
 
+
+//	void conditional_execution();
+
 };
 
 } // namespace generator

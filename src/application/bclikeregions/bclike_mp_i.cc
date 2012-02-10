@@ -66,7 +66,7 @@ void bclike_mp_i::main_task_algorithm(void){
 
 	set_next_ecp_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, actual_robot);
 	sr_ecp_msg->message("MOVE left");
-	wait_for_task_termination(false, 1,  actual_robot.c_str());
+	wait_for_task_termination(false, actual_robot);
 
 	//Setup end position
 	vec.clear();
@@ -76,7 +76,7 @@ void bclike_mp_i::main_task_algorithm(void){
 	//Start moving
 	set_next_ecp_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, actual_robot);
 	sr_ecp_msg->message("MOVE right");
-	wait_for_task_termination(false, 1,  actual_robot.c_str());
+	wait_for_task_termination(false, actual_robot);
 
 
 	std::vector<std::pair<ecp::common::task::mrrocpp_regions, bool> >::iterator it;
@@ -97,18 +97,18 @@ void bclike_mp_i::main_task_algorithm(void){
 				//Go to code
 				tmp = msg.robotPositionToString(vec);
 				set_next_ecp_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tmp, lib::ECP_2_MP_STRING_SIZE, actual_robot);
-				wait_for_task_termination(false, 1,  actual_robot.c_str());
+				wait_for_task_termination(false, actual_robot);
 
 				//Get back to previous position
 				tmp = msg.robotPositionToString(pos);
 				set_next_ecp_state (ecp_mp::task::ECP_ST_POSITION_MOVE, 0, tmp, lib::ECP_2_MP_STRING_SIZE, actual_robot);
-				wait_for_task_termination(false, 1,  actual_robot.c_str());
+				wait_for_task_termination(false, actual_robot);
 			}
 		}
 
 		set_next_ecp_state (ecp_mp::task::ECP_ST_SCAN_MOVE, 0, tab, lib::ECP_2_MP_STRING_SIZE, actual_robot);
 		sr_ecp_msg->message("MOVE right");
-		wait_for_task_termination(false, 1, actual_robot.c_str());
+		wait_for_task_termination(false, actual_robot);
 	}
 
 	sr_ecp_msg->message("KONIEC");

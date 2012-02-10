@@ -31,7 +31,7 @@ void axzb_force::main_task_algorithm(void)
 
 	//run a subtask to get the data if needed
 	if (config.value <int> ("acquire")) {
-		sub_task::acq_force* acq_task = new sub_task::acq_force(*this);
+		subtask::acq_force* acq_task = new subtask::acq_force(*this);
 		acq_task->write_data(K_file_path, kk_file_path, M_file_path, mm_file_path, ofp.number_of_measures);
 		delete acq_task;
 	}

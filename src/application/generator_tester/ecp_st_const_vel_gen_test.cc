@@ -19,12 +19,12 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace sub_task {
+namespace subtask {
 
-sub_task_const_vel_gen_test::sub_task_const_vel_gen_test(task::task & _ecp_t) :
-		sub_task(_ecp_t)
+subtask_const_vel_gen_test::subtask_const_vel_gen_test(task::task & _ecp_t) :
+		subtask(_ecp_t)
 {
-        subtask_generator_name = mrrocpp::ecp_mp::sub_task::ECP_ST_CONST_VEL_GEN_TEST;
+        generator_name = mrrocpp::ecp_mp::subtask::ECP_ST_CONST_VEL_GEN_TEST;
 	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 		cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 6);
 		cvgenjoint->set_debug(true);
@@ -78,7 +78,7 @@ sub_task_const_vel_gen_test::sub_task_const_vel_gen_test(task::task & _ecp_t) :
         network_path = std::string(ecp_t.mrrocpp_network_path);
 }
 
-void sub_task_const_vel_gen_test::conditional_execution()
+void subtask_const_vel_gen_test::conditional_execution()
 {
 
         std::vector <double> coordinates1(6);//postument
@@ -626,7 +626,7 @@ void sub_task_const_vel_gen_test::conditional_execution()
         // ANGLE AXIS RELATIVE END*/
 }
 
-sub_task_const_vel_gen_test::~sub_task_const_vel_gen_test()
+subtask_const_vel_gen_test::~subtask_const_vel_gen_test()
 {
 	delete cvgenjoint;
 	delete cvgenmotor;

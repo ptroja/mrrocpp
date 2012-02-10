@@ -9,8 +9,9 @@
  * @ingroup mp
  */
 
+#include <boost/thread/thread_time.hpp>
+
 #include "base/mp/generator/mp_generator.h"
-#include "base/lib/timer.h"
 
 namespace mrrocpp {
 namespace mp {
@@ -24,16 +25,16 @@ namespace generator {
  */
 class delay_ms_condition : public generator
 {
-protected:
+private:
 	/**
-	 * @brief timer to measure time
+	 * @brief Timeout.
 	 */
-	lib::timer local_timer;
+	boost::system_time timeout;
 
 	/**
 	 * @brief desired total time to pass
 	 */
-	int ms_delay;
+	unsigned int ms_delay;
 
 public:
 
@@ -42,13 +43,13 @@ public:
 	 * @param _mp_task mp task object reference.
 	 * @param _ms_delay desired total time to pass
 	 */
-	delay_ms_condition(task::task& _mp_task, int _ms_delay);
+	delay_ms_condition(task::task& _mp_task, unsigned int _ms_delay);
 
 	/**
 	 * @brief sets desired total time to pass
 	 * @param _ms_delay desired total time to pass
 	 */
-	void configure(int _ms_delay);
+	void configure(unsigned int _ms_delay);
 
 	bool first_step();
 	bool next_step();

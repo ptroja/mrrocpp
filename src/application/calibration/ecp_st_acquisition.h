@@ -3,14 +3,14 @@
 
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
-#include "base/ecp/ecp_sub_task.h"
+#include "base/ecp/ecp_subtask.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace sub_task {
+namespace subtask {
 
-class acquisition : public sub_task
+class acquisition : public subtask
 {
 public:
 	// KONSTRUKTORY
@@ -23,7 +23,7 @@ public:
 			write_data(const std::string & _K_fp, const std::string & _kk_fp, const std::string & _M_fp, const std::string & _mm_fp, int _number_of_measures) = 0;
 };
 
-} // namespace sub_task
+} // namespace subtask
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp
