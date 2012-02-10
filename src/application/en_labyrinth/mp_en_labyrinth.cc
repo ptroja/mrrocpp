@@ -9,9 +9,8 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
-#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
-#include "generator/ecp/transparent/ecp_mp_g_transparent.h"
 
 
 #include "base/mp/mp_task.h"
@@ -68,6 +67,18 @@ void mp_en_labyrinth::main_task_algorithm(void)
 
 	Types::Mrrocpp_Proxy::EN_Labyrinth_Reading reading;
 
+
+
+	// sekwencja generator na wybranym manipulatorze
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE, (int) 5, "", lib::irp6p_m::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) 0, "", lib::irp6p_m::ROBOT_NAME);
+	wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+
+
+
+
 	sr_ecp_msg->message("reading init");
 	reading = discode->call_remote_procedure<Types::Mrrocpp_Proxy::EN_Labyrinth_Reading>(double(29.0386));
 	sr_ecp_msg->message("reading received");
@@ -110,6 +121,7 @@ void mp_en_labyrinth::main_task_algorithm(void)
 
 		set_next_ecp_state(ecp_mp::generator::ECP_GEN_EN_LABYRINTH, (int) 5, "ABSOLUTE_JOIN 1.117 -1.636 0.11 -0.041 4.669 -1.816", lib::irp6p_m::ROBOT_NAME);
 		wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+		//wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 
 		sr_ecp_msg->message("Moving to the ending point");
@@ -140,6 +152,7 @@ void mp_en_labyrinth::main_task_algorithm(void)
 			}
 			set_next_ecp_state(ecp_mp::generator::ECP_GEN_EN_LABYRINTH, (int) 5, relative_move, lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+			//wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 		}
 
 //	}
