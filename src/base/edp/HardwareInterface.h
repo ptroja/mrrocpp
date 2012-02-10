@@ -92,6 +92,10 @@ public:
 	virtual void init() = 0;
 	virtual void insert_set_value(int drive_number, double set_value) = 0;
 	virtual int get_current(int drive_number) = 0;
+
+	virtual float get_voltage(int drive_number) = 0;
+
+
 	virtual double get_increment(int drive_number) = 0;
 	virtual long int get_position(int drive_number) = 0;
 	virtual uint64_t read_write_hardware(void) = 0; // Obsluga sprzetu

@@ -41,13 +41,13 @@ const int LAST_MOXA_PORT_NUM = 6;
  */
 
 const std::string ports_strings[] =
-{ "/dev/ttyMUE7", "/dev/ttyMUE0", "/dev/ttyMUE1", "/dev/ttyMUE2", "/dev/ttyMUE3", "/dev/ttyMUE4", "/dev/ttyMUE5" };
-// {"/dev/ttyMI7", "/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5" };
+//{ "/dev/ttyMUE7", "/dev/ttyMUE0", "/dev/ttyMUE1", "/dev/ttyMUE2", "/dev/ttyMUE3", "/dev/ttyMUE4", "/dev/ttyMUE5" };
+ {"/dev/ttyMI7", "/dev/ttyMI0", "/dev/ttyMI1", "/dev/ttyMI2", "/dev/ttyMI3", "/dev/ttyMI4", "/dev/ttyMI5" };
 /*!
  * @brief IRp6 on track overcurrent threshold [mA]
  * @ingroup irp6ot_m
  */
-const int MAX_CURRENT_0 = 15000;
+const int MAX_CURRENT_0 = 25000;
 const int MAX_CURRENT_1 = 15000;
 const int MAX_CURRENT_2 = 18000;
 const int MAX_CURRENT_3 = 10000;

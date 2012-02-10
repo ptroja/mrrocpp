@@ -2,7 +2,6 @@
 
 add_executable(edp_conveyor
 	edp_conveyor_effector.cc
-	hi_conv.cc
 	regulator_conv.cc
 	sg_conv.cc
 )

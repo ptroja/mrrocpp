@@ -59,13 +59,14 @@ SET(GUI_CXX_SRCS
     base/WgtToolBase.cpp
     base/wgt_process_control.cpp
 	base/wgt_robot_process_control.cpp
-    base/ui_ecp_dialogs/wgt_yes_no.cpp
-    base/ui_ecp_dialogs/wgt_swarm.cpp
+    base/ui_ecp_dialogs/wgt_yes_no.cpp    
     base/ui_ecp_dialogs/wgt_message.cpp
     base/ui_ecp_dialogs/wgt_input_integer.cpp
     base/ui_ecp_dialogs/wgt_input_double.cpp
     base/ui_ecp_dialogs/wgt_choose_option.cpp
     base/ui_ecp_dialogs/wgt_teaching.cpp
+    base/ui_ecp_dialogs/wgt_swarm.cpp
+    base/ui_ecp_dialogs/xmlsyntaxhighlighter.cpp
    	base/menu_bar.cpp
 	base/allrobots.cpp
 	base/menu_bar_action.cpp
@@ -78,53 +79,19 @@ SET(GUI_CXX_SRCS
 	base/ui_ecp_robot/ui_ecp_r_base.cc
 )
 
-
 if(ROBOT_BIRD_HAND)
 SET(GUI_CXX_SRCS
-${GUI_CXX_SRCS}
+    ${GUI_CXX_SRCS}
     bird_hand/wgt_bird_hand_command.cpp
    	bird_hand/ui_ecp_r_bird_hand.cc
 	bird_hand/ui_r_bird_hand.cc
 )
 endif(ROBOT_BIRD_HAND)
 
-if(ROBOTS_SWARMITFIX)
-SET(GUI_CXX_SRCS
-${GUI_CXX_SRCS}
-    spkm/wgt_spkm_inc.cpp
-    spkm/wgt_spkm_int.cpp
-    spkm/wgt_spkm_ext.cpp
-    smb/wgt_smb_command.cpp
-    shead/wgt_shead_command.cpp
-   	sbench/wgt_sbench_command.cpp
-   	sbench/wgt_sbench_voltage_command.cpp
-   	sbench/wgt_sbench_preasure_command.cpp
-	spkm/ui_ecp_r_spkm.cc
-	spkm/ui_ecp_r_spkm1.cc
-	spkm/ui_ecp_r_spkm2.cc
-	spkm/ui_r_spkm.cc
-	spkm/ui_r_spkm1.cc
-	spkm/ui_r_spkm2.cc
-	smb/ui_ecp_r_smb.cc
-	smb/ui_ecp_r_smb1.cc
-	smb/ui_ecp_r_smb2.cc
-	smb/ui_r_smb.cc
-	smb/ui_r_smb1.cc
-	smb/ui_r_smb2.cc
-	shead/ui_ecp_r_shead.cc
-	shead/ui_ecp_r_shead1.cc
-	shead/ui_ecp_r_shead2.cc
-	shead/ui_r_shead.cc
-	shead/ui_r_shead1.cc
-	shead/ui_r_shead2.cc
-	sbench/ui_ecp_r_sbench.cc
-	sbench/ui_r_sbench.cc
-)
-endif(ROBOTS_SWARMITFIX)
 
 if(ROBOTS_012)
 SET(GUI_CXX_SRCS
-${GUI_CXX_SRCS}
+    ${GUI_CXX_SRCS}
    	conveyor/ui_ecp_r_conveyor.cc
   	irp6ot_m/ui_ecp_r_irp6ot_m.cc
   	irp6ot_tfg/ui_ecp_r_irp6ot_tfg.cc
@@ -159,7 +126,7 @@ SET(GUI_MOC_SRCS
     base/wgt_process_control.h
 	base/wgt_robot_process_control.h
     base/ui_ecp_dialogs/wgt_yes_no.h
-    base/ui_ecp_dialogs/wgt_swarm.h  
+    base/ui_ecp_dialogs/wgt_swarm.h
     base/ui_ecp_dialogs/wgt_message.h
     base/ui_ecp_dialogs/wgt_input_integer.h
     base/ui_ecp_dialogs/wgt_input_double.h
@@ -177,39 +144,16 @@ SET(GUI_MOC_SRCS
 
 if(ROBOT_BIRD_HAND)
 SET(GUI_MOC_SRCS
-${GUI_MOC_SRCS}
+    ${GUI_MOC_SRCS}
 	bird_hand/ui_r_bird_hand.h
 	bird_hand/wgt_bird_hand_command.h
 )
 endif(ROBOT_BIRD_HAND)
 
-if(ROBOTS_SWARMITFIX)
-SET(GUI_MOC_SRCS
-${GUI_MOC_SRCS}
-	spkm/ui_r_spkm.h
-	spkm/ui_r_spkm1.h
-	spkm/ui_r_spkm2.h
-	smb/ui_r_smb.h
-	smb/ui_r_smb1.h
-	smb/ui_r_smb2.h
-	shead/ui_r_shead.h
-	shead/ui_r_shead1.h
-	shead/ui_r_shead2.h
-	sbench/ui_r_sbench.h
-	sbench/wgt_sbench_command.h
-	sbench/wgt_sbench_voltage_command.h
-	sbench/wgt_sbench_preasure_command.h
-    spkm/wgt_spkm_inc.h
-    spkm/wgt_spkm_int.h
-    spkm/wgt_spkm_ext.h
-    smb/wgt_smb_command.h
-    shead/wgt_shead_command.h
-)
-endif(ROBOTS_SWARMITFIX)
 
 if(ROBOTS_012)
 SET(GUI_MOC_SRCS
-${GUI_MOC_SRCS}
+    ${GUI_MOC_SRCS}
 	sarkofag/ui_r_sarkofag.h
 	conveyor/ui_r_conveyor.h
 	irp6_m/wgt_irp6_m_joints.h
@@ -236,7 +180,7 @@ SET(GUI_UI
     base/wgt_process_control.ui
     base/wgt_robot_process_control.ui
     base/ui_ecp_dialogs/wgt_yes_no.ui
-    base/ui_ecp_dialogs/wgt_swarm.ui   
+    base/ui_ecp_dialogs/wgt_swarm.ui
     base/ui_ecp_dialogs/wgt_message.ui
     base/ui_ecp_dialogs/wgt_input_integer.ui
     base/ui_ecp_dialogs/wgt_input_double.ui
@@ -249,26 +193,15 @@ SET(GUI_UI
 
 if(ROBOT_BIRD_HAND)
 SET(GUI_UI
-${GUI_UI}
+    ${GUI_UI}
     bird_hand/wgt_bird_hand_command.ui
 )
 endif(ROBOT_BIRD_HAND)
 
-if(ROBOTS_SWARMITFIX)
-SET(GUI_UI
-${GUI_UI}
-    spkm/wgt_spkm_inc.ui
-    spkm/wgt_spkm_int.ui
-    spkm/wgt_spkm_ext.ui
-    smb/wgt_smb_command.ui
-    shead/wgt_shead_command.ui
-    sbench/wgt_sbench_command.ui
-)
-endif(ROBOTS_SWARMITFIX)
 
 if(ROBOTS_012)
 SET(GUI_UI
-${GUI_UI}
+    ${GUI_UI}
     irp6_m/wgt_irp6_m_angle_axis.ui
     irp6_m/wgt_irp6_m_euler.ui
     irp6_m/wgt_irp6_m_relative_angle_axis.ui

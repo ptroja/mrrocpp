@@ -16,10 +16,10 @@
 
 #include "robot/irp6_tfg/dp_tfg.h"
 
-#include "application/edge_follow/ecp_mp_st_edge_follow.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
-#include "subtask/ecp_mp_st_tff_nose_run.h"
-#include "generator/ecp/ecp_mp_g_tfg.h"
+#include "ecp_mp_g_edge_follow.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/tff_nose_run/ecp_mp_g_tff_nose_run.h"
+//#include "generator/ecp/ecp_mp_g_tfg.h"
 
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
@@ -92,7 +92,7 @@ void edge_follow_mr::main_task_algorithm(void)
 
 	// sekwencja generator na wybranym chwytaku
 
-	char tmp_string[lib::MP_2_ECP_STRING_SIZE];
+	char tmp_string[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
 
 	lib::irp6_tfg::mp_to_ecp_parameters mp_ecp_command;
 
@@ -108,17 +108,17 @@ void edge_follow_mr::main_task_algorithm(void)
 	 */
 
 	// sekwencja generator na wybranym manipulatorze
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE, (int) 5, "", manipulator_name);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE, (int) 5, "", manipulator_name);
 
-	wait_for_task_termination(false, 1, manipulator_name.c_str());
+	wait_for_task_termination(false, manipulator_name);
 
-	set_next_ecp_state(ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN, (int) 5, "", manipulator_name);
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN, (int) 0, "", manipulator_name);
 
-	wait_for_task_termination(false, 1, manipulator_name.c_str());
+	wait_for_task_termination(false, manipulator_name);
 
-	set_next_ecp_state(ecp_mp::sub_task::EDGE_FOLLOW, (int) 5, "", manipulator_name);
+	set_next_ecp_state(ecp_mp::generator::EDGE_FOLLOW, (int) 0, "", manipulator_name);
 
-	wait_for_task_termination(false, 1, manipulator_name.c_str());
+	wait_for_task_termination(false, manipulator_name);
 
 	sr_ecp_msg->message("END");
 

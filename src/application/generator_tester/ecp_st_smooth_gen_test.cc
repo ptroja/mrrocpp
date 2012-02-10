@@ -10,18 +10,20 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 
 #include "robot/conveyor/const_conveyor.h"
+//#include "ecp_mp_st_smooth_gen_test.h"
 
 #include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace sub_task {
+namespace subtask {
 
-sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
-		sub_task(_ecp_t)
+subtask_smooth_gen_test::subtask_smooth_gen_test(task::task & _ecp_t) :
+		subtask(_ecp_t)
 {
 
+        subtask_generator_name = mrrocpp::ecp_mp::subtask::ECP_ST_SMOOTH_GEN_TEST;
 	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
 		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 6);
 		sgenjoint->set_debug(true);
@@ -31,7 +33,6 @@ sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 
 		track = false;
 		postument = true;
-		poly = false;
 		conv = false;
 
 		sgeneuler = new generator::newsmooth(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
@@ -49,7 +50,6 @@ sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 
 		track = true;
 		postument = false;
-		poly = false;
 		conv = false;
 
 		sgeneuler = new generator::newsmooth(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
@@ -67,7 +67,6 @@ sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 
 		track = false;
 		postument = false;
-		poly = false;
 		conv = true;
 
 		sgeneuler = new generator::newsmooth(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
@@ -81,33 +80,74 @@ sub_task_smooth_gen_test::sub_task_smooth_gen_test(task::task & _ecp_t) :
 	network_path = std::string(ecp_t.mrrocpp_network_path);
 }
 
-void sub_task_smooth_gen_test::conditional_execution()
+void subtask_smooth_gen_test::conditional_execution()
 {
 
+        sgenjoint->set_optimization(false);
+        sgenjoint->reset();
 	std::vector <double> coordinates1(6); //postument
 	std::vector <double> coordinates2(7); //track
-	std::vector <double> coordinates3(7); //polycrank
 
 	//network_path = "../../src/application/generator_tester/optimizedTraj.trj";
 	//sgenjoint->load_coordinates_from_file(network_path.c_str());
 	//sgenjoint->Move();
 
-	// JOINT ABSOLUTE
-	sr_ecp_msg.message("Joint absolute");
+        network_path = "../../src/application/generator_tester/trajectory.trj";
+        sgenjoint->load_trajectory_from_file(network_path.c_str());
+        //network_path = std::string(ecp_t.mrrocpp_network_path);
+
+        sgenjoint->set_optimization(true);
+
+        if (sgenjoint->calculate_interpolate()/* && sgenjoint->detect_jerks(1) == 0*/) {
+                sgenjoint->Move();
+
+                std::vector<double> max_current_change = std::vector<double>(6);
+                max_current_change[0] = 4000;
+                max_current_change[1] = 3000;
+                max_current_change[2] = 2500;
+                max_current_change[3] = 1500;
+                max_current_change[4] = 1500;
+                max_current_change[5] = 800;
+
+                std::vector<double> max_velocity = std::vector<double>(6);
+                max_velocity[0] = 0.5;
+                max_velocity[1] = 0.5;
+                max_velocity[2] = 0.5;
+                max_velocity[3] = 0.5;
+                max_velocity[4] = 0.5;
+                max_velocity[5] = 0.5;
+
+                std::vector<double> max_acceleration = std::vector<double>(6);
+                max_acceleration[0] = 0.15;
+                max_acceleration[1] = 0.15;
+                max_acceleration[2] = 0.15;
+                max_acceleration[3] = 0.15;
+                max_acceleration[4] = 0.15;
+                max_acceleration[5] = 0.15;
+
+                while (!sgenjoint->optimize_energy_cost(max_current_change, max_velocity, max_acceleration))
+                {
+                    sr_ecp_msg.message("Optimizing...");
+                    sgenjoint->calculate_interpolate();
+                    sgenjoint->Move();
+                }
+        }
+
+        sgenjoint->set_optimization(false);
+        sgenjoint->reset();
+        
+        // JOINT ABSOLUTE
+        /*sr_ecp_msg.message("Joint absolute");
 	sgenjoint->reset();
 	sgenjoint->set_absolute();
 	if (track) {
-		//network_path += "../src/application/generator_tester/trajectory.trj";
-		//sgenjoint->load_trajectory_from_file(network_path.c_str());
-		//network_path = std::string(ecp_t.mrrocpp_network_path);
-
-		coordinates2[0] = 0.0;
-		coordinates2[1] = -0.104;
-		coordinates2[2] = -1.542;
-		coordinates2[3] = 0.020;
-		coordinates2[4] = 1.404;
-		coordinates2[5] = 3.358;
-		coordinates2[6] = -2.538;
+                coordinates2[0] = 0.0;
+                coordinates2[1] = -0.104;
+                coordinates2[2] = -1.542;
+                coordinates2[3] = 0.020;
+                coordinates2[4] = 1.404;
+                coordinates2[5] = 3.358;
+                coordinates2[6] = -2.538;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates2);
 	} else if (postument) {
 		coordinates1[0] = -0.104;
@@ -117,21 +157,6 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[4] = 3.358;
 		coordinates1[5] = -2.538;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
-	} else if (poly) {
-		network_path += "src/application/generator_tester/polycrank.trj";
-		sgenjoint->load_trajectory_from_file(network_path.c_str());
-		network_path = std::string(ecp_t.mrrocpp_network_path);
-
-		coordinates3[0] = 3.500;
-		coordinates3[1] = 3.500;
-		coordinates3[2] = 3.500;
-		coordinates3[3] = 3.500;
-		coordinates3[4] = 3.500;
-		coordinates3[5] = 3.500;
-		coordinates3[6] = 3.500;
-
-		sgenjoint->load_absolute_joint_trajectory_pose(coordinates3);
-
 	} else if (conv) {
 		network_path += "src/application/generator_tester/conveyor.trj";
 		//network_path = "/root/najnowszy/mrrocpp/src/application/generator_tester/conveyor.trj";
@@ -155,17 +180,6 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[4] = 3.858;
 		coordinates1[5] = -2.738;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
-	} else if (poly) {
-		coordinates3[0] = 3.000;
-		coordinates3[1] = 3.000;
-		coordinates3[2] = 3.000;
-		coordinates3[3] = 3.000;
-		coordinates3[4] = 3.000;
-		coordinates3[5] = 3.000;
-		coordinates3[6] = 3.000;
-		sgenjoint->load_absolute_joint_trajectory_pose(coordinates3);
-	}
-
 	if (track) {
 		coordinates2[0] = 0.0;
 		coordinates2[1] = -0.104;
@@ -183,16 +197,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 		coordinates1[4] = 3.658;
 		coordinates1[5] = -2.738;
 		sgenjoint->load_absolute_joint_trajectory_pose(coordinates1);
-	} else if (poly) {
-		coordinates3[0] = 2.500;
-		coordinates3[1] = 2.500;
-		coordinates3[2] = 2.500;
-		coordinates3[3] = 2.500;
-		coordinates3[4] = 2.500;
-		coordinates3[5] = 2.500;
-		coordinates3[6] = 2.500;
-		sgenjoint->load_absolute_joint_trajectory_pose(coordinates3);
-	}
+        }
 
 	if (sgenjoint->calculate_interpolate() && sgenjoint->detect_jerks(1) == 0) {
 		sgenjoint->Move();
@@ -652,7 +657,7 @@ void sub_task_smooth_gen_test::conditional_execution()
 	 // ANGLE AXIS RELATIVE END*/
 }
 
-sub_task_smooth_gen_test::~sub_task_smooth_gen_test()
+subtask_smooth_gen_test::~subtask_smooth_gen_test()
 {
 	delete sgenjoint;
 	delete sgenmotor;

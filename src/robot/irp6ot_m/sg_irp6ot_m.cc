@@ -30,7 +30,7 @@ namespace irp6ot_m {
 
 /*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer(effector &_master) :
-	common::servo_buffer(_master), master(_master)
+		common::servo_buffer(_master), master(_master)
 {
 	for (int j = 0; j < master.number_of_servos; j++) {
 		synchro_axis_order[j] = ((j + SYN_INIT_AXE) % (master.number_of_servos));
@@ -57,20 +57,19 @@ servo_buffer::servo_buffer(effector &_master) :
 
 void servo_buffer::load_hardware_interface(void)
 {
-	const std::vector <std::string>
-				ports_vector(mrrocpp::lib::irp6ot_m::ports_strings, mrrocpp::lib::irp6ot_m::ports_strings
-						+ mrrocpp::lib::irp6ot_m::LAST_MOXA_PORT_NUM + 1);
-		hi
-				= new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6ot_m::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::irp6ot_m::MAX_INCREMENT);
-		hi->init();
+	const std::vector <std::string> ports_vector(mrrocpp::lib::irp6ot_m::ports_strings, mrrocpp::lib::irp6ot_m::ports_strings
+			+ mrrocpp::lib::irp6ot_m::LAST_MOXA_PORT_NUM + 1);
+	hi =
+			new hi_moxa::HI_moxa(master, mrrocpp::lib::irp6ot_m::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::irp6ot_m::MAX_INCREMENT);
+	hi->init();
 
-		hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_0);
-		hi->set_parameter(1, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_1);
-		hi->set_parameter(2, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_2);
-		hi->set_parameter(3, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_3);
-		hi->set_parameter(4, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_4);
-		hi->set_parameter(5, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_5);
-		hi->set_parameter(6, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_6);
+	hi->set_parameter(0, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_0);
+	hi->set_parameter(1, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_1);
+	hi->set_parameter(2, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_2);
+	hi->set_parameter(3, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_3);
+	hi->set_parameter(4, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_4);
+	hi->set_parameter(5, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_5);
+	hi->set_parameter(6, hi_moxa::PARAM_MAXCURRENT, mrrocpp::lib::irp6ot_m::MAX_CURRENT_6);
 
 	// utworzenie tablicy regulatorow
 	// Serwomechanizm 1

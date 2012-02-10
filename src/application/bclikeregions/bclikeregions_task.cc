@@ -81,7 +81,7 @@ task* return_created_ecp_task(lib::configurator &config){
 //#include "application/bclikeregions/bclikeregions_task.h"
 //#include "application/bclikeregions/bclikeregions_gen.h"
 //
-//#include "subtask/ecp_mp_st_bias_edp_force.h"
+//#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 //
 //#include <boost/shared_ptr.hpp>
 //#include "base/ecp/ecp_task.h"

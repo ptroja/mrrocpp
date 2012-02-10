@@ -8,6 +8,8 @@
 #ifndef __ECP_MP_T_RCSC_H
 #define __ECP_MP_T_RCSC_H
 
+#include "../../generator/ecp/tff_rubik_face_rotate/ecp_mp_g_tff_rubik_face_rotate.h"
+
 namespace mrrocpp {
 namespace ecp_mp {
 namespace task {
@@ -31,26 +33,8 @@ enum RCSC_GRIPPER_OP
 /**
  *
  */
-enum RCSC_TURN_ANGLES
-{
-	RCSC_CCL_90, RCSC_CL_0, RCSC_CL_90, RCSC_CL_180
-};
 
-/**
- *
- */
-enum RCSC_RUBIK_GRAB_PHASES
-{
-	RCSC_RG_FROM_OPEARTOR_PHASE_1,
-	RCSC_RG_FROM_OPEARTOR_PHASE_2,
-	RCSC_RG_FCHANGE_PHASE_1,
-	RCSC_RG_FCHANGE_PHASE_2,
-	RCSC_RG_FCHANGE_PHASE_3,
-	RCSC_RG_FCHANGE_PHASE_4,
-	RCSC_RG_FACE_TURN_PHASE_0
-};
-
-} // namespace task
+}// namespace task
 } // namespace ecp_mp
 } // namespace mrrocpp
 

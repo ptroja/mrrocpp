@@ -15,6 +15,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <iostream>
@@ -33,23 +34,21 @@ namespace common {
 
 /*--------------------------------------------------------------------------*/
 shell::shell(lib::configurator &_config) :
-		config(_config), hardware_busy_file_fullpath(""), my_pid(0)
+		config(_config), hardware_busy_file_fullpath(""), my_pid(getpid())
 {
 	/* Lokalizacja procesu wywietlania komunikatow SR */
 	msg =
 			(boost::shared_ptr <lib::sr_edp>) new lib::sr_edp(lib::EDP, config.robot_name, config.get_sr_attach_point().c_str());
-
-	my_pid = getpid();
 }
 
 shell::~shell()
 {
+	close_hardware_busy_file();
 }
 
 /*--------------------------------------------------------------------------*/
 bool shell::detect_hardware_busy()
 {
-
 	// obsluga mechanizmu sygnalizacji zajetosci sprzetu
 
 	const std::string hardware_busy_attach_point = config.get_edp_hardware_busy_file();
@@ -63,9 +62,7 @@ bool shell::detect_hardware_busy()
 		std::cerr << "initialize_communication nie moglem odczytac: " << hardware_busy_file_fullpath << std::endl;
 
 		// utworz plik i wstaw do niego pid
-		if (!create_hardware_busy_file()) {
-			return false;
-		}
+		return create_hardware_busy_file();
 
 	} else {
 		pid_t file_pid;
@@ -86,6 +83,7 @@ bool shell::detect_hardware_busy()
 		ss << "/proc/" << file_pid;
 
 		std::cerr << ss.str() << std::endl;
+
 		// jesli nie ma procesu
 		if (access(ss.str().c_str(), R_OK) != 0) {
 			// usun plik
@@ -93,20 +91,17 @@ bool shell::detect_hardware_busy()
 				perror("Error deleting file");
 				return false;
 			} else {
-				puts("File successfully deleted");
+				//	puts("File successfully deleted");
 			}
 
 			// utworz plik i wstaw do niego pid
-			if (!create_hardware_busy_file()) {
-				return false;
-			}
+			return create_hardware_busy_file();
 
 		} else {
 			// juz jest EDP
 			fprintf(stderr, "edp: hardware busy\n");
 			return false;
 		}
-
 	}
 
 	return true;
@@ -139,12 +134,11 @@ bool shell::create_hardware_busy_file()
 	return true;
 }
 
-bool shell::close_hardware_busy_file()
+void shell::close_hardware_busy_file()
 {
-
 	if (access(hardware_busy_file_fullpath.c_str(), R_OK) == 0) {
 
-		std::cerr << "close_hardware_busy_file odczytałem: " << hardware_busy_file_fullpath << std::endl;
+		//	std::cerr << "close_hardware_busy_file odczytałem: " << hardware_busy_file_fullpath << std::endl;
 
 		pid_t file_pid;
 
@@ -164,7 +158,7 @@ bool shell::close_hardware_busy_file()
 			if (remove(hardware_busy_file_fullpath.c_str()) != 0) {
 				perror("Error deleting file");
 			} else {
-				puts("File successfully deleted");
+				//	puts("File successfully deleted");
 			}
 		} else {
 			std::cerr << "Another EDP was running" << std::endl;
@@ -172,8 +166,6 @@ bool shell::close_hardware_busy_file()
 	} else {
 		std::cerr << "close_hardware_busy_file nie mogle odczytac: " << hardware_busy_file_fullpath << std::endl;
 	}
-
-	return true;
 }
 
 } // namespace common

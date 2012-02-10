@@ -1,0 +1,11 @@
+add_library(ecp_g_tff_gripper_approach
+	ecp_g_tff_gripper_approach.cc
+)
+
+add_library(ecp_mp_g_tff_gripper_approach
+	ecp_mp_g_tff_gripper_approach.cc
+	)
+	
+target_link_libraries(ecp_g_tff_gripper_approach ecp_mp_generators ecp_mp)
+
+install(TARGETS ecp_g_tff_gripper_approach ecp_mp_g_tff_gripper_approach DESTINATION lib)

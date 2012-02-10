@@ -17,7 +17,10 @@ void force::operator()()
 {
 	//	sr_msg->message("operator");
 
-	lib::set_thread_priority(pthread_self(), lib::PTHREAD_MAX_PRIORITY - 1);
+	if(!master.robot_test_mode) {
+		lib::set_thread_priority(lib::PTHREAD_MAX_PRIORITY - 1);
+	}
+
 	try {
 		if (!force_sensor_test_mode) {
 			connect_to_hardware();
@@ -26,13 +29,6 @@ void force::operator()()
 		thread_started.command();
 
 		configure_sensor();
-	}
-
-	catch (std::runtime_error & e) {
-		printf("force sensor runtime error: %s \n", e.what());
-		sr_msg->message(lib::FATAL_ERROR, e.what());
-		master.edp_shell.close_hardware_busy_file();
-		_exit(EXIT_SUCCESS);
 	}
 
 	catch (lib::exception::se_sensor & error) {
@@ -55,6 +51,12 @@ void force::operator()()
 		}
 		sr_msg->message(lib::FATAL_ERROR, error0);
 
+	}
+
+	catch (std::exception & e) {
+		printf("force sensor exception: %s\n", e.what());
+		sr_msg->message(lib::FATAL_ERROR, e.what());
+		exit(EXIT_SUCCESS);
 	}
 
 	catch (...) {

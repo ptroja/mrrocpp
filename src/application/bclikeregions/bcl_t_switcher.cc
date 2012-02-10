@@ -42,11 +42,11 @@ bcl_t_switcher::bcl_t_switcher(lib::configurator &_config):
 #endif//IRP6_P
 
 	//Adding additional subtasks
-	sub_task::sub_task* ecpst;
-	ecpst = new sub_task::ecp_st_scan_move(*this);
+	subtask::subtask* ecpst;
+	ecpst = new subtask::ecp_st_scan_move(*this);
 	subtask_m[ecp_mp::task::ECP_ST_SCAN_MOVE] = ecpst;
 
-	ecpst = new sub_task::ecp_st_position_move(*this);
+	ecpst = new subtask::ecp_st_position_move(*this);
 	subtask_m[ecp_mp::task::ECP_ST_POSITION_MOVE] = ecpst;
 
 	std::cout << "KONIEC KONSTRUKTORA BCL SWITCHER" << std::endl;

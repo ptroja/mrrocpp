@@ -1,3 +1,5 @@
+if(NOT UBUNTU32BIT)
+
 add_library(agent BufferBase.cc InputBufferBase.cc AgentBase.cc Agent.cc RemoteAgent.cc)
 
 # Serialization is essential for this library
@@ -11,6 +13,8 @@ install(TARGETS agent DESTINATION lib)
 if(QNXNTO)
 target_link_libraries(agent rpc)
 endif(QNXNTO)
+
+endif(NOT UBUNTU32BIT)
 
 #
 # Test programs

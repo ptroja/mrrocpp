@@ -59,6 +59,22 @@ protected:
 	 * Temporary iterator used mainly to iterate through a single position which is always of type vector<double>.
 	 */
 	std::vector <double>::iterator tempIter;
+        /**
+         * Vector of read currents. (used in optimization)
+         */
+        std::vector <std::vector<double> > current_vector;
+        /**
+         * Current vector iterator.
+         */
+        std::vector <std::vector <double> >::iterator current_vector_iterator;
+        /**
+         * Vector of read energy. (used in optimization)
+         */
+        std::vector <std::vector<double> > energy_vector;
+        /**
+         * Energy vector iterator.
+         */
+        std::vector <std::vector <double> >::iterator energy_vector_iterator;
 	/**
 	 * Type of the commanded motion (absolute or relative)
 	 */
@@ -99,10 +115,18 @@ protected:
 	 * If true, debug information is shown.
 	 */
 	bool debug;
+        /**
+         * If true, optimization can be performed.
+         */
+        bool optimization;
 	/**
 	 * Set to true if trajectory was specified in angle axis absolute coordinates and the interpolation is performed on poses transformed into relative vectors.
 	 */
 	bool angle_axis_absolute_transformed_into_relative;
+        /**
+         * Energy cost during consecutive optimization iterations.
+         */
+        std::vector<double> energy_cost;
 
 	//--------- VELOCITY AND ACCELERATION VECTORS ---------
 	/**
@@ -293,15 +317,23 @@ protected:
 		flushall();
 	}
 
-	double getCurrentModule(int i)
+        /**
+         * Returns current current average modue value.
+         */
+        /*double getCurrentModule(int i)
 	{
 		return the_robot->reply_package.arm.measured_current.average_module[i];
-	}
+        }*/
 
-	double getCurrentCubic(int i)
+        /**
+         *
+         */
+        /*double getCurrentCubic(int i)
 	{
 		return the_robot->reply_package.arm.measured_current.average_cubic[i];
-	}
+        }*/
+
+
 
 public:
 	/**
@@ -311,6 +343,7 @@ public:
 			common::generator::generator(_ecp_task)
 	{
 		debug = false;
+                optimization = false;
 		angle_axis_absolute_transformed_into_relative = false;
 		motion_type = lib::ABSOLUTE;
 		nmc = 10;
@@ -324,6 +357,18 @@ public:
 	{
 
 	}
+        /**
+         * Prints energy cost vector.
+         */
+        void print_energy_cost()
+        {
+            printf("############## Energy cost ##############\n");
+            for (int i = 0; i < energy_cost.size(); i++)
+            {
+                printf("%d: %f\n",i, energy_cost[i]);
+            }
+        }
+
 	/**
 	 * Set debug variable.
 	 */
@@ -331,6 +376,14 @@ public:
 	{
 		this->debug = debug;
 	}
+        /**
+         * Set optimization variable.
+         */
+        void set_optimization(bool optimization)
+        {
+            this->optimization = optimization;
+        }
+
         /**
           * Sets up the standard velocity vector for joint representation.
           */
@@ -428,6 +481,8 @@ public:
 				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 		}
 
+                current_vector.clear();
+                energy_vector.clear();
 		coordinate_vector_iterator = coordinate_vector.begin();
 		sr_ecp_msg.message("Moving...");
 		return true;
@@ -445,8 +500,8 @@ public:
 
 		if (coordinate_vector_iterator == coordinate_vector.end()) {
 			sr_ecp_msg.message("Motion finished");
-			reset(); //reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
-			return false;
+                        reset(); //reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
+                        return false;
 		}
 
 		int i; //loop counter
@@ -462,6 +517,14 @@ public:
 		the_robot->ecp_command.instruction_type = lib::SET;
 
 		double coordinates[axes_num];
+                //std::vector<double> currents;
+                std::vector<double> currents;
+                std::vector<double> energy;
+                if (optimization)
+                {
+                    currents = std::vector<double>(axes_num);
+                    energy = std::vector<double>(axes_num);
+                }
 
 		switch (pose_spec)
 		{
@@ -471,14 +534,29 @@ public:
 				tempIter = (*coordinate_vector_iterator).begin();
 				for (i = 0; i < axes_num; i++) {
 					the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = *tempIter;
+
+                                        if (optimization)
+                                        {
+                                            currents[i] = sqrt(the_robot->reply_package.arm.measured_current.average_square[i]);
+                                            energy[i] = the_robot->reply_package.arm.measured_current.energy[i];
+                                        }
+
 					if (debug) {
-						printf("%f\t", *tempIter);
+                                                printf("%f\t", *tempIter);
+                                                //printf("%f\t", currents[i]);
 					}
 					tempIter++;
 
 				}
+
+                                if (optimization)
+                                {
+                                    current_vector.push_back(currents);
+                                    energy_vector.push_back(energy);
+                                }
+
 				if (debug) {
-					printf("\n");
+                                        printf("\n");
 					flushall();
 				}
 				break;
@@ -579,13 +657,13 @@ public:
 		}
 
 		if (debug) {
-			print_pose_vector();
+                        print_pose_vector();
 		}
 
 		interpolated = interpolate();
 
 		if (debug) {
-			print_coordinate_vector();
+                        print_coordinate_vector();
 		}
 
 		return interpolated;
@@ -617,15 +695,19 @@ public:
 	 */
 	virtual void reset()
 	{
-		//sr_ecp_msg.message("reset 1");
-		pose_vector.clear();
-		//sr_ecp_msg.message("reset 2");
 		coordinate_vector.clear();
-		//sr_ecp_msg.message("reset 3");
+                if (!optimization)
+                {
+                    current_vector.clear();
+                    energy_vector.clear();
+                    pose_vector.clear();
+                    energy_cost.clear();
+                }
 		calculated = false;
 		interpolated = false;
 		angle_axis_absolute_transformed_into_relative = false;
 		sr_ecp_msg.message("Generator reset");
+
 	}
 	/**
 	 * Detection of possible jerks. Method scans the vector of coordinates (after interpolation) and checks if the allowed acceleration was not exceeded.
@@ -724,7 +806,7 @@ public:
 		return 0;
 	}
         /**
-         *
+         * Loads a list of calculated coordinates from a text file.
          * @param file_name name of the file with the trajectory
          */
         bool load_coordinates_from_file(const char* file_name)

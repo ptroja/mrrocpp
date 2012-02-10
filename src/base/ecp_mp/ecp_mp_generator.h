@@ -11,7 +11,6 @@
 
 #include "base/ecp_mp/ecp_mp_typedefs.h"
 
-
 namespace mrrocpp {
 
 namespace lib {
@@ -41,6 +40,16 @@ protected:
 	 * @brief the reference to sr communication object in multi thread version
 	 */
 	lib::sr_ecp& sr_ecp_msg;
+
+	/**
+	 * @brief calls initiate reading method for sensor from sensor map
+	 */
+	void initiate_sensors_readings();
+
+	/**
+	 * @brief calls get reading method for sensor from sensor map
+	 */
+	void get_sensors_readings();
 
 public:
 	/**

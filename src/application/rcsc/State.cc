@@ -7,28 +7,25 @@
 
 #include "State.h"
 #include "base/lib/datastr.h"
-#include "subtask/ecp_mp_st_bias_edp_force.h"
-#include "subtask/ecp_mp_st_tff_nose_run.h"
-#include "generator/ecp/force/ecp_mp_g_bias_edp_force.h"
-#include "generator/ecp/force/ecp_mp_g_force_tool_change.h"
-#include "generator/ecp/force/ecp_mp_g_tff_gripper_approach.h"
-#include "generator/ecp/force/ecp_mp_g_tff_nose_run.h"
-#include "generator/ecp/force/ecp_mp_g_tff_rubik_face_rotate.h"
-#include "generator/ecp/force/ecp_mp_g_tff_rubik_grab.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 
-#include "generator/ecp/ecp_mp_g_transparent.h"
+#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/force_tool_change/ecp_mp_g_force_tool_change.h"
+#include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
+#include "generator/ecp/tff_nose_run/ecp_mp_g_tff_nose_run.h"
+#include "generator/ecp/tff_rubik_face_rotate/ecp_mp_g_tff_rubik_face_rotate.h"
+
+#include "generator/ecp/transparent/ecp_mp_g_transparent.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/ecp_mp_g_teach_in.h"
-#include "generator/ecp/force/ecp_mp_g_weight_measure.h"
-
-#include "subtask/ecp_mp_st_gripper_opening.h"
+#include "generator/ecp/weight_measure/ecp_mp_g_weight_measure.h"
 
 namespace mrrocpp {
 namespace mp {
 namespace common {
 
-State::State()
-	: numArgument(0)
+State::State() :
+		numArgument(0)
 {
 }
 
@@ -46,7 +43,7 @@ const char* State::getStateID() const
 
 void State::setNumArgument(const std::string & numArgument)
 {
-	this->numArgument = boost::lexical_cast<int>(numArgument);
+	this->numArgument = boost::lexical_cast <int>(numArgument);
 }
 
 //-----------------------------------------------------------------------------------------------------------
@@ -93,24 +90,18 @@ void State::setGeneratorType(const std::string & genType)
 		this->generatorType = ecp_mp::generator::ECP_GEN_TRANSPARENT;
 	else if (genType == "ECP_GEN_TFF_NOSE_RUN")
 		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_NOSE_RUN;
-	else if (genType == "ECP_ST_TFF_NOSE_RUN")
-		this->generatorType = ecp_mp::sub_task::ECP_ST_TFF_NOSE_RUN;
 	else if (genType == "ECP_GEN_TEACH_IN")
 		this->generatorType = ecp_mp::generator::ECP_GEN_TEACH_IN;
 	else if (genType == "ECP_GEN_NEWSMOOTH")
 		this->generatorType = ecp_mp::generator::ECP_GEN_NEWSMOOTH;
-	else if (genType == "ECP_GEN_TFF_RUBIK_GRAB")
-		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_RUBIK_GRAB;
 	else if (genType == "ECP_GEN_TFF_RUBIK_FACE_ROTATE")
 		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_RUBIK_FACE_ROTATE;
 	else if (genType == "ECP_GEN_TFF_GRIPPER_APPROACH")
 		this->generatorType = ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH;
-	else if (genType == "ECP_ST_GRIPPER_OPENING")
-		this->generatorType = ecp_mp::sub_task::ECP_ST_GRIPPER_OPENING;
 	else if (genType == "ECP_GEN_BIAS_EDP_FORCE")
 		this->generatorType = ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE;
 	else if (genType == "ECP_ST_BIAS_EDP_FORCE")
-		this->generatorType = ecp_mp::sub_task::ECP_ST_BIAS_EDP_FORCE;
+		this->generatorType = ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE;
 	else if (genType == "ECP_GEN_WEIGHT_MEASURE")
 		this->generatorType = ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE;
 	else if (genType == "ECP_TOOL_CHANGE_GENERATOR")
@@ -168,8 +159,7 @@ const std::list <Transition> & State::getTransitions() const
 const char * State::returnNextStateID(StateHeap &sh)
 {
 	for (std::list <Transition>::iterator it = stateTransitions.begin(); it != stateTransitions.end(); ++it) {
-		if ((*it).getConditionResult())
-		{
+		if ((*it).getConditionResult()) {
 			const char * str = (*it).getTargetID(sh);
 			return str;
 		}
@@ -181,18 +171,20 @@ const char * State::returnNextStateID(StateHeap &sh)
 
 void State::showStateContent() const
 {
-	std::cout << id << std::endl << type << std::endl << robot << std::endl << generatorType << std::endl;//<<stringArgument<<std::endl;
+	std::cout << id << std::endl << type << std::endl << robot << std::endl << generatorType << std::endl; //<<stringArgument<<std::endl;
 	if (robotSet.is_initialized()) {
 		std::cout << "\nFirst set count: " << robotSet->firstSet.size() << " = ";
-		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->firstSet) {
-			std::cout << name << "; ";
-		}
+		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->firstSet)
+				{
+					std::cout << name << "; ";
+				}
 		std::cout << std::endl;
 
 		std::cout << "\nSecond set count: " << robotSet->secondSet.size() << " = ";
-		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->secondSet) {
-			std::cout << name << "; ";
-		}
+		BOOST_FOREACH(const lib::robot_name_t & name, robotSet->secondSet)
+				{
+					std::cout << name << "; ";
+				}
 		std::cout << std::endl;
 	}
 	std::cout << "Transitions count: " << stateTransitions.size() << std::endl;
@@ -204,5 +196,4 @@ void State::showStateContent() const
 } // namespace common
 } // namespace mp
 } // namespace mrrocpp
-
 

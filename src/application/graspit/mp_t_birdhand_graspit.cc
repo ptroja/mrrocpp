@@ -24,9 +24,6 @@
 #include "robot/bird_hand/mp_r_bird_hand.h"
 #include "robot/irp6ot_tfg/mp_r_irp6ot_tfg.h"
 #include "robot/irp6p_tfg/mp_r_irp6p_tfg.h"
-#include "robot/shead/mp_r_shead.h"
-#include "robot/spkm/mp_r_spkm.h"
-#include "robot/smb/mp_r_smb.h"
 #include "robot/sarkofag/mp_r_sarkofag.h"
 #include "robot/festival/const_festival.h"
 
@@ -119,8 +116,8 @@ void graspit::main_task_algorithm(void)
 		// TODO: throw
 	}
 
-	char tmp_string1[lib::MP_2_ECP_STRING_SIZE];
-	char tmp_string2[lib::MP_2_ECP_STRING_SIZE];
+	char tmp_string1[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
+	char tmp_string2[lib::MP_2_ECP_SERIALIZED_DATA_SIZE];
 
 	struct _irp6
 	{
@@ -146,11 +143,11 @@ void graspit::main_task_algorithm(void)
 
 	set_next_ecp_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, gripper_name);
 
-	wait_for_task_termination(false, 1, gripper_name.c_str());
+	wait_for_task_termination(false, gripper_name);
 
 	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, manipulator_name);
 
-	wait_for_task_termination(false, 1, manipulator_name.c_str());
+	wait_for_task_termination(false, manipulator_name);
 
 	//last IRp6 position from GraspI
 	for (int i = 0; i < 6; ++i)
@@ -181,11 +178,11 @@ void graspit::main_task_algorithm(void)
 
 	set_next_ecp_state(ecp_mp::task::ECP_GEN_IRP6, (int) 5, tmp_string2, manipulator_name);
 
-	wait_for_task_termination(false, 1, manipulator_name.c_str());
+	wait_for_task_termination(false, manipulator_name);
 
 	set_next_ecp_state(ecp_mp::task::ECP_GEN_BIRD_HAND, (int) 5, tmp_string1, gripper_name);
 
-	wait_for_task_termination(false, 1, gripper_name.c_str());
+	wait_for_task_termination(false, gripper_name);
 
 	//debugging
 	//	std::stringstream ss(std::stringstream::in | std::stringstream::out);
