@@ -10,7 +10,7 @@
 
 #include "../../generator/ecp/ecp_g_newsmooth.h"
 #include "sensor/fradia/ecp_mp_s_fradia_sensor.h"
-#include "generator/ecp/ecp_g_constant_velocity.h"
+#include "generator/ecp/constant_velocity/ecp_g_constant_velocity.h"
 #include "base/ecp_mp/ecp_mp_sensor.h"
 #include "bcl_types.h"
 #include "ecp_mp_message.h"

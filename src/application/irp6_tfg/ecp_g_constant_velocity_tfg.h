@@ -8,7 +8,7 @@
 #ifndef _ECP_G_CONSTANT_VELOCITY_TFG_H_
 #define _ECP_G_CONSTANT_VELOCITY_TFG_H_
 
-#include "../../generator/ecp/ecp_g_constant_velocity.h"
+#include "../../generator/ecp/constant_velocity/ecp_g_constant_velocity.h"
 
 namespace mrrocpp {
 namespace ecp {

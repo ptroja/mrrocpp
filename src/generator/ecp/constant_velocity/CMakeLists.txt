@@ -1,0 +1,7 @@
+add_library(ecp_g_constant_velocity
+	ecp_g_constant_velocity.cc
+)
+
+target_link_libraries(ecp_g_constant_velocity ecp_smooth_base ecp_g_get_position ecp)
+
+install(TARGETS ecp_g_constant_velocity DESTINATION lib)

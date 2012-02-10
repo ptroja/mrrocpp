@@ -12,7 +12,7 @@
 
 #include "ecp_t_tfg.h"
 #include "ecp_mp_g_tfg.h"
-#include "generator/ecp/ecp_mp_g_constant_velocity.h"
+#include "generator/ecp/constant_velocity/ecp_mp_g_constant_velocity.h"
 #include "vector"
 
 namespace mrrocpp {
