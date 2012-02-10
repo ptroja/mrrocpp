@@ -8,9 +8,8 @@
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 #include "generator/ecp/ecp_mp_g_newsmooth.h"
-#include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
+#include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
-#include "generator/ecp/transparent/ecp_mp_g_transparent.h"
 
 #include "base/mp/mp_task.h"
 #include "base/lib/mrmath/mrmath.h"
@@ -67,6 +66,7 @@ void mp_en_labyrinth::main_task_algorithm(void)
 
 	Types::Mrrocpp_Proxy::EN_Labyrinth_Reading reading;
 
+
 	sr_ecp_msg->message("reading init");
 	reading = discode->call_remote_procedure <Types::Mrrocpp_Proxy::EN_Labyrinth_Reading>(double(29.0386));
 	sr_ecp_msg->message("reading received");
@@ -111,9 +111,11 @@ void mp_en_labyrinth::main_task_algorithm(void)
 	cout << "Ending point: (" << reading.end_point_x << "," << reading.end_point_y << ")" << endl;
 	std::string relative_move;
 	bool error = false;
-	for (int i = 0; i < reading.path_size && !error; ++i) {
+	for (int i = 0; i < reading.path_size && !error; ++i)
+	{
 		cout << "Point " << i << " is " << reading.path[i] << endl;
 		switch (reading.path[i])
+
 		{
 			case UP:
 				relative_move = "RELATIVE_EULER 0.02 0.0 0.0 0.0 0.0 0.0";
@@ -131,10 +133,13 @@ void mp_en_labyrinth::main_task_algorithm(void)
 				error = true;
 				sr_ecp_msg->message("Path reading from DisCODe contains error in direction description!");
 				break;
-		}
-		set_next_ecp_state(ecp_mp::generator::ECP_GEN_EN_LABYRINTH, (int) 5, relative_move, lib::irp6p_m::ROBOT_NAME);
-		wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
+			}
+			set_next_ecp_state(ecp_mp::generator::ECP_GEN_EN_LABYRINTH, (int) 5, relative_move, lib::irp6p_m::ROBOT_NAME);
+			//wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
+			wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 	}
+	set_next_ecp_state(ecp_mp::generator::ECP_GEN_EN_LABYRINTH, (int) 5, relative_move, lib::irp6p_m::ROBOT_NAME);
+	wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 
 //	}
 
