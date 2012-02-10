@@ -211,14 +211,6 @@ public:
 	void wait_for_task_termination(bool activate_trigger, const lib::robot_name_t & robot_name);
 
 	/**
-	 * @brief sends end motion command to ECP's - mkisiel xml task version
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param number_of_robots number of robots to receive command
-	 * @param properRobotsSet pointer to robot list
-	 */
-	void send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet);
-
-	/**
 	 * @brief executes delay
 	 * it calls dedicated generator and then sends command in generator Move instruction
 	 * @param _ms_delay delay time

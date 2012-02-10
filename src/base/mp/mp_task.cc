@@ -135,20 +135,6 @@ void task::wait_for_task_termination(bool activate_trigger, const std::vector <l
 	wtf_gen.Move();
 }
 
-// send_end_motion
-void task::send_end_motion_to_ecps(int number_of_robots, lib::robot_name_t *properRobotsSet)
-{
-	generator::send_end_motion_to_ecps mp_semte_gen(*this);
-
-	for (int x = 0; x < number_of_robots; x++) // Loop until all numbers are added
-			{
-		lib::robot_name_t robot_l = properRobotsSet[x]; // Adds the next value in argument list to sum.
-		mp_semte_gen.robot_m[robot_l] = robot_m[robot_l];
-	}
-
-	mp_semte_gen.Move();
-}
-
 //
 // funkcja odbierajaca pulsy z UI lub ECP wykorzystywana w MOVE
 //
