@@ -9,7 +9,7 @@ add_executable(ecp_android_teach
 )
 
 target_link_libraries(ecp_android_teach
-	ecp_generators
+	ecp_robot
 )
 
 install(TARGETS ecp_android_teach DESTINATION bin)

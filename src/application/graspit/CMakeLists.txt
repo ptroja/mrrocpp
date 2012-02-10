@@ -3,7 +3,7 @@ add_executable(ecp_irp6_graspit
 )
 
 target_link_libraries(ecp_irp6_graspit
-	ecp_generators
+	ecp_robot
 )
 
 add_executable(ecp_birdhand_graspit
@@ -12,7 +12,7 @@ add_executable(ecp_birdhand_graspit
 )
 
 target_link_libraries(ecp_birdhand_graspit
-	ecp_generators
+	ecp_robot
 )
 
 add_executable(mp_tfg_graspit

@@ -3,7 +3,7 @@ add_executable(ecp_edge_follow_mr
 	ecp_t_edge_follow_mr.cc
 )
 
-target_link_libraries(ecp_edge_follow_mr ecp_generators)
+target_link_libraries(ecp_edge_follow_mr ecp_robot)
 
 add_executable(mp_edge_follow_mr
 	mp_t_edge_follow_mr.cc

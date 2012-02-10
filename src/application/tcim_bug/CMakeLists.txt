@@ -4,7 +4,7 @@ add_executable(ecp_tcim_bug
 )
 
 target_link_libraries(ecp_tcim_bug
-	ecp_generators
+	ecp_robot
 )
 
 ####################################3

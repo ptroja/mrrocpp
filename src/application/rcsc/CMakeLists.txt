@@ -25,7 +25,7 @@ target_link_libraries(mp_rcsc mp)
 target_link_libraries(mp_fsautomat mp)
 
 
-target_link_libraries(ecp_fsautomat ecp_generators)
+target_link_libraries(ecp_fsautomat ecp_robot)
 
 install(TARGETS
 	mp_fsautomat ecp_fsautomat

@@ -5,7 +5,7 @@ add_executable(ecp_irp6_m
 
 
 target_link_libraries(ecp_irp6_m
-    ecp_robot ecp_generators
+    ecp_robot
 	)
 
 install(TARGETS

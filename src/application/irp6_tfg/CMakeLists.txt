@@ -5,7 +5,7 @@ add_executable(ecp_tfg
 )
 
 target_link_libraries(ecp_tfg
-	ecp_generators
+	ecp_robot
 )
 
 install(TARGETS ecp_tfg DESTINATION bin)

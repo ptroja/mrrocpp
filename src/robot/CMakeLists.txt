@@ -35,7 +35,7 @@ add_library(ecp_robot
 	../base/ecp/ecp_robot.cc
 )
 
-target_link_libraries(ecp_robot ecp)
+target_link_libraries(ecp_robot ecp_generators)
 
 # enable conditional inclusion to ecp_robot
 target_link_library_if(ROBOTS_012 ecp_robot ecp_r_irp6ot_m)
