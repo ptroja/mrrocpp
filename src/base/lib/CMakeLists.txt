@@ -26,7 +26,6 @@ add_library(mrrocpp
 	child.cc
 	c_buffer.cc r_buffer.cc
 	mis_fun.cc
-	timer.cc
 	datastr.cc
 	condition_synchroniser.cc
 	single_thread_port.cc
