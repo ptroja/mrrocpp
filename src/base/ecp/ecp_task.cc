@@ -18,7 +18,6 @@
 #include "base/lib/configurator.h"
 #include "base/lib/sr/sr_ecp.h"
 #include "ecp_task.h"
-#include "ecp_subtask.h"
 #include "ecp_robot.h"
 #include "ecp_exceptions.h"
 #include "ecp_generator.h"
