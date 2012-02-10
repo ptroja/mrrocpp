@@ -9,7 +9,7 @@
 #define _SPLINE_PROFILE_H
 
 #include "base/lib/trajectory_pose/spline_trajectory_pose.h"
-#include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
+#include "generator/lib/velocity_profile_calculator/velocity_profile.h"
 
 namespace mrrocpp {
 namespace ecp {

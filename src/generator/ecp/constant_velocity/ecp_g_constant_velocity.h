@@ -10,8 +10,8 @@
 
 #include "generator/ecp/ecp_g_multiple_position.h"
 #include "base/lib/trajectory_pose/constant_velocity_trajectory_pose.h"
-#include "generator/ecp/velocity_profile_calculator/constant_velocity_profile.h"
-#include "generator/ecp/trajectory_interpolator/constant_velocity_interpolator.h"
+#include "generator/lib/velocity_profile_calculator/constant_velocity_profile.h"
+#include "generator/lib/trajectory_interpolator/constant_velocity_interpolator.h"
 
 #include "ecp_mp_g_constant_velocity.h"
 

@@ -1,4 +1,3 @@
-
 add_subdirectory (weight_measure)
 add_subdirectory (bias_edp_force)
 add_subdirectory (force_tool_change)
@@ -26,15 +25,6 @@ ecp_mp_g_tff_nose_run
 ecp_mp_g_tff_gripper_approach
 )
 
-add_library(ecp_smooth_base
-	velocity_profile_calculator/bang_bang_profile.cc
-	velocity_profile_calculator/constant_velocity_profile.cc
-    velocity_profile_calculator/spline_profile.cc
-	trajectory_interpolator/constant_velocity_interpolator.cc
-	trajectory_interpolator/bang_bang_interpolator.cc
-    trajectory_interpolator/spline_interpolator.cc
-)
-
 
 add_library(ecp_generators
 	ecp_taught_in_pose.cc
@@ -60,8 +50,9 @@ ecp_g_get_position
 ecp_g_spline
 ecp_g_visual_servo
 )
-target_link_libraries(ecp_smooth_base ecp_g_get_position)
+
 
 target_link_libraries(ecp_generators ecp)
 
-install(TARGETS ecp_generators ecp_smooth_base ecp_mp_generators DESTINATION lib)
+install(TARGETS ecp_generators ecp_mp_generators DESTINATION lib)
+

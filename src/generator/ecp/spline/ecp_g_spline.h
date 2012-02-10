@@ -11,8 +11,8 @@
 #include "generator/ecp/ecp_g_multiple_position.h"
 #include "base/lib/trajectory_pose/spline_trajectory_pose.h"
 #include "base/lib/datastr.h"
-#include "generator/ecp/velocity_profile_calculator/spline_profile.h"
-#include "generator/ecp/trajectory_interpolator/spline_interpolator.h"
+#include "generator/lib/velocity_profile_calculator/spline_profile.h"
+#include "generator/lib/trajectory_interpolator/spline_interpolator.h"
 
 namespace mrrocpp {
 namespace ecp {

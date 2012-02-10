@@ -19,8 +19,8 @@
 #include "base/lib/trajectory_pose/trajectory_pose.h"
 #include "generator/ecp/get_position/ecp_g_get_position.h"
 #include "base/ecp/ecp_generator.h"
-#include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
-#include "generator/ecp/trajectory_interpolator/trajectory_interpolator.h"
+#include "generator/lib/velocity_profile_calculator/velocity_profile.h"
+#include "generator/lib/trajectory_interpolator/trajectory_interpolator.h"
 #include "base/lib/mrmath/mrmath.h"
 
 namespace mrrocpp {
