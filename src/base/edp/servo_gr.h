@@ -10,6 +10,7 @@
 
 #include <boost/utility.hpp>
 
+#include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition.hpp>
 
@@ -110,10 +111,8 @@ class servo_buffer : public boost::noncopyable
 {
 	// Bufor polecen przysylanych z EDP_MASTER dla SERVO
 	// Obiekt z algorytmem regulacji
-private:
-
 protected:
-	boost::thread *thread_id;
+	boost::thread thread_id;
 
 	HardwareInterface* hi; // obiekt odpowiedzialny za kontakt ze sprzetem
 

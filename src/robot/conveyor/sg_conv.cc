@@ -22,7 +22,6 @@ namespace mrrocpp {
 namespace edp {
 namespace conveyor {
 
-/*-----------------------------------------------------------------------*/
 servo_buffer::servo_buffer(effector &_master) :
 		common::servo_buffer(_master), master(_master)
 {
@@ -30,10 +29,8 @@ servo_buffer::servo_buffer(effector &_master) :
 		axe_inc_per_revolution[j] = INC_PER_REVOLUTION;
 	}
 
-	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
+	thread_id = boost::thread(boost::bind(&servo_buffer::operator(), this));
 }
-
-/*-----------------------------------------------------------------------*/
 
 void servo_buffer::load_hardware_interface(void)
 {
@@ -44,6 +41,7 @@ void servo_buffer::load_hardware_interface(void)
 			+ mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM + 1);
 	hi =
 			new hi_moxa::HI_moxa(master, mrrocpp::lib::conveyor::LAST_MOXA_PORT_NUM, ports_vector, mrrocpp::lib::conveyor::MAX_INCREMENT);
+
 	hi->init();
 
 	// conveyor uruchamia sie jako zsynchronizowany - ustawic parametr na karcie sterownika
@@ -56,8 +54,6 @@ void servo_buffer::load_hardware_interface(void)
 
 	common::servo_buffer::load_hardware_interface();
 }
-
-/*------------- * ----------------------------------------------------------*/
 
 void servo_buffer::synchronise(void)
 {
@@ -75,20 +71,20 @@ void servo_buffer::synchronise(void)
 	}
 
 	// zerowanie regulatorow
-	for (int j = 0; j < lib::conveyor::NUM_OF_SERVOS; j++) {
+	for (int j = 0; j < lib::conveyor::NUM_OF_SERVOS; ++j) {
 		crp = regulator_ptr[j];
 		crp->clear_regulator();
 		hi->reset_position(j);
 	}
 
 	// zatrzymanie na chwile robota
-	for (int j = 0; j < lib::conveyor::NUM_OF_SERVOS; j++) {
+	for (int j = 0; j < lib::conveyor::NUM_OF_SERVOS; ++j) {
 		synchro_step = 0.0;
 		crp = regulator_ptr[j];
 		crp->insert_new_step(synchro_step);
 	}
 
-	for (int j = 0; j < 25; j++)
+	for (int j = 0; j < 25; ++j)
 		Move_1_step();
 
 	//	kk = 0;
@@ -99,9 +95,6 @@ void servo_buffer::synchronise(void)
 	return;
 }
 
-/*-----------------------------------------------------------------------*/
-
 } // namespace conveyor
 } // namespace edp
 } // namespace mrrocpp
-

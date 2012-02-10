@@ -1,6 +1,5 @@
 /* --------------------------------------------------------------------- */
 /*                          SERVO_GROUP Process                          */
-// ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
 #include <cstdio>
@@ -177,7 +176,7 @@ void servo_buffer::send_to_SERVO_GROUP()
 	 case lib::SERVO_ALGORITHM_AND_PARAMETERS:
 	 command_size = (int) (((uint8_t*) (&servo_command.parameters.servo_alg_par.address_byte)) - ((uint8_t*) (&servo_command.instruction_code)));
 	 break;
-	 }; // end: switch
+	 } // end: switch
 	 // if (Send(&servo_command, &sg_reply, command_size, sizeof(lib::servo_group_reply)) < 0) {
 	 */
 
@@ -624,8 +623,6 @@ servo_buffer::~servo_buffer(void)
 		delete regulator_ptr[j];
 
 	delete hi;
-
-	delete thread_id;
 }
 /*-----------------------------------------------------------------------*/
 
@@ -696,7 +693,7 @@ void servo_buffer::synchronise(void)
 	for (int j = 0; j < (master.number_of_servos); j++) {
 
 		command.parameters.move.abs_position[j] = 0.0;
-	}; // end: for
+	} // end: for
 
 	// szeregowa synchronizacja serwomechanizmow
 	for (int k = 0; k < (master.number_of_servos); k++) {
@@ -706,8 +703,10 @@ void servo_buffer::synchronise(void)
 		common::regulator* crp = regulator_ptr[j];
 
 		synchro_choose_axis_to_move(crp, j);
+
 		if (!move_to_synchro_area(crp, j))
 			return;
+
 		if (!synchro_stop_for_a_while(crp, j))
 			return;
 
@@ -727,7 +726,8 @@ void servo_buffer::synchronise(void)
 	// zatrzymanie na chwile robota
 	for (int k = 0; k < (master.number_of_servos); k++) {
 		regulator_ptr[k]->insert_new_step(0.0);
-	};
+	}
+
 	for (int i = 0; i < SYNCHRO_FINAL_STOP_STEP_NUMBER; i++) {
 		Move_1_step();
 	}
@@ -736,8 +736,6 @@ void servo_buffer::synchronise(void)
 
 	// printf("koniec synchro\n");
 	reply_to_EDP_MASTER();
-	return;
-
 }
 
 void servo_buffer::synchro_choose_axis_to_move(common::regulator* &crp, int j)
