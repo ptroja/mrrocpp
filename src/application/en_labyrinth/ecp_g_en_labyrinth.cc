@@ -27,7 +27,7 @@ namespace generator {
 en_labyrinth::en_labyrinth(common::task::task& _ecp_task) :
 		common::generator::newsmooth(_ecp_task, lib::ECP_XYZ_ANGLE_AXIS, 6)
 {
-	subtask_generator_name = ecp_mp::generator::ECP_GEN_EN_LABYRINTH;
+	generator_name = ecp_mp::generator::ECP_GEN_EN_LABYRINTH;
 }
 
 void en_labyrinth::conditional_execution()

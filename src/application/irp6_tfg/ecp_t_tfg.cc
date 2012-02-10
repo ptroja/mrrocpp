@@ -33,9 +33,9 @@ tfg::tfg(lib::configurator &_config) :
 		// TODO: throw
 	}
 
-	register_sg(new generator::tfg(*this, 10));
+	register_generator(new generator::tfg(*this, 10));
 
-	register_sg(new generator::constant_velocity(*this, lib::ECP_JOINT, 1));
+	register_generator(new generator::constant_velocity(*this, lib::ECP_JOINT, 1));
 
 	sr_ecp_msg->message("ecp TFG loaded");
 }

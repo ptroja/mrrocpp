@@ -44,15 +44,15 @@ edge_follow_mr::edge_follow_mr(lib::configurator &_config) :
 
 	// utworzenie generatorow do uruchamiania dispatcherem
 
-	register_sg(new common::generator::bias_edp_force(*this));
+	register_generator(new common::generator::bias_edp_force(*this));
 
 	{
 		common::generator::tff_nose_run *ecp_gen = new common::generator::tff_nose_run(*this, 8);
 		ecp_gen->configure_pulse_check(true);
-		register_sg(ecp_gen);
+		register_generator(ecp_gen);
 	}
 
-	register_sg(new generator::y_edge_follow_force(*this, 8));
+	register_generator(new generator::y_edge_follow_force(*this, 8));
 
 	// utworzenie podzadan
 

@@ -40,7 +40,7 @@ weight_measure::weight_measure(common::task::task& _ecp_task, double _weight_dif
 		catch_time(_catch_time),
 		terminate_state_recognized(false)
 {
-	subtask_generator_name = ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE;
+	generator_name = ecp_mp::generator::ECP_GEN_WEIGHT_MEASURE;
 	clear_buffer();
 }
 

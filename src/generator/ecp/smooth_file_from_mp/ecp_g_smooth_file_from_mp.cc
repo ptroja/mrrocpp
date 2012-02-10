@@ -2,7 +2,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "ecp_st_smooth_file_from_mp.h"
+#include "ecp_g_smooth_file_from_mp.h"
 #include "generator/ecp/ecp_g_newsmooth.h"
 
 #include "base/ecp/ecp_task.h"
@@ -10,20 +10,20 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace subtask {
+namespace generator {
 
-subtask_smooth_file_from_mp::subtask_smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec, std::string _LABEL, bool _detect_jerks) :
-		subtask(_ecp_t), detect_jerks(_detect_jerks)
+smooth_file_from_mp::smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPECIFICATION pose_spec, std::string _LABEL, bool _detect_jerks) :
+		common::generator::generator(_ecp_t), detect_jerks(_detect_jerks)
 {
-	subtask_generator_name = _LABEL;
+	generator_name = _LABEL;
 	switch (pose_spec)
 	{
 		case lib::ECP_JOINT:
 			sgen =
-					(boost::shared_ptr <generator::newsmooth>) new generator::newsmooth(ecp_t, pose_spec, ecp_t.ecp_m_robot->number_of_servos);
+					(boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, pose_spec, ecp_t.ecp_m_robot->number_of_servos);
 			break;
 		case lib::ECP_XYZ_ANGLE_AXIS:
-			sgen = (boost::shared_ptr <generator::newsmooth>) new generator::newsmooth(ecp_t, pose_spec, 6);
+			sgen = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, pose_spec, 6);
 			sgen->set_debug(true);
 			break;
 		default:
@@ -31,7 +31,7 @@ subtask_smooth_file_from_mp::subtask_smooth_file_from_mp(task::task & _ecp_t, li
 	}
 }
 
-void subtask_smooth_file_from_mp::conditional_execution()
+void smooth_file_from_mp::conditional_execution()
 {
 	sgen->reset();
 

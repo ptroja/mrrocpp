@@ -26,7 +26,7 @@ subtask_spline_gen_test::subtask_spline_gen_test(task::task & _ecp_t) :
 		subtask(_ecp_t)
 {
 
-        subtask_generator_name = mrrocpp::ecp_mp::subtask::ECP_ST_SPLINE_GEN_TEST;
+        generator_name = mrrocpp::ecp_mp::subtask::ECP_ST_SPLINE_GEN_TEST;
         if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
                 spgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 6);
                 spgenjoint->set_debug(true);

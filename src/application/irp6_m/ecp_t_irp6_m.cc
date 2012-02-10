@@ -6,10 +6,9 @@
 
 #include "base/lib/sr/srlib.h"
 //#include "ecp_mp_t_rcsc.h"
-#include "subtask/ecp_st_smooth_file_from_mp.h"
 
-#include "generator/ecp/ecp_mp_g_newsmooth.h"
-#include "generator/ecp/ecp_mp_g_teach_in.h"
+#include "generator/ecp/smooth_file_from_mp/ecp_g_smooth_file_from_mp.h"
+
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
 #include "generator/ecp/transparent/ecp_mp_g_transparent.h"
 #include "generator/ecp/tff_rubik_face_rotate/ecp_mp_g_tff_rubik_face_rotate.h"
@@ -47,17 +46,15 @@ irp6_m::irp6_m(lib::configurator &_config) :
 		throw std::runtime_error("Robot not supported");
 	}
 
-	register_sg(new common::generator::sleep(*this));
-	register_sg(new generator::transparent(*this));
-	register_sg(new generator::bias_edp_force(*this));
-	register_sg(new generator::tff_gripper_approach(*this, 8));
-	register_sg(new generator::tff_rubik_face_rotate(*this, 8));
-	register_sg(new common::generator::tff_nose_run(*this, 8));
-
-	register_sg(new generator::weight_measure(*this, 1));
-
-	register_sg(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::subtask::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
-	register_sg(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::subtask::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
+	register_generator(new generator::sleep(*this));
+	register_generator(new generator::transparent(*this));
+	register_generator(new generator::bias_edp_force(*this));
+	register_generator(new generator::tff_gripper_approach(*this, 8));
+	register_generator(new generator::tff_rubik_face_rotate(*this, 8));
+	register_generator(new generator::tff_nose_run(*this, 8));
+	register_generator(new generator::weight_measure(*this, 1));
+	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::generator::ECP_GEN_SMOOTH_JOINT_FILE_FROM_MP, true));
+	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_GEN_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
 
 	sr_ecp_msg->message("ecp loaded");
 }
