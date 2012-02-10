@@ -2,14 +2,14 @@
 
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
-#include "generator/ecp/ecp_g_operator_reaction_condition.h"
+#include "ecp_g_operator_reaction_condition.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
 
 operator_reaction_condition::operator_reaction_condition(common::task::task& _ecp_task) :
-	common::generator::generator(_ecp_task)
+		common::generator::generator(_ecp_task)
 {
 	pose_list.clear();
 	pose_list_iterator = pose_list.end();
@@ -106,7 +106,6 @@ bool operator_reaction_condition::first_step()
 
 } // end: irp6ot_operator_reaction_condition::condition_value ()
 // --------------------------------------------------------------------------
-
 
 // --------------------------------------------------------------------------
 bool operator_reaction_condition::next_step()
