@@ -36,7 +36,7 @@ servo_buffer::servo_buffer(effector &_master) :
 	synchro_step_coarse[0] = AXIS_7_SYNCHRO_STEP_COARSE;
 	synchro_step_fine[0] = AXIS_7_SYNCHRO_STEP_FINE;
 
-	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
+	thread_id = boost::thread(boost::bind(&servo_buffer::operator(), this));
 }
 /*-----------------------------------------------------------------------*/
 

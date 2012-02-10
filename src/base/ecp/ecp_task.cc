@@ -45,7 +45,8 @@ task_base::task_base(lib::configurator &_config, boost::shared_ptr <robot::ecp_r
 
 void task_base::register_generator(generator::generator_base* _gen)
 {
-	std::string gen_name = _gen->generator_name;
+	const std::string & gen_name = _gen->generator_name;
+
 	if (gen_name != EMPTY_SUBTASK_GENERATOR_NAME) {
 		if (generator_m.find(gen_name) == generator_m.end()) {
 			generator_m[gen_name] = _gen;

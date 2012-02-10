@@ -67,7 +67,7 @@ void force::operator()()
 		perror("clock_gettime()");
 	}
 
-	while (!TERMINATE) //!< for (;;)
+	while (!boost::this_thread::interruption_requested())
 	{
 		try {
 			if (new_edp_command) {
@@ -146,13 +146,12 @@ void force::operator()()
 		catch (...) {
 			std::cerr << "unidentified error in EDP force thread" << std::endl;
 		}
-
-	} //!< //!< end while(;;)
+	}
 } //!< end MAIN
 
 force::force(common::manip_effector &_master) :
 		force_sensor_test_mode(true), is_reading_ready(false), //!< nie ma zadnego gotowego odczytu
-		is_right_turn_frame(true), gravity_transformation(NULL), master(_master), TERMINATE(false), is_sensor_configured(false), new_edp_command(false), cb(FORCE_BUFFER_LENGHT) //!< czujnik niezainicjowany
+		is_right_turn_frame(true), gravity_transformation(NULL), master(_master), is_sensor_configured(false), new_edp_command(false), cb(FORCE_BUFFER_LENGHT) //!< czujnik niezainicjowany
 {
 	/*! Lokalizacja procesu wywietlania komunikatow SR */
 

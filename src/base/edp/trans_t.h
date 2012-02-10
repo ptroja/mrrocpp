@@ -32,8 +32,6 @@ template <typename COMMAND_T = lib::c_buffer>
 class trans_t : public boost::noncopyable
 {
 protected:
-	boost::thread thread_id;
-
 	typedef struct _master_to_transformer_cmd
 	{
 		MT_ORDER trans_t_task;
@@ -46,6 +44,8 @@ protected:
 	virtual void operator()() = 0;
 
 public:
+	boost::thread thread_id;
+
 	lib::condition_synchroniser master_to_trans_synchroniser;
 	lib::condition_synchroniser trans_t_to_master_synchroniser;
 
@@ -54,6 +54,8 @@ public:
 
 	virtual ~trans_t()
 	{
+		thread_id.interrupt();
+		thread_id.join();
 	}
 
 	void master_to_trans_t_order(MT_ORDER nm_task, int nm_tryb, const COMMAND_T& _instruction)
