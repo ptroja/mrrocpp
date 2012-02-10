@@ -45,12 +45,8 @@ irp6_m::irp6_m(lib::configurator &_config) :
 	register_generator(new generator::tff_rubik_face_rotate(*this, 8));
 	register_generator(new generator::tff_nose_run(*this, 8));
 	register_generator(new generator::weight_measure(*this, 1));
-	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::generator::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
-	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
-
-	// TEMPORARY REMOVAL
-//	register_generator(new subtask::subtask_);
-//	register_generator(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
+	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::generator::ECP_GEN_SMOOTH_JOINT_FILE_FROM_MP, true));
+	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_GEN_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
 
 	sr_ecp_msg->message("ecp loaded");
 }

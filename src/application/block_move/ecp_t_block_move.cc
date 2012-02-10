@@ -65,17 +65,17 @@ block_move::block_move(lib::configurator &_config) :
 	register_generator(new common::generator::bias_edp_force(*this));
 
 	// utworzenie podzadan
-	//subtask_m[ecp_mp::generator::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP] =
+	//subtask_m[ecp_mp::generator::ECP_GEN_SMOOTH_JOINT_FILE_FROM_MP] =
 	//new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
-	//subtask_m[ecp_mp::generator::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
+	//subtask_m[ecp_mp::generator::ECP_GEN_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
 	//new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
 
-	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::generator::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
-	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
+	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::generator::ECP_GEN_SMOOTH_JOINT_FILE_FROM_MP, true));
+	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_GEN_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
 
 	// TEMPORARY REMOVAL
-	//register_generator(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::generator::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
-	//register_generator(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
+	//register_generator(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::generator::ECP_GEN_SMOOTH_JOINT_FILE_FROM_MP, true));
+	//register_generator(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_GEN_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
 
 	//sensor rpc
 	sr_ecp_msg->message("Creating discode sensor...");
