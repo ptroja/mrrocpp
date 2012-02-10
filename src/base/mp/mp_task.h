@@ -9,107 +9,17 @@
 #ifndef MP_TASK_H_
 #define MP_TASK_H_
 
-#include <ostream>
+#include <boost/foreach.hpp>
 
-#include "base/mp/mp_typedefs.h"
-#include "base/ecp_mp/ecp_mp_task.h"
-
-#include "base/lib/agent/InputBuffer.h"
-#include "base/lib/agent/OutputBuffer.h"
+#include "base/mp/mp_task_base.h"
 
 #include "generator/mp_g_set_next_ecps_state.h"
+#include "generator/mp_g_wait_for_task_termination.h"
+#include "generator/mp_g_send_end_motion_to_ecps.h"
 
 namespace mrrocpp {
 namespace mp {
-
-// Forward declaration.
-namespace generator {
-class generator;
-}
-
 namespace task {
-
-/**
- * MP robot utilities (macros and classes).
- * @note this is necessary to first create robot and then assign it to robot_m
- * the robot constructor can not be directly called with them associated robot_m field creation
- * because it uses robot_m
- * @note if the robot has been already added, then do nothing
- */
-
-#define ACTIVATE_MP_ROBOT(__robot_name) \
-	if(robot_m.find(lib::__robot_name::ROBOT_NAME) == robot_m.end()) {\
-		if (config.exists_and_true ("is_active", "[edp_" #__robot_name "]")) {\
-			robot::robot* created_robot = new robot::__robot_name(*this);\
-			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
-		}\
-	}
-
-#define ACTIVATE_MP_DEFAULT_ROBOT(__robot_name) \
-	if(robot_m.find(lib::__robot_name::ROBOT_NAME) == robot_m.end()) {\
-		if (config.exists_and_true ("is_active", "[edp_" #__robot_name "]")) {\
-			robot::robot* created_robot = new robot::robot(lib::__robot_name::ROBOT_NAME, *this, 0);\
-			robot_m[lib::__robot_name::ROBOT_NAME] = created_robot;\
-		}\
-	}
-
-//! Macro for checking if robot is marked as activate in the config file
-#define IS_MP_ROBOT_ACTIVE(__robot_name) \
-	(config.exists_and_true ("is_active", "[edp_" #__robot_name "]"))
-
-//! Type for optionally active input data buffer
-template <class T>
-class InputPtr : private boost::shared_ptr <lib::agent::InputBuffer <T> >
-{
-	//! Underlying implementation of 'optional' concept
-	typedef boost::shared_ptr <lib::agent::InputBuffer <T> > ptrType;
-
-public:
-	//! Create input buffer and register within an agent
-	void Create(lib::agent::Agent & owner, const std::string & name, const T & default_value = T())
-	{
-		if (ptrType::get()) {
-			std::ostringstream tmp;
-			tmp << "optional Input buffer \"" << name << "\"already created";
-			throw std::runtime_error(tmp.str());
-		}
-
-		ptrType::operator=((ptrType) new lib::agent::InputBuffer<T>(owner, name, default_value));
-	}
-
-	//! Reuse access operator from the underlying 'optional' concept type
-	using ptrType::operator->;
-
-	//! Reuse getter from the underlying 'optional' concept type
-	using ptrType::get;
-};
-
-//! Type for optionally inactive output data buffer
-template <class T>
-struct OutputPtr : private boost::shared_ptr <lib::agent::OutputBuffer <T> >
-{
-	//! Underlying implementation of 'optional' concept
-	typedef boost::shared_ptr <lib::agent::OutputBuffer <T> > ptrType;
-
-public:
-	//! Create input buffer and register within an agent
-	void Create(lib::agent::RemoteAgent & owner, const std::string & name)
-	{
-		if (ptrType::get()) {
-			std::ostringstream tmp;
-			tmp << "optional Output buffer \"" << name << "\"already created";
-			throw std::runtime_error(tmp.str());
-		}
-
-		ptrType::operator=((ptrType) new lib::agent::OutputBuffer<T>(owner, name));
-	}
-
-	//! Reuse access operator from the underlying 'optional' concept type
-	using ptrType::operator->;
-
-	//! Reuse getter from the underlying 'optional' concept type
-	using ptrType::get;
-};
 
 /*!
  * @brief Base class of all mp tasks
@@ -117,32 +27,81 @@ public:
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup mp
  */
-class task : public ecp_mp::task::task
+class task : public task_base
 {
-private:
+public:
 	/**
-	 * @brief Initializes communication channels
+	 * Constructor.
+	 * @param _configurator configurator object
 	 */
-	void initialize_communication(void);
-
-	/**
-	 * @brief waits for acknowledge reply from all robots
-	 */
-	void wait_for_all_robots_acknowledge();
-
-	/**
-	 * @brief pause all ECP's
-	 * it sends special MP command
-	 */
-	void pause_all();
-
-	/**
-	 * @brief resume all ECP's
-	 * it sends special MP command
-	 */
-	void resume_all();
+	task(lib::configurator &_config);
 
 protected:
+	/**
+	 * @brief executes delay
+	 * it calls dedicated generator and then sends command in generator Move instruction
+	 * @param _ms_delay delay time
+	 */
+	void wait_ms(unsigned int _ms_delay);
+
+	/**
+	 * @brief Insert robot names into generator's map (recursive variadic template).
+	 * @param gen generator
+	 * @param robot_name first robot name
+	 * @param robot_names rest of robot names
+	 */
+	template<typename... Args>
+	void insert_robots(generator::generator & gen, const lib::robot_name_t & robot_name, const Args&... robot_names)
+	{
+		// Insert head of the argument lists.
+		gen.robot_m[robot_name] = this->robot_m[robot_name];
+
+		// If there are more arguments...
+		if(sizeof...(Args)) {
+			// ...then handle them recursively.
+			insert_robots(gen, robot_names...);
+		}
+	}
+
+	/**
+	 * @brief sends end motion command to ECP's
+	 * it calls dedicated generator and then sends command in generator Move instruction
+	 * @param ... robots labels
+	 */
+	template<typename... Args>
+	void send_end_motion_to_ecps(const lib::robot_name_t & robot_name, const Args&... robot_names)
+	{
+		generator::send_end_motion_to_ecps mp_semte_gen(*this);
+
+		insert_robots(mp_semte_gen, robot_name, robot_names...);
+
+		mp_semte_gen.Move();
+	}
+
+	/**
+	 * @brief waits for task termination reply from set of robots ECP's
+	 * it calls dedicated generator and then sends command in generator Move instruction
+	 */
+	void wait_for_task_termination(bool activate_trigger, const std::vector <lib::robot_name_t> & robotSet);
+
+	/**
+	 * @brief Wait for task termination with variadic list of robot names.
+	 * @param activate_trigger
+	 * @param robot_name
+	 * @param robot_names
+	 */
+	template<typename... Args>
+	void wait_for_task_termination(bool activate_trigger, const lib::robot_name_t & robot_name, const Args&... robot_names)
+	{
+		generator::wait_for_task_termination wtf_gen(*this);
+
+		insert_robots(wtf_gen, robot_name, robot_names...);
+
+		wtf_gen.configure(activate_trigger);
+
+		wtf_gen.Move();
+	}
+
 	/**
 	 * @brief sets the next state of ECP
 	 * it calls dedicated generator and then sends new command in generator Move instruction
@@ -165,106 +124,17 @@ protected:
 		mp_snes_gen.Move();
 	}
 
+private:
 	/**
-	 * @brief sends end motion command to ECP's
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param number_of_robots number of robots to receive command
-	 * @param ... robots labels
+	 * @brief Insert robot names into generator's map (recursive variadic template end-call).
+	 * @param gen generator
+	 * @param robot_name first robot name
 	 */
-	void send_end_motion_to_ecps(int number_of_robots, ...);
-
-	/**
-	 * @brief waits for task termination reply from set of robots ECP's
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param number_of_robots number of robots to receive command
-	 * @param ... robots labels
-	 */
-	void wait_for_task_termination(bool activate_trigger, const std::vector <lib::robot_name_t> & robotSet);
-
-	void wait_for_task_termination(bool activate_trigger, const lib::robot_name_t & robot_name);
-
-	/**
-	 * @brief executes delay
-	 * it calls dedicated generator and then sends command in generator Move instruction
-	 * @param _ms_delay delay time
-	 */
-	void wait_ms(unsigned int _ms_delay);
-
-	/**
-	 * @brief Check if the robot has been created and activated
-	 * @param name robot name
-	 */
-	bool is_robot_activated(const lib::robot_name_t & name) const
+	void insert_robots(generator::generator & gen, const lib::robot_name_t & robot_name)
 	{
-		return (robot_m.find(name) != robot_m.end());
+		// Insert head of the argument lists.
+		gen.robot_m[robot_name] = this->robot_m[robot_name];
 	}
-
-public:
-	/**
-	 * @brief Constructor
-	 * @param _config configurator object reference.
-	 */
-	task(lib::configurator &_config);
-
-	/**
-	 * @brief Destructor
-	 */
-	virtual ~task(void);
-
-	/**
-	 * @brief pure virtual method to create robots
-	 * it have to be reimplemented in inherited classes
-	 */
-	virtual void create_robots(void) = 0;
-
-	/**
-	 * @brief waits for START pulse from UI
-	 */
-	void wait_for_start(void);
-
-	/**
-	 * @brief starts all ECP's
-	 * it sends special MP command
-	 */
-	void start_all();
-
-	/**
-	 * @brief waits for STOP pulse from UI
-	 */
-	void wait_for_stop(void);
-
-	/**
-	 * @brief Waits for stop pulse from UI and terminated all ECP's
-	 */
-	void stop_and_terminate(void);
-
-	/**
-	 * @brief termianted all ECP's
-	 * it sends special MP command
-	 */
-	void terminate_all();
-
-	/**
-	 * @brief main task algorithm
-	 * to implement ni inherited classes
-	 */
-	virtual void main_task_algorithm(void) = 0;
-
-	/**
-	 * @brief map of all robots used in the task
-	 */
-	common::robots_t robot_m;
-
-	/**
-	 * @brief receives pulse from UI or ECP
-	 */
-	void receive_ui_or_ecp_message(generator::generator& the_generator);
-
-protected:
-	/**
-	 * @brief pulse from UI
-	 */
-	lib::agent::InputBuffer<char> ui_pulse;
 };
 
 /**
@@ -272,10 +142,10 @@ protected:
  * @param _config configurator object reference
  * @return inherited task pointer
  */
-task* return_created_mp_task(lib::configurator &_config);
+task * return_created_mp_task(lib::configurator &_config);
 
 } // namespace task
 } // namespace mp
 } // namespace mrrocpp
 
-#endif /*MP_TASK_H_*/
+#endif /* MP_TASK_H_ */

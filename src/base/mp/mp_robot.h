@@ -21,6 +21,7 @@ namespace mrrocpp {
 namespace mp {
 
 namespace task {
+class task_base;
 class task;
 } // namespace task
 namespace generator {
@@ -39,7 +40,7 @@ class robot : public ecp_mp::robot
 {
 	// Both the generator and task have access to private methods
 	friend class mrrocpp::mp::generator::generator;
-	friend class mrrocpp::mp::task::task;
+	friend class mrrocpp::mp::task::task_base;
 
 private:
 	/**
@@ -145,8 +146,6 @@ public:
 	 */
 	virtual ~robot();
 };
-
-
 
 } // namespace robot
 } // namespace mp
