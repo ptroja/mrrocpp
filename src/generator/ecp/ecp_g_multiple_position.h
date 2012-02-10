@@ -17,7 +17,7 @@
 #include "base/ecp/ecp_robot.h"
 
 #include "base/lib/trajectory_pose/trajectory_pose.h"
-#include "generator/ecp/ecp_g_get_position.h"
+#include "generator/ecp/get_position/ecp_g_get_position.h"
 #include "base/ecp/ecp_generator.h"
 #include "generator/ecp/velocity_profile_calculator/velocity_profile.h"
 #include "generator/ecp/trajectory_interpolator/trajectory_interpolator.h"
@@ -59,22 +59,22 @@ protected:
 	 * Temporary iterator used mainly to iterate through a single position which is always of type vector<double>.
 	 */
 	std::vector <double>::iterator tempIter;
-        /**
-         * Vector of read currents. (used in optimization)
-         */
-        std::vector <std::vector<double> > current_vector;
-        /**
-         * Current vector iterator.
-         */
-        std::vector <std::vector <double> >::iterator current_vector_iterator;
-        /**
-         * Vector of read energy. (used in optimization)
-         */
-        std::vector <std::vector<double> > energy_vector;
-        /**
-         * Energy vector iterator.
-         */
-        std::vector <std::vector <double> >::iterator energy_vector_iterator;
+	/**
+	 * Vector of read currents. (used in optimization)
+	 */
+	std::vector <std::vector <double> > current_vector;
+	/**
+	 * Current vector iterator.
+	 */
+	std::vector <std::vector <double> >::iterator current_vector_iterator;
+	/**
+	 * Vector of read energy. (used in optimization)
+	 */
+	std::vector <std::vector <double> > energy_vector;
+	/**
+	 * Energy vector iterator.
+	 */
+	std::vector <std::vector <double> >::iterator energy_vector_iterator;
 	/**
 	 * Type of the commanded motion (absolute or relative)
 	 */
@@ -115,18 +115,18 @@ protected:
 	 * If true, debug information is shown.
 	 */
 	bool debug;
-        /**
-         * If true, optimization can be performed.
-         */
-        bool optimization;
+	/**
+	 * If true, optimization can be performed.
+	 */
+	bool optimization;
 	/**
 	 * Set to true if trajectory was specified in angle axis absolute coordinates and the interpolation is performed on poses transformed into relative vectors.
 	 */
 	bool angle_axis_absolute_transformed_into_relative;
-        /**
-         * Energy cost during consecutive optimization iterations.
-         */
-        std::vector<double> energy_cost;
+	/**
+	 * Energy cost during consecutive optimization iterations.
+	 */
+	std::vector <double> energy_cost;
 
 	//--------- VELOCITY AND ACCELERATION VECTORS ---------
 	/**
@@ -202,7 +202,7 @@ protected:
 	{
 		pose_vector_iterator = pose_vector.begin();
 		if (motion_type == lib::ABSOLUTE) {
-                        flushall();
+			flushall();
 			get_position * get_pos = new get_position(ecp_t, pose_spec, axes_num); //generator used to get the actual position of the robot
 			get_pos->Move();
 
@@ -317,23 +317,21 @@ protected:
 		flushall();
 	}
 
-        /**
-         * Returns current current average modue value.
-         */
-        /*double getCurrentModule(int i)
-	{
-		return the_robot->reply_package.arm.measured_current.average_module[i];
-        }*/
+	/**
+	 * Returns current current average modue value.
+	 */
+	/*double getCurrentModule(int i)
+	 {
+	 return the_robot->reply_package.arm.measured_current.average_module[i];
+	 }*/
 
-        /**
-         *
-         */
-        /*double getCurrentCubic(int i)
-	{
-		return the_robot->reply_package.arm.measured_current.average_cubic[i];
-        }*/
-
-
+	/**
+	 *
+	 */
+	/*double getCurrentCubic(int i)
+	 {
+	 return the_robot->reply_package.arm.measured_current.average_cubic[i];
+	 }*/
 
 public:
 	/**
@@ -343,7 +341,7 @@ public:
 			common::generator::generator(_ecp_task)
 	{
 		debug = false;
-                optimization = false;
+		optimization = false;
 		angle_axis_absolute_transformed_into_relative = false;
 		motion_type = lib::ABSOLUTE;
 		nmc = 10;
@@ -357,17 +355,16 @@ public:
 	{
 
 	}
-        /**
-         * Prints energy cost vector.
-         */
-        void print_energy_cost()
-        {
-            printf("############## Energy cost ##############\n");
-            for (int i = 0; i < energy_cost.size(); i++)
-            {
-                printf("%d: %f\n",i, energy_cost[i]);
-            }
-        }
+	/**
+	 * Prints energy cost vector.
+	 */
+	void print_energy_cost()
+	{
+		printf("############## Energy cost ##############\n");
+		for (int i = 0; i < energy_cost.size(); i++) {
+			printf("%d: %f\n", i, energy_cost[i]);
+		}
+	}
 
 	/**
 	 * Set debug variable.
@@ -376,42 +373,42 @@ public:
 	{
 		this->debug = debug;
 	}
-        /**
-         * Set optimization variable.
-         */
-        void set_optimization(bool optimization)
-        {
-            this->optimization = optimization;
-        }
+	/**
+	 * Set optimization variable.
+	 */
+	void set_optimization(bool optimization)
+	{
+		this->optimization = optimization;
+	}
 
-        /**
-          * Sets up the standard velocity vector for joint representation.
-          */
-        void set_joint_velocity_vector(const std::vector <double> & joint_velocity)
-        {
-            this->joint_velocity = joint_velocity;
-        }
-        /**
-          * Sets up the standard velocity vector for motor representation.
-          */
-        void set_motor_velocity_vector(const std::vector <double> & motor_velocity)
-        {
-            this->motor_velocity = motor_velocity;
-        }
-        /**
-          * Sets up the standard velocity vector for angle axis representation.
-          */
-        void set_angle_axis_velocity_vector(const std::vector <double> & angle_axis_velocity)
-        {
-            this->angle_axis_velocity = angle_axis_velocity;
-        }
-        /**
-          * Sets up the standard velocity vector for euler zyz representation.
-          */
-        void set_euler_zyz_velocity_vector(const std::vector <double> & euler_zyz_velocity)
-        {
-            this->euler_zyz_velocity = euler_zyz_velocity;
-        }
+	/**
+	 * Sets up the standard velocity vector for joint representation.
+	 */
+	void set_joint_velocity_vector(const std::vector <double> & joint_velocity)
+	{
+		this->joint_velocity = joint_velocity;
+	}
+	/**
+	 * Sets up the standard velocity vector for motor representation.
+	 */
+	void set_motor_velocity_vector(const std::vector <double> & motor_velocity)
+	{
+		this->motor_velocity = motor_velocity;
+	}
+	/**
+	 * Sets up the standard velocity vector for angle axis representation.
+	 */
+	void set_angle_axis_velocity_vector(const std::vector <double> & angle_axis_velocity)
+	{
+		this->angle_axis_velocity = angle_axis_velocity;
+	}
+	/**
+	 * Sets up the standard velocity vector for euler zyz representation.
+	 */
+	void set_euler_zyz_velocity_vector(const std::vector <double> & euler_zyz_velocity)
+	{
+		this->euler_zyz_velocity = euler_zyz_velocity;
+	}
 	/**
 	 * Implementation of the first_step method.
 	 */
@@ -481,8 +478,8 @@ public:
 				BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 		}
 
-                current_vector.clear();
-                energy_vector.clear();
+		current_vector.clear();
+		energy_vector.clear();
 		coordinate_vector_iterator = coordinate_vector.begin();
 		sr_ecp_msg.message("Moving...");
 		return true;
@@ -500,8 +497,8 @@ public:
 
 		if (coordinate_vector_iterator == coordinate_vector.end()) {
 			sr_ecp_msg.message("Motion finished");
-                        reset(); //reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
-                        return false;
+			reset(); //reset the generator, set generated and calculated flags to false, flush coordinate and pose lists
+			return false;
 		}
 
 		int i; //loop counter
@@ -517,14 +514,13 @@ public:
 		the_robot->ecp_command.instruction_type = lib::SET;
 
 		double coordinates[axes_num];
-                //std::vector<double> currents;
-                std::vector<double> currents;
-                std::vector<double> energy;
-                if (optimization)
-                {
-                    currents = std::vector<double>(axes_num);
-                    energy = std::vector<double>(axes_num);
-                }
+		//std::vector<double> currents;
+		std::vector <double> currents;
+		std::vector <double> energy;
+		if (optimization) {
+			currents = std::vector <double>(axes_num);
+			energy = std::vector <double>(axes_num);
+		}
 
 		switch (pose_spec)
 		{
@@ -535,28 +531,26 @@ public:
 				for (i = 0; i < axes_num; i++) {
 					the_robot->ecp_command.arm.pf_def.arm_coordinates[i] = *tempIter;
 
-                                        if (optimization)
-                                        {
-                                            currents[i] = sqrt(the_robot->reply_package.arm.measured_current.average_square[i]);
-                                            energy[i] = the_robot->reply_package.arm.measured_current.energy[i];
-                                        }
+					if (optimization) {
+						currents[i] = sqrt(the_robot->reply_package.arm.measured_current.average_square[i]);
+						energy[i] = the_robot->reply_package.arm.measured_current.energy[i];
+					}
 
 					if (debug) {
-                                                printf("%f\t", *tempIter);
-                                                //printf("%f\t", currents[i]);
+						printf("%f\t", *tempIter);
+						//printf("%f\t", currents[i]);
 					}
 					tempIter++;
 
 				}
 
-                                if (optimization)
-                                {
-                                    current_vector.push_back(currents);
-                                    energy_vector.push_back(energy);
-                                }
+				if (optimization) {
+					current_vector.push_back(currents);
+					energy_vector.push_back(energy);
+				}
 
 				if (debug) {
-                                        printf("\n");
+					printf("\n");
 					flushall();
 				}
 				break;
@@ -657,13 +651,13 @@ public:
 		}
 
 		if (debug) {
-                        print_pose_vector();
+			print_pose_vector();
 		}
 
 		interpolated = interpolate();
 
 		if (debug) {
-                        print_coordinate_vector();
+			print_coordinate_vector();
 		}
 
 		return interpolated;
@@ -696,13 +690,12 @@ public:
 	virtual void reset()
 	{
 		coordinate_vector.clear();
-                if (!optimization)
-                {
-                    current_vector.clear();
-                    energy_vector.clear();
-                    pose_vector.clear();
-                    energy_cost.clear();
-                }
+		if (!optimization) {
+			current_vector.clear();
+			energy_vector.clear();
+			pose_vector.clear();
+			energy_cost.clear();
+		}
 		calculated = false;
 		interpolated = false;
 		angle_axis_absolute_transformed_into_relative = false;
@@ -805,118 +798,118 @@ public:
 		}
 		return 0;
 	}
-        /**
-         * Loads a list of calculated coordinates from a text file.
-         * @param file_name name of the file with the trajectory
-         */
-        bool load_coordinates_from_file(const char* file_name)
-        {
-            sr_ecp_msg.message(file_name);
+	/**
+	 * Loads a list of calculated coordinates from a text file.
+	 * @param file_name name of the file with the trajectory
+	 */
+	bool load_coordinates_from_file(const char* file_name)
+	{
+		sr_ecp_msg.message(file_name);
 
-            char coordinate_type_desc[80]; //description of pose specification read from the file
-            char motion_type_desc[80]; //description of motion type read from the file
-            lib::ECP_POSE_SPECIFICATION ps; //pose specification read from the file
-            lib::MOTION_TYPE mt; //type of the commanded motion (relative or absolute)
-            int number_of_poses = 0; //number of poses to be read
-            int i, j; //loop counters
+		char coordinate_type_desc[80]; //description of pose specification read from the file
+		char motion_type_desc[80]; //description of motion type read from the file
+		lib::ECP_POSE_SPECIFICATION ps; //pose specification read from the file
+		lib::MOTION_TYPE mt; //type of the commanded motion (relative or absolute)
+		int number_of_poses = 0; //number of poses to be read
+		int i, j; //loop counters
 
-            std::ifstream from_file(file_name); // open the file
-            if (!from_file.good()) {
-                    //perror(file_name);
-                    BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
-                    return false;
-            }
+		std::ifstream from_file(file_name); // open the file
+		if (!from_file.good()) {
+			//perror(file_name);
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_EXISTENT_FILE));
+			return false;
+		}
 
-            if (!(from_file >> coordinate_type_desc)) {
-                    BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
-                    return false;
-            }
+		if (!(from_file >> coordinate_type_desc)) {
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
+			return false;
+		}
 
-            //removing spaces and tabs
-            i = 0;
-            j = 0;
-            while (coordinate_type_desc[i] == ' ' || coordinate_type_desc[i] == '\t')
-                    i++;
-            while (coordinate_type_desc[i] != ' ' && coordinate_type_desc[i] != '\t' && coordinate_type_desc[i] != '\n'
-                            && coordinate_type_desc[i] != '\r' && coordinate_type_desc[j] != '\0') {
-                    coordinate_type_desc[j] = toupper(coordinate_type_desc[i]);
-                    i++;
-                    j++;
-            }
-            coordinate_type_desc[j] = '\0';
+		//removing spaces and tabs
+		i = 0;
+		j = 0;
+		while (coordinate_type_desc[i] == ' ' || coordinate_type_desc[i] == '\t')
+			i++;
+		while (coordinate_type_desc[i] != ' ' && coordinate_type_desc[i] != '\t' && coordinate_type_desc[i] != '\n'
+				&& coordinate_type_desc[i] != '\r' && coordinate_type_desc[j] != '\0') {
+			coordinate_type_desc[j] = toupper(coordinate_type_desc[i]);
+			i++;
+			j++;
+		}
+		coordinate_type_desc[j] = '\0';
 
-            if (!strcmp(coordinate_type_desc, "MOTOR")) {
-                    ps = lib::ECP_MOTOR;
-            } else if (!strcmp(coordinate_type_desc, "JOINT")) {
-                    ps = lib::ECP_JOINT;
-            } else if (!strcmp(coordinate_type_desc, "XYZ_EULER_ZYZ")) {
-                    ps = lib::ECP_XYZ_EULER_ZYZ;
-            } else if (!strcmp(coordinate_type_desc, "XYZ_ANGLE_AXIS")) {
-                    ps = lib::ECP_XYZ_ANGLE_AXIS;
-            } else {
-                    BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_TRAJECTORY_FILE));
-                    return false;
-            }
+		if (!strcmp(coordinate_type_desc, "MOTOR")) {
+			ps = lib::ECP_MOTOR;
+		} else if (!strcmp(coordinate_type_desc, "JOINT")) {
+			ps = lib::ECP_JOINT;
+		} else if (!strcmp(coordinate_type_desc, "XYZ_EULER_ZYZ")) {
+			ps = lib::ECP_XYZ_EULER_ZYZ;
+		} else if (!strcmp(coordinate_type_desc, "XYZ_ANGLE_AXIS")) {
+			ps = lib::ECP_XYZ_ANGLE_AXIS;
+		} else {
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_TRAJECTORY_FILE));
+			return false;
+		}
 
-            this->pose_spec = ps;
+		this->pose_spec = ps;
 
-            if (!(from_file >> number_of_poses)) {
-                    BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
-                    return false;
-            }
+		if (!(from_file >> number_of_poses)) {
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
+			return false;
+		}
 
-            if (!(from_file >> motion_type_desc)) {
-                    BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
-                    return false;
-            }
+		if (!(from_file >> motion_type_desc)) {
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
+			return false;
+		}
 
-            if (!strcmp(motion_type_desc, "ABSOLUTE")) {
-                    mt = lib::ABSOLUTE;
-                    set_absolute();
-            } else if (!strcmp(motion_type_desc, "RELATIVE")) {
-                    mt = lib::RELATIVE;
-                    set_relative();
-            } else {
-                    BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_TRAJECTORY_FILE));
-                    return false;
-            }
+		if (!strcmp(motion_type_desc, "ABSOLUTE")) {
+			mt = lib::ABSOLUTE;
+			set_absolute();
+		} else if (!strcmp(motion_type_desc, "RELATIVE")) {
+			mt = lib::RELATIVE;
+			set_relative();
+		} else {
+			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(NON_TRAJECTORY_FILE));
+			return false;
+		}
 
-            //double tab[10];
-            int pos = from_file.tellg();
-            char line[80];
-            int dlugosc;
-            do {
-                    from_file.getline(line, 80);
-                    dlugosc = strlen(line);
-            } while (dlugosc < 5);
-            //int num = lib::setValuesInArray(tab, line);
-            this->set_axes_num(6);
-            from_file.seekg(pos);
+		//double tab[10];
+		int pos = from_file.tellg();
+		char line[80];
+		int dlugosc;
+		do {
+			from_file.getline(line, 80);
+			dlugosc = strlen(line);
+		} while (dlugosc < 5);
+		//int num = lib::setValuesInArray(tab, line);
+		this->set_axes_num(6);
+		from_file.seekg(pos);
 
-            //std::vector <double> v(axes_num); //vector of read velocities
-            //std::vector <double> a(axes_num); //vector of read accelerations
-            std::vector <double> coordinates(axes_num); //vector of read coordinates
+		//std::vector <double> v(axes_num); //vector of read velocities
+		//std::vector <double> a(axes_num); //vector of read accelerations
+		std::vector <double> coordinates(axes_num); //vector of read coordinates
 
-            for (i = 0; i < number_of_poses; i++) {
-                    for (j = 0; j < axes_num; j++) {
-                            if (!(from_file >> coordinates[j])) { //protection before the non-numerical data
-                                    BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
-                                    return false;
-                            }
-                            printf("%f\t", coordinates[j]);
-                    }
-                    from_file.ignore(std::numeric_limits <std::streamsize>::max(), '\n');
+		for (i = 0; i < number_of_poses; i++) {
+			for (j = 0; j < axes_num; j++) {
+				if (!(from_file >> coordinates[j])) { //protection before the non-numerical data
+					BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(READ_FILE_ERROR));
+					return false;
+				}
+				printf("%f\t", coordinates[j]);
+			}
+			from_file.ignore(std::numeric_limits <std::streamsize>::max(), '\n');
 
-                    coordinate_vector.push_back(coordinates);
-                    printf("\n");
+			coordinate_vector.push_back(coordinates);
+			printf("\n");
 
-            }
+		}
 
-            calculated = true;
-            interpolated = true;
+		calculated = true;
+		interpolated = true;
 
-            return true;
-        }
+		return true;
+	}
 
 	/**
 	 * Method load the relative trajectory_pose object to the pose_vector.

@@ -9,6 +9,7 @@ add_subdirectory (transparent)
 add_subdirectory (sleep)
 add_subdirectory (smooth_file_from_mp)
 add_subdirectory (newsmooth)
+add_subdirectory (get_position)
 
 add_library(ecp_mp_generators
 ecp_mp_g_common.cc
@@ -30,7 +31,6 @@ add_library(ecp_smooth_base
     ecp_g_constant_velocity.cc
     ecp_g_spline.cc
     ecp_g_visual_servo.cc
-	ecp_g_get_position.cc
 )
 
 
@@ -54,7 +54,9 @@ ecp_g_sleep
 ecp_g_smooth_file_from_mp
 ecp_g_newsmooth
 ecp_smooth_base
+ecp_g_get_position
 )
+target_link_libraries(ecp_smooth_base ecp_g_get_position)
 
 target_link_libraries(ecp_generators ecp)
 

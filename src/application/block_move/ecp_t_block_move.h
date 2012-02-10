@@ -21,7 +21,7 @@
 
 #include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 #include "generator/ecp/newsmooth/ecp_mp_g_newsmooth.h"
-#include "generator/ecp/ecp_g_get_position.h"
+#include "generator/ecp/get_position/ecp_g_get_position.h"
 
 #include "../visual_servoing/visual_servo.h"
 #include "../visual_servoing/single_visual_servo_manager.h"
