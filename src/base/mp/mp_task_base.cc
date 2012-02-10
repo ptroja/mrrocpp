@@ -6,18 +6,10 @@
  * @ingroup mp
  */
 
-#include <cstdio>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <csignal>
-#include <cstdarg>
-#include <cerrno>
 #include <cstdlib>
-#include <unistd.h>
-#include <fstream>
-#include <cstring>
 
 #include <boost/foreach.hpp>
+#include <boost/shared_ptr.hpp>
 
 #include "base/lib/datastr.h"
 
