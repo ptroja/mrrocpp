@@ -9,15 +9,15 @@
 #include <iostream>
 
 #include <boost/unordered_map.hpp>
-#include <boost/tokenizer.hpp>
-#include <boost/lexical_cast.hpp>
 
 #include <zmq.hpp>
+
+#include "zmqpp.h"
 
 int main(int argc, char *argv[])
 {
 	// Name to location mapping.
-	typedef boost::unordered_map<std::string, std::string> locations_t;
+	typedef boost::unordered_map<std::string, zmqpp::location> locations_t;
 
 	locations_t locations;
 
@@ -31,102 +31,82 @@ int main(int argc, char *argv[])
 	sock.bind("tcp://*:5555");
 
 	while (true) {
-		// Create message.
-		zmq::message_t msg;
+		// Create place-holder data.
+		zmqpp::location msg;
+#if 0
+		// Setup poll list.
+		zmq::pollitem_t pollitem;
 
-		sock.recv(&msg);
+		pollitem.socket = sock;
+		pollitem.events = ZMQ_POLLIN|ZMQ_POLLERR;
 
-		printf("%s\n", (char *) msg.data());
+		int r = zmq::poll(&pollitem, 1, -1);
 
-		typedef boost::char_separator<char> separator_t ;
-		typedef boost::tokenizer<separator_t> tokenizer_t;
+		std::cout << r << std::endl;
 
-		std::string request((char *) msg.data());
-
-		separator_t sep(":/@");
-
-		tokenizer_t tokens(request, sep);
-
-		tokenizer_t::const_iterator it = tokens.begin();
-
-		const std::string type = *it++;
-
-		if(type == "R") {
-			const std::string name = *it++;
-			const std::string host = *it++;
-			const int port = boost::lexical_cast<int>(*it++);
-			const int pid = boost::lexical_cast<int>(*it++);
-
-			std::cout << type << ":" << name << "@" << host << ":" << port << "/" << pid << std::endl;
-
-			if(locations.count(name) > 0) {
-				// Reply with empty message.
-				zmq::message_t reply;
-
-				sock.send(reply);
-			} else {
-				std::stringstream ss;
-
-				ss << host << ":" << port << "/" << pid;
-
-				locations.insert(locations_t::value_type(name, ss.str()));
-
-				zmq::message_t reply(ss.str().size());
-
-				strcpy((char *) reply.data(), ss.str().c_str());
-
-				sock.send(msg);
-			}
-
-		} else if (type == "U") {
-			const std::string name = *it++;
-			const std::string host = *it++;
-			const int port = boost::lexical_cast<int>(*it++);
-			const int pid = boost::lexical_cast<int>(*it++);
-
-			std::cout << type << ":" << name << ":" << host << ":" << port << "/" << pid << std::endl;
-
-			locations_t::const_iterator it = locations.find(name);
-
-			if(it == locations.end()) {
-				// Reply with empty message.
-				zmq::message_t reply;
-
-				sock.send(reply);
-			} else {
-				zmq::message_t reply(it->second.size());
-
-				strcpy((char *) reply.data(), it->second.c_str());
-
-				sock.send(msg);
-
-				locations.erase(it);
-			}
-
-		} else if (type == "Q") {
-			const std::string name = *it++;
-
-			locations_t::const_iterator it = locations.find(name);
-
-			if(it == locations.end()) {
-				// Reply with empty message.
-				zmq::message_t reply;
-
-				sock.send(reply);
-			} else {
-				zmq::message_t reply(it->second.size());
-
-				strcpy((char *) reply.data(), it->second.c_str());
-
-				sock.send(msg);
-			}
-
-		} else {
-			// Reply with empty message.
-			zmq::message_t reply;
-
-			sock.send(reply);
+		if(pollitem.revents & ZMQ_POLLIN) {
+			std::cout << "ZMQ_POLLIN" << std::endl;
 		}
+
+		if(pollitem.revents & ZMQ_POLLERR) {
+			std::cout << "ZMQ_POLLERR" << std::endl;
+		}
+#endif
+		zmqpp::recv(sock, msg);
+
+		std::cout << "<-" << msg << std::endl;
+
+		if(msg.type == zmqpp::location::REGISTER) {
+
+			// Check location within a map.
+			if(locations.count(msg.name) == 0) {
+				// Update map.
+				locations.insert(locations_t::value_type(msg.name, msg));
+
+				// Confirm.
+				msg.type = zmqpp::location::ACK;
+			} else {
+				// Default to NACK message.
+				msg.type = zmqpp::location::NACK;
+			}
+
+		} else if (msg.type == zmqpp::location::UNREGISTER) {
+
+			// Check location within a map.
+			locations_t::const_iterator it = locations.find(msg.name);
+
+			if(it != locations.end()) {
+				// Erase.
+				locations.erase(it);
+
+				// Confirm.
+				msg.type = zmqpp::location::ACK;
+			} else {
+				// Default to NACK message.
+				msg.type = zmqpp::location::NACK;
+			}
+
+		} else if (msg.type == zmqpp::location::QUERY) {
+			locations_t::const_iterator it = locations.find(msg.name);
+
+			if(it != locations.end()) {
+				msg = it->second;
+
+				// Confirm.
+				msg.type = zmqpp::location::ACK;
+			} else {
+				// Default to NACK message.
+				msg.type = zmqpp::location::NACK;
+			}
+		} else {
+			// Default to NACK message.
+			msg.type = zmqpp::location::NACK;
+		}
+
+		std::cout << "->" << msg << std::endl;
+
+		// Reply.
+		zmqpp::send(sock, msg);
 	}
 
 	return 0;

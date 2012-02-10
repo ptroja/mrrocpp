@@ -133,7 +133,7 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 include(FindComedi)
 include(FindXSD)
 include(FindXerces)
-pkg_check_modules(ZeroMQ REQUIRED libzmq)
+pkg_check_modules(ZeroMQ libzmq)
 
 # Make sure the compiler can find include files
 include_directories (${MRROCPP_SOURCE_DIR}/src) 
