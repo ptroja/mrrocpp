@@ -146,8 +146,6 @@ block_position_list block_move::create_plan(block_position_list l)
 {
 	sr_ecp_msg->message("Creating plan");
 
-<<<<<<< HEAD
-
 	l.sort();
 
 	cout << "Plan:" << endl;
@@ -155,42 +153,28 @@ block_position_list block_move::create_plan(block_position_list l)
 		(*it).print();
 	}
 
-=======
-	/*
-	 l.sort();
-
-	 cout << "Plan:" << endl;
-	 for(block_position_list::iterator it = l.begin(); it != l.end(); ++it) {
-	 (*it).print();
-	 }
-	 */
->>>>>>> 4a0f1a834b509fad1c32c78ed282dc033c0466bf
-
 	block_position_list plan;
 
-	BlockPlanner* bp = new BlockPlanner(WIDTH, l.size(), l);
+#ifdef USE_GECODE
 
-	sr_ecp_msg->message("Building tree");
+	BlockPlanner* bp = new BlockPlanner(WIDTH, l.size(), l);	//definition of CSP
 
-	DFS<BlockPlanner> e(bp);
+	DFS<BlockPlanner> e(bp);									//searching for solution
 
-	sr_ecp_msg->message("Printing solution");
-<<<<<<< HEAD
-
-	bp->print();
-	plan = bp->getPlan();
+	bp->print();												//printing solution
+	plan = bp->getPlan();										//getting a solution
 	delete bp;
 
-=======
-	/*
-	 bp->print();
-	 plan = bp->getPlan();
-	 delete bp;
-	 */
->>>>>>> 4a0f1a834b509fad1c32c78ed282dc033c0466bf
 	sr_ecp_msg->message("Creating plan end");
 
 	return plan;
+
+#else
+
+	return l;
+
+#endif
+
 }
 
 void block_move::main_task_algorithm(void)
@@ -276,13 +260,10 @@ void block_move::main_task_algorithm(void)
 			wait_ms(1000);
 
 			sr_ecp_msg->message("Force approach");
-<<<<<<< HEAD
-			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) ecp_mp::generator::tff_gripper_approach::behaviour_specification, ecp_mp::generator::tff_gripper_approach::behaviour_specification_data_type(0.03, 800, 5), lib::irp6p_m::ROBOT_NAME);
-			wait_for_task_termination(false, 1, lib::irp6p_m::ROBOT_NAME.c_str());
-=======
+
 			set_next_ecp_state(ecp_mp::generator::ECP_GEN_TFF_GRIPPER_APPROACH, (int) ecp_mp::generator::tff_gripper_approach::behaviour_specification, ecp_mp::generator::tff_gripper_approach::behaviour_specification_data_type(0.03, 800, 3), lib::irp6p_m::ROBOT_NAME);
 			wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
->>>>>>> 4a0f1a834b509fad1c32c78ed282dc033c0466bf
+
 
 			wait_ms(1000);
 
