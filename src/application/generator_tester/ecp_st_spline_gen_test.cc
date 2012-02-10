@@ -15,15 +15,18 @@
 
 #include "base/ecp/ecp_task.h"
 
+//#include "ecp_mp_st_spline_gen_test.h"
+
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace sub_task {
+namespace subtask {
 
-sub_task_spline_gen_test::sub_task_spline_gen_test(task::task & _ecp_t) :
-		sub_task(_ecp_t)
+subtask_spline_gen_test::subtask_spline_gen_test(task::task & _ecp_t) :
+		subtask(_ecp_t)
 {
 
+        generator_name = mrrocpp::ecp_mp::subtask::ECP_ST_SPLINE_GEN_TEST;
         if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
                 spgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 6);
                 spgenjoint->set_debug(true);
@@ -79,7 +82,7 @@ sub_task_spline_gen_test::sub_task_spline_gen_test(task::task & _ecp_t) :
         network_path = std::string(ecp_t.mrrocpp_network_path);
 }
 
-void sub_task_spline_gen_test::conditional_execution()
+void subtask_spline_gen_test::conditional_execution()
 {
 
         std::vector <double> coordinates1(6);//postument
@@ -628,7 +631,7 @@ void sub_task_spline_gen_test::conditional_execution()
         sr_ecp_msg.message("Spline test END");*/
 }
 
-sub_task_spline_gen_test::~sub_task_spline_gen_test()
+subtask_spline_gen_test::~subtask_spline_gen_test()
 {
         delete spgenjoint;
         delete spgenmotor;

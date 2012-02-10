@@ -1,7 +1,7 @@
 #if !defined(_ECP_ST_KCZ_FORCE_H)
 #define _ECP_ST_KCZ_FORCE_H
 
-#include "base/ecp/ecp_sub_task.h"
+#include "base/ecp/ecp_subtask.h"
 #include "ecp_g_pcbird_nose_run.h"
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 #include "ecp_st_acquisition.h"
@@ -9,7 +9,7 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace sub_task {
+namespace subtask {
 
 class acq_force : public acquisition
 {

@@ -18,7 +18,6 @@
 //
 // Ostatnia modyfikacja: 2004r.
 // -------------------------------------------------------------------------
-
 #include <cstdio>
 #include <fstream>
 #include <iostream>
@@ -31,7 +30,7 @@
 #include "base/lib/com_buf.h"
 
 #include "base/lib/sr/sr_ecp.h"
-#include "robot/irp6_tfg/ecp_g_tfg.h"
+#include "ecp_g_tfg.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
 
@@ -46,11 +45,10 @@ namespace generator {
 //
 // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // ///////////////////
 
-
 tfg::tfg(common::task::task& _ecp_task, int step) :
-	common::generator::generator(_ecp_task), step_no(step)
+		common::generator::generator(_ecp_task), step_no(step)
 {
-
+	generator_name = ecp_mp::generator::ECP_GEN_TFG;
 }
 
 bool tfg::first_step()
@@ -73,7 +71,6 @@ bool tfg::first_step()
 	return true;
 }
 // --------------------------------------------------------------------------
-
 
 // --------------------------------------------------------------------------
 bool tfg::next_step()

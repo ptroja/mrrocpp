@@ -8,7 +8,7 @@
 #include "BReading.h"
 #include "ecp_t_block_move.h"
 
-#include "subtask/ecp_st_smooth_file_from_mp.h"
+#include "generator/ecp/smooth_file_from_mp/ecp_g_smooth_file_from_mp.h"
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 
 //#include "subtask/ecp_mp_st_gripper_opening.h"
@@ -45,18 +45,18 @@ namespace task {
 
 // KONSTRUKTORY
 block_move::block_move(lib::configurator &_config) :
-common::task::task(_config)
+		common::task::task(_config)
 {
 	if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
-	}
-	else {
+	} else {
 		throw std::runtime_error("Robot not supported");
 	}
 
 	log_dbg_enabled = true;
 
 	// utworzenie generatorow
+<<<<<<< HEAD
 	sg = new common::generator::newsmooth(*this,lib::ECP_XYZ_ANGLE_AXIS, 6);
 	gp = new common::generator::get_position(*this,lib::ECP_XYZ_ANGLE_AXIS, 6);
 
@@ -67,6 +67,28 @@ common::task::task(_config)
 	// utworzenie podzadan
 	register_sg(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::sub_task::ECP_ST_SMOOTH_JOINT_FILE_FROM_MP, true));
 	register_sg(new sub_task::sub_task_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::sub_task::ECP_ST_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
+=======
+	gtga = new common::generator::tff_gripper_approach(*this, 8);
+	sg = new common::generator::newsmooth(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
+	gp = new common::generator::get_position(*this, lib::ECP_XYZ_ANGLE_AXIS, 6);
+
+	// utworzenie generatorow do uruchamiania dispatcherem
+	//generator_m[ecp_mp::generator::ECP_GEN_BIAS_EDP_FORCE] = new generator::bias_edp_force(*this);
+	register_generator(new common::generator::bias_edp_force(*this));
+
+	// utworzenie podzadan
+	//subtask_m[ecp_mp::generator::ECP_GEN_SMOOTH_JOINT_FILE_FROM_MP] =
+	//new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_JOINT, true);
+	//subtask_m[ecp_mp::generator::ECP_GEN_SMOOTH_ANGLE_AXIS_FILE_FROM_MP] =
+	//new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, true);
+
+	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::generator::ECP_GEN_SMOOTH_JOINT_FILE_FROM_MP, true));
+	register_generator(new generator::smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_GEN_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
+
+	// TEMPORARY REMOVAL
+	//register_generator(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_JOINT, ecp_mp::generator::ECP_GEN_SMOOTH_JOINT_FILE_FROM_MP, true));
+	//register_generator(new subtask::subtask_smooth_file_from_mp(*this, lib::ECP_XYZ_ANGLE_AXIS, ecp_mp::generator::ECP_GEN_SMOOTH_ANGLE_AXIS_FILE_FROM_MP, true));
+>>>>>>> 4a0f1a834b509fad1c32c78ed282dc033c0466bf
 
 	//sensor rpc
 	sr_ecp_msg->message("Creating discode sensor...");
@@ -76,20 +98,19 @@ common::task::task(_config)
 
 	//get position compute parameters
 	ecp_bm_config_section_name = "[ecp_block_move]";
-	offset = config.value <6, 1> ("offset", ecp_bm_config_section_name);
-	block_size = config.value <6, 1> ("block_size", ecp_bm_config_section_name);
-	correction = config.value <6, 1> ("correction", ecp_bm_config_section_name);
-	position = config.value <6, 1> ("position", ecp_bm_config_section_name);
-	int tm = config.value <int> ("sm_timeout", ecp_bm_config_section_name);
-	int block_localization = config.value <int> ("block_localization", ecp_bm_config_section_name);
-	int board_localization = config.value <int> ("board_localization", ecp_bm_config_section_name);
+	offset = config.value <6, 1>("offset", ecp_bm_config_section_name);
+	block_size = config.value <6, 1>("block_size", ecp_bm_config_section_name);
+	correction = config.value <6, 1>("correction", ecp_bm_config_section_name);
+	position = config.value <6, 1>("position", ecp_bm_config_section_name);
+	int tm = config.value <int>("sm_timeout", ecp_bm_config_section_name);
+	int block_localization = config.value <int>("block_localization", ecp_bm_config_section_name);
+	int board_localization = config.value <int>("board_localization", ecp_bm_config_section_name);
 
 	//defining a type of servovision
 	sr_ecp_msg->message("Creating visual servo...");
-	if(block_localization == 1) {
+	if (block_localization == 1) {
 		vs_config_section_name = "[block_reaching_servovision]";
-	}
-	else if(board_localization == 1) {
+	} else if (board_localization == 1) {
 		vs_config_section_name = "[board_localization_servovision]";
 	}
 
@@ -97,11 +118,13 @@ common::task::task(_config)
 	reg = (boost::shared_ptr <visual_servo_regulator>) new regulator_p(config, vs_config_section_name);
 	ds = (boost::shared_ptr <discode_sensor>) new discode_sensor(config, vs_config_section_name);
 	vs = (boost::shared_ptr <visual_servo>) new ib_eih_visual_servo(reg, ds, vs_config_section_name, config);
-	object_reached_term_cond = (boost::shared_ptr <termination_condition>) new object_reached_termination_condition(config, vs_config_section_name);
+	object_reached_term_cond =
+			(boost::shared_ptr <termination_condition>) new object_reached_termination_condition(config, vs_config_section_name);
 	timeout_term_cond = (boost::shared_ptr <termination_condition>) new timeout_termination_condition(tm);
 
 	//utworzenie generatora ruchu
-	sm = (boost::shared_ptr <single_visual_servo_manager>) new single_visual_servo_manager(*this, vs_config_section_name.c_str(), vs);
+	sm =
+			(boost::shared_ptr <single_visual_servo_manager>) new single_visual_servo_manager(*this, vs_config_section_name.c_str(), vs);
 	sm->add_position_constraint(cube);
 	sm->configure();
 
@@ -110,7 +133,7 @@ common::task::task(_config)
 
 void block_move::mp_2_ecp_next_state_string_handler(void)
 {
-	if(mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST) {
+	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_VISUAL_SERVO_TEST) {
 
 		sr_ecp_msg->message("configurate sensor...");
 
@@ -118,9 +141,9 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 		Types::Mrrocpp_Proxy::BReading br;
 
-		br = ds_rpc->call_remote_procedure<Types::Mrrocpp_Proxy::BReading>((int) param);
+		br = ds_rpc->call_remote_procedure <Types::Mrrocpp_Proxy::BReading>((int) param);
 
-		if(br.rpcReceived) {
+		if (br.rpcReceived) {
 			sr_ecp_msg->message("Rpc received");
 		}
 
@@ -131,37 +154,35 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 		sm->Move();
 
 		//obsługa warunku zakończenia pracy - warunek stopu
-		if(object_reached_term_cond->is_condition_met()) {
+		if (object_reached_term_cond->is_condition_met()) {
 			sr_ecp_msg->message("object_reached_term_cond is met");
 			ecp_reply.variant = 1;
 
-			if(param == BOARD_COLOR) {
+			if (param == BOARD_COLOR) {
 
 				//odczyt pozycji w ANGLE_AXIS
 				gp->Move();
 				position_vector = gp->get_position_vector();
 
-				if(!position.size()) {
+				if (!position.size()) {
 					sr_ecp_msg->message("get_position_vector is empty");
 				}
 
 				std::cout << "POSITION" << endl;
-				for(size_t i = 0; i < position_vector.size(); ++i) {
+				for (size_t i = 0; i < position_vector.size(); ++i) {
 					std::cout << position_vector[i] << std::endl;
 				}
 				std::cout << std::endl;
 			}
-		}
-		else {
+		} else {
 			sr_ecp_msg->message("object_reached_term_cond IS NOT MET");
 		}
 
 		//obsługa warunku zakończenia pracy - timeout
-		if(timeout_term_cond->is_condition_met()) {
+		if (timeout_term_cond->is_condition_met()) {
 			sr_ecp_msg->message("timeout_term_cond is met");
 			ecp_reply.variant = 0;
-		}
-		else {
+		} else {
 			sr_ecp_msg->message("timeout_term_cond IS NOT MET");
 		}
 
@@ -179,43 +200,42 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 		int change_pos[6];
 
 		change_pos[2] = param % 10;
-		change_pos[1] = (param % 100 - change_pos[2])/10;
-		change_pos[0] = (param % 1000 - change_pos[1])/100;
+		change_pos[1] = (param % 100 - change_pos[2]) / 10;
+		change_pos[0] = (param % 1000 - change_pos[1]) / 100;
 		change_pos[3] = 0;
 		change_pos[4] = 0;
 		change_pos[5] = 0;
 
 		std::cout << "CHANGE_POSITION" << endl;
-		for(size_t i = 0; i < 6; ++i) {
+		for (size_t i = 0; i < 6; ++i) {
 			std::cout << change_pos[i] << std::endl;
 		}
 		std::cout << std::endl;
 
-		position_on_board(0,0) = change_pos[0] - 1.0;				//TODO: odwrócić planszę
-		position_on_board(1,0) = change_pos[1] - 1.0;
-		position_on_board(2,0) = change_pos[2] - 2.0;
-		position_on_board(3,0) = 0;
-		position_on_board(4,0) = 0;
-		position_on_board(5,0) = 0;
+		position_on_board(0, 0) = change_pos[0] - 1.0; //TODO: odwrócić planszę
+		position_on_board(1, 0) = change_pos[1] - 1.0;
+		position_on_board(2, 0) = change_pos[2] - 2.0;
+		position_on_board(3, 0) = 0;
+		position_on_board(4, 0) = 0;
+		position_on_board(5, 0) = 0;
 
-		correction_weights(0,0) = (position_on_board(0,0) == 3.0) ? 0 : 1;
-		correction_weights(1,0) = (position_on_board(1,0) == 3.0) ? 0 : 1;
-		correction_weights(2,0) = 0;
-		correction_weights(3,0) = 0;
-		correction_weights(4,0) = 0;
-		correction_weights(5,0) = 0;
+		correction_weights(0, 0) = (position_on_board(0, 0) == 3.0) ? 0 : 1;
+		correction_weights(1, 0) = (position_on_board(1, 0) == 3.0) ? 0 : 1;
+		correction_weights(2, 0) = 0;
+		correction_weights(3, 0) = 0;
+		correction_weights(4, 0) = 0;
+		correction_weights(5, 0) = 0;
 
 		sr_ecp_msg->message("after load coordinates");
 
 		int do_move = 0; //czy zmieniac pozycje
-		for(int i = 0; i < 6; ++i) {
-			if(abs(position_on_board(i,0)) < 4 && position_on_board(i,0) >= 0) {
+		for (int i = 0; i < 6; ++i) {
+			if (abs(position_on_board(i, 0)) < 4 && position_on_board(i, 0) >= 0) {
 				do_move = 1;
 			}
 		}
 
-		if(do_move == 1)
-		{
+		if (do_move == 1) {
 			sg->reset();
 			sg->set_absolute();
 
@@ -224,30 +244,30 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 			sr_ecp_msg->message("after reset and set_absoulute");
 
 			std::cout << "POSITION ON BOARD" << endl;
-			for(size_t i = 0; i < 6; ++i) {
-				std::cout << position_on_board(i,0) << std::endl;
+			for (size_t i = 0; i < 6; ++i) {
+				std::cout << position_on_board(i, 0) << std::endl;
 			}
 			std::cout << std::endl;
 
-
 			/*coordinates[0] = position[0] + offset_x + (4 - change_pos[0])*BLOCK_WIDTH + corr_x*(change_pos[0] - 1);
-			coordinates[1] = position[1] + offset_y + (4 - change_pos[1])*BLOCK_WIDTH + corr_y*(change_pos[0] - 1);
-			coordinates[2] = position[2] + (change_pos[2]-3)*BLOCK_HEIGHT;
-			coordinates[3] = position[3] + change_pos[3]*BLOCK_WIDTH;
-			coordinates[4] = position[4] + change_pos[4]*BLOCK_WIDTH;
-			coordinates[5] = position[5] + change_pos[5]*BLOCK_WIDTH;
-			*/
+			 coordinates[1] = position[1] + offset_y + (4 - change_pos[1])*BLOCK_WIDTH + corr_y*(change_pos[0] - 1);
+			 coordinates[2] = position[2] + (change_pos[2]-3)*BLOCK_HEIGHT;
+			 coordinates[3] = position[3] + change_pos[3]*BLOCK_WIDTH;
+			 coordinates[4] = position[4] + change_pos[4]*BLOCK_WIDTH;
+			 coordinates[5] = position[5] + change_pos[5]*BLOCK_WIDTH;
+			 */
 
-			for(size_t i = 0; i < 6; ++i) {
-				coordinates_vector[i] = position(i) + offset(i,0) + position_on_board(i,0)*block_size(i,0) + correction(i,0)*correction_weights(i,0);
+			for (size_t i = 0; i < 6; ++i) {
+				coordinates_vector[i] = position(i) + offset(i, 0) + position_on_board(i, 0) * block_size(i, 0)
+						+ correction(i, 0) * correction_weights(i, 0);
 			}
 
 			/*
-			std::cout << "coordinates: " << std::endl;
-			for(int i = 0; i < 6; ++i) {
-			std::cout << coordinates[i] << std::endl;
-			}
-			*/
+			 std::cout << "coordinates: " << std::endl;
+			 for(int i = 0; i < 6; ++i) {
+			 std::cout << coordinates[i] << std::endl;
+			 }
+			 */
 
 			sr_ecp_msg->message("coordinates ready");
 
@@ -255,8 +275,7 @@ void block_move::mp_2_ecp_next_state_string_handler(void)
 
 			sr_ecp_msg->message("pose loaded");
 
-			if(sg->calculate_interpolate())
-			{
+			if (sg->calculate_interpolate()) {
 				sg->Move();
 			}
 
