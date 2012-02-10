@@ -25,7 +25,6 @@
 #include <iostream>
 #include <fstream>
 
-#include <pthread.h>
 #include <cerrno>
 
 #include "interface.h"

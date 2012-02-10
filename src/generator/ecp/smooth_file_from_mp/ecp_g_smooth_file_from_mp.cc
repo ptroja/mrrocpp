@@ -19,8 +19,8 @@ smooth_file_from_mp::smooth_file_from_mp(task::task & _ecp_t, lib::ECP_POSE_SPEC
 	switch (pose_spec)
 	{
 		case lib::ECP_JOINT:
-			sgen =
-					(boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, pose_spec, ecp_t.ecp_m_robot->number_of_servos);
+                        sgen = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, pose_spec, ecp_t.ecp_m_robot->number_of_servos);
+                        sgen->set_debug(true);
 			break;
 		case lib::ECP_XYZ_ANGLE_AXIS:
 			sgen = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, pose_spec, 6);

@@ -11,7 +11,7 @@
 #include <boost/foreach.hpp>
 
 #include "base/mp/mp_robot.h"
-
+#include "base/mp/mp_task.h"
 
 #include "base/mp/generator/mp_g_wait_for_task_termination.h"
 

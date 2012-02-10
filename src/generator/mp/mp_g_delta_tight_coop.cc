@@ -11,6 +11,7 @@
 #include <boost/foreach.hpp>
 
 #include "base/mp/mp_robot.h"
+#include "base/mp/mp_task.h"
 
 #include "generator/mp/mp_g_delta_tight_coop.h"
 

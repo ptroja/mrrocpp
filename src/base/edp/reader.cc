@@ -20,7 +20,6 @@
 #include <boost/circular_buffer.hpp>
 
 #include <cerrno>
-#include <pthread.h>
 #include <ctime>
 
 #include <boost/scoped_array.hpp>

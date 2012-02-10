@@ -16,7 +16,7 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-generator::generator(task::task& _mp_task) :
+generator::generator(task::task_base & _mp_task) :
 	ecp_mp::generator::generator(*_mp_task.sr_ecp_msg), mp_t(_mp_task), wait_for_ECP_message(false)
 {
 }

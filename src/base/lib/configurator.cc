@@ -41,7 +41,7 @@ namespace lib {
 
 // Konstruktor obiektu - konfiguratora.
 configurator::configurator(const std::string & _node, const std::string & _dir, const std::string & _section_name) :
-	node(_node), dir(_dir), section_name(_section_name)
+		node(_node), dir(_dir), section_name(_section_name)
 {
 	// jesli nazwa sekcji rozpoczyna sie od [ecp lub [edp to wyekstrahuj nazwe robota
 	// w przeciwnym razie podstawia pusta
@@ -91,7 +91,7 @@ void configurator::change_config_file(const std::string & _ini_file)
 
 bool configurator::check_config(const std::string & key) const
 {
-	return (exists(key.c_str()) && value <int> (key));
+	return (exists(key.c_str()) && value <int>(key));
 }
 
 std::string configurator::return_attach_point_name(const char* _key, const char* __section_name) const
@@ -99,7 +99,7 @@ std::string configurator::return_attach_point_name(const char* _key, const char*
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
 	// Zwrocenie atach_point'a.
-	return value <std::string> (_key, _section_name);
+	return value <std::string>(_key, _section_name);
 }
 
 std::string configurator::return_default_reader_measures_path() const
@@ -203,7 +203,7 @@ std::string configurator::return_mrrocpp_network_path() const
 bool configurator::exists(const std::string & _key) const
 {
 	try {
-		value <std::string> (_key, section_name);
+		value <std::string>(_key, section_name);
 	} catch (boost::property_tree::ptree_error & e) {
 		return false;
 	}
@@ -214,7 +214,7 @@ bool configurator::exists(const std::string & _key) const
 bool configurator::exists(const std::string & _key, const std::string & _section_name) const
 {
 	try {
-		value <std::string> (_key, _section_name);
+		value <std::string>(_key, _section_name);
 	} catch (boost::property_tree::ptree_error & e) {
 		return false;
 	}
@@ -227,7 +227,7 @@ bool configurator::exists_and_true(const char* _key, const char* __section_name)
 	const char *_section_name = (__section_name) ? __section_name : section_name.c_str();
 
 	if (exists(_key, _section_name)) {
-		return value <bool> (_key, _section_name);
+		return value <bool>(_key, _section_name);
 	} else {
 		return false;
 	}
@@ -235,7 +235,7 @@ bool configurator::exists_and_true(const char* _key, const char* __section_name)
 
 pid_t configurator::process_spawn(const std::string & _section_name)
 {
-	const std::string program_name = value <std::string> ("program_name", _section_name);
+	const std::string program_name = value <std::string>("program_name", _section_name);
 
 	std::string rsh_spawn_node;
 
@@ -243,20 +243,22 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		rsh_spawn_node = "localhost";
 	} else {
 
-		std::string spawned_node_name = value <std::string> ("node_name", _section_name);
-
-		if (spawned_node_name == sysinfo.nodename) {
-			rsh_spawn_node = "localhost";
-		} else {
-			rsh_spawn_node = spawned_node_name;
-		}
+		std::string spawned_node_name = value <std::string>("node_name", _section_name);
+		/*
+		 if (spawned_node_name == sysinfo.nodename) {
+		 rsh_spawn_node = "localhost";
+		 } else {
+		 rsh_spawn_node = spawned_node_name;
+		 }
+		 */
+		rsh_spawn_node = spawned_node_name;
 	}
 
 	bool use_ssh;
 
 	// Use SSH ?
 	if (exists("use_ssh", _section_name)) {
-		use_ssh = value <bool> ("use_ssh", _section_name);
+		use_ssh = value <bool>("use_ssh", _section_name);
 	} else {
 		use_ssh = false;
 	}
@@ -266,13 +268,13 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 	// Sciezka do binariow.
 	char bin_path[PATH_MAX];
 	if (exists("binpath", _section_name)) {
-		std::string _bin_path = value <std::string> ("binpath", _section_name);
+		std::string _bin_path = value <std::string>("binpath", _section_name);
 
 		if (_bin_path == std::string("current")) {
 			char* cwd;
 			char buff[PATH_MAX + 1];
 
-			cwd = getcwd(buff, PATH_MAX + 1);
+cwd			= getcwd(buff, PATH_MAX + 1);
 			if (cwd == NULL) {
 				perror("Blad cwd w configurator");
 			}
@@ -286,7 +288,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		char* cwd;
 		char buff[PATH_MAX + 1];
 
-		cwd = getcwd(buff, PATH_MAX + 1);
+cwd		= getcwd(buff, PATH_MAX + 1);
 		if (cwd == NULL) {
 			perror("Blad cwd w configurator");
 		}
@@ -312,15 +314,21 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		//ewentualne dodatkowe argumenty wywolania np. przekierowanie na konsole
 		std::string asa;
 		if (exists("additional_spawn_argument", lib::UI_SECTION)) {
-			asa = value <std::string> ("additional_spawn_argument", lib::UI_SECTION);
+			asa = value <std::string>("additional_spawn_argument", lib::UI_SECTION);
+		}
+
+		if (exists("additional_spawn_argument", _section_name)) {
+			asa += " ";
+			asa += value <std::string>("additional_spawn_argument", _section_name);
 		}
 
 		char process_path[PATH_MAX];
 		char *ui_host = getenv("UI_HOST");
-		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s", bin_path, ui_host ? ui_host : "", bin_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str());
+		snprintf(process_path, sizeof(process_path), "cd %s; UI_HOST=%s %s%s %s %s %s %s", bin_path,
+				ui_host ? ui_host : "", bin_path, program_name.c_str(), node.c_str(), dir.c_str(), _section_name.c_str(), asa.c_str());
 
 		// create new session for separation of signal delivery
-		if (setsid() == (pid_t) - 1) {
+		if (setsid() == (pid_t) -1) {
 			perror("setsid()");
 		}
 
@@ -329,7 +337,7 @@ pid_t configurator::process_spawn(const std::string & _section_name)
 		if (!exists("username", _section_name)) {
 			username = getenv("USER");
 		} else {
-			username = value <std::string> ("username", _section_name);
+			username = value <std::string>("username", _section_name);
 		}
 
 		if ((rsh_spawn_node == "localhost") && (username == getenv("USER"))) {
