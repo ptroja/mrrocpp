@@ -6,21 +6,16 @@
  * @ingroup spring_contact
  */
 
-#include <cstdio>
-
-#include "base/lib/configurator.h"
-#include "base/lib/sr/sr_ecp.h"
-
-#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
-#include "robot/irp6p_m/ecp_r_irp6p_m.h"
-
-#include "robot/irp6p_m/const_irp6p_m.h"
-
 #include "ecp_t_spring_contact.h"
 
+// generators to be register headers
 #include "ecp_g_spring_contact.h"
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
+
+// ecp_robots headers
+#include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
+#include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -37,7 +32,7 @@ spring_contact::spring_contact(lib::configurator &_config) :
 	} else if (config.robot_name == lib::irp6p_m::ROBOT_NAME) {
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new irp6p_m::robot(*this);
 	} else {
-		// TODO: throw
+		throw std::runtime_error("Robot not supported");
 	}
 
 	// utworzenie generatorow do uruchamiania dispatcherem
