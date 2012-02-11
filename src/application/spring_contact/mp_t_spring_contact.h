@@ -9,6 +9,8 @@
  * @ingroup spring_contact
  */
 
+#include "base/mp/mp_task.h"
+
 namespace mrrocpp {
 namespace mp {
 namespace task {
