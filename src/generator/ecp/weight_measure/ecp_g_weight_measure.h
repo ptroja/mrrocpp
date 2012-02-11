@@ -9,9 +9,7 @@
  * @ingroup generators
  */
 #include "ecp_mp_g_weight_measure.h"
-
-#include "generator/ecp/teach_in/ecp_g_teach_in.h"
-#include "base/lib/mrmath/mrmath.h"
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -120,7 +118,6 @@ public:
 
 	bool first_step();
 	bool next_step();
-
 
 };
 

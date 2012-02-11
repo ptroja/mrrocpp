@@ -10,8 +10,7 @@
  */
 
 #include "ecp_mp_g_bias_edp_force.h"
-#include "generator/ecp/teach_in/ecp_g_teach_in.h"
-#include "base/lib/mrmath/mrmath.h"
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {
