@@ -1,10 +1,3 @@
-#include <cstdio>
-
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-#include "base/lib/sr/srlib.h"
-
 #include "ecp_t_tfg.h"
 
 // generators to be register headers

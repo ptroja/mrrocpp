@@ -1,28 +1,11 @@
-#include <iostream>
-#include <string>
-#include <sstream>
-
-#include "base/mp/mp_task.h"
 #include "mp_t_swarm_demo_irp6.h"
 
-#include "base/lib/mrmath/mrmath.h"
-
-#include "robot/irp6_tfg/dp_tfg.h"
-#include "robot/irp6ot_tfg/const_irp6ot_tfg.h"
-#include "robot/irp6p_tfg/const_irp6p_tfg.h"
-#include "robot/irp6ot_m/const_irp6ot_m.h"
-#include "robot/irp6p_m/const_irp6p_m.h"
-
-#include "base/lib/typedefs.h"
-#include "base/lib/impconst.h"
-#include "base/lib/com_buf.h"
-#include "base/lib/sr/srlib.h"
-
+// ecp generators to be commanded
 #include "generator/ecp/tff_gripper_approach/ecp_mp_g_tff_gripper_approach.h"
-
 #include "generator/ecp/smooth_file_from_mp/ecp_mp_g_smooth_file_from_mp.h"
 #include "generator/ecp/bias_edp_force/ecp_mp_g_bias_edp_force.h"
 
+// mp_robots headers
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
 
