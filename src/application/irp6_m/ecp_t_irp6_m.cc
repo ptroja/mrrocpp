@@ -7,6 +7,7 @@
 
 #include "ecp_t_irp6_m.h"
 
+// generators to be register headers
 #include "generator/ecp/smooth_file_from_mp/ecp_g_smooth_file_from_mp.h"
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
@@ -16,6 +17,7 @@
 #include "generator/ecp/tff_gripper_approach/ecp_g_tff_gripper_approach.h"
 #include "generator/ecp/weight_measure/ecp_g_weight_measure.h"
 
+// ecp_robots headers
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 
