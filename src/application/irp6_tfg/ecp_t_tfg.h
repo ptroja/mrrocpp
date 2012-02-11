@@ -3,8 +3,6 @@
 
 #include "base/ecp/ecp_task.h"
 
-#include "ecp_g_tfg.h"
-#include "ecp_g_constant_velocity_tfg.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -14,7 +12,6 @@ namespace task {
 class tfg : public common::task::task
 {
 protected:
-	//generatory
 
 	bool save_activated;
 
