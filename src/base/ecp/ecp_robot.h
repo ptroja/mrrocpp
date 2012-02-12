@@ -51,31 +51,6 @@ namespace robot {
  */
 class ecp_robot_base : public ecp_mp::robot
 {
-	// friend classes
-	friend class ui_common_robot;
-
-	/**
-	 * @brief method to spawn and connect to EDP
-	 *
-	 * when called from Ui it first spawns then connects to EDP,\n
-	 * when called from ECP it only connects to existing EDP
-	 * @param config configurator of communcation channels, edp binary file name etc.
-	 */
-	void connect_to_edp(lib::configurator &config);
-
-	/**
-	 * @brief pid of EDP process
-	 */
-	pid_t EDP_MASTER_Pid;
-
-	/**
-	 * @brief  the EDP spawn and kill flag
-	 *
-	 * if the flag is set the EDP is spawned with robot object creation then killed with destruction\n
-	 * it is set when UI calls robot constructor
-	 */
-	const bool is_created_by_ui;
-
 public:
 	/**
 	 * @brief to exchange data with generators
@@ -125,12 +100,7 @@ public:
 	/**
 	 * @brief the configuration file section name of associated EDP process
 	 */
-	std::string edp_section;
-
-	/**
-	 * @brief file descriptor of EDP communication channel
-	 */
-	lib::fd_client_t EDP_fd;
+	const std::string edp_section;
 
 	/**
 	 * @brief states if any data_port is set
@@ -174,17 +144,6 @@ public:
 	ecp_robot_base(const lib::robot_name_t & _robot_name, int _number_of_servos, common::task::task_base& _ecp_object);
 
 	/**
-	 * @brief checks the flag
-	 * then sets the flag or throw exception. Called from create_command() method.
-	 */
-	void check_then_set_command_flag(bool& flag);
-
-	/**
-	 * @brief returns EDP_MASTER_Pid - EDP pid
-	 */
-	pid_t get_EDP_pid(void) const;
-
-	/**
 	 * @brief desctructor
 	 *
 	 * Closes communication channels and optionally kills EDP process
@@ -203,6 +162,31 @@ public:
 	 */
 	bool is_synchronised(void) const;
 
+	/**
+	 * @brief returns EDP_MASTER_Pid - EDP pid
+	 */
+	pid_t get_EDP_pid(void) const;
+
+protected:
+	/**
+	 * @brief file descriptor of EDP communication channel
+	 */
+	lib::fd_client_t EDP_fd;
+
+private:
+	/**
+	 * @brief method to spawn and connect to EDP
+	 *
+	 * when called from Ui it first spawns then connects to EDP,\n
+	 * when called from ECP it only connects to existing EDP
+	 * @param config configurator of communcation channels, edp binary file name etc.
+	 */
+	void connect_to_edp(lib::configurator &config);
+
+	/**
+	 * @brief pid of EDP process
+	 */
+	pid_t EDP_pid;
 };
 
 class common_buffers_ecp_robot : public ecp_robot_base
@@ -248,7 +232,6 @@ public:
 	 * The particular type is the field of derived classes
 	 */
 	lib::r_buffer & reply_package;
-
 };
 
 template <typename ROBOT_COMMAND_T = lib::c_buffer, typename ROBOT_REPLY_T = lib::r_buffer>

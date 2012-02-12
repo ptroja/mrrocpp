@@ -167,10 +167,10 @@ public:
 	void EDP_slay_int();
 	void abort_edp();
 	void connect_to_reader(void);
-	void connect_to_ecp_pulse_chanell(void); //TODO: channel, nie chanell
+	void connect_to_ecp_pulse_channel(void);
 	void pulse_ecp_execute(int code, int value);
 	virtual void delete_ui_ecp_robot();
-	int ui_get_edp_pid();
+	pid_t ui_get_edp_pid() const;
 	void ui_get_controler_state(lib::controller_state_t & robot_controller_initial_state_l);
 	virtual void manage_interface();
 	virtual void setup_menubar();
