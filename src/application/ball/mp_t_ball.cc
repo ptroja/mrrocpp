@@ -70,7 +70,7 @@ void ball::configure_edp_force_sensor(bool configure_track, bool configure_postu
 
 void ball::main_task_algorithm(void)
 {
-	generator::ball mp_h_gen(*this, 10);
+	generator::ball mp_h_gen(*this);
 	mp_h_gen.robot_m = robot_m;
 
 	//TODO do zamiany na newsmooth
