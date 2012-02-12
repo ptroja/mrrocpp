@@ -365,12 +365,10 @@ private:
 
 //------------------------------------------------------------------------------
 /*! robot_model */
-typedef struct
-
-_robot_model
+struct robot_model_t
 {
 	//! Constructor set default discriminant type
-	_robot_model() :
+	robot_model_t() :
 			type(ROBOT_MODEL_SPECIFICATION(-1))
 	{
 	}
@@ -434,7 +432,7 @@ private:
 				break;
 		}
 	}
-} robot_model_t;
+};
 
 //------------------------------------------------------------------------------
 //                                  c_buffer
@@ -444,7 +442,7 @@ typedef robot_model_t c_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef struct c_buffer_arm
+struct c_buffer_arm_t
 {
 	//----------------------------------------------------------
 	struct
@@ -478,7 +476,7 @@ private:
 		ar & pf_def.behaviour;
 
 	}
-} c_buffer_arm_t;
+};
 
 //------------------------------------------------------------------------------
 struct c_buffer
@@ -606,7 +604,7 @@ private:
 typedef robot_model_t r_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
-typedef struct _controller_state_t
+struct controller_state_t
 {
 	//! Flag informing whether the robot is synchronized or not.
 	bool is_synchronised;
@@ -629,11 +627,11 @@ private:
 		ar & is_power_on;
 		ar & robot_in_fault_state;
 	}
-} controller_state_t;
+};
 
 //------------------------------------------------------------------------------
 /*! arm */
-typedef struct r_buffer_arm
+struct r_buffer_arm_t
 {
 	/*!
 	 *  Sposob  zdefiniowania polozenia zadanego koncowki.
@@ -732,7 +730,7 @@ private:
 		ar & measured_current.energy;
 
 	}
-} r_buffer_arm_t;
+};
 
 //------------------------------------------------------------------------------
 struct r_buffer_base
@@ -969,7 +967,7 @@ private:
 /**
  * @brief Empty data structure.
  */
-typedef struct _empty
+struct empty_t
 {
 private:
 	//! Give access to boost::serialization framework
@@ -980,7 +978,7 @@ private:
 	void serialize(Archive & ar, const unsigned int version)
 	{
 	}
-} empty_t;
+};
 
 } // namespace lib
 } // namespace mrrocpp
