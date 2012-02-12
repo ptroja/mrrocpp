@@ -9,6 +9,8 @@
 #ifndef __EDP_EFFECTOR_H
 #define __EDP_EFFECTOR_H
 
+#include <boost/utility.hpp>
+
 #include "edp_shell.h"
 
 using namespace mrrocpp::lib::exception;
@@ -25,7 +27,7 @@ namespace common {
  *
  * \author yoyek
  */
-class effector
+class effector : private boost::noncopyable
 {
 protected:
 	/*!
@@ -87,11 +89,9 @@ protected:
 		caller = rcvid;
 
 		instruction_ = new_ecp_command;
+
 		//	if ((instruction.instruction_type == lib::SET) || (instruction.instruction_type == lib::SET_GET)) {
-
 		//	std::cout << "edp effector: " << instruction.instruction_type << "\n";
-
-		instruction_deserialization();
 		//	}
 
 		return instruction_.instruction_type;
@@ -110,8 +110,6 @@ protected:
 		// informacji o tym, ze przyslane polecenie nie moze byc przyjte
 		// do wykonania w aktualnym stanie EDP
 
-		reply_serialization();
-
 		if (!((reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK)))
 			reply.reply_type = real_reply_type;
 
@@ -124,20 +122,6 @@ protected:
 		}
 		real_reply_type = lib::ACKNOWLEDGE;
 	}
-
-	/*!
-	 * \brief method to deserialize part of the reply
-	 *
-	 * Currently simple memcpy implementation in derrived classes
-	 */
-	virtual void instruction_deserialization();
-
-	/*!
-	 * \brief method to serialize part of the reply
-	 *
-	 * Currently simple memcpy implementation in derrived classes
-	 */
-	virtual void reply_serialization();
 
 	/*!
 	 * \brief method to establish error sent to ECP.

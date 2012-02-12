@@ -19,10 +19,9 @@
 #include "base/kinematics/kinematics_manager.h"
 #include "base/edp/in_out.h"
 #include "base/edp/edp_effector.h"
+#include "base/lib/exception.h"
 
 #include <boost/function.hpp>
-
-static const float VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT = 0.2;
 
 namespace mrrocpp {
 namespace edp {
@@ -38,18 +37,13 @@ class manip_trans_t;
 class reader_buffer;
 class vis_server;
 
-enum STATE
-{
-	GET_STATE, GET_SYNCHRO, SYNCHRO_TERMINATED, GET_INSTRUCTION, EXECUTE_INSTRUCTION, WAIT, WAIT_Q
-};
-
 /*!
  * \class motor_driven_effector
  * \brief Base class of all EDP effectors using motors (e.g. robots)
  *
- * The class can be treated as multi variant shield. The derrived classes can optionally use servo_buffer (dedicated servo thread)
+ * The class can be treated as multi variant shield. The derived classes can optionally use servo_buffer (dedicated servo thread)
  * reader_buffer - dedicated reader thread, mt_tt_obj - dedicated thread to interpolate in task coordinates, e.g. force control in manipulators
- * vis_server - dedicated thread to sent joint position e.g. to visualisation processes,
+ * vis_server - dedicated thread to sent joint position e.g. to visualization processes,
  * sensor::force -- dedicated thread to measure force for the purpose of position force control of robotics manipulator
  * edp_vsp_obj - thread to sent data to VSP process (when the force sensor is used both as the prioceptor and exteroceptor)
  * *
@@ -57,6 +51,32 @@ enum STATE
  */
 class motor_driven_effector : public effector, public kinematics::common::kinematics_manager
 {
+private:
+	enum STATE
+	{
+		GET_STATE, GET_SYNCHRO, SYNCHRO_TERMINATED, GET_INSTRUCTION, EXECUTE_INSTRUCTION, WAIT, WAIT_Q
+	};
+
+	/*!
+	 * \brief (GOF) Good old-fashioned mrroc++ non fatal error 1.
+	 * \author yoyek
+	 */
+	REGISTER_NON_FATAL_ERROR(nfe_1, "Non fatal error - type 1")
+
+	/*!
+	 * \brief (GOF) Good old-fashioned mrroc++ non fatal error 3.
+	 * \author yoyek
+	 */
+	REGISTER_NON_FATAL_ERROR(nfe_3, "Non fatal error - type 3")
+
+	/*!
+	 * \brief (GOF) Good old-fashioned mrroc++ non fatal error 4.
+	 * \author yoyek
+	 */
+	REGISTER_NON_FATAL_ERROR(nfe_4, "Non fatal error - type 4")
+
+	static const float VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT = 0.2;
+
 protected:
 	/*!
 	 * \brief The number of steps in the macrostep.
