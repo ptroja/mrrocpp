@@ -6,6 +6,9 @@
  * @brief File contains bias_edp_force generator declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
+ * bias_edp_force generator sends the bias force command to EDP to set the offset level of force measurements.
+ * it does not use parameters from MP during conditional execution
+ *
  * @ingroup generators
  */
 
@@ -33,10 +36,11 @@ public:
 	 */
 	bias_edp_force(common::task::task& _ecp_task);
 
-	virtual bool first_step();
-	virtual bool next_step();
-
-//	void conditional_execution();
+	/**
+	 * @brief generates first step of transition function
+	 * @return terminal condition value
+	 */
+	bool first_step();
 
 };
 
