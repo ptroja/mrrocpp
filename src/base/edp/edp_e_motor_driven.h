@@ -75,7 +75,7 @@ private:
 	 */
 	REGISTER_NON_FATAL_ERROR(nfe_4, "Non fatal error - type 4")
 
-	static const float VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT = 0.2;
+	static constexpr float VELOCITY_LIMIT_GLOBAL_FACTOR_DEFAULT = 0.2;
 
 protected:
 	/*!
