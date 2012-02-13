@@ -9,9 +9,8 @@
  * @ingroup generators
  */
 
-#include "generator/ecp/ecp_g_teach_in.h"
-#include "base/lib/mrmath/mrmath.h"
 #include "ecp_mp_g_tff_rubik_face_rotate.h"
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {

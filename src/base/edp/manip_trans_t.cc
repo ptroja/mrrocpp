@@ -33,7 +33,7 @@ void manip_trans_t::operator()()
 		lib::set_thread_priority(lib::PTHREAD_MAX_PRIORITY);
 	}
 
-	while (1) {
+	while (!boost::this_thread::interruption_requested()) {
 
 		// oczekiwanie na zezwolenie ruchu od edp_master
 		master_to_trans_synchroniser.wait();

@@ -1,0 +1,7 @@
+add_library(ecp_g_operator_reaction_condition
+	ecp_g_operator_reaction_condition.cc
+)
+
+target_link_libraries(ecp_g_operator_reaction_condition ecp)
+
+install(TARGETS ecp_g_operator_reaction_condition DESTINATION lib)

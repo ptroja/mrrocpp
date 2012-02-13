@@ -4,7 +4,7 @@
 
 #include "base/lib/sr/srlib.h"
 #include "application/generator_tester/ecp_st_smooth_gen_test.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"

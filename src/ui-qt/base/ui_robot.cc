@@ -309,7 +309,7 @@ void UiRobot::pulse_reader_execute(int code, int value)
 	}
 }
 
-void UiRobot::connect_to_ecp_pulse_chanell()
+void UiRobot::connect_to_ecp_pulse_channel()
 {
 	short tmp = 0;
 	// kilka sekund  (~1) na otworzenie urzadzenia
@@ -362,7 +362,7 @@ void UiRobot::pulse_ecp()
 {
 	if (state.edp.is_synchronised) { // o ile ECP dziala (sprawdzanie poprzez dzialanie odpowiedniego EDP)
 		if (state.ecp.trigger_fd == lib::invalid_fd) {
-			connect_to_ecp_pulse_chanell();
+			connect_to_ecp_pulse_channel();
 		}
 
 		if (state.ecp.trigger_fd != lib::invalid_fd) {
@@ -487,7 +487,7 @@ bool UiRobot::is_edp_loaded()
 	return ((state.edp.state == UI_EDP_WAITING_TO_START_READER) || (state.edp.state == UI_EDP_WAITING_TO_STOP_READER));
 }
 
-int UiRobot::ui_get_edp_pid()
+pid_t UiRobot::ui_get_edp_pid() const
 {
 	return ui_ecp_robot->ecp->get_EDP_pid();
 }

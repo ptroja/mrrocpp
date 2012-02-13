@@ -3,7 +3,7 @@
 
 /*!
  * @file
- * @brief File contains bias_edp_force label definition
+ * @brief File contains bias_edp_force generator label definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup generators
@@ -18,9 +18,8 @@ namespace generator {
  */
 const std::string ECP_GEN_BIAS_EDP_FORCE = "ECP_GEN_BIAS_EDP_FORCE";
 
-}// namespace generator
+} // namespace generator
 } // namespace ecp_mp
 } // namespace mrrocpp
-
 
 #endif

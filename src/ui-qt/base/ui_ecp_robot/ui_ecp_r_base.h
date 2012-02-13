@@ -3,9 +3,6 @@
 
 #include "../ui.h"
 #include "../ui_robot.h"
-// Konfigurator.
-#include "base/lib/configurator.h"
-#include "base/lib/mrmath/mrmath.h"
 
 #include "base/ecp/ecp_robot.h"
 
@@ -17,7 +14,6 @@ class UiRobot;
 // ---------------------------------------------------------------
 class EcpRobot
 {
-
 public:
 	common::UiRobot& ui_robot;
 
@@ -31,7 +27,6 @@ public:
 	virtual void execute_motion(void);
 
 	virtual ~EcpRobot();
-
 };
 
 }

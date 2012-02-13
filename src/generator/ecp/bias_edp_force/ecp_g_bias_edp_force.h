@@ -6,12 +6,14 @@
  * @brief File contains bias_edp_force generator declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
+ * bias_edp_force generator sends the bias force command to EDP to set the offset level of force measurements.
+ * it does not use parameters
+ *
  * @ingroup generators
  */
 
 #include "ecp_mp_g_bias_edp_force.h"
-#include "generator/ecp/ecp_g_teach_in.h"
-#include "base/lib/mrmath/mrmath.h"
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -34,11 +36,11 @@ public:
 	 */
 	bias_edp_force(common::task::task& _ecp_task);
 
-	virtual bool first_step();
-	virtual bool next_step();
-
-
-//	void conditional_execution();
+	/**
+	 * @brief generates first step of transition function
+	 * @return terminal condition value
+	 */
+	bool first_step();
 
 };
 

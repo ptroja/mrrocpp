@@ -1,6 +1,8 @@
 #if !defined(__MP_T_SWARM_DEMO_IRP6_H)
 #define __MP_T_SWARM_DEMO_IRP6_H
 
+#include "base/mp/mp_task.h"
+
 namespace mrrocpp {
 namespace mp {
 namespace task {

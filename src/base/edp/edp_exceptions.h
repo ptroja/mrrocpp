@@ -29,7 +29,6 @@ typedef enum _LIMIT_TYPE
 //! Type of violated limit.
 typedef boost::error_info <struct limit_type_, mrrocpp::edp::exception::LIMIT_TYPE> limit_type;
 
-
 //! Convert limit type diagnostic field to human-readable string.
 inline std::string to_string(limit_type const & e)
 {
@@ -43,7 +42,6 @@ inline std::string to_string(limit_type const & e)
 			return "Unknown";
 	}
 }
-
 
 //! Number of motor that caused the exception.
 typedef boost::error_info <struct motor_number_, int> motor_number;
@@ -106,28 +104,10 @@ REGISTER_NON_FATAL_ERROR(nfe_invalid_command, "Invalid command")
 REGISTER_NON_FATAL_ERROR(nfe_invalid_motion_type, "Invalid motion type")
 
 /*!
- * \brief (GOF) Good old-fashioned mrroc++ non fatal error 1.
- * \author yoyek
- */
-REGISTER_NON_FATAL_ERROR(nfe_1, "Non fatal error - type 1")
-
-/*!
  * \brief (GOF) Good old-fashioned mrroc++ non fatal error 2.
  * \author yoyek
  */
 REGISTER_NON_FATAL_ERROR(nfe_2, "Non fatal error - type 2")
-
-/*!
- * \brief (GOF) Good old-fashioned mrroc++ non fatal error 3.
- * \author yoyek
- */
-REGISTER_NON_FATAL_ERROR(nfe_3, "Non fatal error - type 3")
-
-/*!
- * \brief (GOF) Good old-fashioned mrroc++ non fatal error 4.
- * \author yoyek
- */
-REGISTER_NON_FATAL_ERROR(nfe_4, "Non fatal error - type 4")
 
 /*!
  * \brief (GOF) Good old-fashioned mrroc++ fatal error.

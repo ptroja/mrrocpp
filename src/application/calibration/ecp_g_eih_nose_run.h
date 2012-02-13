@@ -11,7 +11,7 @@
 #include "base/lib/impconst.h"
 #include "base/lib/com_buf.h"
 
-#include "generator/ecp/ecp_g_teach_in.h"
+#include "generator/ecp/teach_in/ecp_g_teach_in.h"
 #include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
 #include "base/lib/mrmath/mrmath.h"
 

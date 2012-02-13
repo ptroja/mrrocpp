@@ -9,8 +9,8 @@
  * @ingroup ecp
  */
 
-#include "base/ecp/ecp_generator.h"
 #include "ecp_mp_g_transparent.h"
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {

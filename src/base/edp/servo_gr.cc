@@ -1,6 +1,5 @@
 /* --------------------------------------------------------------------- */
 /*                          SERVO_GROUP Process                          */
-// ostatnia modyfikacja - styczen 2005
 /* --------------------------------------------------------------------- */
 
 #include <cstdio>
@@ -127,14 +126,15 @@ uint8_t servo_buffer::Move_a_step(void)
 	Move_1_step();
 	if (master.is_synchronised()) { // by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
 		// by Y - do dokonczenia
-		for (int i = 0; i < master.number_of_servos; i++) {
-			if (!(master.robot_test_mode)) {
-				master.update_servo_current_motor_pos_abs(hi->get_position(i) * (2 * M_PI) / axe_inc_per_revolution[i], i);
+		if (!(master.robot_test_mode)) {
+			for (int i = 0; i < master.number_of_servos; i++) {
+					master.update_servo_current_motor_pos_abs(hi->get_position(i) * (2 * M_PI) / axe_inc_per_revolution[i], i);
 			}
 		}
 
 		master.compute_servo_joints_and_frame(); // by Y - aktualizacja trasformatora
 	}
+
 	return convert_error();
 }
 /*-----------------------------------------------------------------------*/
@@ -177,7 +177,7 @@ void servo_buffer::send_to_SERVO_GROUP()
 	 case lib::SERVO_ALGORITHM_AND_PARAMETERS:
 	 command_size = (int) (((uint8_t*) (&servo_command.parameters.servo_alg_par.address_byte)) - ((uint8_t*) (&servo_command.instruction_code)));
 	 break;
-	 }; // end: switch
+	 } // end: switch
 	 // if (Send(&servo_command, &sg_reply, command_size, sizeof(lib::servo_group_reply)) < 0) {
 	 */
 
@@ -243,10 +243,8 @@ void servo_buffer::operator()()
 	//	std::auto_ptr<servo_buffer> sb(return_created_servo_buffer()); // bufor do komunikacji z EDP_MASTER
 
 	try {
-
 		load_hardware_interface();
 	}
-
 	catch (std::exception & e) {
 		printf("servo group exception: %s\n", e.what());
 		master.msg->message(lib::FATAL_ERROR, e.what());
@@ -263,7 +261,7 @@ void servo_buffer::operator()()
 	master.sb_loaded.wait();
 	/* BEGIN SERVO_GROUP */
 
-	for (;;) {
+	while(!boost::this_thread::interruption_requested()) {
 		// komunikacja z transformation
 		if (!get_command()) {
 			// scoped-locked reader data update
@@ -617,6 +615,8 @@ void servo_buffer::ppp(void) const
 /*-----------------------------------------------------------------------*/
 servo_buffer::~servo_buffer(void)
 {
+	thread_id.interrupt();
+	thread_id.join();
 
 	// Destruktor grupy regulatorow
 	// Zniszcyc regulatory
@@ -624,8 +624,6 @@ servo_buffer::~servo_buffer(void)
 		delete regulator_ptr[j];
 
 	delete hi;
-
-	delete thread_id;
 }
 /*-----------------------------------------------------------------------*/
 
@@ -696,7 +694,7 @@ void servo_buffer::synchronise(void)
 	for (int j = 0; j < (master.number_of_servos); j++) {
 
 		command.parameters.move.abs_position[j] = 0.0;
-	}; // end: for
+	} // end: for
 
 	// szeregowa synchronizacja serwomechanizmow
 	for (int k = 0; k < (master.number_of_servos); k++) {
@@ -706,8 +704,10 @@ void servo_buffer::synchronise(void)
 		common::regulator* crp = regulator_ptr[j];
 
 		synchro_choose_axis_to_move(crp, j);
+
 		if (!move_to_synchro_area(crp, j))
 			return;
+
 		if (!synchro_stop_for_a_while(crp, j))
 			return;
 
@@ -727,7 +727,8 @@ void servo_buffer::synchronise(void)
 	// zatrzymanie na chwile robota
 	for (int k = 0; k < (master.number_of_servos); k++) {
 		regulator_ptr[k]->insert_new_step(0.0);
-	};
+	}
+
 	for (int i = 0; i < SYNCHRO_FINAL_STOP_STEP_NUMBER; i++) {
 		Move_1_step();
 	}
@@ -736,8 +737,6 @@ void servo_buffer::synchronise(void)
 
 	// printf("koniec synchro\n");
 	reply_to_EDP_MASTER();
-	return;
-
 }
 
 void servo_buffer::synchro_choose_axis_to_move(common::regulator* &crp, int j)

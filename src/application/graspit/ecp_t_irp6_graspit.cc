@@ -8,7 +8,7 @@
 #include "robot/irp6ot_m/ecp_r_irp6ot_m.h"
 #include "robot/irp6p_m/ecp_r_irp6p_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
-#include "generator/ecp/ecp_g_constant_velocity.h"
+#include "generator/ecp/constant_velocity/ecp_g_constant_velocity.h"
 #include "ecp_t_irp6_graspit.h"
 #include "ecp_mp_t_graspit.h"
 

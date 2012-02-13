@@ -1,6 +1,8 @@
 #ifndef ECP_MP_ROBOT_H_
 #define ECP_MP_ROBOT_H_
 
+#include <boost/utility.hpp>
+
 #include "base/lib/impconst.h"
 
 /*!
@@ -20,7 +22,7 @@ namespace ecp_mp {
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  * @ingroup ecp_mp
  */
-class robot
+class robot : private boost::noncopyable
 {
 public:
 	/**

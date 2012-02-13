@@ -11,7 +11,7 @@
 
 
 
-#include "generator/ecp/ecp_g_get_position.h"
+#include "generator/ecp/get_position/ecp_g_get_position.h"
 #include <netdb.h>
 #include <netinet/in.h>
 #include "base/ecp_mp/ecp_mp_sensor.h"

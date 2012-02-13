@@ -13,8 +13,6 @@
 #include <unistd.h>
 #include <cmath>
 
-#include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_robot.h"
 #include "ecp_g_spring_contact.h"
 
 namespace mrrocpp {

@@ -11,9 +11,8 @@ namespace generator {
 
 const std::string ECP_GEN_WEIGHT_MEASURE = "ECP_GEN_WEIGHT_MEASURE";
 
-}// namespace generator
+} // namespace generator
 } // namespace ecp_mp
 } // namespace mrrocpp
-
 
 #endif

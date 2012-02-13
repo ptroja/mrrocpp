@@ -11,9 +11,8 @@ namespace generator {
 
 const std::string ECP_GEN_TRANSPARENT = "ECP_GEN_TRANSPARENT";
 
-}// namespace generator
+} // namespace generator
 } // namespace ecp_mp
 } // namespace mrrocpp
-
 
 #endif

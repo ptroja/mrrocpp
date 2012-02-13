@@ -7,7 +7,7 @@
 #include "mp_en_labyrinth.h"
 #include "robot/irp6ot_m/mp_r_irp6ot_m.h"
 #include "robot/irp6p_m/mp_r_irp6p_m.h"
-#include "generator/ecp/ecp_mp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_mp_g_newsmooth.h"
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/tff_nose_run/ecp_g_tff_nose_run.h"
 

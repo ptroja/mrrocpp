@@ -2,7 +2,7 @@
 #define _ECP_T_TB_IRP6OT_H
 
 #include "base/ecp/ecp_task.h"
-#include "generator/ecp/ecp_g_newsmooth.h"
+#include "generator/ecp/newsmooth/ecp_g_newsmooth.h"
 
 #include "generator/ecp/bias_edp_force/ecp_g_bias_edp_force.h"
 #include "generator/ecp/tff_gripper_approach/ecp_g_tff_gripper_approach.h"

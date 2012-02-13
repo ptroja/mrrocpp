@@ -12,7 +12,7 @@ target_link_libraries(ecp_en_labyrinth
     ecp_r_irp6ot_m
 	ecp ${COMMON_LIBRARIES}
 	visual_servoing
-	ecp_generators
+	ecp_robot
 	discode_sensor
 )
 

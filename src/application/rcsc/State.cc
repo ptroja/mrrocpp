@@ -16,8 +16,8 @@
 #include "generator/ecp/tff_rubik_face_rotate/ecp_mp_g_tff_rubik_face_rotate.h"
 
 #include "generator/ecp/transparent/ecp_mp_g_transparent.h"
-#include "generator/ecp/ecp_mp_g_newsmooth.h"
-#include "generator/ecp/ecp_mp_g_teach_in.h"
+#include "generator/ecp/newsmooth/ecp_mp_g_newsmooth.h"
+#include "generator/ecp/teach_in/ecp_mp_g_teach_in.h"
 #include "generator/ecp/weight_measure/ecp_mp_g_weight_measure.h"
 
 namespace mrrocpp {

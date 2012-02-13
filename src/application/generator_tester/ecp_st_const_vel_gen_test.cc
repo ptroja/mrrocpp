@@ -6,7 +6,7 @@
 
 #include "base/lib/sr/srlib.h"
 #include "application/generator_tester/ecp_st_const_vel_gen_test.h"
-#include "generator/ecp/ecp_g_constant_velocity.h"
+#include "generator/ecp/constant_velocity/ecp_g_constant_velocity.h"
 
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"

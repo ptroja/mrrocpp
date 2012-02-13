@@ -51,7 +51,7 @@ servo_buffer::servo_buffer(effector &_master) :
 		}
 	}
 
-	thread_id = new boost::thread(boost::bind(&servo_buffer::operator(), this));
+	thread_id = boost::thread(boost::bind(&servo_buffer::operator(), this));
 }
 /*-----------------------------------------------------------------------*/
 

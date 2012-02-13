@@ -2,9 +2,8 @@
 add_subdirectory (lib)
 add_subdirectory (kinematics)
 add_subdirectory (edp)
-if(NOT UBUNTU32BIT)
+
 add_subdirectory (ecp_mp)
 add_subdirectory (ecp)
 add_subdirectory (mp)
 add_subdirectory (vsp)
-endif(NOT UBUNTU32BIT)
