@@ -7,7 +7,7 @@
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * bias_edp_force generator sends the bias force command to EDP to set the offset level of force measurements.
- * it does not use parameters from MP during conditional execution
+ * it does not use parameters
  *
  * @ingroup generators
  */

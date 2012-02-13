@@ -1,6 +1,6 @@
 /*!
  * @file
- * @brief File contains force generators definition
+ * @brief File contains bias_edp_force generator definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup generators

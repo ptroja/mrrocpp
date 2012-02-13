@@ -1,6 +1,6 @@
 /*!
  * @file
- * @brief File contains force generators definition
+ * @brief File contains force_tool_change generator definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup generators
@@ -53,17 +53,16 @@ bool force_tool_change::first_step()
 	return true;
 }
 
-bool force_tool_change::next_step()
-{
-	return false;
-}
-
 void force_tool_change::set_tool_parameters(double x, double y, double z, double v)
 {
 	tool_parameters[0] = x;
 	tool_parameters[1] = y;
 	tool_parameters[2] = z;
 	weight = v;
+}
+
+void force_tool_change::conditional_execution()
+{
 }
 
 } // namespace generator
