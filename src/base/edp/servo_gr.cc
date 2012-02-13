@@ -124,6 +124,7 @@ uint8_t servo_buffer::Move_a_step(void)
 	// wykonac ruch o krok nie reagujac na SYNCHRO_SWITCH oraz SYNCHRO_ZERO
 
 	Move_1_step();
+
 	if (master.is_synchronised()) { // by Y aktualizacja transformera am jedynie sens po synchronizacji (kiedy robot zna swoja pozycje)
 		// by Y - do dokonczenia
 		if (!(master.robot_test_mode)) {
@@ -159,34 +160,6 @@ void servo_buffer::set_robot_model_servo_algorithm(const lib::c_buffer &instruct
 /*--------------------------------------------------------------------------*/
 void servo_buffer::send_to_SERVO_GROUP()
 {
-	// int command_size; // dulgosci rozkazu
-	// sigset_t set, old_set; // zmienne opisujace sygnaly przysylane do procesu
-	// Wyslanie polecenia do SERVO_GROUP
-
-	/*
-	 // by Y - wywalone
-	 // Obliczenie dugoci rozkazu
-	 switch(servo_command.instruction_code) {
-	 case lib::READ:
-	 case lib::SYNCHRONISE:
-	 command_size = (int) (((uint8_t*) (&servo_command.address_byte)) - ((uint8_t*) (&servo_command.instruction_code)));
-	 break;
-	 case lib::MOVE:
-	 command_size = (int) (((uint8_t*) (&servo_command.parameters.move.address_byte)) - ((uint8_t*) (&servo_command.instruction_code)));
-	 break;
-	 case lib::SERVO_ALGORITHM_AND_PARAMETERS:
-	 command_size = (int) (((uint8_t*) (&servo_command.parameters.servo_alg_par.address_byte)) - ((uint8_t*) (&servo_command.instruction_code)));
-	 break;
-	 } // end: switch
-	 // if (Send(&servo_command, &sg_reply, command_size, sizeof(lib::servo_group_reply)) < 0) {
-	 */
-
-	/* sigemptyset ( &set);
-	 sigaddset ( &set, SIGUSR1);
-
-	 SignalProcmask( 0,thread_id, SIG_BLOCK, &set, NULL ); // by Y uniemozliwienie jednoczesnego wystawiania spotkania do serwo przez edp_m i readera
-	 */
-
 	{
 		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
 		servo_command_rdy = true;
@@ -194,13 +167,11 @@ void servo_buffer::send_to_SERVO_GROUP()
 
 	{
 		boost::unique_lock <boost::mutex> lock(sg_reply_mtx);
-		while (!sg_reply_rdy) {
+		while (!sg_reply_ready) {
 			sg_reply_cond.wait(sg_reply_mtx);
 		}
-		sg_reply_rdy = false;
+		sg_reply_ready = false;
 	}
-
-	//   SignalProcmask( 0,thread_id, SIG_UNBLOCK, &set, NULL );
 
 	if ((sg_reply.error.error0 != OK) || (sg_reply.error.error1 != OK)) {
 		printf("a: %llx, :%llx\n", sg_reply.error.error0, sg_reply.error.error1);
@@ -212,8 +183,6 @@ void servo_buffer::send_to_SERVO_GROUP()
 	for (int i = 0; i < master.number_of_servos; i++) {
 
 		master.current_motor_pos[i] = sg_reply.abs_position[i];
-
-		//	 printf("current motor pos: %d\n", current_motor_pos[0]);
 
 		if (master.robot_test_mode) {
 			// W.S. Tylko przy testowaniu
@@ -229,11 +198,6 @@ void servo_buffer::send_to_SERVO_GROUP()
 
 	// przepisanie stanu regulatora chwytaka
 	master.reply.arm.gripper_reg_state = sg_reply.gripper_reg_state;
-
-	// printf("edp_irp6s_and_conv_effector::send_to_SERVO_GROUP: %f, %f\n", current_motor_pos[4], sg_reply.abs_position[4]);
-
-	// 	printf("current motor pos: %f\n", current_motor_pos[0]*IRP6_ON_TRACK_INC_PER_REVOLUTION/2*M_PI );
-
 }
 /*--------------------------------------------------------------------------*/
 
@@ -245,6 +209,7 @@ void servo_buffer::operator()()
 	try {
 		load_hardware_interface();
 	}
+
 	catch (std::exception & e) {
 		printf("servo group exception: %s\n", e.what());
 		master.msg->message(lib::FATAL_ERROR, e.what());
@@ -304,7 +269,7 @@ void servo_buffer::operator()()
 			}
 		} // end: else
 	}
-} // end: main() SERVO_GROUP
+}
 
 /*-----------------------------------------------------------------------*/
 void servo_buffer::get_all_positions(void)
@@ -346,7 +311,7 @@ SERVO_COMMAND servo_buffer::command_type() const
 }
 
 servo_buffer::servo_buffer(motor_driven_effector &_master) :
-		servo_command_rdy(false), sg_reply_rdy(false), step_number_in_macrostep(0), thread_started(), master(_master)
+		servo_command_rdy(false), sg_reply_ready(false), step_number_in_macrostep(0), thread_started(), master(_master)
 {
 
 }
@@ -359,6 +324,7 @@ bool servo_buffer::get_command(void)
 
 	{
 		boost::lock_guard <boost::mutex> lock(servo_command_mtx);
+
 		if (servo_command_rdy) {
 			command = servo_command;
 			servo_command_rdy = false;
@@ -590,7 +556,7 @@ void servo_buffer::reply_to_EDP_MASTER(void)
 		boost::lock_guard <boost::mutex> lock(sg_reply_mtx);
 
 		sg_reply = servo_data;
-		sg_reply_rdy = true;
+		sg_reply_ready = true;
 	}
 
 	// TODO: should not call notify with mutex locked?
