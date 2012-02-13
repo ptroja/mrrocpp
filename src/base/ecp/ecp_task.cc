@@ -83,7 +83,10 @@ void task_base::main_task_algorithm(void)
 
 		get_next_state();
 
-		sr_ecp_msg->message("Order received");
+		// message with current generator being executed
+		std::stringstream ss(std::stringstream::in | std::stringstream::out);
+		ss << "Order received: " << mp_2_ecp_next_state_string;
+		sr_ecp_msg->message(ss.str().c_str());
 
 		mp_2_ecp_next_state_string_handler();
 
