@@ -56,8 +56,8 @@ public:
 		// Serialize data.
 		xdr_oa << data;
 
-		// FIXME: pre-allocate message.
-		::zmq::message_t msg(xdr_oa.getArchiveSize());
+		// Build ZMQ message.
+		::zmq::message_t msg((void *) xdr_oa.get_buffer(), xdr_oa.getArchiveSize(), NULL);
 
 		// Copy data to ZMQ message.
 		memcpy(msg.data(), xdr_oa.get_buffer(), xdr_oa.getArchiveSize());

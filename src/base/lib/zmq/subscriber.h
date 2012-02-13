@@ -38,8 +38,10 @@ public:
 	template<typename T>
 	void receive(T & data)
 	{
+		char blob[16*1024];
+
 		//! Pre-allocated ZMQ message.
-		::zmq::message_t msg;
+		::zmq::message_t msg(blob, sizeof(blob), NULL);
 
 		sock.recv(&msg);
 
@@ -49,7 +51,6 @@ public:
 
 		std::cout << "receive('" << data << "', " << msg.size() << ")" << std::endl;
 	}
-
 };
 
 } // namespace zmq
