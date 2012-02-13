@@ -14,7 +14,6 @@
 
 #include "base/lib/sr/srlib.h"
 
-
 #include "base/mp/mp_robot.h"
 #include "application/ball/mp_g_ball.h"
 #include "base/lib/mrmath/mrmath.h"
@@ -27,8 +26,12 @@ namespace mp {
 namespace generator {
 
 ball::ball(task::task& _mp_task, int step) :
-	continously_coordinated(_mp_task), irp6ot_con(true), irp6p_con(true),
-			global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015), speedup(0.0), speedup_factor(0.005)
+		continously_coordinated(_mp_task),
+		irp6ot_con(true),
+		irp6p_con(true),
+		global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015),
+		speedup(0.0),
+		speedup_factor(0.005)
 {
 	step_no = step;
 }
@@ -53,7 +56,6 @@ void ball::setup_command(robot::robot & robot)
 	robot.mp_command.instruction.robot_model.type = lib::TOOL_FRAME;
 	robot.mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	robot.mp_command.instruction.set_arm_type = lib::FRAME;
-	robot.mp_command.instruction.get_arm_type = lib::FRAME;
 	robot.mp_command.instruction.motion_type = lib::ABSOLUTE;
 	robot.mp_command.instruction.interpolation_type = lib::TCIM;
 	robot.mp_command.instruction.motion_steps = td.internode_step_no;
@@ -166,8 +168,8 @@ bool ball::next_step_inside()
 
 	return true;
 
-	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
-			== lib::TASK_TERMINATED)) {
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED)
+			|| (irp6p->ecp_reply_package.reply == lib::TASK_TERMINATED)) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else

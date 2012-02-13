@@ -3,35 +3,34 @@
 namespace mrrocpp {
 namespace lib {
 
-c_buffer::c_buffer (void) :
-  instruction_type(SYNCHRO),
-  set_type(0),
-  get_type(0),
-  get_robot_model_type(TOOL_FRAME),
-  set_arm_type(FRAME),
-  get_arm_type(FRAME),
-  output_values(0),
-  //address_byte(0),
-  motion_type(ABSOLUTE),
-  motion_steps(0),
-  value_in_step_no(0)
+c_buffer::c_buffer(void) :
+		instruction_type(SYNCHRO),
+		set_type(0),
+		get_type(0),
+		get_robot_model_type(TOOL_FRAME),
+		set_arm_type(FRAME),
+		output_values(0),
+		//address_byte(0),
+		motion_type(ABSOLUTE),
+		motion_steps(0),
+		value_in_step_no(0)
 {
 	// konstruktor (inicjalizator) bufora polecen z ECP
-/*
-	for (int i=0; i<4; i++)
-		for (int j=0; j<3; j++)
-			if (i==j)
-				arm.pf_def.arm_frame[j][i] = 1.0;
-			else
-				arm.pf_def.arm_frame[j][i] = 0.0;
+	/*
+	 for (int i=0; i<4; i++)
+	 for (int j=0; j<3; j++)
+	 if (i==j)
+	 arm.pf_def.arm_frame[j][i] = 1.0;
+	 else
+	 arm.pf_def.arm_frame[j][i] = 0.0;
 
-	for (int i=0; i<4; i++)
-		for (int j=0; j<3; j++)
-			if (i==j)
-				robot_model.tool_frame_def.tool_frame[j][i] = 1.0;
-			else
-				robot_model.tool_frame_def.tool_frame[j][i] = 0.0;
-	// robot_model.tool_frame_def.address_byte = 0;
+	 for (int i=0; i<4; i++)
+	 for (int j=0; j<3; j++)
+	 if (i==j)
+	 robot_model.tool_frame_def.tool_frame[j][i] = 1.0;
+	 else
+	 robot_model.tool_frame_def.tool_frame[j][i] = 0.0;
+	 // robot_model.tool_frame_def.address_byte = 0;
 	 * */
 }
 

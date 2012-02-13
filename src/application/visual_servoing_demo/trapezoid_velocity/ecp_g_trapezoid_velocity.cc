@@ -22,7 +22,7 @@ namespace common {
 namespace generator {
 
 trapezoid_velocity::trapezoid_velocity(mrrocpp::ecp::common::task::task & ecp_task) :
-	common::generator::generator(ecp_task), motion_steps(30)
+		common::generator::generator(ecp_task), motion_steps(30)
 {
 }
 
@@ -45,7 +45,7 @@ bool trapezoid_velocity::first_step()
 
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.get_arm_type = lib::JOINT;
+
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 	the_robot->ecp_command.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.set_arm_type = lib::JOINT;
@@ -70,7 +70,7 @@ bool trapezoid_velocity::next_step()
 {
 	if (!current_theta_saved) { // save first position
 		for (size_t i = 0; i < lib::MAX_SERVOS_NR; ++i) {
-			current_arm_coordinates[i] = the_robot->reply_package.arm.pf_def.arm_coordinates[i];
+			current_arm_coordinates[i] = the_robot->reply_package.arm.pf_def.joint_coordinates[i];
 		}
 		s = current_arm_coordinates[axis_idx];
 		v = 0;
@@ -87,7 +87,7 @@ bool trapezoid_velocity::next_step()
 	} else if (state == S_ACCEL) {
 		double dv = accel1 * dt;
 		v += dv;
-		if(v >= v_max){
+		if (v >= v_max) {
 			v = v_max;
 			steps_count = 0;
 			state = S_CONST_SPEED;
@@ -99,14 +99,14 @@ bool trapezoid_velocity::next_step()
 		s += ds;
 
 		steps_count++;
-		if(steps_count >= STEPS_NUMBER_CONST_SPEED){
+		if (steps_count >= STEPS_NUMBER_CONST_SPEED) {
 			steps_count = 0;
 			state = S_SLOWDOWN;
 		}
 	} else if (state == S_SLOWDOWN) {
 		double dv = -accel2 * dt;
 		v += dv;
-		if(v <= 0){
+		if (v <= 0) {
 			v = 0;
 			steps_count = 0;
 			state = S_STOP;

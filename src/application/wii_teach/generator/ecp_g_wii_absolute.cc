@@ -13,16 +13,16 @@ namespace irp6ot_m {
 namespace generator {
 
 wii_absolute::wii_absolute(common::task::task& _ecp_task, ecp_mp::sensor::wiimote* _wiimote) :
-	wii(_ecp_task, _wiimote)
+		wii(_ecp_task, _wiimote)
 {
 	int i;
 	char buffer[100];
 
 	for (i = 0; i < MAX_NO_OF_DEGREES; ++i) {
 		sprintf(buffer, "absolute_multiplier_%d", i);
-		multipliers[i] = ecp_t.config.value <double> (buffer);
+		multipliers[i] = ecp_t.config.value <double>(buffer);
 		sprintf(buffer, "absolute_max_change_%d", i);
-		maxChange[i] = ecp_t.config.value <double> (buffer);
+		maxChange[i] = ecp_t.config.value <double>(buffer);
 	}
 }
 
@@ -41,7 +41,7 @@ void wii_absolute::set_position(bool changed)
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
 
 	homog_matrix.get_translation_vector(old_translation);
-	
+
 	translation[0] = nextChange[1];
 	translation[1] = nextChange[0];
 	translation[2] = nextChange[2];
@@ -49,15 +49,15 @@ void wii_absolute::set_position(bool changed)
 	rotation[0][0] = cos(nextChange[6]) * cos(nextChange[4]);
 	rotation[1][0] = sin(nextChange[6]) * cos(nextChange[4]);
 	rotation[2][0] = -sin(nextChange[4]);
-	rotation[0][1] = cos(nextChange[6]) * sin(nextChange[4]) * sin(nextChange[5]) - sin(nextChange[6])
-			* cos(nextChange[5]);
-	rotation[1][1] = sin(nextChange[6]) * sin(nextChange[4]) * sin(nextChange[5]) + cos(nextChange[6])
-			* cos(nextChange[5]);
+	rotation[0][1] = cos(nextChange[6]) * sin(nextChange[4]) * sin(nextChange[5])
+			- sin(nextChange[6]) * cos(nextChange[5]);
+	rotation[1][1] = sin(nextChange[6]) * sin(nextChange[4]) * sin(nextChange[5])
+			+ cos(nextChange[6]) * cos(nextChange[5]);
 	rotation[2][1] = cos(nextChange[4]) * sin(nextChange[5]);
-	rotation[0][2] = cos(nextChange[6]) * sin(nextChange[4]) * cos(nextChange[5]) + sin(nextChange[6])
-			* sin(nextChange[5]);
-	rotation[1][2] = sin(nextChange[6]) * sin(nextChange[4]) * cos(nextChange[5]) - cos(nextChange[6])
-			* sin(nextChange[5]);
+	rotation[0][2] = cos(nextChange[6]) * sin(nextChange[4]) * cos(nextChange[5])
+			+ sin(nextChange[6]) * sin(nextChange[5]);
+	rotation[1][2] = sin(nextChange[6]) * sin(nextChange[4]) * cos(nextChange[5])
+			- cos(nextChange[6]) * sin(nextChange[5]);
 	rotation[2][2] = cos(nextChange[4]) * cos(nextChange[5]);
 
 	rotation_matrix.set_rotation_matrix(rotation);
@@ -77,7 +77,7 @@ bool wii_absolute::first_step()
 	the_robot->ecp_command.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.set_arm_type = lib::FRAME;
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.get_arm_type = lib::FRAME;
+//	the_robot->ecp_command.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 	the_robot->ecp_command.interpolation_type = lib::MIM;
 	the_robot->ecp_command.motion_steps = 25;

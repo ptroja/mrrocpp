@@ -28,7 +28,7 @@ using namespace logger;
 using mrrocpp::ecp_mp::sensor::discode::discode_sensor;
 
 ecp_g_discode_sensor_test::ecp_g_discode_sensor_test(mrrocpp::ecp::common::task::task & ecp_task, mrrocpp::ecp_mp::sensor::discode::discode_sensor *ds) :
-	common::generator::generator(ecp_task), ds(ds)
+		common::generator::generator(ecp_task), ds(ds)
 {
 	// TODO Auto-generated constructor stub
 	sensor_m["my_discode_sensor"] = ds;
@@ -44,7 +44,7 @@ bool ecp_g_discode_sensor_test::first_step()
 	int motion_steps = 30;
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.get_arm_type = lib::FRAME;
+//	the_robot->ecp_command.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 	the_robot->ecp_command.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.set_arm_type = lib::FRAME;
@@ -69,26 +69,26 @@ bool ecp_g_discode_sensor_test::next_step()
 
 //	log_dbg("bool ecp_g_discode_sensor_test::next_step()\n");
 
-	//	shared_ptr <xdr_iarchive <> > ia = ds->get_iarchive();
-	//	string s;
-	//	*ia >> s;
-	//	log("ecp_g_discode_sensor_test::next_step() received: \"%s\"", s.c_str());
-	//
-	//	*(ds->get_oarchive()) << string("bool ecp_g_discode_sensor_test::next_step()");
+//	shared_ptr <xdr_iarchive <> > ia = ds->get_iarchive();
+//	string s;
+//	*ia >> s;
+//	log("ecp_g_discode_sensor_test::next_step() received: \"%s\"", s.c_str());
+//
+//	*(ds->get_oarchive()) << string("bool ecp_g_discode_sensor_test::next_step()");
 
-	//	jjj++;
-	//	if (jjj % 4 == 0) {
-	//		*ds->get_oarchive() << jjj;
-	//	}
-	//	if (jjj % 20 == 0) {
-	//		ds.get_oarchive()->clear_buffer();
-	//	}
+//	jjj++;
+//	if (jjj % 4 == 0) {
+//		*ds->get_oarchive() << jjj;
+//	}
+//	if (jjj % 20 == 0) {
+//		ds.get_oarchive()->clear_buffer();
+//	}
 	if (ds->get_state() == discode_sensor::DSS_READING_RECEIVED) {
-		Types::Mrrocpp_Proxy::PBReading r = ds->retreive_reading <Types::Mrrocpp_Proxy::PBReading> ();
-		log("ecp_g_discode_sensor_test::next_step(): object visible: %d\n", (int)r.objectVisible);
-		if(r.objectVisible){
-			cout<<"Object position:\n";
-			cout<<r.objectPosition<<endl;
+		Types::Mrrocpp_Proxy::PBReading r = ds->retreive_reading <Types::Mrrocpp_Proxy::PBReading>();
+		log("ecp_g_discode_sensor_test::next_step(): object visible: %d\n", (int) r.objectVisible);
+		if (r.objectVisible) {
+			cout << "Object position:\n";
+			cout << r.objectPosition << endl;
 			cout.flush();
 		}
 	} else {

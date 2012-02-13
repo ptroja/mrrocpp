@@ -58,7 +58,7 @@ bool tff_gripper_approach::first_step()
 	the_robot->ecp_command.robot_model.type = lib::TOOL_FRAME;
 	the_robot->ecp_command.get_robot_model_type = lib::TOOL_FRAME;
 	the_robot->ecp_command.set_arm_type = lib::PF_VELOCITY;
-	the_robot->ecp_command.get_arm_type = lib::FRAME;
+//	the_robot->ecp_command.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.motion_type = lib::RELATIVE;
 	the_robot->ecp_command.interpolation_type = lib::TCIM;
 	the_robot->ecp_command.motion_steps = td.internode_step_no;

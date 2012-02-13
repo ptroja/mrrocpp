@@ -90,21 +90,24 @@ bool tight_coop::next_step()
 	// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 	robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 	robot_m_iterator->second->mp_command.instruction.get_type = NOTHING_DEFINITION;
-	robot_m_iterator->second->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
+	// TEMPORARY REMOVAL
+	// robot_m_iterator->second->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
+	//END OF TEMPORARY REMOVAL
 
 	// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
 	// (okreslenie kolejnego wezla interpolacji)
 	// i: licznik kolejnych wspolrzednych wektora [0..6]
-	for (int i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
-		robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i] =
-				robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
-						+ node_counter * irp6ot_td.coordinate_delta[i] / irp6ot_td.interpolation_node_no;
-	// printf("X_d= %lf  X_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[0],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[0]);
-	// printf("Y_d= %lf  Y_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[1],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[1]);
-	// printf("Z_d= %lf  Z_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[2],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[2]);
-
-	// by Y - ZAKOMENTOWANE ponizej - nie wiadomo jaka idea temu przyswiecala
-	// ale dzialalo to zle z generatorami transparentnymi ECP
+	/* TEMPORARY REMOVAL
+	 for (int i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
+	 robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i] =
+	 robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
+	 + node_counter * irp6ot_td.coordinate_delta[i] / irp6ot_td.interpolation_node_no;
+	 */// END OF TEMPORARY REMOVAL
+	 // printf("X_d= %lf  X_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[0],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[0]);
+	 // printf("Y_d= %lf  Y_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[1],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[1]);
+	 // printf("Z_d= %lf  Z_a= %lf\n",robot_list->E_ptr->mp_command.instruction.arm.pf_def.arm_coordinates[2],robot_list->E_ptr->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[2]);
+	 // by Y - ZAKOMENTOWANE ponizej - nie wiadomo jaka idea temu przyswiecala
+	 // ale dzialalo to zle z generatorami transparentnymi ECP
 	/*
 	 if (node_counter == td.interpolation_node_no) {
 	 // Zakonczenie generacji trajektorii
@@ -116,18 +119,22 @@ bool tight_coop::next_step()
 		// Przygotowanie kroku ruchu - do kolejnego wezla interpolacji
 		robot_m_iterator->second->mp_command.instruction.instruction_type = lib::SET;
 		robot_m_iterator->second->mp_command.instruction.get_type = NOTHING_DEFINITION;
-		robot_m_iterator->second->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
-		// Obliczenie zadanej pozycji posredniej w tym kroku ruchu
-		// (okreslenie kolejnego wezla interpolacji)
-		// i: licznik kolejnych wspolrzednych wektora [0..6]
-		for (int i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
-			robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i] =
-					robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
-							+ node_counter * irp6p_td.coordinate_delta[i] / irp6p_td.interpolation_node_no;
+		/* TEMPORARY REMOVAL
+		 robot_m_iterator->second->mp_command.instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
+		 */ //END OFF TEMPORARY REMOVAL
+		  // Obliczenie zadanej pozycji posredniej w tym kroku ruchu
+		  // (okreslenie kolejnego wezla interpolacji)
+		  // i: licznik kolejnych wspolrzednych wektora [0..6]
+		/* TEMPORARY REMOVAL
+		 for	(int i = 0; i < 6; i++) // zakladamy, ze na liscie jest jeden robot
 
+		 robot_m_iterator->second->mp_command.instruction.arm.pf_def.arm_coordinates[i] =
+		 robot_m_iterator->second->ecp_reply_package.reply_package.arm.pf_def.arm_coordinates[i]
+		 + node_counter * irp6p_td.coordinate_delta[i] / irp6p_td.interpolation_node_no;
+		 */ //END OFF TEMPORARY REMOVAL
 	}
 
-	// skopiowac przygotowany rozkaz dla ECP do bufora wysylkowego
+// skopiowac przygotowany rozkaz dla ECP do bufora wysylkowego
 
 	return true;
 }

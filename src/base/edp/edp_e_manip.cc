@@ -155,21 +155,15 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib:
 		get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 		get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
 	}
-	switch (instruction.get_arm_type)
-	{
-		case lib::FRAME:
-			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-			// Przepisanie definicji koncowki danej w postaci
-			// TRANS z wewntrznych struktur danych TRANSFORMATORa
-			// do wewntrznych struktur danych REPLY_BUFFER
 
-			reply.arm.pf_def.arm_frame = current_end_effector_frame;
+	// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
+	// Przepisanie definicji koncowki danej w postaci
+	// TRANS z wewntrznych struktur danych TRANSFORMATORa
+	// do wewntrznych struktur danych REPLY_BUFFER
 
-			// dla robotow track i postument - oblicz chwytak
-			break;
-		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
-			motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
-	}
+	reply.arm.pf_def.arm_frame = current_end_effector_frame;
+
+	motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
 
 	reply.servo_step = step_counter;
 
@@ -193,21 +187,16 @@ void manip_effector::get_arm_position_with_force_and_sb(bool read_hardware, lib:
 void manip_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &instruction)
 { // odczytanie pozycji ramienia
 
-	switch (instruction.get_arm_type)
-	{
-		case lib::FRAME:
-			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
-			get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
-			// TRANS z wewntrznych struktur danych TRANSFORMATORa
-			// do wewntrznych struktur danych REPLY_BUFFER
+	// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	get_current_kinematic_model()->i2e_transform(current_joints, current_end_effector_frame);
+	// TRANS z wewntrznych struktur danych TRANSFORMATORa
+	// do wewntrznych struktur danych REPLY_BUFFER
 
-			reply.arm.pf_def.arm_frame = current_end_effector_frame;
-			break;
-		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
-			motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
-			break;
-	}
+	reply.arm.pf_def.arm_frame = current_end_effector_frame;
+
+	motor_driven_effector::get_arm_position_get_arm_type_switch(instruction);
+
 }
 
 /*--------------------------------------------------------------------------*/
