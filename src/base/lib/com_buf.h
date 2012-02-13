@@ -651,7 +651,12 @@ struct r_buffer_arm_t
 		 *  XYZ + orientacja koncowki wzgledem ukladu bazowego.
 		 *  @todo Translate to English.
 		 */
+
 		double arm_coordinates[lib::MAX_SERVOS_NR];
+
+		double joint_coordinates[lib::MAX_SERVOS_NR];
+
+		double motor_coordinates[lib::MAX_SERVOS_NR];
 
 		lib::Ft_vector force_xyz_torque_xyz;
 	} pf_def;
@@ -718,6 +723,9 @@ private:
 				ar & pf_def.arm_coordinates;
 				break;
 		}
+		ar & pf_def.arm_frame;
+		ar & pf_def.joint_coordinates;
+		ar & pf_def.motor_coordinates;
 
 		ar & pf_def.force_xyz_torque_xyz;
 		ar & gripper_reg_state;
