@@ -13,10 +13,11 @@
 
 #include <zmq.hpp>
 
-#include "zmqpp.h"
+#include "location.h"
+#include "registry.h"
 
 // Name to location mapping.
-typedef boost::unordered_map<std::string, zmqpp::location> locations_t;
+typedef boost::unordered_map<std::string, mrrocpp::lib::zmq::location> locations_t;
 
 void print_registry(const locations_t & registry)
 {
@@ -55,7 +56,7 @@ int main(int argc, char *argv[])
 		print_registry(locations);
 
 		// Create place-holder data.
-		zmqpp::location msg;
+		mrrocpp::lib::zmq::location msg;
 
 		// Setup poll list.
 		zmq::pollitem_t pollitem;
@@ -81,11 +82,11 @@ int main(int argc, char *argv[])
 			std::cout << "ZMQ_POLLERR" << std::endl;
 		}
 
-		zmqpp::recv(sock, msg);
+		mrrocpp::lib::zmq::recv(sock, msg);
 
 		std::cout << "<-" << msg << std::endl;
 
-		if(msg.type == zmqpp::location::REGISTER) {
+		if(msg.type == mrrocpp::lib::zmq::location::REGISTER) {
 
 			// Check location within a map.
 			if(locations.count(msg.name) == 0) {
@@ -93,13 +94,13 @@ int main(int argc, char *argv[])
 				locations.insert(locations_t::value_type(msg.name, msg));
 
 				// Confirm.
-				msg.type = zmqpp::location::ACK;
+				msg.type = mrrocpp::lib::zmq::location::ACK;
 			} else {
 				// Default to NACK message.
-				msg.type = zmqpp::location::NACK;
+				msg.type = mrrocpp::lib::zmq::location::NACK;
 			}
 
-		} else if (msg.type == zmqpp::location::UNREGISTER) {
+		} else if (msg.type == mrrocpp::lib::zmq::location::UNREGISTER) {
 
 			// Check location within a map.
 			locations_t::const_iterator it = locations.find(msg.name);
@@ -109,45 +110,45 @@ int main(int argc, char *argv[])
 				locations.erase(it);
 
 				// Confirm.
-				msg.type = zmqpp::location::ACK;
+				msg.type = mrrocpp::lib::zmq::location::ACK;
 			} else {
 				// Default to NACK message.
-				msg.type = zmqpp::location::NACK;
+				msg.type = mrrocpp::lib::zmq::location::NACK;
 			}
 
-		} else if (msg.type == zmqpp::location::QUERY) {
+		} else if (msg.type == mrrocpp::lib::zmq::location::QUERY) {
 			locations_t::const_iterator it = locations.find(msg.name);
 
 			if(it != locations.end()) {
 				msg = it->second;
 
 				// Confirm.
-				msg.type = zmqpp::location::ACK;
+				msg.type = mrrocpp::lib::zmq::location::ACK;
 			} else {
 				// Default to NACK message.
-				msg.type = zmqpp::location::NACK;
+				msg.type = mrrocpp::lib::zmq::location::NACK;
 			}
-		} else if (msg.type == zmqpp::location::PING) {
+		} else if (msg.type == mrrocpp::lib::zmq::location::PING) {
 			locations_t::iterator it = locations.find(msg.name);
 
 			if(it != locations.end()) {
 				it->second.timer = 10;
 
 				// Confirm.
-				msg.type = zmqpp::location::ACK;
+				msg.type = mrrocpp::lib::zmq::location::ACK;
 			} else {
 				// Default to NACK message.
-				msg.type = zmqpp::location::NACK;
+				msg.type = mrrocpp::lib::zmq::location::NACK;
 			}
 		} else {
 			// Default to NACK message.
-			msg.type = zmqpp::location::NACK;
+			msg.type = mrrocpp::lib::zmq::location::NACK;
 		}
 
 		std::cout << "->" << msg << std::endl;
 
 		// Reply.
-		zmqpp::send(sock, msg);
+		mrrocpp::lib::zmq::send(sock, msg);
 	}
 
 	return 0;

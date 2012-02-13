@@ -7,14 +7,14 @@
 
 #include <iostream>
 
-#include "zmqpp.h"
+#include "publisher.h"
 
 int
 main(int argc, char *argv[])
 {
 	while(true) {
 		{
-			zmqpp::publisher r("foo");
+			mrrocpp::lib::zmq::publisher r("foo");
 			sleep(5);
 		}
 		sleep(3);
