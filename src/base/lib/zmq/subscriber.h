@@ -12,18 +12,44 @@
 
 #include <zmq.hpp>
 
+#include "../xdr/xdr_iarchive.hpp"
+
 namespace mrrocpp {
 namespace lib {
 namespace zmq {
 
 class subscriber {
 public:
+	//! Constructor.
 	subscriber(const std::string & name);
 
 private:
-	const std::string remote_name;
+	//! Name of the publication topic.
+	const std::string topic_name;
 
+	//! Socket for data receiving.
 	::zmq::socket_t sock;
+
+	//! Cross-platform serialization archive.
+	xdr_iarchive<> xdr_ia;
+
+public:
+	//! Receive data.
+	template<typename T>
+	void receive(T & data)
+	{
+		//! Pre-allocated ZMQ message.
+		::zmq::message_t msg;
+
+		sock.recv(&msg);
+
+		xdr_ia.set_buffer((const char *) msg.data(), msg.size());
+
+		xdr_ia >> data;
+
+		std::cout << "receive('" << data << "', " << msg.size() << ")" << std::endl;
+	}
+
 };
 
 } // namespace zmq

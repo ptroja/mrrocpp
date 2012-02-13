@@ -19,7 +19,8 @@ namespace lib {
 namespace zmq {
 
 subscriber::subscriber(const std::string & remote_name_)
-	: remote_name(remote_name_), sock(context::instance().get(), ZMQ_SUB)
+	: topic_name(remote_name_),
+	  sock(context::instance().get(), ZMQ_SUB)
 {
 	// Get own location.
 	char hostname[256];
@@ -28,7 +29,7 @@ subscriber::subscriber(const std::string & remote_name_)
 		throw std::runtime_error("Could not get hostname");
 	}
 
-	location remote = registry::instance().locate_name(remote_name);
+	location remote = registry::instance().locate_name(topic_name);
 
 	// Build address with string stream.
 	std::ostringstream os;
@@ -38,10 +39,10 @@ subscriber::subscriber(const std::string & remote_name_)
 		// Check if we are within the same process.
 		if(remote.pid == (int) getpid()) {
 			// Connect with INPROC transport.
-			os << "inproc://" << remote_name;
+			os << "inproc://" << topic_name;
 		} else {
 			// Connect with IPC transport.
-			os << "ipc://tmp/" << remote.pid << "/" << remote_name;
+			os << "ipc:///tmp/.zmq_" << remote.pid << "_" << topic_name;
 		}
 	} else {
 		// Connect with TCP transport.
@@ -50,6 +51,9 @@ subscriber::subscriber(const std::string & remote_name_)
 
 	// Connect.
 	sock.connect(os.str().c_str());
+
+	// Recive all messages by default.
+	sock.setsockopt(ZMQ_SUBSCRIBE, NULL, 0);
 }
 
 } // namespace zmq

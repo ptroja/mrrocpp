@@ -22,12 +22,22 @@ namespace zmq {
 
 publisher::publisher(const std::string & name)
 	: my_name(name),
-	  tcp_sock(context::instance().get(), ZMQ_PUB),
-	  ipc_sock(context::instance().get(), ZMQ_PUB),
-	  inproc_sock(context::instance().get(), ZMQ_PUB)
+	  sock(context::instance().get(), ZMQ_PUB)
 {
 	// Bind to TCP socket.
-	port = bind_ephemeral_tcp(tcp_sock);
+	port = bind_ephemeral_tcp(sock);
+
+	// Build address with string stream.
+	std::ostringstream ipc_address, inproc_address;
+
+	// INPROC transport address.
+	ipc_address << "ipc:///tmp/.zmq_" << (int) getpid() << "_" << name;
+
+	sock.bind(ipc_address.str().c_str());
+
+	inproc_address << "inproc://" << name;
+
+	sock.bind(inproc_address.str().c_str());
 
 	// Register name.
 	registry::instance().register_name(my_name, port);
@@ -36,9 +46,7 @@ publisher::publisher(const std::string & name)
 	const uint64_t hwm_value = 1;
 
 	// Set high-water mark action.
-	tcp_sock.setsockopt(ZMQ_HWM, &hwm_value, sizeof(hwm_value));
-	ipc_sock.setsockopt(ZMQ_HWM, &hwm_value, sizeof(hwm_value));
-	inproc_sock.setsockopt(ZMQ_HWM, &hwm_value, sizeof(hwm_value));
+	sock.setsockopt(ZMQ_HWM, &hwm_value, sizeof(hwm_value));
 
 	// Spawn keep-alive thread.
 	tid = boost::thread(boost::bind(&publisher::ping, this));

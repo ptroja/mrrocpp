@@ -14,7 +14,10 @@ main(int argc, char *argv[])
 {
 	mrrocpp::lib::zmq::publisher pub("foo");
 
+	int i = 0;
+
 	while(true) {
+		pub.send(i++);
 		sleep(1);
 	}
 

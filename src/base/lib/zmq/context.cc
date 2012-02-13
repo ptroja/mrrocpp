@@ -7,8 +7,6 @@
 
 #include "context.h"
 
-#include <zmq.hpp>
-
 namespace mrrocpp {
 namespace lib {
 namespace zmq {

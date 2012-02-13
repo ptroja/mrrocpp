@@ -9,10 +9,10 @@
 #define ZMQ_PUBLISHER_H_
 
 #include <string>
-
 #include <boost/thread/thread.hpp>
-
 #include <zmq.hpp>
+
+#include "../xdr/xdr_oarchive.hpp"
 
 namespace mrrocpp {
 namespace lib {
@@ -30,8 +30,8 @@ private:
 	//! Name.
 	const std::string my_name;
 
-	//! Publishing sockets.
-	::zmq::socket_t tcp_sock, ipc_sock, inproc_sock;
+	//! Publishing socket.
+	::zmq::socket_t sock;
 
 	//! TCP port number.
 	int port;
@@ -44,6 +44,28 @@ private:
 
 	//! Bind ephemeral TCP socket.
 	int bind_ephemeral_tcp(::zmq::socket_t & sock);
+
+public:
+	//! Send data.
+	template<typename T>
+	void send(const T & data)
+	{
+		// Cross-platform serialization archive.
+		xdr_oarchive<> xdr_oa;
+
+		// Serialize data.
+		xdr_oa << data;
+
+		// FIXME: pre-allocate message.
+		::zmq::message_t msg(xdr_oa.getArchiveSize());
+
+		// Copy data to ZMQ message.
+		memcpy(msg.data(), xdr_oa.get_buffer(), xdr_oa.getArchiveSize());
+
+		std::cout << "send('" << data << "', " << xdr_oa.getArchiveSize() << ")" << std::endl;
+
+		sock.send(msg, ZMQ_NOBLOCK);
+	}
 };
 
 } // namespace zmq
