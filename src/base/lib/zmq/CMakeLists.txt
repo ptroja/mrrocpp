@@ -9,8 +9,11 @@ target_link_libraries(zmqps ${ZeroMQ_LIBRARIES}
 add_executable(zmq_names zmq_names.cc)
 target_link_libraries (zmq_names zmqps)
 	
-add_executable(zmq_test zmq_test.cc)
-target_link_libraries(zmq_test zmqps) 
+add_executable(test_subscribe test_subscribe.cc)
+target_link_libraries(test_subscribe zmqps)
+
+add_executable(test_publish test_publish.cc)
+target_link_libraries(test_publish zmqps) 
 
 install(TARGETS zmq_names DESTINATION bin)
 install(TARGETS zmqps DESTINATION lib)

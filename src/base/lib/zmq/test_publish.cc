@@ -12,12 +12,10 @@
 int
 main(int argc, char *argv[])
 {
+	mrrocpp::lib::zmq::publisher pub("foo");
+
 	while(true) {
-		{
-			mrrocpp::lib::zmq::publisher r("foo");
-			sleep(5);
-		}
-		sleep(3);
+		sleep(1);
 	}
 
 	return 0;

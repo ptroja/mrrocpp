@@ -21,7 +21,7 @@ typedef boost::unordered_map<std::string, mrrocpp::lib::zmq::location> locations
 
 void print_registry(const locations_t & registry)
 {
-	//std::cout << "registry#" << registry.size() << ":" << std::endl;
+	std::cout << "registry#" << registry.size() << ":" << std::endl;
 	BOOST_FOREACH(const locations_t::value_type & item, registry) {
 		std::cout << "\t" << item.second << std::endl;
 	}
@@ -29,13 +29,19 @@ void print_registry(const locations_t & registry)
 
 void flush_registry(locations_t & registry)
 {
+	bool changed = false;
+
 	//std::cout << "flush registry" << std::endl;
-	BOOST_FOREACH(locations_t::value_type & item, registry) {
-		if(--item.second.timer) {
-			//std::cout << "removing '" << item.first << "' item" << std::endl;
-			registry.erase(item.first);
+	for(locations_t::iterator it = registry.begin(); it != registry.end();) {
+		if(--(it->second.timer)) {
+			it = registry.erase(it);
+			changed = true;
+		} else {
+			++it;
 		}
 	}
+
+	if(changed) print_registry(registry);
 }
 
 int main(int argc, char *argv[])
@@ -62,7 +68,7 @@ int main(int argc, char *argv[])
 		zmq::pollitem_t pollitem;
 
 		pollitem.socket = sock;
-		pollitem.events = ZMQ_POLLIN|ZMQ_POLLERR;
+		pollitem.events = ZMQ_POLLIN;
 
 		int r = zmq::poll(&pollitem, 1, 500000);
 
@@ -72,19 +78,9 @@ int main(int argc, char *argv[])
 			continue;
 		}
 
-		//std::cout << r << std::endl;
-
-//		if(pollitem.revents & ZMQ_POLLIN) {
-//			std::cout << "ZMQ_POLLIN" << std::endl;
-//		}
-
-		if(pollitem.revents & ZMQ_POLLERR) {
-			std::cout << "ZMQ_POLLERR" << std::endl;
-		}
-
 		mrrocpp::lib::zmq::recv(sock, msg);
 
-		std::cout << "<-" << msg << std::endl;
+		//std::cout << "<-" << msg << std::endl;
 
 		if(msg.type == mrrocpp::lib::zmq::location::REGISTER) {
 
@@ -132,7 +128,7 @@ int main(int argc, char *argv[])
 			locations_t::iterator it = locations.find(msg.name);
 
 			if(it != locations.end()) {
-				it->second.timer = 10;
+				it->second.timer = 5;
 
 				// Confirm.
 				msg.type = mrrocpp::lib::zmq::location::ACK;
@@ -145,7 +141,7 @@ int main(int argc, char *argv[])
 			msg.type = mrrocpp::lib::zmq::location::NACK;
 		}
 
-		std::cout << "->" << msg << std::endl;
+		//std::cout << "->" << msg << std::endl;
 
 		// Reply.
 		mrrocpp::lib::zmq::send(sock, msg);
