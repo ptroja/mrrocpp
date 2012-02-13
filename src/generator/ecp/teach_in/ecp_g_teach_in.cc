@@ -39,6 +39,8 @@ namespace generator {
 teach_in::teach_in(common::task::task& _ecp_task) :
 		common::generator::generator(_ecp_task)
 {
+	generator_name = ecp_mp::generator::ECP_GEN_TEACH_IN;
+
 	pose_list.clear();
 	pose_list_iterator = pose_list.end();
 }

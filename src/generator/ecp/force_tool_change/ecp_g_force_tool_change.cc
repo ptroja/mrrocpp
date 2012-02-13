@@ -34,12 +34,13 @@ namespace generator {
 force_tool_change::force_tool_change(common::task::task& _ecp_task) :
 		common::generator::generator(_ecp_task)
 {
+	generator_name = ecp_mp::generator::ECP_GEN_FORCE_TOOL_CHANGE;
+
 	set_tool_parameters(-0.18, 0.0, 0.25, 0);
 }
 
 bool force_tool_change::first_step()
 {
-	generator_name = ecp_mp::generator::ECP_GEN_FORCE_TOOL_CHANGE;
 
 	the_robot->ecp_command.instruction_type = lib::SET;
 	the_robot->ecp_command.set_type = ROBOT_MODEL_DEFINITION;

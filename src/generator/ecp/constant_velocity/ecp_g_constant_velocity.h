@@ -8,12 +8,12 @@
 #ifndef _ECP_G_CONSTANT_VELOCITY_H_
 #define _ECP_G_CONSTANT_VELOCITY_H_
 
+#include "ecp_mp_g_constant_velocity.h"
+
 #include "generator/ecp/ecp_g_multiple_position.h"
 #include "base/lib/trajectory_pose/constant_velocity_trajectory_pose.h"
 #include "generator/lib/velocity_profile_calculator/constant_velocity_profile.h"
 #include "generator/lib/trajectory_interpolator/constant_velocity_interpolator.h"
-
-#include "ecp_mp_g_constant_velocity.h"
 
 namespace mrrocpp {
 namespace ecp {

@@ -23,6 +23,8 @@ spline::spline(common::task::task& _ecp_task, lib::ECP_POSE_SPECIFICATION pose_s
 				ecp::common::generator::velocity_profile_calculator::spline_profile>(_ecp_task)
 {
 
+	generator_name = ecp_mp::generator::ECP_GEN_SPLINE;
+
 	this->pose_spec = pose_spec;
 	this->axes_num = axes_num;
 	this->vpc = velocity_profile_calculator::spline_profile();
