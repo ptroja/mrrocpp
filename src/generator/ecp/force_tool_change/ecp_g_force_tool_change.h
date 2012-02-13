@@ -11,7 +11,7 @@
  * TODO conditional execution to be implemented
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
- *f
+ *
  * @ingroup generators
  */
 
