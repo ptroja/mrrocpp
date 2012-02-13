@@ -155,6 +155,13 @@ bool weight_measure::next_step()
 	return true;
 }
 
+void weight_measure::conditional_execution()
+{
+	set_weight_difference(ecp_t.mp_command.ecp_next_state.sg_buf.get <double>());
+
+	Move();
+}
+
 } // namespace generator
 } // namespace common
 } // namespace ecp

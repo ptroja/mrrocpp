@@ -6,7 +6,10 @@
  * @brief File contains ecp transparent generator declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup ecp
+ * it used in continuous coordination
+ * the kinematic checking handler can be enabled and disabled
+ *
+ * @ingroup generators
  */
 
 #include "ecp_mp_g_transparent.h"
@@ -22,7 +25,7 @@ namespace generator {
  * used in continuous coordination
  *
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
- * @ingroup ecp
+ * @ingroup generators
  */
 class transparent : public common::generator::generator
 {
@@ -39,8 +42,16 @@ public:
 	 */
 	bool throw_kinematics_exceptions;
 
+	/**
+	 * @brief generates first step of transition function
+	 * @return terminal condition value
+	 */
 	bool first_step();
 
+	/**
+	 * @brief generates next steps (starting from the second) of transition function
+	 * @return terminal condition value
+	 */
 	bool next_step();
 
 	/**
@@ -49,6 +60,9 @@ public:
 	 */
 	void execute_motion(void);
 
+	/**
+	 * @brief method executed by dispatcher
+	 */
 	void conditional_execution();
 
 };

@@ -3,7 +3,7 @@
  * @brief File contains ecp transparent generator definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup ecp
+ * @ingroup generators
  */
 
 #include "base/ecp/ecp_task.h"
