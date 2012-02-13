@@ -107,10 +107,10 @@ protected:
 	{
 		// Wyslanie potwierdzenia przyjecia polecenia do wykonania,
 		// adekwatnej odpowiedzi na zapytanie lub
-		// informacji o tym, ze przyslane polecenie nie moze byc przyjte
+		// informacji o tym, ze przyslane polecenie nie moze byc przyjete
 		// do wykonania w aktualnym stanie EDP
 
-		if (!((reply.reply_type == lib::ERROR) || (reply.reply_type == lib::SYNCHRO_OK)))
+		if ((reply.reply_type != lib::ERROR) && (reply.reply_type != lib::SYNCHRO_OK))
 			reply.reply_type = real_reply_type;
 
 		if (messip::port_reply(server_attach, caller, 0, reply) == -1) {
@@ -120,6 +120,7 @@ protected:
 			msg->message(lib::SYSTEM_ERROR, e, "Reply() to ECP failed");
 			throw exception::se();
 		}
+
 		real_reply_type = lib::ACKNOWLEDGE;
 	}
 
