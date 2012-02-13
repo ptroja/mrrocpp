@@ -290,7 +290,7 @@ protected:
 	}
 	/**
 	 * Calculates trajectory.
-	 * @return true if calculation was successful.
+         * @return true if calculation was successful
 	 */
 	virtual bool calculate() = 0;
 	/**
@@ -316,22 +316,6 @@ protected:
 		}
 		flushall();
 	}
-
-	/**
-	 * Returns current current average modue value.
-	 */
-	/*double getCurrentModule(int i)
-	 {
-	 return the_robot->reply_package.arm.measured_current.average_module[i];
-	 }*/
-
-	/**
-	 *
-	 */
-	/*double getCurrentCubic(int i)
-	 {
-	 return the_robot->reply_package.arm.measured_current.average_cubic[i];
-	 }*/
 
 public:
 	/**
@@ -801,6 +785,7 @@ public:
 	/**
 	 * Loads a list of calculated coordinates from a text file.
 	 * @param file_name name of the file with the trajectory
+         * @return true if loading was successful, false otherwise
 	 */
 	bool load_coordinates_from_file(const char* file_name)
 	{
@@ -914,11 +899,13 @@ public:
 	/**
 	 * Method load the relative trajectory_pose object to the pose_vector.
 	 * @param trajectory_pose pose to load
+         * @return true if loading was successful, false otherwise
 	 */
 	virtual bool load_relative_pose(Pos & trajectory_pose) = 0;
 	/**
 	 * Method load the absolute trajectory_pose object to the pose_vector.
 	 * @param trajectory_pose pose to load
+         * @return true if loading was successful, false otherwise
 	 */
 	virtual bool load_absolute_pose(Pos & trajectory_pose) = 0;
 };
