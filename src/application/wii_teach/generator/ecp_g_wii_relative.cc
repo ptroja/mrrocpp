@@ -13,15 +13,15 @@ namespace irp6ot_m {
 namespace generator {
 
 wii_relative::wii_relative(common::task::task& _ecp_task, ecp_mp::sensor::wiimote* _wiimote) :
-	wii(_ecp_task, _wiimote)
+		wii(_ecp_task, _wiimote)
 {
 	char buffer[100];
 
 	for (int i = 0; i < MAX_NO_OF_DEGREES; ++i) {
 		sprintf(buffer, "relative_multiplier_%d", i);
-		multipliers[i] = ecp_t.config.value <double> (buffer);
+		multipliers[i] = ecp_t.config.value <double>(buffer);
 		sprintf(buffer, "relative_max_change_%d", i);
-		maxChange[i] = ecp_t.config.value <double> (buffer);
+		maxChange[i] = ecp_t.config.value <double>(buffer);
 	}
 }
 
@@ -40,7 +40,7 @@ bool wii_relative::first_step()
 {
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.get_arm_type = lib::FRAME;
+//	the_robot->ecp_command.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.set_arm_type = lib::FRAME;
 	the_robot->ecp_command.motion_type = lib::RELATIVE;

@@ -91,7 +91,7 @@ bool weight_measure::first_step()
 
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.get_arm_type = lib::FRAME;
+//	the_robot->ecp_command.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.interpolation_type = lib::TCIM;
 
 	return true;
@@ -153,6 +153,13 @@ bool weight_measure::next_step()
 	}
 
 	return true;
+}
+
+void weight_measure::conditional_execution()
+{
+	set_weight_difference(ecp_t.mp_command.ecp_next_state.sg_buf.get <double>());
+
+	Move();
 }
 
 } // namespace generator

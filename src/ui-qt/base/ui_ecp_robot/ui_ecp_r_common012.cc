@@ -52,7 +52,7 @@ void EcpRobot::init()
 	// Konstruktor klasy
 	ecp->ecp_command.robot_model.kinematic_model.kinematic_model_no = 0;
 	ecp->ecp_command.get_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.get_arm_type = lib::MOTOR;
+//	ecp->ecp_command.get_arm_type = lib::MOTOR;
 	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
 	ecp->ecp_command.set_arm_type = lib::MOTOR;
 	ecp->ecp_command.motion_steps = 0;
@@ -105,7 +105,7 @@ void EcpRobot::move_motors(const double final_position[])
 		ecp->ecp_command.interpolation_type = lib::MIM;
 	}
 	ecp->ecp_command.get_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.get_arm_type = lib::MOTOR;
+//	ecp->ecp_command.get_arm_type = lib::MOTOR;
 	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
 	ecp->ecp_command.set_arm_type = lib::MOTOR;
 	ecp->ecp_command.motion_steps = nr_of_steps;
@@ -122,7 +122,9 @@ void EcpRobot::move_motors(const double final_position[])
 
 	if (ecp->is_synchronised())
 		for (int j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
-			current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
+				{
+			current_position[j] = ecp->reply_package.arm.pf_def.motor_coordinates[j];
+		}
 }
 // ---------------------------------------------------------------
 
@@ -145,7 +147,7 @@ void EcpRobot::move_joints(const double final_position[])
 	// Parametry zlecenia ruchu i odczytu polozenia
 	ecp->ecp_command.instruction_type = lib::SET_GET;
 	ecp->ecp_command.get_type = ARM_DEFINITION; // ARM
-	ecp->ecp_command.get_arm_type = lib::JOINT;
+//	ecp->ecp_command.get_arm_type = lib::JOINT;
 	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
 	ecp->ecp_command.set_arm_type = lib::JOINT;
 	ecp->ecp_command.motion_type = lib::ABSOLUTE;
@@ -164,7 +166,7 @@ void EcpRobot::move_joints(const double final_position[])
 	execute_motion();
 
 	for (int j = 0; j < ecp->number_of_servos; j++) // Przepisanie aktualnych polozen
-		current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
+		current_position[j] = ecp->reply_package.arm.pf_def.joint_coordinates[j];
 }
 // ---------------------------------------------------------------
 
@@ -261,14 +263,14 @@ void EcpRobot::read_motors(double current_position[])
 	// Parametry zlecenia ruchu i odczytu polozenia
 	ecp->ecp_command.get_type = ARM_DEFINITION;
 	ecp->ecp_command.instruction_type = lib::GET;
-	ecp->ecp_command.get_arm_type = lib::MOTOR;
+//	ecp->ecp_command.get_arm_type = lib::MOTOR;
 	ecp->ecp_command.interpolation_type = lib::MIM;
 
 	execute_motion();
 	// printf("dalej za query read motors\n");
 	for (int i = 0; i < ecp->number_of_servos; i++) // Przepisanie aktualnych polozen
 		// { // printf("current position: %f\n",ecp->reply_package.arm.pf_def.arm_coordinates[i]);
-		current_position[i] = ecp->reply_package.arm.pf_def.arm_coordinates[i];
+		current_position[i] = ecp->reply_package.arm.pf_def.motor_coordinates[i];
 	// 			    }
 	// printf("koniec read motors\n");
 }
@@ -282,13 +284,13 @@ void EcpRobot::read_joints(double current_position[])
 	// Parametry zlecenia ruchu i odczytu polozenia
 	ecp->ecp_command.instruction_type = lib::GET;
 	ecp->ecp_command.get_type = ARM_DEFINITION;
-	ecp->ecp_command.get_arm_type = lib::JOINT;
+	//ecp->ecp_command.get_arm_type = lib::JOINT;
 	ecp->ecp_command.interpolation_type = lib::MIM;
 
 	execute_motion();
 
 	for (int i = 0; i < ecp->number_of_servos; ++i) // Przepisanie aktualnych polozen
-		current_position[i] = ecp->reply_package.arm.pf_def.arm_coordinates[i];
+		current_position[i] = ecp->reply_package.arm.pf_def.joint_coordinates[i];
 }
 // ---------------------------------------------------------------
 
@@ -374,7 +376,7 @@ void EcpRobot::move_xyz_euler_zyz(const double final_position[7])
 
 	// Parametry zlecenia ruchu i odczytu polozenia
 	ecp->ecp_command.instruction_type = lib::SET_GET;
-	ecp->ecp_command.get_arm_type = lib::FRAME;
+//	ecp->ecp_command.get_arm_type = lib::FRAME;
 	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
 	ecp->ecp_command.set_arm_type = lib::FRAME;
 	ecp->ecp_command.motion_type = lib::ABSOLUTE;
@@ -390,9 +392,9 @@ void EcpRobot::move_xyz_euler_zyz(const double final_position[7])
 
 	execute_motion();
 
-	for (int j = 0; j < 6; j++) { // Przepisanie aktualnych polozen
-		current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
-	}
+	lib::Xyz_Euler_Zyz_vector tmp_vector;
+	ecp->reply_package.arm.pf_def.arm_frame.get_xyz_euler_zyz(tmp_vector);
+	tmp_vector.to_table(current_position);
 
 }
 // ---------------------------------------------------------------
@@ -425,7 +427,7 @@ void EcpRobot::move_xyz_angle_axis(const double final_position[7])
 		return;
 
 	ecp->ecp_command.instruction_type = lib::SET_GET;
-	ecp->ecp_command.get_arm_type = lib::FRAME;
+//	ecp->ecp_command.get_arm_type = lib::FRAME;
 	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
 	ecp->ecp_command.set_arm_type = lib::FRAME;
 	ecp->ecp_command.motion_type = lib::ABSOLUTE;
@@ -437,9 +439,9 @@ void EcpRobot::move_xyz_angle_axis(const double final_position[7])
 
 	execute_motion();
 
-	for (int j = 0; j < 6; j++) { // Przepisanie aktualnych polozen
-		current_position[j] = ecp->reply_package.arm.pf_def.arm_coordinates[j];
-	}
+	lib::Xyz_Angle_Axis_vector tmp_vector;
+	ecp->reply_package.arm.pf_def.arm_frame.get_xyz_angle_axis(tmp_vector);
+	tmp_vector.to_table(current_position);
 
 }
 
@@ -461,7 +463,7 @@ void EcpRobot::move_xyz_angle_axis_relative(const double position_increment[7])
 		return;
 
 	ecp->ecp_command.instruction_type = lib::SET_GET;
-	ecp->ecp_command.get_arm_type = lib::FRAME;
+//	ecp->ecp_command.get_arm_type = lib::FRAME;
 	ecp->ecp_command.set_type = ARM_DEFINITION; // ARM
 	ecp->ecp_command.set_arm_type = lib::FRAME;
 	ecp->ecp_command.motion_type = lib::RELATIVE;
@@ -484,7 +486,7 @@ void EcpRobot::read_xyz_euler_zyz(double current_position[])
 	// Parametry zlecenia ruchu i odczytu polozenia
 	ecp->ecp_command.get_type = ARM_DEFINITION;
 	ecp->ecp_command.instruction_type = lib::GET;
-	ecp->ecp_command.get_arm_type = lib::FRAME;
+//	ecp->ecp_command.get_arm_type = lib::FRAME;
 	ecp->ecp_command.interpolation_type = lib::MIM;
 
 	execute_motion();
@@ -503,7 +505,7 @@ void EcpRobot::read_xyz_angle_axis(double current_position[])
 
 	ecp->ecp_command.get_type = ARM_DEFINITION;
 	ecp->ecp_command.instruction_type = lib::GET;
-	ecp->ecp_command.get_arm_type = lib::FRAME;
+//	ecp->ecp_command.get_arm_type = lib::FRAME;
 	ecp->ecp_command.interpolation_type = lib::MIM;
 	execute_motion();
 

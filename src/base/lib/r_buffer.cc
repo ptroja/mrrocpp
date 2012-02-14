@@ -12,7 +12,6 @@ r_buffer::r_buffer(void) :
 		input_values(0)
 {
 	robot_model.type = TOOL_FRAME;
-	arm.type = FRAME;
 	error_no.error0 = OK;
 	error_no.error1 = OK;
 

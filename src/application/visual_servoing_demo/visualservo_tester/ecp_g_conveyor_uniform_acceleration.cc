@@ -59,7 +59,7 @@ bool ecp_g_conveyor_uniform_acceleration::first_step()
 {
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.get_arm_type = lib::JOINT;
+//	the_robot->ecp_command.get_arm_type = lib::JOINT;
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 	the_robot->ecp_command.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.set_arm_type = lib::JOINT;
@@ -85,7 +85,7 @@ bool ecp_g_conveyor_uniform_acceleration::next_step()
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
 
 	if (!initial_position_saved) {
-		current_position = the_robot->reply_package.arm.pf_def.arm_coordinates[0];
+		current_position = the_robot->reply_package.arm.pf_def.joint_coordinates[0];
 		initial_position_saved = true;
 	}
 

@@ -13,26 +13,23 @@
 #include "base/ecp/ecp_robot.h"
 #include "application/android_teach/generator/EcpGAndroid.h"
 
-
 namespace mrrocpp {
 namespace ecp {
 namespace irp6ot_m {
 namespace generator {
 
-
-EcpGAndroid::EcpGAndroid(common::task::task& _ecp_task,ecp_mp::sensor::EcpMpAndroid* androidSensor, ecp_mp::sensor::android_teach::AndroidState* androidState)
-			: common::generator::generator(_ecp_task), androidSensor(androidSensor), androidState(androidState)
+EcpGAndroid::EcpGAndroid(common::task::task& _ecp_task, ecp_mp::sensor::EcpMpAndroid* androidSensor, ecp_mp::sensor::android_teach::AndroidState* androidState) :
+		common::generator::generator(_ecp_task), androidSensor(androidSensor), androidState(androidState)
 {
-    for(int i  = 0;i < MAX_NO_OF_DEGREES;++i)
-    {
-        currentValue[i] = 0;
-        requestedChange[i] = 0;
-        nextChange[i] = 0;
-        maxChange[i] = 0;
-        multipliers[i] = 0;
-    }
+	for (int i = 0; i < MAX_NO_OF_DEGREES; ++i) {
+		currentValue[i] = 0;
+		requestedChange[i] = 0;
+		nextChange[i] = 0;
+		maxChange[i] = 0;
+		multipliers[i] = 0;
+	}
 
-    currentGripperValue = 0;
+	currentGripperValue = 0;
 
 }
 
@@ -43,52 +40,46 @@ EcpGAndroid::~EcpGAndroid()
 
 bool EcpGAndroid::calculate_change(int axis, double value)
 {
-    bool changed = false;
+	bool changed = false;
 
-    value *= multipliers[axis];
-    requestedChange[axis] = value;
+	value *= multipliers[axis];
+	requestedChange[axis] = value;
 
-    for(int i = 0;i < MAX_NO_OF_DEGREES;++i)
-    {
-        if(fabs(nextChange[i] - requestedChange[i]) < maxChange[i])
-        {
-            nextChange[i] = requestedChange[i];
-        }
-        else
-        {
-            if(requestedChange[i] > nextChange[i])
-            	nextChange[i] = nextChange[i] + maxChange[i];
-            else
-            	nextChange[i] = nextChange[i] - maxChange[i];
-        }
-        if(nextChange[i] != 0)
-        	changed = true;
-    }
+	for (int i = 0; i < MAX_NO_OF_DEGREES; ++i) {
+		if (fabs(nextChange[i] - requestedChange[i]) < maxChange[i]) {
+			nextChange[i] = requestedChange[i];
+		} else {
+			if (requestedChange[i] > nextChange[i])
+				nextChange[i] = nextChange[i] + maxChange[i];
+			else
+				nextChange[i] = nextChange[i] - maxChange[i];
+		}
+		if (nextChange[i] != 0)
+			changed = true;
+	}
 
-    return changed;
+	return changed;
 }
 
 int EcpGAndroid::get_axis(void)
 {
-    int axis = -1;
-    axis = androidState->getSelectedAxis();
-    return axis;
+	int axis = -1;
+	axis = androidState->getSelectedAxis();
+	return axis;
 }
 
 bool EcpGAndroid::next_step()
 {
 	char buf[100];
-	androidState->updateCurrentJointPosition(the_robot->reply_package.arm.pf_def.arm_coordinates);
+	androidState->updateCurrentJointPosition(the_robot->reply_package.arm.pf_def.joint_coordinates);
 
 	androidSensor->getReadings();
 
- 	if (androidState->readings.mode == 2)
- 	{
- 		perror("	next_step() mode = 2  zle");
- 	}
+	if (androidState->readings.mode == 2) {
+		perror("	next_step() mode = 2  zle");
+	}
 
-	if (androidState->readings.value == 0)
-	{
+	if (androidState->readings.value == 0) {
 		perror("stop w next_step EcpGAndroid");
 	}
 
@@ -113,19 +104,14 @@ bool EcpGAndroid::next_step()
 
 	double value = speed * androidState->jointSpeedMulti[axis];
 
-
 	preset_position();
 
-
 	// bylo for(int i = 0; i < 7; ++i)
-	for(int i = 0; i < MAX_NO_OF_DEGREES; ++i)
-	{
+	for (int i = 0; i < MAX_NO_OF_DEGREES; ++i) {
 		requestedChange[i] = 0;
 	}
 
-
-	bool changed = calculate_change(axis,value);
-
+	bool changed = calculate_change(axis, value);
 
 //	if (androidState->readings.value != 0)
 //	{
@@ -133,17 +119,13 @@ bool EcpGAndroid::next_step()
 //		perror(buf);
 //	}
 
-	if(!changed && stop)
+	if (!changed && stop)
 		return false;
 
 	if (androidState->disconnected)
 		return false;
 
-
-
 	set_position(changed);
-
-
 
 	return true;
 
@@ -151,72 +133,64 @@ bool EcpGAndroid::next_step()
 
 void EcpGAndroid::execute_motion(void)
 {
-    // komunikacja wlasciwa z manipulatorem
-    the_robot->send();
-    if (the_robot->reply_package.reply_type == lib::ERROR)
-    {
-    	the_robot->query();
-    	//throw common::robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
-    	throw ecp_mp::sensor::android_teach::NetworkException();
-    }
-    the_robot->query();
+	// komunikacja wlasciwa z manipulatorem
+	the_robot->send();
+	if (the_robot->reply_package.reply_type == lib::ERROR) {
+		the_robot->query();
+		//throw common::robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
+		throw ecp_mp::sensor::android_teach::NetworkException();
+	}
+	the_robot->query();
 
+	if (the_robot->reply_package.reply_type == lib::ERROR) {
+		switch (the_robot->reply_package.error_no.error0)
+		{
+			case BEYOND_UPPER_D0_LIMIT:
+			case BEYOND_UPPER_THETA1_LIMIT:
+			case BEYOND_UPPER_THETA2_LIMIT:
+			case BEYOND_UPPER_THETA3_LIMIT:
+			case BEYOND_UPPER_THETA4_LIMIT:
+			case BEYOND_UPPER_THETA5_LIMIT:
+			case BEYOND_UPPER_THETA6_LIMIT:
+			case BEYOND_UPPER_THETA7_LIMIT:
+			case BEYOND_UPPER_LIMIT_AXIS_1:
+			case BEYOND_UPPER_LIMIT_AXIS_2:
+			case BEYOND_UPPER_LIMIT_AXIS_3:
+			case BEYOND_UPPER_LIMIT_AXIS_4:
+			case BEYOND_UPPER_LIMIT_AXIS_5:
+			case BEYOND_UPPER_LIMIT_AXIS_6:
+			case BEYOND_UPPER_LIMIT_AXIS_7:
+				androidState->setLimit(1);
+				break;
+			case BEYOND_LOWER_D0_LIMIT:
+			case BEYOND_LOWER_THETA1_LIMIT:
+			case BEYOND_LOWER_THETA2_LIMIT:
+			case BEYOND_LOWER_THETA3_LIMIT:
+			case BEYOND_LOWER_THETA4_LIMIT:
+			case BEYOND_LOWER_THETA5_LIMIT:
+			case BEYOND_LOWER_THETA6_LIMIT:
+			case BEYOND_LOWER_THETA7_LIMIT:
+			case BEYOND_LOWER_LIMIT_AXIS_1:
+			case BEYOND_LOWER_LIMIT_AXIS_2:
+			case BEYOND_LOWER_LIMIT_AXIS_3:
+			case BEYOND_LOWER_LIMIT_AXIS_4:
+			case BEYOND_LOWER_LIMIT_AXIS_5:
+			case BEYOND_LOWER_LIMIT_AXIS_6:
+			case BEYOND_LOWER_LIMIT_AXIS_7:
+				androidState->setLimit(2);
+				break;
+			default:
+				throw ecp_mp::sensor::android_teach::NetworkException(); //common::robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
+				break;
 
-
-    if (the_robot->reply_package.reply_type == lib::ERROR)
-    {
-	switch ( the_robot->reply_package.error_no.error0 )
-        {
-            case BEYOND_UPPER_D0_LIMIT:
-            case BEYOND_UPPER_THETA1_LIMIT:
-            case BEYOND_UPPER_THETA2_LIMIT:
-            case BEYOND_UPPER_THETA3_LIMIT:
-            case BEYOND_UPPER_THETA4_LIMIT:
-            case BEYOND_UPPER_THETA5_LIMIT:
-            case BEYOND_UPPER_THETA6_LIMIT:
-            case BEYOND_UPPER_THETA7_LIMIT:
-            case BEYOND_UPPER_LIMIT_AXIS_1:
-            case BEYOND_UPPER_LIMIT_AXIS_2:
-            case BEYOND_UPPER_LIMIT_AXIS_3:
-            case BEYOND_UPPER_LIMIT_AXIS_4:
-            case BEYOND_UPPER_LIMIT_AXIS_5:
-            case BEYOND_UPPER_LIMIT_AXIS_6:
-            case BEYOND_UPPER_LIMIT_AXIS_7:
-            	androidState->setLimit(1);
-            	break;
-            case BEYOND_LOWER_D0_LIMIT:
-            case BEYOND_LOWER_THETA1_LIMIT:
-            case BEYOND_LOWER_THETA2_LIMIT:
-            case BEYOND_LOWER_THETA3_LIMIT:
-            case BEYOND_LOWER_THETA4_LIMIT:
-            case BEYOND_LOWER_THETA5_LIMIT:
-            case BEYOND_LOWER_THETA6_LIMIT:
-            case BEYOND_LOWER_THETA7_LIMIT:
-            case BEYOND_LOWER_LIMIT_AXIS_1:
-            case BEYOND_LOWER_LIMIT_AXIS_2:
-            case BEYOND_LOWER_LIMIT_AXIS_3:
-            case BEYOND_LOWER_LIMIT_AXIS_4:
-            case BEYOND_LOWER_LIMIT_AXIS_5:
-            case BEYOND_LOWER_LIMIT_AXIS_6:
-            case BEYOND_LOWER_LIMIT_AXIS_7:
-                androidState->setLimit(2);
-                break;
-            default:
-		throw ecp_mp::sensor::android_teach::NetworkException();//common::robot::ECP_error (lib::NON_FATAL_ERROR, EDP_ERROR);
-		break;
-
-	} /* end: switch */
-    }
-    else
-    {
-        androidState->setLimit(0);
-    }
+		} /* end: switch */
+	} else {
+		androidState->setLimit(0);
+	}
 }
 
 }
 } // namespace irp6ot
 } // namespace ecp
 } // namespace mrrocpp
-
-
 

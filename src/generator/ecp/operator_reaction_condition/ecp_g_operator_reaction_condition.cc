@@ -119,7 +119,6 @@ bool operator_reaction_condition::next_step()
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION; // ARM
 	//  the_robot->ecp_command.get_arm_type = lib::XYZ_EULER_ZYZ;// W.S.
-	the_robot->ecp_command.get_arm_type = lib::MOTOR;
 
 	// Sprawdzenie warunku poczatkowego - reakcji operatora
 	if (ecp_t.operator_reaction("Next motion?")) {
@@ -135,11 +134,11 @@ bool operator_reaction_condition::next_step()
 		if (!is_supplementary_list_head()) { // Czy wskaznik na glowe listy jest NULL
 			// Tworzymy glowe listy
 			//      create_supplementary_list_head(lib::XYZ_EULER_ZYZ, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates); // W.S.
-			create_supplementary_list_head(lib::ECP_MOTOR, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates);
+			create_supplementary_list_head(lib::ECP_MOTOR, 0.0, the_robot->reply_package.arm.pf_def.motor_coordinates);
 		} else {
 			// Wstaw do listy nowa pozycje
 			//      insert_supplementary_list_element(lib::XYZ_EULER_ZYZ, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates);
-			insert_supplementary_list_element(lib::ECP_MOTOR, 0.0, the_robot->reply_package.arm.pf_def.arm_coordinates);
+			insert_supplementary_list_element(lib::ECP_MOTOR, 0.0, the_robot->reply_package.arm.pf_def.motor_coordinates);
 		}
 		return false;
 	} else {

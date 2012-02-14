@@ -89,25 +89,15 @@ void motor_driven_effector::get_arm_position_get_arm_type_switch(lib::c_buffer &
 	// Przepisanie definicji koncowki danej w postaci
 	// JOINTS z wewnetrznych struktur danych TRANSFORMATORa
 	// do wewnetrznych struktur danych REPLY_BUFFER
-	switch (instruction.get_arm_type)
-	{
-		case lib::JOINT:
-			// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
-			get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
+	// przeliczenie wspolrzednych do poziomu, ktory ma byc odczytany
+	get_current_kinematic_model()->mp2i_transform(current_motor_pos, current_joints);
 
-			for (int i = 0; i < number_of_servos; i++) {
-				reply.arm.pf_def.arm_coordinates[i] = current_joints[i];
-			}
-			break;
-		case lib::MOTOR:
-			for (int i = 0; i < number_of_servos; i++) {
-				reply.arm.pf_def.arm_coordinates[i] = current_motor_pos[i];
-			}
-			break;
-		default: // blad: nieznany sposob zapisu wspolrzednych koncowki
-			printf("EFF_TYPE: %d\n", instruction.get_arm_type);
-			BOOST_THROW_EXCEPTION(nfe_2() << mrrocpp_error0(INVALID_GET_END_EFFECTOR_TYPE));
-			break;
+	for (int i = 0; i < number_of_servos; i++) {
+		reply.arm.pf_def.joint_coordinates[i] = current_joints[i];
+	}
+
+	for (int i = 0; i < number_of_servos; i++) {
+		reply.arm.pf_def.motor_coordinates[i] = current_motor_pos[i];
 	}
 
 }
@@ -359,9 +349,6 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 	reply.error_no.error0 = OK;
 	reply.error_no.error1 = OK;
 
-	// by Y bug redmine 414
-	reply.arm.type = instruction.get_arm_type;
-
 	// Wykonanie instrukcji
 	switch (instruction.instruction_type)
 	{
@@ -379,10 +366,8 @@ void motor_driven_effector::interpret_instruction(lib::c_buffer &instruction)
 				// przemieszczenie koncowki
 				// move_arm();
 				master_order(MT_MOVE_ARM, 0);
-				instruction.get_arm_type = instruction.set_arm_type;
+
 				get_arm_position(false, instruction); // Aktualizacja transformera
-				instruction.get_arm_type = lib::INVALID_END_EFFECTOR;
-				//    	printf("interpret instruction, set koniec\n");
 			}
 
 			break;

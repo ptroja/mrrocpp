@@ -15,7 +15,6 @@
 
 #include "base/lib/sr/srlib.h"
 
-
 #include "base/mp/mp_robot.h"
 #include "application/haptic_stiffness/mp_g_haptic_stiffness.h"
 #include "base/lib/mrmath/mrmath.h"
@@ -28,10 +27,17 @@ namespace mp {
 namespace generator {
 
 haptic_stiffness::haptic_stiffness(task::task& _mp_task, int step) :
-	continously_coordinated(_mp_task), irp6p_state(HS_LOW_FORCE), total_irp6p_stiffness(0.0),
-			last_irp6p_stiffness(0.0), initial_irp6p_force(0.0), initial_irp6p_position(0.0),
-			intermediate_irp6p_force(0.0), intermediate_irp6p_position(0.0), irp6ot_con(1), irp6p_con(1),
-			global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
+		continously_coordinated(_mp_task),
+		irp6p_state(HS_LOW_FORCE),
+		total_irp6p_stiffness(0.0),
+		last_irp6p_stiffness(0.0),
+		initial_irp6p_force(0.0),
+		initial_irp6p_position(0.0),
+		intermediate_irp6p_force(0.0),
+		intermediate_irp6p_position(0.0),
+		irp6ot_con(1),
+		irp6p_con(1),
+		global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015)
 {
 	step_no = step;
 }
@@ -67,7 +73,6 @@ bool haptic_stiffness::first_step()
 	irp6ot->mp_command.instruction.robot_model.type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
-	irp6ot->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6ot->mp_command.instruction.motion_type = lib::RELATIVE;
 	irp6ot->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6ot->mp_command.instruction.motion_steps = td.internode_step_no;
@@ -108,7 +113,6 @@ bool haptic_stiffness::first_step()
 	irp6p->mp_command.instruction.robot_model.type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.set_arm_type = lib::FRAME;
-	irp6p->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6p->mp_command.instruction.motion_type = lib::ABSOLUTE;
 	irp6p->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6p->mp_command.instruction.motion_steps = td.internode_step_no;
@@ -203,9 +207,7 @@ bool haptic_stiffness::next_step_inside()
 	 irp6p_goal_xyz_angle_axis_increment_in_end_effector.to_table (irp6p->ecp_td.MPtoECP_position_velocity);
 	 */
 	//	irp6p->ecp_td.MPtoECP_position_velocity[2] = 0.01;
-
-	lib::Ft_v_vector
-			irp6p_ECPtoMP_force_xyz_torque_xyz(irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz);
+	lib::Ft_v_vector irp6p_ECPtoMP_force_xyz_torque_xyz(irp6p->ecp_reply_package.reply_package.arm.pf_def.force_xyz_torque_xyz);
 
 	for (int i = 0; i < 6; i++) {
 		irp6ot->mp_command.instruction.arm.pf_def.force_xyz_torque_xyz[i] = -irp6p_ECPtoMP_force_xyz_torque_xyz[i];
@@ -225,7 +227,6 @@ bool haptic_stiffness::next_step_inside()
 	}
 
 	// Estymacja sztywności w automacie skończonym
-
 
 	// pobranie biezacej sily i polozenia w osi z narzedzia
 
@@ -341,11 +342,10 @@ bool haptic_stiffness::next_step_inside()
 	}
 	// wypiski
 
-
 	//	if ((cycle_counter % 10) == 0) {
 	std::cout << "irp6p_f: " << current_irp6p_force << ", irp6p_p: " << current_irp6p_position << ", irp6p_ts: "
-			<< total_irp6p_stiffness << ", irp6p_ls: " << last_irp6p_stiffness << ", irp6ot_f: "
-			<< current_irp6ot_force << ", irp6ot_p: " << current_irp6ot_position << std::endl;
+			<< total_irp6p_stiffness << ", irp6p_ls: " << last_irp6p_stiffness << ", irp6ot_f: " << current_irp6ot_force
+			<< ", irp6ot_p: " << current_irp6ot_position << std::endl;
 
 	//std::cout << "irp6p_ECPtoMP_force_xyz_torque_xyz\n" << irp6p_ECPtoMP_force_xyz_torque_xyz << "interval:"
 	//		<< time_interval << std::endl;
@@ -353,8 +353,8 @@ bool haptic_stiffness::next_step_inside()
 
 	//	}
 
-	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
-			== lib::TASK_TERMINATED)) {
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED)
+			|| (irp6p->ecp_reply_package.reply == lib::TASK_TERMINATED)) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else

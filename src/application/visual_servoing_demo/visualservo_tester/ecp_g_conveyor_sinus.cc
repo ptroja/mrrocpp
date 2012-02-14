@@ -24,12 +24,12 @@ namespace common {
 namespace generator {
 
 ecp_g_conveyor_sinus::ecp_g_conveyor_sinus(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name) :
-	common::generator::generator(ecp_task)
+		common::generator::generator(ecp_task)
 {
 	motion_steps = 30;
 	dt = motion_steps * 0.002;
-	A = ecp_task.config.value <double> ("sinus_A", section_name);
-	f = ecp_task.config.value <double> ("sinus_f", section_name);
+	A = ecp_task.config.value <double>("sinus_A", section_name);
+	f = ecp_task.config.value <double>("sinus_f", section_name);
 	t = 0;
 	initial_position = 0;
 }
@@ -42,7 +42,7 @@ bool ecp_g_conveyor_sinus::first_step()
 {
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.get_arm_type = lib::JOINT;
+//	the_robot->ecp_command.get_arm_type = lib::JOINT;
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 	the_robot->ecp_command.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.set_arm_type = lib::JOINT;
@@ -66,7 +66,7 @@ bool ecp_g_conveyor_sinus::next_step()
 	the_robot->ecp_command.instruction_type = lib::SET_GET;
 
 	if (!initial_position_saved) {
-		initial_position = the_robot->reply_package.arm.pf_def.arm_coordinates[0];
+		initial_position = the_robot->reply_package.arm.pf_def.joint_coordinates[0];
 		initial_position_saved = true;
 	}
 
@@ -80,7 +80,7 @@ bool ecp_g_conveyor_sinus::next_step()
 	return true;
 }
 
-}//namespace
+} //namespace
 
 }
 

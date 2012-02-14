@@ -62,7 +62,7 @@ bool tfg::first_step()
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.set_arm_type = lib::JOINT;
-	the_robot->ecp_command.get_arm_type = lib::JOINT;
+//	the_robot->ecp_command.get_arm_type = lib::JOINT;
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 	the_robot->ecp_command.interpolation_type = lib::MIM;
 	the_robot->ecp_command.motion_steps = step_no;
@@ -89,7 +89,7 @@ bool tfg::next_step()
 	the_robot->ecp_command.value_in_step_no = 998;
 
 	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	ss << "position: " << the_robot->reply_package.arm.pf_def.arm_coordinates[0] << ", node_counter:  " << node_counter;
+	ss << "position: " << the_robot->reply_package.arm.pf_def.joint_coordinates[0] << ", node_counter:  " << node_counter;
 
 	sr_ecp_msg.message(ss.str().c_str());
 
