@@ -19,66 +19,69 @@
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace subtask {
+namespace generator {
 
-subtask_const_vel_gen_test::subtask_const_vel_gen_test(task::task & _ecp_t) :
-		subtask(_ecp_t)
+const_vel_gen_test::const_vel_gen_test(task::task & _ecp_t) :
+                common::generator::generator(_ecp_t)
 {
-        generator_name = mrrocpp::ecp_mp::subtask::ECP_ST_CONST_VEL_GEN_TEST;
+        generator_name = mrrocpp::ecp_mp::generator::ECP_MP_CONST_VEL_GEN_TEST;
 	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
-		cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 6);
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_JOINT, 6);
 		cvgenjoint->set_debug(true);
 
-		cvgenmotor = new generator::constant_velocity(ecp_t, lib::ECP_MOTOR, 6);
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_MOTOR, 6);
 		cvgenmotor->set_debug(true);
 
 		track = false;
 		postument = true;
 		conv = false;
 
-		cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
 		cvgeneuler->set_debug(true);
 
-		cvgenangle = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
 		cvgenangle->set_debug(true);
 
 	} else if (_ecp_t.ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
-		cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 7);
-		cvgenjoint->set_debug(true);
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_JOINT, 7);
+                cvgenjoint->set_debug(true);
 
-		cvgenmotor = new generator::constant_velocity(ecp_t, lib::ECP_MOTOR, 7);
-		cvgenmotor->set_debug(true);
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_MOTOR, 7);
+                cvgenmotor->set_debug(true);
 
-		track = true;
-		postument = false;
-		conv = false;
+                track = true;
+                postument = false;
+                conv = false;
 
-		cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-		cvgeneuler->set_debug(true);
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                cvgeneuler->set_debug(true);
 
-		cvgenangle = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
-		cvgenangle->set_debug(true);
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                cvgenangle->set_debug(true);
 
 	} else if (_ecp_t.ecp_m_robot->robot_name == lib::conveyor::ROBOT_NAME) {
-		cvgenjoint = new generator::constant_velocity(ecp_t, lib::ECP_JOINT, 1);
-		cvgenjoint->set_debug(true);
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_JOINT, 1);
+                cvgenjoint->set_debug(true);
 
-		cvgenmotor = new generator::constant_velocity(ecp_t, lib::ECP_MOTOR, 1);
-		cvgenmotor->set_debug(true);
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_MOTOR, 1);
+                cvgenmotor->set_debug(true);
 
-		track = false;
-		postument = false;
-		conv = true;
+                track = false;
+                postument = false;
+                conv = true;
 
-		cvgeneuler = new generator::constant_velocity(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
-		cvgeneuler->set_debug(true);
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
+                cvgeneuler->set_debug(true);
+
+                cvgenjoint = (boost::shared_ptr <constant_velocity>) new constant_velocity(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
+                cvgenangle->set_debug(true);
 
         }
 
         network_path = std::string(ecp_t.mrrocpp_network_path);
 }
 
-void subtask_const_vel_gen_test::conditional_execution()
+void const_vel_gen_test::conditional_execution()
 {
 
         std::vector <double> coordinates1(6);//postument
@@ -626,15 +629,12 @@ void subtask_const_vel_gen_test::conditional_execution()
         // ANGLE AXIS RELATIVE END*/
 }
 
-subtask_const_vel_gen_test::~subtask_const_vel_gen_test()
+const_vel_gen_test::~const_vel_gen_test()
 {
-	delete cvgenjoint;
-	delete cvgenmotor;
-	delete cvgeneuler;
-	delete cvgenangle;
+
 }
 
-} // namespace task
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

@@ -6,7 +6,7 @@
 
 #include "base/lib/sr/srlib.h"
 #include "application/generator_tester/ecp_st_spline_gen_test.h"
-#include "generator/ecp/ecp_g_spline.h"
+#include "generator/ecp/spline/ecp_g_spline.h"
 
 #include "robot/irp6ot_m/const_irp6ot_m.h"
 #include "robot/irp6p_m/const_irp6p_m.h"
@@ -15,74 +15,73 @@
 
 #include "base/ecp/ecp_task.h"
 
-//#include "ecp_mp_st_spline_gen_test.h"
-
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace subtask {
+namespace generator {
 
-subtask_spline_gen_test::subtask_spline_gen_test(task::task & _ecp_t) :
-		subtask(_ecp_t)
+spline_gen_test::spline_gen_test(task::task & _ecp_t) :
+                common::generator::generator(_ecp_t)
 {
 
-        generator_name = mrrocpp::ecp_mp::subtask::ECP_ST_SPLINE_GEN_TEST;
-        if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
-                spgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 6);
-                spgenjoint->set_debug(true);
-                //cvgenjoint->setType(linear);
+    generator_name = mrrocpp::ecp_mp::generator::ECP_MP_SPLINE_GEN_TEST;
+    if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_JOINT, 6);
+            spgenjoint->set_debug(true);
 
-                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 6);
-                spgenmotor->set_debug(true);
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_MOTOR, 6);
+            spgenmotor->set_debug(true);
 
-                track = false;
-                postument = true;
-                conv = false;
+            track = false;
+            postument = true;
+            conv = false;
 
-                spgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-                spgeneuler->set_debug(true);
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+            spgeneuler->set_debug(true);
 
-                spgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
-                spgenangle->set_debug(true);
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+            spgenangle->set_debug(true);
 
-        } else if (_ecp_t.ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
-                spgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 7);
-                spgenjoint->set_debug(true);
+    } else if (_ecp_t.ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_JOINT, 7);
+            spgenjoint->set_debug(true);
 
-                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 7);
-                spgenmotor->set_debug(true);
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_MOTOR, 7);
+            spgenmotor->set_debug(true);
 
-                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 6);
-                spgenmotor->set_debug(true);
+            track = true;
+            postument = false;
+            conv = false;
 
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+            spgeneuler->set_debug(true);
 
-                spgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-                spgeneuler->set_debug(true);
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+            spgenangle->set_debug(true);
 
-                spgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
-                spgenangle->set_debug(true);
+    } else if (_ecp_t.ecp_m_robot->robot_name == lib::conveyor::ROBOT_NAME) {
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_JOINT, 1);
+            spgenjoint->set_debug(true);
 
-        } else if (_ecp_t.ecp_m_robot->robot_name == lib::conveyor::ROBOT_NAME) {
-                spgenjoint = new generator::spline(ecp_t, lib::ECP_JOINT, 1);
-                spgenjoint->set_debug(true);
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_MOTOR, 1);
+            spgenmotor->set_debug(true);
 
-                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 1);
-                spgenmotor->set_debug(true);
+            track = false;
+            postument = false;
+            conv = true;
 
-                spgenmotor = new generator::spline(ecp_t, lib::ECP_MOTOR, 1);
-                spgenmotor->set_debug(true);
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
+            spgeneuler->set_debug(true);
 
-                spgeneuler = new generator::spline(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
-                spgeneuler->set_debug(true);
+            spgenjoint = (boost::shared_ptr <spline>) new spline(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
+            spgenangle->set_debug(true);
 
-                spgenangle = new generator::spline(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
-                spgenangle->set_debug(true);
-        }
+    }
 
-        network_path = std::string(ecp_t.mrrocpp_network_path);
+    network_path = std::string(ecp_t.mrrocpp_network_path);
 }
 
-void subtask_spline_gen_test::conditional_execution()
+void spline_gen_test::conditional_execution()
 {
 
         std::vector <double> coordinates1(6);//postument
@@ -631,15 +630,12 @@ void subtask_spline_gen_test::conditional_execution()
         sr_ecp_msg.message("Spline test END");*/
 }
 
-subtask_spline_gen_test::~subtask_spline_gen_test()
+spline_gen_test::~spline_gen_test()
 {
-        delete spgenjoint;
-        delete spgenmotor;
-        delete spgeneuler;
-        delete spgenangle;
+
 }
 
-} // namespace task
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

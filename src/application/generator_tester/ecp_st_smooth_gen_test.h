@@ -1,8 +1,8 @@
-#if !defined(_ECP_SUBTASK_SMOOTH_GEN_TEST_H)
-#define _ECP_SUBTASK_SMOOTH_GEN_TEST_H
+#if !defined(_SMOOTH_GEN_TEST_H)
+#define _SMOOTH_GEN_TEST_H
 
-#include "base/ecp/ecp_subtask.h"
 #include "application/generator_tester/ecp_mp_st_smooth_gen_test.h"
+#include "base/ecp/ecp_generator.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -10,18 +10,15 @@ namespace common {
 
 namespace generator {
 class newsmooth;
-}
 
-namespace subtask {
-
-class subtask_smooth_gen_test : public subtask
+    class smooth_gen_test : public common::generator::generator
 {
 
 private:
-	generator::newsmooth * sgenjoint;
-	generator::newsmooth * sgenmotor;
-	generator::newsmooth * sgeneuler;
-	generator::newsmooth * sgenangle;
+        boost::shared_ptr <newsmooth> sgenjoint;
+        boost::shared_ptr <newsmooth> sgenmotor;
+        boost::shared_ptr <newsmooth> sgeneuler;
+        boost::shared_ptr <newsmooth> sgenangle;
 
 	bool track;
 	bool postument;
@@ -29,13 +26,13 @@ private:
 	std::string network_path;
 
 public:
-	subtask_smooth_gen_test(task::task & _ecp_t);
-	~subtask_smooth_gen_test();
+        smooth_gen_test(task::task & _ecp_t);
+        ~smooth_gen_test();
 
 	void conditional_execution();
 };
 
-} // namespace task
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

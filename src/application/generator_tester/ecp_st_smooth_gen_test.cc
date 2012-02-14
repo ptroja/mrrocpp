@@ -10,130 +10,129 @@
 #include "robot/irp6p_m/const_irp6p_m.h"
 
 #include "robot/conveyor/const_conveyor.h"
-//#include "ecp_mp_st_smooth_gen_test.h"
 
 #include "base/ecp/ecp_task.h"
 
 namespace mrrocpp {
 namespace ecp {
 namespace common {
-namespace subtask {
+namespace generator {
 
-subtask_smooth_gen_test::subtask_smooth_gen_test(task::task & _ecp_t) :
-		subtask(_ecp_t)
+smooth_gen_test::smooth_gen_test(task::task & _ecp_t) :
+                common::generator::generator(_ecp_t)
 {
 
-	generator_name = mrrocpp::ecp_mp::subtask::ECP_ST_SMOOTH_GEN_TEST;
-	if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
-		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 6);
-		sgenjoint->set_debug(true);
+        generator_name = mrrocpp::ecp_mp::generator::ECP_MP_SMOOTH_GEN_TEST;
+        if (_ecp_t.ecp_m_robot->robot_name == lib::irp6p_m::ROBOT_NAME) {
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_JOINT, 6);
+                sgenjoint->set_debug(true);
 
-		sgenmotor = new generator::newsmooth(ecp_t, lib::ECP_MOTOR, 6);
-		sgenmotor->set_debug(true);
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_MOTOR, 6);
+                sgenmotor->set_debug(true);
 
-		track = false;
-		postument = true;
-		conv = false;
+                track = false;
+                postument = true;
+                conv = false;
 
-		sgeneuler = new generator::newsmooth(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-		sgeneuler->set_debug(true);
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                sgeneuler->set_debug(true);
 
-		sgenangle = new generator::newsmooth(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
-		sgenangle->set_debug(true);
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                sgenangle->set_debug(true);
 
-	} else if (_ecp_t.ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
-		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 7);
-		sgenjoint->set_debug(true);
+        } else if (_ecp_t.ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_JOINT, 7);
+                sgenjoint->set_debug(true);
 
-		sgenmotor = new generator::newsmooth(ecp_t, lib::ECP_MOTOR, 7);
-		sgenmotor->set_debug(true);
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_MOTOR, 7);
+                sgenmotor->set_debug(true);
 
-		track = true;
-		postument = false;
-		conv = false;
+                track = true;
+                postument = false;
+                conv = false;
 
-		sgeneuler = new generator::newsmooth(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
-		sgeneuler->set_debug(true);
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                sgeneuler->set_debug(true);
 
-		sgenangle = new generator::newsmooth(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
-		sgenangle->set_debug(true);
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                sgenangle->set_debug(true);
 
-	} else if (_ecp_t.ecp_m_robot->robot_name == lib::conveyor::ROBOT_NAME) {
-		sgenjoint = new generator::newsmooth(ecp_t, lib::ECP_JOINT, 1);
-		sgenjoint->set_debug(true);
+        } else if (_ecp_t.ecp_m_robot->robot_name == lib::conveyor::ROBOT_NAME) {
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_JOINT, 1);
+                sgenjoint->set_debug(true);
 
-		sgenmotor = new generator::newsmooth(ecp_t, lib::ECP_MOTOR, 1);
-		sgenmotor->set_debug(true);
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_MOTOR, 1);
+                sgenmotor->set_debug(true);
 
-		track = false;
-		postument = false;
-		conv = true;
+                track = false;
+                postument = false;
+                conv = true;
 
-		sgeneuler = new generator::newsmooth(ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
-		sgeneuler->set_debug(true);
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
+                sgeneuler->set_debug(true);
 
-		sgenangle = new generator::newsmooth(ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
-		sgenangle->set_debug(true);
+                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
+                sgenangle->set_debug(true);
 
-	}
+        }
 
-	network_path = std::string(ecp_t.mrrocpp_network_path);
+        network_path = std::string(ecp_t.mrrocpp_network_path);
 }
 
-void subtask_smooth_gen_test::conditional_execution()
+void smooth_gen_test::conditional_execution()
 {
 
-	sgenjoint->set_optimization(false);
-	sgenjoint->reset();
-	std::vector <double> coordinates1(6); //postument
-	std::vector <double> coordinates2(7); //track
+        sgenjoint->set_optimization(false);
+        sgenjoint->reset();
+        std::vector <double> coordinates1(6); //postument
+        std::vector <double> coordinates2(7); //track
 
-	//network_path = "../../src/application/generator_tester/optimizedTraj.trj";
-	//sgenjoint->load_coordinates_from_file(network_path.c_str());
-	//sgenjoint->Move();
+        //network_path = "../../src/application/generator_tester/optimizedTraj.trj";
+        //sgenjoint->load_coordinates_from_file(network_path.c_str());
+        //sgenjoint->Move();
 
-	network_path = "../../src/application/generator_tester/trajectory.trj";
-	sgenjoint->load_trajectory_from_file(network_path.c_str());
-	//network_path = std::string(ecp_t.mrrocpp_network_path);
+        network_path = "../../src/application/generator_tester/trajectory.trj";
+        sgenjoint->load_trajectory_from_file(network_path.c_str());
+        //network_path = std::string(ecp_t.mrrocpp_network_path);
 
-	sgenjoint->set_optimization(true);
+        sgenjoint->set_optimization(true);
 
-	if (sgenjoint->calculate_interpolate()/* && sgenjoint->detect_jerks(1) == 0*/) {
-		sgenjoint->Move();
+        if (sgenjoint->calculate_interpolate()/* && sgenjoint->detect_jerks(1) == 0*/) {
+                sgenjoint->Move();
 
-		std::vector <double> max_current_change = std::vector <double>(6);
-		max_current_change[0] = 4000;
-		max_current_change[1] = 3000;
-		max_current_change[2] = 2500;
-		max_current_change[3] = 1500;
-		max_current_change[4] = 1500;
-		max_current_change[5] = 800;
+                std::vector <double> max_current_change = std::vector <double>(6);
+                max_current_change[0] = 4000;
+                max_current_change[1] = 3000;
+                max_current_change[2] = 2500;
+                max_current_change[3] = 1500;
+                max_current_change[4] = 1500;
+                max_current_change[5] = 800;
 
-		std::vector <double> max_velocity = std::vector <double>(6);
-		max_velocity[0] = 0.5;
-		max_velocity[1] = 0.5;
-		max_velocity[2] = 0.5;
-		max_velocity[3] = 0.5;
-		max_velocity[4] = 0.5;
-		max_velocity[5] = 0.5;
+                std::vector <double> max_velocity = std::vector <double>(6);
+                max_velocity[0] = 0.5;
+                max_velocity[1] = 0.5;
+                max_velocity[2] = 0.5;
+                max_velocity[3] = 0.5;
+                max_velocity[4] = 0.5;
+                max_velocity[5] = 0.5;
 
-		std::vector <double> max_acceleration = std::vector <double>(6);
-		max_acceleration[0] = 0.15;
-		max_acceleration[1] = 0.15;
-		max_acceleration[2] = 0.15;
-		max_acceleration[3] = 0.15;
-		max_acceleration[4] = 0.15;
-		max_acceleration[5] = 0.15;
+                std::vector <double> max_acceleration = std::vector <double>(6);
+                max_acceleration[0] = 0.15;
+                max_acceleration[1] = 0.15;
+                max_acceleration[2] = 0.15;
+                max_acceleration[3] = 0.15;
+                max_acceleration[4] = 0.15;
+                max_acceleration[5] = 0.15;
 
-		while (!sgenjoint->optimize_energy_cost(max_current_change, max_velocity, max_acceleration)) {
-			sr_ecp_msg.message("Optimizing...");
-			sgenjoint->calculate_interpolate();
-			sgenjoint->Move();
-		}
-	}
+                while (!sgenjoint->optimize_energy_cost(max_current_change, max_velocity, max_acceleration)) {
+                        sr_ecp_msg.message("Optimizing...");
+                        sgenjoint->calculate_interpolate();
+                        sgenjoint->Move();
+                }
+        }
 
-	sgenjoint->set_optimization(false);
-	sgenjoint->reset();
+        sgenjoint->set_optimization(false);
+        sgenjoint->reset();
 
 	// JOINT ABSOLUTE
 	/*sr_ecp_msg.message("Joint absolute");
@@ -656,15 +655,12 @@ void subtask_smooth_gen_test::conditional_execution()
 	 // ANGLE AXIS RELATIVE END*/
 }
 
-subtask_smooth_gen_test::~subtask_smooth_gen_test()
+smooth_gen_test::~smooth_gen_test()
 {
-	delete sgenjoint;
-	delete sgenmotor;
-	delete sgeneuler;
-	delete sgenangle;
+
 }
 
-} // namespace task
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

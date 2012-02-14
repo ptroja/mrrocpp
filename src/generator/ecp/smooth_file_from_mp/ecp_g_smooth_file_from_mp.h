@@ -25,7 +25,7 @@ public:
 	void conditional_execution();
 };
 
-} // namespace task
+} // namespace generator
 } // namespace common
 } // namespace ecp
 } // namespace mrrocpp

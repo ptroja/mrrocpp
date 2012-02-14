@@ -91,7 +91,7 @@ void gen_test::main_task_algorithm(void)
 		//------------------- CONSTANT VELOCITY GENERATOR END -------------------
 
 		//------------------- SMOOTH GENERATOR -------------------
-		set_next_ecp_state(ecp_mp::subtask::ECP_ST_SMOOTH_GEN_TEST, (int) 5, "", lib::irp6p_m::ROBOT_NAME);
+                set_next_ecp_state(ecp_mp::generator::ECP_MP_SMOOTH_GEN_TEST, (int) 5, "", lib::irp6p_m::ROBOT_NAME);
                 wait_for_task_termination(false, lib::irp6p_m::ROBOT_NAME);
 		//------------------- SMOOTH GENERATOR END -------------------
 

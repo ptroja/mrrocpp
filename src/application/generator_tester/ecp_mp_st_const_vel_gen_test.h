@@ -1,13 +1,13 @@
-#if !defined(_ECP_MP_SUBTASK_CONST_VEL_GEN_TEST_H)
-#define _ECP_MP_SUBTASK_CONST_VEL_GEN_TEST_H
+#if !defined(_ECP_MP_CONST_VEL_GEN_TEST_H)
+#define _ECP_MP_CONST_VEL_GEN_TEST_H
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace subtask {
+namespace generator {
 
-    const std::string ECP_ST_CONST_VEL_GEN_TEST = "ECP_ST_CONST_VEL_GEN_TEST";
+    const std::string ECP_MP_CONST_VEL_GEN_TEST = "ECP_MP_CONST_VEL_GEN_TEST";
 
-} // namespace task
+} // namespace generator
 } // namespace ecp_mp
 } // namespace mrrocpp
 
