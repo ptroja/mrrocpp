@@ -76,12 +76,13 @@ smooth_gen_test::smooth_gen_test(task::task & _ecp_t) :
 
         }
 
-        network_path = std::string(ecp_t.mrrocpp_network_path);
+        network_path = std::string(_ecp_t.mrrocpp_network_path);
 }
 
 void smooth_gen_test::conditional_execution()
 {
 
+        sr_ecp_msg.message("conditional execution");
         sgenjoint->set_optimization(false);
         sgenjoint->reset();
         std::vector <double> coordinates1(6); //postument

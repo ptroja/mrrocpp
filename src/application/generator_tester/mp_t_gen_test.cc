@@ -40,9 +40,9 @@ task* return_created_mp_task(lib::configurator &_config)
 //Robot creation, depending on the configuration file
 void gen_test::create_robots()
 {
-	ACTIVATE_MP_ROBOT(irp6ot_m);
+        //ACTIVATE_MP_ROBOT(irp6ot_m);
 	ACTIVATE_MP_ROBOT(irp6p_m);
-	ACTIVATE_MP_ROBOT(conveyor);
+        //ACTIVATE_MP_ROBOT(conveyor);
 }
 
 gen_test::gen_test(lib::configurator &_config) :
@@ -55,8 +55,8 @@ void gen_test::main_task_algorithm(void)
 
 	sr_ecp_msg->message("Gen Test (MP) START");
 
-	lib::robot_name_t manipulator_name;
-	lib::robot_name_t gripper_name;
+        //lib::robot_name_t manipulator_name;
+        //lib::robot_name_t gripper_name;
 
 	// Track
 

@@ -3,7 +3,7 @@
 
 namespace mrrocpp {
 namespace ecp_mp {
-namespace generator {
+namespace generator {    
 
     const std::string ECP_MP_SPLINE_GEN_TEST = "ECP_MP_SPLINE_GEN_TEST";
 
