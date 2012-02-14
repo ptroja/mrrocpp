@@ -27,51 +27,51 @@ smooth_gen_test::smooth_gen_test(task::task & _ecp_t) :
                 sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_JOINT, 6);
                 sgenjoint->set_debug(true);
 
-                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_MOTOR, 6);
+                sgenmotor = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_MOTOR, 6);
                 sgenmotor->set_debug(true);
 
                 track = false;
                 postument = true;
                 conv = false;
 
-                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                sgeneuler = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
                 sgeneuler->set_debug(true);
 
-                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                sgenangle = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
                 sgenangle->set_debug(true);
 
         } else if (_ecp_t.ecp_m_robot->robot_name == lib::irp6ot_m::ROBOT_NAME) {
                 sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_JOINT, 7);
                 sgenjoint->set_debug(true);
 
-                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_MOTOR, 7);
+                sgenmotor = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_MOTOR, 7);
                 sgenmotor->set_debug(true);
 
                 track = true;
                 postument = false;
                 conv = false;
 
-                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
+                sgeneuler = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 6);
                 sgeneuler->set_debug(true);
 
-                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
+                sgenangle = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 6);
                 sgenangle->set_debug(true);
 
         } else if (_ecp_t.ecp_m_robot->robot_name == lib::conveyor::ROBOT_NAME) {
                 sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_JOINT, 1);
                 sgenjoint->set_debug(true);
 
-                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_MOTOR, 1);
+                sgenmotor = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_MOTOR, 1);
                 sgenmotor->set_debug(true);
 
                 track = false;
                 postument = false;
                 conv = true;
 
-                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
+                sgeneuler = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_EULER_ZYZ, 1);
                 sgeneuler->set_debug(true);
 
-                sgenjoint = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
+                sgenangle = (boost::shared_ptr <newsmooth>) new newsmooth(_ecp_t, lib::ECP_XYZ_ANGLE_AXIS, 1);
                 sgenangle->set_debug(true);
 
         }
