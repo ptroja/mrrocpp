@@ -26,33 +26,39 @@ namespace ecp_mp {
 namespace sensor {
 namespace discode {
 
-class ds_exception: public std::runtime_error {
+class ds_exception : public std::runtime_error
+{
 public:
 	/** Takes a character string describing the error.  */
 	explicit ds_exception(const std::string& arg);
 };
 
-class ds_connection_exception: public ds_exception {
+class ds_connection_exception : public ds_exception
+{
 public:
 	explicit ds_connection_exception(const std::string& arg);
 };
 
-class ds_timeout_exception: public ds_exception {
+class ds_timeout_exception : public ds_exception
+{
 public:
 	explicit ds_timeout_exception(const std::string& arg);
 };
 
-class ds_wrong_state_exception: public ds_exception {
+class ds_wrong_state_exception : public ds_exception
+{
 public:
 	explicit ds_wrong_state_exception(const std::string& arg);
 };
 
-class discode_sensor: public mrrocpp::ecp_mp::sensor::sensor_interface {
+class discode_sensor : public mrrocpp::ecp_mp::sensor::sensor_interface
+{
 public:
 	/**
 	 * DSS (short form of discode_sensor_state). State of the sensor.
 	 */
-	enum discode_sensor_state {
+	enum discode_sensor_state
+	{
 		DSS_NOT_CONNECTED, DSS_CONNECTED, DSS_REQUEST_SENT, DSS_READING_RECEIVED, DSS_ERROR
 	};
 
@@ -90,7 +96,7 @@ public:
 	 * This method may be called only once after get_reading(). Just because.
 	 * @return
 	 */
-	template<typename READING_T>
+	template <typename READING_T>
 	READING_T retreive_reading();
 
 	/**
@@ -98,7 +104,7 @@ public:
 	 * @param to_send Data to send.
 	 * @return data returned from call.
 	 */
-	template<typename RECEIVED_T, typename TO_SEND_T>
+	template <typename RECEIVED_T, typename TO_SEND_T>
 	RECEIVED_T call_remote_procedure(const TO_SEND_T& to_send);
 
 	reading_message_header get_rmh() const;
@@ -110,10 +116,10 @@ private:
 	uint16_t discode_port;
 	std::string discode_node_name;
 
-	xdr_iarchive<> header_iarchive;
-	xdr_iarchive<> iarchive;
-	xdr_oarchive<> header_oarchive;
-	xdr_oarchive<> oarchive;
+	xdr_iarchive <> header_iarchive;
+	xdr_iarchive <> iarchive;
+	xdr_oarchive <> header_oarchive;
+	xdr_oarchive <> oarchive;
 
 	/** @brief Socket file descriptor.  */
 	int sockfd;
@@ -157,15 +163,15 @@ private:
 
 	void save_request_sent_time();
 	void save_reading_received_time();
-}; // class discode_sensor
+};
+// class discode_sensor
 
-template<typename READING_T>
+template <typename READING_T>
 READING_T discode_sensor::retreive_reading()
 {
 	if (state != DSS_READING_RECEIVED) {
 		state = DSS_ERROR;
-		throw ds_wrong_state_exception(
-				"discode_sensor::retreive_reading(): state != DSS_READING_RECEIVED");
+		throw ds_wrong_state_exception("discode_sensor::retreive_reading(): state != DSS_READING_RECEIVED");
 	}
 
 	READING_T reading;
@@ -178,14 +184,13 @@ READING_T discode_sensor::retreive_reading()
 	return reading;
 }
 
-template<typename RECEIVED_T, typename TO_SEND_T>
+template <typename RECEIVED_T, typename TO_SEND_T>
 RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
 {
 //	logger::log("discode_sensor::call_remote_procedure() begin\n");
 
 	if (state != DSS_CONNECTED && state != DSS_READING_RECEIVED) {
-		throw ds_wrong_state_exception(
-				"discode_sensor::call_remote_procedure(): state != DSS_CONNECTED");
+		throw ds_wrong_state_exception("discode_sensor::call_remote_procedure(): state != DSS_CONNECTED");
 	}
 
 	imh.is_rpc_call = true;
@@ -195,20 +200,20 @@ RECEIVED_T discode_sensor::call_remote_procedure(const TO_SEND_T& to_send)
 //	logger::log("discode_sensor::call_remote_procedure() before send_buffers\n");
 	send_buffers_to_discode();
 
-	if(is_data_available(rpc_call_timeout)){
+	if (is_data_available(rpc_call_timeout)) {
 		receive_buffers_from_discode();
 		RECEIVED_T received;
 
-		for(int i=0; i<rmh.data_size; ++i){
+		for (int i = 0; i < rmh.data_size; ++i) {
 			unsigned char c = iarchive.get_buffer()[i];
-			logger::log("%02X ", (unsigned int)c);
+			logger::log("%02X ", (unsigned int) c);
 		}
 		logger::log("\n");
 
 		logger::log("discode_sensor::call_remote_procedure() rmh.data_size: %d\n", rmh.data_size);
-		logger::log("discode_sensor::call_remote_procedure() iarchive.size: %d\n", iarchive.getArchiveSize());
+		logger::log("discode_sensor::call_remote_procedure() iarchive.size: %d\n", (int) iarchive.getArchiveSize());
 		iarchive >> received;
-		if(!rmh.is_rpc_call){
+		if (!rmh.is_rpc_call) {
 			state = DSS_ERROR;
 			throw ds_connection_exception("Received non-RPC reply to RPC call.");
 		}

@@ -119,16 +119,16 @@ namespace sensor {
  * @param _configurator MRROC++ configurator.
  */
 neuron_sensor::neuron_sensor(mrrocpp::lib::configurator& _configurator) :
-	config(_configurator)
+		config(_configurator)
 {
 
 	base_period = current_period = 0;
 
-	basePeriod=5;
-	currentPeriod=1;
+	basePeriod = 5;
+	currentPeriod = 1;
 
-	uint16_t vsp_port = config.value <uint16_t> ("vsp_port", "[VSP]");
-	const std::string vsp_node_name = config.value <std::string> ("vsp_node_name", "[VSP]");
+	uint16_t vsp_port = config.value <uint16_t>("vsp_port", "[VSP]");
+	const std::string vsp_node_name = config.value <std::string>("vsp_node_name", "[VSP]");
 
 	printf("%d %s\n", vsp_port, vsp_node_name.c_str());
 
@@ -144,7 +144,8 @@ neuron_sensor::neuron_sensor(mrrocpp::lib::configurator& _configurator) :
 
 	//Get server hostname.
 	hostent* server = gethostbyname(vsp_node_name.c_str());
-	if (server == NULL)
+	if (server == NULL
+		)
 		throw std::runtime_error("gethostbyname(" + vsp_node_name + "): " + std::string(hstrerror(h_errno)));
 
 	//Data with addres of connection.
@@ -199,7 +200,7 @@ void neuron_sensor::get_reading()
 			printf("VSP end command received\n");
 			break;
 
-		case INITIALIZATION_DATA:{
+		case INITIALIZATION_DATA: {
 
 			memcpy(&(coordinates.x), buff + 1, 8);
 			memcpy(&(coordinates.y), buff + 9, 8);
@@ -208,20 +209,21 @@ void neuron_sensor::get_reading()
 			int fileLength;
 			memcpy(&(fileLength), buff + 25, 4);
 
-			fileName=(char*)malloc(fileLength+1);
+			fileName = (char*) malloc(fileLength + 1);
 			memcpy(fileName, buff + 29, fileLength);
-			fileName[fileLength]='\0';
+			fileName[fileLength] = '\0';
 
 			printf("filename - %s %lf %lf %lf\n", fileName, coordinates.x, coordinates.y, coordinates.z);
-			break;}
+			break;
+		}
 		case TRAJECTORY_FIRST:
 			memcpy(&(macroSteps), buff + 1, 1);
-			memcpy(&(radius),buff+2, 8);
+			memcpy(&(radius), buff + 2, 8);
 			memcpy(&(coordinates.x), buff + 10, 8);
 			memcpy(&(coordinates.y), buff + 18, 8);
 			memcpy(&(coordinates.z), buff + 26, 8);
 			printf("first_Coordinates - %lf %lf %lf\n", coordinates.x, coordinates.y, coordinates.z);
-			basePeriod= macroSteps;
+			basePeriod = macroSteps;
 			break;
 
 		case TR_NEXT_POSITION:
@@ -256,7 +258,8 @@ void neuron_sensor::get_reading()
  */
 bool neuron_sensor::stop()
 {
-	if (command == VSP_STOP)
+	if (command == VSP_STOP
+		)
 		return true;
 	return false;
 }
@@ -269,7 +272,8 @@ bool neuron_sensor::stop()
  */
 bool neuron_sensor::startBraking()
 {
-	if (command == START_BREAKING)
+	if (command == START_BREAKING
+		)
 		return true;
 	return false;
 }
@@ -470,7 +474,7 @@ void neuron_sensor::initiate_reading()
  */
 bool neuron_sensor::newData()
 {
-	if (basePeriod>0 && currentPeriod == basePeriod)
+	if (basePeriod > 0 && currentPeriod == basePeriod)
 		return true;
 
 	return false;
@@ -484,11 +488,10 @@ bool neuron_sensor::positionRequested()
 {
 	--currentPeriod;
 	//printf("current period: %d\n",currentPeriod);
-	if (basePeriod>0 && currentPeriod == 0){
+	if (basePeriod > 0 && currentPeriod == 0) {
 		currentPeriod = basePeriod;
 		return true;
 	}
-
 
 	return false;
 }
@@ -511,14 +514,15 @@ double neuron_sensor::getRadius()
 }
 
 //TODO: comments
-void neuron_sensor::sendStatistics(double currents_sum, double max){
+void neuron_sensor::sendStatistics(double currents_sum, double max)
+{
 	char buff[17];
 	uint8_t temp_command = STATISTICS;
 	memcpy(buff, &temp_command, 1);
 	memcpy(buff + 1, &currents_sum, 8);
 	memcpy(buff + 9, &max, 8);
 
-	printf("neuron_sensor->sendStatistics : %lf :%lf \n",currents_sum, max);
+	printf("neuron_sensor->sendStatistics : %lf :%lf \n", currents_sum, max);
 
 	int result = write(socketDescriptor, buff, sizeof(buff));
 
@@ -531,7 +535,8 @@ void neuron_sensor::sendStatistics(double currents_sum, double max){
 	}
 }
 
-char * const neuron_sensor::getFileName(){
+char * neuron_sensor::getFileName()
+{
 	return fileName;
 }
 

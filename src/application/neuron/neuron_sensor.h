@@ -117,7 +117,7 @@ public:
 	void stopReceivingData();
 	double getRadius();
 	void sendStatistics(double currents_sum, double max);
-	char * const getFileName();
+	char * getFileName();
 };
 
 } //sensor

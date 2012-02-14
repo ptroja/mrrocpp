@@ -153,15 +153,17 @@ fsautomat::fsautomat(lib::configurator &_config) :
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_teach_in_gen")) {
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											;
+										if (argument && xmlStrcmp(argument, (const xmlChar *) "")) {
+
+										}
 										tig = new common::generator::teach_in(*this);
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "bias_edp_force_gen")) {
 
 										xmlChar *argument = xmlNodeGetContent(child_node->children);
-										if (argument && xmlStrcmp(argument, (const xmlChar *) ""))
-											;
+										if (argument && xmlStrcmp(argument, (const xmlChar *) "")) {
+
+										}
 										befg = new common::generator::bias_edp_force(*this);
 										xmlFree(argument);
 									} else if (!xmlStrcmp(child_node->children->name, (const xmlChar *) "ecp_smooth_gen")) {
