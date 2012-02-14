@@ -145,7 +145,7 @@ neuron_sensor::neuron_sensor(mrrocpp::lib::configurator& _configurator) :
 	//Get server hostname.
 	hostent* server = gethostbyname(vsp_node_name.c_str());
 	if (server == NULL
-		)
+	)
 		throw std::runtime_error("gethostbyname(" + vsp_node_name + "): " + std::string(hstrerror(h_errno)));
 
 	//Data with addres of connection.
@@ -259,7 +259,7 @@ void neuron_sensor::get_reading()
 bool neuron_sensor::stop()
 {
 	if (command == VSP_STOP
-		)
+	)
 		return true;
 	return false;
 }
@@ -273,7 +273,7 @@ bool neuron_sensor::stop()
 bool neuron_sensor::startBraking()
 {
 	if (command == START_BREAKING
-		)
+	)
 		return true;
 	return false;
 }
