@@ -25,15 +25,10 @@ namespace mrrocpp {
 namespace mp {
 namespace generator {
 
-ball::ball(task::task& _mp_task, int step) :
-		continously_coordinated(_mp_task),
-		irp6ot_con(true),
-		irp6p_con(true),
-		global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015),
-		speedup(0.0),
-		speedup_factor(0.005)
+ball::ball(task::task& _mp_task) :
+	continously_coordinated(_mp_task), irp6ot_con(true), irp6p_con(true),
+			global_base(1, 0, 0, -0.08, 0, 1, 0, 2.08, 0, 0, 1, -0.015), speedup(0.0), speedup_factor(0.005)
 {
-	step_no = step;
 }
 
 void ball::configure(bool l_irp6ot_con, bool l_irp6p_con)
@@ -44,11 +39,6 @@ void ball::configure(bool l_irp6ot_con, bool l_irp6p_con)
 
 void ball::setup_command(robot::robot & robot)
 {
-	lib::trajectory_description td;
-
-	td.internode_step_no = step_no;
-	td.value_in_step_no = td.internode_step_no - 4;
-
 	robot.mp_command.command = lib::NEXT_POSE;
 	robot.mp_command.instruction.instruction_type = lib::GET;
 	robot.mp_command.instruction.get_type = ARM_DEFINITION;
@@ -58,8 +48,8 @@ void ball::setup_command(robot::robot & robot)
 	robot.mp_command.instruction.set_arm_type = lib::FRAME;
 	robot.mp_command.instruction.motion_type = lib::ABSOLUTE;
 	robot.mp_command.instruction.interpolation_type = lib::TCIM;
-	robot.mp_command.instruction.motion_steps = td.internode_step_no;
-	robot.mp_command.instruction.value_in_step_no = td.value_in_step_no;
+	robot.mp_command.instruction.motion_steps = 10;
+	robot.mp_command.instruction.value_in_step_no = 10 - 4;
 
 	for (int i = 0; i < 3; i++) {
 		robot.mp_command.instruction.arm.pf_def.arm_coordinates[i] = 0;

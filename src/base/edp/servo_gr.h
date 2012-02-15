@@ -145,7 +145,7 @@ protected:
 	bool servo_command_rdy;
 	boost::mutex servo_command_mtx;
 
-	bool sg_reply_rdy;
+	bool sg_reply_ready;
 	boost::mutex sg_reply_mtx;
 	boost::condition sg_reply_cond;
 

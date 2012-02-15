@@ -716,6 +716,7 @@ void manip_effector::single_thread_move_arm(const lib::c_buffer &instruction)
 			break;
 		default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 			motor_driven_effector::single_thread_move_arm(instruction);
+			break;
 	}
 
 }
@@ -740,11 +741,11 @@ void manip_effector::multi_thread_move_arm(const lib::c_buffer &instruction)
 					break;
 				default: // blad: niezdefiniowany sposb specyfikacji pozycji koncowki
 					motor_driven_effector::multi_thread_move_arm(instruction);
+					break;
 			}
 			break;
 		case lib::TCIM:
 			pose_force_torque_at_frame_move(instruction);
-
 			break;
 		default:
 			break;

@@ -9,12 +9,9 @@
 #include "base/lib/xdr/xdr_iarchive.hpp"
 #include "base/lib/xdr/xdr_oarchive.hpp"
 
-#include <vector>
-
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/string.hpp>
-#include <boost/serialization/vector.hpp>
 #include <boost/serialization/nvp.hpp>
 
 #include "base/lib/impconst.h"
@@ -441,44 +438,6 @@ private:
 typedef robot_model_t c_buffer_robot_model_t;
 
 //------------------------------------------------------------------------------
-/*! arm */
-struct c_buffer_arm_t
-{
-	//----------------------------------------------------------
-	struct
-	{
-		/*!  End's trihedron relative to the base system. */
-		lib::Homog_matrix arm_frame;
-		/*! XYZ + end's orientation relative to the base system. */
-		double arm_coordinates[lib::MAX_SERVOS_NR];
-		/*! Given torque. */
-		double desired_torque[lib::MAX_SERVOS_NR];
-		double inertia[6], reciprocal_damping[6];
-		lib::Ft_vector force_xyz_torque_xyz;
-		BEHAVIOUR_SPECIFICATION behaviour[6];
-	} pf_def;
-	//----------------------------------------------------------
-
-private:
-	//! Give access to boost::serialization framework
-	friend class boost::serialization::access;
-
-	//! Serialization of the data structure
-	template <class Archive>
-	void serialize(Archive & ar, const unsigned int version)
-	{
-		ar & pf_def.arm_frame; // if set_arm_type == FRAME
-		ar & pf_def.arm_coordinates; // otherwise.
-		ar & pf_def.desired_torque;
-		ar & pf_def.inertia;
-		ar & pf_def.reciprocal_damping;
-		ar & pf_def.force_xyz_torque_xyz;
-		ar & pf_def.behaviour;
-
-	}
-};
-
-//------------------------------------------------------------------------------
 struct c_buffer
 {
 	/*! Type of the instruction. */
@@ -527,7 +486,23 @@ struct c_buffer
 	 */
 	uint16_t value_in_step_no;
 	c_buffer_robot_model_t robot_model;
-	c_buffer_arm_t arm;
+
+	struct c_buffer_arm_t
+	{
+		//----------------------------------------------------------
+		struct
+		{
+			/*!  End's trihedron relative to the base system. */
+			lib::Homog_matrix arm_frame;
+			/*! XYZ + end's orientation relative to the base system. */
+			double arm_coordinates[lib::MAX_SERVOS_NR];
+			/*! Given torque. */
+			double desired_torque[lib::MAX_SERVOS_NR];
+			double inertia[6], reciprocal_damping[6];
+			lib::Ft_vector force_xyz_torque_xyz;
+			BEHAVIOUR_SPECIFICATION behaviour[6];
+		} pf_def;
+	} arm;
 
 	//-----------------------------------------------------
 	//                      METHODS
@@ -579,17 +554,54 @@ private:
 	void serialize(Archive & ar, const unsigned int version)
 	{
 		ar & instruction_type;
-		ar & set_type;
-		ar & get_type;
-		ar & get_robot_model_type;
-		ar & set_arm_type;
-		ar & output_values;
-		ar & interpolation_type;
-		ar & motion_type;
-		ar & motion_steps;
-		ar & value_in_step_no;
-		ar & robot_model;
-		ar & arm;
+
+		if(instruction_type == SET || instruction_type == SET_GET) {
+			ar & set_type;
+
+			if(is_set_arm()) {
+				ar & set_arm_type;
+				switch(set_arm_type) {
+					case FRAME:
+						ar & arm.pf_def.arm_frame;
+						break;
+					default:
+						ar & arm.pf_def.arm_coordinates;
+						break;
+				}
+
+				// FIXME: these are always required or only when FRAME is specified?
+				ar & arm.pf_def.desired_torque;
+				ar & arm.pf_def.inertia;
+				ar & arm.pf_def.reciprocal_damping;
+				ar & arm.pf_def.force_xyz_torque_xyz;
+				ar & arm.pf_def.behaviour;
+
+				ar & interpolation_type;
+				ar & motion_type;
+				ar & motion_steps;
+				ar & value_in_step_no;
+			}
+
+			if(is_set_outputs()) {
+				ar & output_values;
+			}
+
+			if(is_set_robot_model()) {
+				ar & robot_model;
+			}
+		}
+
+		if(instruction_type == GET || instruction_type == SET_GET) {
+			ar & get_type;
+
+			if(is_get_arm()) {
+				ar & get_arm_type;
+			}
+
+			if(is_get_robot_model()) {
+				ar & get_robot_model_type;
+			}
+		}
 	}
 };
 

@@ -810,7 +810,7 @@ void motor_driven_effector::pre_synchro_loop(STATE& next_state)
 							// potwierdzenie przyjecia polecenia (dla ECP)
 							//            printf("SET_GET\n");
 							reply.reply_type = lib::ACKNOWLEDGE;
-							reply.reply_type = lib::ACKNOWLEDGE;
+
 							variant_reply_to_instruction();
 
 							if ((rep_type(instruction)) == lib::CONTROLLER_STATE) {

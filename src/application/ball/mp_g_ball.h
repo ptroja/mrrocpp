@@ -45,11 +45,8 @@ private:
 	void setup_command(robot::robot & robot);
 
 public:
-	int step_no;
-	//     double delta[6];
-
 	// konstruktor
-	ball(task::task& _mp_task, int step = 0);
+	ball(task::task& _mp_task);
 
 	void configure(bool l_irp6ot_con, bool l_irp6p_con);
 
