@@ -24,6 +24,12 @@ namespace mrrocpp {
 namespace lib {
 namespace zmq {
 
+//! Port number for synchronous requests.
+const unsigned int registry_port = 5555;
+
+//! Port number for asynchronous keep-alive messages.
+const unsigned int keep_alive_port = 5556;
+
 template<typename T>
 void send(::zmq::socket_t & sock, const T & data)
 {
@@ -69,7 +75,7 @@ public:
 private:
 	registry();
 
-	::zmq::socket_t sock;
+	::zmq::socket_t sock, keep_alive_sock;
 
 	//! Access protection.
 	boost::mutex mtx;

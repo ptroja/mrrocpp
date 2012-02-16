@@ -36,9 +36,18 @@ void registry::create()
 }
 
 registry::registry()
-	: sock(context::instance().get(), ZMQ_REQ)
+	: sock(context::instance().get(), ZMQ_REQ),
+	  keep_alive_sock(context::instance().get(), ZMQ_PUB)
 {
-	sock.connect("tcp://localhost:5555");
+	std::string synch_address = "tcp://localhost:";
+	synch_address += (int) mrrocpp::lib::zmq::registry_port;
+
+	sock.connect(synch_address.c_str());
+
+	std::string keep_alive_address = "tcp://localhost:";
+	keep_alive_address += (int) mrrocpp::lib::zmq::keep_alive_port;
+
+	keep_alive_sock.connect(keep_alive_address.c_str());
 }
 
 void registry::register_name(const std::string & name, int port)
@@ -123,9 +132,7 @@ void registry::ping(const std::string & name)
 	{
 		boost::mutex::scoped_lock lock(mtx);
 
-		send(sock, ping_message);
-
-		recv(sock, ping_message);
+		send(keep_alive_sock, ping_message);
 	}
 }
 
