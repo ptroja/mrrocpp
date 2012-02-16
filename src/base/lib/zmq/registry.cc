@@ -10,7 +10,7 @@
 #include <boost/thread/once.hpp>
 #include <boost/thread/mutex.hpp>
 
-#include <unistd.h>
+#include <boost/asio/ip/host_name.hpp>
 
 #include "registry.h"
 #include "context.h"
@@ -54,14 +54,8 @@ void registry::register_name(const std::string & name, int port)
 {
 	location me;
 
-	char hostname[256];
-
-	if(gethostname(hostname, 256) == -1) {
-		throw std::runtime_error("Could not get hostname");
-	}
-
 	me.type = location::REGISTER;
-	me.host = hostname;
+	me.host = boost::asio::ip::host_name();
 	me.name = name;
 	me.pid = (int) getpid();
 	me.port = port;
