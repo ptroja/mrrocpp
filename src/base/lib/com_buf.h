@@ -594,10 +594,6 @@ private:
 		if(instruction_type == GET || instruction_type == SET_GET) {
 			ar & get_type;
 
-			if(is_get_arm()) {
-				ar & get_arm_type;
-			}
-
 			if(is_get_robot_model()) {
 				ar & get_robot_model_type;
 			}

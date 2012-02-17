@@ -1,4 +1,6 @@
+# Transport-related folders.
 add_subdirectory (messip)
+add_subdirectory (zmq)
 
 # configsrv is needed only for non-QNX platforms and then messip is used
 add_executable(configsrv configsrv.cc configsrv_m.cc)
