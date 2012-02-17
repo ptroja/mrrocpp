@@ -10,6 +10,7 @@
 
 #include <boost/unordered_map.hpp>
 #include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <zmq.hpp>
 
@@ -35,6 +36,7 @@ void flush_registry(locations_t & registry)
 	//std::cout << "flush registry" << std::endl;
 	for (locations_t::iterator it = registry.begin(); it != registry.end();) {
 		if (--(it->second.timer)) {
+			std::cout << "\tflushing '" << it->second.name << "' from registry";
 			it = registry.erase(it);
 			changed = true;
 		} else {
@@ -65,7 +67,7 @@ int main(int argc, char *argv[])
 	// Bind synchronous requests socket.
 	{
 		std::string address = "tcp://*:";
-		address += (int) mrrocpp::lib::zmq::registry_port;
+		address += boost::lexical_cast<std::string>(mrrocpp::lib::zmq::registry_port);
 
 		requests_socket.bind(address.c_str());
 	}
@@ -73,27 +75,27 @@ int main(int argc, char *argv[])
 	// Bind keep-alive socket.
 	{
 		std::string address = "tcp://*:";
-		address += (int) mrrocpp::lib::zmq::keep_alive_port;
+		address += boost::lexical_cast<std::string>(mrrocpp::lib::zmq::keep_alive_port);
 
 		notifications_socket.bind(address.c_str());
 	}
+
+	// Create place-holder data.
+	mrrocpp::lib::zmq::location msg;
+
+	// Setup poll list.
+	zmq::pollitem_t pollitems[2];
+
+	pollitems[0].socket = requests_socket;
+	pollitems[0].events = ZMQ_POLLIN;
+
+	pollitems[1].socket = notifications_socket;
+	pollitems[1].events = ZMQ_POLLIN;
 
 	// Handle incoming messages in a loop.
 	while (true) {
 		// Display registry.
 		print_registry(locations);
-
-		// Create place-holder data.
-		mrrocpp::lib::zmq::location msg;
-
-		// Setup poll list.
-		zmq::pollitem_t pollitems[2];
-
-		pollitems[0].socket = requests_socket;
-		pollitems[0].events = ZMQ_POLLIN;
-
-		pollitems[1].socket = notifications_socket;
-		pollitems[1].events = ZMQ_POLLIN;
 
 		int r = zmq::poll(pollitems, 2, 500000);
 
@@ -104,7 +106,7 @@ int main(int argc, char *argv[])
 		}
 
 		// Handle request socket.
-		if (pollitems[0].events == ZMQ_POLLIN) {
+		if (pollitems[0].revents == ZMQ_POLLIN) {
 
 			mrrocpp::lib::zmq::recv(requests_socket, msg);
 
@@ -162,7 +164,9 @@ int main(int argc, char *argv[])
 			// Reply.
 			mrrocpp::lib::zmq::send(requests_socket, msg);
 
-		} else if (pollitems[1].events == ZMQ_POLLIN) {
+		} else if (pollitems[1].revents == ZMQ_POLLIN) {
+
+			mrrocpp::lib::zmq::recv(notifications_socket, msg);
 
 			// Handle keep-alive notification.
 			if (msg.type == mrrocpp::lib::zmq::location::PING) {

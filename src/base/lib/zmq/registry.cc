@@ -9,6 +9,7 @@
 
 #include <boost/thread/once.hpp>
 #include <boost/thread/mutex.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <boost/asio/ip/host_name.hpp>
 
@@ -40,12 +41,12 @@ registry::registry()
 	  keep_alive_sock(context::instance().get(), ZMQ_PUB)
 {
 	std::string synch_address = "tcp://localhost:";
-	synch_address += (int) mrrocpp::lib::zmq::registry_port;
+	synch_address += boost::lexical_cast<std::string>(mrrocpp::lib::zmq::registry_port);
 
 	sock.connect(synch_address.c_str());
 
 	std::string keep_alive_address = "tcp://localhost:";
-	keep_alive_address += (int) mrrocpp::lib::zmq::keep_alive_port;
+	keep_alive_address += boost::lexical_cast<std::string>(mrrocpp::lib::zmq::keep_alive_port);
 
 	keep_alive_sock.connect(keep_alive_address.c_str());
 }
