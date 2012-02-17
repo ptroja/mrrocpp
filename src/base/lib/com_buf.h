@@ -450,8 +450,7 @@ struct c_buffer
 	ROBOT_MODEL_SPECIFICATION get_robot_model_type;
 	/*! Definition type of the end-effector's given position. */
 	POSE_SPECIFICATION set_arm_type;
-	/*! Definition type of the end-effector's read position. */
-	POSE_SPECIFICATION get_arm_type;
+
 	/*! Binary outputs values. */
 	uint16_t output_values;
 
@@ -648,8 +647,7 @@ struct r_buffer_arm_t
 	 *  Sposob  zdefiniowania polozenia zadanego koncowki.
 	 *  @todo Translate to English.
 	 */
-	POSE_SPECIFICATION type;
-
+	// POSE_SPECIFICATION type;
 	struct
 	{
 		/*!
@@ -658,11 +656,9 @@ struct r_buffer_arm_t
 		 */
 		lib::Homog_matrix arm_frame;
 
-		/*!
-		 *  XYZ + orientacja koncowki wzgledem ukladu bazowego.
-		 *  @todo Translate to English.
-		 */
-		double arm_coordinates[lib::MAX_SERVOS_NR];
+		double joint_coordinates[lib::MAX_SERVOS_NR];
+
+		double motor_coordinates[lib::MAX_SERVOS_NR];
 
 		lib::Ft_vector force_xyz_torque_xyz;
 	} pf_def;
@@ -718,17 +714,11 @@ private:
 	template <class Archive>
 	void serialize(Archive & ar, const unsigned int version)
 	{
-		ar & type;
+		//	ar & type;
 
-		switch (type)
-		{
-			case FRAME:
-				ar & pf_def.arm_frame;
-				break;
-			default:
-				ar & pf_def.arm_coordinates;
-				break;
-		}
+		ar & pf_def.arm_frame;
+		ar & pf_def.joint_coordinates;
+		ar & pf_def.motor_coordinates;
 
 		ar & pf_def.force_xyz_torque_xyz;
 		ar & gripper_reg_state;

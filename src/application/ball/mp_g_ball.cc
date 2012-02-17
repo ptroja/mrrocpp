@@ -14,7 +14,6 @@
 
 #include "base/lib/sr/srlib.h"
 
-
 #include "base/mp/mp_robot.h"
 #include "application/ball/mp_g_ball.h"
 #include "base/lib/mrmath/mrmath.h"
@@ -47,7 +46,6 @@ void ball::setup_command(robot::robot & robot)
 	robot.mp_command.instruction.robot_model.type = lib::TOOL_FRAME;
 	robot.mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	robot.mp_command.instruction.set_arm_type = lib::FRAME;
-	robot.mp_command.instruction.get_arm_type = lib::FRAME;
 	robot.mp_command.instruction.motion_type = lib::ABSOLUTE;
 	robot.mp_command.instruction.interpolation_type = lib::TCIM;
 	robot.mp_command.instruction.motion_steps = 10;
@@ -160,8 +158,8 @@ bool ball::next_step_inside()
 
 	return true;
 
-	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED) || (irp6p->ecp_reply_package.reply
-			== lib::TASK_TERMINATED)) {
+	if ((irp6ot->ecp_reply_package.reply == lib::TASK_TERMINATED)
+			|| (irp6p->ecp_reply_package.reply == lib::TASK_TERMINATED)) {
 		sr_ecp_msg.message("w mp task terminated");
 		return false;
 	} else

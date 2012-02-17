@@ -6,7 +6,9 @@
  * @brief File contains weight measure generator declaration
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
- * @ingroup generators
+ * it checks for the weight measurement inside manipulator gripper increase to detect object of certain weight insertion
+ * the object to be inserted and detected mass is set
+ *
  */
 #include "ecp_mp_g_weight_measure.h"
 #include "base/ecp/ecp_generator.h"
@@ -116,8 +118,22 @@ public:
 	 */
 	weight_measure(common::task::task& _ecp_task, double _weight_difference = 0.0, double _catch_time = 1.0);
 
+	/**
+	 * @brief generates first step of transition function
+	 * @return terminal condition value
+	 */
 	bool first_step();
+
+	/**
+	 * @brief generates next steps (starting from the second) of transition function
+	 * @return terminal condition value
+	 */
 	bool next_step();
+
+	/**
+	 * @brief method executed by dispatcher
+	 */
+	void conditional_execution();
 
 };
 

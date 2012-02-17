@@ -1,6 +1,6 @@
 /*!
  * @file
- * @brief File contains force generators definition
+ * @brief File contains force_tool_change generator definition
  * @author twiniars <twiniars@ia.pw.edu.pl>, Warsaw University of Technology
  *
  * @ingroup generators
@@ -34,12 +34,13 @@ namespace generator {
 force_tool_change::force_tool_change(common::task::task& _ecp_task) :
 		common::generator::generator(_ecp_task)
 {
+	generator_name = ecp_mp::generator::ECP_GEN_FORCE_TOOL_CHANGE;
+
 	set_tool_parameters(-0.18, 0.0, 0.25, 0);
 }
 
 bool force_tool_change::first_step()
 {
-	generator_name = ecp_mp::generator::ECP_GEN_FORCE_TOOL_CHANGE;
 
 	the_robot->ecp_command.instruction_type = lib::SET;
 	the_robot->ecp_command.set_type = ROBOT_MODEL_DEFINITION;
@@ -52,17 +53,16 @@ bool force_tool_change::first_step()
 	return true;
 }
 
-bool force_tool_change::next_step()
-{
-	return false;
-}
-
 void force_tool_change::set_tool_parameters(double x, double y, double z, double v)
 {
 	tool_parameters[0] = x;
 	tool_parameters[1] = y;
 	tool_parameters[2] = z;
 	weight = v;
+}
+
+void force_tool_change::conditional_execution()
+{
 }
 
 } // namespace generator

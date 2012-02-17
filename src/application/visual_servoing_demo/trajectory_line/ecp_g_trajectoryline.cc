@@ -15,13 +15,12 @@ namespace generator {
 ecp_g_trajectory_line::ecp_g_trajectory_line(mrrocpp::ecp::common::task::task & ecp_task, const std::string& section_name) :
 		common::generator::generator(ecp_task), initial_position_saved(false)
 {
-	motion_steps = ecp_task.config.value<int>("motion_steps", section_name);
+	motion_steps = ecp_task.config.value <int>("motion_steps", section_name);
 	motion_steps_value_in_step_no = motion_steps - 3;
 	dt = motion_steps * 2e-3;
 
-	A = ecp_task.config.value<double>("A", section_name);
-	f = ecp_task.config.value<double>("f", section_name);
-
+	A = ecp_task.config.value <double>("A", section_name);
+	f = ecp_task.config.value <double>("f", section_name);
 
 }
 
@@ -33,7 +32,6 @@ bool ecp_g_trajectory_line::first_step()
 {
 	the_robot->ecp_command.instruction_type = lib::GET;
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
-	the_robot->ecp_command.get_arm_type = lib::FRAME;
 	the_robot->ecp_command.motion_type = lib::ABSOLUTE;
 	the_robot->ecp_command.set_type = ARM_DEFINITION;
 	the_robot->ecp_command.set_arm_type = lib::FRAME;

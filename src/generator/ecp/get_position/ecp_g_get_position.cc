@@ -33,26 +33,9 @@ bool get_position::first_step()
 {
 	the_robot->ecp_command.get_type = ARM_DEFINITION;
 	the_robot->ecp_command.instruction_type = lib::GET;
-        the_robot->ecp_command.motion_type = lib::ABSOLUTE; //aqui siempre ABSOLUTE, RELATIVE makes no sense here (q no tiene sentido)
+	the_robot->ecp_command.motion_type = lib::ABSOLUTE; //aqui siempre ABSOLUTE, RELATIVE makes no sense here (q no tiene sentido)
 	the_robot->ecp_command.interpolation_type = lib::MIM;
-	switch (pose_spec)
-	{
-		case lib::ECP_XYZ_ANGLE_AXIS:
-			the_robot->ecp_command.get_arm_type = lib::FRAME;
-			break;
-		case lib::ECP_XYZ_EULER_ZYZ:
-			the_robot->ecp_command.get_arm_type = lib::FRAME;
-			break;
-		case lib::ECP_MOTOR:
-			the_robot->ecp_command.get_arm_type = lib::MOTOR;
-			break;
-		case lib::ECP_JOINT:
-			the_robot->ecp_command.get_arm_type = lib::JOINT;
-			break;
-		default:
-			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
-			break;
-	}
+
 	return true;
 }
 
@@ -76,10 +59,15 @@ bool get_position::next_step()
 			BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
 		}
 
-	} else if (pose_spec == lib::ECP_JOINT || pose_spec == lib::ECP_MOTOR) {
-			position.clear();
+	} else if (pose_spec == lib::ECP_JOINT) {
+		position.clear();
 		for (int i = 0; i < axes_num; i++) {
-			position.push_back(the_robot->reply_package.arm.pf_def.arm_coordinates[i]);
+			position.push_back(the_robot->reply_package.arm.pf_def.joint_coordinates[i]);
+		}
+	} else if (pose_spec == lib::ECP_MOTOR) {
+		position.clear();
+		for (int i = 0; i < axes_num; i++) {
+			position.push_back(the_robot->reply_package.arm.pf_def.motor_coordinates[i]);
 		}
 	} else {
 		BOOST_THROW_EXCEPTION(exception::nfe_g() << lib::exception::mrrocpp_error0(INVALID_POSE_SPECIFICATION));
@@ -87,7 +75,7 @@ bool get_position::next_step()
 	return false;
 }
 
-const vector<double> & get_position::get_position_vector() const
+const vector <double> & get_position::get_position_vector() const
 {
 	return position;
 }

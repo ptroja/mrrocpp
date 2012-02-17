@@ -15,7 +15,6 @@
 
 #include "base/lib/sr/srlib.h"
 
-
 #include "base/mp/mp_robot.h"
 #include "application/haptic/mp_g_haptic.h"
 #include "base/lib/mrmath/mrmath.h"
@@ -57,7 +56,6 @@ bool haptic::first_step()
 	irp6ot->mp_command.instruction.robot_model.type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	irp6ot->mp_command.instruction.set_arm_type = lib::PF_VELOCITY;
-	irp6ot->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6ot->mp_command.instruction.motion_type = lib::RELATIVE;
 	irp6ot->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6ot->mp_command.instruction.motion_steps = td.internode_step_no;
@@ -98,7 +96,6 @@ bool haptic::first_step()
 	irp6p->mp_command.instruction.robot_model.type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.get_robot_model_type = lib::TOOL_FRAME;
 	irp6p->mp_command.instruction.set_arm_type = lib::FRAME;
-	irp6p->mp_command.instruction.get_arm_type = lib::FRAME;
 	irp6p->mp_command.instruction.motion_type = lib::ABSOLUTE;
 	irp6p->mp_command.instruction.interpolation_type = lib::TCIM;
 	irp6p->mp_command.instruction.motion_steps = td.internode_step_no;
